@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<!--  This site was created in Webflow. http://www.webflow.com  -->
+<!--  Last Published: Fri Dec 13 2019 11:32:24 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="5ddce16f2111934b681205aa" data-wf-site="5ddce16f2111933b6c1205a5">
+<head>
+  <meta charset="utf-8">
+  <title>Flexbox Grid</title>
+  <meta content="A 12 column Responsive Flexbox Grid built for Webflow - Free to use for any of your projects" name="description">
+  <meta content="Flexbox Grid" property="og:title">
+  <meta content="A 12 column Responsive Flexbox Grid built for Webflow - Free to use for any of your projects" property="og:description">
+  <meta content="summary" name="twitter:card">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="Webflow" name="generator">
+  <link href="../css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="../css/webflow.css" rel="stylesheet" type="text/css">
+  <link href="../css/wazi.webflow.css" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">
+      WebFont.load({
+        google: {
+          families: ["Roboto:regular,italic,500,500italic,700,700italic,900,900italic"]
+        }
+      });
+    </script>
+  <!-- [if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif] -->
+  <script type="text/javascript">
+      ! function(o, c) {
+        var n = c.documentElement,
+          t = " w-mod-";
+        n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
+      }(window, document);
+    </script>
+  <link href="../images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="../images/webclip.png" rel="apple-touch-icon">
+</head>
+<body>
+  <div class="grid__module_section">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h1>Getting Started</h1>
+          <h5>Columns need to be nested within  a <span class="emp">&quot;row&quot;</span> and a direct child of a <span class="emp">&quot;container&quot;</span>.  All columns start off at equal-widths by defining the class of <span class="emp">&quot;col&quot;</span> and auto-collapse at the mobile portrait breakpoint if no responsive classes are defined. </h5>
+          <div class="w-embed"><img src="https://i.imgur.com/BPOit4h.jpg" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Remove Gutters</h3>
+          <h5>To remove all padding from columns, use the <span class="emp">&quot;no-gutters&quot;</span> class preceded by the initial class of <span class="emp">&quot;col&quot;</span>.</h5>
+          <div class="w-embed"><img src="https://i.imgur.com/lJiFeqB.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col--no-gutters">
+          <div class="inner-div-example">
+            <div> no-gutters</div>
+          </div>
+        </div>
+        <div class="grid__module_col col--no-gutters">
+          <div class="inner-div-example">
+            <div>no-gutters</div>
+          </div>
+        </div>
+        <div class="grid__module_col col--no-gutters">
+          <div class="inner-div-example">
+            <div>no-gutters</div>
+          </div>
+        </div>
+        <div class="grid__module_col col--no-gutters">
+          <div class="inner-div-example">
+            <div>no-gutters</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Full Width Container</h3>
+          <h5>Define your div with a class of <span class="emp">&quot;container-fluid&quot; </span>for full width.</h5>
+          <div class="w-embed"><img src="https://i.imgur.com/zgmhmx8.jpg" width="275"></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid__module_container--fluid">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>col</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section fade">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h1>Responsive Grid</h1>
+          <h3>Grid - Desktop</h3>
+          <h5>To define our 12 column grid, all classes must precede with the initial class of <span class="emp">&quot;col&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/kp9zquN.png?1" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_1">
+          <div class="inner-div-example">
+            <div>col-1</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_11">
+          <div class="inner-div-example">
+            <div>col-11</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_2">
+          <div class="inner-div-example">
+            <div>col-2</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_10">
+          <div class="inner-div-example">
+            <div>col-10</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_3">
+          <div class="inner-div-example">
+            <div>col-3</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_9">
+          <div class="inner-div-example">
+            <div>col-9</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_4">
+          <div class="inner-div-example">
+            <div>col-4</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_8">
+          <div class="inner-div-example">
+            <div>col-8</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_5">
+          <div class="inner-div-example">
+            <div>col-5</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_7">
+          <div class="inner-div-example">
+            <div>col-7</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_6">
+          <div class="inner-div-example">
+            <div>col-6</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_6">
+          <div class="inner-div-example">
+            <div>col-6</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_12">
+          <div class="inner-div-example">
+            <div>col-12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section fade">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Grid - Tablet (Breakpoint)</h3>
+          <h5>Defining our tablet breakpoints, all classes must precede with the class of <span class="emp">&quot;col&quot;</span> and if defined, your desktop class of <span class="emp">&quot;col-(1-12)&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/96GmLuH.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_m_1">
+          <div class="inner-div-example">
+            <div>col-m-1</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_m_11">
+          <div class="inner-div-example">
+            <div>col-m-11</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_m_2">
+          <div class="inner-div-example">
+            <div>col-m-2</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_m_10">
+          <div class="inner-div-example">
+            <div>col-m-10</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_m_3">
+          <div class="inner-div-example">
+            <div>col-m-3</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_m_9">
+          <div class="inner-div-example">
+            <div>col-m-9</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_m_4">
+          <div class="inner-div-example">
+            <div>col-m-4</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_m_8">
+          <div class="inner-div-example">
+            <div>col-m-8</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_m_5">
+          <div class="inner-div-example">
+            <div>col-m-5</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_m_7">
+          <div class="inner-div-example">
+            <div>col-m-7</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_m_6">
+          <div class="inner-div-example">
+            <div>col-m-6</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_m_6">
+          <div class="inner-div-example">
+            <div>col-m-6</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_m_12">
+          <div class="inner-div-example">
+            <div>col-m-12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section fade">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Grid - Mobile Landscape (Breakpoint)</h3>
+          <h5>Defining our tablet breakpoints, all classes must precede with the class of <span class="emp">&quot;col&quot;</span> and if defined, your desktop and tablet classes of <span class="emp">&quot;col-(1-12)&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/Zv8JUEb.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_sm_1">
+          <div class="inner-div-example">
+            <div>col-sm-1</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_sm_11">
+          <div class="inner-div-example">
+            <div>col-sm-11</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_sm_2">
+          <div class="inner-div-example">
+            <div>col-sm-2</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_sm_10">
+          <div class="inner-div-example">
+            <div>col-sm-10</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_sm_3">
+          <div class="inner-div-example">
+            <div>col-sm-3</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_sm_9">
+          <div class="inner-div-example">
+            <div>col-sm-9</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_sm_4">
+          <div class="inner-div-example">
+            <div>col-sm-4</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_sm_8">
+          <div class="inner-div-example">
+            <div>col-sm-8</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_sm_5">
+          <div class="inner-div-example">
+            <div>col-sm-5</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_sm_7">
+          <div class="inner-div-example">
+            <div>col-sm-7</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_sm_6">
+          <div class="inner-div-example">
+            <div>col-sm-6</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_sm_6">
+          <div class="inner-div-example">
+            <div>col-sm-6</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_sm_12">
+          <div class="inner-div-example">
+            <div>col-sm-12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section fade">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Grid - Mobile Portrait (Breakpoint)</h3>
+          <h5>Defining our tablet breakpoints, all classes must precede with the class of <span class="emp">&quot;col&quot;</span> and if defined, your desktop, tablet and mobile landscape classes of <span class="emp">&quot;col-(1-12)&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/pGFq20Z.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_xs_1">
+          <div class="inner-div-example">
+            <div>col-xs-1</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_xs_11">
+          <div class="inner-div-example">
+            <div>col-xs-11</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_xs_2">
+          <div class="inner-div-example">
+            <div>col-xs-2</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_xs_10">
+          <div class="inner-div-example">
+            <div>col-xs-10</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_xs_3">
+          <div class="inner-div-example">
+            <div>col-xs-3</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_xs_9">
+          <div class="inner-div-example">
+            <div>col-xs-9</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_xs_4">
+          <div class="inner-div-example">
+            <div>col-xs-4</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_xs_8">
+          <div class="inner-div-example">
+            <div>col-xs-8</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_xs_5">
+          <div class="inner-div-example">
+            <div>col-xs-5</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_xs_7">
+          <div class="inner-div-example">
+            <div>col-xs-7</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_xs_6">
+          <div class="inner-div-example">
+            <div>col-xs-6</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_xs_6">
+          <div class="inner-div-example">
+            <div>col-xs-6</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_xs_12">
+          <div class="inner-div-example">
+            <div>col-xs-12</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section fade">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Column Wrapping</h3>
+          <h5>If responsive columns are placed within a single row and which the total result in greater then 12, they will automatically wrap onto a new line.<span class="emp"></span></h5>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col_4">
+          <div class="inner-div-example">
+            <div>col-4</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_8">
+          <div class="inner-div-example">
+            <div>col-8</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_6">
+          <div class="inner-div-example">
+            <div>col-6</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_6">
+          <div class="inner-div-example">
+            <div>col-6</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_3">
+          <div class="inner-div-example">
+            <div>col-3</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_2">
+          <div class="inner-div-example">
+            <div>col-2</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_7">
+          <div class="inner-div-example">
+            <div>col-7</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h1>Vertical Alignment</h1>
+          <h3>Align-Start</h3>
+          <h5>To align columns from the top, combine a class of  <span class="emp">&quot;align-start&quot;</span> preceded by the class of <span class="emp">&quot;row&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/3MzIZL3.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row row--align-start row-example">
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>align-start</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>align-start</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>align-start</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Align-Center</h3>
+          <h5>To align columns from the center, combine a class of  <span class="emp">&quot;align-center&quot;</span> preceded by the class of <span class="emp">&quot;row&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/N4qFy2d.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row row--align-center row-example">
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>align-center</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>align-center</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>align-center</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Align-End</h3>
+          <h5>To align columns from the bottom, combine a class of  <span class="emp">&quot;align-end&quot;</span> preceded by the class of <span class="emp">&quot;row&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/My1Nxn2.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row row--align-end row-example">
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>align-end</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>align-end</div>
+          </div>
+        </div>
+        <div class="grid__module_col">
+          <div class="inner-div-example">
+            <div>align-end</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section fade">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h1>Horizontal Alignment</h1>
+          <h3>Justify-Start</h3>
+          <h5>To align columns from the left, combine a class of  <span class="emp">&quot;justify-start&quot;</span> preceded by the by class of <span class="emp">&quot;row&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/6greyLb.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row row--justify-start">
+        <div class="grid__module_col col_3">
+          <div class="inner-div-example">
+            <div>justify-start</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_6">
+          <div class="inner-div-example">
+            <div>justify-start</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Justify-Center</h3>
+          <h5>To align columns from the right, combine a class of  <span class="emp">&quot;justify-center&quot;</span> preceded by the class of <span class="emp">&quot;row&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/88KeD2x.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row row--justify-center">
+        <div class="grid__module_col col_3">
+          <div class="inner-div-example">
+            <div>justify-center</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_6">
+          <div class="inner-div-example">
+            <div>justify-center</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Justify-End</h3>
+          <h5>To align columns from the right, combine a class of  <span class="emp">&quot;justify-end&quot;</span> preceded by the class of <span class="emp">&quot;row&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/yHGnjxC.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row row--justify-end">
+        <div class="grid__module_col col_3">
+          <div class="inner-div-example">
+            <div>justify-end</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_6">
+          <div class="inner-div-example">
+            <div>justify-end</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Justify-Between</h3>
+          <h5>To evenly space columns between each-other, combine a class of  <span class="emp">&quot;justify-between&quot;</span> preceded by the class of <span class="emp">&quot;row&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/iGCdQ0e.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row row--justify-between">
+        <div class="grid__module_col col_3">
+          <div class="inner-div-example">
+            <div>justify-between</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_6">
+          <div class="inner-div-example">
+            <div>justify-between</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h3>Justify-Around</h3>
+          <h5>To evenly space columns around each-other, combine a class of  <span class="emp">&quot;justify-around&quot;</span> preceded by the class of <span class="emp">&quot;row&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/keNISqz.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row row--justify-around">
+        <div class="grid__module_col col_3">
+          <div class="inner-div-example">
+            <div>justify-around</div>
+          </div>
+        </div>
+        <div class="grid__module_col col_6">
+          <div class="inner-div-example">
+            <div>justify-around</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h1>Self-Align Columns</h1>
+          <h5>To individually self-align columns, combine a class of  <span class="emp">&quot;self-start&quot;</span>, <span class="emp">&quot;self-center&quot;</span>, <span class="emp">&quot;self-end&quot;</span> preceded by the by class of <span class="emp">&quot;col&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/wTifm9i.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row row-example">
+        <div class="grid__module_col col--self-start">
+          <div class="inner-div-example">
+            <div>self-start</div>
+          </div>
+        </div>
+        <div class="grid__module_col col--self-center">
+          <div class="inner-div-example">
+            <div>self-center</div>
+          </div>
+        </div>
+        <div class="grid__module_col col--self-end">
+          <div class="inner-div-example">
+            <div>self-end</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section fade">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <h1>Column Reordering</h1>
+          <h5>To individually reorder columns, combine a class of either <span class="emp">&quot;order-first&quot;</span>, <span class="emp">&quot;order-last&quot;</span>, preceded by the by class of <span class="emp">&quot;col&quot;</span></h5>
+          <div class="w-embed"><img src="https://i.imgur.com/NGY4LOD.png" width="275"></div>
+        </div>
+      </div>
+      <div class="grid__module_row">
+        <div class="grid__module_col col--order-last">
+          <div class="inner-div-example">
+            <div>order-last</div>
+          </div>
+        </div>
+        <div class="grid__module_col col--order-first">
+          <div class="inner-div-example">
+            <div>order-first</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid__module_section footer">
+    <div class="grid__module_container">
+      <div class="grid__module_row">
+        <div class="grid__module_col">
+          <div class="text-center">
+            <h5 class="light">If you would like me to build more free resources, or simply want to support my work?</h5>
+            <div class="w-embed">
+              <style>
+                  .bmc-button img {
+                    width: 27px !important;
+                    margin-bottom: 1px !important;
+                    box-shadow: none !important;
+                    border: none !important;
+                    vertical-align: middle !important;
+                  }
+                  .bmc-button {
+                    line-height: 36px !important;
+                    height: 37px !important;
+                    text-decoration: none !important;
+                    display: inline-flex !important;
+                    color: #FFFFFF !important;
+                    background-color: #FF813F !important;
+                    border-radius: 3px !important;
+                    border: 1px solid transparent !important;
+                    padding: 1px 9px !important;
+                    font-size: 22px !important;
+                    letter-spacing: 0.6px !important;
+                    box-shadow: 0px 1px 2px rgba(190, 190, 190, 0.5) !important;
+                    -webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;
+                    margin: 0 auto !important;
+                    font-family: 'Cookie', cursive !important;
+                    -webkit-box-sizing: border-box !important;
+                    box-sizing: border-box !important;
+                    -o-transition: 0.3s all linear !important;
+                    -webkit-transition: 0.3s all linear !important;
+                    -moz-transition: 0.3s all linear !important;
+                    -ms-transition: 0.3s all linear !important;
+                    transition: 0.3s all linear !important;
+                  }
+                  .bmc-button:hover,
+                  .bmc-button:active,
+                  .bmc-button:focus {
+                    -webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;
+                    text-decoration: none !important;
+                    box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;
+                    opacity: 0.85 !important;
+                    color: #FFFFFF !important;
+                  }
+                </style>
+              <link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/lQsS2gXeR"><img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:5px">Buy me a coffee</span></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="../js/webflow.js" type="text/javascript"></script>
+  <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
+  <script>
+      setTimeout(function() {
+        $('.w-webflow-badge').css({
+          'display': 'none !important'
+        });
+      }, 2000);
+    </script>
+</body>
+</html>

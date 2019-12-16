@@ -5,10 +5,11 @@
   "author": "Adi Eyal <adi@openup.org.za>",
   "license": "MIT",
   "dependencies": {
+    "d3-format": "^1.4.2",
+    "d3-selection": "^1.4.1",
+    "data-visualisations": "https://github.com/vulekamali/data-visualisations.git#reusable",
     "js": "^0.1.0",
     "main": "^1000.0.1",
-    "main.js": "0.0.1",
-    "test": "^0.6.0",
-    "test.js": "^1.0.0"
+    "main.js": "0.0.1"
   }
 }

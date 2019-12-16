@@ -1,3 +1,8 @@
+import {select as d3select} from 'd3-selection';
+import {format as d3format} from 'd3-format';
+import {reusableBarChart} from "data-visualisations/src/charts/bar/reusable-bar-chart/reusable-bar-chart";
+import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
+
 const baseUrl = "http://localhost:8000";
 
 function loadMenu(data) {
@@ -60,13 +65,85 @@ function loadMenu(data) {
     }
 }
 
+function loadProfile(data) {
+    var profileWrapper = $(".location-profile");
+    var categoryTemplate = $(".location-profile__data-category--first")[0].cloneNode(true);
+    var subcategoryTemplate = $(".data-category__indicator", categoryTemplate)[0].cloneNode(true);
+    var indicatorTemplate = $(".indicator__chart", subcategoryTemplate)[0].cloneNode(true);
+
+    $(".location-profile__data-category--first").remove();
+    $(".location-profile__data-category").remove();
+    $(".data-category__indicator", categoryTemplate).remove();
+    $(".data-category__indicator--last", categoryTemplate).remove();
+    $(".indicator__chart", subcategoryTemplate).remove();
+
+
+    function addCategory(category, subcategories) {
+        var newCategorySection = categoryTemplate.cloneNode(true);
+        var wrapper = $(".grid__module_section", newCategorySection);
+
+        $(".data-category__header_title h2", newCategorySection).text(category);
+        profileWrapper.append(newCategorySection);
+        for (const [subcategory, indicators] of Object.entries(subcategories)) {
+            addSubcategory(wrapper, subcategory, indicators);
+        }
+    }
+
+    function addSubcategory(wrapper, subcategory, indicators) {
+        var newSubcategorySection = subcategoryTemplate.cloneNode(true);
+        $(".indicator__title_wrapper h3", newSubcategorySection).text(subcategory);
+        wrapper.append(newSubcategorySection);
+
+        for (const [indicator, classes] of Object.entries(indicators)) {
+            addIndicator(newSubcategorySection, indicator, classes);
+        }
+    }
+
+    function addIndicator(wrapper, indicator, classes) {
+        var newIndicatorSection = indicatorTemplate.cloneNode(true);
+        $(".indicator__chart_title", newIndicatorSection).text(classes.indicator);
+        wrapper.append(newIndicatorSection);
+        var chartContainer = $(".indicator__chart_container", newIndicatorSection);
+        addChart(chartContainer[0], classes.classes)
+    }
+
+    function addChart(container, classes) {
+        var fmt = d3format(",");
+        const myChart = reusableBarChart();
+        // TODO how big should this be?
+        myChart.height(100);
+        myChart.width(550);
+        myChart.tooltipFormatter((d) => {
+            return `${d.data.label}: ${fmt(d.data.value)}`;
+        });
+
+        var data = [];
+        for (const [key, value] of Object.entries(classes)) {
+            if (value != null)
+                data.push({label: key, value: value});
+        }
+        $("img", container).remove();
+
+        d3select(container)
+            .call(myChart.data(data));
+
+    }
+
+    for (const [category, subcategories] of Object.entries(data)) {
+        addCategory(category, subcategories);
+    }
+        
+}
+
 export default function load() {
     var profileId = 1;
-    var geographyId = 2;
+    var geographyId = 3;
     $.ajax({url: baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"})
         .done(function(data) {
             console.log(data);
             loadMenu(data);
+            loadProfile(data);
+            $(".d3-tip").css("z-index", 100);
             Webflow.require('ix2').init()
         })
 }

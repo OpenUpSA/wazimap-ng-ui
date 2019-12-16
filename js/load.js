@@ -15,26 +15,27 @@ function loadMenu(data) {
     var categoryTemplate = $(".data-menu__category")[0].cloneNode(true);
     $(".data-menu__category").remove();
 
-    data.forEach(function(el) {
+    for (const [category, subcategories] of Object.entries(data)) {
         var newCategory = categoryTemplate.cloneNode(true)
-        $(".link__h1_title div", newCategory).text(el.category);
+        $(".link__h1_title div", newCategory).text(category);
         parentContainer.append(newCategory);
         var h2Wrapper = $(".category__dropdown_wrapper", newCategory);
         var subCategoryTemplate = $(".data-menu__subcategory", h2Wrapper)[0].cloneNode(true);
         $(".data-menu__subcategory", h2Wrapper).remove();
 
-        el["sub-categories"].forEach(function(el2) {
+        for (const [subcategory, indicators] of Object.entries(subcategories)) {
             var newSubCategory = subCategoryTemplate.cloneNode(true);
-            $(".data-menu__sub-category_trigger div", newSubCategory).text(el2.name);
+            $(".data-menu__sub-category_trigger div", newSubCategory).text(subcategory);
             h2Wrapper.append(newSubCategory);
 
             var h3Wrapper = $(".sub-category__dropdown_wrapper", newSubCategory);
             var indicatorTemplate = $(".data-menu__indicator", h3Wrapper)[0].cloneNode(true);
 
             $(".data-menu__indicator", h3Wrapper).remove();
-            el2["indicators"].forEach(function(el3) {
+            for (const [indicator, subindicators] of Object.entries(indicators)) {
+                var indicatorLabel = subindicators.indicator;
                 var newIndicator = indicatorTemplate.cloneNode(true);
-                $(".data-menu__indicator_trigger div", newIndicator).text(el3.name);
+                $(".data-menu__indicator_trigger div", newIndicator).text(indicatorLabel);
                 h3Wrapper.append(newIndicator);
 
                 var indicatorWrapper = $(".indicator__dropdown_wrapper", newIndicator);
@@ -42,25 +43,27 @@ function loadMenu(data) {
 
                 $(".data-menu__sub-indicator", indicatorWrapper).remove();
                 $(".menu__link_h4--active", indicatorWrapper).remove();
-                if (el3.classes != undefined) {
+                if (subindicators.classes != undefined) {
 
-                    el3["classes"].forEach(function(el4) {
+                    for (const [subindicator, value] of Object.entries(subindicators.classes)) {
                         var newSubIndicator = subIndicatorTemplate.cloneNode(true);
-                        $("div:nth-child(2)", newSubIndicator).text(el4);
+                        $("div:nth-child(2)", newSubIndicator).text(subindicator);
                         indicatorWrapper.append(newSubIndicator);
 
                         $(newSubIndicator).on("click", setActive);
-                    });
+                    };
                 } else {
                     indicatorWrapper.remove();
                 }
-            })
-        });
-    })
+            }
+        };
+    }
 }
 
 export default function load() {
-    $.ajax({url: baseUrl + "/api/v1/profiles/1/"})
+    var profileId = 1;
+    var geographyId = 2;
+    $.ajax({url: baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"})
         .done(function(data) {
             console.log(data);
             loadMenu(data);

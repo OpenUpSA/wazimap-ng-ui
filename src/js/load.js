@@ -5,7 +5,7 @@ import {reusableBarChart} from "data-visualisations/src/charts/bar/reusable-bar-
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 
-const baseUrl = "https://wazimap-ng.openup.org.za;
+const baseUrl = "https://wazimap-ng.openup.org.za";
 
 function loadMenu(data) {
     var parentContainer = $(".data-menu__links")

@@ -18,7 +18,7 @@
     "parcel-bundler": "^1.12.4"
   },
   "scripts": {
-    "dev": "parcel index.html",
-    "build": "parcel build index.html"
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html --out-dir docs"
   }
 }

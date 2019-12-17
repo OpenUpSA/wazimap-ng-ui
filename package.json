@@ -12,5 +12,8 @@
     "js": "^0.1.0",
     "main": "^1000.0.1",
     "main.js": "0.0.1"
+  },
+  "devDependencies": {
+    "cssnano": "^4.1.10"
   }
 }

@@ -139,7 +139,7 @@ function loadProfile(data) {
 
 export default function load() {
     var profileId = 1;
-    var geographyId = 3;
+    var geographyId = 1;
     $.ajax({url: baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"})
         .done(function(data) {
             console.log(data);

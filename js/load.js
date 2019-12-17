@@ -1,7 +1,9 @@
 import {select as d3select} from 'd3-selection';
 import {format as d3format} from 'd3-format';
 import {reusableBarChart} from "data-visualisations/src/charts/bar/reusable-bar-chart/reusable-bar-chart";
+
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
+import "../css/barchart.css";
 
 const baseUrl = "http://localhost:8000";
 
@@ -108,11 +110,11 @@ function loadProfile(data) {
     }
 
     function addChart(container, classes) {
-        var fmt = d3format(",");
+        var fmt = d3format(",.2f");
         const myChart = reusableBarChart();
         // TODO how big should this be?
         myChart.height(100);
-        myChart.width(550);
+        myChart.width(850);
         myChart.tooltipFormatter((d) => {
             return `${d.data.label}: ${fmt(d.data.value)}`;
         });

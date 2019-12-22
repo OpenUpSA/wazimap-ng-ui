@@ -1,11 +1,13 @@
 import {select as d3select} from 'd3-selection';
 import {format as d3format} from 'd3-format';
-import {reusableBarChart} from "data-visualisations/src/charts/bar/reusable-bar-chart/reusable-bar-chart";
+import Controller from './controller';
+import loadProfile from './page_profile';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 
-const baseUrl = "https://wazimap-ng.openup.org.za";
+//const baseUrl = "https://wazimap-ng.openup.org.za";
+const baseUrl = "http://localhost:8000";
 
 function loadMenu(data) {
     var parentContainer = $(".data-menu__links")
@@ -40,7 +42,7 @@ function loadMenu(data) {
 
             $(".data-menu__indicator", h3Wrapper).remove();
             for (const [indicator, subindicators] of Object.entries(indicators)) {
-                var indicatorLabel = subindicators.indicator;
+                var indicatorLabel = indicator;
                 var newIndicator = indicatorTemplate.cloneNode(true);
                 $(".data-menu__indicator_trigger div", newIndicator).text(indicatorLabel);
                 h3Wrapper.append(newIndicator);
@@ -50,15 +52,17 @@ function loadMenu(data) {
 
                 $(".data-menu__sub-indicator", indicatorWrapper).remove();
                 $(".menu__link_h4--active", indicatorWrapper).remove();
-                if (subindicators.classes != undefined) {
+                //if (subindicators.classes != undefined) {
+                if (true) {
 
-                    for (const [subindicator, value] of Object.entries(subindicators.classes)) {
+                    subindicators.forEach(function(obj) {
                         var newSubIndicator = subIndicatorTemplate.cloneNode(true);
-                        $("div:nth-child(2)", newSubIndicator).text(subindicator);
+                        var text = obj.key
+                        $("div:nth-child(2)", newSubIndicator).text(text);
                         indicatorWrapper.append(newSubIndicator);
 
                         $(newSubIndicator).on("click", setActive);
-                    };
+                    })
                 } else {
                     indicatorWrapper.remove();
                 }
@@ -67,85 +71,23 @@ function loadMenu(data) {
     }
 }
 
-function loadProfile(data) {
-    var profileWrapper = $(".location-profile");
-    var categoryTemplate = $(".location-profile__data-category--first")[0].cloneNode(true);
-    var subcategoryTemplate = $(".data-category__indicator", categoryTemplate)[0].cloneNode(true);
-    var indicatorTemplate = $(".indicator__chart", subcategoryTemplate)[0].cloneNode(true);
-
-    $(".location-profile__data-category--first").remove();
-    $(".location-profile__data-category").remove();
-    $(".data-category__indicator", categoryTemplate).remove();
-    $(".data-category__indicator--last", categoryTemplate).remove();
-    $(".indicator__chart", subcategoryTemplate).remove();
-
-
-    function addCategory(category, subcategories) {
-        var newCategorySection = categoryTemplate.cloneNode(true);
-        var wrapper = $(".grid__module_section", newCategorySection);
-
-        $(".data-category__header_title h2", newCategorySection).text(category);
-        profileWrapper.append(newCategorySection);
-        for (const [subcategory, indicators] of Object.entries(subcategories)) {
-            addSubcategory(wrapper, subcategory, indicators);
-        }
-    }
-
-    function addSubcategory(wrapper, subcategory, indicators) {
-        var newSubcategorySection = subcategoryTemplate.cloneNode(true);
-        $(".indicator__title_wrapper h3", newSubcategorySection).text(subcategory);
-        wrapper.append(newSubcategorySection);
-
-        for (const [indicator, classes] of Object.entries(indicators)) {
-            addIndicator(newSubcategorySection, indicator, classes);
-        }
-    }
-
-    function addIndicator(wrapper, indicator, classes) {
-        var newIndicatorSection = indicatorTemplate.cloneNode(true);
-        $(".indicator__chart_title", newIndicatorSection).text(classes.indicator);
-        wrapper.append(newIndicatorSection);
-        var chartContainer = $(".indicator__chart_container", newIndicatorSection);
-        addChart(chartContainer[0], classes.classes)
-    }
-
-    function addChart(container, classes) {
-        var fmt = d3format(",.2f");
-        const myChart = reusableBarChart();
-        // TODO how big should this be?
-        myChart.height(100);
-        myChart.width(850);
-        myChart.tooltipFormatter((d) => {
-            return `${d.data.label}: ${fmt(d.data.value)}`;
-        });
-
-        var data = [];
-        for (const [key, value] of Object.entries(classes)) {
-            if (value != null)
-                data.push({label: key, value: value});
-        }
-        $("img", container).remove();
-
-        d3select(container)
-            .call(myChart.data(data));
-
-    }
-
-    for (const [category, subcategories] of Object.entries(data)) {
-        addCategory(category, subcategories);
-    }
-        
-}
-
-export default function load() {
-    var profileId = 3;
-    var geographyId = 1;
-    $.ajax({url: baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"})
+function loadGeography(profileId, geographyId) {
+    var url = baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"
+    $.ajax({url: url})
         .done(function(data) {
             console.log(data);
-            loadMenu(data);
+            loadMenu(data["indicators"]);
             loadProfile(data);
             $(".d3-tip").css("z-index", 100);
             Webflow.require('ix2').init()
         })
+}
+
+var controller;
+
+export default function load() {
+    var profileId = 1;
+    var geographyId = "592012017";
+    var controller = new Controller(loadGeography);
+    controller.trigger()
 }

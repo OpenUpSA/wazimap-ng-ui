@@ -1,4 +1,4 @@
-\.*.swp
+\.*.sw[op]
 node_modules
 dist
 .cache

@@ -2,12 +2,15 @@ import {select as d3select} from 'd3-selection';
 import {format as d3format} from 'd3-format';
 import Controller from './controller';
 import loadProfile from './page_profile';
+import {MapControl} from './maps';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 
 //const baseUrl = "https://wazimap-ng.openup.org.za";
 const baseUrl = "http://localhost:8000";
+
+var mapcontrol = null;
 
 function loadMenu(data) {
     var parentContainer = $(".data-menu__links")
@@ -80,6 +83,8 @@ function loadGeography(profileId, geographyId) {
             loadProfile(data);
             $(".d3-tip").css("z-index", 100);
             Webflow.require('ix2').init()
+            // TODO need to set this to the geography searched for
+            mapcontrol.overlayBoundaries(null);
         })
 }
 
@@ -90,4 +95,5 @@ export default function load() {
     var geographyId = "592012017";
     var controller = new Controller(loadGeography);
     controller.trigger()
+    mapcontrol = new MapControl();
 }

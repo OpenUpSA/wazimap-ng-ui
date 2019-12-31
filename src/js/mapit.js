@@ -1,4 +1,3 @@
-// TODO currently assumes JQuery - might want to have no dependencies
 var baseUrl = "https://mapit.openup.org.za";
 var baseAreasUrl = baseUrl + "/areas";
 var defaultParams = "generation=2&simplify_tolerance=0.005";

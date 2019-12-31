@@ -77,16 +77,14 @@ function loadMenu(data) {
 
 function loadGeography(profileId, geographyId) {
     var url = baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"
-    $.ajax({url: url})
-        .done(function(data) {
-            console.log(data);
-            loadMenu(data["indicators"]);
-            loadProfile(data);
-            $(".d3-tip").css("z-index", 100);
-            Webflow.require('ix2').init()
-            // TODO need to set this to the geography searched for
-            mapcontrol.overlayBoundaries(null);
-        })
+    getJSON(url).then(function(data) {
+        console.log(data);
+        loadMenu(data["indicators"]);
+        loadProfile(data);
+        // TODO need to move this somewhere useful
+        $(".d3-tip").css("z-index", 100);
+        Webflow.require('ix2').init()
+    })
 }
 
 var controller;
@@ -97,4 +95,9 @@ export default function load() {
     var controller = new Controller(loadGeography);
     controller.trigger()
     mapcontrol = new MapControl();
+    mapcontrol.on("geoselect", function(areaCode) {
+        controller.setGeography(areaCode);
+    })
+    // TODO need to set this to the geography searched for
+    mapcontrol.overlayBoundaries(null);
 }

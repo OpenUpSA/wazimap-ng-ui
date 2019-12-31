@@ -22,5 +22,9 @@ export default function Controller(geoloader) {
 Controller.prototype = {
     trigger: function() {
         $(window).trigger('hashchange');
+    },
+
+    setGeography: function(areaCode) {
+        window.location.hash = "#geo:" + areaCode;
     }
 }

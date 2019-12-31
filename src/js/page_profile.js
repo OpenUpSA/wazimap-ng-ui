@@ -22,6 +22,20 @@ function addBreadCrumbs(container, geography) {
     })
 }
 
+function addKeyMetrics(container, data) {
+    var metrics = data.key_metrics
+    var metricWrapper = $(".key-metrics", container)
+    var metricTemplate = $(".key-metric", metricWrapper)[0].cloneNode(true)
+    $(".key-metric", metricWrapper).remove()
+
+    metrics.forEach(function(el) {
+        var metric = metricTemplate.cloneNode(true)
+        $(".key-metric_value div", metric).text(el.value)
+        $(".key-metric_title", metric).text(el.label)
+        metricWrapper.append(metric)
+    })
+}
+
 export default function loadProfile(data) {
     var all_indicators = data.indicators;
 
@@ -37,6 +51,7 @@ export default function loadProfile(data) {
     $(".indicator__chart", subcategoryTemplate).remove();
 
     updateGeography(profileWrapper, data);
+    addKeyMetrics(profileWrapper, data);
 
 
     function addCategory(category, subcategories) {

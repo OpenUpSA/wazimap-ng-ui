@@ -1,2 +1,4 @@
 import load from "./load";
-load();
+var profileId = 1;
+
+load(profileId);

@@ -11,8 +11,6 @@ import "../css/barchart.css";
 //const baseUrl = "https://wazimap-ng.openup.org.za";
 const baseUrl = "http://localhost:8000";
 
-var mapcontrol = null;
-
 function loadMenu(data) {
     var parentContainer = $(".data-menu__links")
 
@@ -89,15 +87,15 @@ function loadGeography(profileId, geographyId) {
 
 var controller;
 
-export default function load() {
-    var profileId = 1;
-    var geographyId = "592012017";
+export default function load(profileId) {
     var controller = new Controller(loadGeography);
-    controller.trigger()
-    mapcontrol = new MapControl();
+    var mapcontrol = new MapControl();
+
     mapcontrol.on("geoselect", function(areaCode) {
         controller.setGeography(areaCode);
     })
+    
+    controller.trigger()
     // TODO need to set this to the geography searched for
     mapcontrol.overlayBoundaries(null);
 }

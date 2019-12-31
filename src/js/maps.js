@@ -15,6 +15,7 @@ export function MapControl(coords, tileUrl) {
 
     this.layerCache = new LayerCache();
 
+    this.eventListeners = {};
 
     this.styles = {
         hoverOnly: {
@@ -51,6 +52,21 @@ MapControl.prototype = {
         L.control.zoom({position: 'topright'}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
         return map;
+    },
+
+    on: function(event, func) {
+        if (this.eventListeners[event] == undefined)
+            this.eventListeners[event] = [];
+
+        this.eventListeners[event].push(func);
+    },
+
+    triggerEvent: function(event, payload) {
+        if (this.eventListeners[event] != undefined) {
+            this.eventListeners[event].forEach(function(listener) {
+                listener(payload);
+            });
+        }
     },
 
     setLayerStyle: function(layer, style) {
@@ -106,6 +122,7 @@ MapControl.prototype = {
                         var prop = el.layer.feature.properties;
                         var areaCode = prop.id;
                         self.overlayBoundaries(areaCode);
+                        self.triggerEvent("geoselect", prop.codes.MDB);
                     }) 
                     .addTo(self.map);
                     if (!alreadyZoomed) {

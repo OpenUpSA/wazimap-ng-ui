@@ -1,4 +1,4 @@
-export function loadMenu(data) {
+export function loadMenu(data, subindicatorCallback) {
     var parentContainer = $(".data-menu__links")
     var categoryTemplate = $(".data-menu__category")[0].cloneNode(true);
     var subCategoryTemplate = $(".data-menu__subcategory", categoryTemplate)[0].cloneNode(true);
@@ -23,7 +23,11 @@ export function loadMenu(data) {
                 $("div:nth-child(2)", newSubIndicator).text(text);
                 indicatorWrapper.append(newSubIndicator);
 
-                $(newSubIndicator).on("click", setActive);
+                $(newSubIndicator).on("click", function(el) {
+                    setActive(el);
+                    if (subindicatorCallback != undefined)
+                        subindicatorCallback(el, obj)
+                });
             })
         } else {
             indicatorWrapper.remove();
@@ -53,7 +57,6 @@ export function loadMenu(data) {
         for (const [subcategory, indicators] of Object.entries(subcategories)) {
             addIndicators(h2Wrapper, subcategory, indicators);
         };
-
     }
 
     function setActive(el) {

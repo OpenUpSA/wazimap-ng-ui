@@ -12,11 +12,39 @@ import "../css/barchart.css";
 //const baseUrl = "https://wazimap-ng.openup.org.za";
 const baseUrl = "http://localhost:8000";
 
+var mapcontrol = new MapControl();
+
+function getColor(d) {
+    return d > 0.3 ? '#800026' :
+           d > 0.25 ? '#BD0026' :
+           d > 0.2 ? '#E31A1C' :
+           d > 0.15 ? '#FC4E2A' :
+           d > 0.1 ? '#FD8D3C' :
+           d > 0.05 ? '#FEB24C' :
+           d > 0   ? '#FED976' :
+                      '#FFEDA0';
+}
+
+function choropleth(el, obj) {
+    console.log(obj) 
+    var total = 0
+    for (const [code, count] of Object.entries(obj.children)) {
+        total += count;
+    }
+
+    for (const [code, count] of Object.entries(obj.children)) {
+        var val = count / total;
+        var layer = mapcontrol.layerCache.geoMap[code];    
+        layer.setStyle({fillColor: getColor(val)})
+    }
+
+}
+
 function loadGeography(profileId, geographyId) {
     var url = baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"
     getJSON(url).then(function(data) {
         console.log(data);
-        loadMenu(data["indicators"]);
+        loadMenu(data["indicators"], choropleth);
         loadProfile(data);
         // TODO need to move this somewhere useful
         $(".d3-tip").css("z-index", 100);
@@ -28,7 +56,6 @@ var controller;
 
 export default function load(profileId) {
     var controller = new Controller(loadGeography);
-    var mapcontrol = new MapControl();
 
     mapcontrol.on("geoselect", function(areaCode) {
         controller.setGeography(areaCode);

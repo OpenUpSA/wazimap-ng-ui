@@ -149,9 +149,19 @@ A node contains the following attributes:
 */
 export function LayerCache() {
     this.mapit = new MapIt();
+    this.geoMap = {};
 }
 
 LayerCache.prototype = {
+
+    hashGeographies: function(layer) {
+        var self = this;
+        layer.eachLayer(function(l) {
+            var props = l.feature.properties;
+            var code = props.codes.MDB;
+            self.geoMap[code] = l; 
+        })
+    },
     /**
      * Return an array of Leaflet layers to be displayed
      * @param  {[type]}
@@ -173,6 +183,7 @@ LayerCache.prototype = {
                     var parentAreaCode = geography.parent;
                     self.mapit.toGeoJSON(geography.id).then(function(geojson) {
                         var layer = L.geoJson(geojson);
+                        self.hashGeographies(layer);
                         var hasGeometries = layer.getLayers().length > 0;
                         if (hasGeometries)
                             layers.push(layer);

@@ -3,6 +3,7 @@ import {format as d3format} from 'd3-format';
 import Controller from './controller';
 import loadProfile from './page_profile';
 import {MapControl} from './maps';
+import {getJSON} from './utils';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";

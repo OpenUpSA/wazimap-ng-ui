@@ -25,7 +25,7 @@ function getColor(d) {
                       '#FFEDA0';
 }
 
-function choropleth(el, obj) {
+function choropleth(el, data, obj) {
     console.log(obj) 
     var total = 0
     for (const [code, count] of Object.entries(obj.children)) {

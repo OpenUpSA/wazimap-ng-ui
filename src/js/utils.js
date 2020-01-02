@@ -23,3 +23,25 @@ export function getJSON(url) {
     req.send();
   });
 }
+
+export function Observer() {
+  this.eventListeners = {}
+}
+
+Observer.prototype = {
+
+  on: function(event, func) {
+    if (this.eventListeners[event] == undefined)
+      this.eventListeners[event] = [];
+
+    this.eventListeners[event].push(func);
+  },
+
+  triggerEvent: function(event, payload) {
+    if (this.eventListeners[event] != undefined) {
+      this.eventListeners[event].forEach(function(listener) {
+        listener(payload);
+      });
+    }
+  },
+}

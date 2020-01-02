@@ -1,5 +1,8 @@
 import {select as d3select} from 'd3-selection';
 import {format as d3format} from 'd3-format';
+import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
+import {scaleSequential as d3scaleSequential} from 'd3-scale';
+import {min as d3min, max as d3max} from 'd3-array';
 import Controller from './controller';
 import loadProfile from './page_profile';
 import {loadMenu} from './menu';
@@ -14,30 +17,30 @@ const baseUrl = "http://localhost:8000";
 
 var mapcontrol = new MapControl();
 
-function getColor(d) {
-    return d > 0.3 ? '#800026' :
-           d > 0.25 ? '#BD0026' :
-           d > 0.2 ? '#E31A1C' :
-           d > 0.15 ? '#FC4E2A' :
-           d > 0.1 ? '#FD8D3C' :
-           d > 0.05 ? '#FEB24C' :
-           d > 0   ? '#FED976' :
-                      '#FFEDA0';
-}
+function choropleth(el, data, subindicators, obj) {
+    var childGeographies = Object.entries(obj.children).map(function(childGeography) {
+        var code = childGeography[0];
+        var count = childGeography[1];
+        var universe = subindicators.reduce(function(el1, el2) {
+          if (el2.children != undefined && el2.children[code] != undefined)
+            return el1 + el2.children[code];
+          return el1;
+        }, 0)
+        var val = count / universe;
+        return {code: code, val: val};
+    })
 
-function choropleth(el, data, obj) {
-    console.log(obj) 
-    var total = 0
-    for (const [code, count] of Object.entries(obj.children)) {
-        total += count;
-    }
+    var values = childGeographies.map(function(el) {
+      return el.val;
+    })
 
-    for (const [code, count] of Object.entries(obj.children)) {
-        var val = count / total;
-        var layer = mapcontrol.layerCache.geoMap[code];    
-        layer.setStyle({fillColor: getColor(val)})
-    }
+    var scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values), d3max(values)])
 
+    childGeographies.forEach(function(el) {
+      var layer = mapcontrol.layerCache.geoMap[el.code];
+      var color = scale(el.val);
+      layer.setStyle({fillColor: color});
+    })
 }
 
 function loadGeography(profileId, geographyId) {

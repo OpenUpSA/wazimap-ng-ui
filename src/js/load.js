@@ -8,6 +8,7 @@ import loadProfile from './page_profile';
 import {loadMenu} from './menu';
 import {MapControl} from './maps';
 import {getJSON} from './utils';
+import {Profile} from './profile';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";

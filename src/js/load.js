@@ -13,15 +13,20 @@ import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css
 import "../css/barchart.css";
 
 //const baseUrl = "https://wazimap-ng.openup.org.za";
-const baseUrl = "http://localhost:8000";
+const baseUrl = "http://localhost:8001";
 
 var mapcontrol = new MapControl();
+var controller = new Controller();
 
-function choropleth(el, data, subindicators, obj) {
-    var childGeographies = Object.entries(obj.children).map(function(childGeography) {
+/**
+ * Handles creating a choropleth when a subindicator is clicked
+ * @param  {[type]} data    An object that contains subindictors and obj
+ */
+function choropleth(data) {
+    var childGeographies = Object.entries(data.obj.children).map(function(childGeography) {
         var code = childGeography[0];
         var count = childGeography[1];
-        var universe = subindicators.reduce(function(el1, el2) {
+        var universe = data.subindicators.reduce(function(el1, el2) {
           if (el2.children != undefined && el2.children[code] != undefined)
             return el1 + el2.children[code];
           return el1;
@@ -43,11 +48,14 @@ function choropleth(el, data, subindicators, obj) {
     })
 }
 
-function loadGeography(profileId, geographyId) {
+function loadGeography(payload) {
+    var profileId = payload.profileId;
+    var geographyId = payload.geographyId;
+
     var url = baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"
     getJSON(url).then(function(data) {
         console.log(data);
-        loadMenu(data["indicators"], choropleth);
+        loadMenu(data["indicators"], controller.onSubIndicatorClick);
         loadProfile(data);
         // TODO need to move this somewhere useful
         $(".d3-tip").css("z-index", 100);
@@ -55,16 +63,15 @@ function loadGeography(profileId, geographyId) {
     })
 }
 
-var controller;
 
 export default function load(profileId) {
-    var controller = new Controller(loadGeography);
+    // TODO all of this needs to be cleaned up
+    controller.on("hashChange", loadGeography);
+    controller.on("subindicatorClick", choropleth);
 
-    mapcontrol.on("geoselect", function(areaCode) {
-        controller.setGeography(areaCode);
-    })
+    mapcontrol.on("geoselect", controller.onGeoSelect)
 
-    controller.trigger()
+    controller.triggerHashChange()
     // TODO need to set this to the geography searched for
     mapcontrol.overlayBoundaries(null);
 }

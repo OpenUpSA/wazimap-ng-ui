@@ -1,4 +1,5 @@
 import MapIt from './mapit';
+import {Observer} from './utils';
 
 var defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 var defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -12,10 +13,8 @@ export function MapControl(coords, tileUrl) {
         var tileUrl = defaultTileUrl;
 
     this.map = this.configureMap(coords, tileUrl);
-
     this.layerCache = new LayerCache();
-
-    this.eventListeners = {};
+    this.observer = new Observer();
 
     this.styles = {
         hoverOnly: {
@@ -55,18 +54,11 @@ MapControl.prototype = {
     },
 
     on: function(event, func) {
-        if (this.eventListeners[event] == undefined)
-            this.eventListeners[event] = [];
-
-        this.eventListeners[event].push(func);
+        this.observer.on(event, func);
     },
 
     triggerEvent: function(event, payload) {
-        if (this.eventListeners[event] != undefined) {
-            this.eventListeners[event].forEach(function(listener) {
-                listener(payload);
-            });
-        }
+        this.observer.triggerEvent(event, payload);
     },
 
     setLayerStyle: function(layer, style) {

@@ -26,7 +26,12 @@ export function loadMenu(data, subindicatorCallback) {
                 $(newSubIndicator).on("click", function(el) {
                     setActive(el);
                     if (subindicatorCallback != undefined)
-                        subindicatorCallback(el, data, subindicators, obj)
+                        subindicatorCallback({
+                            el: el,
+                            data: data,
+                            subindicators: subindicators,
+                            obj: obj
+                        })
                 });
             })
         } else {

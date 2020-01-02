@@ -1,5 +1,14 @@
-export default function Controller(geoloader) {
-    this.geoloader = geoloader;
+import {Observer} from './utils';
+
+export default function Controller() {
+    this.observer = new Observer();
+    var self = this;
+
+    // bind this to event handlers
+    this.onSubIndicatorClick = this.onSubIndicatorClick.bind(this);
+    this.onHashChange = this.onHashChange.bind(this);
+    this.onGeoSelect = this.onGeoSelect.bind(this);
+
     $(window).on('hashchange', function(){
             // On every hash change the render function is called with the new hash.
             // This is how the navigation of our app happens.
@@ -13,15 +22,42 @@ export default function Controller(geoloader) {
                     var geographyId = parts[0];
                 else
                     var geographyId = parts[1];
-                geoloader(profileId, geographyId);
+
+                self.triggerEvent("hashChange", {
+                    profileId: profileId,
+                    geographyId: geographyId
+                })
             }
             
     });
 };
 
 Controller.prototype = {
-    trigger: function() {
+    on: function(event, func) {
+        this.observer.on(event, func);
+    },
+
+    triggerEvent(event, payload) {
+        this.observer.triggerEvent(event, payload)
+    },
+
+    triggerHashChange: function() {
         $(window).trigger('hashchange');
+    },
+
+    onSubIndicatorClick(payload) {
+        this.observer.triggerEvent("subindicatorClick", payload);
+    },
+
+    onHashChange(payload) {
+        this.observer.triggerEvent("hashChange", payload);
+    },
+
+    onGeoSelect(payload) {
+        var areaCode = payload;
+
+        this.observer.triggerEvent("geoSelect", areaCode); 
+        window.location.hash = "#geo:" + areaCode;
     },
 
     setGeography: function(areaCode) {

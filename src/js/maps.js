@@ -107,6 +107,15 @@ MapControl.prototype = {
 
             var alreadyZoomed = false;
 
+            var layerPayload = function(layer) {
+                var prop = layer.layer.feature.properties;
+                return {
+                    areaCode: prop.codes.MDB,
+                    layer: layer.layer,
+                    element: layer
+                }
+            }
+
             layers.forEach(function(layer) {
                 layer
                     .off("click")
@@ -114,8 +123,14 @@ MapControl.prototype = {
                         var prop = el.layer.feature.properties;
                         var areaCode = prop.id;
                         self.overlayBoundaries(areaCode);
-                        self.triggerEvent("geoselect", prop.codes.MDB);
+                        self.triggerEvent("layerClick", layerPayload(el));
                     }) 
+                    .on("mouseover", function(el) {
+                        self.triggerEvent("layerMouseOver", layerPayload(el));
+                    })
+                    .on("mouseout", function(el) {
+                        self.triggerEvent("layerMouseOut", layerPayload(el));
+                    })
                     .addTo(self.map);
                     if (!alreadyZoomed) {
                         try {

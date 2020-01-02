@@ -7,7 +7,10 @@ export default function Controller() {
     // bind this to event handlers
     this.onSubIndicatorClick = this.onSubIndicatorClick.bind(this);
     this.onHashChange = this.onHashChange.bind(this);
-    this.onGeoSelect = this.onGeoSelect.bind(this);
+    this.onLayerClick = this.onLayerClick.bind(this);
+    this.onLayerMouseOver = this.onLayerMouseOver.bind(this);
+    this.onLayerMouseOut = this.onLayerMouseOut.bind(this);
+    this.onProfileLoaded = this.onProfileLoaded.bind(this);
 
     $(window).on('hashchange', function(){
             // On every hash change the render function is called with the new hash.
@@ -53,11 +56,25 @@ Controller.prototype = {
         this.observer.triggerEvent("hashChange", payload);
     },
 
-    onGeoSelect(payload) {
-        var areaCode = payload;
+    onLayerClick(payload) {
+        var areaCode = payload.areaCode;
 
-        this.observer.triggerEvent("geoSelect", areaCode); 
+        this.observer.triggerEvent("layerClick", areaCode); 
         window.location.hash = "#geo:" + areaCode;
+    },
+
+    onLayerMouseOver(payload) {
+        this.observer.triggerEvent("layerMouseOver", payload); 
+        payload.layer.bindPopup(payload.areaCode).openPopup();
+    },
+
+    onLayerMouseOut(payload) {
+        this.observer.triggerEvent("layerMouseOut", payload); 
+    },
+
+    onProfileLoaded(payload) {
+        this.observer.triggerEvent("profileLoaded", payload); 
+        console.log(payload.data)
     },
 
     setGeography: function(areaCode) {

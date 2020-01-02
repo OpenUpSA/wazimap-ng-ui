@@ -54,7 +54,10 @@ function loadGeography(payload) {
 
     var url = baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"
     getJSON(url).then(function(data) {
-        console.log(data);
+        var profile = new Profile(data);
+
+        controller.onProfileLoaded(profile);
+        // TODO might want to consider turning these load functions into classes 
         loadMenu(data["indicators"], controller.onSubIndicatorClick);
         loadProfile(data);
         // TODO need to move this somewhere useful
@@ -65,11 +68,12 @@ function loadGeography(payload) {
 
 
 export default function load(profileId) {
-    // TODO all of this needs to be cleaned up
     controller.on("hashChange", loadGeography);
     controller.on("subindicatorClick", choropleth);
 
-    mapcontrol.on("geoselect", controller.onGeoSelect)
+    mapcontrol.on("layerClick", controller.onLayerClick)
+    mapcontrol.on("layerMouseOver", controller.onLayerMouseOver)
+    mapcontrol.on("layerMouseOut", controller.onLayerMouseOut)
 
     controller.triggerHashChange()
     // TODO need to set this to the geography searched for

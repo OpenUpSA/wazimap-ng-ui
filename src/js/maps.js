@@ -148,7 +148,8 @@ MapControl.prototype = {
                 return {
                     areaCode: prop.codes.MDB,
                     layer: layer.layer,
-                    element: layer
+                    element: layer,
+                    properties: prop,
                 }
             }
 

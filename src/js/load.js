@@ -17,6 +17,7 @@ var mapcontrol = new MapControl();
 var controller = new Controller();
 
 function loadGeography(payload) {
+    var payload = payload.payload;
     var profileId = payload.profileId;
     var geographyId = payload.geographyId;
 
@@ -38,10 +39,39 @@ function loadGeography(payload) {
 export default function load(profileId) {
     controller.on("hashChange", loadGeography);
     controller.on("subindicatorClick", function(payload) {
+        payload = payload.payload;
+
         mapcontrol.choropleth(payload);
     })
 
     controller.on("subindicatorClick", onSubIndicatorChange);
+    controller.on("layerMouseOver", function(payload) {
+        console.log(payload)
+        var popupLabel = "";
+        var state = payload.state;
+        var payload = payload.payload;
+        popupLabel += payload.properties.name;
+        var areaCode = payload.areaCode;
+        if (state.subindicator != null) {
+            var subindicators = state.subindicator.subindicators;
+            var subindicator = state.subindicator.obj.key;
+            var subindicatorValues = subindicators.filter(function(el) {
+                return el.key == subindicator
+            })
+            if (subindicatorValues.length > 0) {
+                var subindicatorValue = subindicatorValues[0];
+                for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
+                    if (geographyCode == areaCode) {
+                        var countFmt = numFmt(count);
+                        popupLabel = `<strong>${popupLabel}</strong>`;
+                        popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
+                    }
+                }
+            }
+        }
+        var popup = payload.layer.bindPopup(popupLabel).openPopup();
+    })
+
 
     mapcontrol.on("layerClick", controller.onLayerClick)
     mapcontrol.on("layerMouseOver", controller.onLayerMouseOver)

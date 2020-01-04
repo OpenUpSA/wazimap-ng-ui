@@ -1,6 +1,7 @@
 import {select as d3select} from 'd3-selection';
 
 export function onSubIndicatorChange(payload) {
+    payload = payload.payload;
     var label = `${payload.indicator} (${payload.obj.key})`
     updateSubIndicatorChip(label);
 }

@@ -47,3 +47,6 @@ Observer.prototype = {
     }
   },
 }
+
+export var numFmt = d3format(",.2d");
+

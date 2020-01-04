@@ -2,6 +2,12 @@ import {Observer} from './utils';
 
 export default function Controller() {
     this.observer = new Observer();
+    this.state = {
+       profile: null,
+       // Set if a choropleth is currently active
+       subindicator: null 
+    }
+
     var self = this;
 
     // bind this to event handlers
@@ -41,6 +47,10 @@ Controller.prototype = {
     },
 
     triggerEvent(event, payload) {
+        payload = {
+            payload: payload,
+            state: this.state
+        }
         this.observer.triggerEvent(event, payload)
     },
 
@@ -60,32 +70,33 @@ Controller.prototype = {
      * @return {[type]}         [description]
      */
     onSubIndicatorClick(payload) {
-        this.observer.triggerEvent("subindicatorClick", payload);
+        this.state.subindicator = payload;
+        this.triggerEvent("subindicatorClick", payload);
     },
 
     onHashChange(payload) {
-        this.observer.triggerEvent("hashChange", payload);
+        this.triggerEvent("hashChange", payload);
     },
 
     onLayerClick(payload) {
         var areaCode = payload.areaCode;
 
-        this.observer.triggerEvent("layerClick", areaCode); 
+        this.triggerEvent("layerClick", areaCode); 
         window.location.hash = "#geo:" + areaCode;
     },
 
     onLayerMouseOver(payload) {
-        this.observer.triggerEvent("layerMouseOver", payload); 
-        payload.layer.bindPopup(payload.areaCode).openPopup();
+        this.triggerEvent("layerMouseOver", payload); 
     },
 
     onLayerMouseOut(payload) {
-        this.observer.triggerEvent("layerMouseOut", payload); 
+        this.triggerEvent("layerMouseOut", payload); 
     },
 
     onProfileLoaded(payload) {
-        this.observer.triggerEvent("profileLoaded", payload); 
-        console.log(payload.data)
+        this.state.profile = payload;
+        this.state.subindicators = null; // unset when a new profile is loaded
+        this.triggerEvent("profileLoaded", payload); 
     },
 
     setGeography: function(areaCode) {

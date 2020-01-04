@@ -1,3 +1,7 @@
+import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
+import {scaleSequential as d3scaleSequential} from 'd3-scale';
+import {min as d3min, max as d3max} from 'd3-array';
+
 import MapIt from './mapit';
 import {Observer} from './utils';
 
@@ -85,6 +89,38 @@ MapControl.prototype = {
     setLayerToSelected: function(layer) {
         var self = this;
         this.setLayerStyle(layer, this.styles.selected);
+    },
+
+    /**
+     * Handles creating a choropleth when a subindicator is clicked
+     * @param  {[type]} data    An object that contains subindictors and obj
+     */
+    choropleth: function(data) {
+        var self = this
+
+        var childGeographies = Object.entries(data.obj.children).map(function(childGeography) {
+            var code = childGeography[0];
+            var count = childGeography[1];
+            var universe = data.subindicators.reduce(function(el1, el2) {
+              if (el2.children != undefined && el2.children[code] != undefined)
+                return el1 + el2.children[code];
+              return el1;
+            }, 0)
+            var val = count / universe;
+            return {code: code, val: val};
+        })
+
+        var values = childGeographies.map(function(el) {
+          return el.val;
+        })
+
+        var scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values), d3max(values)])
+
+        childGeographies.forEach(function(el) {
+          var layer = self.layerCache.geoMap[el.code];
+          var color = scale(el.val);
+          layer.setStyle({fillColor: color});
+        })
     },
 
     overlayBoundaries: function(areaCode) {

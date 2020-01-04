@@ -29,6 +29,7 @@ export function loadMenu(data, subindicatorCallback) {
                         subindicatorCallback({
                             el: el,
                             data: data,
+                            indicator: indicator,
                             subindicators: subindicators,
                             obj: obj
                         })

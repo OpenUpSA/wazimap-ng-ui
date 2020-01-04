@@ -48,6 +48,17 @@ Controller.prototype = {
         $(window).trigger('hashchange');
     },
 
+    /**
+     * Event handler that is fired when a subindicator in the menu is clicked
+     * @param  {[type]} payload [description]
+     * payload {
+            el: el,     # clicked element
+            data: data, # profile data
+            subindicators: subindicators, # child geography data for each related subindicator
+            obj: obj. # subindicator data
+       }
+     * @return {[type]}         [description]
+     */
     onSubIndicatorClick(payload) {
         this.observer.triggerEvent("subindicatorClick", payload);
     },

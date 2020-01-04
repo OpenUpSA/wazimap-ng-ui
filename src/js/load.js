@@ -1,10 +1,9 @@
 import {select as d3select} from 'd3-selection';
-import {format as d3format} from 'd3-format';
 import Controller from './controller';
 import loadProfile from './page_profile';
 import {loadMenu} from './menu';
 import {MapControl} from './maps';
-import {getJSON} from './utils';
+import {getJSON, numFmt} from './utils';
 import {Profile} from './profile';
 import {onSubIndicatorChange} from './map_panel';
 

@@ -1,3 +1,5 @@
+import {format as d3format} from 'd3-format';
+
 export function getJSON(url) {
   // Return a new promise.
   return new Promise(function(resolve, reject) {

@@ -6,6 +6,7 @@ import {MapControl} from './maps';
 import {getJSON, numFmt} from './utils';
 import {Profile} from './profile';
 import {onSubIndicatorChange} from './map_panel';
+import {onProfileLoaded as onProfileLoadedSearch} from './search';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -71,6 +72,8 @@ export default function load(profileId) {
         }
         var popup = payload.layer.bindPopup(popupLabel).openPopup();
     })
+
+    controller.on("profileLoaded", onProfileLoadedSearch);
 
 
     mapcontrol.on("layerClick", controller.onLayerClick)

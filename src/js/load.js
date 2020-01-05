@@ -23,7 +23,7 @@ function loadGeography(payload) {
     var geographyId = payload.geographyId;
 
     var url = baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"
-    getJSON(url).then(function(data) {
+    getJSON(url).then((data) => {
         var profile = new Profile(data);
 
         controller.onProfileLoaded(profile);
@@ -39,15 +39,14 @@ function loadGeography(payload) {
 
 export default function load(profileId) {
     controller.on("hashChange", loadGeography);
-    controller.on("subindicatorClick", function(payload) {
+    controller.on("subindicatorClick", (payload) => {
         payload = payload.payload;
 
         mapcontrol.choropleth(payload);
     })
 
     controller.on("subindicatorClick", onSubIndicatorChange);
-    controller.on("layerMouseOver", function(payload) {
-        console.log(payload)
+    controller.on("layerMouseOver", (payload) => {
         var popupLabel = "";
         var state = payload.state;
         var payload = payload.payload;
@@ -56,7 +55,7 @@ export default function load(profileId) {
         if (state.subindicator != null) {
             var subindicators = state.subindicator.subindicators;
             var subindicator = state.subindicator.obj.key;
-            var subindicatorValues = subindicators.filter(function(el) {
+            var subindicatorValues = subindicators.filter((el) => {
                 return el.key == subindicator
             })
             if (subindicatorValues.length > 0) {

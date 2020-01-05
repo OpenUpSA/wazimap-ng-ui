@@ -17,7 +17,7 @@ export function getJSON(url) {
     };
 
     // Handle network errors
-    req.onerror = function() {
+    req.onerror = () => {
       reject(Error("Network Error"));
     };
 
@@ -40,7 +40,7 @@ export class Observer {
 
   triggerEvent = (event, payload) => {
     if (this.eventListeners[event] != undefined) {
-      this.eventListeners[event].forEach(function(listener) {
+      this.eventListeners[event].forEach((listener) => {
         listener(payload);
       });
     }

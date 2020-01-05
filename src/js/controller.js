@@ -11,7 +11,7 @@ export default class Controller {
 
         var self = this;
 
-        $(window).on('hashchange', function() {
+        $(window).on('hashchange', () => {
                 // On every hash change the render function is called with the new hash.
                 // This is how the navigation of our app happens.
                 var hash = decodeURI(window.location.hash);

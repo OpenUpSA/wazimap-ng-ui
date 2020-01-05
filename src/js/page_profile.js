@@ -15,7 +15,7 @@ function addBreadCrumbs(container, geography) {
     var breadcrumbTemplate = $(".breadcrumb", container)[0].cloneNode(true);
     $(".breadcrumb", container).remove();
 
-    geography.parents.forEach(function(el) {
+    geography.parents.forEach((el) => {
         var breadcrumb = breadcrumbTemplate.cloneNode(true);
         $(".truncate", breadcrumb).text(el.name) 
         container.append(breadcrumb);
@@ -28,7 +28,7 @@ function addKeyMetrics(container, data) {
     var metricTemplate = $(".key-metric", metricWrapper)[0].cloneNode(true)
     $(".key-metric", metricWrapper).remove()
 
-    metrics.forEach(function(el) {
+    metrics.forEach((el) => {
         var metric = metricTemplate.cloneNode(true)
         $(".key-metric_value div", metric).text(el.value)
         $(".key-metric_title", metric).text(el.label)
@@ -81,7 +81,7 @@ export default function loadProfile(data) {
         wrapper.append(newIndicatorSection);
         var chartContainer = $(".indicator__chart_container", newIndicatorSection);
 
-        classes.forEach(function(el) {
+        classes.forEach((el) => {
             el["label"] = el.key
             el["value"] = el["count"]
         })

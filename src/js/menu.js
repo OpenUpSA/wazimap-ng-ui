@@ -17,13 +17,13 @@ export function loadMenu(data, subindicatorCallback) {
         $(".menu__link_h4--active", indicatorWrapper).remove();
         // TODO ????
         if (true) {
-            subindicators.forEach(function(obj) {
+            subindicators.forEach((obj) => {
                 var newSubIndicator = subIndicatorTemplate.cloneNode(true);
                 var text = obj.key
                 $("div:nth-child(2)", newSubIndicator).text(text);
                 indicatorWrapper.append(newSubIndicator);
 
-                $(newSubIndicator).on("click", function(el) {
+                $(newSubIndicator).on("click", (el) => {
                     setActive(el);
                     if (subindicatorCallback != undefined)
                         subindicatorCallback({

@@ -1,14 +1,13 @@
 import {format as d3format} from 'd3-format';
 
 export function getJSON(url) {
-  return new Promise(function(resolve, reject) {
-    // Do the usual XHR stuff
-    var req = new XMLHttpRequest();
+  return new Promise((resolve, reject) => {
+    const req = new XMLHttpRequest();
     req.open('GET', url);
 
-    req.onload = function() {
+    req.onload = () => {
       if (req.status == 200) {
-        var json = JSON.parse(req.response);
+        const json = JSON.parse(req.response);
         resolve(json);
       } else {
         reject(Error(req.statusText));
@@ -20,7 +19,6 @@ export function getJSON(url) {
       reject(Error("Network Error"));
     };
 
-    // Make the request
     req.send();
   });
 }
@@ -33,18 +31,17 @@ export class Observer {
   on = (event, func) => {
     if (this.eventListeners[event] == undefined)
       this.eventListeners[event] = [];
-
     this.eventListeners[event].push(func);
   };
 
   triggerEvent = (event, payload) => {
     if (this.eventListeners[event] != undefined) {
-      this.eventListeners[event].forEach((listener) => {
+      this.eventListeners[event].forEach(listener => {
         listener(payload);
       });
     }
   };
 }
 
-export var numFmt = d3format(",.2d");
+export const numFmt = d3format(",.2d");
 

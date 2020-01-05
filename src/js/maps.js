@@ -9,12 +9,13 @@ var defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697
 var defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 var MAPITSA = 4577; // South Africa MapIt code
 
-export function MapControl(coords, tileUrl) {
-    if (coords == undefined)
-        var coords = defaultCoordinates;
+export function MapControl(coords, config) {
+    config = config || {}
 
-    if (tileUrl == undefined)
-        var tileUrl = defaultTileUrl;
+    var coords = config.coords || defaultCoordinates;
+    var tileUrl = config.zoomMap || defaultTileUrl;
+
+    this.zoomMap = config.zoomMap || true;
 
     this.map = this.configureMap(coords, tileUrl);
     this.layerCache = new LayerCache();
@@ -169,7 +170,8 @@ MapControl.prototype = {
                         self.triggerEvent("layerMouseOut", layerPayload(el));
                     })
                     .addTo(self.map);
-                    if (!alreadyZoomed) {
+
+                    if (self.zoomMap && !alreadyZoomed) {
                         try {
                                 self.map.fitBounds(layer.getBounds());
                                 alreadyZoomed = true;

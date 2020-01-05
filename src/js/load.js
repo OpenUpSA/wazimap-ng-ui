@@ -14,15 +14,15 @@ import "../css/barchart.css";
 //const baseUrl = "https://wazimap-ng.openup.org.za";
 const baseUrl = "http://localhost:8001";
 
-var mapcontrol = new MapControl();
-var controller = new Controller();
+const mapcontrol = new MapControl();
+const controller = new Controller();
 
 function loadGeography(payload) {
     var payload = payload.payload;
-    var profileId = payload.profileId;
-    var geographyId = payload.geographyId;
+    const profileId = payload.profileId;
+    const geographyId = payload.geographyId;
 
-    var url = baseUrl + "/api/v1/profiles/" + profileId + "/geographies/" + geographyId + "/"
+    const url = `${baseUrl}/api/v1/profiles/${profileId}/geographies/${geographyId}/`;
     getJSON(url).then((data) => {
         var profile = new Profile(data);
 
@@ -39,37 +39,36 @@ function loadGeography(payload) {
 
 export default function load(profileId) {
     controller.on("hashChange", loadGeography);
-    controller.on("subindicatorClick", (payload) => {
+    controller.on("subindicatorClick", payload => {
         payload = payload.payload;
 
         mapcontrol.choropleth(payload);
     })
 
     controller.on("subindicatorClick", onSubIndicatorChange);
-    controller.on("layerMouseOver", (payload) => {
+    controller.on("layerMouseOver", payload => {
         var popupLabel = "";
-        var state = payload.state;
+        const state = payload.state;
         var payload = payload.payload;
         popupLabel += payload.properties.name;
         var areaCode = payload.areaCode;
+        
         if (state.subindicator != null) {
-            var subindicators = state.subindicator.subindicators;
-            var subindicator = state.subindicator.obj.key;
-            var subindicatorValues = subindicators.filter((el) => {
-                return el.key == subindicator
-            })
+            const subindicators = state.subindicator.subindicators;
+            const subindicator = state.subindicator.obj.key;
+            const subindicatorValues = subindicators.filter(subindicator => subindicator.key == subindicator);
             if (subindicatorValues.length > 0) {
-                var subindicatorValue = subindicatorValues[0];
+                const subindicatorValue = subindicatorValues[0];
                 for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
                     if (geographyCode == areaCode) {
-                        var countFmt = numFmt(count);
+                        const countFmt = numFmt(count);
                         popupLabel = `<strong>${popupLabel}</strong>`;
                         popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
                     }
                 }
             }
         }
-        var popup = payload.layer.bindPopup(popupLabel).openPopup();
+        const popup = payload.layer.bindPopup(popupLabel).openPopup();
     })
 
     controller.on("profileLoaded", onProfileLoadedSearch);

@@ -1,67 +1,79 @@
-var baseUrl = "https://mapit.openup.org.za";
-var baseAreasUrl = baseUrl + "/areas";
-var defaultParams = "generation=2&simplify_tolerance=0.005";
+import {getJSON} from './utils' 
 
-var levelMap = {
-    country: {code: "CY", childLevel: "province", },
-    province: {code: "PR", childLevel: "district"},
-    district: {code: "DC", childLevel: "municipality"},
-    municipality: {code: "MN", childLevel: "subplace"},
-    mainplace: {code: "MP", childLevel: "subplace"},
-    subplace: {code: "SP", childLevel: null },
-}
+const baseUrl = "https://mapit.openup.org.za";
+const baseAreasUrl = baseUrl + "/areas";
+const defaultParams = "generation=2&simplify_tolerance=0.005";
 
-var getJSON = function(url) {
-	return Promise.resolve($.getJSON(url));
-}
-
-export default class MapIt {
-	constructor(queryParams) {
-		if (queryParams != undefined)
-			this.queryParams = queryParams;
-		else
-			this.queryParams = defaultParams;
-
-		this.areaIds = {};
-
+class MapItApiHelper {
+	constructor(queryParams=defaultParams) {
+		this.queryParams = queryParams;
 	};
 
-	createGeography = (areaCode, data) => {
-		if (this.areaIds[areaCode] == undefined) {
-			this.areaIds[areaCode] = data;
+	generateChildrenUrl = (parentMapItId) => {
+		var url = `${baseUrl}/area/${parentMapItId}/children.json`;
+		return url;
+	};
+
+	generateAreaGeographiesUrl = (areaCodes) => {
+		var url = `${baseUrl}/areas/${areaCodes.join(",")}.geojson?${this.queryParams}`;
+		return url;
+	};
+
+	loadChildren = (parentMapItId) => {
+		const url = this.generateChildrenUrl(parentMapItId);
+
+		return new Promise((resolve, reject) => {
+			getJSON(url).then(data => resolve(data))
+		})
+	};
+
+	loadAreaGeographies = (mapItIds) => {
+		const url = this.generateAreaGeographiesUrl(mapItIds);
+		return new Promise((resolve, reject) => {
+			getJSON(url).then(geojson => resolve(geojson))
+		})
+	}
+}
+
+/**
+ * Class to manage caching MapIt data and maintaining a geographical hierarchy
+ */
+export default class MapIt {
+
+	constructor() {
+		this.areaIds = {};
+		this.api = new MapItApiHelper();
+	};
+
+	createGeography = (mapItId, data) => {
+		if (this.areaIds[mapItId] == undefined) {
+			this.areaIds[mapItId] = data;
 		}
 	};
 
-	getGeography = (areaCode) => {
-		var self = this;
+	getGeography = (mapItId) => {
+		const self = this;
+		const alreadyExists = mapItId => this.areaIds[mapItId] != undefined
 
-		if (self.areaIds[areaCode] != undefined)
-			return new Promise(function(resolve, reject) {
-				resolve(self.areaIds[areaCode])
-			})
-		else {
-			return new Promise(function(resolve, reject) {
-				self.getChildren(areaCode).then(function(children) {
-					var childCodes = children.map(function(el) {
-						return el.id;	
-					})
 
-					self.areaIds[areaCode] = {
-						children: childCodes,
+		return new Promise(function(resolve, reject) {
+			if (alreadyExists(mapItId))
+				resolve(self.areaIds[mapItId])
+			else {
+				self.getChildGeographies(mapItId).then(childGeographies => {
+					const childMapItIds = childGeographies.map(geography => geography.id);
+
+					self.areaIds[mapItId] = {
+						children: childMapItIds,
 						parent: null, // TODO need to figure out how to get this
 						geojson: null, // TODO should this be retrieved?
-						id: areaCode
+						id: mapItId
 					};
 
-					resolve(self.areaIds[areaCode])
+					resolve(self.areaIds[mapItId])
 				})
-			})
-		}
-	};
-
-	getChildrenUrl = (parentAreaCode) => {
-		var url = `${baseUrl}/area/${parentAreaCode}/children.json`;
-		return url;
+			}
+		})
 	};
 
 	/**
@@ -71,63 +83,34 @@ export default class MapIt {
 	 * @param  {Function}
 	 * @return {[type]}
 	 */
-	getChildren = (parentAreaCode) => {
-		var self = this;
-		return new Promise(function(resolve, reject) {
-			if (self.areaIds[parentAreaCode] != undefined && self.areaIds[parentAreaCode].children != undefined) {
-				var childCodes = self.areaIds[parentAreaCode].children;
-				self.getAreaGeographies(childCodes).then(function(geos) {
-					resolve(geos);
-				});
-			} else {
-				var url = self.getChildrenUrl(parentAreaCode);
-				getJSON(url).then(function(data) {
-					var childCodes = Object.keys(data);
-					var geography = self.areaIds[parentAreaCode];
+	getChildGeographies = (parentMapItId) => {
+		const self = this;
+		return new Promise((resolve, reject) => {
+			const childrenExist = self.areaIds[parentMapItId] != undefined && self.areaIds[parentMapItId].children != undefined;
 
-					if (geography == undefined)
+			if (childrenExist) {
+				const childCodes = self.areaIds[parentMapItId].children;
+				self.getAreaGeographies(childCodes).then(geos => resolve(geos));
+			} else {
+				self.api.loadChildren(parentMapItId).then(data => {
+					const childCodes = Object.keys(data);
+					const geography = self.areaIds[parentMapItId];
+
+					if (geography == undefined) {
 						// TODO I don't like the duplication of geography creation - need to centralise
-						self.createGeography(parentAreaCode, {
+						self.createGeography(parentMapItId, {
 							children: childCodes,
-							id: parentAreaCode,
+							id: parentMapItId,
 							geojson: null,
 							parent: null
 						});
-					else {
+					} else {
 						geography.children = childCodes;	
 					}
-					self.getAreaGeographies(childCodes).then(function(geos) {
-						resolve(geos);
-					});
+					self.getAreaGeographies(childCodes).then(geos => resolve(geos));
 				})
 			}
-
 		})
-	};
-
-	getGeographiesGeometryUrl = (areaCodes) => {
-		var url = `${baseUrl}/areas/${areaCodes.join(",")}/geometry?${this.queryParams}`;
-		return url;
-	};
-
-	getGeographiesGeometry = (areaCodes) => {
-		var self = this;
-		var url = self.getGeographiesGeometryUrl(areaCodes);
-		return new Promise(function(resolve, reject) {
-			getJSON(url).then(function(json) {
-				Object.keys(json).forEach(function(key) {
-					if (self.areaIds[key] != undefined) {
-						self.areaIds[key].geometry = json[key];
-					}
-				})
-				resolve();
-			}) 
-		})
-	};
-
-	getAreaGeographiesUrl = (areaCodes) => {
-		var url = `${baseUrl}/areas/${areaCodes.join(",")}.geojson?${this.queryParams}`;
-		return url;
 	};
 
 	/**
@@ -136,51 +119,45 @@ export default class MapIt {
 	 * @param  {Function}
 	 * @return {[geographies]}
 	 */
-	getAreaGeographies = (areaCodes) => {
-		var self = this;
+	getAreaGeographies = (mapItIds) => {
+		const self = this;
+		const notDownloaded = mapItId => self.areaIds[mapItId] == undefined;
+		const updateGeography = geojsonFeature => {
+			const mapItId = geojsonFeature.properties.id;
+			if (notDownloaded(mapItId))
+				self.createGeography(mapItId, {});
+			self.areaIds[mapItId].geojson = geojsonFeature;
+			self.areaIds[mapItId].parent = geojsonFeature.properties.parent_area;
+			self.areaIds[mapItId].id = mapItId;
 
-		return new Promise(function(resolve, reject) {
-			var downloadCodes = areaCodes.filter(function(areaCode) {
-				return self.areaIds[areaCode] == undefined;
-			})
+		}
+
+		return new Promise((resolve, reject) => {
+			const downloadCodes = mapItIds.filter(notDownloaded);
 
 			if (downloadCodes.length > 0) {
-				var url = self.getAreaGeographiesUrl(downloadCodes);
-				getJSON(url).then(function(geojson) {
-					var geographies = geojson.features;
-					geographies.forEach(function(el) {
-						var id = el.properties.id;
-						if (self.areaIds[id] == undefined)
-							self.createGeography(id, {});
-						self.areaIds[id].geojson = el;
-						self.areaIds[id].parent = el.properties.parent_area;
-						self.areaIds[id].id = id;
-					})
-					self.getAreaGeographies(areaCodes)
-						.then(function(geos) {
-							resolve(geos);
-						})
+
+				self.api.loadAreaGeographies(downloadCodes).then(geojson => {
+					const geojsonFeatures = geojson.features;
+					geojsonFeatures.forEach(updateGeography);
+
+					const geos = mapItIds.map(mapItId => self.areaIds[mapItId]);
+					resolve(geos);
 				})
 			} else {
-				var geos = areaCodes.map(function(areaCode) {
-					return self.areaIds[areaCode];
-				})
-
+				const geos = mapItIds.map(mapItId => self.areaIds[mapItId]);
 				resolve(geos);
 			}
-
 		})
 	};
 
-	toGeoJSON = (parentAreaCode) => {
-		var self = this;
-		return new Promise(function(resolve, reject) {
-			var children = self.getChildren(parentAreaCode).then(function(children) {
-				var geos = children.map(function(child) {
-					return child.geojson;
-				})
+	toGeoJSON = (parentMapItId) => {
+		const self = this;
+		return new Promise((resolve, reject) => {
+			const children = self.getChildGeographies(parentMapItId).then(children => {
+				const geos = children.map(child => child.geojson)
 
-				var geojson = {
+				const geojson = {
 					features: geos,
 					type: "FeatureCollection"
 				}

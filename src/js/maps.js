@@ -9,40 +9,73 @@ var defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697
 var defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 var MAPITSA = 4577; // South Africa MapIt code
 
-export function MapControl(coords, config) {
+var defaultStyles = {
+    hoverOnly: {
+        over: {
+            fillColor: "darkred",
+        },
+        out: {
+            fillColor: "#ffffff",
+            opacity: "0%",
+            stroke: false,
+        } 
+    },
+    selected: {
+        over: {
+            color: "darkred"
+        },
+        out: {
+            color: "red",
+            opacity: 1,
+            weight: 1
+        }
+    }
+}
+
+function LayerStyler(styles) {
+    this.styles = styles || defaultStyles;
+}
+
+LayerStyler.prototype = {
+    setLayerStyle: function(layer, styles) {
+        layer.resetStyle();
+        layer.eachLayer(function(feature) {
+            feature.setStyle(styles.out);
+
+            feature
+                .off("mouseover mouseout")
+                .on("mouseover", function(el) {
+                    feature.setStyle(styles.over);
+                })
+                .on("mouseout", function(el) {
+                    feature.setStyle(styles.out);
+            })
+        })
+    },
+
+    setLayerToHoverOnly: function(layer) {
+        this.setLayerStyle(layer, this.styles.hoverOnly);
+    },
+
+    setLayerToSelected: function(layer) {
+        this.setLayerStyle(layer, this.styles.selected);
+    },
+}
+
+export function MapControl(config) {
     config = config || {}
 
     var coords = config.coords || defaultCoordinates;
     var tileUrl = config.zoomMap || defaultTileUrl;
 
     this.zoomMap = config.zoomMap || true;
+    this.boundaryLayers = null;
 
-    this.map = this.configureMap(coords, tileUrl);
     this.layerCache = new LayerCache();
     this.observer = new Observer();
+    this.layerStyler = new LayerStyler();
 
-    this.styles = {
-        hoverOnly: {
-            over: {
-                fillColor: "darkred",
-            },
-            out: {
-                fillColor: "#ffffff",
-                opacity: "0%",
-                stroke: false,
-            } 
-        },
-        selected: {
-            over: {
-                color: "darkred"
-            },
-            out: {
-                color: "red",
-                opacity: 1,
-                weight: 1
-            }
-        }
-    }
+    this.map = this.configureMap(coords, tileUrl);
 }
 
 MapControl.prototype = {
@@ -55,41 +88,18 @@ MapControl.prototype = {
         L.tileLayer(tileUrl).addTo(map);
         L.control.zoom({position: 'topright'}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
+
         return map;
     },
 
+    /* Observer method */
     on: function(event, func) {
         this.observer.on(event, func);
     },
 
+    /* Observer method */
     triggerEvent: function(event, payload) {
         this.observer.triggerEvent(event, payload);
-    },
-
-    setLayerStyle: function(layer, style) {
-        var self = this;
-        layer.resetStyle();
-        layer.eachLayer(function(feature) {
-            feature.setStyle(style.out);
-            feature.off("mouseover mouseout");
-            feature
-                .on("mouseover", function(el) {
-                    feature.setStyle(style.over);
-                })
-                .on("mouseout", function(el) {
-                    feature.setStyle(style.out);
-                })
-        })
-    },
-
-    setLayerToHoverOnly: function(layer) {
-        var self = this;
-        this.setLayerStyle(layer, this.styles.hoverOnly);
-    },
-
-    setLayerToSelected: function(layer) {
-        var self = this;
-        this.setLayerStyle(layer, this.styles.selected);
     },
 
     /**
@@ -134,12 +144,12 @@ MapControl.prototype = {
             var mainLayer = layers[0];
 
             secondaryLayers.forEach(function(layer) {
-                self.setLayerToHoverOnly(layer);
+                self.layerStyler.setLayerToHoverOnly(layer);
                 self.boundaryLayers.addLayer(layer);
 
             })
 
-            self.setLayerToSelected(mainLayer);
+            self.layerStyler.setLayerToSelected(mainLayer);
             self.boundaryLayers.addLayer(mainLayer);
 
             var alreadyZoomed = false;

@@ -52,11 +52,11 @@ export default function load(profileId) {
         var payload = payload.payload;
         popupLabel += payload.properties.name;
         var areaCode = payload.areaCode;
-        
+
         if (state.subindicator != null) {
             const subindicators = state.subindicator.subindicators;
             const subindicator = state.subindicator.obj.key;
-            const subindicatorValues = subindicators.filter(subindicator => subindicator.key == subindicator);
+            const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
             if (subindicatorValues.length > 0) {
                 const subindicatorValue = subindicatorValues[0];
                 for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {

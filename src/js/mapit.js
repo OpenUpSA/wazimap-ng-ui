@@ -11,28 +11,28 @@ var levelMap = {
     subplace: {code: "SP", childLevel: null },
 }
 
-export default function MapIt(queryParams) {
-	if (queryParams != undefined)
-		this.queryParams = queryParams;
-	else
-		this.queryParams = defaultParams;
-
-	this.areaIds = {};
-
-}
-
 var getJSON = function(url) {
 	return Promise.resolve($.getJSON(url));
 }
 
-MapIt.prototype = {
-	createGeography: function(areaCode, data) {
+export default class MapIt {
+	constructor(queryParams) {
+		if (queryParams != undefined)
+			this.queryParams = queryParams;
+		else
+			this.queryParams = defaultParams;
+
+		this.areaIds = {};
+
+	};
+
+	createGeography = (areaCode, data) => {
 		if (this.areaIds[areaCode] == undefined) {
 			this.areaIds[areaCode] = data;
 		}
-	},
+	};
 
-	getGeography: function(areaCode) {
+	getGeography = (areaCode) => {
 		var self = this;
 
 		if (self.areaIds[areaCode] != undefined)
@@ -57,12 +57,12 @@ MapIt.prototype = {
 				})
 			})
 		}
-	},
+	};
 
-	getChildrenUrl: function(parentAreaCode) {
+	getChildrenUrl = (parentAreaCode) => {
 		var url = `${baseUrl}/area/${parentAreaCode}/children.json`;
 		return url;
-	},
+	};
 
 	/**
 	Returns the children of the given parent area code
@@ -71,7 +71,7 @@ MapIt.prototype = {
 	 * @param  {Function}
 	 * @return {[type]}
 	 */
-	getChildren: function(parentAreaCode) {
+	getChildren = (parentAreaCode) => {
 		var self = this;
 		return new Promise(function(resolve, reject) {
 			if (self.areaIds[parentAreaCode] != undefined && self.areaIds[parentAreaCode].children != undefined) {
@@ -103,14 +103,14 @@ MapIt.prototype = {
 			}
 
 		})
-	},
+	};
 
-	getGeographiesGeometryUrl: function(areaCodes) {
+	getGeographiesGeometryUrl = (areaCodes) => {
 		var url = `${baseUrl}/areas/${areaCodes.join(",")}/geometry?${this.queryParams}`;
 		return url;
-	},
+	};
 
-	getGeographiesGeometry: function(areaCodes) {
+	getGeographiesGeometry = (areaCodes) => {
 		var self = this;
 		var url = self.getGeographiesGeometryUrl(areaCodes);
 		return new Promise(function(resolve, reject) {
@@ -123,12 +123,12 @@ MapIt.prototype = {
 				resolve();
 			}) 
 		})
-	},
+	};
 
-	getAreaGeographiesUrl: function(areaCodes) {
+	getAreaGeographiesUrl = (areaCodes) => {
 		var url = `${baseUrl}/areas/${areaCodes.join(",")}.geojson?${this.queryParams}`;
 		return url;
-	},
+	};
 
 	/**
 	 * Download the geojson for the given area codes
@@ -136,7 +136,7 @@ MapIt.prototype = {
 	 * @param  {Function}
 	 * @return {[geographies]}
 	 */
-	getAreaGeographies: function(areaCodes) {
+	getAreaGeographies = (areaCodes) => {
 		var self = this;
 
 		return new Promise(function(resolve, reject) {
@@ -170,9 +170,9 @@ MapIt.prototype = {
 			}
 
 		})
-	},
+	};
 
-	toGeoJSON: function(parentAreaCode) {
+	toGeoJSON = (parentAreaCode) => {
 		var self = this;
 		return new Promise(function(resolve, reject) {
 			var children = self.getChildren(parentAreaCode).then(function(children) {
@@ -189,5 +189,5 @@ MapIt.prototype = {
 			})
 
 		})
-	},
+	};
 }

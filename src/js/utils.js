@@ -26,26 +26,25 @@ export function getJSON(url) {
   });
 }
 
-export function Observer() {
-  this.eventListeners = {}
-}
+export class Observer {
+  constructor() {
+    this.eventListeners = {}
+  }
 
-Observer.prototype = {
-
-  on: function(event, func) {
+  on = (event, func) => {
     if (this.eventListeners[event] == undefined)
       this.eventListeners[event] = [];
 
     this.eventListeners[event].push(func);
-  },
+  };
 
-  triggerEvent: function(event, payload) {
+  triggerEvent = (event, payload) => {
     if (this.eventListeners[event] != undefined) {
       this.eventListeners[event].forEach(function(listener) {
         listener(payload);
       });
     }
-  },
+  };
 }
 
 export var numFmt = d3format(",.2d");

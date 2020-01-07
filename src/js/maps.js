@@ -3,11 +3,11 @@ import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 
 import MapIt from './mapit';
+import {MAPITSA} from './mapit';
 import {Observer} from './utils';
 
-var defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
-var defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-var MAPITSA = 4577; // South Africa MapIt code
+const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
+const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
 var defaultStyles = {
     hoverOnly: {
@@ -134,10 +134,10 @@ export class MapControl {
         })
     };
 
-    overlayBoundaries = (areaCode) => {
+    overlayBoundaries = (mapItId) => {
         var self = this;
 
-        self.layerCache.getLayer(areaCode).then((layers) => {
+        self.layerCache.getLayer(mapItId).then((layers) => {
             self.boundaryLayers.clearLayers();
 
             var secondaryLayers = layers.slice(1).reverse();
@@ -157,7 +157,7 @@ export class MapControl {
             var layerPayload = function(layer) {
                 var prop = layer.layer.feature.properties;
                 return {
-                    areaCode: prop.codes.MDB,
+                    mapItId: prop.codes.MDB,
                     layer: layer.layer,
                     element: layer,
                     properties: prop,
@@ -169,8 +169,8 @@ export class MapControl {
                     .off("click")
                     .on("click", (el) => {
                         var prop = el.layer.feature.properties;
-                        var areaCode = prop.id;
-                        self.overlayBoundaries(areaCode);
+                        var mapItId = prop.id;
+                        self.overlayBoundaries(mapItId);
                         self.triggerEvent("layerClick", layerPayload(el));
                     }) 
                     .on("mouseover", (el) => {
@@ -183,8 +183,8 @@ export class MapControl {
 
                     if (self.zoomMap && !alreadyZoomed) {
                         try {
-                                self.map.fitBounds(layer.getBounds());
-                                alreadyZoomed = true;
+                            self.map.fitBounds(layer.getBounds());
+                            alreadyZoomed = true;
                         } catch (err) {
                             console.log("Error zooming: " + err);
                         }
@@ -224,17 +224,17 @@ export class LayerCache {
      * @param  {Function}
      * @return {[type]}
      */
-    getLayer = (areaCode, layers) => {
+    getLayer = (mapItId, layers) => {
         var self = this;
         return new Promise((resolve, reject) => {
 
-            if (areaCode == null)
-                areaCode = MAPITSA;
+            if (mapItId == null)
+                mapItId = MAPITSA;
 
             if (layers == undefined)
                 layers = [];
 
-            var sequence = self.mapit.getGeography(areaCode)
+            var sequence = self.mapit.getGeography(mapItId)
                 .then((geography) => {
                     var parentAreaCode = geography.parent;
                     self.mapit.toGeoJSON(geography.id).then((geojson) => {

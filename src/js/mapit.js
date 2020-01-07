@@ -4,6 +4,8 @@ const baseUrl = "https://mapit.openup.org.za";
 const baseAreasUrl = baseUrl + "/areas";
 const defaultParams = "generation=2&simplify_tolerance=0.005";
 
+export const MAPITSA = 4577; // South Africa MapIt code
+
 class MapItApiHelper {
 	constructor(queryParams=defaultParams) {
 		this.queryParams = queryParams;

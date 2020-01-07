@@ -14,6 +14,7 @@ import "../css/barchart.css";
 //const baseUrl = "https://wazimap-ng.openup.org.za";
 const baseUrl = "http://localhost:8001";
 
+const SACode = "ZA"
 const mapcontrol = new MapControl();
 const controller = new Controller();
 
@@ -36,43 +37,37 @@ function loadGeography(payload) {
     })
 }
 
+function loadPopup(payload) {
+    const state = payload.state;
+    var payload = payload.payload;
+    var popupLabel = payload.properties.name;
+    var areaCode = payload.areaCode;
 
-export default function load(profileId) {
-    controller.on("hashChange", loadGeography);
-    controller.on("subindicatorClick", payload => {
-        payload = payload.payload;
-
-        mapcontrol.choropleth(payload);
-    })
-
-    controller.on("subindicatorClick", onSubIndicatorChange);
-    controller.on("layerMouseOver", payload => {
-        var popupLabel = "";
-        const state = payload.state;
-        var payload = payload.payload;
-        popupLabel += payload.properties.name;
-        var areaCode = payload.areaCode;
-
-        if (state.subindicator != null) {
-            const subindicators = state.subindicator.subindicators;
-            const subindicator = state.subindicator.obj.key;
-            const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
-            if (subindicatorValues.length > 0) {
-                const subindicatorValue = subindicatorValues[0];
-                for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
-                    if (geographyCode == areaCode) {
-                        const countFmt = numFmt(count);
-                        popupLabel = `<strong>${popupLabel}</strong>`;
-                        popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
-                    }
+    if (state.subindicator != null) {
+        const subindicators = state.subindicator.subindicators;
+        const subindicator = state.subindicator.obj.key;
+        const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
+        if (subindicatorValues.length > 0) {
+            const subindicatorValue = subindicatorValues[0];
+            for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
+                if (geographyCode == areaCode) {
+                    const countFmt = numFmt(count);
+                    popupLabel = `<strong>${popupLabel}</strong>`;
+                    popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
                 }
             }
         }
-        const popup = payload.layer.bindPopup(popupLabel).openPopup();
-    })
+    }
+    const popup = payload.layer.bindPopup(popupLabel).openPopup();
 
+}
+
+export default function load(profileId) {
+    controller.on("hashChange", loadGeography);
+    controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
+    controller.on("subindicatorClick", onSubIndicatorChange);
+    controller.on("layerMouseOver", payload => loadPopup(payload));
     controller.on("profileLoaded", onProfileLoadedSearch);
-
 
     mapcontrol.on("layerClick", controller.onLayerClick)
     mapcontrol.on("layerMouseOver", controller.onLayerMouseOver)
@@ -81,6 +76,5 @@ export default function load(profileId) {
     controller.triggerHashChange()
     // TODO need to set this to the geography searched for
     mapcontrol.overlayBoundaries(null);
-    const SACode = "ZA"
     loadGeography({payload: {profileId: profileId, geographyId: SACode}})
 }

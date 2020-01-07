@@ -8,6 +8,7 @@ import {Observer} from './utils';
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const defaultGeography = MAPITSA
 
 var defaultStyles = {
     hoverOnly: {
@@ -229,15 +230,15 @@ export class LayerCache {
         return new Promise((resolve, reject) => {
 
             if (mapItId == null)
-                mapItId = MAPITSA;
+                mapItId = defaultGeography;
 
             if (layers == undefined)
                 layers = [];
 
             var sequence = self.mapit.getGeography(mapItId)
-                .then((geography) => {
+                .then(geography => {
                     var parentAreaCode = geography.parent;
-                    self.mapit.toGeoJSON(geography.id).then((geojson) => {
+                    self.mapit.toGeoJSON(geography.id).then(geojson => {
                         var layer = L.geoJson(geojson);
                         self.hashGeographies(layer);
                         var hasGeometries = layer.getLayers().length > 0;
@@ -246,7 +247,7 @@ export class LayerCache {
 
                         if (parentAreaCode != null) {
                             self.getLayer(parentAreaCode, layers)
-                                .then((layers) => {
+                                .then(layers => {
                                     resolve(layers);
                                 });
                         } else {

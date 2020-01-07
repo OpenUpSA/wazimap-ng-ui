@@ -77,7 +77,7 @@ export default function loadProfile(data) {
 
     function addIndicator(wrapper, indicator, classes) {
         var newIndicatorSection = indicatorTemplate.cloneNode(true);
-        $(".indicator__chart_title", newIndicatorSection).text(classes.indicator);
+        $(".indicator__chart_title h4", newIndicatorSection).text(indicator);
         wrapper.append(newIndicatorSection);
         var chartContainer = $(".indicator__chart_container", newIndicatorSection);
 
@@ -93,7 +93,7 @@ export default function loadProfile(data) {
         const myChart = reusableBarChart();
         // TODO how big should this be?
         myChart.height(100);
-        myChart.width(850);
+        myChart.width(550);
         myChart.tooltipFormatter((d) => {
             return `${d.data.label}: ${fmt(d.data.value)}`;
         });

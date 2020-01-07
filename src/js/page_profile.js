@@ -93,12 +93,14 @@ export default function loadProfile(data) {
         const myChart = reusableBarChart();
         // TODO how big should this be?
         myChart.height(100);
-        myChart.width(550);
+        myChart.width(800);
         myChart.tooltipFormatter((d) => {
             return `${d.data.label}: ${fmt(d.data.value)}`;
         });
 
         $("img", container).remove();
+        $("svg", container).remove();
+
 
         d3select(container)
             .call(myChart.data(data));

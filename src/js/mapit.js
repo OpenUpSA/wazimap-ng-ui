@@ -19,18 +19,40 @@ class MapItApiHelper {
 		return url;
 	};
 
+	processGeography = (feature) => {
+		if (feature.codes.MDB == "LIM")
+			feature.codes.MDB = "LP"	
+	}
+
 	loadChildren = (parentMapItId) => {
+		const self = this;
 		const url = this.generateChildrenUrl(parentMapItId);
 
 		return new Promise((resolve, reject) => {
-			getJSON(url).then(data => resolve(data))
+			getJSON(url).then(data => {
+				// TODO figure out how to isolate South Africa specific extensions
+				for (const [key, val] of Object.entries(data)) {
+					self.processGeography(val);
+
+				}
+				resolve(data)
+			})
 		})
 	};
 
 	loadAreaGeographies = (mapItIds) => {
+		const self = this;
 		const url = this.generateAreaGeographiesUrl(mapItIds);
+
 		return new Promise((resolve, reject) => {
-			getJSON(url).then(geojson => resolve(geojson))
+			getJSON(url).then(geojson => {
+				console.log(geojson);
+				const features = geojson.features;
+				features.forEach((val) => {
+					self.processGeography(val.properties);
+				}) 
+				resolve(geojson)
+			})
 		})
 	}
 }

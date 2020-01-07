@@ -72,10 +72,10 @@ export default class Controller {
     };
 
     onLayerClick = (payload) => {
-        var areaCode = payload.areaCode;
+        var mapItId = payload.mapItId;
 
-        this.triggerEvent("layerClick", areaCode); 
-        window.location.hash = "#geo:" + areaCode;
+        this.triggerEvent("layerClick", mapItId); 
+        window.location.hash = "#geo:" + mapItId;
     };
 
     onLayerMouseOver = (payload) => {
@@ -92,7 +92,7 @@ export default class Controller {
         this.triggerEvent("profileLoaded", payload); 
     };
 
-    setGeography = (areaCode) => {
-        window.location.hash = "#geo:" + areaCode;
+    setGeography = (mapItId) => {
+        window.location.hash = "#geo:" + mapItId;
     }
 }

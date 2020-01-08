@@ -11,9 +11,8 @@ import {onProfileLoaded as onProfileLoadedSearch} from './search';
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 
-//const baseUrl = "https://wazimap-ng.openup.org.za";
-const baseUrl = "http://localhost:8001";
 
+var baseUrl = null;
 const SACode = "ZA"
 const mapcontrol = new MapControl();
 const controller = new Controller();
@@ -62,7 +61,8 @@ function loadPopup(payload) {
 
 }
 
-export default function load(profileId) {
+export default function load(serverUrl, profileId) {
+    baseUrl = serverUrl;
     controller.on("hashChange", loadGeography);
     controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
     controller.on("subindicatorClick", onSubIndicatorChange);

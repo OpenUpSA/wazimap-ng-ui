@@ -76,5 +76,4 @@ export default function load(profileId) {
     controller.triggerHashChange()
     // TODO need to set this to the geography searched for
     mapcontrol.overlayBoundaries(null);
-    loadGeography({payload: {profileId: profileId, geographyId: SACode}})
 }

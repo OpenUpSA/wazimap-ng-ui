@@ -2,17 +2,24 @@ import {select as d3select} from 'd3-selection';
 import {format as d3format} from 'd3-format';
 import {reusableBarChart} from "data-visualisations/src/charts/bar/reusable-bar-chart/reusable-bar-chart";
 
+const profileWrapper = $(".location-profile");
+const categoryTemplate = $(".location-profile__data-category--first")[0].cloneNode(true);
+const subcategoryTemplate = $(".data-category__indicator", categoryTemplate)[0].cloneNode(true);
+const indicatorTemplate = $(".indicator__chart", subcategoryTemplate)[0].cloneNode(true);
+const breadcrumbsContainer = $(".location-header__breadcumbs_wrapper", profileWrapper);
+const breadcrumbTemplate = $(".breadcrumb", breadcrumbsContainer)[0].cloneNode(true);
+const metricWrapper = $(".key-metrics", profileWrapper)
+const metricTemplate = $(".key-metric", metricWrapper)[0].cloneNode(true)
+
 function updateGeography(container, data) {
     var geography = data.geography
     var label = geography.name + " (" + geography.code + ")";
     $(".location-header_title h1", container).text(label);
 
-    var breadcrumbsContainer = $(".location-header__breadcumbs_wrapper", container);
     addBreadCrumbs(breadcrumbsContainer, geography);
 }
 
 function addBreadCrumbs(container, geography) {
-    var breadcrumbTemplate = $(".breadcrumb", container)[0].cloneNode(true);
     $(".breadcrumb", container).remove();
 
     geography.parents.forEach((el) => {
@@ -24,8 +31,6 @@ function addBreadCrumbs(container, geography) {
 
 function addKeyMetrics(container, data) {
     var metrics = data.key_metrics
-    var metricWrapper = $(".key-metrics", container)
-    var metricTemplate = $(".key-metric", metricWrapper)[0].cloneNode(true)
     $(".key-metric", metricWrapper).remove()
 
     metrics.forEach((el) => {
@@ -36,13 +41,9 @@ function addKeyMetrics(container, data) {
     })
 }
 
+
 export default function loadProfile(data) {
     var all_indicators = data.indicators;
-
-    var profileWrapper = $(".location-profile");
-    var categoryTemplate = $(".location-profile__data-category--first")[0].cloneNode(true);
-    var subcategoryTemplate = $(".data-category__indicator", categoryTemplate)[0].cloneNode(true);
-    var indicatorTemplate = $(".indicator__chart", subcategoryTemplate)[0].cloneNode(true);
 
     $(".location-profile__data-category--first").remove();
     $(".location-profile__data-category").remove();

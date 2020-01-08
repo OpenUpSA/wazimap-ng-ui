@@ -15,7 +15,8 @@
     "data-visualisations": "https://github.com/vulekamali/data-visualisations.git#reusable",
     "js": "^0.1.0",
     "main": "^1000.0.1",
-    "main.js": "0.0.1"
+    "main.js": "0.0.1",
+    "shx": "^0.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.7.7",
@@ -28,7 +29,11 @@
     "parcel-bundler": "^1.12.4"
   },
   "scripts": {
-    "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html --out-dir docs"
+    "start": "parcel ./src/index.html",
+    "prebuild-dev": "shx rm -rf dist/*",
+    "build-dev": "parcel build ./src/index.html --no-minify --public-url ./",
+    "prebuild": "shx rm -rf dist/*",
+    "build": "parcel build ./src/index.html --public-url ./",
+    "push-gh-pages": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose"
   }
 }

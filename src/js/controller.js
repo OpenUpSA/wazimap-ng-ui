@@ -62,20 +62,30 @@ export default class Controller {
      * @return {[type]}         [description]
      */
 
+    /* Menu events */
     onSubIndicatorClick = (payload) => {
         this.state.subindicator = payload;
         this.triggerEvent("subindicatorClick", payload);
+        this.onChloroplethUpdate(payload)
     };
 
+    /* Location bar events */
     onHashChange = (payload) => {
         this.triggerEvent("hashChange", payload);
     };
 
+    /* Map events */
+    /**
+     * Boundary clicked on the map
+     * payload is {"MapItId": 333}
+     */
     onLayerClick = (payload) => {
         var mapItId = payload.mapItId;
 
         this.triggerEvent("layerClick", mapItId); 
         window.location.hash = "#geo:" + mapItId;
+
+        this.onGeographySelected(payload)
     };
 
     onLayerMouseOver = (payload) => {
@@ -86,13 +96,49 @@ export default class Controller {
         this.triggerEvent("layerMouseOut", payload); 
     };
 
+    onChloroplethUpdate = (payload) => {
+        this.triggerEvent("choroplethUpdate", payload);
+    }
+
+    /**
+     * E.g. a map boundary is clicked
+     * payload is {"MapItId": 333}
+     */
+    onGeographySelected = (payload) => {
+        this.triggerEvent("geographySelected", payload)
+    }
+
+
+    /* Search events */
+    onSearchBefore = (payload) => {
+        this.triggerEvent("searchBefore", payload)
+    }
+
+    onSearchResults = (payload) => {
+        console.log(payload)
+        this.triggerEvent("searchResults", payload)
+    }
+
+    /**
+     * When a search result is clicked
+     * {code: WC011, level: municipality, name: Matzikama}
+     */
+    onSearchResultClick = (payload) => {
+        this.triggerEvent("searchResultClick", payload)
+    }
+
+    onSearchClear = (payload) => {
+        this.triggerEvent("searchClear", payload)
+    }
+
+    setGeography = (mapItId) => {
+        window.location.hash = "#geo:" + mapItId;
+    }
+
     onProfileLoaded = (payload) => {
         this.state.profile = payload;
         this.state.subindicators = null; // unset when a new profile is loaded
         this.triggerEvent("profileLoaded", payload); 
     };
 
-    setGeography = (mapItId) => {
-        window.location.hash = "#geo:" + mapItId;
-    }
 }

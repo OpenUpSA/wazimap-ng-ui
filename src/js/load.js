@@ -14,8 +14,9 @@ import "../css/barchart.css";
 
 var baseUrl = null;
 const SACode = "ZA"
-const mapcontrol = new MapControl();
 const controller = new Controller();
+const mapcontrol = new MapControl(controller);
+const search = new Search(2);
 
 function loadGeography(payload) {
     var payload = payload.payload;
@@ -64,14 +65,25 @@ function loadPopup(payload) {
 export default function load(serverUrl, profileId) {
     baseUrl = serverUrl;
     controller.on("hashChange", loadGeography);
-    controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
+    controller.on("choroplethUpdate", payload => mapcontrol.choropleth(payload.payload))
     controller.on("subindicatorClick", onSubIndicatorChange);
     controller.on("layerMouseOver", payload => loadPopup(payload));
     controller.on("profileLoaded", onProfileLoadedSearch);
+    controller.on("geographySelected", payload => {mapcontrol.overlayBoundaries(payload.payload.mapItId)})
+    controller.on("searchResultClick", payload => {
+        // TODO MDB is South Africa-specific - need to figure out how to abstract
+        // this away
+        mapcontrol.overlayBoundaries(`MDB:${payload.payload.code}`)
+    })
 
     mapcontrol.on("layerClick", controller.onLayerClick)
     mapcontrol.on("layerMouseOver", controller.onLayerMouseOver)
     mapcontrol.on("layerMouseOut", controller.onLayerMouseOut)
+
+    search.on('beforeSearch', controller.onSearchBefore);
+    search.on('searchResults', controller.onSearchResults);
+    search.on('resultClick', controller.onSearchResultClick);
+    search.on('clearSearch', controller.onSearchClear);
 
     controller.triggerHashChange()
     // TODO need to set this to the geography searched for

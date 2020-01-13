@@ -158,7 +158,8 @@ export class MapControl {
             var layerPayload = function(layer) {
                 var prop = layer.layer.feature.properties;
                 return {
-                    mapItId: prop.codes.MDB,
+                    //mapItId: prop.codes.MDB,
+                    mapItId: prop.id,
                     layer: layer.layer,
                     element: layer,
                     properties: prop,
@@ -171,7 +172,7 @@ export class MapControl {
                     .on("click", (el) => {
                         var prop = el.layer.feature.properties;
                         var mapItId = prop.id;
-                        self.overlayBoundaries(mapItId);
+                        //self.overlayBoundaries(mapItId);
                         self.triggerEvent("layerClick", layerPayload(el));
                     }) 
                     .on("mouseover", (el) => {

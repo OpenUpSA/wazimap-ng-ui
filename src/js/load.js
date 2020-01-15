@@ -33,6 +33,7 @@ function loadGeography(payload) {
         // TODO need to move this somewhere useful
         $(".d3-tip").css("z-index", 100);
         Webflow.require('ix2').init()
+        controller.registerWebflowEvents();
     })
 }
 
@@ -63,6 +64,7 @@ function loadPopup(payload) {
 
 export default function load(serverUrl, profileId) {
     baseUrl = serverUrl;
+    controller.registerWebflowEvents();
     controller.on("hashChange", loadGeography);
     controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
     controller.on("subindicatorClick", onSubIndicatorChange);

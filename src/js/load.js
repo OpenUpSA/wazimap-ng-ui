@@ -2,6 +2,7 @@ import {select as d3select} from 'd3-selection';
 import Controller from './controller';
 import loadProfile from './page_profile';
 import {loadMenu} from './menu';
+import PDFPrinter from './print';
 import {MapControl} from './maps';
 import {getJSON, numFmt} from './utils';
 import {Profile} from './profile';
@@ -16,6 +17,8 @@ var baseUrl = null;
 const SACode = "ZA"
 const mapcontrol = new MapControl();
 const controller = new Controller();
+const pdfprinter = new PDFPrinter();
+const printButton = $("#profile-print");
 
 function loadGeography(payload) {
     var payload = payload.payload;
@@ -70,10 +73,13 @@ export default function load(serverUrl, profileId) {
     controller.on("subindicatorClick", onSubIndicatorChange);
     controller.on("layerMouseOver", payload => loadPopup(payload));
     controller.on("profileLoaded", onProfileLoadedSearch);
+    controller.on("printProfile", payload => pdfprinter.printDiv(payload))
 
-    mapcontrol.on("layerClick", controller.onLayerClick)
-    mapcontrol.on("layerMouseOver", controller.onLayerMouseOver)
-    mapcontrol.on("layerMouseOut", controller.onLayerMouseOut)
+    mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
+    mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))
+    mapcontrol.on("layerMouseOut", payload => controller.onLayerMouseOut(payload))
+
+    printButton.on("click", payload => controller.onPrintProfile(payload));
 
     controller.triggerHashChange()
     // TODO need to set this to the geography searched for

@@ -34,6 +34,7 @@
     "build-dev": "parcel build ./src/index.html --no-minify --public-url ./",
     "prebuild": "shx rm -rf dist/*",
     "build": "parcel build ./src/index.html --public-url ./",
-    "push-gh-pages": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose"
+    "push-gh-pages": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose",
+    "clean-files": "mv dist/js*.js dist/wazimap-ng.js; mv dist/js*.css dist/wazimap-ng.css"
   }
 }

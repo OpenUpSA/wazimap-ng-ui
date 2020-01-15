@@ -92,6 +92,14 @@ export default class Controller {
         this.triggerEvent("profileLoaded", payload); 
     };
 
+    onPrintProfile = (payload) => {
+        let filename = "geography";
+        if (this.state.profile != null) {
+            filename = this.state.profile.data.geography.name
+        }
+        this.triggerEvent("printProfile", filename)
+    }
+
     setGeography = (mapItId) => {
         window.location.hash = "#geo:" + mapItId;
     }

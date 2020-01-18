@@ -4,7 +4,7 @@ import {min as d3min, max as d3max} from 'd3-array';
 
 import MapIt from './mapit';
 import {MAPITSA} from './mapit';
-import {Observer} from './utils';
+import {Observable} from './utils';
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -63,8 +63,9 @@ class LayerStyler {
     };
 }
 
-export class MapControl {
+export class MapControl extends Observable {
     constructor(config) {
+        super();
         config = config || {}
 
         var coords = config.coords || defaultCoordinates;
@@ -74,7 +75,6 @@ export class MapControl {
         this.boundaryLayers = null;
 
         this.layerCache = new LayerCache();
-        this.observer = new Observer();
         this.layerStyler = new LayerStyler();
 
         this.map = this.configureMap(coords, tileUrl);
@@ -91,16 +91,6 @@ export class MapControl {
         this.boundaryLayers = L.layerGroup().addTo(map);
 
         return map;
-    };
-
-    /* Observer method */
-    on = (event, func) => {
-        this.observer.on(event, func);
-    };
-
-    /* Observer method */
-    triggerEvent = (event, payload) => {
-        this.observer.triggerEvent(event, payload);
     };
 
     /**

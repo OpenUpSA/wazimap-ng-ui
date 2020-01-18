@@ -1,8 +1,8 @@
-import {Observer} from './utils';
+import {Observable} from './utils';
 
-export default class Controller {
+export default class Controller extends Observable {
     constructor() {
-        this.observer = new Observer();
+        super();
         this.state = {
            profile: null,
            // Set if a choropleth is currently active
@@ -34,16 +34,12 @@ export default class Controller {
         });
     };
 
-    on = (event, func) => {
-        this.observer.on(event, func);
-    };
-
-    triggerEvent = (event, payload) => {
+    triggerEvent(event, payload) {
         payload = {
             payload: payload,
             state: this.state
         }
-        this.observer.triggerEvent(event, payload)
+        super.triggerEvent(event, payload);
     };
 
     triggerHashChange = () => {
@@ -124,8 +120,7 @@ export default class Controller {
                         $(el).on(ev, el => func(el)) 
                     }
                 })
-        })
-
+            })
         })
     }
 }

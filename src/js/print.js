@@ -1,20 +1,6 @@
-import {Observer} from './utils';
+import {Observable} from './utils';
 
-export default class PDFPrinter {
-    constructor() {
-        this.observer = new Observer();
-        //$("#profile-print").on("click", el => this.printDiv())
-        //document.getElementById('profile-print').setAttribute("onclick", "printDiv()");
-    }
-
-    on = (event, func) => {
-        this.observer.on(event, func);
-    };
-
-    triggerEvent = (event, payload) => {
-        this.observer.triggerEvent(event, payload);
-    };
-
+export default class PDFPrinter extends Observable {
     printDiv = (payload) => {
         let filename = 'geography';
         if (payload.payload != undefined)

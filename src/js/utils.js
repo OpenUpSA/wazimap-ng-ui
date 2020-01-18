@@ -23,7 +23,7 @@ export function getJSON(url) {
   });
 }
 
-export class Observer {
+export class Observable {
   constructor() {
     this.eventListeners = {}
   }
@@ -34,7 +34,7 @@ export class Observer {
     this.eventListeners[event].push(func);
   };
 
-  triggerEvent = (event, payload) => {
+  triggerEvent(event, payload) {
     if (this.eventListeners[event] != undefined) {
       this.eventListeners[event].forEach(listener => {
         listener(payload);

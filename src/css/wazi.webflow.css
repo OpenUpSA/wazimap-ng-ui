@@ -907,7 +907,7 @@ a {
 
 .content__charts-area {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1730,7 +1730,7 @@ a {
   margin-bottom: 16px;
 }
 
-.sub-indicator__chart--pie {
+.pie {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3986,7 +3986,10 @@ a {
   right: 0%;
   bottom: 0%;
   z-index: 2;
-  display: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
@@ -3996,6 +3999,10 @@ a {
   -ms-flex-align: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.content__map_loading.hidden {
+  display: none;
 }
 
 .lottie-animation {
@@ -4189,38 +4196,6 @@ a {
   font-size: 0.8em;
   letter-spacing: 1px;
   text-transform: uppercase;
-}
-
-.point-data__checkbox {
-  display: none;
-  width: 30px;
-  height: 30px;
-  margin-left: 16px;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-}
-
-.icon-lottie--checkbox {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  width: 20px;
-  height: 20px;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
 }
 
 .point-data__h2_bg {
@@ -4933,12 +4908,11 @@ a {
   flex-direction: column;
 }
 
-.sub-indicator__chart--bar {
+.indicator__chart {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 100%;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -4947,6 +4921,14 @@ a {
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+}
+
+.indicator__chart.pie {
+  width: 200px;
+}
+
+.indicator__chart.bar {
+  width: 100%;
 }
 
 .toggle__icon--vertical--small {

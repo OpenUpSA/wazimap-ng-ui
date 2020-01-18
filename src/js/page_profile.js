@@ -17,7 +17,7 @@ const subcategoryMetricsClass = '.indicator__key-metrics';
 const indicatorClass = '.indicator__sub-indicator';
 const indicatorTitleClass = '.sub-indicator__chart_header h4';
 
-const chartContainerClass = '.sub-indicator__chart';
+const chartContainerClass = '.indicator__chart';
 
 const headerTitleClass = '.location-header__title h1';
 const breadcrumbsContainerClass = '.location-header__breadcrumbs';

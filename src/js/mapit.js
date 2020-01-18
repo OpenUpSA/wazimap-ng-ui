@@ -12,12 +12,12 @@ class MapItApiHelper {
 	};
 
 	generateChildrenUrl = (parentMapItId) => {
-		var url = `${baseUrl}/area/${parentMapItId}/children.json`;
+		const url = `${baseUrl}/area/${parentMapItId}/children.json`;
 		return url;
 	};
 
 	generateAreaGeographiesUrl = (areaCodes) => {
-		var url = `${baseUrl}/areas/${areaCodes.join(",")}.geojson?${this.queryParams}`;
+		const url = `${baseUrl}/areas/${areaCodes.join(",")}.geojson?${this.queryParams}`;
 		return url;
 	};
 

@@ -47,6 +47,7 @@ function loadPopup(payload) {
     var payload = payload.payload;
     var popupLabel = payload.properties.name;
     var areaCode = payload.areaCode;
+    const popup = L.popup({autoPan: false})
 
     if (state.subindicator != null) {
         const subindicators = state.subindicator.subindicators;
@@ -63,7 +64,8 @@ function loadPopup(payload) {
             }
         }
     }
-    const popup = payload.layer.bindPopup(popupLabel).openPopup();
+    popup.setContent(popupLabel)
+    payload.layer.bindPopup(popup).openPopup();
 
 }
 

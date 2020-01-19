@@ -96,6 +96,28 @@ export default class Controller extends Observable {
         this.triggerEvent("printProfile", filename)
     }
 
+    /* Search events */
+    onSearchBefore(payload) {
+        this.triggerEvent("searchBefore", payload)
+    }
+
+    onSearchResults(payload) {
+        console.log(payload)
+        this.triggerEvent("searchResults", payload)
+    }
+
+    /**
+     * When a search result is clicked
+     * {code: WC011, level: municipality, name: Matzikama}
+     */
+    onSearchResultClick(payload) {
+        this.triggerEvent("searchResultClick", payload)
+    }
+
+    onSearchClear(payload) {
+        this.triggerEvent("searchClear", payload)
+    }
+
     setGeography(mapItId) {
         window.location.hash = "#geo:" + mapItId;
     }

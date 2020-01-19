@@ -3,7 +3,7 @@ import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 
 import MapIt from './mapit';
-import {MAPITSA} from './mapit';
+import {MAPITSA, MapItGeographyProvider} from './mapit';
 import {Observable} from './utils';
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
@@ -38,7 +38,7 @@ class LayerStyler {
         this.styles = styles || defaultStyles;
     }
 
-    setLayerStyle = (layer, styles) => {
+    setLayerStyle(layer, styles) {
         layer.resetStyle();
         layer.eachLayer((feature) => {
             feature.setStyle(styles.out);
@@ -54,11 +54,11 @@ class LayerStyler {
         })
     };
 
-    setLayerToHoverOnly = (layer) => {
+    setLayerToHoverOnly(layer) {
         this.setLayerStyle(layer, this.styles.hoverOnly);
     };
 
-    setLayerToSelected = (layer) => {
+    setLayerToSelected(layer) {
         this.setLayerStyle(layer, this.styles.selected);
     };
 }
@@ -80,7 +80,7 @@ export class MapControl extends Observable {
         this.map = this.configureMap(coords, tileUrl);
     };
 
-    configureMap = (coords, tileUrl) => {
+    configureMap(coords, tileUrl) {
 
         var map = L
             .map('main-map', { zoomControl: false})
@@ -97,7 +97,7 @@ export class MapControl extends Observable {
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    choropleth = (data) => {
+    choropleth(data) {
         var self = this
 
         var childGeographies = Object.entries(data.obj.children).map((childGeography) => {
@@ -125,10 +125,10 @@ export class MapControl extends Observable {
         })
     };
 
-    overlayBoundaries = (mapItId) => {
+    overlayBoundaries(mapItId) {
         var self = this;
 
-        self.layerCache.getLayer(mapItId).then((layers) => {
+        self.layerCache.getLayer2(mapItId).then(layers => {
             self.boundaryLayers.clearLayers();
 
             var secondaryLayers = layers.slice(1).reverse();
@@ -159,9 +159,9 @@ export class MapControl extends Observable {
                 layer
                     .off("click")
                     .on("click", (el) => {
-                        var prop = el.layer.feature.properties;
-                        var mapItId = prop.id;
-                        self.overlayBoundaries(mapItId);
+                        const prop = el.layer.feature.properties;
+                        const areaCode = prop.codes.MDB;
+                        self.overlayBoundaries(areaCode);
                         self.triggerEvent("layerClick", layerPayload(el));
                     }) 
                     .on("mouseover", (el) => {
@@ -196,13 +196,13 @@ A node contains the following attributes:
 */
 export class LayerCache {
     constructor() {
-        this.mapit = new MapIt();
+        this.mapit = new MapItGeographyProvider()
         this.geoMap = {};
     };
 
-    hashGeographies = (layer) => {
+    hashGeographies(layer) {
         var self = this;
-        layer.eachLayer((l) => {
+        layer.eachLayer(l => {
             var props = l.feature.properties;
             var code = props.codes.MDB;
             self.geoMap[code] = l; 
@@ -215,37 +215,70 @@ export class LayerCache {
      * @param  {Function}
      * @return {[type]}
      */
-    getLayer = (mapItId, layers) => {
-        var self = this;
-        return new Promise((resolve, reject) => {
+    getLayer2(code, layers) {
+        const self = this;
+        if (code == null)
+            code = defaultGeography;
 
-            if (mapItId == null)
-                mapItId = defaultGeography;
+        if (layers == undefined)
+            layers = [];
 
-            if (layers == undefined)
-                layers = [];
+        let geography = null;
 
-            var sequence = self.mapit.getGeography(mapItId)
-                .then(geography => {
-                    var parentAreaCode = geography.parent;
-                    self.mapit.toGeoJSON(geography.id).then(geojson => {
-                        var layer = L.geoJson(geojson);
-                        self.hashGeographies(layer);
-                        var hasGeometries = layer.getLayers().length > 0;
-                        if (hasGeometries)
-                            layers.push(layer);
-
-                        if (parentAreaCode != null) {
-                            self.getLayer(parentAreaCode, layers)
-                                .then(layers => {
-                                    resolve(layers);
-                                });
-                        } else {
-                            resolve(layers);
-                        }
-
-                    });
+        return Promise.resolve(code)
+            .then(code => {
+                return self.mapit.getGeography(code).then(g => {
+                    geography = g;
+                    return code
                 })
-        })
-    };
+            })
+            .then(code => self.mapit.childGeometries(code))
+            .then(geojson => {
+                const layer = L.geoJson(geojson);
+                const hasGeometries = layer.getLayers().length > 0;
+                self.hashGeographies(layer);
+                if (hasGeometries)
+                    layers.push(layer);
+
+                return geography.get_parent()
+            })
+            .then(parent => {
+                if (parent != null) {
+                    geography = geography.get_parent();
+                    return self.getLayer2(geography.code, layers);
+                }
+
+                return layers;
+            })
+    }
+
+    getLayer(code, layers) {
+        var self = this;
+
+        if (code == null)
+            code = defaultGeography;
+
+        if (layers == undefined)
+            layers = [];
+
+        return self.mapit.getGeography(code).then(geography => {
+            return self.mapit.childGeometries(code).then(geojson => {
+                const layer = L.geoJson(geojson);
+                const hasGeometries = layer.getLayers().length > 0;
+
+                self.hashGeographies(layer);
+                if (hasGeometries)
+                    layers.push(layer);
+
+                if (geography.parent != null) {
+                    return Promise.resolve(geography.get_parent().then(parent => {
+                        return self.getLayer(parent.code, layers);
+                    }));
+                }
+
+                return layers;
+            });
+        });
+
+    }
 }

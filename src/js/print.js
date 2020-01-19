@@ -1,7 +1,7 @@
 import {Observable} from './utils';
 
 export default class PDFPrinter extends Observable {
-    printDiv = (payload) => {
+    printDiv(payload) {
         let filename = 'geography';
         if (payload.payload != undefined)
             filename = payload.payload;

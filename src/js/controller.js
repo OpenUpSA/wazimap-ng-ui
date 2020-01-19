@@ -42,7 +42,7 @@ export default class Controller extends Observable {
         super.triggerEvent(event, payload);
     };
 
-    triggerHashChange = () => {
+    triggerHashChange()  {
         $(window).trigger('hashchange');
     };
 
@@ -58,37 +58,37 @@ export default class Controller extends Observable {
      * @return {[type]}         [description]
      */
 
-    onSubIndicatorClick = (payload) => {
+    onSubIndicatorClick(payload) {
         this.state.subindicator = payload;
         this.triggerEvent("subindicatorClick", payload);
     };
 
-    onHashChange = (payload) => {
+    onHashChange(payload) {
         this.triggerEvent("hashChange", payload);
     };
 
-    onLayerClick = (payload) => {
+    onLayerClick(payload) {
         var mapItId = payload.mapItId;
 
         this.triggerEvent("layerClick", mapItId); 
         window.location.hash = "#geo:" + mapItId;
     };
 
-    onLayerMouseOver = (payload) => {
+    onLayerMouseOver(payload) {
         this.triggerEvent("layerMouseOver", payload); 
     };
 
-    onLayerMouseOut = (payload) => {
+    onLayerMouseOut(payload) {
         this.triggerEvent("layerMouseOut", payload); 
     };
 
-    onProfileLoaded = (payload) => {
+    onProfileLoaded(payload) {
         this.state.profile = payload;
         this.state.subindicators = null; // unset when a new profile is loaded
         this.triggerEvent("profileLoaded", payload); 
     };
 
-    onPrintProfile = (payload) => {
+    onPrintProfile(payload) {
         let filename = "geography";
         if (this.state.profile != null) {
             filename = this.state.profile.data.geography.name
@@ -96,11 +96,11 @@ export default class Controller extends Observable {
         this.triggerEvent("printProfile", filename)
     }
 
-    setGeography = (mapItId) => {
+    setGeography(mapItId) {
         window.location.hash = "#geo:" + mapItId;
     }
 
-    registerWebflowEvents = () => {
+    registerWebflowEvents() {
         const events = ["click", "mouseover", "mouseout"];
         const self = this;
         events.forEach(function(ev){

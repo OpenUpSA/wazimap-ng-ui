@@ -3,7 +3,7 @@ export class Profile {
         this.data = data;
     };
 
-    getParent = () => {
+    getParent() {
         var parents = this.data.geography.parents;
         if (parents == undefined || parents.length == 0)
             return null;
@@ -11,11 +11,11 @@ export class Profile {
         return parents.reverse()[0]; 
     };
 
-    getName = () => {
+    getName() {
         return this.data.geography.name;
     };
 
-    getFullName = () => {
+    getFullName() {
         var label = this.getName();
         var parent = this.getParent();
         if (parent != null)

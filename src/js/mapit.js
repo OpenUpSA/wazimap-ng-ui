@@ -1,194 +1,224 @@
 import {getJSON} from './utils' 
+import GeographyProvider from './geography_provider'
+import {Geography} from './geography_provider'
 
 const baseUrl = "https://mapit.openup.org.za";
 const baseAreasUrl = baseUrl + "/areas";
 const defaultParams = "generation=2&simplify_tolerance=0.005";
 
-export const MAPITSA = 4577; // South Africa MapIt code
+export const MAPITSA = 'ZA'; // South Africa MapIt code
 
 class MapItApiHelper {
 	constructor(queryParams=defaultParams) {
 		this.queryParams = queryParams;
 	};
 
-	generateChildrenUrl = (parentMapItId) => {
+	generateChildrenUrl(parentMapItId) {
 		const url = `${baseUrl}/area/${parentMapItId}/children.json`;
 		return url;
 	};
 
-	generateAreaGeographiesUrl = (areaCodes) => {
+	generateAreaGeographiesUrl(areaCodes) {
 		const url = `${baseUrl}/areas/${areaCodes.join(",")}.geojson?${this.queryParams}`;
 		return url;
 	};
 
-	processGeography = (feature) => {
-		if (feature.codes.MDB == "LIM")
-			feature.codes.MDB = "LP"	
-	}
-
-	loadChildren = (parentMapItId) => {
+	loadChildren(parentMapItId) {
 		const self = this;
 		const url = this.generateChildrenUrl(parentMapItId);
 
-		return new Promise((resolve, reject) => {
-			getJSON(url).then(data => {
-				// TODO figure out how to isolate South Africa specific extensions
-				for (const [key, val] of Object.entries(data)) {
-					self.processGeography(val);
-
-				}
-				resolve(data)
-			})
-		})
+		return getJSON(url);
 	};
 
-	loadAreaGeographies = (mapItIds) => {
+	loadGeography(code) {
+		const url = `${baseUrl}/area/${code}.json`;
+		return getJSON(url);
+	}
+
+	loadAreaGeographies(mapItIds) {
 		const self = this;
 		const url = this.generateAreaGeographiesUrl(mapItIds);
 
-		return new Promise((resolve, reject) => {
-			getJSON(url).then(geojson => {
-				console.log(geojson);
-				const features = geojson.features;
-				features.forEach((val) => {
-					self.processGeography(val.properties);
-				}) 
-				resolve(geojson)
-			})
-		})
+		return getJSON(url).then(geojson => {
+			const features = geojson.features;
+
+			return geojson;
+		});
 	}
 }
 
+
 /**
- * Class to manage caching MapIt data and maintaining a geographical hierarchy
+ * A MapIt-extension of the Geography object
+ * It is lazy-loaded meaning that missing properties are loaded on demand
+ * It receives a provider that can create parent or child geographies in its construct
  */
-export default class MapIt {
+class MapItGeography extends Geography {
+	constructor(geoprovider, code) {
+		super(code);
+		this.provider = geoprovider;
+	}
 
-	constructor() {
-		this.areaIds = {};
-		this.api = new MapItApiHelper();
-	};
-
-	createGeography = (mapItId, data) => {
-		if (this.areaIds[mapItId] == undefined) {
-			this.areaIds[mapItId] = data;
+	_get_parent() {
+		if (this._parentId != null) {
+			return Promise.resolve(this.provider._getGeographyById(this._parentId));
 		}
-	};
+		return Promise.resolve(null);
+	}
 
-	getGeography = (mapItId) => {
+	get_parent() {
 		const self = this;
-		const alreadyExists = mapItId => this.areaIds[mapItId] != undefined
 
-
-		return new Promise(function(resolve, reject) {
-			if (alreadyExists(mapItId))
-				resolve(self.areaIds[mapItId])
-			else {
-				self.getChildGeographies(mapItId).then(childGeographies => {
-					const childMapItIds = childGeographies.map(geography => geography.id);
-
-					self.areaIds[mapItId] = {
-						children: childMapItIds,
-						parent: null, // TODO need to figure out how to get this
-						geojson: null, // TODO should this be retrieved?
-						id: mapItId
-					};
-
-					resolve(self.areaIds[mapItId])
-				})
-			}
-		})
-	};
-
-	/**
-	Returns the children of the given parent area code
-	e.g. https://mapit.openup.org.za/area/4577/children.json
-	 * @param  {int} areaCode	MapIt area code of parent
-	 * @param  {Function}
-	 * @return {[type]}
-	 */
-	getChildGeographies = (parentMapItId) => {
-		const self = this;
-		return new Promise((resolve, reject) => {
-			const childrenExist = self.areaIds[parentMapItId] != undefined && self.areaIds[parentMapItId].children != undefined;
-
-			if (childrenExist) {
-				const childCodes = self.areaIds[parentMapItId].children;
-				self.getAreaGeographies(childCodes).then(geos => resolve(geos));
-			} else {
-				self.api.loadChildren(parentMapItId).then(data => {
-					const childCodes = Object.keys(data);
-					const geography = self.areaIds[parentMapItId];
-
-					if (geography == undefined) {
-						// TODO I don't like the duplication of geography creation - need to centralise
-						self.createGeography(parentMapItId, {
-							children: childCodes,
-							id: parentMapItId,
-							geojson: null,
-							parent: null
-						});
-					} else {
-						geography.children = childCodes;	
-					}
-					self.getAreaGeographies(childCodes).then(geos => resolve(geos));
-				})
-			}
-		})
-	};
-
-	/**
-	 * Download the geojson for the given area codes
-	 * @param  {[type]}
-	 * @param  {Function}
-	 * @return {[geographies]}
-	 */
-	getAreaGeographies = (mapItIds) => {
-		const self = this;
-		const notDownloaded = mapItId => self.areaIds[mapItId] == undefined;
-		const updateGeography = geojsonFeature => {
-			const mapItId = geojsonFeature.properties.id;
-			if (notDownloaded(mapItId))
-				self.createGeography(mapItId, {});
-			self.areaIds[mapItId].geojson = geojsonFeature;
-			self.areaIds[mapItId].parent = geojsonFeature.properties.parent_area;
-			self.areaIds[mapItId].id = mapItId;
-
+		if (this._parent == null) {
+			return this._get_parent().then(parent => {
+				self._parent = parent;
+				return this._parent;
+			});
 		}
 
-		return new Promise((resolve, reject) => {
-			const downloadCodes = mapItIds.filter(notDownloaded);
+		return this._parent;
+	}
 
-			if (downloadCodes.length > 0) {
+	_get_children() {
+		return Promise.resolve(this.provider.getChildren(this.code));
+	}
 
-				self.api.loadAreaGeographies(downloadCodes).then(geojson => {
-					const geojsonFeatures = geojson.features;
-					geojsonFeatures.forEach(updateGeography);
-
-					const geos = mapItIds.map(mapItId => self.areaIds[mapItId]);
-					resolve(geos);
-				})
-			} else {
-				const geos = mapItIds.map(mapItId => self.areaIds[mapItId]);
-				resolve(geos);
-			}
-		})
-	};
-
-	toGeoJSON = (parentMapItId) => {
-		const self = this;
-		return new Promise((resolve, reject) => {
-			const children = self.getChildGeographies(parentMapItId).then(children => {
-				const geos = children.map(child => child.geojson)
-
-				const geojson = {
-					features: geos,
-					type: "FeatureCollection"
-				}
-
-				resolve(geojson);
+	get_children() {
+		if (this._children == undefined || this._children.length == 0) {
+			return this._get_children().then(children => {
+				this._children = children;
+				return children;
 			})
+		}
+		return Promise.resolve(this.children);
+	}
+
+	_get_geometry() {
+		return Promise.resolve(this.provider.getGeometry(this.code));
+	}
+
+	get_geometry() {
+		if (this._geometry == null) {
+			return this._get_geometry().then(geometry => {
+				this._geometry = geometry;
+				return geometry;
+			});
+		}
+		return this._geometry;
+	}
+
+	get type() {
+		return this._type;
+	}
+
+	get id() {
+		return this._id;
+	}
+}
+
+
+/**
+ * MapIt can be queries by mapitid or by area code. Area codes are prefixed with "MDB:"
+ */
+export class MapItGeographyProvider extends GeographyProvider {
+	constructor() {
+		super();
+		this.api = new MapItApiHelper();
+		this.geographies = {}
+	}
+
+	getGeography(code) {
+		if (this.geographies[code] == undefined) {
+			return this._getGeographyByCode(code).then(geog => {
+				this.geographies[code] = geog;
+				return geog;
+			});
+		}
+		return Promise.resolve(this.geographies[code]);
+	}
+
+	getChildren(code) {
+		return this.getGeography(code).then(geography => {
+			if (geography._children != undefined && geography._children.length > 0)
+				return geography._children
+			else {
+				return this.api.loadChildren(`MDB:${code}`).then(js => {
+					const children = [];
+					geography._children = children;
+					for (const [id, childjs] of Object.entries(js)) {
+						let geography = this._createGeography(childjs);
+						children.push(geography);
+						this.geographies[geography.code] = geography;
+					}
+					return children;
+				})
+			}
+		});
+	}
+
+	getGeometry(code, loadChildren=false) {
+		const self = this;
+		return this.getGeography(code).then(geog => {
+			if (!loadChildren) {
+				if (geog.geometry == null)
+					return Promise.resolve(self.api.loadAreaGeographies(`MDB:${code}`));
+			} else {
+				return geog.get_children().then(children => {
+					const childrenWithoutGeometries = children.filter(child => child._geometry == null);
+					const codes = childrenWithoutGeometries.map(child => `MDB:${child.code}`)
+					return self.api.loadAreaGeographies(codes).then(geojson => {
+						if (codes.length > 0) {
+							const features = Object.values(geojson.features);
+							features.forEach(feature => {
+								let childCode = feature.properties.codes.MDB;
+								let childGeography = self.geographies[childCode]
+								childGeography._geometry = feature;
+							})
+						}
+						// TODO do I return children or their geometries
+						return children.map(child => child._geometry);
+
+					});
+
+				});
+			}
 
 		})
-	};
+	}
+
+	childGeometries(code) {
+		const loadChildGeographies = true;
+		return this.getGeometry(code, loadChildGeographies).then(children => {
+			const geojson = {
+				features: children,
+				type: "FeatureCollection"
+			}
+
+			return geojson
+		});
+	}
+
+	_createGeography(js) {
+		const code = js.codes.MDB;
+		const geography = new MapItGeography(this, code);
+
+		geography._parentId = js.parent_area;
+		geography._type = js.type_name;
+		geography._id = js.id;
+
+		return geography	
+	}
+
+
+	_getGeographyByCode(code) {
+		const self = this;
+		const areaCode = `MDB:${code}`;
+		return self._getGeographyById(areaCode);
+	}
+
+	_getGeographyById(mapitid) {
+		const self = this;
+		return this.api.loadGeography(mapitid).then(js => self._createGeography(js))
+	}
+
 }

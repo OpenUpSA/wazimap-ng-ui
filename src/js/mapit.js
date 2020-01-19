@@ -13,20 +13,8 @@ class MapItApiHelper {
 		this.queryParams = queryParams;
 	};
 
-	generateChildrenUrl(parentMapItId) {
-		const url = `${baseUrl}/area/${parentMapItId}/children.json`;
-		return url;
-	};
-
-	generateAreaGeographiesUrl(areaCodes) {
-		const url = `${baseUrl}/areas/${areaCodes.join(",")}.geojson?${this.queryParams}`;
-		return url;
-	};
-
 	loadChildren(parentMapItId) {
-		const self = this;
-		const url = this.generateChildrenUrl(parentMapItId);
-
+		const url = `${baseUrl}/area/${parentMapItId}/children.json`;
 		return getJSON(url);
 	};
 
@@ -35,15 +23,10 @@ class MapItApiHelper {
 		return getJSON(url);
 	}
 
-	loadAreaGeographies(mapItIds) {
-		const self = this;
-		const url = this.generateAreaGeographiesUrl(mapItIds);
+	loadAreaGeographies(areaCodes) {
+		const url = `${baseUrl}/areas/${areaCodes.join(",")}.geojson?${this.queryParams}`;
 
-		return getJSON(url).then(geojson => {
-			const features = geojson.features;
-
-			return geojson;
-		});
+		return getJSON(url);
 	}
 }
 

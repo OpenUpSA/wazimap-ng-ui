@@ -31,7 +31,8 @@ function loadGeography(payload) {
 
         controller.onProfileLoaded(profile);
         // TODO might want to consider turning these load functions into classes 
-        loadMenu(data["indicators"], controller.onSubIndicatorClick);
+        // TODO need to change this to trigger an event
+        loadMenu(data["indicators"], payload => controller.onSubIndicatorClick(payload));
         loadProfile(data);
         // TODO need to move this somewhere useful
         $(".d3-tip").css("z-index", 100);

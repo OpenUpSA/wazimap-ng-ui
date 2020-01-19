@@ -8,14 +8,37 @@ const defaultParams = "generation=2&simplify_tolerance=0.005";
 
 export const MAPITSA = 'ZA'; // South Africa MapIt code
 
+const typeCodes = {
+	"Country": {code: "CY", children: ["PR"]},
+	"Province": {code: "PR", children: ["DC"]},
+	"District": {code: "DC", children: ["MN"]},
+	"Municipality": {code: "MN", children: ["WD", "SP"]},
+	"Ward": {code: "WD", children: []},
+	"SubPlace": {code: "SP", children: []},
+	"CY": {code: "CY", children: ["PR"]},
+	"PR": {code: "PR", children: ["DC"]},
+	"DC": {code: "DC", children: ["MN"]},
+	"MN": {code: "MN", children: ["SP", "WD"]},
+	"WD": {code: "WD", children: []},
+	"SP": {code: "SP", children: []},
+}
+
 class MapItApiHelper {
 	constructor(queryParams=defaultParams) {
 		this.queryParams = queryParams;
 	};
 
-	loadChildren(parentMapItId) {
-		const url = `${baseUrl}/area/${parentMapItId}/children.json`;
-		return getJSON(url);
+	loadChildren(parentType, parentMapItId) {
+		const children = typeCodes[parentType].children;
+		let childType = "";
+		if (children.length > 0)
+			childType = children[0];
+		else
+			return Promise.resolve({});
+
+		const url = `${baseUrl}/area/MDB:${parentMapItId}/children.json`;
+		const url2 = `${baseUrl}/areas/MDB-levels:${parentType}-${parentMapItId}|${childType}`;
+		return getJSON(url2);
 	};
 
 	loadGeography(code) {
@@ -43,6 +66,13 @@ class MapItGeography extends Geography {
 	}
 
 	_get_parent() {
+		if (this.mdb_levels != undefined) {
+			const match = this.mdb_levels.match("[A-Z]{2}-([A-Z0-9]+)[|][A-Z]+");
+			if (match != null) {
+				const parentCode = match[1];
+				return Promise.resolve(this.provider._getGeographyById(`MDB:${parentCode}`));
+			}
+		}
 		if (this._parentId != null) {
 			return Promise.resolve(this.provider._getGeographyById(this._parentId));
 		}
@@ -94,6 +124,10 @@ class MapItGeography extends Geography {
 		return this._type;
 	}
 
+	get typeCode() {
+		return typeCodes[this._type].code;
+	}
+
 	get id() {
 		return this._id;
 	}
@@ -101,7 +135,11 @@ class MapItGeography extends Geography {
 
 
 /**
- * MapIt can be queries by mapitid or by area code. Area codes are prefixed with "MDB:"
+ * This class is responsible for querying from the Mapit webservice and wrapping them in a MapItGeography object.
+ * It understands parent-child semantics and stores a local cache of results. It does not
+ * contain state about the current geography.
+ * 
+ * MapIt can be queried by mapitid or by area code. Area codes are prefixed with "MDB:"
  */
 export class MapItGeographyProvider extends GeographyProvider {
 	constructor() {
@@ -125,7 +163,7 @@ export class MapItGeographyProvider extends GeographyProvider {
 			if (geography._children != undefined && geography._children.length > 0)
 				return geography._children
 			else {
-				return this.api.loadChildren(`MDB:${code}`).then(js => {
+				return this.api.loadChildren(geography.typeCode, code).then(js => {
 					const children = [];
 					geography._children = children;
 					for (const [id, childjs] of Object.entries(js)) {
@@ -182,12 +220,17 @@ export class MapItGeographyProvider extends GeographyProvider {
 	}
 
 	_createGeography(js) {
+		console.log(js);
 		const code = js.codes.MDB;
 		const geography = new MapItGeography(this, code);
 
 		geography._parentId = js.parent_area;
 		geography._type = js.type_name;
 		geography._id = js.id;
+		// TODO might need to consider removing this
+		// currently being used to identify the parent geography since
+		// MapIt can't always find the parent.
+		geography.mdb_levels = js.codes['MDB-levels'];
 
 		return geography	
 	}

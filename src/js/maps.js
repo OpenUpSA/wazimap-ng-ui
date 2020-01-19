@@ -125,10 +125,10 @@ export class MapControl extends Observable {
         })
     };
 
-    overlayBoundaries(mapItId) {
+    overlayBoundaries(areaCode) {
         var self = this;
 
-        self.layerCache.getLayer2(mapItId).then(layers => {
+        self.layerCache.getLayers(areaCode).then(layers => {
             self.boundaryLayers.clearLayers();
 
             var secondaryLayers = layers.slice(1).reverse();
@@ -215,7 +215,7 @@ export class LayerCache {
      * @param  {Function}
      * @return {[type]}
      */
-    getLayer2(code, layers) {
+    getLayers(code, layers) {
         const self = this;
         if (code == null)
             code = defaultGeography;
@@ -245,40 +245,10 @@ export class LayerCache {
             .then(parent => {
                 if (parent != null) {
                     geography = geography.get_parent();
-                    return self.getLayer2(geography.code, layers);
+                    return self.getLayers(geography.code, layers);
                 }
 
                 return layers;
             })
-    }
-
-    getLayer(code, layers) {
-        var self = this;
-
-        if (code == null)
-            code = defaultGeography;
-
-        if (layers == undefined)
-            layers = [];
-
-        return self.mapit.getGeography(code).then(geography => {
-            return self.mapit.childGeometries(code).then(geojson => {
-                const layer = L.geoJson(geojson);
-                const hasGeometries = layer.getLayers().length > 0;
-
-                self.hashGeographies(layer);
-                if (hasGeometries)
-                    layers.push(layer);
-
-                if (geography.parent != null) {
-                    return Promise.resolve(geography.get_parent().then(parent => {
-                        return self.getLayer(parent.code, layers);
-                    }));
-                }
-
-                return layers;
-            });
-        });
-
     }
 }

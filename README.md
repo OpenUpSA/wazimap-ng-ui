@@ -7,8 +7,8 @@ yarn start
 
 # Other commands
 ```bash
-yarn build will compile the relevant bundles
-yarn push-gh-pages pushes to github for hosting
+yarn build # compile the relevant bundles for production
+yarn push-gh-pages # pushes to github for hosting
 ```
 
 

@@ -1,6 +1,7 @@
 import {Observable} from './utils';
 import {select as d3select} from 'd3-selection';
 
+// TODO should change this to jquery instead
 var navSearch = d3select(".nav__search");
 
 /**

@@ -13,6 +13,9 @@ export class MapChip extends Observable {
         // You also need to refactor some old code which was written prior to this class
         // map_panel.js:9-11 should be removed. Instead, this component should listen to a subindicatorClick event, see row load.js:77
         // this shoduld effectively replace map_panel.js entirely. When you receive a subindicatorClick event, change the text on the chip and show it.
+
+        // you will also need to instantiate the widget in load.js (see load.js:22)
+
     }
 
 

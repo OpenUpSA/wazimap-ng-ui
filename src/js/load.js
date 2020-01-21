@@ -8,20 +8,14 @@ import {getJSON, numFmt} from './utils';
 import {Profile} from './profile';
 import {onSubIndicatorChange} from './map_panel';
 import {onProfileLoaded as onProfileLoadedSearch, Search} from './search';
+import {MapItGeographyProvider} from './geography_providers/mapit';
+import {WazimapProvider} from './geography_providers/wazimap';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 
 
-var baseUrl = null;
-const SACode = "ZA"
-const mapcontrol = new MapControl();
-const controller = new Controller();
-const pdfprinter = new PDFPrinter();
-const printButton = $("#profile-print");
-const search = new Search(2);
-
-function loadGeography(payload) {
+function loadGeography(baseUrl, controller, payload) {
     var payload = payload.payload;
     const profileId = payload.profileId;
     const geographyId = payload.geographyId;
@@ -70,9 +64,18 @@ function loadPopup(payload) {
 }
 
 export default function load(serverUrl, profileId) {
-    baseUrl = serverUrl;
+    const baseUrl = serverUrl;
+    const SACode = "ZA"
+    const geographyProvider = new WazimapProvider(`${baseUrl}/api/v1`)
+    //const geographyProvider = new MapItGeographyProvider()
+    const mapcontrol = new MapControl(geographyProvider);
+    const controller = new Controller();
+    const pdfprinter = new PDFPrinter();
+    const printButton = $("#profile-print");
+    const search = new Search(2);
+
     controller.registerWebflowEvents();
-    controller.on("hashChange", loadGeography);
+    controller.on("hashChange", payload => loadGeography(baseUrl, controller, payload));
     controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
     controller.on("subindicatorClick", onSubIndicatorChange);
     controller.on("layerMouseOver", payload => loadPopup(payload));

@@ -27,15 +27,12 @@ export class Geography {
 }
 
 export default class GeographyProvider {
-    constructor() {
-       this.defaultGeography = null; 
-    }
     /**
      * Returns a geography object for the given code
      * @param  {[type]} code [description]
      * @return {[type]}      [description]
      */
-    getGeography(code) {
+    async getGeography(code) {
 
     } 
 
@@ -45,17 +42,7 @@ export default class GeographyProvider {
      * @param  {[type]} childtype filter by childtype is multiple are availble, e.g subplace, ward
      * @return {[type]}           list of Geography objects
      */
-    getChildren(code, childtype) {
-
-    }
-
-    /**
-     * Get child geojson for the given geography code
-     * @param  {[type]} code      code for parent geography
-     * @param  {[type]} childtype filter by childtype is multiple are availble, e.g subplace, ward
-     * @return {[type]}           list of Geography objects
-     */
-    childGeometries(code, childtype) {
+    async getChildren(code, childtype) {
 
     }
 }

@@ -63,7 +63,7 @@ export class WazimapProvider extends GeographyProvider {
      */
      // TODO implement childtype
     childGeometries(code, childtype) {
-        const url = `${this.baseUrl}/boundaries/${code}/children/?dsf33idfdhhdddd`;
+        const url = `${this.baseUrl}/boundaries/${code}/children/`;
         return getJSON(url)
     }
 }

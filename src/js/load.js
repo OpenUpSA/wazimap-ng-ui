@@ -20,7 +20,7 @@ function loadGeography(baseUrl, controller, payload) {
     const profileId = payload.profileId;
     const geographyId = payload.geographyId;
 
-    const url = `${baseUrl}/api/v1/profiles/${profileId}/geographies/${geographyId}/`;
+    const url = `${baseUrl}/profiles/${profileId}/geographies/${geographyId}/`;
     getJSON(url).then((data) => {
         var profile = new Profile(data);
 
@@ -64,9 +64,9 @@ function loadPopup(payload) {
 }
 
 export default function load(serverUrl, profileId) {
-    const baseUrl = serverUrl;
+    const baseUrl = `${serverUrl}/api/v1`;
     const SACode = "ZA"
-    const geographyProvider = new WazimapProvider(`${baseUrl}/api/v1`)
+    const geographyProvider = new WazimapProvider(baseUrl)
     //const geographyProvider = new MapItGeographyProvider()
     const mapcontrol = new MapControl(geographyProvider);
     const controller = new Controller();

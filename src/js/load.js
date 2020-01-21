@@ -6,10 +6,10 @@ import PDFPrinter from './print';
 import {MapControl} from './maps';
 import {getJSON, numFmt} from './utils';
 import {Profile} from './profile';
-import {onSubIndicatorChange} from './map_panel';
 import {onProfileLoaded as onProfileLoadedSearch, Search} from './search';
 import {MapItGeographyProvider} from './geography_providers/mapit';
 import {WazimapProvider} from './geography_providers/wazimap';
+import {MapChip} from './mapchip';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -72,12 +72,13 @@ export default function load(serverUrl, profileId) {
     const controller = new Controller();
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
+    const mapchip = new MapChip();
     const search = new Search(2);
 
     controller.registerWebflowEvents();
     controller.on("hashChange", payload => loadGeography(baseUrl, controller, payload));
     controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
-    controller.on("subindicatorClick", onSubIndicatorChange);
+    controller.on("subindicatorClick", payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on("layerMouseOver", payload => loadPopup(payload));
     controller.on("profileLoaded", onProfileLoadedSearch);
     controller.on("printProfile", payload => pdfprinter.printDiv(payload))
@@ -98,6 +99,8 @@ export default function load(serverUrl, profileId) {
     search.on('clearSearch', payload => controller.onSearchClear(payload));
 
     printButton.on("click", payload => controller.onPrintProfile(payload));
+	
+	mapchip.on("mapChipRemoved", payload => controller.onMapChipRemoved(payload));
 
     controller.triggerHashChange()
     // TODO need to set this to the geography searched for

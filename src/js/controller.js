@@ -96,8 +96,9 @@ export default class Controller extends Observable {
         this.triggerEvent("printProfile", filename)
     }
 	
-	onRemoveMapChip = (element) =>{
-		element.remove();
+	//Payload is the MapChip Element
+	onMapChipRemoved(payload) {
+		this.triggerEvent('mapChipRemoved', payload);
 	}
 
     /* Search events */

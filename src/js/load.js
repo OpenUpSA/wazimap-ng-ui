@@ -75,7 +75,6 @@ export default function load(serverUrl, profileId) {
     controller.registerWebflowEvents();
     controller.on("hashChange", loadGeography);
     controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
-	// controller.on("subindicatorClick", onSubIndicatorChange);
     controller.on("subindicatorClick", payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on("layerMouseOver", payload => loadPopup(payload));
     controller.on("profileLoaded", onProfileLoadedSearch);
@@ -98,7 +97,7 @@ export default function load(serverUrl, profileId) {
 
     printButton.on("click", payload => controller.onPrintProfile(payload));
 	
-	mapchip.on("removeMapChip", payload => controller.onRemoveMapChip(payload));
+	mapchip.on("mapChipRemoved", payload => controller.onMapChipRemoved(payload));
 
     controller.triggerHashChange()
     // TODO need to set this to the geography searched for

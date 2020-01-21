@@ -37,7 +37,7 @@ export class MapChip extends Observable {
 		this.showMapChip();
 	}
 
-	updateMapChipText = (textValue) => {
+	updateMapChipText(textValue) {
 		$(clonedMapChip).find( '.truncate' ).text(textValue);
 	}
 

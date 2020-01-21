@@ -224,7 +224,6 @@ export class MapItGeographyProvider extends GeographyProvider {
 	}
 
 	_createGeography(js) {
-		console.log(js);
 		const code = js.codes.MDB;
 		const geography = new MapItGeography(this, code);
 

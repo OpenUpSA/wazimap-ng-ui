@@ -12,7 +12,6 @@ export class Geography {
     }
 
     get parent() {
-        console.log("get parent 1")
         return this._parent;
     }
 
@@ -32,8 +31,8 @@ export default class GeographyProvider {
      * @param  {[type]} code [description]
      * @return {[type]}      [description]
      */
-    async getGeography(code) {
-
+    getGeography(code) {
+        throw "Cannot instantiate the GeographyProvider base class, it needs to be extended."
     } 
 
     /**
@@ -42,7 +41,17 @@ export default class GeographyProvider {
      * @param  {[type]} childtype filter by childtype is multiple are availble, e.g subplace, ward
      * @return {[type]}           list of Geography objects
      */
-    async getChildren(code, childtype) {
+    getChildren(code, childtype) {
+        throw "Cannot instantiate the GeographyProvider base class, it needs to be extended."
+    }
 
+    /**
+     * Get child geojson for the given geography code
+     * @param  {[type]} code      code for parent geography
+     * @param  {[type]} childtype filter by childtype is multiple are availble, e.g subplace, ward
+     * @return {[type]}           list of Geography objects
+     */
+    childGeometries(code, childtype) {
+        throw "Cannot instantiate the GeographyProvider base class, it needs to be extended."
     }
 }

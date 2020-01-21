@@ -12,9 +12,13 @@ export class WazimapProvider extends GeographyProvider {
 
     _createGeography(js) {
         const code = js.properties.code;
-        const geography = new Geography(this, code);
+        const geography = new Geography(code);
+        const parentCode = js.properties.parent;
+        const parent = this.geographies[parentCode]
 
-        geography._parentId = js.properties.parent;
+        geography._parentId = parentCode;
+        if (parent != undefined)
+            geography._parent = parent;
         geography._type = js.properties.level;
         geography._id = js.properties.code;
 
@@ -33,6 +37,7 @@ export class WazimapProvider extends GeographyProvider {
             const url = `${this.baseUrl}/boundaries/${code}/`;
             return getJSON(url).then(js => {
                 const geography = self._createGeography(js);
+                self.geographies[code] = geography;
                 return geography;
             })
         }

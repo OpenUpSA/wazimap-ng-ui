@@ -95,6 +95,11 @@ export default class Controller extends Observable {
         }
         this.triggerEvent("printProfile", filename)
     }
+	
+	//Payload is the MapChip Element
+	onMapChipRemoved(payload) {
+		this.triggerEvent('mapChipRemoved', payload);
+	}
 
     /* Search events */
     onSearchBefore(payload) {

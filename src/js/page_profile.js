@@ -115,7 +115,7 @@ export default function loadProfile(data) {
 
         // TODO how big should this be?
         myChart.height(100);
-        myChart.width(800);
+        myChart.width(560);
         myChart.tooltipFormatter((d) => {
             return `${d.data.label}: ${fmt(d.data.value)}`;
         });

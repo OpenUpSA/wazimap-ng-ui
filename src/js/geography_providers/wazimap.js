@@ -21,6 +21,7 @@ export class WazimapProvider extends GeographyProvider {
             geography._parent = parent;
         geography._type = js.properties.level;
         geography._id = js.properties.code;
+        geography._geometry = js;
 
         return geography    
     }

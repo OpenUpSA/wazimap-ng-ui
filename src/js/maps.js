@@ -123,10 +123,11 @@ export class MapControl extends Observable {
         })
     };
 
-    overlayBoundaries(areaCode) {
+    overlayBoundaries(areaCode, showChildren=true) {
         var self = this;
+        const boundaryLayers = [];
 
-        self.layerCache.getLayers(areaCode).then(layers => {
+        self.layerCache.getLayers(areaCode, boundaryLayers, showChildren).then(layers => {
             self.boundaryLayers.clearLayers();
 
             var secondaryLayers = layers.slice(1).reverse();
@@ -214,7 +215,7 @@ export class LayerCache {
      * @param  {Function}
      * @return {[type]}
      */
-    getLayers(code, layers) {
+    getLayers(code, layers, showChildren=true) {
         const self = this;
         if (code == null)
             code = this.mapit.defaultGeography;
@@ -231,7 +232,12 @@ export class LayerCache {
                     return code
                 })
             })
-            .then(code => self.mapit.childGeometries(code))
+            .then(code => {
+                if (showChildren)
+                    return self.mapit.childGeometries(code)
+                else
+                    return self.mapit.getGeography(code).then(geo => geo.geometry);
+            })
             .then(geojson => {
                 const layer = L.geoJson(geojson);
                 const hasGeometries = layer.getLayers().length > 0;

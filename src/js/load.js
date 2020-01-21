@@ -82,12 +82,7 @@ export default function load(serverUrl, profileId) {
     controller.on("layerMouseOver", payload => loadPopup(payload));
     controller.on("profileLoaded", onProfileLoadedSearch);
     controller.on("printProfile", payload => pdfprinter.printDiv(payload))
-    controller.on("searchResultClick", payload => {
-        // TODO MDB is South Africa-specific - need to figure out how to abstract
-        // this away
-        console.log(payload)
-        mapcontrol.overlayBoundaries(payload.payload.code)
-    })
+    controller.on("searchResultClick", payload => mapcontrol.overlayBoundaries(payload.payload.code))
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))

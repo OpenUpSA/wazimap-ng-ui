@@ -13,6 +13,7 @@ export class MapChip extends Observable {
 	
 	prepareDomElements() {
         clonedMapChip = $('.chip--map')[0].cloneNode(true);
+		$(clonedMapChip).removeClass('hide');
         this.clearAllMapChip();
     }
 	

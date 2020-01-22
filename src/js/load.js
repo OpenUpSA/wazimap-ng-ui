@@ -58,6 +58,8 @@ export default function load(serverUrl, profileId) {
     const geographyLoader = new GeographyLoader(baseUrl, mapcontrol);
     const profileLoader = new ProfileLoader();
     const locationInfoBox = new LocationInfoBox();
+	const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'));
+	pdataLoadSpinner.hide();
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));

@@ -7,7 +7,7 @@ export class LoadingSpinner /*extends Observable*/ {
     constructor(spinnerDOM) {
 		//super();
 		this.spinnerDOM = spinnerDOM;
-		this.hideSpinner();
+		this.hide();
     }
 	
 	show(){

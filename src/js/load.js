@@ -12,6 +12,7 @@ import {WazimapProvider} from './geography_providers/wazimap';
 import {MapChip} from './mapchip';
 import {GeographyLoader} from './geography_loader';
 import {LocationInfoBox} from './location_info_box';
+import {LoadingSpinner} from './loading_spinner';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -60,6 +61,9 @@ export default function load(serverUrl, profileId) {
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
+	
+	const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'));
+	pdataLoadSpinner.show();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();

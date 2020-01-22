@@ -60,6 +60,13 @@ export default function load(serverUrl, profileId) {
     const locationInfoBox = new LocationInfoBox();
 	const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'));
 	pdataLoadSpinner.hide();
+	// const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'));
+	// const pdataLoadSpinner2 = new LoadingSpinner($('.location__search_loading'));
+	// const pdataLoadSpinner3 = new LoadingSpinner($('.point-data__h2_load-complete'));
+	// const pdataLoadSpinner4 = new LoadingSpinner($('.content__map_loading'));
+	// pdataLoadSpinner.show();
+	// pdataLoadSpinner2.show();
+	// pdataLoadSpinner3.show();
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));

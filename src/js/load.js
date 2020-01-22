@@ -75,6 +75,9 @@ export default function load(serverUrl, profileId) {
     const mapchip = new MapChip();
     const search = new Search(2);
 
+    $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
+    $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
+
     controller.registerWebflowEvents();
     controller.on("hashChange", payload => loadGeography(baseUrl, controller, payload));
     controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
@@ -83,6 +86,8 @@ export default function load(serverUrl, profileId) {
     controller.on("profileLoaded", onProfileLoadedSearch);
     controller.on("printProfile", payload => pdfprinter.printDiv(payload))
     controller.on("searchResultClick", payload => mapcontrol.overlayBoundaries(payload.payload.code, false))
+    controller.on("richDataDrawerOpen", payload => mapcontrol.onSizeUpdate(payload))
+    controller.on("richDataDrawerClose", payload => mapcontrol.onSizeUpdate(payload))
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))

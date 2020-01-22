@@ -58,6 +58,18 @@ export default class Controller extends Observable {
      * @return {[type]}         [description]
      */
 
+     /**
+      * Triggered when the rich data drawer is pulled across the screen
+      * @param  {[type]} payload [description]
+      * @return {[type]}         [description]
+      */
+     onRichDataDrawer(payload) {
+        if (payload.open == true)
+            this.triggerEvent("richDataDrawerOpen", {})
+        else
+            this.triggerEvent("richDataDrawerClose", {})
+     }
+
     onSubIndicatorClick(payload) {
         this.state.subindicator = payload;
         this.triggerEvent("subindicatorClick", payload);

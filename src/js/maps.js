@@ -77,9 +77,15 @@ export class MapControl extends Observable {
         this.map = this.configureMap(coords, tileUrl);
     };
 
+    onSizeUpdate() {
+        setTimeout(() => {
+            this.map.invalidateSize(true);
+        }, 500);
+    }
+
     configureMap(coords, tileUrl) {
 
-        var map = L
+        const map = L
             .map('main-map', { zoomControl: false})
             .setView([coords["lat"], coords["long"]], coords["zoom"])
 

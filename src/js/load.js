@@ -63,21 +63,23 @@ export default function load(serverUrl, profileId) {
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
-    controller.on("hashChange", payload => geographyLoader.loadGeography(payload.payload.geography, payload.payload.profile));
-    controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
-    controller.on("subindicatorClick", payload => mapchip.onSubIndicatorChange(payload.payload));
-    controller.on("layerMouseOver", payload => loadPopup(payload));
-    controller.on("profileLoaded", onProfileLoadedSearch);
-    controller.on("printProfile", payload => pdfprinter.printDiv(payload))
-    controller.on("searchResultClick", payload => mapcontrol.overlayBoundaries(payload.payload.code, false))
-    controller.on("richDataDrawerOpen", payload => mapcontrol.onSizeUpdate(payload))
-    controller.on("richDataDrawerClose", payload => mapcontrol.onSizeUpdate(payload))
-    controller.on("loadedGeography", payload => profileLoader.loadProfile(payload))
-    controller.on("loadedGeography", payload => {
+    controller.on('hashChange', payload => geographyLoader.loadGeography(payload.payload.geography, payload.payload.profile));
+    controller.on('breadcrumbSelected', payload => geographyLoader.loadGeography(payload.payload.code, payload.state.profile));
+
+    controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.payload))
+    controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
+    controller.on('layerMouseOver', payload => loadPopup(payload));
+    controller.on('profileLoaded', onProfileLoadedSearch);
+    controller.on('printProfile', payload => pdfprinter.printDiv(payload))
+    controller.on('searchResultClick', payload => mapcontrol.overlayBoundaries(payload.payload.code, false))
+    controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
+    controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
+    controller.on('loadedGeography', payload => profileLoader.loadProfile(payload))
+    controller.on('loadedGeography', payload => {
         const data = payload.payload.profile.data;
-        loadMenu(data["indicators"], payload => controller.onSubIndicatorClick(payload));
+        loadMenu(data['indicators'], payload => controller.onSubIndicatorClick(payload));
     })
-    controller.on("loadedGeography", payload => {
+    controller.on('loadedGeography', payload => {
         const geographies = payload.payload.profile.data.geography;
         const locations = geographies.parents;
         locations.push({code: geographies.code, level: geographies.level, name: geographies.name})
@@ -97,8 +99,9 @@ export default function load(serverUrl, profileId) {
     geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
 
     printButton.on("click", payload => controller.onPrintProfile(payload));
+    locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
 	
-	mapchip.on("mapChipRemoved", payload => controller.onMapChipRemoved(payload));
+	mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
 
     controller.triggerHashChange()
     // TODO need to set this to the geography searched for

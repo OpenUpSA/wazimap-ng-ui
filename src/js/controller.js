@@ -121,6 +121,22 @@ export default class Controller extends Observable {
 		this.triggerEvent('mapChipRemoved', payload);
 	}
 
+    /** When a breadcrumb is clicked. Payload is a location: 
+    {
+         code: 'WC',
+         level: 'province',
+         name: 'Western Cape'
+    }
+    */
+    /**
+     * [onMapChipRemoved description]
+     * @param  {[type]} payload [description]
+     * @return {[type]}         [description]
+     */
+    onBreadcrumbSelected(payload) {
+        this.triggerEvent('breadcrumbSelected', payload);
+    }
+
     /* Search events */
     onSearchBefore(payload) {
         this.triggerEvent("searchBefore", payload)

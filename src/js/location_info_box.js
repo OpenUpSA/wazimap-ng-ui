@@ -7,6 +7,7 @@ export class LocationInfoBox extends Observable {
     }
 
     updateInfo(locations) {
+        const self = this;
         const breadcrumbsContainer = $('.map__location-tags_wrapper');
         const breadcrumbTemplate = $('.breadcrumb--map', breadcrumbsContainer)[0];
         $('.breadcrumb--map', breadcrumbsContainer).remove();
@@ -17,12 +18,15 @@ export class LocationInfoBox extends Observable {
             breadcrumbsContainer.append(locationElement);
             $('.truncate', locationElement).text(location.name);
             $('.breadcrumb__geography-chip div', locationElement).text(location.level);
+
+            $(locationElement).on('click', el => {
+                self.triggerEvent('breadcrumbSelected', location);
+            })
         })
 
         if (locationElement != null) {
             $(locationElement).addClass('last')
         }
 
-        console.log(location);
     }
 }

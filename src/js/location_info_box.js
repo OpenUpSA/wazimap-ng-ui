@@ -1,6 +1,8 @@
 import {Observable, getJSON} from './utils';
 import {Profile} from './profile';
 
+const breadcrumbsContainer = $('.map__location-tags_wrapper');
+const breadcrumbTemplate = $('.breadcrumb--map', breadcrumbsContainer)[0];
 export class LocationInfoBox extends Observable {
     constructor() {
         super();
@@ -8,8 +10,6 @@ export class LocationInfoBox extends Observable {
 
     updateInfo(locations) {
         const self = this;
-        const breadcrumbsContainer = $('.map__location-tags_wrapper');
-        const breadcrumbTemplate = $('.breadcrumb--map', breadcrumbsContainer)[0];
         $('.breadcrumb--map', breadcrumbsContainer).remove();
 
         let locationElement = null;

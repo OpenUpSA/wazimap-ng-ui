@@ -95,15 +95,16 @@ export default function load(serverUrl, profileId) {
     search.on('resultClick', payload => controller.onSearchResultClick(payload));
     search.on('clearSearch', payload => controller.onSearchClear(payload));
 
-    geographyLoader.on('loadingGeography', payload => controller.onLoadingGeography(payload))
-    geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
 
     printButton.on("click", payload => controller.onPrintProfile(payload));
     locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
 	
 	mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
 
+    geographyLoader.on('loadingGeography', payload => controller.onLoadingGeography(payload))
+    geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
+
+
     controller.triggerHashChange()
-    // TODO need to set this to the geography searched for
     mapcontrol.overlayBoundaries(null);
 }

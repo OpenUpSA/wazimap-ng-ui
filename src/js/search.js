@@ -1,5 +1,6 @@
 import {Observable} from './utils';
 import {select as d3select} from 'd3-selection';
+import {getJSON} from './utils';
 
 // TODO should change this to jquery instead
 var navSearch = d3select(".nav__search");
@@ -55,22 +56,16 @@ export class Search extends Observable {
                 source: function (request, response) {
                     self.triggerEvent('beforeSearch', {term: request.term});
                     self.emptySearchResults();
+                    const url = `${self.searchUrl}?q=${request.term}`;
 
-                    $.ajax({
-                        url: self.searchUrl,
-                        dataType: 'json',
-                        data: {
-                            q: request.term
-                        },
-                        success: function (data) {
-                            self.triggerEvent('searchResults', {items: data});
+                    getJSON(url).then(data => {
+                        self.triggerEvent('searchResults', {items: data});
 
-                            count = data.length;
-                            $('.search__dropdown_label').html(count + ' Results');  //this needs to be here because if 0 row returns from the API, render function is not fired
+                        count = data.length;
+                        $('.search__dropdown_label').html(count + ' Results');  //this needs to be here because if 0 row returns from the API, render function is not fired
 
-                            response(data);
-                        }
-                    });
+                        response(data);
+                    })
                 }
             }).autocomplete('instance')._renderItem = function (ul, item) {
                 /**

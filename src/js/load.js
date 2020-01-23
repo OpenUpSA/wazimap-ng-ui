@@ -11,6 +11,7 @@ import {MapItGeographyProvider} from './geography_providers/mapit';
 import {WazimapProvider} from './geography_providers/wazimap';
 import {MapChip} from './mapchip';
 import {GeographyLoader} from './geography_loader';
+import {LocationInfoBox} from './location_info_box';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -55,6 +56,7 @@ export default function load(serverUrl, profileId) {
     const search = new Search(baseUrl, 2);
     const geographyLoader = new GeographyLoader(baseUrl, mapcontrol);
     const profileLoader = new ProfileLoader();
+    const locationInfoBox = new LocationInfoBox();
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
@@ -74,6 +76,12 @@ export default function load(serverUrl, profileId) {
     controller.on("loadedGeography", payload => {
         const data = payload.payload.profile.data;
         loadMenu(data["indicators"], payload => controller.onSubIndicatorClick(payload));
+    })
+    controller.on("loadedGeography", payload => {
+        const geographies = payload.payload.profile.data.geography;
+        const locations = geographies.parents;
+        locations.push({code: geographies.code, level: geographies.level, name: geographies.name})
+        locationInfoBox.updateInfo(locations)
     })
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))

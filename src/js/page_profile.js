@@ -64,9 +64,9 @@ function addKeyMetrics(container, data) {
 }
 
 
-export default function loadProfile(data) {
+export default class ProfileLoader {
 
-    function addCategory(category, subcategories) {
+    addCategory(category, subcategories) {
         const newCategorySection = categoryTemplate.cloneNode(true);
         const wrapper = newCategorySection;
 
@@ -76,11 +76,11 @@ export default function loadProfile(data) {
 
         profileHeader.append(newCategorySection);
         for (const [subcategory, indicators] of Object.entries(subcategories)) {
-            addSubcategory(wrapper, subcategory, indicators);
+            this.addSubcategory(wrapper, subcategory, indicators);
         }
     }
 
-    function addSubcategory(wrapper, subcategory, indicators) {
+    addSubcategory(wrapper, subcategory, indicators) {
         const newSubcategorySection = subcategoryTemplate.cloneNode(true);
         $(subcategoryTitleClass, newSubcategorySection).text(subcategory);
         //$(subcategoryDescriptionClass).text(subcategory.description);
@@ -88,11 +88,11 @@ export default function loadProfile(data) {
         //$(subcategoryMetricsClass).dosomethihn
 
         for (const [indicator, classes] of Object.entries(indicators)) {
-            addIndicator(newSubcategorySection, indicator, classes);
+            this.addIndicator(newSubcategorySection, indicator, classes);
         }
     }
 
-    function addIndicator(wrapper, indicator, classes) {
+    addIndicator(wrapper, indicator, classes) {
         const newIndicatorSection = indicatorTemplate.cloneNode(true);
         const chartContainer = $(chartContainerClass, newIndicatorSection);
 
@@ -103,10 +103,10 @@ export default function loadProfile(data) {
             el["label"] = el.key
             el["value"] = el["count"]
         })
-        addChart(chartContainer[0], classes)
+        this.addChart(chartContainer[0], classes)
     }
 
-    function addChart(container, data) {
+    addChart(container, data) {
         // TODO need to hander different chart types
         const chartType = 'bar';
         const chartClass = `${chartContainerClass}--${chartType}`;
@@ -129,18 +129,20 @@ export default function loadProfile(data) {
 
     }
 
-    const all_indicators = data.indicators;
+    loadProfile(payload) {
+        const data = payload.payload.profile.data;
+        const all_indicators = data.indicators;
 
-    $(categoryClass).remove();
-    $(subcategoryClass, categoryTemplate).remove();
-    $(indicatorClass, subcategoryTemplate).remove();
+        $(categoryClass).remove();
+        $(subcategoryClass, categoryTemplate).remove();
+        $(indicatorClass, subcategoryTemplate).remove();
 
-    updateGeography(profileHeader, data);
-    addKeyMetrics(profileHeader, data);
+        updateGeography(profileHeader, data);
+        addKeyMetrics(profileHeader, data);
 
 
-    for (const [category, subcategories] of Object.entries(all_indicators)) {
-        addCategory(category, subcategories);
+        for (const [category, subcategories] of Object.entries(all_indicators)) {
+            this.addCategory(category, subcategories);
+        }
     }
-        
 }

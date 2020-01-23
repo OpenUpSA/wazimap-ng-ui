@@ -1,6 +1,6 @@
 import {select as d3select} from 'd3-selection';
 import Controller from './controller';
-import loadProfile from './page_profile';
+import ProfileLoader  from './page_profile';
 import {loadMenu} from './menu';
 import PDFPrinter from './print';
 import {MapControl} from './maps';
@@ -10,31 +10,11 @@ import {onProfileLoaded as onProfileLoadedSearch, Search} from './search';
 import {MapItGeographyProvider} from './geography_providers/mapit';
 import {WazimapProvider} from './geography_providers/wazimap';
 import {MapChip} from './mapchip';
+import {GeographyLoader} from './geography_loader';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 
-
-function loadGeography(baseUrl, controller, payload) {
-    var payload = payload.payload;
-    const profileId = payload.profileId;
-    const geographyId = payload.geographyId;
-
-    const url = `${baseUrl}/profiles/${profileId}/geographies/${geographyId}/`;
-    getJSON(url).then((data) => {
-        var profile = new Profile(data);
-
-        controller.onProfileLoaded(profile);
-        // TODO might want to consider turning these load functions into classes 
-        // TODO need to change this to trigger an event
-        loadMenu(data["indicators"], payload => controller.onSubIndicatorClick(payload));
-        loadProfile(data);
-        // TODO need to move this somewhere useful
-        $(".d3-tip").css("z-index", 100);
-        Webflow.require('ix2').init()
-        controller.registerWebflowEvents();
-    })
-}
 
 function loadPopup(payload) {
     const state = payload.state;
@@ -67,19 +47,21 @@ export default function load(serverUrl, profileId) {
     const baseUrl = `${serverUrl}/api/v1`;
     const SACode = "ZA"
     const geographyProvider = new WazimapProvider(baseUrl)
-    //const geographyProvider = new MapItGeographyProvider()
     const mapcontrol = new MapControl(geographyProvider);
     const controller = new Controller();
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
     const mapchip = new MapChip();
     const search = new Search(baseUrl, 2);
+    const geographyLoader = new GeographyLoader(baseUrl, mapcontrol);
+    const profileLoader = new ProfileLoader();
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
 
+    // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
-    controller.on("hashChange", payload => loadGeography(baseUrl, controller, payload));
+    controller.on("hashChange", payload => geographyLoader.loadGeography(payload.payload.geography, payload.payload.profile));
     controller.on("subindicatorClick", payload => mapcontrol.choropleth(payload.payload))
     controller.on("subindicatorClick", payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on("layerMouseOver", payload => loadPopup(payload));
@@ -88,6 +70,11 @@ export default function load(serverUrl, profileId) {
     controller.on("searchResultClick", payload => mapcontrol.overlayBoundaries(payload.payload.code, false))
     controller.on("richDataDrawerOpen", payload => mapcontrol.onSizeUpdate(payload))
     controller.on("richDataDrawerClose", payload => mapcontrol.onSizeUpdate(payload))
+    controller.on("loadedGeography", payload => profileLoader.loadProfile(payload))
+    controller.on("loadedGeography", payload => {
+        const data = payload.payload.profile.data;
+        loadMenu(data["indicators"], payload => controller.onSubIndicatorClick(payload));
+    })
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))
@@ -97,6 +84,9 @@ export default function load(serverUrl, profileId) {
     search.on('searchResults', payload => controller.onSearchResults(payload));
     search.on('resultClick', payload => controller.onSearchResultClick(payload));
     search.on('clearSearch', payload => controller.onSearchClear(payload));
+
+    geographyLoader.on('loadingGeography', payload => controller.onLoadingGeography(payload))
+    geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
 
     printButton.on("click", payload => controller.onPrintProfile(payload));
 	

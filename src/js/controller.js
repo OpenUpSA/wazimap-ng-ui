@@ -1,10 +1,10 @@
 import {Observable} from './utils';
 
 export default class Controller extends Observable {
-    constructor() {
+    constructor(profile=1) {
         super();
         this.state = {
-           profile: null,
+           profile: profile,
            // Set if a choropleth is currently active
            subindicator: null 
         }
@@ -14,9 +14,8 @@ export default class Controller extends Observable {
         $(window).on('hashchange', () => {
                 // On every hash change the render function is called with the new hash.
                 // This is how the navigation of our app happens.
-                var hash = decodeURI(window.location.hash);
-                var parts = hash.split(":")
-                var profileId = 1;
+                const hash = decodeURI(window.location.hash);
+                let parts = hash.split(":")
 
                 if (parts[0] == "#geo") {
                     parts = parts[1].split(",")
@@ -26,8 +25,8 @@ export default class Controller extends Observable {
                         var geographyId = parts[1];
 
                     self.triggerEvent("hashChange", {
-                        profileId: profileId,
-                        geographyId: geographyId
+                        profile: self.profile,
+                        geography: geographyId
                     })
                 }
                 
@@ -75,6 +74,15 @@ export default class Controller extends Observable {
         this.triggerEvent("subindicatorClick", payload);
     };
 
+    /**
+     * Payload includes profile and geography, e.g.
+     * {
+     *     profile: 1,
+     *     geography: WC
+     * }
+     * @param  {[type]} payload [description]
+     * @return {[type]}         [description]
+     */
     onHashChange(payload) {
         this.triggerEvent("hashChange", payload);
     };
@@ -137,6 +145,33 @@ export default class Controller extends Observable {
 
     setGeography(mapItId) {
         window.location.hash = "#geo:" + mapItId;
+    }
+
+    /**
+     * Payload includes profile and geography, e.g.
+     * {
+     *     profile: 1,
+     *     geography: WC
+     * }
+     */
+    onLoadingGeography(payload) {
+        this.triggerEvent("loadingGeography", payload)
+    }
+
+
+    /**
+     * Payload includes profile and geography, e.g.
+     * {
+     *     profile: 1,
+     *     geography: [Project object]
+     * }
+     */
+    onLoadedGeography(payload) {
+        // Important to trigger loadedGeography before reinitialising Webflow
+        // otherwise new elements placed on the page are not recognised by webflow
+        this.triggerEvent("loadedGeography", payload)
+        Webflow.require('ix2').init()
+        this.registerWebflowEvents();
     }
 
     registerWebflowEvents() {

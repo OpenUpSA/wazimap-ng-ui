@@ -9,7 +9,7 @@ var navSearch = d3select(".nav__search");
  * TODO - might want to consider folding this into the Search class
  */
 export function onProfileLoaded(payload) {
-    var profile = payload.payload;
+    const profile = payload.payload;
     navSearch.select(".search-chip .truncate").text(profile.getFullName());
 }
 

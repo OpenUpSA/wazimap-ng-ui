@@ -74,9 +74,9 @@ export class Search extends Observable {
                 $('.ui-widget-content').remove();
 
                 const resultItem = searchResultItem.cloneNode(true);
-                const label = self.generateSearchLabel(item);
-                $(".truncate", resultItem).text(label);
-
+                const labels = self.generateSearchLabel(item);
+                $(".search__list-item_title .truncate", resultItem).text(labels.name);
+                $(".search__list-item_parent .truncate", resultItem).text(labels.parents);
                 $(".search__list-item_geography-type div", resultItem).text(item.level);
 
                 return $("<div>")
@@ -94,7 +94,10 @@ export class Search extends Observable {
             label = `${label}, ${parent.name}`;
         })
 
-        return label;
+        return {
+            name: profile.name,
+            parents: label
+        };
     }
 
     /**

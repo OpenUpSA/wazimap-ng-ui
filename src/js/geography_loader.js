@@ -1,7 +1,5 @@
 import {Observable, getJSON} from './utils';
 import {Profile} from './profile';
-import {loadMenu} from './menu';
-import loadProfile from './page_profile';
 
 export class GeographyLoader extends Observable {
     constructor(baseUrl, map) {

@@ -13,7 +13,6 @@ export function onProfileLoaded(payload) {
     navSearch.select(".search-chip .truncate").text(profile.getFullName());
 }
 
-const searchUrl = 'https://wazimap-ng.openup.org.za/api/v1/geography/search/';
 let minLength = 3;
 const clsName = 'location__search_input';
 let searchResultItem = '';
@@ -26,10 +25,12 @@ export class Search extends Observable {
      * constructor of the class
      * sets the default values, calls init function(this.setSearchInput)
      * */
-    constructor(minChars) {
+    constructor(baseUrl, minChars) {
         super();
 
         minLength = minChars;
+        this.baseUrl = baseUrl;
+        this.searchUrl = `${baseUrl}/geography/search/`;
 
         this.prepareDomElements();
         this.setSearchInput();
@@ -56,7 +57,7 @@ export class Search extends Observable {
                     self.emptySearchResults();
 
                     $.ajax({
-                        url: searchUrl,
+                        url: self.searchUrl,
                         dataType: 'json',
                         data: {
                             q: request.term

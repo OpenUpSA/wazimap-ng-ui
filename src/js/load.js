@@ -73,7 +73,7 @@ export default function load(serverUrl, profileId) {
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
     const mapchip = new MapChip();
-    const search = new Search(2);
+    const search = new Search(baseUrl, 2);
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));

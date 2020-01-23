@@ -13,6 +13,7 @@ import {MapChip} from './mapchip';
 import {GeographyLoader} from './geography_loader';
 import {LocationInfoBox} from './location_info_box';
 import {LoadingSpinner} from './loading_spinner';
+import {PointData} from "./point_data";
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -60,7 +61,6 @@ export default function load(serverUrl, profileId) {
     const locationInfoBox = new LocationInfoBox();
 	const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'), {start: true});
 	const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
-	const pdataCompleteLoadSpinner = new LoadingSpinner($('.point-data__h2_load-complete'), {stop: true});
 	const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
 	// const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'));
 	// const pdataLoadSpinner2 = new LoadingSpinner($('.location__search_loading'));
@@ -69,6 +69,7 @@ export default function load(serverUrl, profileId) {
 	// pdataLoadSpinner.show();
 	// pdataLoadSpinner2.show();
 	// pdataLoadSpinner3.show();
+	const pointData = new PointData(mapcontrol.map);
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
@@ -99,6 +100,21 @@ export default function load(serverUrl, profileId) {
         locations.push({code: geographies.code, level: geographies.level, name: geographies.name})
         locationInfoBox.updateInfo(locations)
     })
+	controller.on("searchBefore", payload => searchLoadSpinner.start());
+	controller.on("searchResults", payload => searchLoadSpinner.stop());
+	controller.on("layerLoading", payload => contentMapSpinner.start());
+	controller.on("layerLoadingDone", payload => contentMapSpinner.stop());
+	controller.on("themeSelected", payload => {
+		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
+	});
+	controller.on("themeUnselected", payload => {
+		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+	});
+	controller.on("themePointLoaded", payload => {
+		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
+	});
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))
@@ -120,6 +136,9 @@ export default function load(serverUrl, profileId) {
     geographyLoader.on('loadingGeography', payload => controller.onLoadingGeography(payload))
     geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
 
+	pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
+	pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
+	pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload))
 
     controller.triggerHashChange()
     mapcontrol.overlayBoundaries(null);

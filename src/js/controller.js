@@ -129,6 +129,18 @@ export default class Controller extends Observable {
 	onMapChipRemoved(payload) {
 		this.triggerEvent('mapChipRemoved', payload);
 	}
+	
+	onThemeSelected(payload){
+		this.triggerEvent('themeSelected', payload);
+	}
+	
+	onThemeUnselected(payload){
+		this.triggerEvent('themeUnselected', payload);
+	}
+	
+	onThemePointLoaded(payload){
+		this.triggerEvent('themePointLoaded', payload);
+	}
 
     /** When a breadcrumb is clicked. Payload is a location: 
     {

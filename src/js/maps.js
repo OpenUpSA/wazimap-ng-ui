@@ -132,6 +132,8 @@ export class MapControl extends Observable {
         var self = this;
         const boundaryLayers = [];
 
+		self.triggerEvent("layerLoading", self.map);
+		
         self.layerCache.getLayers(areaCode, boundaryLayers, showChildren).then(layers => {
             self.boundaryLayers.clearLayers();
 
@@ -185,6 +187,8 @@ export class MapControl extends Observable {
                         }
                     }
             })
+			
+			self.triggerEvent("layerLoadingDone", self.map);
         });
 
     }; 

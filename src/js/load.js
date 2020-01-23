@@ -58,8 +58,10 @@ export default function load(serverUrl, profileId) {
     const geographyLoader = new GeographyLoader(baseUrl, mapcontrol);
     const profileLoader = new ProfileLoader();
     const locationInfoBox = new LocationInfoBox();
-	const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'));
-	pdataLoadSpinner.hide();
+	const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'), {start: true});
+	const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
+	const pdataCompleteLoadSpinner = new LoadingSpinner($('.point-data__h2_load-complete'), {stop: true});
+	const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
 	// const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'));
 	// const pdataLoadSpinner2 = new LoadingSpinner($('.location__search_loading'));
 	// const pdataLoadSpinner3 = new LoadingSpinner($('.point-data__h2_load-complete'));
@@ -78,7 +80,6 @@ export default function load(serverUrl, profileId) {
     controller.registerWebflowEvents();
     controller.on('hashChange', payload => geographyLoader.loadGeography(payload.payload.geography, payload.payload.profile));
     controller.on('breadcrumbSelected', payload => geographyLoader.loadGeography(payload.payload.code, payload.state.profile));
-
     controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.payload))
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on('layerMouseOver', payload => loadPopup(payload));
@@ -102,6 +103,8 @@ export default function load(serverUrl, profileId) {
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))
     mapcontrol.on("layerMouseOut", payload => controller.onLayerMouseOut(payload))
+	mapcontrol.on("layerLoading", payload => controller.onLayerLoading(payload))
+    mapcontrol.on("layerLoadingDone", payload => controller.onLayerLoadingDone(payload))
 
     search.on('beforeSearch', payload => controller.onSearchBefore(payload));
     search.on('searchResults', payload => controller.onSearchResults(payload));

@@ -3,19 +3,22 @@
 /**
  * Keeps track of hiding or showing a spinner
  */
-export class LoadingSpinner /*extends Observable*/ {
-    constructor(spinnerDOM) {
-		//super();
-		this.spinnerDOM = spinnerDOM;
-		this.hide();
+export class LoadingSpinner {
+    constructor(spinnerDOM, SpinnerState = { start: false, stop: false}) {
+		this.spinnerObject = $(spinnerDOM);
+		
+		if(SpinnerState.start)
+			this.start();
+		else if(SpinnerState.stop)
+			this.stop();
     }
 	
-	show(){
-		$(this.spinnerDOM).show();
+	start(){
+		this.spinnerObject.show();
 	}
 
-	hide(){
-		$(this.spinnerDOM).hide();
+	stop(){
+		this.spinnerObject.hide();
 	}
 
 }

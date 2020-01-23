@@ -101,6 +101,15 @@ export default class Controller extends Observable {
     onLayerMouseOut(payload) {
         this.triggerEvent("layerMouseOut", payload); 
     };
+	
+	onLayerLoading(payload) {
+        this.triggerEvent("layerLoading", payload); 
+    };
+	
+	onLayerLoadingDone(payload) {
+        this.triggerEvent("layerLoadingDone", payload); 
+    };
+	
 
     onProfileLoaded(payload) {
         this.state.profile = payload;

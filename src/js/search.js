@@ -78,8 +78,10 @@ export class Search extends Observable {
                  */
                 $('.ui-widget-content').remove();
 
-                let resultItem = searchResultItem.cloneNode(true);
-                $(".truncate", resultItem).text(item.name);
+                const resultItem = searchResultItem.cloneNode(true);
+                const label = self.generateSearchLabel(item);
+                $(".truncate", resultItem).text(label);
+
                 $(".search__list-item_geography-type div", resultItem).text(item.level);
 
                 return $("<div>")
@@ -88,6 +90,16 @@ export class Search extends Observable {
                     .appendTo($('.search__dropdown_list'));
             };
         });
+    }
+
+    generateSearchLabel(profile) {
+        const parents = profile.parents.reverse();
+        let label = profile.name;
+        parents.forEach(parent => {
+            label = `${label}, ${parent.name}`;
+        })
+
+        return label;
     }
 
     /**

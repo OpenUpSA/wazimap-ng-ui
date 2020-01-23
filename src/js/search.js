@@ -87,11 +87,25 @@ export class Search extends Observable {
         });
     }
 
-    generateSearchLabel(profile) {
-        const parents = profile.parents.reverse();
-        let label = profile.name;
-        parents.forEach(parent => {
-            label = `${label}, ${parent.name}`;
+    generateSearchLabel(profile, skipTopLevel=true, skipDuplicates=true) {
+        let parents = profile.parents;
+        let label = '';
+        let previous = '';
+
+        parents = parents.reverse();
+
+        if (skipTopLevel)
+            parents = parents.slice(0, -1);
+
+
+        parents.forEach((parent, idx) => {
+            if (!skipDuplicates || parent.name != previous) {
+                if (idx > 0)
+                    label += ', '
+                label += parent.name;
+            }
+
+            previous = parent.name;
         })
 
         return {

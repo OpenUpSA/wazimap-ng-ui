@@ -26,6 +26,7 @@ export class LocationInfoBox extends Observable {
 
         if (locationElement != null) {
             $(locationElement).addClass('last')
+            $(locationElement).off("click")
         }
 
     }

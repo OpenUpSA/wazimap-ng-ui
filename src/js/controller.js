@@ -103,11 +103,11 @@ export default class Controller extends Observable {
     };
 	
 	onLayerLoading(payload) {
-        this.triggerEvent("layerLoading", payload); 
+        this.triggerEvent("layerLoading", payload);
     };
 	
 	onLayerLoadingDone(payload) {
-        this.triggerEvent("layerLoadingDone", payload); 
+        this.triggerEvent("layerLoadingDone", payload);
     };
 	
 
@@ -206,10 +206,19 @@ export default class Controller extends Observable {
     onLoadedGeography(payload) {
         // Important to trigger loadedGeography before reinitialising Webflow
         // otherwise new elements placed on the page are not recognised by webflow
-        this.triggerEvent("loadedGeography", payload)
+        this.triggerEvent("loadedGeography", payload);
         Webflow.require('ix2').init()
-        this.registerWebflowEvents();
+		this.registerWebflowEvents();
     }
+	
+	onLoadingThemes(payload) {
+		this.triggerEvent("loadingThemes", payload);
+	}
+	
+	onLoadedThemes(payload) {
+		this.triggerEvent("loadedThemes", payload);
+		Webflow.ready();
+	}
 
     registerWebflowEvents() {
         const events = ["click", "mouseover", "mouseout"];

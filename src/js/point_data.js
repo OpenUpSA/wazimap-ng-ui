@@ -13,6 +13,8 @@ const wrapperClsName = 'point-data__content_wrapper';
 const pointDataItemClsName = 'point-data__h1--dropdown';
 const categoryWrapperClsName = 'point-data__h1_content';
 const categoryItemClsName = 'point-data__h2_wrapper';
+const categoryItemLoadingClsName = 'point-data__h2_loading';
+const categoryItemDoneClsName = 'point-data__h2_load-complete';
 const treeLineClsName = 'point-data__h2_tree-line-v';
 const activeClsName = 'active-1';
 const passiveColor = '#f7f7f7';
@@ -38,7 +40,6 @@ export class PointData extends Observable {
         markers = L.markerClusterGroup();
 
         this.prepareDomElements();
-        this.getThemes();
     }
 
     /**
@@ -46,7 +47,9 @@ export class PointData extends Observable {
      */
     prepareDomElements = () => {
         pointDataItem = $('.' + pointDataItemClsName)[0].cloneNode(true);
-        categoryItem = $('.' + categoryItemClsName)[1].cloneNode(true);
+        categoryItem = $('.' + categoryItemClsName)[0].cloneNode(true);
+		$(categoryItem).find('.' + categoryItemLoadingClsName).addClass('hide');
+		$(categoryItem).find('.' + categoryItemDoneClsName).addClass('hide');
         treeLineItem = $('.' + treeLineClsName)[0].cloneNode(true);
 
         $('.' + wrapperClsName).html('');
@@ -55,8 +58,9 @@ export class PointData extends Observable {
     /**
      * gets the themes and creates the point data dialog
      * */
-    getThemes = () => {
+    loadThemes = () => {
         let self = this;
+		self.triggerEvent("loadingThemes", self);
 
         getJSON(url).then((data) => {
             if (data.results !== null && data.results.length > 0) {
@@ -95,6 +99,8 @@ export class PointData extends Observable {
                     $('.' + wrapperClsName).append(item);
                 }
             }
+			
+			self.triggerEvent("loadedThemes", data);
         })
     }
 

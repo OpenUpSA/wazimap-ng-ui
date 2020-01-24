@@ -51,6 +51,7 @@ export default function load(serverUrl, profileId) {
     const SACode = "ZA"
     const geographyProvider = new WazimapProvider(baseUrl)
     const mapcontrol = new MapControl(geographyProvider);
+	const pointData = new PointData(mapcontrol.map);
     const controller = new Controller();
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
@@ -62,20 +63,9 @@ export default function load(serverUrl, profileId) {
 	const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'), {start: true});
 	const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
 	const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
-	// const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'));
-	// const pdataLoadSpinner2 = new LoadingSpinner($('.location__search_loading'));
-	// const pdataLoadSpinner3 = new LoadingSpinner($('.point-data__h2_load-complete'));
-	// const pdataLoadSpinner4 = new LoadingSpinner($('.content__map_loading'));
-	// pdataLoadSpinner.show();
-	// pdataLoadSpinner2.show();
-	// pdataLoadSpinner3.show();
-	const pointData = new PointData(mapcontrol.map);
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
-	
-	const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'));
-	pdataLoadSpinner.show();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
@@ -138,8 +128,11 @@ export default function load(serverUrl, profileId) {
 
 	pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
 	pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
-	pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload))
-
+	pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload))	
+	pointData.on("loadingThemes", payload => controller.onLoadingThemes(payload));
+	pointData.on("loadedThemes", payload => controller.onLoadedThemes(payload));
+	
+	pointData.loadThemes();
     controller.triggerHashChange()
     mapcontrol.overlayBoundaries(null);
 }

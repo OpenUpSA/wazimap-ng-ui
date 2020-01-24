@@ -4378,6 +4378,102 @@ a {
   justify-content: center;
 }
 
+.point-marker._2 {
+  color: #993aff;
+}
+
+.point-marker._3 {
+  color: #f04f4f;
+}
+
+.point-marker._4 {
+  color: #48c555;
+}
+
+.point-marker._5 {
+  color: #ad356d;
+}
+
+.point-marker._6 {
+  color: #ff893a;
+}
+
+.point-marker._7 {
+  color: #2ccaad;
+}
+
+.point-marker._8 {
+  color: #ff3a8c;
+}
+
+.point-marker._9 {
+  color: #0a8286;
+}
+
+.point-marker._10 {
+  color: #e7bc20;
+}
+
+.point-marker__tooltip {
+  position: absolute;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.point-marker._2 {
+  color: #993aff;
+}
+
+.point-marker._3 {
+  color: #f04f4f;
+}
+
+.point-marker._4 {
+  color: #48c555;
+}
+
+.point-marker._5 {
+  color: #ad356d;
+}
+
+.point-marker._6 {
+  color: #ff893a;
+}
+
+.point-marker._7 {
+  color: #2ccaad;
+}
+
+.point-marker._8 {
+  color: #ff3a8c;
+}
+
+.point-marker._9 {
+  color: #0a8286;
+}
+
+.point-marker._10 {
+  color: #e7bc20;
+}
+
+.point-marker__tooltip {
+  position: absolute;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
 .point-marker__tooltip.show {
   display: -webkit-box;
   display: -webkit-flex;

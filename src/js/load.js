@@ -60,10 +60,8 @@ export default function load(serverUrl, profileId) {
     const geographyLoader = new GeographyLoader(baseUrl, mapcontrol);
     const profileLoader = new ProfileLoader();
     const locationInfoBox = new LocationInfoBox();
-	const pdataLoadSpinner = new LoadingSpinner($('.point-data__h2_loading'), {start: true});
 	const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
 	const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
-	const pointData = new PointData(mapcontrol.map);
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));

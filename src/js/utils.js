@@ -3,8 +3,9 @@ import {format as d3format} from 'd3-format';
 const queryCache = {};
 
 export function getJSON(url, skipCache=false) {
-  if (queryCache[url] != undefined && !skipCache)
+  if (queryCache[url] != undefined && !skipCache) {
     return Promise.resolve(queryCache[url])
+  }
 
   return new Promise((resolve, reject) => {
     const req = new XMLHttpRequest();

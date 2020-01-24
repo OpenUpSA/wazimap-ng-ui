@@ -81,8 +81,9 @@ export default function load(serverUrl, profileId) {
     })
     controller.on('loadedGeography', payload => {
         const geographies = payload.payload.profile.data.geography;
-        const locations = geographies.parents;
-        locations.push({code: geographies.code, level: geographies.level, name: geographies.name})
+        const currentGeography = {code: geographies.code, level: geographies.level, name: geographies.name}
+        const locations = [...geographies.parents, currentGeography]
+
         locationInfoBox.updateInfo(locations)
     })
 

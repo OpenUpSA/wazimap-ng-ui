@@ -174,6 +174,8 @@ export default class Controller extends Observable {
      */
     onSearchResultClick(payload) {
         this.triggerEvent("searchResultClick", payload)
+        // TODO should trigger a separate profile load event
+        window.location.hash = "#geo:" + payload.code;
     }
 
     onSearchClear(payload) {

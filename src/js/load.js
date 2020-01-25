@@ -75,21 +75,20 @@ export default function load(serverUrl, profileId) {
     controller.on('layerMouseOver', payload => loadPopup(payload));
     controller.on('profileLoaded', onProfileLoadedSearch);
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))
+    controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
+
     controller.on('searchResultClick', payload => mapcontrol.overlayBoundaries(payload.payload.code, false))
+
     controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
+
     controller.on('loadedGeography', payload => profileLoader.loadProfile(payload))
     controller.on('loadedGeography', payload => {
         const data = payload.payload.profile.data;
+        // TODO this needs to be cleaned up
         loadMenu(data['indicators'], payload => controller.onSubIndicatorClick(payload));
     })
-    controller.on('loadedGeography', payload => {
-        const geographies = payload.payload.profile.data.geography;
-        const currentGeography = {code: geographies.code, level: geographies.level, name: geographies.name}
-        const locations = [...geographies.parents, currentGeography]
-
-        locationInfoBox.updateInfo(locations)
-    })
+    controller.on('loadedGeography', payload => locationInfoBox.update(payload.payload.profile))
 	controller.on("searchBefore", payload => searchLoadSpinner.start());
 	controller.on("searchResults", payload => searchLoadSpinner.stop());
 	controller.on("layerLoading", payload => contentMapSpinner.start());

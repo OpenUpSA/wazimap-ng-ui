@@ -132,7 +132,6 @@ export default class ProfileLoader {
             
         $(".d3-tip")
             .css("z-index", 100)
-            .css("opacity", 1);
 
 
     }

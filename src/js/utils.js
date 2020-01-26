@@ -45,7 +45,7 @@ export function getJSON(url, skipCache=false) {
     req.onload = () => {
       if (req.status == 200) {
         const json = JSON.parse(req.response);
-        queryCache[url] = json;
+       cache.setItem(url, json);
         resolve(json);
       } else {
         reject(Error(req.statusText));

@@ -236,20 +236,26 @@ export class LayerCache {
 
         let geography = null;
 
-        return Promise.resolve(code)
+        const promiseGeography = Promise.resolve(code)
             .then(code => {
                 return self.mapit.getGeography(code).then(g => {
                     geography = g;
                     return code
                 })
             })
+
+        const promiseChildren = Promise.resolve(code)
             .then(code => {
                 if (showChildren)
                     return self.mapit.childGeometries(code)
                 else
-                    return self.mapit.getGeography(code).then(geo => geo.geometry);
+                    return Promise.resolve(geography.geometry);
+                    //return self.mapit.getGeography(code).then(geo => geo.geometry);
             })
-            .then(geojson => {
+
+        return Promise.all([promiseGeography, promiseChildren])
+            .then(results => {
+                const geojson = results[1];
                 const layer = L.geoJson(geojson);
 
 

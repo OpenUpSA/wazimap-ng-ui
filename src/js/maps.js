@@ -167,7 +167,6 @@ export class MapControl extends Observable {
                     .on("click", (el) => {
                         const prop = el.layer.feature.properties;
                         const areaCode = prop.code;
-                        self.overlayBoundaries(areaCode);
                         self.triggerEvent("layerClick", layerPayload(el));
                     }) 
                     .on("mouseover", (el) => {

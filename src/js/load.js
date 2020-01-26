@@ -18,35 +18,7 @@ import {PointData} from "./point_data";
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 
-
-function loadPopup(payload) {
-    const state = payload.state;
-    var payload = payload.payload;
-    var popupLabel = payload.properties.name;
-    var areaCode = payload.areaCode;
-    const popup = L.popup({autoPan: false})
-
-    if (state.subindicator != null) {
-        const subindicators = state.subindicator.subindicators;
-        const subindicator = state.subindicator.obj.key;
-        const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
-        if (subindicatorValues.length > 0) {
-            const subindicatorValue = subindicatorValues[0];
-            for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
-                if (geographyCode == areaCode) {
-                    const countFmt = numFmt(count);
-                    popupLabel = `<strong>${popupLabel}</strong>`;
-                    popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
-                }
-            }
-        }
-    }
-    popup.setContent(popupLabel)
-    payload.layer.bindPopup(popup).openPopup();
-
-}
-
-export default function load(serverUrl, profileId) {
+export default function configureApplication(serverUrl, profileId) {
     const baseUrl = `${serverUrl}/api/v1`;
     const SACode = "ZA"
     const geographyProvider = new WazimapProvider(baseUrl)
@@ -72,7 +44,7 @@ export default function load(serverUrl, profileId) {
     controller.on('breadcrumbSelected', payload => geographyLoader.loadGeography(payload.payload.code, payload.state.profile));
     controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.payload))
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
-    controller.on('layerMouseOver', payload => loadPopup(payload));
+    controller.on('layerMouseOver', payload => mapcontrol.loadPopup(payload));
     controller.on('profileLoaded', onProfileLoadedSearch);
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))
     controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))

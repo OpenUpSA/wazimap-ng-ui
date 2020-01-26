@@ -99,11 +99,13 @@ export default class ProfileLoader {
         $(indicatorTitleClass, newIndicatorSection).text(indicator);
         wrapper.append(newIndicatorSection);
 
-        classes.forEach((el) => {
-            el["label"] = el.key
-            el["value"] = el["count"]
-        })
-        this.addChart(chartContainer[0], classes)
+        if (classes != undefined && Array.isArray(classes)) {
+            classes.forEach((el) => {
+                el["label"] = el.key
+                el["value"] = el["count"]
+            })
+            this.addChart(chartContainer[0], classes)
+        }
     }
 
     addChart(container, data) {

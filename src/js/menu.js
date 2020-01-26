@@ -13,28 +13,34 @@ export function loadMenu(data, subindicatorCallback) {
         var indicatorWrapper = $(".indicator__dropdown_wrapper", newIndicator);
         var subIndicatorTemplate = $(".data-menu__sub-indicator", newIndicator)[0].cloneNode(true);
 
-        $(".data-menu__sub-indicator", indicatorWrapper).remove();
-        $(".menu__link_h4--active", indicatorWrapper).remove();
         // TODO ????
         if (true) {
-            subindicators.forEach((obj) => {
-                var newSubIndicator = subIndicatorTemplate.cloneNode(true);
-                var text = obj.key
-                $("div:nth-child(2)", newSubIndicator).text(text);
-                indicatorWrapper.append(newSubIndicator);
+            if (subindicators == undefined || !Array.isArray(subindicators)) {
+                console.log("Missing subindicators")
+            } else {
+                $(".data-menu__sub-indicator", indicatorWrapper).remove();
+                $(".menu__link_h4--active", indicatorWrapper).remove();
+                subindicators.forEach((obj) => {
+                    var newSubIndicator = subIndicatorTemplate.cloneNode(true);
+                    var text = obj.key
+                    $("div:nth-child(2)", newSubIndicator).text(text);
+                    indicatorWrapper.append(newSubIndicator);
 
-                $(newSubIndicator).on("click", (el) => {
-                    setActive(el);
-                    if (subindicatorCallback != undefined)
-                        subindicatorCallback({
-                            el: el,
-                            data: data,
-                            indicator: indicator,
-                            subindicators: subindicators,
-                            obj: obj
-                        })
-                });
-            })
+                    $(newSubIndicator).on("click", (el) => {
+                        setActive(el);
+                        if (subindicatorCallback != undefined)
+                            subindicatorCallback({
+                                el: el,
+                                data: data,
+                                indicator: indicator,
+                                subindicators: subindicators,
+                                obj: obj
+                            })
+                    });
+                })
+
+            }
+
         } else {
             indicatorWrapper.remove();
         }

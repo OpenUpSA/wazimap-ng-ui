@@ -90,7 +90,7 @@ export class MapControl extends Observable {
             .setView([coords["lat"], coords["long"]], coords["zoom"])
 
         L.tileLayer(tileUrl).addTo(map);
-        L.control.zoom({position: 'topright'}).addTo(map);
+        L.control.zoom({position: 'bottomright'}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
 
         return map;

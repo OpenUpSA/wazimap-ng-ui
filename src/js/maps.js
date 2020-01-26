@@ -252,12 +252,6 @@ export class LayerCache {
             .then(geojson => {
                 const layer = L.geoJson(geojson);
 
-                if (geojson.features != undefined) {
-                    geojson.features.forEach(feature => {
-                        if (feature.properties != undefined && feature.properties.code != undefined)
-                            self.mapit.preCache(feature.properties.code);
-                    })
-                }
 
                 const hasGeometries = layer.getLayers().length > 0;
                 self.hashGeographies(layer);

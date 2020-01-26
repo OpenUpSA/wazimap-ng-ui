@@ -134,4 +134,13 @@ export default function load(serverUrl, profileId) {
 	pointData.loadThemes();
     controller.triggerHashChange()
     mapcontrol.overlayBoundaries(null);
+
+    [
+        "ZA",
+        "WC", "GT", "NW", "EC", "NC", "LP", "KZN", "FS", "MP",
+        "CPT", "JHB", "TSH", "EKU", "MAN", "BUF", "NMA"
+    ].forEach(code => {
+        geographyProvider.preCache(code)
+    })
+
 }

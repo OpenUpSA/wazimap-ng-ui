@@ -1,6 +1,8 @@
-import {getJSON} from '../utils' 
+import {getJSON, Cache} from '../utils' 
 import GeographyProvider from './geography_provider'
 import {Geography} from './geography_provider'
+
+const cache = new Cache();
 
 export class WazimapProvider extends GeographyProvider {
     constructor(baseUrl) {
@@ -14,7 +16,7 @@ export class WazimapProvider extends GeographyProvider {
         const code = js.properties.code;
         const geography = new Geography(code);
         const parentCode = js.properties.parent;
-        const parent = this.geographies[parentCode]
+        const parent = cache.getItem(parentCode)
 
         geography._parentId = parentCode;
         if (parent != undefined)
@@ -34,15 +36,15 @@ export class WazimapProvider extends GeographyProvider {
     getGeography(code) {
         const self = this;
 
-        if (this.geographies[code] == undefined) {
+        if (cache.getItem(code) == null) {
             const url = `${this.baseUrl}/boundaries/${code}/`;
             return getJSON(url).then(js => {
                 const geography = self._createGeography(js);
-                self.geographies[code] = geography;
+                cache.setItem(code, geography);
                 return geography;
             })
         }
-        return Promise.resolve(this.geographies[code]);
+        return Promise.resolve(cache.getItem(code));
     } 
 
 
@@ -66,5 +68,10 @@ export class WazimapProvider extends GeographyProvider {
     childGeometries(code, childtype) {
         const url = `${this.baseUrl}/boundaries/${code}/children/`;
         return getJSON(url)
+    }
+
+    preCache(code) {
+        this.getGeography(code);
+        this.getChildren(code);
     }
 }

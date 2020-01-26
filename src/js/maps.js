@@ -267,7 +267,9 @@ export class LayerCache {
             .then(parent => {
                 if (parent != null) {
                     geography = geography.parent;
-                    return self.getLayers(geography.code, layers);
+                    return self.getLayers(geography.code, layers, true);
+                } else if (geography._parentId != null) {
+                    return self.getLayers(geography._parentId, layers, true);
                 }
 
                 return layers;

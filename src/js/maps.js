@@ -179,7 +179,10 @@ export class MapControl extends Observable {
 
                     if (self.zoomMap && !alreadyZoomed) {
                         try {
-                            self.map.flyToBounds(layer.getBounds());
+                            self.map.flyToBounds(layer.getBounds(), {
+                                animate: true,
+                                duration: 0.5 // in seconds
+                            });
                             alreadyZoomed = true;
                         } catch (err) {
                             console.log("Error zooming: " + err);

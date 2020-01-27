@@ -66,15 +66,38 @@ export default function configureApplication(serverUrl, profileId) {
     controller.on("layerLoading", payload => contentMapSpinner.start());
     controller.on("layerLoadingDone", payload => contentMapSpinner.stop());
     controller.on("themeSelected", payload => {
-    	new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
     });
     controller.on("themeUnselected", payload => {
-    	new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-    	new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
     });
+
     controller.on("themePointLoaded", payload => {
-    	new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-    	new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
+        if(payload.payload.data == "cancel")
+        {
+            new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+            new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+            return;
+        }
+            
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
+    });
+    
+    controller.on("categorySelected", payload => {
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+    });
+    
+    controller.on("categoryUnselected", payload => {
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+    });
+    
+    controller.on("categoryPointLoaded", payload => {
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
     });
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
@@ -91,7 +114,7 @@ export default function configureApplication(serverUrl, profileId) {
 
     printButton.on("click", payload => controller.onPrintProfile(payload));
     locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
-	
+
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
 
     geographyLoader.on('loadingGeography', payload => controller.onLoadingGeography(payload))
@@ -99,11 +122,14 @@ export default function configureApplication(serverUrl, profileId) {
 
     pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
     pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
-    pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload))	
+    pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload));
     pointData.on("loadingThemes", payload => controller.onLoadingThemes(payload));
     pointData.on("loadedThemes", payload => controller.onLoadedThemes(payload));
-	
-	pointData.loadThemes();
+    pointData.on("categorySelected", payload => controller.onCategorySelected(payload));
+    pointData.on("categoryUnselected", payload => controller.onCategoryUnselected(payload));
+    pointData.on("categoryPointLoaded", payload => controller.onCategoryPointLoaded(payload));
+    
+    pointData.loadThemes();
     controller.triggerHashChange()
     mapcontrol.overlayBoundaries(null);
 }

@@ -141,6 +141,19 @@ export default class Controller extends Observable {
         this.triggerEvent('themePointLoaded', payload);
     }
 
+    onCategorySelected(payload){
+        this.triggerEvent('categorySelected', payload);
+    }
+
+    onCategoryUnselected(payload){
+        this.triggerEvent('categoryUnselected', payload);
+    }
+    
+    onCategoryPointLoaded(payload){
+        this.triggerEvent('categoryPointLoaded', payload);
+    }
+    
+
     /** When a breadcrumb is clicked. Payload is a location: 
     {
          code: 'WC',

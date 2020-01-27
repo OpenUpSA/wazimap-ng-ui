@@ -156,72 +156,74 @@ export class MapControl extends Observable {
         })
     };
 
-    overlayBoundaries(areaCode, showChildren=true) {
-        var self = this;
+    overlayBoundaries(payload) {
+        const self = this;
         const boundaryLayers = [];
 
 		self.triggerEvent("layerLoading", self.map);
-		
-        self.layerCache.getLayers(areaCode, boundaryLayers, showChildren).then(layers => {
-            self.boundaryLayers.clearLayers();
-
-            var secondaryLayers = layers.slice(1).reverse();
-            var mainLayer = layers[0];
-
-            secondaryLayers.forEach((layer) => {
-                self.layerStyler.setLayerToHoverOnly(layer);
-                self.boundaryLayers.addLayer(layer);
-
-            })
-
-            self.layerStyler.setLayerToSelected(mainLayer);
-            self.boundaryLayers.addLayer(mainLayer);
-
-            var alreadyZoomed = false;
-
-            var layerPayload = function(layer) {
-                var prop = layer.layer.feature.properties;
-                return {
-                    mapItId: prop.code,
-                    layer: layer.layer,
-                    element: layer,
-                    properties: prop,
-                }
-            }
-
-            layers.forEach((layer) => {
-                layer
-                    .off("click")
-                    .on("click", (el) => {
-                        const prop = el.layer.feature.properties;
-                        const areaCode = prop.code;
-                        self.triggerEvent("layerClick", layerPayload(el));
-                    }) 
-                    .on("mouseover", (el) => {
-                        self.triggerEvent("layerMouseOver", layerPayload(el));
-                    })
-                    .on("mouseout", (el) => {
-                        self.triggerEvent("layerMouseOut", layerPayload(el));
-                    })
-                    .addTo(self.map);
-
-                    if (self.zoomMap && !alreadyZoomed) {
-                        try {
-                            self.map.flyToBounds(layer.getBounds(), {
-                                animate: true,
-                                duration: 0.5 // in seconds
-                            });
-                            alreadyZoomed = true;
-                        } catch (err) {
-                            console.log("Error zooming: " + err);
-                        }
-                    }
-            })
-			
-			self.triggerEvent("layerLoadingDone", self.map);
+        const selectedBoundary = payload.payload.children;
+        const parentBoundaries = payload.payload.parent_layers;
+        const layers = [selectedBoundary, ...parentBoundaries].map(l => {
+            return L.geoJson(l);
         });
+	   	
+        self.boundaryLayers.clearLayers();
 
-    }; 
+        var secondaryLayers = layers.slice(1).reverse();
+        var mainLayer = layers[0];
+
+        secondaryLayers.forEach((layer) => {
+            self.layerStyler.setLayerToHoverOnly(layer);
+            self.boundaryLayers.addLayer(layer);
+
+        })
+
+        self.layerStyler.setLayerToSelected(mainLayer);
+        self.boundaryLayers.addLayer(mainLayer);
+
+        var alreadyZoomed = false;
+
+        var layerPayload = function(layer) {
+            var prop = layer.layer.feature.properties;
+            return {
+                areaCode: prop.code,
+                layer: layer.layer,
+                element: layer,
+                properties: prop,
+            }
+        }
+
+        layers.forEach((layer) => {
+            layer
+                .off("click")
+                .on("click", (el) => {
+                    const prop = el.layer.feature.properties;
+                    const areaCode = prop.code;
+                    self.triggerEvent("layerClick", layerPayload(el));
+                }) 
+                .on("mouseover", (el) => {
+                    self.triggerEvent("layerMouseOver", layerPayload(el));
+                })
+                .on("mouseout", (el) => {
+                    self.triggerEvent("layerMouseOut", layerPayload(el));
+                })
+                .addTo(self.map);
+
+                if (self.zoomMap && !alreadyZoomed) {
+                    try {
+                        self.map.flyToBounds(layer.getBounds(), {
+                            animate: true,
+                            duration: 0.5 // in seconds
+                        });
+                        alreadyZoomed = true;
+                    } catch (err) {
+                        console.log("Error zooming: " + err);
+                    }
+                }
+        })
+		
+		self.triggerEvent("layerLoadingDone", self.map);
+    };
 }
 
 /**

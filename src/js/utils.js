@@ -13,8 +13,8 @@ export class Cache {
     if (val != null)
       return JSON.parse(val);
 
-    if (this.memoryCache[val] != undefined)
-      return this.memoryCache[val]
+    if (this.memoryCache[key] != undefined)
+      return this.memoryCache[key]
 
     return null;
   }

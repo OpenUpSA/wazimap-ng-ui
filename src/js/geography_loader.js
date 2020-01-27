@@ -12,7 +12,6 @@ export class GeographyLoader extends Observable {
         const url = `${this.baseUrl}/profiles/${profileId}/geographies/${geography}/`;
         const self = this;
 
-        this.triggerEvent('loadingGeography', {geography: geography, profile: profileId});
         return getJSON(url).then(data => {
             const profile = new Profile(data);
 

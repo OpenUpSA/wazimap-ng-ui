@@ -137,7 +137,7 @@ export default class ProfileLoader {
     }
 
     loadProfile(payload) {
-        const data = payload.payload.profile.data;
+        const data = payload.payload.profile;
         const all_indicators = data.indicators;
 
         $(categoryClass).remove();

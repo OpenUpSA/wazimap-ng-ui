@@ -24,7 +24,7 @@ export default function configureApplication(serverUrl, profileId) {
     const geographyProvider = new WazimapProvider(baseUrl)
     const mapcontrol = new MapControl(geographyProvider);
     const pointData = new PointData(mapcontrol.map);
-    const controller = new Controller();
+    const controller = new Controller(baseUrl, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
     const mapchip = new MapChip();
@@ -40,27 +40,25 @@ export default function configureApplication(serverUrl, profileId) {
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
-    controller.on('hashChange', payload => geographyLoader.loadGeography(payload.payload.geography, payload.payload.profile));
     controller.on('breadcrumbSelected', payload => geographyLoader.loadGeography(payload.payload.code, payload.state.profile));
     controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.payload))
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on('layerMouseOver', payload => mapcontrol.loadPopup(payload));
     controller.on('profileLoaded', onProfileLoadedSearch);
-    controller.on('printProfile', payload => pdfprinter.printDiv(payload))
     controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
+    controller.on('printProfile', payload => pdfprinter.printDiv(payload))
 
     controller.on('searchResultClick', payload => mapcontrol.overlayBoundaries(payload.payload.code, false))
 
     controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
-    controller.on('loadedGeography', payload => profileLoader.loadProfile(payload))
-    controller.on('loadedGeography', payload => {
-        const data = payload.payload.profile.data;
-        // TODO this needs to be cleaned up
-        loadMenu(data['indicators'], payload => controller.onSubIndicatorClick(payload));
-    })
-    controller.on('loadedGeography', payload => locationInfoBox.update(payload.payload.profile))
+    controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload.profile))
+    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile['indicators'], payload => controller.onSubIndicatorClick(payload)))
+    // controller.on('loadedNewProfile', payload => geographyLoader.loadGeography(payload.payload.geography, payload.payload.profile));
+    controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload))
+    controller.on('loadedNewProfile', payload => mapcontrol.overlayBoundaries(payload))
+
     controller.on("searchBefore", payload => searchLoadSpinner.start());
     controller.on("searchResults", payload => searchLoadSpinner.stop());
     controller.on("layerLoading", payload => contentMapSpinner.start());
@@ -94,8 +92,7 @@ export default function configureApplication(serverUrl, profileId) {
 	
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
 
-    geographyLoader.on('loadingGeography', payload => controller.onLoadingGeography(payload))
-    geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
+    //geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
 
     pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
     pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
@@ -104,6 +101,7 @@ export default function configureApplication(serverUrl, profileId) {
     pointData.on("loadedThemes", payload => controller.onLoadedThemes(payload));
 	
 	pointData.loadThemes();
+    // TODO do we want this here?
     controller.triggerHashChange()
-    mapcontrol.overlayBoundaries(null);
+    // mapcontrol.overlayBoundaries(null);
 }

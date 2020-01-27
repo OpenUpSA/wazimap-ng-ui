@@ -1,15 +1,18 @@
-import {Observable} from './utils';
+import {Observable, getJSON} from './utils';
 
 export default class Controller extends Observable {
-    constructor(profile=1) {
+    constructor(baseUrl, profileId=1) {
         super();
+        this.baseUrl = baseUrl;
+        this.profileId = profileId;
+
         this.state = {
-           profile: profile,
+           profile: profileId,
            // Set if a choropleth is currently active
            subindicator: null 
         }
 
-        var self = this;
+        const self = this;
 
         $(window).on('hashchange', () => {
                 // On every hash change the render function is called with the new hash.
@@ -20,14 +23,18 @@ export default class Controller extends Observable {
                 if (parts[0] == "#geo") {
                     parts = parts[1].split(",")
                     if (parts.length == 1)
-                        var geographyId = parts[0];
+                        var areaCode = parts[0];
                     else
-                        var geographyId = parts[1];
+                        var areaCode = parts[1];
 
-                    self.triggerEvent("hashChange", {
+                    const payload = {
+                        // TODO need to change this to profileId
                         profile: self.profile,
-                        geography: geographyId
-                    })
+                        // TODO need to change this to areaCode
+                        geography: areaCode
+                    }
+                    self.triggerEvent("hashChange", payload);
+                    self.onHashChange(payload);
                 }
                 
         });
@@ -85,13 +92,28 @@ export default class Controller extends Observable {
      */
     onHashChange(payload) {
         this.triggerEvent("hashChange", payload);
+        this.loadProfile(payload)
     };
 
-    onLayerClick(payload) {
-        var mapItId = payload.mapItId;
+    loadProfile(payload) {
+        this.triggerEvent("loadingNewProfile", payload.geography);
+        const url = `${this.baseUrl}/all_details/profile/${this.profileId}/geography/${payload.geography}/`;
+        getJSON(url).then(js => {
+            console.log(js)
+            this.triggerEvent("loadedNewProfile", js);
+            // TODO this should be run after all dynamic stuff is run
+            // Shouldn't be here
+            Webflow.require('ix2').init()
+            this.registerWebflowEvents();
+        })
+    }
 
-        this.triggerEvent("layerClick", mapItId); 
-        window.location.hash = "#geo:" + mapItId;
+
+    onLayerClick(payload) {
+        const areaCode = payload.areaCode;
+
+        this.triggerEvent("layerClick", areaCode); 
+        window.location.hash = `#geo:${areaCode}`;
     };
 
     onLayerMouseOver(payload) {
@@ -207,7 +229,8 @@ export default class Controller extends Observable {
     onLoadedGeography(payload) {
         // Important to trigger loadedGeography before reinitialising Webflow
         // otherwise new elements placed on the page are not recognised by webflow
-        this.triggerEvent("loadedGeography", payload);
+        //this.triggerEvent("loadedGeography", payload);
+        // TODO remove this once the best home is found for it
         Webflow.require('ix2').init()
         this.registerWebflowEvents();
     }

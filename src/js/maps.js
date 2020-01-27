@@ -90,11 +90,39 @@ export class MapControl extends Observable {
             .setView([coords["lat"], coords["long"]], coords["zoom"])
 
         L.tileLayer(tileUrl).addTo(map);
-        L.control.zoom({position: 'topright'}).addTo(map);
+        L.control.zoom({position: 'bottomright'}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
 
         return map;
     };
+
+    loadPopup(payload) {
+        const state = payload.state;
+        var payload = payload.payload;
+        var popupLabel = payload.properties.name;
+        var areaCode = payload.areaCode;
+        const popup = L.popup({autoPan: false})
+
+        if (state.subindicator != null) {
+            const subindicators = state.subindicator.subindicators;
+            const subindicator = state.subindicator.obj.key;
+            const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
+            if (subindicatorValues.length > 0) {
+                const subindicatorValue = subindicatorValues[0];
+                for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
+                    if (geographyCode == areaCode) {
+                        const countFmt = numFmt(count);
+                        popupLabel = `<strong>${popupLabel}</strong>`;
+                        popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
+                    }
+                }
+            }
+        }
+        popup.setContent(popupLabel)
+        payload.layer.bindPopup(popup).openPopup();
+
+    }
+
 
     /**
      * Handles creating a choropleth when a subindicator is clicked
@@ -167,7 +195,6 @@ export class MapControl extends Observable {
                     .on("click", (el) => {
                         const prop = el.layer.feature.properties;
                         const areaCode = prop.code;
-                        self.overlayBoundaries(areaCode);
                         self.triggerEvent("layerClick", layerPayload(el));
                     }) 
                     .on("mouseover", (el) => {
@@ -180,7 +207,10 @@ export class MapControl extends Observable {
 
                     if (self.zoomMap && !alreadyZoomed) {
                         try {
-                            self.map.fitBounds(layer.getBounds());
+                            self.map.flyToBounds(layer.getBounds(), {
+                                animate: true,
+                                duration: 0.5 // in seconds
+                            });
                             alreadyZoomed = true;
                         } catch (err) {
                             console.log("Error zooming: " + err);
@@ -234,21 +264,29 @@ export class LayerCache {
 
         let geography = null;
 
-        return Promise.resolve(code)
+        const promiseGeography = Promise.resolve(code)
             .then(code => {
                 return self.mapit.getGeography(code).then(g => {
                     geography = g;
                     return code
                 })
             })
+
+        const promiseChildren = Promise.resolve(code)
             .then(code => {
                 if (showChildren)
                     return self.mapit.childGeometries(code)
                 else
-                    return self.mapit.getGeography(code).then(geo => geo.geometry);
+                    return Promise.resolve(geography.geometry);
+                    //return self.mapit.getGeography(code).then(geo => geo.geometry);
             })
-            .then(geojson => {
+
+        return Promise.all([promiseGeography, promiseChildren])
+            .then(results => {
+                const geojson = results[1];
                 const layer = L.geoJson(geojson);
+
+
                 const hasGeometries = layer.getLayers().length > 0;
                 self.hashGeographies(layer);
                 if (hasGeometries)
@@ -259,7 +297,9 @@ export class LayerCache {
             .then(parent => {
                 if (parent != null) {
                     geography = geography.parent;
-                    return self.getLayers(geography.code, layers);
+                    return self.getLayers(geography.code, layers, true);
+                } else if (geography._parentId != null) {
+                    return self.getLayers(geography._parentId, layers, true);
                 }
 
                 return layers;

@@ -16,9 +16,6 @@ export class GeographyLoader extends Observable {
         return getJSON(url).then(data => {
             const profile = new Profile(data);
 
-            // TODO need to move this somewhere useful
-            $(".d3-tip").css("z-index", 100);
-
             self.triggerEvent('loadedGeography', {geography: geography, profile: profile});
             self.map.overlayBoundaries(geography);
         })

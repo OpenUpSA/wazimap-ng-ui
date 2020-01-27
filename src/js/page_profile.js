@@ -33,6 +33,7 @@ const breadcrumbTemplate = $(".breadcrumb", breadcrumbsContainer)[0].cloneNode(t
 const metricWrapper = $(".location-header__key-metrics", profileHeader);
 const metricTemplate = $(".key-metric", metricWrapper)[0].cloneNode(true);
 
+
 function updateGeography(container, data) {
     const geography = data.geography
     const label = geography.name + " (" + geography.code + ")";
@@ -99,11 +100,13 @@ export default class ProfileLoader {
         $(indicatorTitleClass, newIndicatorSection).text(indicator);
         wrapper.append(newIndicatorSection);
 
-        classes.forEach((el) => {
-            el["label"] = el.key
-            el["value"] = el["count"]
-        })
-        this.addChart(chartContainer[0], classes)
+        if (classes != undefined && Array.isArray(classes)) {
+            classes.forEach((el) => {
+                el["label"] = el.key
+                el["value"] = el["count"]
+            })
+            this.addChart(chartContainer[0], classes)
+        }
     }
 
     addChart(container, data) {
@@ -126,6 +129,10 @@ export default class ProfileLoader {
 
         d3select(container)
             .call(myChart.data(data));
+            
+        $(".d3-tip")
+            .css("z-index", 100)
+
 
     }
 

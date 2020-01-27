@@ -2,9 +2,41 @@ import {format as d3format} from 'd3-format';
 
 const queryCache = {};
 
+export class Cache {
+  constructor() {
+    this.memoryCache = {}
+
+  }
+
+  getItem(key) {
+    const val = localStorage.getItem(key);
+    if (val != null)
+      return JSON.parse(val);
+
+    if (this.memoryCache[val] != undefined)
+      return this.memoryCache[val]
+
+    return null;
+  }
+
+  setItem(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (err) {
+      console.log(`Error using localstorage, reverting to memory cache: ${err}`)
+      this.memoryCache[key] = val;
+    }
+  }
+}
+
+const cache = new Cache();
+
 export function getJSON(url, skipCache=false) {
-  if (queryCache[url] != undefined && !skipCache)
-    return Promise.resolve(queryCache[url])
+  //if (queryCache[url] != undefined && !skipCache) {
+  if (cache.getItem(url) != null && !skipCache) {
+    return Promise.resolve(cache.getItem(url));
+    //return Promise.resolve(queryCache[url])
+  }
 
   return new Promise((resolve, reject) => {
     const req = new XMLHttpRequest();
@@ -13,7 +45,7 @@ export function getJSON(url, skipCache=false) {
     req.onload = () => {
       if (req.status == 200) {
         const json = JSON.parse(req.response);
-        queryCache[url] = json;
+       cache.setItem(url, json);
         resolve(json);
       } else {
         reject(Error(req.statusText));

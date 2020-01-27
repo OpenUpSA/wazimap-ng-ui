@@ -92,16 +92,16 @@ export default function configureApplication(serverUrl, profileId) {
     printButton.on("click", payload => controller.onPrintProfile(payload));
     locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
 	
-	mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
+    mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
 
     geographyLoader.on('loadingGeography', payload => controller.onLoadingGeography(payload))
     geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
 
-	pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
-	pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
-	pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload))	
-	pointData.on("loadingThemes", payload => controller.onLoadingThemes(payload));
-	pointData.on("loadedThemes", payload => controller.onLoadedThemes(payload));
+    pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
+    pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
+    pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload))	
+    pointData.on("loadingThemes", payload => controller.onLoadingThemes(payload));
+    pointData.on("loadedThemes", payload => controller.onLoadedThemes(payload));
 	
 	pointData.loadThemes();
     controller.triggerHashChange()

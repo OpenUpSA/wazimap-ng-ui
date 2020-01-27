@@ -73,6 +73,28 @@ export default function configureApplication(serverUrl, profileId) {
 		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
 	});
 	controller.on("themePointLoaded", payload => {
+        if(payload.payload.data == "cancel")
+        {
+            new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+            new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+            return;
+        }
+            
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
+	});
+    
+	controller.on("categorySelected", payload => {
+		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
+		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+	});
+    
+	controller.on("categoryUnselected", payload => {
+		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+	});
+    
+	controller.on("categoryPointLoaded", payload => {
 		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
 		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
 	});
@@ -99,9 +121,12 @@ export default function configureApplication(serverUrl, profileId) {
 
     pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
     pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
-    pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload))	
+    pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload));
     pointData.on("loadingThemes", payload => controller.onLoadingThemes(payload));
     pointData.on("loadedThemes", payload => controller.onLoadedThemes(payload));
+    pointData.on("categorySelected", payload => controller.onCategorySelected(payload));
+    pointData.on("categoryUnselected", payload => controller.onCategoryUnselected(payload));
+    pointData.on("categoryPointLoaded", payload => controller.onCategoryPointLoaded(payload));
 	
 	pointData.loadThemes();
     controller.triggerHashChange()

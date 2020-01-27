@@ -189,6 +189,7 @@ export default class Controller extends Observable {
      */
     onBreadcrumbSelected(payload) {
         this.triggerEvent('breadcrumbSelected', payload);
+        this.changeHash(payload.code)
     }
 
     /* Search events */

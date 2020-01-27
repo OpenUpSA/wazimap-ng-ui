@@ -101,15 +101,14 @@ export default class Controller extends Observable {
     onLayerMouseOut(payload) {
         this.triggerEvent("layerMouseOut", payload); 
     };
-	
-	onLayerLoading(payload) {
+
+    onLayerLoading(payload) {
         this.triggerEvent("layerLoading", payload);
     };
-	
-	onLayerLoadingDone(payload) {
+
+    onLayerLoadingDone(payload) {
         this.triggerEvent("layerLoadingDone", payload);
     };
-	
 
     onProfileLoaded(payload) {
         this.state.profile = payload;
@@ -124,23 +123,23 @@ export default class Controller extends Observable {
         }
         this.triggerEvent("printProfile", filename)
     }
-	
-	//Payload is the MapChip Element
-	onMapChipRemoved(payload) {
-		this.triggerEvent('mapChipRemoved', payload);
-	}
-	
-	onThemeSelected(payload){
-		this.triggerEvent('themeSelected', payload);
-	}
-	
-	onThemeUnselected(payload){
-		this.triggerEvent('themeUnselected', payload);
-	}
-	
-	onThemePointLoaded(payload){
-		this.triggerEvent('themePointLoaded', payload);
-	}
+
+    //Payload is the MapChip Element
+    onMapChipRemoved(payload) {
+        this.triggerEvent('mapChipRemoved', payload);
+    }
+    
+    onThemeSelected(payload){
+        this.triggerEvent('themeSelected', payload);
+    }
+    
+    onThemeUnselected(payload){
+        this.triggerEvent('themeUnselected', payload);
+    }
+    
+    onThemePointLoaded(payload){
+        this.triggerEvent('themePointLoaded', payload);
+    }
 
     /** When a breadcrumb is clicked. Payload is a location: 
     {
@@ -210,17 +209,17 @@ export default class Controller extends Observable {
         // otherwise new elements placed on the page are not recognised by webflow
         this.triggerEvent("loadedGeography", payload);
         Webflow.require('ix2').init()
-		this.registerWebflowEvents();
+        this.registerWebflowEvents();
     }
-	
-	onLoadingThemes(payload) {
-		this.triggerEvent("loadingThemes", payload);
-	}
-	
-	onLoadedThemes(payload) {
-		this.triggerEvent("loadedThemes", payload);
-		Webflow.ready();
-	}
+    
+    onLoadingThemes(payload) {
+        this.triggerEvent("loadingThemes", payload);
+    }
+    
+    onLoadedThemes(payload) {
+        this.triggerEvent("loadedThemes", payload);
+        Webflow.ready();
+    }
 
     registerWebflowEvents() {
         const events = ["click", "mouseover", "mouseout"];

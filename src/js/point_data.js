@@ -24,6 +24,7 @@ let treeLineItem = null;
 let markers = null;
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
+let addrPointCancelTokens = {};
 
 let colors = ['#dfe8ff', '#ebdcfa', '#ffe2ee', '#badc58', '#7ed6df', '#ea8685', '#cf6a87', '#9AECDB', '#FEA47F', '#1dd1a1'];    //colors of the point data dialog
 
@@ -67,7 +68,8 @@ export class PointData extends Observable {
                 for (let i = 0; i < data.results.length; i++) {
                     let item = pointDataItem.cloneNode(true);
                     $('.h1__trigger_title .truncate', item).text(data.results[i].name);
-                    $('.point-data__h1_trigger', item).css('background-color', colors[i % 10]); //todo:get the color from the API
+                    $('.point-data__h1_trigger', item).css('background-color', passiveColor);
+                    //$('.point-data__h1_trigger', item).css('background-color', colors[i % 10]); //todo:get the color from the API
                     $('.' + categoryWrapperClsName, item).html('');
 
                     if (data.results[i].categories !== null && data.results[i].categories.length > 0) {
@@ -77,7 +79,7 @@ export class PointData extends Observable {
                                 categoryId: data.results[i].categories[j].id
                             })
                             let cItem = categoryItem.cloneNode(true);
-                            $(cItem).on('click', () => self.selectedCategoriesChanged(cItem, data.results[i].categories[j], i));
+                            $(cItem).on('click', () => self.selectedCategoriesChanged(cItem, item, data.results[i].categories[j], i));
                             $(cItem).find('.point-data__h2').removeClass(activeClsName);
                             $('.truncate', cItem).text(data.results[i].categories[j].name);
                             $('.point-data__h2_link', cItem).removeClass('point-data__h2_link').addClass('point-data__h2_link--disabled');
@@ -107,32 +109,63 @@ export class PointData extends Observable {
     /**
      * this function is called when a category is toggled
      * */
-    selectedCategoriesChanged = (cItem, category, index) => {
+    selectedCategoriesChanged = (cItem, item, category, index) => {
         if ($(cItem).find('.point-data__h2').hasClass(activeClsName)) {
-            this.triggerEvent('categorySelected', {category: category});
+            this.triggerEvent('categoryUnselected', {category: category, item: cItem});
 
             this.selectedCategories.splice(this.selectedCategories.indexOf(category.id), 1);
             $(cItem).find('.point-data__h2').removeClass(activeClsName);
             $(cItem).find('.point-data__h2').css('background-color', passiveColor);
+            
+            if($(item).find('.' + categoryItemClsName).find('.' + activeClsName).length == 0)
+                $('.point-data__h1_trigger', item).css('background-color', passiveColor);
+            
             this.removeCategoryPoints(category);
         } else {
-            this.triggerEvent('categoryUnselected', {category: category});
+            this.triggerEvent('categorySelected', {category: category, item: cItem});
 
             this.selectedCategories.push(category.id);
             $(cItem).find('.point-data__h2').addClass(activeClsName);
             $(cItem).find('.point-data__h2').css('background-color', colors[index % 10]); //todo:get the color from the API
-            this.showCategoryPoint(category);
+            
+            $('.point-data__h1_trigger', item).css('background-color', colors[index % 10]);
+            
+            this.showCategoryPoint(category).then(data => {
+				this.triggerEvent('categoryPointLoaded', {data: data, item: cItem})
+			});
         }
     }
 
     showCategoryPoint = (category) => {
         let categoryUrl = pointsByCategoryUrl.replace('{category_id}', category.id);
         let iterationCounter = 0;
+        
+        const tokenIndex = "category_id-" + category.id;
+        
+        if(addrPointCancelTokens[tokenIndex] == undefined)
+            addrPointCancelTokens[tokenIndex] = []
 
-        this.getAddressPoints(categoryUrl, iterationCounter);
+        const token = { token: "" };
+        
+        addrPointCancelTokens[tokenIndex].push(token);
+        return this.getAddressPoints(categoryUrl, iterationCounter, token).then((data) => {
+                let index = addrPointCancelTokens[tokenIndex].indexOf(token);
+                if(index !== -1) {
+                  addrPointCancelTokens[tokenIndex].splice(index, 1);
+                }
+                return data;
+            });
     }
 
     removeCategoryPoints = (category) => {
+        const tokenIndex = "category_id-" + category.id;
+        if(addrPointCancelTokens[tokenIndex])
+        {
+            for (let i = 0; i < addrPointCancelTokens[tokenIndex].length; i++) {
+                addrPointCancelTokens[tokenIndex][i].token = "cancel";
+            }
+        }
+        
         activePoints = activePoints.filter((item) => {
             return item.categoryId !== category.id
         });
@@ -151,7 +184,7 @@ export class PointData extends Observable {
 
             this.selectedThemes.push(theme.id);
             this.showThemePoints(theme).then(data => {
-				this.triggerEvent('themePointLoaded', {data: data, item: item})
+                this.triggerEvent('themePointLoaded', {data: data, item: item})
 			});
 
             $(item).find('.' + categoryItemClsName).each(function () {
@@ -160,6 +193,8 @@ export class PointData extends Observable {
                     $(this).find('.point-data__h2').css('background-color', colors[index % 10]); //todo:get the color from the API
                 }
             })
+            
+            $('.point-data__h1_trigger', item).css('background-color', colors[index % 10]);
         } else {
             //theme removed
             this.triggerEvent('themeUnselected', {theme: theme, item: item});
@@ -173,17 +208,42 @@ export class PointData extends Observable {
                     $(this).find('.point-data__h2').css('background-color', passiveColor); //todo:get the color from the API
                 }
             })
+            
+            $('.point-data__h1_trigger', item).css('background-color', passiveColor);
         }
     }
 
     showThemePoints = (theme) => {
+        //need to remove for in case its already showing some from selected item
+        this.removeThemePoints(theme);
         let themeUrl = pointsByThemeUrl.replace('{theme_id}', theme.id);
         let iterationCounter = 0;
+        
+        const tokenIndex = "theme_id-" + theme.id;
+        if(addrPointCancelTokens[tokenIndex] == undefined)
+            addrPointCancelTokens[tokenIndex] = []
 
-        return this.getAddressPoints(themeUrl, iterationCounter);
+        var token = { token: "" };
+        
+        addrPointCancelTokens[tokenIndex].push(token);
+        return this.getAddressPoints(themeUrl, iterationCounter, token).then((data) => {                
+                let index = addrPointCancelTokens[tokenIndex].indexOf(token);
+                if(index !== -1) {
+                  addrPointCancelTokens[tokenIndex].splice(index, 1);
+                }
+                return data;
+            });
     }
 
     removeThemePoints = (theme) => {
+        const themeIndex = "theme_id-" + theme.id;
+        if(addrPointCancelTokens[themeIndex])
+        {
+            for (let i = 0; i < addrPointCancelTokens[themeIndex].length; i++) {
+                addrPointCancelTokens[themeIndex][i].token = "cancel";
+            }
+        }
+        
         activePoints = activePoints.filter((item) => {
             return item.themeId !== theme.id
         });
@@ -199,7 +259,7 @@ export class PointData extends Observable {
      * id : id of category or theme requested
      * type : 'Category' or 'Theme'
      */
-    getAddressPoints = (requestUrl, iterationCounter) => {
+    getAddressPoints = (requestUrl, iterationCounter, cancelToken = undefined) => {
         requestUrl = requestUrl.replace('http://', 'https://');
         return getJSON(requestUrl).then((data) => {
             if (data.features !== null && data.features.length > 0) {
@@ -217,12 +277,15 @@ export class PointData extends Observable {
                         themeId: themeId
                     })
                 }
+                
+                if(cancelToken != undefined && cancelToken.token != "")
+                    return cancelToken.token;
 
                 if (++iterationCounter < iterationLimit && data.next !== null && data.features !== null && data.features.length > 0) {
                     //has more
                     this.triggerEvent('iterationCompleted', {iterationCounter: iterationCounter, data: data});
 
-                    return this.getAddressPoints(data.next, iterationCounter);
+                    return this.getAddressPoints(data.next, iterationCounter, cancelToken);
                 } else {
                     //completed
                     this.triggerEvent('addressPointsTake', {data: data});

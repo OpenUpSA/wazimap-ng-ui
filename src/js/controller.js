@@ -137,6 +137,19 @@ export default class Controller extends Observable {
 	onThemeUnselected(payload){
 		this.triggerEvent('themeUnselected', payload);
 	}
+    
+    onCategorySelected(payload){
+		this.triggerEvent('categorySelected', payload);
+	}
+	
+	onCategoryUnselected(payload){
+		this.triggerEvent('categoryUnselected', payload);
+	}
+    
+    onCategoryPointLoaded(payload){
+		this.triggerEvent('categoryPointLoaded', payload);
+	}
+    
 	
 	onThemePointLoaded(payload){
 		this.triggerEvent('themePointLoaded', payload);

@@ -1,8 +1,7 @@
 import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
-
-import {Observable} from './utils';
+import {Observable, numFmt} from './utils';
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -71,10 +70,10 @@ export class MapControl extends Observable {
         this.zoomMap = config.zoomMap || true;
         this.boundaryLayers = null;
 
-        this.layerCache = new LayerCache(geographyProvider);
         this.layerStyler = new LayerStyler();
 
         this.map = this.configureMap(coords, tileUrl);
+        this.layerCache = {};
     };
 
     onSizeUpdate() {
@@ -131,10 +130,10 @@ export class MapControl extends Observable {
     choropleth(data) {
         var self = this
 
-        var childGeographies = Object.entries(data.obj.children).map((childGeography) => {
+        var childGeographies = Object.entries(data.payload.obj.children).map(childGeography => {
             var code = childGeography[0];
             var count = childGeography[1];
-            var universe = data.subindicators.reduce((el1, el2) => {
+            var universe = data.payload.subindicators.reduce((el1, el2) => {
               if (el2.children != undefined && el2.children[code] != undefined)
                 return el1 + el2.children[code];
               return el1;
@@ -150,7 +149,7 @@ export class MapControl extends Observable {
         var scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values), d3max(values)])
 
         childGeographies.forEach((el) => {
-          var layer = self.layerCache.geoMap[el.code];
+          var layer = self.layerCache[el.code];
           var color = scale(el.val);
           layer.setStyle({fillColor: color});
         })
@@ -161,15 +160,25 @@ export class MapControl extends Observable {
         const boundaryLayers = [];
 
 		self.triggerEvent("layerLoading", self.map);
-        const selectedBoundary = payload.payload.children;
+        let selectedBoundary = payload.payload.children;
+        if (Object.values(payload.payload.children).length == 0)
+            selectedBoundary = payload.payload.boundary;
+
         const parentBoundaries = payload.payload.parent_layers;
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
-            return L.geoJson(l);
+            const leafletLayer = L.geoJson(l);
+            const code = payload.payload.profile.geography.code;
+            leafletLayer.eachLayer(l => {
+                let code = l.feature.properties.code;
+                self.layerCache[code] = l;
+            })
+            self.layerCache[code] = leafletLayer;
+            return leafletLayer;
         });
 	   	
         self.boundaryLayers.clearLayers();
 
-        var secondaryLayers = layers.slice(1).reverse();
+        var secondaryLayers = layers.slice(1);
         var mainLayer = layers[0];
 
         secondaryLayers.forEach((layer) => {
@@ -224,87 +233,4 @@ export class MapControl extends Observable {
 		
 		self.triggerEvent("layerLoadingDone", self.map);
     };
-}
-
-/**
-A tree-hash cache for map boundary layers
-Every geograpy node is indexed by level_code
-A node contains the following attributes:
-    - layer
-    - parent layer
-    - code
-*/
-export class LayerCache {
-    constructor(geographyProvider) {
-        this.mapit = geographyProvider
-        //this.mapit = new MapItGeographyProvider()
-        this.geoMap = {};
-    };
-
-    hashGeographies(layer) {
-        var self = this;
-        layer.eachLayer(l => {
-            const props = l.feature.properties;
-            const code = props.code;
-            self.geoMap[code] = l; 
-        })
-    };
-
-    /**
-     * Return an array of Leaflet layers to be displayed
-     * @param  {[type]}
-     * @param  {Function}
-     * @return {[type]}
-     */
-    getLayers(code, layers, showChildren=true) {
-        const self = this;
-        if (code == null)
-            code = this.mapit.defaultGeography;
-
-        if (layers == undefined)
-            layers = [];
-
-        let geography = null;
-
-        const promiseGeography = Promise.resolve(code)
-            .then(code => {
-                return self.mapit.getGeography(code).then(g => {
-                    geography = g;
-                    return code
-                })
-            })
-
-        const promiseChildren = Promise.resolve(code)
-            .then(code => {
-                if (showChildren)
-                    return self.mapit.childGeometries(code)
-                else
-                    return Promise.resolve(geography.geometry);
-                    //return self.mapit.getGeography(code).then(geo => geo.geometry);
-            })
-
-        return Promise.all([promiseGeography, promiseChildren])
-            .then(results => {
-                const geojson = results[1];
-                const layer = L.geoJson(geojson);
-
-
-                const hasGeometries = layer.getLayers().length > 0;
-                self.hashGeographies(layer);
-                if (hasGeometries)
-                    layers.push(layer);
-
-                return geography.parent
-            })
-            .then(parent => {
-                if (parent != null) {
-                    geography = geography.parent;
-                    return self.getLayers(geography.code, layers, true);
-                } else if (geography._parentId != null) {
-                    return self.getLayers(geography._parentId, layers, true);
-                }
-
-                return layers;
-            })
-    }
 }

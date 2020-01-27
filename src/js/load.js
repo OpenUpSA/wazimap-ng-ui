@@ -10,7 +10,6 @@ import {onProfileLoaded as onProfileLoadedSearch, Search} from './search';
 import {MapItGeographyProvider} from './geography_providers/mapit';
 import {WazimapProvider} from './geography_providers/wazimap';
 import {MapChip} from './mapchip';
-import {GeographyLoader} from './geography_loader';
 import {LocationInfoBox} from './location_info_box';
 import {LoadingSpinner} from './loading_spinner';
 import {PointData} from "./point_data";
@@ -29,7 +28,6 @@ export default function configureApplication(serverUrl, profileId) {
     const printButton = $("#profile-print");
     const mapchip = new MapChip();
     const search = new Search(baseUrl, 2);
-    const geographyLoader = new GeographyLoader(baseUrl, mapcontrol);
     const profileLoader = new ProfileLoader();
     const locationInfoBox = new LocationInfoBox();
     const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
@@ -40,22 +38,19 @@ export default function configureApplication(serverUrl, profileId) {
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
-    controller.on('breadcrumbSelected', payload => geographyLoader.loadGeography(payload.payload.code, payload.state.profile));
-    controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.payload))
+    controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload))
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on('layerMouseOver', payload => mapcontrol.loadPopup(payload));
     controller.on('profileLoaded', onProfileLoadedSearch);
     controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))
 
-    controller.on('searchResultClick', payload => mapcontrol.overlayBoundaries(payload.payload.code, false))
 
     controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload.profile))
     controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile['indicators'], payload => controller.onSubIndicatorClick(payload)))
-    // controller.on('loadedNewProfile', payload => geographyLoader.loadGeography(payload.payload.geography, payload.payload.profile));
     controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload))
     controller.on('loadedNewProfile', payload => mapcontrol.overlayBoundaries(payload))
 
@@ -91,8 +86,6 @@ export default function configureApplication(serverUrl, profileId) {
     locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
 	
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
-
-    //geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
 
     pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
     pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))

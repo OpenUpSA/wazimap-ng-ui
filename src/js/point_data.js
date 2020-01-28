@@ -16,11 +16,15 @@ const categoryItemClsName = 'point-data__h2_wrapper';
 const categoryItemLoadingClsName = 'point-data__h2_loading';
 const categoryItemDoneClsName = 'point-data__h2_load-complete';
 const treeLineClsName = 'point-data__h2_tree-line-v';
+const pointMarkerPositionClsName = 'point-marker__position';
+//const popupItemClsName = 'point-marker__tooltip_card';
+const popupItemClsName = 'point-marker__tooltip';
 const activeClsName = 'active-1';
 const passiveColor = '#f7f7f7';
 let pointDataItem = null;
 let categoryItem = null;
 let treeLineItem = null;
+let popupItem = null;
 let markers = null;
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
@@ -52,6 +56,7 @@ export class PointData extends Observable {
 		$(categoryItem).find('.' + categoryItemLoadingClsName).addClass('hide');
 		$(categoryItem).find('.' + categoryItemDoneClsName).addClass('hide');
         treeLineItem = $('.' + treeLineClsName)[0].cloneNode(true);
+        popupItem = $('.' + pointMarkerPositionClsName).find('.' + popupItemClsName)[0].cloneNode(true);
 
         $('.' + wrapperClsName).html('');
     }
@@ -118,7 +123,10 @@ export class PointData extends Observable {
             $(cItem).find('.point-data__h2').css('background-color', passiveColor);
             
             if($(item).find('.' + categoryItemClsName).find('.' + activeClsName).length == 0)
+            {
                 $('.point-data__h1_trigger', item).css('background-color', passiveColor);
+                $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop( "checked", false );
+            }
             
             this.removeCategoryPoints(category);
         } else {
@@ -127,8 +135,12 @@ export class PointData extends Observable {
             this.selectedCategories.push(category.id);
             $(cItem).find('.point-data__h2').addClass(activeClsName);
             $(cItem).find('.point-data__h2').css('background-color', colors[index % 10]); //todo:get the color from the API
-            
             $('.point-data__h1_trigger', item).css('background-color', colors[index % 10]);
+            
+            if($(item).find('.' + categoryItemClsName).find('.' + activeClsName).length == $(item).find('.' + categoryItemClsName).length)
+            {
+                $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop( "checked", true );
+            }
             
             this.showCategoryPoint(category).then(data => {
 				this.triggerEvent('categoryPointLoaded', {data: data, item: cItem})
@@ -274,6 +286,7 @@ export class PointData extends Observable {
                         y: data.features[i].geometry.coordinates[1],
                         name: data.features[i].properties.data.Name,
                         categoryId: categoryId,
+                        categoryName: data.features[i].properties.category.name,
                         themeId: themeId
                     })
                 }
@@ -304,13 +317,36 @@ export class PointData extends Observable {
      */
     showPointsOnMap = () => {
         markers.clearLayers();
-
+        self = this;
+        
         if (activePoints !== null && activePoints.length > 0) {
             for (let i = 0; i < activePoints.length; i++) {
                 let a = activePoints[i];
-                let title = a.name;
-                let marker = L.marker(new L.LatLng(a.y, a.x), {title: title});
-                marker.bindPopup(title);
+                let marker = L.marker(new L.LatLng(a.y, a.x));
+                let popupItemClone = popupItem.cloneNode(true);
+                
+                let name = a.name;
+                if(name == undefined || name == "")
+                    name = "Unknown";    
+                
+                $(popupItemClone).find('.tooltip__card_title').text(name);
+                $(popupItemClone).find('.tooltip__card_subtitle').text(a.categoryName);
+                $(popupItemClone).show();
+                $(popupItemClone).css('opacity','');
+                let existingStyles = $(popupItemClone).attr('style');
+                $(popupItemClone).attr('style', existingStyles + '; ' + 'display: flex !important','');
+                
+                //$(popupItemClone).children("*").css('white-space', 'nowrap');
+                "leaflet-popup-content-wrapper";
+                marker.on('mouseover', function(e) {
+                    this.bindPopup($(popupItemClone).prop('outerHTML'), { maxWidth: "auto", closeButton: false });
+                    this.openPopup()
+                });
+                
+                marker.on('mouseout', function (e) {
+                    this.closePopup();
+                });
+                
                 markers.addLayer(marker);
             }
         }

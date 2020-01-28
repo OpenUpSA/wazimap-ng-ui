@@ -111,8 +111,11 @@ export default class Controller extends Observable {
             self.triggerEvent("loadedNewProfile", js);
             // TODO this should be run after all dynamic stuff is run
             // Shouldn't be here
-            Webflow.require('ix2').init()
-            self.registerWebflowEvents();
+            setTimeout(() => {
+                console.log("initialising webflow")
+                Webflow.require('ix2').init()
+                self.registerWebflowEvents();
+            }, 600)
         })
     }
 

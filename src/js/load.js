@@ -23,7 +23,7 @@ export default function configureApplication(serverUrl, profileId) {
     const SACode = "ZA"
     const geographyProvider = new WazimapProvider(baseUrl)
     const mapcontrol = new MapControl(geographyProvider);
-	const pointData = new PointData(mapcontrol.map);
+    const pointData = new PointData(mapcontrol.map);
     const controller = new Controller();
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
@@ -32,8 +32,8 @@ export default function configureApplication(serverUrl, profileId) {
     const geographyLoader = new GeographyLoader(baseUrl, mapcontrol);
     const profileLoader = new ProfileLoader();
     const locationInfoBox = new LocationInfoBox();
-	const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
-	const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
+    const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
+    const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
@@ -61,18 +61,19 @@ export default function configureApplication(serverUrl, profileId) {
         loadMenu(data['indicators'], payload => controller.onSubIndicatorClick(payload));
     })
     controller.on('loadedGeography', payload => locationInfoBox.update(payload.payload.profile))
-	controller.on("searchBefore", payload => searchLoadSpinner.start());
-	controller.on("searchResults", payload => searchLoadSpinner.stop());
-	controller.on("layerLoading", payload => contentMapSpinner.start());
-	controller.on("layerLoadingDone", payload => contentMapSpinner.stop());
-	controller.on("themeSelected", payload => {
-		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
-	});
-	controller.on("themeUnselected", payload => {
-		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
-	});
-	controller.on("themePointLoaded", payload => {
+    controller.on("searchBefore", payload => searchLoadSpinner.start());
+    controller.on("searchResults", payload => searchLoadSpinner.stop());
+    controller.on("layerLoading", payload => contentMapSpinner.start());
+    controller.on("layerLoadingDone", payload => contentMapSpinner.stop());
+    controller.on("themeSelected", payload => {
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
+    });
+    controller.on("themeUnselected", payload => {
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+    });
+
+    controller.on("themePointLoaded", payload => {
         if(payload.payload.data == "cancel")
         {
             new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
@@ -82,27 +83,27 @@ export default function configureApplication(serverUrl, profileId) {
             
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
-	});
+    });
     
-	controller.on("categorySelected", payload => {
-		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
-		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
-	});
+    controller.on("categorySelected", payload => {
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+    });
     
-	controller.on("categoryUnselected", payload => {
-		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
-	});
+    controller.on("categoryUnselected", payload => {
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
+    });
     
-	controller.on("categoryPointLoaded", payload => {
-		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-		new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
-	});
+    controller.on("categoryPointLoaded", payload => {
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
+        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
+    });
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))
     mapcontrol.on("layerMouseOut", payload => controller.onLayerMouseOut(payload))
-	mapcontrol.on("layerLoading", payload => controller.onLayerLoading(payload))
+    mapcontrol.on("layerLoading", payload => controller.onLayerLoading(payload))
     mapcontrol.on("layerLoadingDone", payload => controller.onLayerLoadingDone(payload))
 
     search.on('beforeSearch', payload => controller.onSearchBefore(payload));
@@ -113,7 +114,7 @@ export default function configureApplication(serverUrl, profileId) {
 
     printButton.on("click", payload => controller.onPrintProfile(payload));
     locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
-	
+
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
 
     geographyLoader.on('loadingGeography', payload => controller.onLoadingGeography(payload))
@@ -127,8 +128,8 @@ export default function configureApplication(serverUrl, profileId) {
     pointData.on("categorySelected", payload => controller.onCategorySelected(payload));
     pointData.on("categoryUnselected", payload => controller.onCategoryUnselected(payload));
     pointData.on("categoryPointLoaded", payload => controller.onCategoryPointLoaded(payload));
-	
-	pointData.loadThemes();
+    
+    pointData.loadThemes();
     controller.triggerHashChange()
     mapcontrol.overlayBoundaries(null);
 }

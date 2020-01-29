@@ -350,9 +350,9 @@ export class PointData extends Observable {
                     popupElement.find('.leaflet-popup-tip-container').remove();
                 });
                 
-                // marker.on('mouseout', function (e) {
-                    // this.closePopup();
-                // });
+                marker.on('mouseout', function (e) {
+                    this.closePopup();
+                });
                 
                 markers.addLayer(marker);
             }

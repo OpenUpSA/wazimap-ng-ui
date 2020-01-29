@@ -333,14 +333,17 @@ export class PointData extends Observable {
                 $(popupItemClone).find('.tooltip__card_subtitle').text(a.categoryName);
                 $(popupItemClone).show();
                 $(popupItemClone).css('opacity','');
-                let existingStyles = $(popupItemClone).attr('style');
+                const existingStyles = $(popupItemClone).attr('style');
                 $(popupItemClone).attr('style', existingStyles + '; ' + 'display: flex !important','');
                 
-                //$(popupItemClone).children("*").css('white-space', 'nowrap');
-                "leaflet-popup-content-wrapper";
                 marker.on('mouseover', function(e) {
                     this.bindPopup($(popupItemClone).prop('outerHTML'), { maxWidth: "auto", closeButton: false });
                     this.openPopup()
+                    let popupElement = $(this.getPopup().getElement());
+                    popupElement.find('.leaflet-popup-content-wrapper').removeClass('leaflet-popup-content-wrapper');
+                    popupElement.find('.leaflet-popup-tip-container').remove();
+                    let tooltipElement = popupElement.find('.point-marker__tooltip');
+                    tooltipElement.attr('style', 'font: unset; font-family: Roboto, sans-serif; font-size: 14px; line-height: 20px;');
                 });
                 
                 marker.on('mouseout', function (e) {

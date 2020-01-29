@@ -1,3 +1,4 @@
+// TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
     var parentContainer = $(".data-menu__links")
     var categoryTemplate = $(".data-menu__category")[0].cloneNode(true);

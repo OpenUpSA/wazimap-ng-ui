@@ -16,16 +16,15 @@ export class LocationInfoBox extends Observable {
     }
 
     update(profile) {
-        const geographies = profile.data.geography;
+        const geographies = profile.geography;
         const currentGeography = {code: geographies.code, level: geographies.level, name: geographies.name}
         const locations = [...geographies.parents, currentGeography]
 
         this.updateBreadcrumbs(locations);
-        this.updateHighlights(profile.data);
+        this.updateHighlights(profile.highlights);
     }
 
-    updateHighlights(data) {
-        const highlights = data.highlights;
+    updateHighlights(highlights) {
         const metricContainers = $('.map__location-info_metric').remove()
         let metric = null;
         for (const [name, highlight] of Object.entries(highlights)) {

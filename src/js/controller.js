@@ -1,35 +1,48 @@
-import {Observable} from './utils';
+import {Observable, getJSON} from './utils';
 
+// TODO remove SA specific stuff;
+const defaultGeography = 'ZA';
 export default class Controller extends Observable {
-    constructor(profile=1) {
+    constructor(baseUrl, profileId=1) {
         super();
+        this.baseUrl = baseUrl;
+        this.profileId = profileId;
+
         this.state = {
-           profile: profile,
+           profileId: profileId,
            // Set if a choropleth is currently active
+           // TODO this state should possibly be stored in the mapcontrol
            subindicator: null 
         }
 
-        var self = this;
+        const self = this;
 
         $(window).on('hashchange', () => {
                 // On every hash change the render function is called with the new hash.
                 // This is how the navigation of our app happens.
                 const hash = decodeURI(window.location.hash);
                 let parts = hash.split(":")
+                let areaCode = null;
 
                 if (parts[0] == "#geo") {
                     parts = parts[1].split(",")
                     if (parts.length == 1)
-                        var geographyId = parts[0];
+                        areaCode = parts[0];
                     else
-                        var geographyId = parts[1];
-
-                    self.triggerEvent("hashChange", {
-                        profile: self.profile,
-                        geography: geographyId
-                    })
+                        areaCode = parts[1];
                 }
-                
+                else {
+                    areaCode = defaultGeography;
+                }
+
+                const payload = {
+                    // TODO need to change this to profileId
+                    profile: self.profile,
+                    // TODO need to change this to areaCode
+                    areaCode: areaCode
+                }
+                self.triggerEvent("hashChange", payload);
+                self.onHashChange(payload);
         });
     };
 
@@ -85,13 +98,37 @@ export default class Controller extends Observable {
      */
     onHashChange(payload) {
         this.triggerEvent("hashChange", payload);
+        this.loadProfile(payload)
     };
 
-    onLayerClick(payload) {
-        var mapItId = payload.mapItId;
+    loadProfile(payload) {
+        const self = this;
+        this.triggerEvent("loadingNewProfile", payload.geography);
+        const url = `${this.baseUrl}/all_details/profile/${this.profileId}/geography/${payload.areaCode}/`;
+        getJSON(url).then(js => {
+            console.log(js)
+            self.state.profile = js;
+            self.triggerEvent("loadedNewProfile", js);
+            // TODO this should be run after all dynamic stuff is run
+            // Shouldn't be here
+            setTimeout(() => {
+                console.log("initialising webflow")
+                Webflow.require('ix2').init()
+                self.registerWebflowEvents();
+            }, 600)
+        })
+    }
 
-        this.triggerEvent("layerClick", mapItId); 
-        window.location.hash = "#geo:" + mapItId;
+    changeHash(areaCode) {
+        window.location.hash = `#geo:${areaCode}`;
+    }
+
+
+    onLayerClick(payload) {
+        const areaCode = payload.areaCode;
+        this.changeHash(areaCode)
+
+        this.triggerEvent("layerClick", areaCode); 
     };
 
     onLayerMouseOver(payload) {
@@ -168,6 +205,7 @@ export default class Controller extends Observable {
      */
     onBreadcrumbSelected(payload) {
         this.triggerEvent('breadcrumbSelected', payload);
+        this.changeHash(payload.code)
     }
 
     /* Search events */
@@ -186,16 +224,11 @@ export default class Controller extends Observable {
      */
     onSearchResultClick(payload) {
         this.triggerEvent("searchResultClick", payload)
-        // TODO should trigger a separate profile load event
-        window.location.hash = "#geo:" + payload.code;
+        this.changeHash(payload.code)
     }
 
     onSearchClear(payload) {
         this.triggerEvent("searchClear", payload)
-    }
-
-    setGeography(mapItId) {
-        window.location.hash = "#geo:" + mapItId;
     }
 
     /**
@@ -220,7 +253,8 @@ export default class Controller extends Observable {
     onLoadedGeography(payload) {
         // Important to trigger loadedGeography before reinitialising Webflow
         // otherwise new elements placed on the page are not recognised by webflow
-        this.triggerEvent("loadedGeography", payload);
+        //this.triggerEvent("loadedGeography", payload);
+        // TODO remove this once the best home is found for it
         Webflow.require('ix2').init()
         this.registerWebflowEvents();
     }

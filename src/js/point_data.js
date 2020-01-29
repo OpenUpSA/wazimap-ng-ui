@@ -17,7 +17,6 @@ const categoryItemLoadingClsName = 'point-data__h2_loading';
 const categoryItemDoneClsName = 'point-data__h2_load-complete';
 const treeLineClsName = 'point-data__h2_tree-line-v';
 const pointMarkerPositionClsName = 'point-marker__position';
-//const popupItemClsName = 'point-marker__tooltip_card';
 const popupItemClsName = 'point-marker__tooltip';
 const activeClsName = 'active-1';
 const passiveColor = '#f7f7f7';
@@ -327,14 +326,21 @@ export class PointData extends Observable {
                 
                 let name = a.name;
                 if(name == undefined || name == "")
-                    name = "Unknown";    
+                    name = "Unknown";
+                
+                let categoryName = a.categoryName;
+                if(categoryName == undefined || categoryName == "")
+                    categoryName = "Unknown Category";
+                
+                name = name.trim();
+                categoryName = categoryName.trim();
                 
                 $(popupItemClone).find('.tooltip__card_title').text(name);
-                $(popupItemClone).find('.tooltip__card_subtitle').text(a.categoryName);
+                $(popupItemClone).find('.tooltip__card_subtitle').text(categoryName);
                 $(popupItemClone).show();
                 $(popupItemClone).css('opacity','');
                 const existingStyles = $(popupItemClone).attr('style');
-                $(popupItemClone).attr('style', existingStyles + '; ' + 'display: flex !important','');
+                $(popupItemClone).attr('style', existingStyles + '; ' + 'font: unset; font-family: Roboto, sans-serif; font-size: 14px; line-height: 20px; text-align: left;');
                 
                 marker.on('mouseover', function(e) {
                     this.bindPopup($(popupItemClone).prop('outerHTML'), { maxWidth: "auto", closeButton: false });
@@ -342,13 +348,11 @@ export class PointData extends Observable {
                     let popupElement = $(this.getPopup().getElement());
                     popupElement.find('.leaflet-popup-content-wrapper').removeClass('leaflet-popup-content-wrapper');
                     popupElement.find('.leaflet-popup-tip-container').remove();
-                    let tooltipElement = popupElement.find('.point-marker__tooltip');
-                    tooltipElement.attr('style', 'font: unset; font-family: Roboto, sans-serif; font-size: 14px; line-height: 20px;');
                 });
                 
-                marker.on('mouseout', function (e) {
-                    this.closePopup();
-                });
+                // marker.on('mouseout', function (e) {
+                    // this.closePopup();
+                // });
                 
                 markers.addLayer(marker);
             }

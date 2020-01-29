@@ -69,6 +69,7 @@ export class MapControl extends Observable {
 
         this.zoomMap = config.zoomMap || true;
         this.boundaryLayers = null;
+        this.mainLayer = null;
 
         this.layerStyler = new LayerStyler();
 
@@ -154,6 +155,11 @@ export class MapControl extends Observable {
           layer.setStyle({fillColor: color});
         })
     };
+    
+    resetChoropleth(){
+        self = this;
+        self.layerStyler.setLayerToSelected(self.mainLayer);
+    }
 
     overlayBoundaries(payload) {
         const self = this;
@@ -179,7 +185,7 @@ export class MapControl extends Observable {
         self.boundaryLayers.clearLayers();
 
         var secondaryLayers = layers.slice(1);
-        var mainLayer = layers[0];
+        self.mainLayer = layers[0];
 
         secondaryLayers.forEach((layer) => {
             self.layerStyler.setLayerToHoverOnly(layer);
@@ -187,8 +193,8 @@ export class MapControl extends Observable {
 
         })
 
-        self.layerStyler.setLayerToSelected(mainLayer);
-        self.boundaryLayers.addLayer(mainLayer);
+        self.layerStyler.setLayerToSelected(self.mainLayer);
+        self.boundaryLayers.addLayer(self.mainLayer);
 
         var alreadyZoomed = false;
 

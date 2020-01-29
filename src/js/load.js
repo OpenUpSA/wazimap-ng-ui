@@ -92,6 +92,8 @@ export default function configureApplication(serverUrl, profileId) {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
     });
+    
+    controller.on("mapChipRemoved", payload => mapcontrol.resetChoropleth());
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))

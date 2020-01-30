@@ -1,48 +1,41 @@
-import {Observable, getJSON} from './utils';
+import {Observable} from './utils';
 
-// TODO remove SA specific stuff;
-const defaultGeography = 'ZA';
 export default class Controller extends Observable {
-    constructor(baseUrl, profileId=1) {
+    constructor(profile = 1) {
         super();
-        this.baseUrl = baseUrl;
-        this.profileId = profileId;
-
         this.state = {
-           profileId: profileId,
-           // Set if a choropleth is currently active
-           // TODO this state should possibly be stored in the mapcontrol
-           subindicator: null 
+            profile: profile,
+            // Set if a choropleth is currently active
+            subindicator: null
         }
 
-        const self = this;
+        var self = this;
 
         $(window).on('hashchange', () => {
-                // On every hash change the render function is called with the new hash.
-                // This is how the navigation of our app happens.
-                const hash = decodeURI(window.location.hash);
-                let parts = hash.split(":")
-                let areaCode = null;
+            // On every hash change the render function is called with the new hash.
+            // This is how the navigation of our app happens.
+            const hash = decodeURI(window.location.hash);
+            let parts = hash.split(":")
 
-                if (parts[0] == "#geo") {
-                    parts = parts[1].split(",")
-                    if (parts.length == 1)
-                        areaCode = parts[0];
-                    else
-                        areaCode = parts[1];
-                }
-                else {
-                    areaCode = defaultGeography;
-                }
+            let zoomNecessary = false;
+            if (parts.length === 3 && parts[2] === 'clicked')
+            {
+                zoomNecessary = true;
+            }
 
-                const payload = {
-                    // TODO need to change this to profileId
+            if (parts[0] == "#geo") {
+                parts = parts[1].split(",")
+                if (parts.length == 1)
+                    var geographyId = parts[0];
+                else
+                    var geographyId = parts[1];
+
+                self.triggerEvent("hashChange", {
                     profile: self.profile,
-                    // TODO need to change this to areaCode
-                    areaCode: areaCode
-                }
-                self.triggerEvent("hashChange", payload);
-                self.onHashChange(payload);
+                    geography: geographyId,
+                    zoomNecessary:zoomNecessary
+                })
+            }
         });
     };
 
@@ -54,7 +47,7 @@ export default class Controller extends Observable {
         super.triggerEvent(event, payload);
     };
 
-    triggerHashChange()  {
+    triggerHashChange() {
         $(window).trigger('hashchange');
     };
 
@@ -70,17 +63,17 @@ export default class Controller extends Observable {
      * @return {[type]}         [description]
      */
 
-     /**
-      * Triggered when the rich data drawer is pulled across the screen
-      * @param  {[type]} payload [description]
-      * @return {[type]}         [description]
-      */
-     onRichDataDrawer(payload) {
+    /**
+     * Triggered when the rich data drawer is pulled across the screen
+     * @param  {[type]} payload [description]
+     * @return {[type]}         [description]
+     */
+    onRichDataDrawer(payload) {
         if (payload.open == true)
             this.triggerEvent("richDataDrawerOpen", {})
         else
             this.triggerEvent("richDataDrawerClose", {})
-     }
+    }
 
     onSubIndicatorClick(payload) {
         this.state.subindicator = payload;
@@ -98,45 +91,21 @@ export default class Controller extends Observable {
      */
     onHashChange(payload) {
         this.triggerEvent("hashChange", payload);
-        this.loadProfile(payload)
     };
 
-    loadProfile(payload) {
-        const self = this;
-        this.triggerEvent("loadingNewProfile", payload.geography);
-        const url = `${this.baseUrl}/all_details/profile/${this.profileId}/geography/${payload.areaCode}/`;
-        getJSON(url).then(js => {
-            console.log(js)
-            self.state.profile = js;
-            self.triggerEvent("loadedNewProfile", js);
-            // TODO this should be run after all dynamic stuff is run
-            // Shouldn't be here
-            setTimeout(() => {
-                console.log("initialising webflow")
-                Webflow.require('ix2').init()
-                self.registerWebflowEvents();
-            }, 600)
-        })
-    }
-
-    changeHash(areaCode) {
-        window.location.hash = `#geo:${areaCode}`;
-    }
-
-
     onLayerClick(payload) {
-        const areaCode = payload.areaCode;
-        this.changeHash(areaCode)
+        var mapItId = payload.mapItId;
 
-        this.triggerEvent("layerClick", areaCode); 
+        this.triggerEvent("layerClick", mapItId);
+        window.location.hash = "#geo:" + mapItId + ":clicked";
     };
 
     onLayerMouseOver(payload) {
-        this.triggerEvent("layerMouseOver", payload); 
+        this.triggerEvent("layerMouseOver", payload);
     };
 
     onLayerMouseOut(payload) {
-        this.triggerEvent("layerMouseOut", payload); 
+        this.triggerEvent("layerMouseOut", payload);
     };
 
     onLayerLoading(payload) {
@@ -150,7 +119,7 @@ export default class Controller extends Observable {
     onProfileLoaded(payload) {
         this.state.profile = payload;
         this.state.subindicators = null; // unset when a new profile is loaded
-        this.triggerEvent("profileLoaded", payload); 
+        this.triggerEvent("profileLoaded", payload);
     };
 
     onPrintProfile(payload) {
@@ -165,39 +134,39 @@ export default class Controller extends Observable {
     onMapChipRemoved(payload) {
         this.triggerEvent('mapChipRemoved', payload);
     }
-    
-    onThemeSelected(payload){
+
+    onThemeSelected(payload) {
         this.triggerEvent('themeSelected', payload);
     }
-    
-    onThemeUnselected(payload){
+
+    onThemeUnselected(payload) {
         this.triggerEvent('themeUnselected', payload);
     }
-    
-    onThemePointLoaded(payload){
+
+    onThemePointLoaded(payload) {
         this.triggerEvent('themePointLoaded', payload);
     }
 
-    onCategorySelected(payload){
+    onCategorySelected(payload) {
         this.triggerEvent('categorySelected', payload);
     }
 
-    onCategoryUnselected(payload){
+    onCategoryUnselected(payload) {
         this.triggerEvent('categoryUnselected', payload);
     }
-    
-    onCategoryPointLoaded(payload){
+
+    onCategoryPointLoaded(payload) {
         this.triggerEvent('categoryPointLoaded', payload);
     }
-    
 
-    /** When a breadcrumb is clicked. Payload is a location: 
-    {
+
+    /** When a breadcrumb is clicked. Payload is a location:
+     {
          code: 'WC',
          level: 'province',
          name: 'Western Cape'
     }
-    */
+     */
     /**
      * [onMapChipRemoved description]
      * @param  {[type]} payload [description]
@@ -205,7 +174,6 @@ export default class Controller extends Observable {
      */
     onBreadcrumbSelected(payload) {
         this.triggerEvent('breadcrumbSelected', payload);
-        this.changeHash(payload.code)
     }
 
     /* Search events */
@@ -224,11 +192,16 @@ export default class Controller extends Observable {
      */
     onSearchResultClick(payload) {
         this.triggerEvent("searchResultClick", payload)
-        this.changeHash(payload.code)
+        // TODO should trigger a separate profile load event
+        window.location.hash = "#geo:" + payload.code;
     }
 
     onSearchClear(payload) {
         this.triggerEvent("searchClear", payload)
+    }
+
+    setGeography(mapItId) {
+        window.location.hash = "#geo:" + mapItId;
     }
 
     /**
@@ -253,16 +226,15 @@ export default class Controller extends Observable {
     onLoadedGeography(payload) {
         // Important to trigger loadedGeography before reinitialising Webflow
         // otherwise new elements placed on the page are not recognised by webflow
-        //this.triggerEvent("loadedGeography", payload);
-        // TODO remove this once the best home is found for it
+        this.triggerEvent("loadedGeography", payload);
         Webflow.require('ix2').init()
         this.registerWebflowEvents();
     }
-    
+
     onLoadingThemes(payload) {
         this.triggerEvent("loadingThemes", payload);
     }
-    
+
     onLoadedThemes(payload) {
         this.triggerEvent("loadedThemes", payload);
         Webflow.ready();
@@ -271,7 +243,7 @@ export default class Controller extends Observable {
     registerWebflowEvents() {
         const events = ["click", "mouseover", "mouseout"];
         const self = this;
-        events.forEach(function(ev){
+        events.forEach(function (ev) {
             let eventElements = $(`*[data-event=${ev}]`);
             Object.values(eventElements).forEach(el => {
                 if (el.attributes == undefined) return;
@@ -285,7 +257,7 @@ export default class Controller extends Observable {
                 functions.split(",").forEach(foo => {
                     const func = self[`on${foo}`];
                     if (func != undefined) {
-                        $(el).on(ev, el => func(el)) 
+                        $(el).on(ev, el => func(el))
                     }
                 })
             })

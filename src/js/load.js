@@ -10,6 +10,7 @@ import {onProfileLoaded as onProfileLoadedSearch, Search} from './search';
 import {MapItGeographyProvider} from './geography_providers/mapit';
 import {WazimapProvider} from './geography_providers/wazimap';
 import {MapChip} from './mapchip';
+import {GeographyLoader} from './geography_loader';
 import {LocationInfoBox} from './location_info_box';
 import {LoadingSpinner} from './loading_spinner';
 import {PointData} from "./point_data";
@@ -23,11 +24,12 @@ export default function configureApplication(serverUrl, profileId) {
     const geographyProvider = new WazimapProvider(baseUrl)
     const mapcontrol = new MapControl(geographyProvider);
     const pointData = new PointData(mapcontrol.map);
-    const controller = new Controller(baseUrl, profileId);
+    const controller = new Controller();
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
     const mapchip = new MapChip();
     const search = new Search(baseUrl, 2);
+    const geographyLoader = new GeographyLoader(baseUrl, mapcontrol);
     const profileLoader = new ProfileLoader();
     const locationInfoBox = new LocationInfoBox();
     const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
@@ -38,22 +40,27 @@ export default function configureApplication(serverUrl, profileId) {
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
-    controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload))
+    controller.on('hashChange', payload => geographyLoader.loadGeography(payload.payload.geography, payload.payload.profile, payload.payload.zoomNecessary));
+    controller.on('breadcrumbSelected', payload => geographyLoader.loadGeography(payload.payload.code, payload.state.profile));
+    controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.payload))
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on('layerMouseOver', payload => mapcontrol.loadPopup(payload));
     controller.on('profileLoaded', onProfileLoadedSearch);
-    controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))
+    controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
 
+    controller.on('searchResultClick', payload => mapcontrol.overlayBoundaries(payload.payload.code, false))
 
     controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
-    controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload.profile))
-    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile['indicators'], payload => controller.onSubIndicatorClick(payload)))
-    controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload))
-    controller.on('loadedNewProfile', payload => mapcontrol.overlayBoundaries(payload))
-
+    controller.on('loadedGeography', payload => profileLoader.loadProfile(payload))
+    controller.on('loadedGeography', payload => {
+        const data = payload.payload.profile.data;
+        // TODO this needs to be cleaned up
+        loadMenu(data['indicators'], payload => controller.onSubIndicatorClick(payload));
+    })
+    controller.on('loadedGeography', payload => locationInfoBox.update(payload.payload.profile))
     controller.on("searchBefore", payload => searchLoadSpinner.start());
     controller.on("searchResults", payload => searchLoadSpinner.stop());
     controller.on("layerLoading", payload => contentMapSpinner.start());
@@ -73,21 +80,21 @@ export default function configureApplication(serverUrl, profileId) {
             new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
             return;
         }
-            
+
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
     });
-    
+
     controller.on("categorySelected", payload => {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
     });
-    
+
     controller.on("categoryUnselected", payload => {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
     });
-    
+
     controller.on("categoryPointLoaded", payload => {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
@@ -110,6 +117,9 @@ export default function configureApplication(serverUrl, profileId) {
 
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
 
+    geographyLoader.on('loadingGeography', payload => controller.onLoadingGeography(payload))
+    geographyLoader.on('loadedGeography', payload => controller.onLoadedGeography(payload))
+
     pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
     pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
     pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload));
@@ -118,9 +128,8 @@ export default function configureApplication(serverUrl, profileId) {
     pointData.on("categorySelected", payload => controller.onCategorySelected(payload));
     pointData.on("categoryUnselected", payload => controller.onCategoryUnselected(payload));
     pointData.on("categoryPointLoaded", payload => controller.onCategoryPointLoaded(payload));
-    
+
     pointData.loadThemes();
-    
     controller.triggerHashChange()
-    // mapcontrol.overlayBoundaries(null);
+    mapcontrol.overlayBoundaries(null);
 }

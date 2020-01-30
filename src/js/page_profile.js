@@ -47,7 +47,7 @@ function addBreadCrumbs(container, geography) {
 
     geography.parents.forEach((el) => {
         let breadcrumb = breadcrumbTemplate.cloneNode(true);
-        $(".truncate", breadcrumb).text(el.name) 
+        $(".truncate", breadcrumb).text(el.name)
         container.append(breadcrumb);
     })
 }
@@ -129,7 +129,7 @@ export default class ProfileLoader {
 
         d3select(container)
             .call(myChart.data(data));
-            
+
         $(".d3-tip")
             .css("z-index", 100)
 
@@ -137,7 +137,7 @@ export default class ProfileLoader {
     }
 
     loadProfile(payload) {
-        const data = payload.payload.profile;
+        const data = payload.payload.profile.data;
         const all_indicators = data.indicators;
 
         $(categoryClass).remove();

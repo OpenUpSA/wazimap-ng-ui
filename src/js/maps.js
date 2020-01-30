@@ -132,29 +132,44 @@ export class MapControl extends Observable {
      * @param  {[type]} data    An object that contains subindictors and obj
      */
     choropleth(data) {
-        var self = this
+        const self = this
+        const children = data.payload.obj.children;
+        const childCodes = data.state.profile.children["features"].map(child => child.properties.code);
 
-        var childGeographies = Object.entries(data.payload.obj.children).map(childGeography => {
-            var code = childGeography[0];
-            var count = childGeography[1];
-            var universe = data.payload.subindicators.reduce((el1, el2) => {
+        function resetLayers(childCodes) {
+            childCodes.forEach(childCode => {
+                  const layer = self.layerCache[childCode];
+                  const color = scale(0);
+                  if (layer != undefined)
+                      layer.setStyle({fillColor: color});
+            });
+
+        }
+
+
+        if (children == undefined || children.length == 0)
+            return
+
+        const childGeographies = Object.entries(data.payload.obj.children).map(childGeography => {
+            const code = childGeography[0];
+            const count = childGeography[1];
+            const universe = data.payload.subindicators.reduce((el1, el2) => {
               if (el2.children != undefined && el2.children[code] != undefined)
                 return el1 + el2.children[code];
               return el1;
             }, 0)
-            var val = count / universe;
+            const val = count / universe;
             return {code: code, val: val};
         })
 
-        var values = childGeographies.map((el) => {
-          return el.val;
-        })
+        const values = childGeographies.map(el => el.val);
+        const scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values), d3max(values)])
 
-        var scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values), d3max(values)])
+        resetLayers(childCodes);
 
         childGeographies.forEach((el) => {
-          var layer = self.layerCache[el.code];
-          var color = scale(el.val);
+          const layer = self.layerCache[el.code];
+          const color = scale(el.val);
           layer.setStyle({fillColor: color});
         })
     };

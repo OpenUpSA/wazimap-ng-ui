@@ -121,11 +121,8 @@ export class PointData extends Observable {
             $(cItem).find('.point-data__h2').removeClass(activeClsName);
             $(cItem).find('.point-data__h2').css('background-color', passiveColor);
             
-            if($(item).find('.' + categoryItemClsName).find('.' + activeClsName).length == 0)
-            {
-                $('.point-data__h1_trigger', item).css('background-color', passiveColor);
-                $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop( "checked", false );
-            }
+            $('.point-data__h1_trigger', item).css('background-color', passiveColor);
+            $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop( "checked", false );
             
             this.removeCategoryPoints(category);
         } else {

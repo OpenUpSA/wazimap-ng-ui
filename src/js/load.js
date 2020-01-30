@@ -50,6 +50,7 @@ export default function configureApplication(serverUrl, profileId) {
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
     controller.on("loadingNewProfile", payload => contentMapSpinner.start());
+    controller.on("loadedNewProfile", payload => mapchip.clearAllMapChip());
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload.profile))
     controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile['indicators'], payload => controller.onSubIndicatorClick(payload)))
     controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload))
@@ -96,7 +97,6 @@ export default function configureApplication(serverUrl, profileId) {
     controller.on("mapChipRemoved", payload => mapcontrol.resetChoropleth());
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
-    mapcontrol.on("layerClick", payload => mapchip.clearAllMapChip());
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))
     mapcontrol.on("layerMouseOut", payload => controller.onLayerMouseOut(payload))
     mapcontrol.on("layerLoading", payload => controller.onLayerLoading(payload))

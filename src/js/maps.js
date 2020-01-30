@@ -108,13 +108,17 @@ export class MapControl extends Observable {
             const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
             if (subindicatorValues.length > 0) {
                 const subindicatorValue = subindicatorValues[0];
-                for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
-                    if (geographyCode == areaCode) {
-                        const countFmt = numFmt(count);
-                        popupLabel = `<strong>${popupLabel}</strong>`;
-                        popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
+                if (subindicatorValue != undefined && subindicatorValue.children != undefined) {
+                    for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
+                        if (geographyCode == areaCode) {
+                            const countFmt = numFmt(count);
+                            popupLabel = `<strong>${popupLabel}</strong>`;
+                            popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
+                        }
                     }
+
                 }
+
             }
         }
         popup.setContent(popupLabel)

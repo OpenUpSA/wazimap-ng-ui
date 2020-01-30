@@ -128,7 +128,7 @@ export default class Controller extends Observable {
         const areaCode = payload.areaCode;
         this.changeHash(areaCode)
 
-        this.triggerEvent("layerClick", areaCode); 
+        this.triggerEvent("layerClick", areaCode);
     };
 
     onLayerMouseOver(payload) {
@@ -163,6 +163,7 @@ export default class Controller extends Observable {
 
     //Payload is the MapChip Element
     onMapChipRemoved(payload) {
+        this.state.subindicator = null;
         this.triggerEvent('mapChipRemoved', payload);
     }
     
@@ -175,7 +176,7 @@ export default class Controller extends Observable {
     }
     
     onThemePointLoaded(payload){
-        this.triggerEvent('themePointLoaded', payload);
+        this.triggerEvent('themeLoaded', payload);
     }
 
     onCategorySelected(payload){

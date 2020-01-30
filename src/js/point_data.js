@@ -195,7 +195,7 @@ export class PointData extends Observable {
 
             this.selectedThemes.push(theme.id);
             this.showThemePoints(theme).then(data => {
-                this.triggerEvent('themePointLoaded', {data: data, item: item})
+                this.triggerEvent('themeLoaded', {data: data, item: item})
 			});
 
             $(item).find('.' + categoryItemClsName).each(function () {

@@ -49,6 +49,7 @@ export default function configureApplication(serverUrl, profileId) {
     controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
+    controller.on("loadingNewProfile", payload => contentMapSpinner.start());
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload.profile))
     controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile['indicators'], payload => controller.onSubIndicatorClick(payload)))
     controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload))
@@ -56,7 +57,6 @@ export default function configureApplication(serverUrl, profileId) {
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());
     controller.on("searchResults", payload => searchLoadSpinner.stop());
-    controller.on("layerLoading", payload => contentMapSpinner.start());
     controller.on("layerLoadingDone", payload => contentMapSpinner.stop());
     controller.on("themeSelected", payload => {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
@@ -66,7 +66,7 @@ export default function configureApplication(serverUrl, profileId) {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
     });
 
-    controller.on("themePointLoaded", payload => {
+    controller.on("themeLoaded", payload => {
         if(payload.payload.data == "cancel")
         {
             new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
@@ -96,6 +96,7 @@ export default function configureApplication(serverUrl, profileId) {
     controller.on("mapChipRemoved", payload => mapcontrol.resetChoropleth());
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
+    mapcontrol.on("layerClick", payload => mapchip.clearAllMapChip());
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))
     mapcontrol.on("layerMouseOut", payload => controller.onLayerMouseOut(payload))
     mapcontrol.on("layerLoading", payload => controller.onLayerLoading(payload))
@@ -114,7 +115,7 @@ export default function configureApplication(serverUrl, profileId) {
 
     pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
     pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
-    pointData.on("themePointLoaded", payload => controller.onThemePointLoaded(payload));
+    pointData.on("themeLoaded", payload => controller.onThemePointLoaded(payload));
     pointData.on("loadingThemes", payload => controller.onLoadingThemes(payload));
     pointData.on("loadedThemes", payload => controller.onLoadedThemes(payload));
     pointData.on("categorySelected", payload => controller.onCategorySelected(payload));

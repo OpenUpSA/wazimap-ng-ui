@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Thu Jan 23 2020 08:42:15 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="5ddce16f21119352361205a8" data-wf-site="5ddce16f2111933b6c1205a5">
+<!--  Last Published: Wed Jan 29 2020 13:41:59 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="5e3007159d703b9483c43db9" data-wf-site="5ddce16f2111933b6c1205a5">
 <head>
   <meta charset="utf-8">
-  <title>Wazimap - Discover stories hidden in South African Data</title>
+  <title>Home - Point Data Test</title>
   <meta content="Wazimap, from the Xhosa word ulwazi for knowledge, provides easy access to South African census and elections data." name="description">
+  <meta content="Home - Point Data Test" property="og:title">
+  <meta content="Wazimap, from the Xhosa word ulwazi for knowledge, provides easy access to South African census and elections data." property="og:description">
+  <meta content="summary" name="twitter:card">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
@@ -13,6 +16,12 @@
   <link href="css/wazi.webflow.css" rel="stylesheet" type="text/css">
   <style>
       @media (min-width:992px) {
+        html.w-mod-js:not(.w-mod-ix) [data-w-id="b588ef32-8911-7f65-34e5-3ce5edc4f3e4"] {
+          width: 70%;
+        }
+        html.w-mod-js:not(.w-mod-ix) [data-w-id="fdb7b711-0066-fed8-49bc-035fb8c2d348"] {
+          width: 30%;
+        }
         html.w-mod-js:not(.w-mod-ix) [data-w-id="b8225b40-b111-98b0-d26c-145f81177e03"] {
           opacity: 0;
           display: none;
@@ -23,16 +32,20 @@
         html.w-mod-js:not(.w-mod-ix) [data-w-id="02e99c1e-4d15-9e14-f8e8-eb88797b443d"] {
           display: none;
         }
-        html.w-mod-js:not(.w-mod-ix) [data-w-id="b588ef32-8911-7f65-34e5-3ce5edc4f3e4"] {
-          width: 70%;
-        }
-        html.w-mod-js:not(.w-mod-ix) [data-w-id="fdb7b711-0066-fed8-49bc-035fb8c2d348"] {
-          width: 30%;
-        }
         html.w-mod-js:not(.w-mod-ix) [data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78b9fb0"] {
           display: block;
         }
         html.w-mod-js:not(.w-mod-ix) [data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78b9fb2"] {
+          display: none;
+        }
+        html.w-mod-js:not(.w-mod-ix) [data-w-id="47c5e246-f872-f400-da35-4c58d76af5e2"] {
+          display: block;
+        }
+        html.w-mod-js:not(.w-mod-ix) [data-w-id="47c5e246-f872-f400-da35-4c58d76af5e4"] {
+          display: none;
+        }
+        html.w-mod-js:not(.w-mod-ix) [data-w-id="47c5e246-f872-f400-da35-4c58d76af5e0"] {
+          opacity: 0;
           display: none;
         }
         html.w-mod-js:not(.w-mod-ix) [data-w-id="6e172d0b-82f3-fc6a-a8c8-e1fd6448c5bf"] {
@@ -45,6 +58,12 @@
         }
       }
       @media (max-width:991px) and (min-width:768px) {
+        html.w-mod-js:not(.w-mod-ix) [data-w-id="b588ef32-8911-7f65-34e5-3ce5edc4f3e4"] {
+          width: 90%;
+        }
+        html.w-mod-js:not(.w-mod-ix) [data-w-id="fdb7b711-0066-fed8-49bc-035fb8c2d348"] {
+          width: 10%;
+        }
         html.w-mod-js:not(.w-mod-ix) [data-w-id="6e172d0b-82f3-fc6a-a8c8-e1fd6448c5bf"] {
           display: none;
           opacity: 0;
@@ -52,12 +71,6 @@
           -moz-transform: translate3d(24PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
           -ms-transform: translate3d(24PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
           transform: translate3d(24PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
-        }
-        html.w-mod-js:not(.w-mod-ix) [data-w-id="b588ef32-8911-7f65-34e5-3ce5edc4f3e4"] {
-          width: 90%;
-        }
-        html.w-mod-js:not(.w-mod-ix) [data-w-id="fdb7b711-0066-fed8-49bc-035fb8c2d348"] {
-          width: 10%;
         }
       }
       @media (max-width:767px) and (min-width:480px) {
@@ -117,6 +130,28 @@
         height: calc(100vh - 60px)
       }
       /*------------------------------------- Scrollbar */
+      /*-------- wide-scrollbar */
+      /*width*/
+      .scroll-element-wide::-webkit-scrollbar {
+        width: 8px;
+      }
+      /*track*/
+      .scroll-element-wide::-webkit-scrollbar-track {
+        background: rgb(61, 61, 61);
+      }
+      /*thumb*/
+      .scroll-element-wide::-webkit-scrollbar-thumb {
+        background: rgb(115, 115, 115);
+        border-width: 2px;
+        border-style: solid;
+        border-color: rgb(61, 61, 61);
+        border-radius: 4px;
+      }
+      /*thumb hover*/
+      .scroll-element-wide::-webkit-scrollbar-thumb:hover {
+        background: rgba(202, 202, 202, 1);
+      }
+      /*-------- default-scrollbar */
       /*width*/
       .scroll-element::-webkit-scrollbar {
         width: 4px;
@@ -1318,25 +1353,25 @@
           <div class="nav__search_buttons">
             <div class="search__buttons_gradient--left"></div>
             <div class="search__buttons_gradient--right"></div>
-            <a data-w-id="fed83e67-6dc8-6f01-671a-b28c5175f034" style="-webkit-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" href="#" class="nav__search_button w-inline-block">
+            <a data-w-id="fed83e67-6dc8-6f01-671a-b28c5175f034" href="#" class="nav__search_button w-inline-block">
               <div class="search__icon_wrapper">
                 <div class="icon--search w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
 </svg></div>
               </div>
             </a>
-            <a data-w-id="9c8cf275-b4d9-a07c-4648-1741f3ea7459" style="-webkit-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" href="#" class="nav__search_button--close w-inline-block">
+            <a data-w-id="9c8cf275-b4d9-a07c-4648-1741f3ea7459" href="#" class="nav__search_button--close w-inline-block">
               <div class="search__icon_wrapper"><img src="images/close-white-24px.svg" alt="" class="icon"></div>
             </a>
           </div>
         </div>
         <div style="display:none;opacity:0" class="nav__search_dropdown">
-          <div class="search__dropdown_scroll scroll-element">
+          <div class="search__dropdown_scroll scroll-element-wide">
             <div class="search__dropdown_wrapper">
               <div class="search__dropdown_plate">
                 <div class="search__dropdown_content">
                   <div class="search__dropdown_label">
-                    <div>0 Results:</div>
+                    <div>NO Results:</div>
                   </div>
                   <div class="search__dropdown_list">
                     <div class="search__dropdown_list-item">
@@ -2496,60 +2531,42 @@
                   </div>
                   <div class="truncate">South Africa</div>
                 </div>
-                <div title="Click to make this your primary search" class="breadcrumb--map">
-                  <div class="breadcrumb__geography-chip">
-                    <div>Province</div>
-                  </div>
-                  <div class="truncate">Gauteng</div>
-                </div>
-                <div title="Click to make this your primary search" class="breadcrumb--map">
-                  <div class="breadcrumb__geography-chip">
-                    <div>MUNIcipality</div>
-                  </div>
-                  <div class="truncate">City of JohannesburgJohannesburg</div>
-                </div>
-                <div title="Currently selected geography" class="breadcrumb--map last">
-                  <div class="breadcrumb__geography-chip">
-                    <div>Ward</div>
-                  </div>
-                  <div class="truncate">City of Johannesburg Ward 10</div>
-                </div>
               </div>
             </div>
             <div class="map__location-info">
               <div class="map__location-info_inner">
                 <div class="map__location-info_metric">
                   <div class="map__location-info_title">
-                    <div>POPULATION (people)</div>
+                    <div class="truncate">POPULATION (people)</div>
                   </div>
                   <div class="map__location-info_value population">
-                    <div class="truncate">34,662</div>
+                    <div class="truncate">-</div>
                   </div>
                 </div>
                 <div class="map__location-info_metric">
                   <div class="map__location-info_title">
-                    <div>Geography size (km2)</div>
+                    <div class="truncate">Geography size (km2)</div>
                   </div>
                   <div class="map__location-info_value size">
-                    <div class="truncate">10.3</div>
+                    <div class="truncate">-</div>
                   </div>
                 </div>
                 <div class="map__location-info_metric last">
                   <div class="map__location-info_title">
-                    <div>density (people/km2)</div>
+                    <div class="truncate">density (people/km2)</div>
                   </div>
                   <div class="map__location-info_value density">
-                    <div class="truncate">3,371.2</div>
+                    <div class="truncate">-</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="content__map_loading hidden">
+          <div class="content__map_loading hide">
             <div data-w-id="f6b27fe1-00fa-93b5-7f3f-eeea673cd494" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180bb9b827fa6d2953dcf7_lottieflow-loading-08-ffffff-easey.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1.4" class="lottie-animation"></div>
           </div>
           <div style="opacity:1;display:flex" class="content__map_current-display">
-            <div title="Indicator currently being displayed" class="chip--map hide">
+            <div title="Indicator currently being displayed" class="chip--map">
               <div class="truncate">Population by age range (10-19)</div>
               <div title="Remove this indicator" class="chip__remove--map">
                 <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -2557,584 +2574,28 @@
 </svg></div>
               </div>
             </div>
-          </div>
-          <div style="opacity:1;display:flex" class="content__map_point-data">
-            <div data-w-id="acebf4bd-f55b-d161-fabe-567ea1a17e5d" class="map__point-data_trigger">
-              <div class="point-data__trigger_header">
-                <div class="point-data__icon">
-                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path fill="currentColor" d="M8.92,11.22a2.56,2.56,0,1,1,2.55-2.55,2.55,2.55,0,0,1-2.55,2.55m0-9.72A7.16,7.16,0,0,0,1.76,8.67C1.76,14,8.92,22,8.92,22S16.08,14,16.08,8.67A7.17,7.17,0,0,0,8.92,1.5Z"></path>
-<path fill="currentColor" d="M18.77,16.26V12.54h-2v3.72H14.39c-.42.69-.85,1.36-1.28,2h3.67V22h2V18.24h3.72v-2Z"></path>
-</svg></div>
-                </div>
-                <div style="opacity:1" class="point-data__title">
-                  <div>Map Options</div>
-                </div>
+            <div class="content__map_legend">
+              <div class="map-legend__label">
+                <div>Legend:</div>
               </div>
-              <div class="point-data__trigger_close hidden"><img src="images/arrow-dropdown-close-24px.svg" alt="" class="icon"></div>
-              <div style="opacity:1" class="dropdown-arrow">
-                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path>
-</svg></div>
+              <div class="map_legend-block">
+                <div class="truncate">-</div>
               </div>
-            </div>
-            <div class="map__point-data_content">
-              <div class="point-data__content_scroll scroll-element">
-                <div class="point-data__content_wrapper">
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _1 active-1">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Education</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-1 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">High schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="344368dd-ced9-30a8-8df8-ebb93478ddc3" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Primary schools</div>
-                            <div class="point-data__h2_loading">
-                              <div data-w-id="e72883d0-e7bf-3389-11b6-dd9b2c45212d" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _2 active-2">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M21 5h-2.64l1.14-3.14L17.15 1l-1.46 4H3v2l2 6-2 6v2h18v-2l-2-6 2-6V5zm-5 9h-3v3h-2v-3H8v-2h3V9h2v3h3v2z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Health</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-2 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Clinics</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="8a2c6502-8bb0-7a59-6f54-a94e54a9ea24" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Dispenseries</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="3d636b0c-b3d3-ad5b-8684-b2bc6330a8f2" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _3 active-3">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Transport</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-3 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">High schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="363c1b1e-1084-31de-4ae6-6f62a7a21827" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Primary schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="def6bc71-b8b7-12e3-cbb4-963c1b8fbc6e" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _4 active-4">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Transport</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-4 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">High schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="9e21521b-db5b-76c3-5812-e001f9c58fd1" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Primary schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="fbf3a95d-e88d-0245-de7b-8d973857b622" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _5 active-5">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Transport</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-5 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">High schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="4ab114c9-b2dd-d8f3-3163-26fe32cea442" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Primary schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="6918d067-fe69-6f3e-4289-3705b3515a31" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _6 active-6">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Transport</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-6 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">High schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="7d775e94-dbef-3f76-ac12-e3b71abf5337" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Primary schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="6a9aec88-413b-3f90-4972-7861d8b5fc8a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _7 active-7">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Transport</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-7 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">High schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="3eb4a28f-5d7b-f2eb-d3c9-d2f7f88e7b23" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Primary schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="447475c7-ecd9-8fcb-7b52-febd11bf8c3b" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _8 active-8">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Transport</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-8 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">High schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="93d9216f-a7ea-4bb6-4032-670992996e28" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Primary schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="ad127350-d8c1-5b47-1e1e-101f88273f60" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _9 active-9">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Transport</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-9 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">High schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="36f52d5b-50f5-69a8-26fc-c2ed7332f68c" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Primary schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="202674cb-ab86-6d56-e47d-1024ac7659df" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="point-data__h1--dropdown">
-                    <div class="point-data__h1--with-checkbox">
-                      <div class="point-data__h1_checkbox">
-                        <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-                      </div>
-                      <div class="point-data__h1_trigger _10 active-10">
-                        <div class="point-data__h1_header">
-                          <div class="point-data__h1_trigger-icon">
-                            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
-</svg></div>
-                          </div>
-                          <div class="h1__trigger_title">
-                            <div class="truncate">Transport</div>
-                          </div>
-                        </div>
-                        <div class="point-data__h1_bg"></div>
-                      </div>
-                      <div class="point-data__h1_content">
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 active-10 w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">High schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="dfa1608a-79f1-b6b7-ddac-1b41931704ce" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_wrapper">
-                          <a href="#" class="point-data__h2 last w-inline-block">
-                            <div class="point-data__h2_tree-line-h"></div>
-                            <div class="truncate">Primary schools</div>
-                            <div class="point-data__h2_loading hide">
-                              <div data-w-id="02aa068b-1b9c-f786-da05-7018f996ade8" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
-                            </div>
-                            <div class="point-data__h2_load-complete hide">
-                              <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
-</svg></div>
-                            </div>
-                          </a>
-                        </div>
-                        <div class="point-data__h2_tree-line-v"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div class="map_legend-block">
+                <div class="truncate">-</div>
+              </div>
+              <div class="map_legend-block">
+                <div class="truncate">-</div>
+              </div>
+              <div class="map_legend-block">
+                <div class="truncate">-</div>
+              </div>
+              <div class="map_legend-block">
+                <div class="truncate">-</div>
               </div>
             </div>
           </div>
-          <div title="Enabling this option will automatically adjust the geography level you are viewing based on how zoomed in or out you are." style="opacity:1;display:flex" class="content__map_zoom-settings">
-            <div class="map__zoom-settings_label">
-              <div>Adjust geography layers when zooming</div>
-            </div>
-            <div title="Enable geography zoom adjust" class="custom-checkbox zoom-geo-toggle w-embed"><label class="switch">
-  <input type="checkbox">
-  <span class="slider round"></span>
-</label></div>
-          </div>
-          <div class="point-marker__position">
+          <div class="point-marker__position hide">
             <div class="content__map_point-marker">
               <div data-w-id="2bcb2a6f-1f45-97e3-1119-688c83a3c244" class="point-marker">
                 <div class="point-marker__icon">
@@ -3161,6 +2622,627 @@
                 <div class="point-marker__tooltip_notch"></div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="content__point-data">
+        <div class="content__point-data_scroll scroll-element">
+          <div class="content__point-data_inner">
+            <div class="map-settings__header">
+              <div class="map-settings__heading">
+                <div class="map-settings__header_icon">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path>
+<path fill="currentColor" d="M24 13.616v-3.232c-1.651-.587-2.694-.752-3.219-2.019v-.001c-.527-1.271.1-2.134.847-3.707l-2.285-2.285c-1.561.742-2.433 1.375-3.707.847h-.001c-1.269-.526-1.435-1.576-2.019-3.219h-3.232c-.582 1.635-.749 2.692-2.019 3.219h-.001c-1.271.528-2.132-.098-3.707-.847l-2.285 2.285c.745 1.568 1.375 2.434.847 3.707-.527 1.271-1.584 1.438-3.219 2.02v3.232c1.632.58 2.692.749 3.219 2.019.53 1.282-.114 2.166-.847 3.707l2.285 2.286c1.562-.743 2.434-1.375 3.707-.847h.001c1.27.526 1.436 1.579 2.019 3.219h3.232c.582-1.636.75-2.69 2.027-3.222h.001c1.262-.524 2.12.101 3.698.851l2.285-2.286c-.744-1.563-1.375-2.433-.848-3.706.527-1.271 1.588-1.44 3.221-2.021zm-12 2.384c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4z"></path>
+</svg></div>
+                </div>
+                <div class="map-settings__header_title">
+                  <div>Map Settings</div>
+                </div>
+              </div>
+            </div>
+            <div class="map-settings__list">
+              <div class="map-settings__list-item_wrapper">
+                <div class="map-settings__list-item_header">
+                  <div>Default geography preference:</div>
+                </div>
+                <div data-delay="0" class="map-settings__list-item_dropdown w-dropdown">
+                  <div class="dropdown-toggle w-dropdown-toggle">
+                    <div class="icon-2 w-icon-dropdown-toggle"></div>
+                    <div>Sub-place when possible</div>
+                  </div>
+                  <nav class="dropdown-list w-dropdown-list"><a href="#" class="dropdown-link w-dropdown-link">Wards when possible</a><a href="#" class="dropdown-link active w-dropdown-link">Sub-places when possible</a><a href="#" class="dropdown-link w-dropdown-link">Informal settlements when possible</a></nav>
+                </div>
+              </div>
+              <div title="Adjust geography when zooming" class="map-settings__list-item_wrapper">
+                <div class="map-settings__list-item_toggle">
+                  <div class="map-settings__list-item_title">
+                    <div class="truncate">Adjust geography when zooming</div>
+                  </div>
+                  <div class="map-settings__list-item_checkbox">
+                    <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="point-data__header">
+              <div class="point-data__heading">
+                <div class="point-data__header_icon">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path>
+<path fill="currentColor" d="M8.92,11.22a2.56,2.56,0,1,1,2.55-2.55,2.55,2.55,0,0,1-2.55,2.55m0-9.72A7.16,7.16,0,0,0,1.76,8.67C1.76,14,8.92,22,8.92,22S16.08,14,16.08,8.67A7.17,7.17,0,0,0,8.92,1.5Z"></path>
+<path fill="currentColor" d="M18.77,16.26V12.54h-2v3.72H14.39c-.42.69-.85,1.36-1.28,2h3.67V22h2V18.24h3.72v-2Z"></path>
+</svg></div>
+                </div>
+                <div class="point-data__header_title">
+                  <div>Point Data </div>
+                </div>
+              </div>
+            </div>
+            <div class="point-data__list">
+              <div class="point-data__content_wrapper">
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _1 active-1">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Education</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-1 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">High schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d95121" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Primary schools</div>
+                          <div class="point-data__h2_loading">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d9512a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _2 active-2">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M21 5h-2.64l1.14-3.14L17.15 1l-1.46 4H3v2l2 6-2 6v2h18v-2l-2-6 2-6V5zm-5 9h-3v3h-2v-3H8v-2h3V9h2v3h3v2z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Health</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-2 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Clinics</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d95141" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Dispenseries</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d9514a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _3 active-3">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Transport</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-3 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">High schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d95161" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Primary schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d9516a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _4 active-4">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Transport</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-4 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">High schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d95181" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Primary schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d9518a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _5 active-5">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Transport</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-5 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">High schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d951a1" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Primary schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d951aa" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _6 active-6">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Transport</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-6 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">High schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d951c1" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Primary schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d951ca" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _7 active-7">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Transport</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-7 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">High schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d951e1" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Primary schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d951ea" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _8 active-8">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Transport</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-8 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">High schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d95201" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Primary schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d9520a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _9 active-9">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Transport</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-9 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">High schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d95221" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Primary schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d9522a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="point-data__h1--dropdown">
+                  <div class="point-data__h1--with-checkbox">
+                    <div class="point-data__h1_checkbox">
+                      <div title="Toggle entire category" class="custom-checkbox point-data-toggle w-embed"><label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label></div>
+                    </div>
+                    <div class="point-data__h1_trigger _10 active-10">
+                      <div class="point-data__h1_header">
+                        <div class="point-data__h1_trigger-icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+</svg></div>
+                        </div>
+                        <div class="h1__trigger_title">
+                          <div class="truncate">Transport</div>
+                        </div>
+                      </div>
+                      <div class="point-data__h1_bg"></div>
+                    </div>
+                    <div class="point-data__h1_content">
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 active-10 w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">High schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d95241" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_wrapper">
+                        <a href="#" class="point-data__h2 last w-inline-block">
+                          <div class="point-data__h2_tree-line-h"></div>
+                          <div class="truncate">Primary schools</div>
+                          <div class="point-data__h2_loading hide">
+                            <div data-w-id="626f9994-cffd-9946-89a8-fcdbc9d9524a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                          </div>
+                          <div class="point-data__h2_load-complete hide">
+                            <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+</svg></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div class="point-data__h2_tree-line-v"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-w-id="47c5e246-f872-f400-da35-4c58d76af5df" class="content__point-data_toggle">
+          <div data-w-id="47c5e246-f872-f400-da35-4c58d76af5e0" class="toggle-tooltip--left">
+            <div class="tooltip__notch--right"></div>
+            <div data-w-id="47c5e246-f872-f400-da35-4c58d76af5e2" class="toggle-tooltip__text--first">Show Map Settings</div>
+            <div data-w-id="47c5e246-f872-f400-da35-4c58d76af5e4" class="toggle-tooltip__text--last">Hide Map Settings</div>
+          </div>
+          <div class="toggle__icon--horizontal">
+            <div class="svg-icon toggle__icon_first w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path>
+<path fill="currentColor" d="M8.92,11.22a2.56,2.56,0,1,1,2.55-2.55,2.55,2.55,0,0,1-2.55,2.55m0-9.72A7.16,7.16,0,0,0,1.76,8.67C1.76,14,8.92,22,8.92,22S16.08,14,16.08,8.67A7.17,7.17,0,0,0,8.92,1.5Z"></path>
+<path fill="currentColor" d="M18.77,16.26V12.54h-2v3.72H14.39c-.42.69-.85,1.36-1.28,2h3.67V22h2V18.24h3.72v-2Z"></path>
+</svg></div>
+            <div class="svg-icon toggle__icon_last w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+</svg></div>
           </div>
         </div>
       </div>
@@ -3235,7 +3317,7 @@
         }
       });
     </script>
-  <script src="js/index.js"></script>
+  <script src="https://openup.org.za/wazimap-ng-ui/wazimap-ng.js"></script>
   <script>
       setTimeout(function() {
         $('.w-webflow-badge').css({

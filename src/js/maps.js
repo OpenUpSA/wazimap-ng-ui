@@ -75,7 +75,40 @@ export class MapControl extends Observable {
 
         this.map = this.configureMap(coords, tileUrl);
         this.layerCache = {};
+
+        this.map.on("zoomend", e => this.zoomChanged(e));
     };
+
+    zoomChanged = (e) => {
+        if (e.sourceTarget._popup === null || typeof e.sourceTarget._popup === 'undefined') {
+            return;
+        }
+
+        let area = e.sourceTarget._popup._content;
+        let zoomLvl = e.sourceTarget._zoom;
+        let areaCode = e.sourceTarget._popup._source.feature.properties.code;
+        let level = e.sourceTarget._popup._source.feature.properties.level;
+
+        const hash = decodeURI(window.location.hash);
+        let parts = hash.split(":")
+
+        console.log(zoomLvl + ' : ' + areaCode + ' : ' + parts + ' : ' + level);
+        console.log(e)
+
+        if (zoomLvl < 7) {
+            window.location.hash = "";
+        } else if (zoomLvl >= 11 && level === 'Subplace') {
+            window.location.hash = "#geo:" + areaCode;
+        } else if (zoomLvl >= 10 && level === 'Mainplace') {
+            window.location.hash = "#geo:" + areaCode;
+        } else if (zoomLvl >= 9 && level === 'Municipality') {
+            window.location.hash = "#geo:" + areaCode;
+        } else if (zoomLvl >= 8 && level === 'District') {
+            window.location.hash = "#geo:" + areaCode;
+        } else if (zoomLvl >= 7 && level === 'Province') {
+            window.location.hash = "#geo:" + areaCode;
+        }
+    }
 
     onSizeUpdate() {
         setTimeout(() => {
@@ -180,7 +213,7 @@ export class MapControl extends Observable {
         self.layerStyler.setLayerToSelected(self.mainLayer);
     }
 
-    overlayBoundaries(payload) {
+    overlayBoundaries(payload, zoomNeeded=false) {
         const self = this;
         const boundaryLayers = [];
 
@@ -215,7 +248,7 @@ export class MapControl extends Observable {
         self.layerStyler.setLayerToSelected(self.mainLayer);
         self.boundaryLayers.addLayer(self.mainLayer);
 
-        var alreadyZoomed = false;
+        var alreadyZoomed = !zoomNeeded;
 
         var layerPayload = function(layer) {
             var prop = layer.layer.feature.properties;

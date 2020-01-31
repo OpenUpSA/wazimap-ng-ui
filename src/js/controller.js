@@ -18,31 +18,37 @@ export default class Controller extends Observable {
         const self = this;
 
         $(window).on('hashchange', () => {
-                // On every hash change the render function is called with the new hash.
-                // This is how the navigation of our app happens.
-                const hash = decodeURI(window.location.hash);
-                let parts = hash.split(":")
-                let areaCode = null;
+            // On every hash change the render function is called with the new hash.
+            // This is how the navigation of our app happens.
+            const hash = decodeURI(window.location.hash);
+            let parts = hash.split(":")
+            let areaCode = null;
+            let zoomNecessary = false;
 
-                if (parts[0] == "#geo") {
-                    parts = parts[1].split(",")
-                    if (parts.length == 1)
-                        areaCode = parts[0];
-                    else
-                        areaCode = parts[1];
-                }
-                else {
-                    areaCode = defaultGeography;
-                }
+            if (parts.length == 2 && parts[2] == 'clicked')
+                zoomNecessary = true;
 
-                const payload = {
-                    // TODO need to change this to profileId
-                    profile: self.profile,
-                    // TODO need to change this to areaCode
-                    areaCode: areaCode
-                }
-                self.triggerEvent("hashChange", payload);
-                self.onHashChange(payload);
+            if (parts[0] == "#geo") {
+                parts = parts[1].split(",")
+                if (parts.length == 1)
+                    areaCode = parts[0];
+                else
+                    areaCode = parts[1];
+            }
+            else {
+                areaCode = defaultGeography;
+            }
+
+            const payload = {
+                // TODO need to change this to profileId
+                profile: self.profile,
+                // TODO need to change this to areaCode
+                areaCode: areaCode,
+                zoomNecessary: zoomNecessary
+            }
+
+            self.triggerEvent("hashChange", payload);
+            self.onHashChange(payload);
         });
     };
 
@@ -54,7 +60,7 @@ export default class Controller extends Observable {
         super.triggerEvent(event, payload);
     };
 
-    triggerHashChange()  {
+    triggerHashChange() {
         $(window).trigger('hashchange');
     };
 
@@ -129,6 +135,7 @@ export default class Controller extends Observable {
         this.changeHash(areaCode)
 
         this.triggerEvent("layerClick", areaCode);
+        window.location.hashh = "#geo:" + areaCode + ":clicked";
     };
 
     onLayerMouseOver(payload) {
@@ -231,6 +238,7 @@ export default class Controller extends Observable {
     onSearchClear(payload) {
         this.triggerEvent("searchClear", payload)
     }
+
 
     /**
      * Payload includes profile and geography, e.g.

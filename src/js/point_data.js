@@ -323,15 +323,28 @@ export class PointData extends Observable {
             for (let i = 0; i < activePoints.length; i++) {
                 let a = activePoints[i];
                 
-                //Only when element is visible on the document does height/outerHeight work
-                //Element is hidden and showing using .show doesn't help before calling height/outerHeight
-                //As such retrieve height from attribute height/width or viewBox
-                let svgIcon = $(pointMarkerClone).find('.svg-icon').children('svg');
-                let markerWidth = Number(svgIcon.attr('width') || svgIcon.attr('viewBox').split(" ")[2].trim());
-                let markerHeight = Number(svgIcon.attr('height') || svgIcon.attr('viewBox').split(" ")[3].trim());
+                let markerOptions = {};
+                let markerSvgIcon = null;
                 
-                $(pointMarkerClone).find('.point-marker__icon').css('z-index', 1000);
-                let divIcon = L.divIcon({
+                switch(a.themeId)
+                {
+                    case 2: //Education theme
+                        markerSvgIcon = $(pointMarkerClone).find('.svg-icon').children('svg');
+                        break;
+                    default:
+                }
+                
+                if(markerSvgIcon)
+                {
+                    //Only when element is visible on the document does height/outerHeight work
+                    //Element is hidden and showing using .show doesn't help before calling height/outerHeight
+                    //As such retrieve height from attribute height/width or viewBox
+                    let markerWidth = Number(markerSvgIcon.attr('width') || markerSvgIcon.attr('viewBox').split(" ")[2].trim());
+                    let markerHeight = Number(markerSvgIcon.attr('height') || markerSvgIcon.attr('viewBox').split(" ")[3].trim());
+                    
+                    $(pointMarkerClone).find('.point-marker__icon').css('z-index', 1000);
+                    
+                    let divIcon = L.divIcon({
                                   html: $(pointMarkerClone).prop('outerHTML'),
                                   iconAnchor: L.point(markerWidth/2, markerHeight),
                                   className: '',
@@ -339,8 +352,11 @@ export class PointData extends Observable {
                                   popupAnchor: L.point(0, -12),
                                   tooltipAnchor: L.point(0, -12)
                               });
+                              
+                     markerOptions = {icon: divIcon};
+                }
                 
-                let marker = L.marker(new L.LatLng(a.y, a.x), {icon: divIcon});
+                let marker = L.marker(new L.LatLng(a.y, a.x), markerOptions);
                 let popupItemClone = popupItem.cloneNode(true);
                 
                 let name = a.name;

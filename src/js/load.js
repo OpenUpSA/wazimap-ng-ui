@@ -23,7 +23,7 @@ export default function configureApplication(serverUrl, profileId) {
     const SACode = "ZA"
     const geographyProvider = new WazimapProvider(baseUrl)
     const mapcontrol = new MapControl(geographyProvider);
-    const pointData = new PointData(mapcontrol.map);
+    const pointData = new PointData(baseUrl, mapcontrol.map);
     const controller = new Controller(baseUrl, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");

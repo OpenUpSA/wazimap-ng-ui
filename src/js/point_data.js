@@ -4,9 +4,9 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 
-const url = 'https://wazimap-ng.openup.org.za/api/v1/points/themes/';
-const pointsByThemeUrl = 'https://wazimap-ng.openup.org.za/api/v1/points/themes/{theme_id}/';
-const pointsByCategoryUrl = 'https://wazimap-ng.openup.org.za/api/v1/points/categories/{category_id}/';
+const url = 'points/themes';
+const pointsByThemeUrl = 'points/themes';
+const pointsByCategoryUrl = 'points/categories';
 
 const iterationLimit = 10;  //iteration limit of the xhr calls, ideally we shouldn't have this
 const wrapperClsName = 'point-data__content_wrapper';
@@ -37,8 +37,9 @@ let colors = ['#dfe8ff', '#ebdcfa', '#ffe2ee', '#badc58', '#7ed6df', '#ea8685', 
  * this class creates the point data dialog
  */
 export class PointData extends Observable {
-    constructor(_map) {
+    constructor(baseUrl, _map) {
 		super();
+        this.baseUrl = baseUrl;
         this.map = _map;
         this.selectedThemes = [];
         this.selectedCategories = [];
@@ -70,8 +71,9 @@ export class PointData extends Observable {
     loadThemes = () => {
         let self = this;
 		self.triggerEvent("loadingThemes", self);
+        const themeUrl = `${this.baseUrl}/${url}/`;
 
-        getJSON(url).then((data) => {
+        getJSON(themeUrl).then((data) => {
             if (data.results !== null && data.results.length > 0) {
                 for (let i = 0; i < data.results.length; i++) {
                     let item = pointDataItem.cloneNode(true);
@@ -149,7 +151,7 @@ export class PointData extends Observable {
     }
 
     showCategoryPoint = (category) => {
-        let categoryUrl = pointsByCategoryUrl.replace('{category_id}', category.id);
+        let categoryUrl = `${this.baseUrl}/${pointsByCategoryUrl}/${category.id}/`
         let iterationCounter = 0;
         
         const tokenIndex = "category_id-" + category.id;
@@ -228,7 +230,7 @@ export class PointData extends Observable {
     showThemePoints = (theme) => {
         //need to remove for in case its already showing some from selected item
         this.removeThemePoints(theme);
-        let themeUrl = pointsByThemeUrl.replace('{theme_id}', theme.id);
+        let themeUrl = `${this.baseUrl}/${pointsByThemeUrl}/${theme.id}/`;
         let iterationCounter = 0;
         
         const tokenIndex = "theme_id-" + theme.id;
@@ -272,42 +274,29 @@ export class PointData extends Observable {
      * type : 'Category' or 'Theme'
      */
     getAddressPoints = (requestUrl, iterationCounter, cancelToken = undefined) => {
-        requestUrl = requestUrl.replace('http://', 'https://');
-        return getJSON(requestUrl).then((data) => {
+        return getJSON(requestUrl).then(data => {
             if (data.features !== null && data.features.length > 0) {
-                for (let i = 0; i < data.features.length; i++) {
-                    let categoryId = data.features[i].properties.category.id;
-                    let themeId = themeCategories.filter((item) => {
+                data.features.forEach(feature => {
+                    const properties = feature.properties;
+                    const geometry = feature.geometry;
+                    const categoryId = properties.category.id;
+                    const themeId = themeCategories.filter(item => {
                         return item.categoryId === categoryId
                     })[0].themeId;
 
                     activePoints.push({
-                        x: data.features[i].geometry.coordinates[0],
-                        y: data.features[i].geometry.coordinates[1],
-                        name: data.features[i].properties.data.Name,
+                        x: geometry.coordinates[0],
+                        y: geometry.coordinates[1],
+                        name: properties.data.Name,
                         categoryId: categoryId,
-                        categoryName: data.features[i].properties.category.name,
+                        categoryName: properties.category.name,
                         themeId: themeId
                     })
-                }
-                
-                if(cancelToken != undefined && cancelToken.token != "")
-                    return cancelToken.token;
+                })
 
-                if (++iterationCounter < iterationLimit && data.next !== null && data.features !== null && data.features.length > 0) {
-                    //has more
-                    this.triggerEvent('iterationCompleted', {iterationCounter: iterationCounter, data: data});
-
-                    return this.getAddressPoints(data.next, iterationCounter, cancelToken);
-                } else {
-                    //completed
-                    this.triggerEvent('addressPointsTake', {data: data});
-
-                    this.showPointsOnMap();
-				
-					//Return data object for next promise
-					return data;
-                }
+                this.triggerEvent('addressPointsTake', {data: data});
+                this.showPointsOnMap();
+                return data;
             }
         })
     }
@@ -319,7 +308,7 @@ export class PointData extends Observable {
         markers.clearLayers();
         self = this;
         
-        if (activePoints !== null && activePoints.length > 0) {
+        if (activePoints !== null && activePoints != undefined && activePoints.length > 0) {
             for (let i = 0; i < activePoints.length; i++) {
                 let a = activePoints[i];
                 

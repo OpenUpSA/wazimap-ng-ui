@@ -18,12 +18,14 @@ const categoryItemDoneClsName = 'point-data__h2_load-complete';
 const treeLineClsName = 'point-data__h2_tree-line-v';
 const pointMarkerPositionClsName = 'point-marker__position';
 const popupItemClsName = 'point-marker__tooltip';
+const pointMarkerClsName = 'point-marker';
 const activeClsName = 'active-1';
 const passiveColor = '#f7f7f7';
 let pointDataItem = null;
 let categoryItem = null;
 let treeLineItem = null;
 let popupItem = null;
+let pointMarkerClone = null;
 let markers = null;
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
@@ -55,7 +57,9 @@ export class PointData extends Observable {
 		$(categoryItem).find('.' + categoryItemLoadingClsName).addClass('hide');
 		$(categoryItem).find('.' + categoryItemDoneClsName).addClass('hide');
         treeLineItem = $('.' + treeLineClsName)[0].cloneNode(true);
-        popupItem = $('.' + pointMarkerPositionClsName).find('.' + popupItemClsName)[0].cloneNode(true);
+        let pointMarkerDiv = $('.' + pointMarkerPositionClsName);
+        popupItem = pointMarkerDiv.find('.' + popupItemClsName)[0].cloneNode(true);
+        pointMarkerClone  = pointMarkerDiv.find('.' + pointMarkerClsName)[0].cloneNode(true);
 
         $('.' + wrapperClsName).html('');
     }
@@ -318,7 +322,41 @@ export class PointData extends Observable {
         if (activePoints !== null && activePoints.length > 0) {
             for (let i = 0; i < activePoints.length; i++) {
                 let a = activePoints[i];
-                let marker = L.marker(new L.LatLng(a.y, a.x));
+                
+                let markerOptions = {};
+                let markerSvgIcon = null;
+                
+                switch(a.themeId)
+                {
+                    case 2: //Education theme
+                        markerSvgIcon = $(pointMarkerClone).find('.svg-icon').children('svg');
+                        break;
+                    default:
+                }
+                
+                if(markerSvgIcon)
+                {
+                    //Only when element is visible on the document does height/outerHeight work
+                    //Element is hidden and showing using .show doesn't help before calling height/outerHeight
+                    //As such retrieve height from attribute height/width or viewBox
+                    let markerWidth = Number(markerSvgIcon.attr('width') || markerSvgIcon.attr('viewBox').split(" ")[2].trim());
+                    let markerHeight = Number(markerSvgIcon.attr('height') || markerSvgIcon.attr('viewBox').split(" ")[3].trim());
+                    
+                    $(pointMarkerClone).find('.point-marker__icon').css('z-index', 1000);
+                    
+                    let divIcon = L.divIcon({
+                                  html: $(pointMarkerClone).prop('outerHTML'),
+                                  iconAnchor: L.point(markerWidth/2, markerHeight),
+                                  className: '',
+                                  iconSize: L.point(markerWidth, markerHeight),
+                                  popupAnchor: L.point(0, -12),
+                                  tooltipAnchor: L.point(0, -12)
+                              });
+                              
+                     markerOptions = {icon: divIcon};
+                }
+                
+                let marker = L.marker(new L.LatLng(a.y, a.x), markerOptions);
                 let popupItemClone = popupItem.cloneNode(true);
                 
                 let name = a.name;
@@ -341,7 +379,7 @@ export class PointData extends Observable {
                 
                 marker.on('mouseover', function(e) {
                     this.bindPopup($(popupItemClone).prop('outerHTML'), { maxWidth: "auto", closeButton: false });
-                    this.openPopup()
+                    this.openPopup();
                     let popupElement = $(this.getPopup().getElement());
                     popupElement.find('.leaflet-popup-content-wrapper').removeClass('leaflet-popup-content-wrapper');
                     popupElement.find('.leaflet-popup-tip-container').remove();

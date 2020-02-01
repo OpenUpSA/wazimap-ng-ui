@@ -13,6 +13,7 @@ import {MapChip} from './mapchip';
 import {LocationInfoBox} from './location_info_box';
 import {LoadingSpinner} from './loading_spinner';
 import {PointData} from "./point_data";
+import {ZoomToggle} from "./mapmenu/zoomtoggle";
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -30,6 +31,7 @@ export default function configureApplication(serverUrl, profileId) {
     const search = new Search(baseUrl, 2);
     const profileLoader = new ProfileLoader();
     const locationInfoBox = new LocationInfoBox();
+    const zoomToggle = new ZoomToggle();
     const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
     const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
 
@@ -95,6 +97,9 @@ export default function configureApplication(serverUrl, profileId) {
     });
     
     controller.on("mapChipRemoved", payload => mapcontrol.resetChoropleth());
+    controller.on("zoomToggled", payload => {
+        mapcontrol.enableZoom(payload.payload.enabled)
+    });
 
     mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
     mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))
@@ -123,6 +128,8 @@ export default function configureApplication(serverUrl, profileId) {
     pointData.on("categoryPointLoaded", payload => controller.onCategoryPointLoaded(payload));
     
     pointData.loadThemes();
+
+    zoomToggle.on("zoomToggled", payload => controller.onZoomToggled(payload));
     
     controller.triggerHashChange()
     // mapcontrol.overlayBoundaries(null);

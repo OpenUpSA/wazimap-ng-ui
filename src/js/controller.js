@@ -277,6 +277,10 @@ export default class Controller extends Observable {
         Webflow.ready();
     }
 
+    onZoomToggled(payload) {
+        this.triggerEvent("zoomToggled", payload);
+    }
+
     registerWebflowEvents() {
         const events = ["click", "mouseover", "mouseout"];
         const self = this;

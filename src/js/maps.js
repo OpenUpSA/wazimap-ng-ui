@@ -65,9 +65,9 @@ export class MapControl extends Observable {
         config = config || {}
 
         var coords = config.coords || defaultCoordinates;
-        var tileUrl = config.zoomMap || defaultTileUrl;
+        var tileUrl = config.tileUrl || defaultTileUrl;
 
-        this.zoomMap = config.zoomMap || true;
+        this.zoomEnabled = config.zoomMap || false;
         this.boundaryLayers = null;
         this.mainLayer = null;
 
@@ -75,11 +75,17 @@ export class MapControl extends Observable {
 
         this.map = this.configureMap(coords, tileUrl);
         this.layerCache = {};
-
         this.map.on("zoomend", e => this.zoomChanged(e));
     };
 
-    zoomChanged = (e) => {
+    enableZoom(enabled) {
+        this.zoomEnabled = enabled;
+    }
+
+    zoomChanged(e) {
+        if (!this.zoomEnabled)
+            return;
+
         if (e.sourceTarget._popup === null || typeof e.sourceTarget._popup === 'undefined') {
             return;
         }
@@ -91,9 +97,6 @@ export class MapControl extends Observable {
 
         const hash = decodeURI(window.location.hash);
         let parts = hash.split(":")
-
-        console.log(zoomLvl + ' : ' + areaCode + ' : ' + parts + ' : ' + level);
-        console.log(e)
 
         if (zoomLvl < 7) {
             window.location.hash = "";
@@ -248,7 +251,7 @@ export class MapControl extends Observable {
         self.layerStyler.setLayerToSelected(self.mainLayer);
         self.boundaryLayers.addLayer(self.mainLayer);
 
-        var alreadyZoomed = !zoomNeeded;
+        var alreadyZoomed = false;
 
         var layerPayload = function(layer) {
             var prop = layer.layer.feature.properties;
@@ -276,7 +279,7 @@ export class MapControl extends Observable {
                 })
                 .addTo(self.map);
 
-                if (self.zoomMap && !alreadyZoomed) {
+                if (!alreadyZoomed) {
                     try {
                         self.map.flyToBounds(layer.getBounds(), {
                             animate: true,

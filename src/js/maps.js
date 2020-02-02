@@ -172,6 +172,8 @@ export class MapControl extends Observable {
      */
     choropleth(data) {
         const self = this
+        if (data.subindicator.obj.children == undefined)
+            return;
         // const children = data.profile.children;
         const childCodes = data.profile.childCodes;
 

@@ -15,10 +15,9 @@ export class LocationInfoBox extends Observable {
         super();
     }
 
-    update(profile) {
-        const geographies = profile.geography;
-        const currentGeography = {code: geographies.code, level: geographies.level, name: geographies.name}
-        const locations = [...geographies.parents, currentGeography]
+    update(dataBundle) {
+        const profile = dataBundle.profile;
+        const locations = [...profile.parents, profile.geography]
 
         this.updateBreadcrumbs(locations);
         this.updateHighlights(profile.highlights);

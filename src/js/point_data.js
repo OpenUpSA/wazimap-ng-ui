@@ -43,8 +43,13 @@ export class PointData extends Observable {
         this.map = _map;
         this.selectedThemes = [];
         this.selectedCategories = [];
+        this.markerFactory = new MarkerFactory();
 
-        markers = L.markerClusterGroup();
+        function updateProgressBar(processed, total, elapsed, layersArray) {
+            console.log(`Elapsed: ${elapsed}, Total: ${total}`) 
+        } 
+        markers = L.markerClusterGroup({ chunkedLoading: true, chunkProgress: updateProgressBar });
+
 
         this.prepareDomElements();
     }
@@ -241,12 +246,12 @@ export class PointData extends Observable {
         
         addrPointCancelTokens[tokenIndex].push(token);
         return this.getAddressPoints(themeUrl, iterationCounter, token).then((data) => {                
-                let index = addrPointCancelTokens[tokenIndex].indexOf(token);
-                if(index !== -1) {
-                  addrPointCancelTokens[tokenIndex].splice(index, 1);
-                }
-                return data;
-            });
+            let index = addrPointCancelTokens[tokenIndex].indexOf(token);
+            if(index !== -1) {
+              addrPointCancelTokens[tokenIndex].splice(index, 1);
+            }
+            return data;
+        });
     }
 
     removeThemePoints = (theme) => {
@@ -305,83 +310,106 @@ export class PointData extends Observable {
      * clears the map, puts back the points that are in activePoints array
      */
     showPointsOnMap = () => {
-        markers.clearLayers();
         self = this;
-        
+
+        let newMarkers = [];
+
         if (activePoints !== null && activePoints != undefined && activePoints.length > 0) {
-            for (let i = 0; i < activePoints.length; i++) {
-                let a = activePoints[i];
-                
-                let markerOptions = {};
-                let markerSvgIcon = null;
-                
-                switch(a.themeId)
-                {
-                    case 2: //Education theme
-                        markerSvgIcon = $(pointMarkerClone).find('.svg-icon').children('svg');
-                        break;
-                    default:
-                }
-                
-                if(markerSvgIcon)
-                {
-                    //Only when element is visible on the document does height/outerHeight work
-                    //Element is hidden and showing using .show doesn't help before calling height/outerHeight
-                    //As such retrieve height from attribute height/width or viewBox
-                    let markerWidth = Number(markerSvgIcon.attr('width') || markerSvgIcon.attr('viewBox').split(" ")[2].trim());
-                    let markerHeight = Number(markerSvgIcon.attr('height') || markerSvgIcon.attr('viewBox').split(" ")[3].trim());
-                    
-                    $(pointMarkerClone).find('.point-marker__icon').css('z-index', 1000);
-                    
-                    let divIcon = L.divIcon({
-                                  html: $(pointMarkerClone).prop('outerHTML'),
-                                  iconAnchor: L.point(markerWidth/2, markerHeight),
-                                  className: '',
-                                  iconSize: L.point(markerWidth, markerHeight),
-                                  popupAnchor: L.point(0, -12),
-                                  tooltipAnchor: L.point(0, -12)
-                              });
-                              
-                     markerOptions = {icon: divIcon};
-                }
-                
-                let marker = L.marker(new L.LatLng(a.y, a.x), markerOptions);
-                let popupItemClone = popupItem.cloneNode(true);
-                
-                let name = a.name;
-                if(name == undefined || name == "")
-                    name = "Unknown";
-                
-                let categoryName = a.categoryName;
-                if(categoryName == undefined || categoryName == "")
-                    categoryName = "Unknown Category";
-                
-                name = name.trim();
-                categoryName = categoryName.trim();
-                
-                $(popupItemClone).find('.tooltip__card_title').text(name);
-                $(popupItemClone).find('.tooltip__card_subtitle').text(categoryName);
-                $(popupItemClone).show();
-                $(popupItemClone).css('opacity','');
-                const existingStyles = $(popupItemClone).attr('style');
-                $(popupItemClone).attr('style', existingStyles + '; ' + 'font: unset; font-family: Roboto, sans-serif; font-size: 14px; line-height: 20px; text-align: left;');
-                
-                marker.on('mouseover', function(e) {
-                    this.bindPopup($(popupItemClone).prop('outerHTML'), { maxWidth: "auto", closeButton: false });
-                    this.openPopup();
-                    let popupElement = $(this.getPopup().getElement());
-                    popupElement.find('.leaflet-popup-content-wrapper').removeClass('leaflet-popup-content-wrapper');
-                    popupElement.find('.leaflet-popup-tip-container').remove();
-                });
-                
-                marker.on('mouseout', function (e) {
-                    this.closePopup();
-                });
-                
-                markers.addLayer(marker);
-            }
+            markers.clearLayers();
+            activePoints.forEach(point => {
+                let marker = this.markerFactory.generateMarker(point);
+                newMarkers.push(marker);
+            })
+            markers.addLayers(newMarkers);
+            this.map.addLayer(markers);
         }
 
-        this.map.addLayer(markers);
+
     }
+}
+
+class MarkerFactory {
+    prepareSvgOptions(markerSvgIcon) {
+        //Only when element is visible on the document does height/outerHeight work
+        //Element is hidden and showing using .show doesn't help before calling height/outerHeight
+        //As such retrieve height from attribute height/width or viewBox
+        let markerWidth = Number(markerSvgIcon.attr('width') || markerSvgIcon.attr('viewBox').split(" ")[2].trim());
+        let markerHeight = Number(markerSvgIcon.attr('height') || markerSvgIcon.attr('viewBox').split(" ")[3].trim());
+        
+        $(pointMarkerClone).find('.point-marker__icon').css('z-index', 1000);
+        
+        let divIcon = L.divIcon({
+            html: $(pointMarkerClone).prop('outerHTML'),
+            iconAnchor: L.point(markerWidth / 2, markerHeight),
+            className: '',
+            iconSize: L.point(markerWidth, markerHeight),
+            popupAnchor: L.point(0, -12),
+            tooltipAnchor: L.point(0, -12)
+        });
+                  
+        const markerOptions = {icon: divIcon};
+        return markerOptions
+    }
+
+    preparePopupItem(point) {
+        const popupItemClone = popupItem.cloneNode(true);
+            
+        let name = point.name;
+        if (name == undefined || name == "")
+            name = "Unknown";
+        name = name.trim();
+            
+        let categoryName = point.categoryName;
+        if (categoryName == undefined || categoryName == "")
+            categoryName = "Unknown Category";
+        categoryName = categoryName.trim();
+            
+        $(popupItemClone).find('.tooltip__card_title').text(name);
+        $(popupItemClone).find('.tooltip__card_subtitle').text(categoryName);
+        $(popupItemClone).show();
+        $(popupItemClone).css('opacity','');
+        const existingStyles = $(popupItemClone).attr('style');
+        // TODO remove inline styles and use existing class
+        $(popupItemClone).attr('style', existingStyles + '; ' + 'font: unset; font-family: Roboto, sans-serif; font-size: 14px; line-height: 20px; text-align: left;');
+
+        return popupItemClone;
+    }
+
+    createMarker(popupItem, coords, markerOptions) {
+        const marker = L.marker(new L.LatLng(coords.y, coords.x), markerOptions);
+
+        marker.on('mouseover', function(e) {
+            this.bindPopup($(popupItem).prop('outerHTML'), { maxWidth: "auto", closeButton: false });
+            this.openPopup();
+            let popupElement = $(this.getPopup().getElement());
+            popupElement.find('.leaflet-popup-content-wrapper').removeClass('leaflet-popup-content-wrapper');
+            popupElement.find('.leaflet-popup-tip-container').remove();
+        });
+        
+        marker.on('mouseout', function (e) {
+            this.closePopup();
+        });
+
+        return marker;
+    }
+
+    generateMarker(point) {
+        let markerOptions = {};
+        let markerSvgIcon = null;
+        switch(point.themeId)
+        {
+            case 2: //Education theme
+                markerSvgIcon = $(pointMarkerClone).find('.svg-icon').children('svg');
+                break;
+            default:
+        }
+
+        if (markerSvgIcon)
+            markerOptions = this.prepareSvgOptions(markerSvgIcon);
+
+        let popupItemClone = this.preparePopupItem(point)
+        let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
+        return marker;
+    }
+
 }

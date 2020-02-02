@@ -28,7 +28,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.6",
     "cssnano": "^4.1.10",
-    "parcel": "^2.0.0-alpha.3.2",
+    "parcel": "^1.12.4",
     "parcel-bundler": "^1.12.4"
   },
   "scripts": {

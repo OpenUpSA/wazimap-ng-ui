@@ -12,7 +12,7 @@ export default class Controller extends Observable {
            profileId: profileId,
            // Set if a choropleth is currently active
            // TODO this state should possibly be stored in the mapcontrol
-           subindicator: null 
+           subindicator: null
         }
 
         const self = this;
@@ -139,12 +139,16 @@ export default class Controller extends Observable {
     };
 
     onLayerMouseOver(payload) {
-        this.triggerEvent("layerMouseOver", payload); 
+        this.triggerEvent("layerMouseOver", payload);
     };
 
     onLayerMouseOut(payload) {
-        this.triggerEvent("layerMouseOut", payload); 
+        this.triggerEvent("layerMouseOut", payload);
     };
+
+    onLayerMouseMove(payload){
+        this.triggerEvent("layerMouseMove", payload);
+    }
 
     onLayerLoading(payload) {
         this.triggerEvent("layerLoading", payload);
@@ -157,7 +161,7 @@ export default class Controller extends Observable {
     onProfileLoaded(payload) {
         this.state.profile = payload;
         this.state.subindicators = null; // unset when a new profile is loaded
-        this.triggerEvent("profileLoaded", payload); 
+        this.triggerEvent("profileLoaded", payload);
     };
 
     onPrintProfile(payload) {
@@ -173,15 +177,15 @@ export default class Controller extends Observable {
         this.state.subindicator = null;
         this.triggerEvent('mapChipRemoved', payload);
     }
-    
+
     onThemeSelected(payload){
         this.triggerEvent('themeSelected', payload);
     }
-    
+
     onThemeUnselected(payload){
         this.triggerEvent('themeUnselected', payload);
     }
-    
+
     onThemePointLoaded(payload){
         this.triggerEvent('themeLoaded', payload);
     }
@@ -193,13 +197,13 @@ export default class Controller extends Observable {
     onCategoryUnselected(payload){
         this.triggerEvent('categoryUnselected', payload);
     }
-    
+
     onCategoryPointLoaded(payload){
         this.triggerEvent('categoryPointLoaded', payload);
     }
-    
 
-    /** When a breadcrumb is clicked. Payload is a location: 
+
+    /** When a breadcrumb is clicked. Payload is a location:
     {
          code: 'WC',
          level: 'province',
@@ -267,11 +271,11 @@ export default class Controller extends Observable {
         Webflow.require('ix2').init()
         this.registerWebflowEvents();
     }
-    
+
     onLoadingThemes(payload) {
         this.triggerEvent("loadingThemes", payload);
     }
-    
+
     onLoadedThemes(payload) {
         this.triggerEvent("loadedThemes", payload);
         Webflow.ready();
@@ -298,7 +302,7 @@ export default class Controller extends Observable {
                 functions.split(",").forEach(foo => {
                     const func = self[`on${foo}`];
                     if (func != undefined) {
-                        $(el).on(ev, el => func(el)) 
+                        $(el).on(ev, el => func(el))
                     }
                 })
             })

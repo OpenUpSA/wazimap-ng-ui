@@ -6,6 +6,8 @@ import {Observable, numFmt} from './utils';
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
+let popup = null;
+
 var defaultStyles = {
     hoverOnly: {
         over: {
@@ -15,7 +17,7 @@ var defaultStyles = {
             fillColor: "#ffffff",
             opacity: "0%",
             stroke: false,
-        } 
+        }
     },
     selected: {
         over: {
@@ -46,7 +48,7 @@ class LayerStyler {
                 })
                 .on("mouseout", (el) => {
                     feature.setStyle(styles.out);
-            })
+                })
         })
     };
 
@@ -122,7 +124,7 @@ export class MapControl extends Observable {
     configureMap(coords, tileUrl) {
 
         const map = L
-            .map('main-map', { zoomControl: false})
+            .map('main-map', {zoomControl: false})
             .setView([coords["lat"], coords["long"]], coords["zoom"])
 
         L.tileLayer(tileUrl).addTo(map);
@@ -137,9 +139,12 @@ export class MapControl extends Observable {
         var payload = payload.payload;
         var popupLabel = payload.properties.name;
         var areaCode = payload.areaCode;
-        const popup = L.popup({autoPan: false})
+        popup = L.popup({
+            autoPan: false
+        })
 
         if (state.subindicator != null) {
+            //if any subindicator selected
             const subindicators = state.subindicator.subindicators;
             const subindicator = state.subindicator.obj.key;
             const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
@@ -158,9 +163,18 @@ export class MapControl extends Observable {
 
             }
         }
+        /*
         popup.setContent(popupLabel)
         payload.layer.bindPopup(popup).openPopup();
+        */
+        popup.setLatLng(payload.element.latlng)
+            .setContent(popupLabel)
+            .openOn(this.map);
+    }
 
+    updatePopupPosition(payload) {
+        //console.log(payload.payload.popup)
+        payload.payload.popup.setLatLng(payload.payload.layer.element.latlng).openOn(this.map);
     }
 
 
@@ -175,10 +189,10 @@ export class MapControl extends Observable {
 
         function resetLayers(childCodes) {
             childCodes.forEach(childCode => {
-                  const layer = self.layerCache[childCode];
-                  const color = scale(0);
-                  if (layer != undefined)
-                      layer.setStyle({fillColor: color});
+                const layer = self.layerCache[childCode];
+                const color = scale(0);
+                if (layer != undefined)
+                    layer.setStyle({fillColor: color});
             });
 
         }
@@ -191,9 +205,9 @@ export class MapControl extends Observable {
             const code = childGeography[0];
             const count = childGeography[1];
             const universe = data.payload.subindicators.reduce((el1, el2) => {
-              if (el2.children != undefined && el2.children[code] != undefined)
-                return el1 + el2.children[code];
-              return el1;
+                if (el2.children != undefined && el2.children[code] != undefined)
+                    return el1 + el2.children[code];
+                return el1;
             }, 0)
             const val = count / universe;
             return {code: code, val: val};
@@ -205,22 +219,22 @@ export class MapControl extends Observable {
         resetLayers(childCodes);
 
         childGeographies.forEach((el) => {
-          const layer = self.layerCache[el.code];
-          const color = scale(el.val);
-          layer.setStyle({fillColor: color});
+            const layer = self.layerCache[el.code];
+            const color = scale(el.val);
+            layer.setStyle({fillColor: color});
         })
     };
-    
-    resetChoropleth(){
+
+    resetChoropleth() {
         self = this;
         self.layerStyler.setLayerToSelected(self.mainLayer);
     }
 
-    overlayBoundaries(payload, zoomNeeded=false) {
+    overlayBoundaries(payload, zoomNeeded = false) {
         const self = this;
         const boundaryLayers = [];
 
-		self.triggerEvent("layerLoading", self.map);
+        self.triggerEvent("layerLoading", self.map);
         let selectedBoundary = payload.payload.children;
         if (Object.values(payload.payload.children).length == 0)
             selectedBoundary = payload.payload.boundary;
@@ -236,7 +250,7 @@ export class MapControl extends Observable {
             self.layerCache[code] = leafletLayer;
             return leafletLayer;
         });
-	   	
+
         self.boundaryLayers.clearLayers();
 
         var secondaryLayers = layers.slice(1);
@@ -253,7 +267,7 @@ export class MapControl extends Observable {
 
         var alreadyZoomed = false;
 
-        var layerPayload = function(layer) {
+        var layerPayload = function (layer) {
             var prop = layer.layer.feature.properties;
             return {
                 areaCode: prop.code,
@@ -270,28 +284,31 @@ export class MapControl extends Observable {
                     const prop = el.layer.feature.properties;
                     const areaCode = prop.code;
                     self.triggerEvent("layerClick", layerPayload(el));
-                }) 
+                })
                 .on("mouseover", (el) => {
                     self.triggerEvent("layerMouseOver", layerPayload(el));
                 })
                 .on("mouseout", (el) => {
                     self.triggerEvent("layerMouseOut", layerPayload(el));
                 })
+                .on("mousemove", (el) => {
+                    self.triggerEvent("layerMouseMove", {layer: layerPayload(el), popup: popup});
+                })
                 .addTo(self.map);
 
-                if (!alreadyZoomed) {
-                    try {
-                        self.map.flyToBounds(layer.getBounds(), {
-                            animate: true,
-                            duration: 0.5 // in seconds
-                        });
-                        alreadyZoomed = true;
-                    } catch (err) {
-                        console.log("Error zooming: " + err);
-                    }
+            if (!alreadyZoomed) {
+                try {
+                    self.map.flyToBounds(layer.getBounds(), {
+                        animate: true,
+                        duration: 0.5 // in seconds
+                    });
+                    alreadyZoomed = true;
+                } catch (err) {
+                    console.log("Error zooming: " + err);
                 }
+            }
         })
-		
-		self.triggerEvent("layerLoadingDone", self.map);
+
+        self.triggerEvent("layerLoadingDone", self.map);
     };
 }

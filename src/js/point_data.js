@@ -84,6 +84,7 @@ export class PointData extends Observable {
                     let item = pointDataItem.cloneNode(true);
                     $('.h1__trigger_title .truncate', item).text(data.results[i].name);
                     $('.point-data__h1_trigger', item).css('background-color', passiveColor);
+                    $('.point-data__h1_trigger', item).addClass('_' + data.results[i].id);
                     //$('.point-data__h1_trigger', item).css('background-color', colors[i % 10]); //todo:get the color from the API
                     $('.' + categoryWrapperClsName, item).html('');
 
@@ -311,11 +312,11 @@ export class PointData extends Observable {
      */
     showPointsOnMap = () => {
         self = this;
+        markers.clearLayers();
 
         let newMarkers = [];
 
         if (activePoints !== null && activePoints != undefined && activePoints.length > 0) {
-            markers.clearLayers();
             activePoints.forEach(point => {
                 let marker = this.markerFactory.generateMarker(point);
                 newMarkers.push(marker);
@@ -399,6 +400,7 @@ class MarkerFactory {
         switch(point.themeId)
         {
             case 2: //Education theme
+                $(pointMarkerClone).addClass('_' + point.themeId);
                 markerSvgIcon = $(pointMarkerClone).find('.svg-icon').children('svg');
                 break;
             default:

@@ -2,6 +2,7 @@ import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 import {Observable, numFmt} from './utils';
+import {geography_config} from './geography_providers/geography_sa';
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -65,9 +66,9 @@ export class MapControl extends Observable {
         config = config || {}
 
         var coords = config.coords || defaultCoordinates;
-        var tileUrl = config.zoomMap || defaultTileUrl;
+        var tileUrl = config.tileUrl || defaultTileUrl;
 
-        this.zoomMap = config.zoomMap || true;
+        this.zoomEnabled = config.zoomMap || false;
         this.boundaryLayers = null;
         this.mainLayer = null;
 
@@ -75,11 +76,17 @@ export class MapControl extends Observable {
 
         this.map = this.configureMap(coords, tileUrl);
         this.layerCache = {};
-
         this.map.on("zoomend", e => this.zoomChanged(e));
     };
 
-    zoomChanged = (e) => {
+    enableZoom(enabled) {
+        this.zoomEnabled = enabled;
+    }
+
+    zoomChanged(e) {
+        if (!this.zoomEnabled)
+            return;
+
         if (e.sourceTarget._popup === null || typeof e.sourceTarget._popup === 'undefined') {
             return;
         }
@@ -91,9 +98,6 @@ export class MapControl extends Observable {
 
         const hash = decodeURI(window.location.hash);
         let parts = hash.split(":")
-
-        console.log(zoomLvl + ' : ' + areaCode + ' : ' + parts + ' : ' + level);
-        console.log(e)
 
         if (zoomLvl < 7) {
             window.location.hash = "";
@@ -146,6 +150,7 @@ export class MapControl extends Observable {
                     for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
                         if (geographyCode == areaCode) {
                             const countFmt = numFmt(count);
+                            // TODO temporary - will integrate into Webflow HTML
                             popupLabel = `<strong>${popupLabel}</strong>`;
                             popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
                         }
@@ -167,8 +172,10 @@ export class MapControl extends Observable {
      */
     choropleth(data) {
         const self = this
-        const children = data.payload.obj.children;
-        const childCodes = data.state.profile.children["features"].map(child => child.properties.code);
+        if (data.subindicator.obj.children == undefined)
+            return;
+        // const children = data.profile.children;
+        const childCodes = data.profile.childCodes;
 
         function resetLayers(childCodes) {
             childCodes.forEach(childCode => {
@@ -181,13 +188,13 @@ export class MapControl extends Observable {
         }
 
 
-        if (children == undefined || children.length == 0)
-            return
+        // if (children == undefined || children.length == 0)
+        //     return
 
-        const childGeographies = Object.entries(data.payload.obj.children).map(childGeography => {
+        const childGeographies = Object.entries(data.subindicator.obj.children).map(childGeography => {
             const code = childGeography[0];
             const count = childGeography[1];
-            const universe = data.payload.subindicators.reduce((el1, el2) => {
+            const universe = data.subindicator.subindicators.reduce((el1, el2) => {
               if (el2.children != undefined && el2.children[code] != undefined)
                 return el1 + el2.children[code];
               return el1;
@@ -208,29 +215,31 @@ export class MapControl extends Observable {
         })
     };
     
-    resetChoropleth(){
+    resetChoropleth() {
         self = this;
         self.layerStyler.setLayerToSelected(self.mainLayer);
     }
 
-    overlayBoundaries(payload, zoomNeeded=false) {
+    overlayBoundaries(geography, geometries, zoomNeeded=false) {
         const self = this;
-        const boundaryLayers = [];
+        const level = geography.level;
+        const preferredChild = geography_config.preferredChildren[level];
+        let selectedBoundary;
+        const parentBoundaries = geometries.parents;
 
 		self.triggerEvent("layerLoading", self.map);
-        let selectedBoundary = payload.payload.children;
-        if (Object.values(payload.payload.children).length == 0)
-            selectedBoundary = payload.payload.boundary;
+        if (Object.values(geometries.children).length == 0)
+            selectedBoundary = geometries.boundary;
+        else
+            selectedBoundary = geometries.children[preferredChild];
 
-        const parentBoundaries = payload.payload.parent_layers;
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
             const leafletLayer = L.geoJson(l);
-            const code = payload.payload.profile.geography.code;
             leafletLayer.eachLayer(l => {
                 let code = l.feature.properties.code;
                 self.layerCache[code] = l;
             })
-            self.layerCache[code] = leafletLayer;
+            self.layerCache[geography.code] = leafletLayer;
             return leafletLayer;
         });
 	   	
@@ -248,7 +257,7 @@ export class MapControl extends Observable {
         self.layerStyler.setLayerToSelected(self.mainLayer);
         self.boundaryLayers.addLayer(self.mainLayer);
 
-        var alreadyZoomed = !zoomNeeded;
+        var alreadyZoomed = false;
 
         var layerPayload = function(layer) {
             var prop = layer.layer.feature.properties;
@@ -260,7 +269,7 @@ export class MapControl extends Observable {
             }
         }
 
-        layers.forEach((layer) => {
+        layers.forEach(layer => {
             layer
                 .off("click")
                 .on("click", (el) => {
@@ -276,7 +285,7 @@ export class MapControl extends Observable {
                 })
                 .addTo(self.map);
 
-                if (self.zoomMap && !alreadyZoomed) {
+                if (!alreadyZoomed) {
                     try {
                         self.map.flyToBounds(layer.getBounds(), {
                             animate: true,

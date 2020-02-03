@@ -13,16 +13,18 @@ import {MapChip} from './mapchip';
 import {LocationInfoBox} from './location_info_box';
 import {LoadingSpinner} from './loading_spinner';
 import {PointData} from "./point_data";
+import {ZoomToggle} from "./mapmenu/zoomtoggle";
+import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
+import {geography_config} from './geography_providers/geography_sa';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 
 export default function configureApplication(serverUrl, profileId) {
     const baseUrl = `${serverUrl}/api/v1`;
-    const SACode = "ZA"
     const geographyProvider = new WazimapProvider(baseUrl)
     const mapcontrol = new MapControl(geographyProvider);
-    const pointData = new PointData(mapcontrol.map);
+    const pointData = new PointData(baseUrl, mapcontrol.map);
     const controller = new Controller(baseUrl, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
@@ -30,6 +32,8 @@ export default function configureApplication(serverUrl, profileId) {
     const search = new Search(baseUrl, 2);
     const profileLoader = new ProfileLoader();
     const locationInfoBox = new LocationInfoBox();
+    const zoomToggle = new ZoomToggle();
+    const preferredChildToggle = new PreferredChildToggle();
     const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
     const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
 
@@ -38,7 +42,7 @@ export default function configureApplication(serverUrl, profileId) {
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
-    controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload))
+    controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.state))
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on('layerMouseOver', payload => mapcontrol.loadPopup(payload));
     controller.on('profileLoaded', onProfileLoadedSearch);
@@ -51,10 +55,14 @@ export default function configureApplication(serverUrl, profileId) {
 
     controller.on("loadingNewProfile", payload => contentMapSpinner.start());
     controller.on("loadedNewProfile", payload => mapchip.clearAllMapChip());
-    controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload.profile))
-    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile['indicators'], payload => controller.onSubIndicatorClick(payload)))
-    controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload))
-    controller.on('loadedNewProfile', payload => mapcontrol.overlayBoundaries(payload))
+    controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
+    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.indicators, payload => controller.onSubIndicatorClick(payload)))
+    controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload.payload))
+    controller.on('loadedNewProfile', payload => {
+        const geography = payload.payload.profile.geography;
+        const geometries = payload.payload.geometries;
+        mapcontrol.overlayBoundaries(geography, geometries)
+    });
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());
     controller.on("searchResults", payload => searchLoadSpinner.stop());
@@ -84,23 +92,26 @@ export default function configureApplication(serverUrl, profileId) {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
     });
     
-    controller.on("categoryUnselected", payload => {
+    controller.on('categoryUnselected', payload => {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
     });
     
-    controller.on("categoryPointLoaded", payload => {
+    controller.on('categoryPointLoaded', payload => {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
     });
     
-    controller.on("mapChipRemoved", payload => mapcontrol.resetChoropleth());
+    controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
+    controller.on('zoomToggled', payload => {
+        mapcontrol.enableZoom(payload.payload.enabled)
+    });
 
-    mapcontrol.on("layerClick", payload => controller.onLayerClick(payload))
-    mapcontrol.on("layerMouseOver", payload => controller.onLayerMouseOver(payload))
-    mapcontrol.on("layerMouseOut", payload => controller.onLayerMouseOut(payload))
-    mapcontrol.on("layerLoading", payload => controller.onLayerLoading(payload))
-    mapcontrol.on("layerLoadingDone", payload => controller.onLayerLoadingDone(payload))
+    mapcontrol.on('layerClick', payload => controller.onLayerClick(payload))
+    mapcontrol.on('layerMouseOver', payload => controller.onLayerMouseOver(payload))
+    mapcontrol.on('layerMouseOut', payload => controller.onLayerMouseOut(payload))
+    mapcontrol.on('layerLoading', payload => controller.onLayerLoading(payload))
+    mapcontrol.on('layerLoadingDone', payload => controller.onLayerLoadingDone(payload))
 
     search.on('beforeSearch', payload => controller.onSearchBefore(payload));
     search.on('searchResults', payload => controller.onSearchResults(payload));
@@ -113,16 +124,19 @@ export default function configureApplication(serverUrl, profileId) {
 
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
 
-    pointData.on("themeSelected", payload => controller.onThemeSelected(payload))
-    pointData.on("themeUnselected", payload => controller.onThemeUnselected(payload))
-    pointData.on("themeLoaded", payload => controller.onThemePointLoaded(payload));
-    pointData.on("loadingThemes", payload => controller.onLoadingThemes(payload));
-    pointData.on("loadedThemes", payload => controller.onLoadedThemes(payload));
-    pointData.on("categorySelected", payload => controller.onCategorySelected(payload));
-    pointData.on("categoryUnselected", payload => controller.onCategoryUnselected(payload));
-    pointData.on("categoryPointLoaded", payload => controller.onCategoryPointLoaded(payload));
+    pointData.on('themeSelected', payload => controller.onThemeSelected(payload))
+    pointData.on('themeUnselected', payload => controller.onThemeUnselected(payload))
+    pointData.on('themeLoaded', payload => controller.onThemePointLoaded(payload));
+    pointData.on('loadingThemes', payload => controller.onLoadingThemes(payload));
+    pointData.on('loadedThemes', payload => controller.onLoadedThemes(payload));
+    pointData.on('categorySelected', payload => controller.onCategorySelected(payload));
+    pointData.on('categoryUnselected', payload => controller.onCategoryUnselected(payload));
+    pointData.on('categoryPointLoaded', payload => controller.onCategoryPointLoaded(payload));
     
     pointData.loadThemes();
+
+    zoomToggle.on('zoomToggled', payload => controller.onZoomToggled(payload));
+    preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload)) 
     
     controller.triggerHashChange()
     // mapcontrol.overlayBoundaries(null);

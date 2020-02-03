@@ -1,7 +1,8 @@
 import {Observable, getJSON} from './utils';
+import {Geography, Profile, DataBundle} from './dataobjects';
+import {geography_config} from './geography_providers/geography_sa';
 
-// TODO remove SA specific stuff;
-const defaultGeography = 'ZA';
+const defaultGeography = geography_config.rootGeography;
 export default class Controller extends Observable {
     constructor(baseUrl, profileId=1) {
         super();
@@ -12,7 +13,7 @@ export default class Controller extends Observable {
            profileId: profileId,
            // Set if a choropleth is currently active
            // TODO this state should possibly be stored in the mapcontrol
-           subindicator: null 
+           subindicator: null,
         }
 
         const self = this;
@@ -112,9 +113,9 @@ export default class Controller extends Observable {
         this.triggerEvent("loadingNewProfile", payload.geography);
         const url = `${this.baseUrl}/all_details/profile/${this.profileId}/geography/${payload.areaCode}/`;
         getJSON(url).then(js => {
-            console.log(js)
-            self.state.profile = js;
-            self.triggerEvent("loadedNewProfile", js);
+            const dataBundle = new DataBundle(js);
+            self.state.profile = dataBundle;
+            self.triggerEvent("loadedNewProfile", dataBundle);
             // TODO this should be run after all dynamic stuff is run
             // Shouldn't be here
             setTimeout(() => {
@@ -275,6 +276,17 @@ export default class Controller extends Observable {
     onLoadedThemes(payload) {
         this.triggerEvent("loadedThemes", payload);
         Webflow.ready();
+    }
+
+    onZoomToggled(payload) {
+        this.triggerEvent("zoomToggled", payload);
+    }
+
+    onPreferredChildChange(childLevel) {
+        this.state.preferredChild = childLevel;
+        this.triggerEvent("preferredChildChange", childLevel);
+        // TODO remove SA specfic stuff
+        geography_config.preferredChildren['municipality'] = childLevel;
     }
 
     registerWebflowEvents() {

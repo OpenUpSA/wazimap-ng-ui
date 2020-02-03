@@ -4,9 +4,9 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 
-const url = 'https://wazimap-ng.openup.org.za/api/v1/points/themes/';
-const pointsByThemeUrl = 'https://wazimap-ng.openup.org.za/api/v1/points/themes/{theme_id}/';
-const pointsByCategoryUrl = 'https://wazimap-ng.openup.org.za/api/v1/points/categories/{category_id}/';
+const url = 'points/themes';
+const pointsByThemeUrl = 'points/themes';
+const pointsByCategoryUrl = 'points/categories';
 
 const iterationLimit = 10;  //iteration limit of the xhr calls, ideally we shouldn't have this
 const wrapperClsName = 'point-data__content_wrapper';
@@ -37,13 +37,19 @@ let colors = ['#dfe8ff', '#ebdcfa', '#ffe2ee', '#badc58', '#7ed6df', '#ea8685', 
  * this class creates the point data dialog
  */
 export class PointData extends Observable {
-    constructor(_map) {
+    constructor(baseUrl, _map) {
 		super();
+        this.baseUrl = baseUrl;
         this.map = _map;
         this.selectedThemes = [];
         this.selectedCategories = [];
+        this.markerFactory = new MarkerFactory();
 
-        markers = L.markerClusterGroup();
+        function updateProgressBar(processed, total, elapsed, layersArray) {
+            console.log(`Elapsed: ${elapsed}, Total: ${total}`) 
+        } 
+        markers = L.markerClusterGroup({ chunkedLoading: true, chunkProgress: updateProgressBar });
+
 
         this.prepareDomElements();
     }
@@ -70,8 +76,9 @@ export class PointData extends Observable {
     loadThemes = () => {
         let self = this;
 		self.triggerEvent("loadingThemes", self);
+        const themeUrl = `${this.baseUrl}/${url}/`;
 
-        getJSON(url).then((data) => {
+        getJSON(themeUrl).then((data) => {
             if (data.results !== null && data.results.length > 0) {
                 for (let i = 0; i < data.results.length; i++) {
                     let item = pointDataItem.cloneNode(true);
@@ -149,7 +156,7 @@ export class PointData extends Observable {
     }
 
     showCategoryPoint = (category) => {
-        let categoryUrl = pointsByCategoryUrl.replace('{category_id}', category.id);
+        let categoryUrl = `${this.baseUrl}/${pointsByCategoryUrl}/${category.id}/`
         let iterationCounter = 0;
         
         const tokenIndex = "category_id-" + category.id;
@@ -228,7 +235,7 @@ export class PointData extends Observable {
     showThemePoints = (theme) => {
         //need to remove for in case its already showing some from selected item
         this.removeThemePoints(theme);
-        let themeUrl = pointsByThemeUrl.replace('{theme_id}', theme.id);
+        let themeUrl = `${this.baseUrl}/${pointsByThemeUrl}/${theme.id}/`;
         let iterationCounter = 0;
         
         const tokenIndex = "theme_id-" + theme.id;
@@ -239,12 +246,12 @@ export class PointData extends Observable {
         
         addrPointCancelTokens[tokenIndex].push(token);
         return this.getAddressPoints(themeUrl, iterationCounter, token).then((data) => {                
-                let index = addrPointCancelTokens[tokenIndex].indexOf(token);
-                if(index !== -1) {
-                  addrPointCancelTokens[tokenIndex].splice(index, 1);
-                }
-                return data;
-            });
+            let index = addrPointCancelTokens[tokenIndex].indexOf(token);
+            if(index !== -1) {
+              addrPointCancelTokens[tokenIndex].splice(index, 1);
+            }
+            return data;
+        });
     }
 
     removeThemePoints = (theme) => {
@@ -272,42 +279,29 @@ export class PointData extends Observable {
      * type : 'Category' or 'Theme'
      */
     getAddressPoints = (requestUrl, iterationCounter, cancelToken = undefined) => {
-        requestUrl = requestUrl.replace('http://', 'https://');
-        return getJSON(requestUrl).then((data) => {
+        return getJSON(requestUrl).then(data => {
             if (data.features !== null && data.features.length > 0) {
-                for (let i = 0; i < data.features.length; i++) {
-                    let categoryId = data.features[i].properties.category.id;
-                    let themeId = themeCategories.filter((item) => {
+                data.features.forEach(feature => {
+                    const properties = feature.properties;
+                    const geometry = feature.geometry;
+                    const categoryId = properties.category.id;
+                    const themeId = themeCategories.filter(item => {
                         return item.categoryId === categoryId
                     })[0].themeId;
 
                     activePoints.push({
-                        x: data.features[i].geometry.coordinates[0],
-                        y: data.features[i].geometry.coordinates[1],
-                        name: data.features[i].properties.data.Name,
+                        x: geometry.coordinates[0],
+                        y: geometry.coordinates[1],
+                        name: properties.data.Name,
                         categoryId: categoryId,
-                        categoryName: data.features[i].properties.category.name,
+                        categoryName: properties.category.name,
                         themeId: themeId
                     })
-                }
-                
-                if(cancelToken != undefined && cancelToken.token != "")
-                    return cancelToken.token;
+                })
 
-                if (++iterationCounter < iterationLimit && data.next !== null && data.features !== null && data.features.length > 0) {
-                    //has more
-                    this.triggerEvent('iterationCompleted', {iterationCounter: iterationCounter, data: data});
-
-                    return this.getAddressPoints(data.next, iterationCounter, cancelToken);
-                } else {
-                    //completed
-                    this.triggerEvent('addressPointsTake', {data: data});
-
-                    this.showPointsOnMap();
-				
-					//Return data object for next promise
-					return data;
-                }
+                this.triggerEvent('addressPointsTake', {data: data});
+                this.showPointsOnMap();
+                return data;
             }
         })
     }
@@ -316,83 +310,106 @@ export class PointData extends Observable {
      * clears the map, puts back the points that are in activePoints array
      */
     showPointsOnMap = () => {
-        markers.clearLayers();
         self = this;
-        
-        if (activePoints !== null && activePoints.length > 0) {
-            for (let i = 0; i < activePoints.length; i++) {
-                let a = activePoints[i];
-                
-                let markerOptions = {};
-                let markerSvgIcon = null;
-                
-                switch(a.themeId)
-                {
-                    case 2: //Education theme
-                        markerSvgIcon = $(pointMarkerClone).find('.svg-icon').children('svg');
-                        break;
-                    default:
-                }
-                
-                if(markerSvgIcon)
-                {
-                    //Only when element is visible on the document does height/outerHeight work
-                    //Element is hidden and showing using .show doesn't help before calling height/outerHeight
-                    //As such retrieve height from attribute height/width or viewBox
-                    let markerWidth = Number(markerSvgIcon.attr('width') || markerSvgIcon.attr('viewBox').split(" ")[2].trim());
-                    let markerHeight = Number(markerSvgIcon.attr('height') || markerSvgIcon.attr('viewBox').split(" ")[3].trim());
-                    
-                    $(pointMarkerClone).find('.point-marker__icon').css('z-index', 1000);
-                    
-                    let divIcon = L.divIcon({
-                                  html: $(pointMarkerClone).prop('outerHTML'),
-                                  iconAnchor: L.point(markerWidth/2, markerHeight),
-                                  className: '',
-                                  iconSize: L.point(markerWidth, markerHeight),
-                                  popupAnchor: L.point(0, -12),
-                                  tooltipAnchor: L.point(0, -12)
-                              });
-                              
-                     markerOptions = {icon: divIcon};
-                }
-                
-                let marker = L.marker(new L.LatLng(a.y, a.x), markerOptions);
-                let popupItemClone = popupItem.cloneNode(true);
-                
-                let name = a.name;
-                if(name == undefined || name == "")
-                    name = "Unknown";
-                
-                let categoryName = a.categoryName;
-                if(categoryName == undefined || categoryName == "")
-                    categoryName = "Unknown Category";
-                
-                name = name.trim();
-                categoryName = categoryName.trim();
-                
-                $(popupItemClone).find('.tooltip__card_title').text(name);
-                $(popupItemClone).find('.tooltip__card_subtitle').text(categoryName);
-                $(popupItemClone).show();
-                $(popupItemClone).css('opacity','');
-                const existingStyles = $(popupItemClone).attr('style');
-                $(popupItemClone).attr('style', existingStyles + '; ' + 'font: unset; font-family: Roboto, sans-serif; font-size: 14px; line-height: 20px; text-align: left;');
-                
-                marker.on('mouseover', function(e) {
-                    this.bindPopup($(popupItemClone).prop('outerHTML'), { maxWidth: "auto", closeButton: false });
-                    this.openPopup();
-                    let popupElement = $(this.getPopup().getElement());
-                    popupElement.find('.leaflet-popup-content-wrapper').removeClass('leaflet-popup-content-wrapper');
-                    popupElement.find('.leaflet-popup-tip-container').remove();
-                });
-                
-                marker.on('mouseout', function (e) {
-                    this.closePopup();
-                });
-                
-                markers.addLayer(marker);
-            }
+
+        let newMarkers = [];
+
+        if (activePoints !== null && activePoints != undefined && activePoints.length > 0) {
+            markers.clearLayers();
+            activePoints.forEach(point => {
+                let marker = this.markerFactory.generateMarker(point);
+                newMarkers.push(marker);
+            })
+            markers.addLayers(newMarkers);
+            this.map.addLayer(markers);
         }
 
-        this.map.addLayer(markers);
+
     }
+}
+
+class MarkerFactory {
+    prepareSvgOptions(markerSvgIcon) {
+        //Only when element is visible on the document does height/outerHeight work
+        //Element is hidden and showing using .show doesn't help before calling height/outerHeight
+        //As such retrieve height from attribute height/width or viewBox
+        let markerWidth = Number(markerSvgIcon.attr('width') || markerSvgIcon.attr('viewBox').split(" ")[2].trim());
+        let markerHeight = Number(markerSvgIcon.attr('height') || markerSvgIcon.attr('viewBox').split(" ")[3].trim());
+        
+        $(pointMarkerClone).find('.point-marker__icon').css('z-index', 1000);
+        
+        let divIcon = L.divIcon({
+            html: $(pointMarkerClone).prop('outerHTML'),
+            iconAnchor: L.point(markerWidth / 2, markerHeight),
+            className: '',
+            iconSize: L.point(markerWidth, markerHeight),
+            popupAnchor: L.point(0, -12),
+            tooltipAnchor: L.point(0, -12)
+        });
+                  
+        const markerOptions = {icon: divIcon};
+        return markerOptions
+    }
+
+    preparePopupItem(point) {
+        const popupItemClone = popupItem.cloneNode(true);
+            
+        let name = point.name;
+        if (name == undefined || name == "")
+            name = "Unknown";
+        name = name.trim();
+            
+        let categoryName = point.categoryName;
+        if (categoryName == undefined || categoryName == "")
+            categoryName = "Unknown Category";
+        categoryName = categoryName.trim();
+            
+        $(popupItemClone).find('.tooltip__card_title').text(name);
+        $(popupItemClone).find('.tooltip__card_subtitle').text(categoryName);
+        $(popupItemClone).show();
+        $(popupItemClone).css('opacity','');
+        const existingStyles = $(popupItemClone).attr('style');
+        // TODO remove inline styles and use existing class
+        $(popupItemClone).attr('style', existingStyles + '; ' + 'font: unset; font-family: Roboto, sans-serif; font-size: 14px; line-height: 20px; text-align: left;');
+
+        return popupItemClone;
+    }
+
+    createMarker(popupItem, coords, markerOptions) {
+        const marker = L.marker(new L.LatLng(coords.y, coords.x), markerOptions);
+
+        marker.on('mouseover', function(e) {
+            this.bindPopup($(popupItem).prop('outerHTML'), { maxWidth: "auto", closeButton: false });
+            this.openPopup();
+            let popupElement = $(this.getPopup().getElement());
+            popupElement.find('.leaflet-popup-content-wrapper').removeClass('leaflet-popup-content-wrapper');
+            popupElement.find('.leaflet-popup-tip-container').remove();
+        });
+        
+        marker.on('mouseout', function (e) {
+            this.closePopup();
+        });
+
+        return marker;
+    }
+
+    generateMarker(point) {
+        let markerOptions = {};
+        let markerSvgIcon = null;
+        switch(point.themeId)
+        {
+            case 2: //Education theme
+                markerSvgIcon = $(pointMarkerClone).find('.svg-icon').children('svg');
+                break;
+            default:
+        }
+
+        if (markerSvgIcon)
+            markerOptions = this.prepareSvgOptions(markerSvgIcon);
+
+        let popupItemClone = this.preparePopupItem(point)
+        let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
+        return marker;
+    }
+
 }

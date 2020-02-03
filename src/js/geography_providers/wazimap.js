@@ -1,6 +1,8 @@
 import {getJSON, Cache} from '../utils' 
 import GeographyProvider from './geography_provider'
 import {Geography} from './geography_provider'
+import {geography_config} from '../geography_providers/geography_sa';
+import {DataBundle} from '../dataobjects';
 
 const cache = new Cache();
 
@@ -9,7 +11,7 @@ export class WazimapProvider extends GeographyProvider {
         super();
         this.geographies = {};
         this.baseUrl = baseUrl;
-        this.defaultGeography = "ZA"; 
+        this.defaultGeography = geography_config.rootGeography
     }
 
     _createGeography(js) {

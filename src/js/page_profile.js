@@ -34,29 +34,28 @@ const metricWrapper = $(".location-header__key-metrics", profileHeader);
 const metricTemplate = $(".key-metric", metricWrapper)[0].cloneNode(true);
 
 
-function updateGeography(container, data) {
-    const geography = data.geography
-    const label = geography.name + " (" + geography.code + ")";
+function updateGeography(container, profile) {
+    const geography = profile.geography
+    const label = `${geography.name} (${geography.code})`;
     $(headerTitleClass, container).text(label);
 
-    addBreadCrumbs(breadcrumbsContainer, geography);
+    addBreadCrumbs(breadcrumbsContainer, profile.parents);
 }
 
-function addBreadCrumbs(container, geography) {
+function addBreadCrumbs(container, parents) {
     $(breadcrumbClass, container).remove();
 
-    geography.parents.forEach((el) => {
+    parents.forEach(parent => {
         let breadcrumb = breadcrumbTemplate.cloneNode(true);
-        $(".truncate", breadcrumb).text(el.name) 
+        $(".truncate", breadcrumb).text(parent.name) 
         container.append(breadcrumb);
     })
 }
 
-function addKeyMetrics(container, data) {
-    const metrics = data.key_metrics
+function addKeyMetrics(container, profile) {
     $(".key-metric", metricWrapper).remove()
 
-    metrics.forEach((el) => {
+    profile.keyMetrics.forEach(el => {
         let metric = metricTemplate.cloneNode(true)
         $(".key-metric_value div", metric).text(el.value)
         $(".key-metric_title", metric).text(el.label)
@@ -136,16 +135,16 @@ export default class ProfileLoader {
 
     }
 
-    loadProfile(payload) {
-        const data = payload.payload.profile;
-        const all_indicators = data.indicators;
+    loadProfile(dataBundle) {
+        const profile = dataBundle.profile;
+        const all_indicators = profile.indicators;
 
         $(categoryClass).remove();
         $(subcategoryClass, categoryTemplate).remove();
         $(indicatorClass, subcategoryTemplate).remove();
 
-        updateGeography(profileHeader, data);
-        addKeyMetrics(profileHeader, data);
+        updateGeography(profileHeader, profile);
+        addKeyMetrics(profileHeader, profile);
 
 
         for (const [category, subcategories] of Object.entries(all_indicators)) {

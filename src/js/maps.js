@@ -177,6 +177,10 @@ export class MapControl extends Observable {
         payload.payload.popup.setLatLng(payload.payload.layer.element.latlng).openOn(this.map);
     }
 
+    hidePopup(payload){
+        this.map.closePopup();
+    }
+
 
     /**
      * Handles creating a choropleth when a subindicator is clicked

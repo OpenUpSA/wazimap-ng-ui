@@ -43,6 +43,7 @@ export default function configureApplication(serverUrl, profileId) {
     controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload))
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on('layerMouseOver', payload => mapcontrol.loadPopup(payload));
+    controller.on('layerMouseOut', payload => mapcontrol.hidePopup(payload));
     controller.on('layerMouseMove', payload => mapcontrol.updatePopupPosition(payload));
     controller.on('profileLoaded', onProfileLoadedSearch);
     controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))

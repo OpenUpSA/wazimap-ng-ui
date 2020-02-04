@@ -19,19 +19,19 @@ const treeLineClsName = 'point-data__h2_tree-line-v';
 const pointMarkerPositionClsName = 'point-marker__position';
 const popupItemClsName = 'point-marker__tooltip';
 const pointMarkerClsName = 'point-marker';
-const activeClsName = 'active-1';
-const passiveColor = '#f7f7f7';
+const defaultActiveClsName = 'active-1';
 let pointDataItem = null;
 let categoryItem = null;
 let treeLineItem = null;
 let popupItem = null;
 let pointMarkerClone = null;
-let markers = null;
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
 let addrPointCancelTokens = {};
 
-let colors = ['#dfe8ff', '#ebdcfa', '#ffe2ee', '#badc58', '#7ed6df', '#ea8685', '#cf6a87', '#9AECDB', '#FEA47F', '#1dd1a1'];    //colors of the point data dialog
+function updateProgressBar(processed, total, elapsed, layersArray) {
+    console.log(`Elapsed: ${elapsed}, Total: ${total}`) 
+}
 
 /**
  * this class creates the point data dialog
@@ -43,12 +43,8 @@ export class PointData extends Observable {
         this.map = _map;
         this.selectedThemes = [];
         this.selectedCategories = [];
-        this.markerFactory = new MarkerFactory();
-
-        function updateProgressBar(processed, total, elapsed, layersArray) {
-            console.log(`Elapsed: ${elapsed}, Total: ${total}`) 
-        } 
-        markers = L.markerClusterGroup({ chunkedLoading: true, chunkProgress: updateProgressBar });
+        this.markerFactory = new MarkerFactory();        
+        this.markers = null;
 
 
         this.prepareDomElements();
@@ -79,13 +75,13 @@ export class PointData extends Observable {
         const themeUrl = `${this.baseUrl}/${url}/`;
 
         getJSON(themeUrl).then((data) => {
+            let themeElements = [];
             if (data.results !== null && data.results.length > 0) {
-                for (let i = 0; i < data.results.length; i++) {
+                for (let i = 0; i < data.results.length; i++) {                    
                     let item = pointDataItem.cloneNode(true);
                     $('.h1__trigger_title .truncate', item).text(data.results[i].name);
-                    $('.point-data__h1_trigger', item).css('background-color', passiveColor);
                     $('.point-data__h1_trigger', item).addClass('_' + data.results[i].id);
-                    //$('.point-data__h1_trigger', item).css('background-color', colors[i % 10]); //todo:get the color from the API
+                    $('.point-data__h1_trigger', item).removeClass(defaultActiveClsName);
                     $('.' + categoryWrapperClsName, item).html('');
 
                     if (data.results[i].categories !== null && data.results[i].categories.length > 0) {
@@ -95,8 +91,8 @@ export class PointData extends Observable {
                                 categoryId: data.results[i].categories[j].id
                             })
                             let cItem = categoryItem.cloneNode(true);
-                            $(cItem).on('click', () => self.selectedCategoriesChanged(cItem, item, data.results[i].categories[j], i));
-                            $(cItem).find('.point-data__h2').removeClass(activeClsName);
+                            $(cItem).on('click', () => self.selectedCategoriesChanged(cItem, item, data.results[i].categories[j], data.results[i].id));
+                            $(cItem).find('.point-data__h2').removeClass(defaultActiveClsName);
                             $('.truncate', cItem).text(data.results[i].categories[j].name);
                             $('.point-data__h2_link', cItem).removeClass('point-data__h2_link').addClass('point-data__h2_link--disabled');
 
@@ -114,8 +110,47 @@ export class PointData extends Observable {
 
                     $(item).find('.point-data__h1_checkbox input[type=checkbox]').on('click', () => self.selectedThemesChanged(item, data.results[i], i));
 
+                    themeElements[data.results[i].id] = item;
                     $('.' + wrapperClsName).append(item);
                 }
+                
+                this.markers = L.markerClusterGroup({ 
+                    chunkedLoading: true,
+                    chunkProgress: updateProgressBar,
+                    iconCreateFunction: function (cluster) {
+                        let childCount = cluster.getChildCount();
+                        let markers = cluster.getAllChildMarkers();
+                        let themeId;
+                        let themes = [];
+                        let div = '';
+                        
+                        
+                        for (let marker of markers) {
+                            themeId = marker.options.themeId;
+                            if(!themes[themeId])
+                                themes[themeId] = { count: 1};
+                            else
+                                themes[themeId].count += 1;
+                        }
+                        
+                        themes.forEach((theme, index) => 
+                        {
+                            let style = 'style=\'background-color: ' + $('.point-data__h1_trigger', themeElements[index]).css('background-color') +'\'';
+                            div += '<div ' + style + '><span>' + theme.count + '</span></div>';
+                        });
+
+                        //var c = ' point-data__h1_trigger _1 active-1';
+                        // var c = ' marker-cluster-';
+                        // if (childCount < 10) {
+                            // c += 'small';
+                        // } else if (childCount < 100) {
+                            // c += 'medium';
+                        // } else {
+                            // c += 'large';
+                        // }
+                        return new L.DivIcon({ html: div, className: 'marker-cluster' /*+ c*/, iconSize: new L.Point(40, 40) });
+                    }
+                });
             }
 			
 			self.triggerEvent("loadedThemes", data);
@@ -125,27 +160,30 @@ export class PointData extends Observable {
     /**
      * this function is called when a category is toggled
      * */
-    selectedCategoriesChanged = (cItem, item, category, index) => {
-        if ($(cItem).find('.point-data__h2').hasClass(activeClsName)) {
+    selectedCategoriesChanged = (cItem, item, category, themeId) => {
+        let activeClassName = 'active-' + themeId;
+        if ($(cItem).find('.point-data__h2').hasClass(activeClassName)) {
             this.triggerEvent('categoryUnselected', {category: category, item: cItem});
 
             this.selectedCategories.splice(this.selectedCategories.indexOf(category.id), 1);
-            $(cItem).find('.point-data__h2').removeClass(activeClsName);
-            $(cItem).find('.point-data__h2').css('background-color', passiveColor);
             
-            $('.point-data__h1_trigger', item).css('background-color', passiveColor);
+            $(cItem).find('.point-data__h2').removeClass(activeClassName);
+            if($(item).find('.' + categoryItemClsName).find('.' + activeClassName).length == 0)
+            {
+                $('.point-data__h1_trigger', item).removeClass(activeClassName);
+            }
+            
             $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop( "checked", false );
             
             this.removeCategoryPoints(category);
         } else {
             this.triggerEvent('categorySelected', {category: category, item: cItem});
-
             this.selectedCategories.push(category.id);
-            $(cItem).find('.point-data__h2').addClass(activeClsName);
-            $(cItem).find('.point-data__h2').css('background-color', colors[index % 10]); //todo:get the color from the API
-            $('.point-data__h1_trigger', item).css('background-color', colors[index % 10]);
             
-            if($(item).find('.' + categoryItemClsName).find('.' + activeClsName).length == $(item).find('.' + categoryItemClsName).length)
+            $(cItem).find('.point-data__h2').addClass(activeClassName);
+            $('.point-data__h1_trigger', item).addClass(activeClassName);
+            
+            if($(item).find('.' + categoryItemClsName).find('.' + activeClassName).length == $(item).find('.' + categoryItemClsName).length)
             {
                 $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop( "checked", true );
             }
@@ -198,6 +236,7 @@ export class PointData extends Observable {
      * this function is called when a theme is toggled
      * */
     selectedThemesChanged = (item, theme, index) => {
+        let activeClassName = 'active-' + theme.id;
         if ($(item).find('.point-data__h1_checkbox input[type=checkbox]').is(':checked')) {
             //theme added
             this.triggerEvent('themeSelected', {theme: theme, item: item});
@@ -208,13 +247,12 @@ export class PointData extends Observable {
 			});
 
             $(item).find('.' + categoryItemClsName).each(function () {
-                if (!$(this).find('.point-data__h2').hasClass(activeClsName)) {
-                    $(this).find('.point-data__h2').addClass(activeClsName);
-                    $(this).find('.point-data__h2').css('background-color', colors[index % 10]); //todo:get the color from the API
+                if (!$(this).find('.point-data__h2').hasClass(activeClassName)) {
+                    $(this).find('.point-data__h2').addClass(activeClassName);
                 }
             })
             
-            $('.point-data__h1_trigger', item).css('background-color', colors[index % 10]);
+            $('.point-data__h1_trigger', item).addClass(activeClassName);
         } else {
             //theme removed
             this.triggerEvent('themeUnselected', {theme: theme, item: item});
@@ -223,13 +261,12 @@ export class PointData extends Observable {
             this.removeThemePoints(theme);
 
             $(item).find('.' + categoryItemClsName).each(function () {
-                if ($(this).find('.point-data__h2').hasClass(activeClsName)) {
-                    $(this).find('.point-data__h2').removeClass(activeClsName);
-                    $(this).find('.point-data__h2').css('background-color', passiveColor); //todo:get the color from the API
+                if ($(this).find('.point-data__h2').hasClass(activeClassName)) {
+                    $(this).find('.point-data__h2').removeClass(activeClassName);
                 }
             })
             
-            $('.point-data__h1_trigger', item).css('background-color', passiveColor);
+            $('.point-data__h1_trigger', item).removeClass(activeClassName);
         }
     }
 
@@ -312,8 +349,7 @@ export class PointData extends Observable {
      */
     showPointsOnMap = () => {
         self = this;
-        markers.clearLayers();
-
+        this.markers.clearLayers();
         let newMarkers = [];
 
         if (activePoints !== null && activePoints != undefined && activePoints.length > 0) {
@@ -321,11 +357,10 @@ export class PointData extends Observable {
                 let marker = this.markerFactory.generateMarker(point);
                 newMarkers.push(marker);
             })
-            markers.addLayers(newMarkers);
-            this.map.addLayer(markers);
+            
+            this.markers.addLayers(newMarkers);
+            this.map.addLayer(this.markers);
         }
-
-
     }
 }
 
@@ -395,7 +430,7 @@ class MarkerFactory {
     }
 
     generateMarker(point) {
-        let markerOptions = {};
+        let markerOptions = { };
         let markerSvgIcon = null;
         switch(point.themeId)
         {
@@ -410,6 +445,7 @@ class MarkerFactory {
             markerOptions = this.prepareSvgOptions(markerSvgIcon);
 
         let popupItemClone = this.preparePopupItem(point)
+        markerOptions.themeId = point.themeId;
         let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
         return marker;
     }

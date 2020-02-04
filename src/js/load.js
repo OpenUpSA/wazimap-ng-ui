@@ -1,6 +1,6 @@
 import {select as d3select} from 'd3-selection';
 import Controller from './controller';
-import ProfileLoader  from './page_profile';
+import ProfileLoader from './page_profile';
 import {loadMenu} from './menu';
 import PDFPrinter from './print';
 import {MapControl} from './maps';
@@ -45,6 +45,8 @@ export default function configureApplication(serverUrl, profileId) {
     controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.state))
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on('layerMouseOver', payload => mapcontrol.loadPopup(payload));
+    controller.on('layerMouseOut', payload => mapcontrol.hidePopup(payload));
+    controller.on('layerMouseMove', payload => mapcontrol.updatePopupPosition(payload));
     controller.on('profileLoaded', onProfileLoadedSearch);
     controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))
@@ -76,17 +78,16 @@ export default function configureApplication(serverUrl, profileId) {
     });
 
     controller.on("themeLoaded", payload => {
-        if(payload.payload.data == "cancel")
-        {
+        if (payload.payload.data == "cancel") {
             new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
             new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
             return;
         }
-            
+
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
     });
-    
+
     controller.on("categorySelected", payload => {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
@@ -96,7 +97,7 @@ export default function configureApplication(serverUrl, profileId) {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
     });
-    
+
     controller.on('categoryPointLoaded', payload => {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
@@ -110,8 +111,10 @@ export default function configureApplication(serverUrl, profileId) {
     mapcontrol.on('layerClick', payload => controller.onLayerClick(payload))
     mapcontrol.on('layerMouseOver', payload => controller.onLayerMouseOver(payload))
     mapcontrol.on('layerMouseOut', payload => controller.onLayerMouseOut(payload))
+    mapcontrol.on("layerMouseMove", payload => controller.onLayerMouseMove(payload))
     mapcontrol.on('layerLoading', payload => controller.onLayerLoading(payload))
     mapcontrol.on('layerLoadingDone', payload => controller.onLayerLoadingDone(payload))
+
 
     search.on('beforeSearch', payload => controller.onSearchBefore(payload));
     search.on('searchResults', payload => controller.onSearchResults(payload));

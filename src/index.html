@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Wed Jan 29 2020 13:41:59 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Tue Feb 04 2020 10:31:25 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="5e3007159d703b9483c43db9" data-wf-site="5ddce16f2111933b6c1205a5">
 <head>
   <meta charset="utf-8">
-  <title>Home - Point Data Test</title>
+  <title>Home</title>
   <meta content="Wazimap, from the Xhosa word ulwazi for knowledge, provides easy access to South African census and elections data." name="description">
-  <meta content="Home - Point Data Test" property="og:title">
+  <meta content="Home" property="og:title">
   <meta content="Wazimap, from the Xhosa word ulwazi for knowledge, provides easy access to South African census and elections data." property="og:description">
   <meta content="summary" name="twitter:card">
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -32,12 +32,6 @@
         html.w-mod-js:not(.w-mod-ix) [data-w-id="02e99c1e-4d15-9e14-f8e8-eb88797b443d"] {
           display: none;
         }
-        html.w-mod-js:not(.w-mod-ix) [data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78b9fb0"] {
-          display: block;
-        }
-        html.w-mod-js:not(.w-mod-ix) [data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78b9fb2"] {
-          display: none;
-        }
         html.w-mod-js:not(.w-mod-ix) [data-w-id="47c5e246-f872-f400-da35-4c58d76af5e2"] {
           display: block;
         }
@@ -46,6 +40,12 @@
         }
         html.w-mod-js:not(.w-mod-ix) [data-w-id="47c5e246-f872-f400-da35-4c58d76af5e0"] {
           opacity: 0;
+          display: none;
+        }
+        html.w-mod-js:not(.w-mod-ix) [data-w-id="07b2a627-d453-1b52-8dbf-50d01831d98f"] {
+          display: block;
+        }
+        html.w-mod-js:not(.w-mod-ix) [data-w-id="07b2a627-d453-1b52-8dbf-50d01831d991"] {
           display: none;
         }
         html.w-mod-js:not(.w-mod-ix) [data-w-id="6e172d0b-82f3-fc6a-a8c8-e1fd6448c5bf"] {
@@ -256,49 +256,65 @@
           <div>Icons</div>
         </div>
         <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="icon--people">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path>
 <path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
 </svg></div>
+          </div>
         </div>
         <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="icon--elections">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path>
 <path fill="currentColor" d="M18 13h-.68l-2 2h1.91L19 17H5l1.78-2h2.05l-2-2H6l-3 3v4c0 1.1.89 2 1.99 2H19c1.1 0 2-.89 2-2v-4l-3-3zm-1-5.05l-4.95 4.95-3.54-3.54 4.95-4.95L17 7.95zm-4.24-5.66L6.39 8.66c-.39.39-.39 1.02 0 1.41l4.95 4.95c.39.39 1.02.39 1.41 0l6.36-6.36c.39-.39.39-1.02 0-1.41L14.16 2.3c-.38-.4-1.01-.4-1.4-.01z"></path>
 </svg></div>
+          </div>
         </div>
         <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="icon--education">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
+</svg></div>
+          </div>
+        </div>
+        <div class="styles__icon-wrapper">
+          <div class="icon--health">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M21 5h-2.64l1.14-3.14L17.15 1l-1.46 4H3v2l2 6-2 6v2h18v-2l-2-6 2-6V5zm-5 9h-3v3h-2v-3H8v-2h3V9h2v3h3v2z"></path>
+</svg></div>
+          </div>
+        </div>
+        <div class="styles__icon-wrapper">
+          <div class="icon--transport">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+</svg></div>
+          </div>
+        </div>
+        <div class="styles__icon-wrapper">
+          <div class="icon--menu">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path>
 <path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
 </svg></div>
+          </div>
         </div>
         <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="icon--point-data">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path>
 <path fill="currentColor" d="M8.92,11.22a2.56,2.56,0,1,1,2.55-2.55,2.55,2.55,0,0,1-2.55,2.55m0-9.72A7.16,7.16,0,0,0,1.76,8.67C1.76,14,8.92,22,8.92,22S16.08,14,16.08,8.67A7.17,7.17,0,0,0,8.92,1.5Z"></path>
 <path fill="currentColor" d="M18.77,16.26V12.54h-2v3.72H14.39c-.42.69-.85,1.36-1.28,2h3.67V22h2V18.24h3.72v-2Z"></path>
 </svg></div>
+          </div>
         </div>
         <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
-</svg></div>
-        </div>
-        <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M21 5h-2.64l1.14-3.14L17.15 1l-1.46 4H3v2l2 6-2 6v2h18v-2l-2-6 2-6V5zm-5 9h-3v3h-2v-3H8v-2h3V9h2v3h3v2z"></path>
-</svg></div>
-        </div>
-        <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
-</svg></div>
-        </div>
-        <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="icon--share">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"></path>
 </svg></div>
+          </div>
         </div>
         <div class="styles__icon-wrapper">
           <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -306,9 +322,11 @@
 </svg></div>
         </div>
         <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="icon--search">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
 </svg></div>
+          </div>
         </div>
         <div class="styles__icon-wrapper">
           <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -333,6 +351,11 @@
         <div class="styles__icon-wrapper">
           <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+</svg></div>
+        </div>
+        <div class="styles__icon-wrapper">
+          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
 </svg></div>
         </div>
         <div class="styles__icon-wrapper">
@@ -381,9 +404,9 @@
 </svg></div>
         </div>
         <div class="styles__icon-wrapper">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
+          <div class="icon--blank-pin">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+          </div>
         </div>
       </div>
       <div class="styles__colours">
@@ -478,17 +501,19 @@
           </div>
         </div>
         <div class="styles__map-tooltips_wrapper">
-          <div class="content__map_point-marker">
-            <div class="point-marker _1">
+          <div class="map_point-marker">
+            <div class="point-marker">
               <div class="point-marker__icon">
-                <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
+                </div>
               </div>
               <div class="point-marker__pin">
-                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
                 <div class="point-marker__shadow"></div>
               </div>
             </div>
@@ -511,7 +536,7 @@
           </div>
         </div>
         <div class="styles__map-tooltips_wrapper">
-          <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78b9faa" class="content__map_toggle">
+          <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831d989" class="content__map_toggle">
             <div class="toggle__icon--horizontal">
               <div class="svg-icon toggle__icon_first--slow w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"></path>
@@ -522,140 +547,180 @@
             </div>
             <div style="opacity:0;display:none" class="toggle-tooltip--left">
               <div class="tooltip__notch--right"></div>
-              <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78b9fb0" class="toggle-tooltip__text--first">Show rich data</div>
-              <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78b9fb2" class="toggle-tooltip__text--last">Show fullscreen map</div>
+              <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831d98f" class="toggle-tooltip__text--first">Show rich data</div>
+              <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831d991" class="toggle-tooltip__text--last">Show fullscreen map</div>
             </div>
           </div>
         </div>
         <div class="styles__map-tooltips_wrapper">
-          <div class="point-marker _1">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="map_point-marker">
+            <div class="point-marker _1">
+              <div class="point-marker__icon">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
-            </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
-              <div class="point-marker__shadow"></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
           </div>
-          <div class="point-marker _2">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
+          <div class="map_point-marker">
+            <div class="point-marker _2">
+              <div class="point-marker__icon">
+                <div class="icon--health">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M21 5h-2.64l1.14-3.14L17.15 1l-1.46 4H3v2l2 6-2 6v2h18v-2l-2-6 2-6V5zm-5 9h-3v3h-2v-3H8v-2h3V9h2v3h3v2z"></path>
 </svg></div>
-            </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
-              <div class="point-marker__shadow"></div>
-            </div>
-          </div>
-          <div class="point-marker _3">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
-</svg></div>
-            </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
-              <div class="point-marker__shadow"></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
           </div>
-          <div class="point-marker _4">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="map_point-marker">
+            <div class="point-marker _3">
+              <div class="point-marker__icon">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
-            </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
-              <div class="point-marker__shadow"></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
           </div>
-          <div class="point-marker _5">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="map_point-marker">
+            <div class="point-marker _4">
+              <div class="point-marker__icon">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
-            </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
-              <div class="point-marker__shadow"></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
           </div>
-          <div class="point-marker _6">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="map_point-marker">
+            <div class="point-marker _5">
+              <div class="point-marker__icon">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
-            </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
-              <div class="point-marker__shadow"></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
           </div>
-          <div class="point-marker _7">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="map_point-marker">
+            <div class="point-marker _6">
+              <div class="point-marker__icon">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
-            </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
-              <div class="point-marker__shadow"></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
           </div>
-          <div class="point-marker _8">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="map_point-marker">
+            <div class="point-marker _7">
+              <div class="point-marker__icon">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
-            </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
-              <div class="point-marker__shadow"></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
           </div>
-          <div class="point-marker _9">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="map_point-marker">
+            <div class="point-marker _8">
+              <div class="point-marker__icon">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
-            </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
-</svg></div>
-              <div class="point-marker__shadow"></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
           </div>
-          <div class="point-marker _10">
-            <div class="point-marker__icon">
-              <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+          <div class="map_point-marker">
+            <div class="point-marker _9">
+              <div class="point-marker__icon">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
-            <div class="point-marker__pin">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
-<path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
+          </div>
+          <div class="map_point-marker">
+            <div class="point-marker _10">
+              <div class="point-marker__icon">
+                <div class="icon--education">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
-              <div class="point-marker__shadow"></div>
+                </div>
+              </div>
+              <div class="point-marker__pin">
+                <div class="icon--blank-pin">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="34" viewbox="0 0 28 34	"><defs><style>.cls-1{fill:none;}.cls-2{fill:currentColor;}.cls-3{fill:#fff;}</style></defs><title>blank-pin-stroke</title><rect class="cls-1" width="28" height="34"></rect><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1-2"><path class="cls-2" d="M5.11,23.63a12.73,12.73,0,1,1,17.8,0L14,32.57Z"></path><path class="cls-3" d="M14,2.5h0a12,12,0,0,1,8.38,20.61L14,31.5,5.64,23.1A12,12,0,0,1,14,2.5M14,1h0A13.5,13.5,0,0,0,4.59,24.18l8.35,8.38L14,33.63l1.06-1.06,8.39-8.39A13.53,13.53,0,0,0,14,1Z"></path></g></g></svg></div>
+                </div>
+                <div class="point-marker__shadow"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -696,9 +761,11 @@
               <div class="point-data__h1_trigger _1 active-1">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
-                    <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                    <div class="icon--education">
+                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
+                    </div>
                   </div>
                   <div class="h1__trigger_title">
                     <div class="truncate">.1 .1-active</div>
@@ -712,7 +779,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">.load-complete</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba022" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831da20" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -726,7 +793,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">.loading</div>
                     <div class="point-data__h2_loading">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba02b" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831da29" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -749,12 +816,15 @@
   <span class="slider round"></span>
 </label></div>
               </div>
-              <div class="point-data__h1_trigger _2">
+              <div class="point-data__h1_trigger _2 active-2">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
-                    <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M21 5h-2.64l1.14-3.14L17.15 1l-1.46 4H3v2l2 6-2 6v2h18v-2l-2-6 2-6V5zm-5 9h-3v3h-2v-3H8v-2h3V9h2v3h3v2z"></path>
+                    <div class="icon--elections">
+                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path>
+<path fill="currentColor" d="M18 13h-.68l-2 2h1.91L19 17H5l1.78-2h2.05l-2-2H6l-3 3v4c0 1.1.89 2 1.99 2H19c1.1 0 2-.89 2-2v-4l-3-3zm-1-5.05l-4.95 4.95-3.54-3.54 4.95-4.95L17 7.95zm-4.24-5.66L6.39 8.66c-.39.39-.39 1.02 0 1.41l4.95 4.95c.39.39 1.02.39 1.41 0l6.36-6.36c.39-.39.39-1.02 0-1.41L14.16 2.3c-.38-.4-1.01-.4-1.4-.01z"></path>
 </svg></div>
+                    </div>
                   </div>
                   <div class="h1__trigger_title">
                     <div class="truncate">.2</div>
@@ -768,7 +838,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Clinics</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba043" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831da42" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -782,7 +852,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Dispenseries</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba04c" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831da4b" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -805,12 +875,15 @@
   <span class="slider round"></span>
 </label></div>
               </div>
-              <div class="point-data__h1_trigger _3">
+              <div class="point-data__h1_trigger _3 active-3">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
-                    <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
+                    <div class="icon--people">
+                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path>
+<path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
 </svg></div>
+                    </div>
                   </div>
                   <div class="h1__trigger_title">
                     <div class="truncate">.3</div>
@@ -824,7 +897,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">High schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba064" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831da64" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -838,7 +911,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Primary schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba06d" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831da6d" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -861,12 +934,14 @@
   <span class="slider round"></span>
 </label></div>
               </div>
-              <div class="point-data__h1_trigger _4">
+              <div class="point-data__h1_trigger _4 active-4">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
-                    <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                    <div class="icon--transport">
+                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"></path>
 </svg></div>
+                    </div>
                   </div>
                   <div class="h1__trigger_title">
                     <div class="truncate">.4</div>
@@ -880,7 +955,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">High schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba085" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831da86" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -894,7 +969,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Primary schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba08e" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831da8f" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -917,7 +992,7 @@
   <span class="slider round"></span>
 </label></div>
               </div>
-              <div class="point-data__h1_trigger _5">
+              <div class="point-data__h1_trigger _5 active-5">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
                     <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -936,7 +1011,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">High schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba0a6" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831daa7" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -950,7 +1025,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Primary schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba0af" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831dab0" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -973,7 +1048,7 @@
   <span class="slider round"></span>
 </label></div>
               </div>
-              <div class="point-data__h1_trigger _6">
+              <div class="point-data__h1_trigger _6 active-6">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
                     <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -992,7 +1067,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">High schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba0c7" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831dac8" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1006,7 +1081,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Primary schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba0d0" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831dad1" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1029,7 +1104,7 @@
   <span class="slider round"></span>
 </label></div>
               </div>
-              <div class="point-data__h1_trigger _7">
+              <div class="point-data__h1_trigger _7 active-7">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
                     <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1048,7 +1123,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">High schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba0e8" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831dae9" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1062,7 +1137,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Primary schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba0f1" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831daf2" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1085,7 +1160,7 @@
   <span class="slider round"></span>
 </label></div>
               </div>
-              <div class="point-data__h1_trigger _8">
+              <div class="point-data__h1_trigger _8 active-8">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
                     <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1104,7 +1179,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">High schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba109" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831db0a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1118,7 +1193,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Primary schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba112" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831db13" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1141,7 +1216,7 @@
   <span class="slider round"></span>
 </label></div>
               </div>
-              <div class="point-data__h1_trigger _9">
+              <div class="point-data__h1_trigger _9 active-9">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
                     <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1160,7 +1235,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">High schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba12a" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831db2b" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1174,7 +1249,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Primary schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba133" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831db34" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1197,7 +1272,7 @@
   <span class="slider round"></span>
 </label></div>
               </div>
-              <div class="point-data__h1_trigger _10">
+              <div class="point-data__h1_trigger _10 active-10">
                 <div class="point-data__h1_header">
                   <div class="point-data__h1_trigger-icon">
                     <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1216,7 +1291,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">High schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba14b" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831db4c" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1230,7 +1305,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Primary schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba154" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831db55" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1272,7 +1347,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">High schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba16c" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831db6d" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1286,7 +1361,7 @@
                     <div class="point-data__h2_tree-line-h"></div>
                     <div class="truncate">Primary schools</div>
                     <div class="point-data__h2_loading hide">
-                      <div data-w-id="0cb26e2a-78ab-cdc5-c7da-fe04c78ba175" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
+                      <div data-w-id="07b2a627-d453-1b52-8dbf-50d01831db76" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e180aceba9f9e252deb7860_lottieflow-loading-08-000000-easey%20(1).json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="2.125" data-duration="1"></div>
                     </div>
                     <div class="point-data__h2_load-complete hide">
                       <div class="svg-icon svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -1298,6 +1373,16 @@
                 <div class="point-data__h2_tree-line-v"></div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="styles__charts">
+        <div class="styles__title">
+          <div>Charts</div>
+        </div>
+        <div class="styles__charts_wrapper">
+          <div class="chart__container">
+            <div></div>
           </div>
         </div>
       </div>
@@ -2530,6 +2615,9 @@
                     <div>Country</div>
                   </div>
                   <div class="truncate">South Africa</div>
+                  <div class="breadcrumb__loading hide">
+                    <div data-w-id="12ccd51c-a424-7f73-1b73-edd1ef022ad1" data-animation-type="lottie" data-src="https://uploads-ssl.webflow.com/5ddce16f2111933b6c1205a5/5e390c757d729aaa187fe8d6_lottieflow-loading-03-ffffff-easey.json" data-loop="1" data-direction="1" data-autoplay="1" data-is-ix2-target="0" data-renderer="svg" data-default-duration="1.8958333333333333" data-duration="0.8" class="breadcrumb__loading-animation"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2596,7 +2684,7 @@
             </div>
           </div>
           <div class="point-marker__position hide">
-            <div class="content__map_point-marker">
+            <div class="map_point-marker">
               <div data-w-id="2bcb2a6f-1f45-97e3-1119-688c83a3c244" class="point-marker">
                 <div class="point-marker__icon">
                   <div class="svg-icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -2604,7 +2692,7 @@
 </svg></div>
                 </div>
                 <div class="point-marker__pin">
-                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="29" viewbox="0 0 24 29	">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="" viewbox="0 0 24 29	">
 <path d="M0 0h24v24H0z" fill="none"></path><path stroke="white" fill="currentColor" d="M24,12A12,12,0,1,0,3.64,20.6h0L12,29l8.39-8.39h0A12,12,0,0,0,24,12Z"></path>
 </svg></div>
                   <div class="point-marker__shadow"></div>

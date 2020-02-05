@@ -359,6 +359,8 @@ class ThemeStyle {
         
         //clear icon element and add icon
         $(iconElement).empty().append($('.styles').find(iconClass).prop('outerHTML'));
+        //remove classes
+        $(colorElement).removeClass('_1 _2 _3 _4 _5');
         //Add correct color to element which requires it
         $(colorElement).addClass('_' + themeId);
         
@@ -439,10 +441,10 @@ class MarkerFactory {
 
     generateMarker(point) {
         let markerOptions = {};
-        let pointMarkerElement = pointMarkerClone.cloneNode(true);
+        //let pointMarkerElement = pointMarkerClone.cloneNode(true);
 
-        if (ThemeStyle.replaceChildDivWithThemeIcon(point.themeId, $(pointMarkerElement), $(pointMarkerElement).find('.point-marker__icon')))
-            markerOptions = this.prepareSvgOptions(pointMarkerElement);
+        if (ThemeStyle.replaceChildDivWithThemeIcon(point.themeId, $(pointMarkerClone), $(pointMarkerClone).find('.point-marker__icon')))
+            markerOptions = this.prepareSvgOptions(pointMarkerClone);
 
         let popupItemClone = this.preparePopupItem(point)
         let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);

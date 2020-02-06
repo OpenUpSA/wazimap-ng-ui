@@ -6,7 +6,9 @@ import {geography_config} from './geography_providers/geography_sa';
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const tooltipClsName = '.content__map_tooltip';
 
+let tooltipItem = null;
 let popup = null;
 
 var defaultStyles = {
@@ -34,7 +36,13 @@ var defaultStyles = {
 
 class LayerStyler {
     constructor(styles) {
+        this.prepareDomElements();
+
         this.styles = styles || defaultStyles;
+    }
+
+    prepareDomElements = () => {
+        tooltipItem = $(tooltipClsName)[0].cloneNode(true);
     }
 
     setLayerStyle(layer, styles) {
@@ -67,10 +75,12 @@ export class MapControl extends Observable {
         super();
         config = config || {}
 
-        var coords = config.coords || defaultCoordinates;
-        var tileUrl = config.tileUrl || defaultTileUrl;
+        const coords = config.coords || defaultCoordinates;
+        const tileUrl = config.tileUrl || defaultTileUrl;
 
+        this.zoomControlEnabled = config.zoomControlEnabled || false;
         this.zoomEnabled = config.zoomMap || false;
+        this.zoomPosition = config.zoomPosition || 'bottomright'
         this.boundaryLayers = null;
         this.mainLayer = null;
 
@@ -78,14 +88,14 @@ export class MapControl extends Observable {
 
         this.map = this.configureMap(coords, tileUrl);
         this.layerCache = {};
-        this.map.on("zoomend", e => this.zoomChanged(e));
+        this.map.on("zoomend", e => this.onZoomChanged(e));
     };
 
     enableZoom(enabled) {
         this.zoomEnabled = enabled;
     }
 
-    zoomChanged(e) {
+    onZoomChanged(e) {
         if (!this.zoomEnabled)
             return;
 
@@ -116,6 +126,12 @@ export class MapControl extends Observable {
         }
     }
 
+    /**
+     * Resize the map according to the size of the container
+     * Add a delay in case the container is resizing using an animatio
+     * in order to wait for the animation to end.
+     * @return {[type]} [description]
+     */
     onSizeUpdate() {
         setTimeout(() => {
             this.map.invalidateSize(true);
@@ -125,62 +141,69 @@ export class MapControl extends Observable {
     configureMap(coords, tileUrl) {
 
         const map = L
-            .map('main-map', {zoomControl: false})
+            .map('main-map', {zoomControl: this.zoomControlEnabled})
             .setView([coords["lat"], coords["long"]], coords["zoom"])
 
         L.tileLayer(tileUrl).addTo(map);
-        L.control.zoom({position: 'bottomright'}).addTo(map);
+        L.control.zoom({position: this.zoomPosition}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
 
         return map;
     };
 
     loadPopup(payload) {
-        const state = payload.state;
-        var payload = payload.payload;
-        var popupLabel = payload.properties.name;
-        var areaCode = payload.areaCode;
         popup = L.popup({
             autoPan: false
         })
+
+        const popupContent = this.createPopupContent(payload);
+
+        popup.setLatLng(payload.payload.element.latlng)
+            .setContent(popupContent)
+            .openOn(this.map);
+    }
+
+    updatePopupPosition(payload) {
+        payload.payload.popup.setLatLng(payload.payload.layer.element.latlng).openOn(this.map);
+    }
+
+    hidePopup(payload) {
+        this.map.closePopup();
+    }
+
+    createPopupContent = (payload) => {
+        let item = tooltipItem.cloneNode(true);
+
+        const state = payload.state;
+        $('.map__tooltip_name .text-block', item).text(payload.payload.properties.name);
+        $('.map__tooltip_geography-chip', item).text(payload.payload.properties.level);
+        var areaCode = payload.payload.areaCode;
 
         if (state.subindicator != null) {
             //if any subindicator selected
             const subindicators = state.subindicator.subindicators;
             const subindicator = state.subindicator.obj.key;
             const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
+
             if (subindicatorValues.length > 0) {
                 const subindicatorValue = subindicatorValues[0];
                 if (subindicatorValue != undefined && subindicatorValue.children != undefined) {
                     for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
                         if (geographyCode == areaCode) {
                             const countFmt = numFmt(count);
-                            // TODO temporary - will integrate into Webflow HTML
-                            popupLabel = `<strong>${popupLabel}</strong>`;
-                            popupLabel += `<br>${state.subindicator.indicator} (${subindicatorValue.key}): ${countFmt}`;
+
+                            $('.map__tooltip_value .tooltip__value_label .truncate', item).text(state.subindicator.indicator + '(' + subindicatorValue.key + ')');
+                            $('.map__tooltip_value .tooltip__value_amount .truncate', item).text(countFmt);
+                            $('.map__tooltip_value .tooltip__value_detail .truncate', item).text('(' + (payload.payload.layer.feature.properties.percentage * 100).toFixed(2) + '%)');
                         }
                     }
-
                 }
-
             }
+        } else {
+            $(item).find('.map__tooltip_value').remove();
         }
-        /*
-        popup.setContent(popupLabel)
-        payload.layer.bindPopup(popup).openPopup();
-        */
-        popup.setLatLng(payload.element.latlng)
-            .setContent(popupLabel)
-            .openOn(this.map);
-    }
 
-    updatePopupPosition(payload) {
-        //console.log(payload.payload.popup)
-        payload.payload.popup.setLatLng(payload.payload.layer.element.latlng).openOn(this.map);
-    }
-
-    hidePopup(payload){
-        this.map.closePopup();
+        return $(item).html();
     }
 
 
@@ -213,8 +236,8 @@ export class MapControl extends Observable {
             const code = childGeography[0];
             const count = childGeography[1];
             const universe = data.subindicator.subindicators.reduce((el1, el2) => {
-              if (el2.children != undefined && el2.children[code] != undefined)
-                return el1 + el2.children[code];
+                if (el2.children != undefined && el2.children[code] != undefined)
+                    return el1 + el2.children[code];
             }, 0)
             const val = count / universe;
             return {code: code, val: val};
@@ -229,21 +252,38 @@ export class MapControl extends Observable {
             const layer = self.layerCache[el.code];
             const color = scale(el.val);
             layer.setStyle({fillColor: color});
+            layer.feature.properties.percentage = el.val;
         })
     };
+
     resetChoropleth() {
         self = this;
         self.layerStyler.setLayerToSelected(self.mainLayer);
     }
 
-    overlayBoundaries(geography, geometries, zoomNeeded=false) {
+    limitGeoViewSelections = (level) => {
+        $('nav#w-dropdown-list-0').find('a').show();
+        $('nav#w-dropdown-list-0').find('a:nth-child(2)').text('Mainplaces when possible');
+        $('#w-dropdown-toggle-0').html($('#w-dropdown-toggle-0').html().toString().replace('Sub-place','Mainplace'))
+
+        //&& childLevel !== 'ward'
+        if (level === 'mainplace' || level === 'subplace') {
+            $('nav#w-dropdown-list-0').find('a:nth-child(1)').hide();
+        } else if (level === 'ward') {
+            $('nav#w-dropdown-list-0').find('a:nth-child(2)').hide();
+        }
+    }
+
+    overlayBoundaries(geography, geometries, zoomNeeded = false) {
         const self = this;
         const level = geography.level;
         const preferredChild = geography_config.preferredChildren[level];
         let selectedBoundary;
         const parentBoundaries = geometries.parents;
 
-		self.triggerEvent("layerLoading", self.map);
+        this.limitGeoViewSelections(level);
+
+        self.triggerEvent("layerLoading", self.map);
         if (Object.values(geometries.children).length == 0)
             selectedBoundary = geometries.boundary;
         else

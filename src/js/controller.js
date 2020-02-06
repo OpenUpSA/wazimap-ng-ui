@@ -3,17 +3,20 @@ import {Geography, Profile, DataBundle} from './dataobjects';
 import {geography_config} from './geography_providers/geography_sa';
 
 const defaultGeography = geography_config.rootGeography;
+
+let currentAreaCode = '';
+
 export default class Controller extends Observable {
-    constructor(baseUrl, profileId=1) {
+    constructor(baseUrl, profileId = 1) {
         super();
         this.baseUrl = baseUrl;
         this.profileId = profileId;
 
         this.state = {
-           profileId: profileId,
-           // Set if a choropleth is currently active
-           // TODO this state should possibly be stored in the mapcontrol
-           subindicator: null
+            profileId: profileId,
+            // Set if a choropleth is currently active
+            // TODO this state should possibly be stored in the mapcontrol
+            subindicator: null
         }
 
         const self = this;
@@ -35,10 +38,11 @@ export default class Controller extends Observable {
                     areaCode = parts[0];
                 else
                     areaCode = parts[1];
-            }
-            else {
+            } else {
                 areaCode = defaultGeography;
             }
+
+            currentAreaCode = areaCode;
 
             const payload = {
                 // TODO need to change this to profileId
@@ -77,17 +81,17 @@ export default class Controller extends Observable {
      * @return {[type]}         [description]
      */
 
-     /**
-      * Triggered when the rich data drawer is pulled across the screen
-      * @param  {[type]} payload [description]
-      * @return {[type]}         [description]
-      */
-     onRichDataDrawer(payload) {
+    /**
+     * Triggered when the rich data drawer is pulled across the screen
+     * @param  {[type]} payload [description]
+     * @return {[type]}         [description]
+     */
+    onRichDataDrawer(payload) {
         if (payload.open == true)
             this.triggerEvent("richDataDrawerOpen", {})
         else
             this.triggerEvent("richDataDrawerClose", {})
-     }
+    }
 
     onSubIndicatorClick(payload) {
         this.state.subindicator = payload;
@@ -147,7 +151,7 @@ export default class Controller extends Observable {
         this.triggerEvent("layerMouseOut", payload);
     };
 
-    onLayerMouseMove(payload){
+    onLayerMouseMove(payload) {
         this.triggerEvent("layerMouseMove", payload);
     }
 
@@ -179,38 +183,38 @@ export default class Controller extends Observable {
         this.triggerEvent('mapChipRemoved', payload);
     }
 
-    onThemeSelected(payload){
+    onThemeSelected(payload) {
         this.triggerEvent('themeSelected', payload);
     }
 
-    onThemeUnselected(payload){
+    onThemeUnselected(payload) {
         this.triggerEvent('themeUnselected', payload);
     }
 
-    onThemePointLoaded(payload){
+    onThemePointLoaded(payload) {
         this.triggerEvent('themeLoaded', payload);
     }
 
-    onCategorySelected(payload){
+    onCategorySelected(payload) {
         this.triggerEvent('categorySelected', payload);
     }
 
-    onCategoryUnselected(payload){
+    onCategoryUnselected(payload) {
         this.triggerEvent('categoryUnselected', payload);
     }
 
-    onCategoryPointLoaded(payload){
+    onCategoryPointLoaded(payload) {
         this.triggerEvent('categoryPointLoaded', payload);
     }
 
 
     /** When a breadcrumb is clicked. Payload is a location:
-    {
+     {
          code: 'WC',
          level: 'province',
          name: 'Western Cape'
     }
-    */
+     */
     /**
      * [onMapChipRemoved description]
      * @param  {[type]} payload [description]
@@ -291,12 +295,29 @@ export default class Controller extends Observable {
         this.triggerEvent("preferredChildChange", childLevel);
         // TODO remove SA specfic stuff
         geography_config.preferredChildren['municipality'] = childLevel;
+
+        this.reDrawChildren(childLevel);
+    }
+
+    reDrawChildren = (childLevel) => {
+        if (childLevel !== 'mainplace' && childLevel !== 'ward') {
+            return;
+        }
+
+        const payload = {
+            profile: this.profile,
+            areaCode: currentAreaCode,
+            zoomNecessary: false
+        }
+
+        this.triggerEvent("hashChange", payload);
+        this.onHashChange(payload);
     }
 
     registerWebflowEvents() {
         const events = ["click", "mouseover", "mouseout"];
         const self = this;
-        events.forEach(function(ev){
+        events.forEach(function (ev) {
             let eventElements = $(`*[data-event=${ev}]`);
             Object.values(eventElements).forEach(el => {
                 if (el.attributes == undefined) return;

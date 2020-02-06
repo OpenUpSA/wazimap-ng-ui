@@ -9,17 +9,17 @@ const pointsByThemeUrl = 'points/themes';
 const pointsByCategoryUrl = 'points/categories';
 
 const iterationLimit = 10;  //iteration limit of the xhr calls, ideally we shouldn't have this
-const wrapperClsName = 'point-data__content_wrapper';
-const pointDataItemClsName = 'point-data__h1--dropdown';
-const categoryWrapperClsName = 'point-data__h1_content';
-const categoryItemClsName = 'point-data__h2_wrapper';
-const categoryItemLoadingClsName = 'point-data__h2_loading';
-const categoryItemDoneClsName = 'point-data__h2_load-complete';
-const treeLineClsName = 'point-data__h2_tree-line-v';
-const pointMarkerPositionClsName = 'point-marker__position';
-const mapPointMarkerClsName = 'map_point-marker';
-const popupItemClsName = 'point-marker__tooltip';
-const pointMarkerClsName = 'point-marker';
+const wrapperClsName = '.point-data__content_wrapper';
+const pointDataItemClsName = '.point-data__h1--dropdown';
+const categoryWrapperClsName = '.point-data__h1_content';
+const categoryItemClsName = '.point-data__h2_wrapper';
+const categoryItemLoadingClsName = '.point-data__h2_loading';
+const categoryItemDoneClsName = '.point-data__h2_load-complete';
+const treeLineClsName = '.point-data__h2_tree-line-v';
+const pointMarkerPositionClsName = '.point-marker__position';
+const mapPointMarkerClsName = '.map_point-marker';
+const popupItemClsName = '.point-marker__tooltip';
+const pointMarkerClsName = '.point-marker';
 const defaultActiveClsName = 'active-1';
 let pointDataItem = null;
 let categoryItem = null;
@@ -42,8 +42,8 @@ export class PointData extends Observable {
         this.selectedThemes = [];
         this.selectedCategories = [];
         this.markerFactory = new MarkerFactory(
-                Number($('.' + pointMarkerClsName).css('width').replace('px','')),
-                Number($('.' + pointMarkerClsName).css('height').replace('px',''))
+                Number($(pointMarkerClsName).css('width').replace('px','')),
+                Number($(pointMarkerClsName).css('height').replace('px',''))
         );
 
         function updateProgressBar(processed, total, elapsed, layersArray) {
@@ -58,16 +58,16 @@ export class PointData extends Observable {
      * gets the necessary classes, removes unneeded elements
      */
     prepareDomElements = () => {
-        pointDataItem = $('.' + pointDataItemClsName)[0].cloneNode(true);
-        categoryItem = $('.' + categoryItemClsName)[0].cloneNode(true);
-		$(categoryItem).find('.' + categoryItemLoadingClsName).addClass('hide');
-		$(categoryItem).find('.' + categoryItemDoneClsName).addClass('hide');
-        treeLineItem = $('.' + treeLineClsName)[0].cloneNode(true);
-        let pointMarkerDiv = $('.' + pointMarkerPositionClsName);
-        popupItem = pointMarkerDiv.find('.' + popupItemClsName)[0].cloneNode(true);
-        pointMarkerClone  = pointMarkerDiv.find('.' + pointMarkerClsName)[0].cloneNode(true);
+        pointDataItem = $(pointDataItemClsName)[0].cloneNode(true);
+        categoryItem = $(categoryItemClsName)[0].cloneNode(true);
+		$(categoryItem).find(categoryItemLoadingClsName).addClass('hide');
+		$(categoryItem).find(categoryItemDoneClsName).addClass('hide');
+        treeLineItem = $(treeLineClsName)[0].cloneNode(true);
+        let pointMarkerDiv = $(pointMarkerPositionClsName);
+        popupItem = pointMarkerDiv.find(popupItemClsName)[0].cloneNode(true);
+        pointMarkerClone  = pointMarkerDiv.find(pointMarkerClsName)[0].cloneNode(true);
 
-        $('.' + wrapperClsName).html('');
+        $(wrapperClsName).html('');
     }
 
     /**
@@ -84,7 +84,7 @@ export class PointData extends Observable {
                     let item = pointDataItem.cloneNode(true);
                     $('.h1__trigger_title .truncate', item).text(data.results[i].name);
                     $('.point-data__h1_trigger', item).removeClass(defaultActiveClsName);
-                    $('.' + categoryWrapperClsName, item).html('');
+                    $(categoryWrapperClsName, item).html('');
 
                     if (data.results[i].categories !== null && data.results[i].categories.length > 0) {
                         for (let j = 0; j < data.results[i].categories.length; j++) {
@@ -98,7 +98,7 @@ export class PointData extends Observable {
                             $('.truncate', cItem).text(data.results[i].categories[j].name);
                             $('.point-data__h2_link', cItem).removeClass('point-data__h2_link').addClass('point-data__h2_link--disabled');
 
-                            $(item).find('.' + categoryWrapperClsName).append(cItem);
+                            $(item).find(categoryWrapperClsName).append(cItem);
 
                             if (j === data.results[i].categories.length - 1) {
                                 //last
@@ -108,14 +108,14 @@ export class PointData extends Observable {
                     }
                     //append tree
                     let treeItem = treeLineItem.cloneNode(true);
-                    $('.' + categoryWrapperClsName, item).append(treeItem);
+                    $(categoryWrapperClsName, item).append(treeItem);
 
                     $(item).find('.point-data__h1_checkbox input[type=checkbox]').on('click', () => self.selectedThemesChanged(item, data.results[i], i));
 
                     //Replace with correct icon and color
                     ThemeStyle.replaceChildDivWithThemeIcon(data.results[i].id, $(item).find('.point-data__h1_trigger'), $(item).find('.point-data__h1_trigger-icon'));
                     
-                    $('.' + wrapperClsName).append(item);
+                    $(wrapperClsName).append(item);
                 }
             }
 			
@@ -134,7 +134,7 @@ export class PointData extends Observable {
             this.selectedCategories.splice(this.selectedCategories.indexOf(category.id), 1);
             
             $(cItem).find('.point-data__h2').removeClass(activeClassName);
-            if($(item).find('.' + categoryItemClsName).find('.' + activeClassName).length == 0)
+            if($(item).find(categoryItemClsName).find('.' + activeClassName).length == 0)
             {
                 $('.point-data__h1_trigger', item).removeClass(activeClassName);
             }
@@ -149,7 +149,7 @@ export class PointData extends Observable {
             $(cItem).find('.point-data__h2').addClass(activeClassName);
             $('.point-data__h1_trigger', item).addClass(activeClassName);
             
-            if($(item).find('.' + categoryItemClsName).find('.' + activeClassName).length == $(item).find('.' + categoryItemClsName).length)
+            if($(item).find(categoryItemClsName).find('.' + activeClassName).length == $(item).find(categoryItemClsName).length)
             {
                 $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop( "checked", true );
             }
@@ -212,7 +212,7 @@ export class PointData extends Observable {
                 this.triggerEvent('themeLoaded', {data: data, item: item})
 			});
 
-            $(item).find('.' + categoryItemClsName).each(function () {
+            $(item).find(categoryItemClsName).each(function () {
                 if (!$(this).find('.point-data__h2').hasClass(activeClassName)) {
                     $(this).find('.point-data__h2').addClass(activeClassName);
                 }
@@ -226,7 +226,7 @@ export class PointData extends Observable {
             this.selectedThemes.splice(this.selectedThemes.indexOf(theme.id), 1);
             this.removeThemePoints(theme);
 
-            $(item).find('.' + categoryItemClsName).each(function () {
+            $(item).find(categoryItemClsName).each(function () {
                 if ($(this).find('.point-data__h2').hasClass(activeClassName)) {
                     $(this).find('.point-data__h2').removeClass(activeClassName);
                 }

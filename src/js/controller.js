@@ -119,6 +119,31 @@ export default class Controller extends Observable {
         getJSON(url).then(js => {
             const dataBundle = new DataBundle(js);
             self.state.profile = dataBundle;
+            
+            //TODO - replace logic below once new API structure is live
+            //As discussed mock the structure for profile_data._indicators as we do not currently have this available from the Api.
+            //Only do it if structure isn't correct
+            dataBundle.profile.profile_data = dataBundle.profile._indicators;
+            if(dataBundle.profile.profile_data &&
+               dataBundle.profile.profile_data[Object.keys(dataBundle.profile.profile_data)[0]].description === undefined)
+            {                
+                let appendMockDesc = " mock description";
+                for (const [catName, subcategories] of Object.entries(dataBundle.profile.profile_data)) {
+                    dataBundle.profile.profile_data[catName] = { subcategories: subcategories, description: catName + appendMockDesc };
+                    
+                    for (const [indName, indicators] of Object.entries(subcategories)) {
+                        subcategories[indName] = {indicators: indicators, description: indName + appendMockDesc};
+                        
+                        for (const [subIndName, subindicators] of Object.entries(indicators)) {
+                            indicators[subIndName] = { subindicators: subindicators, description: subIndName + appendMockDesc};
+                            
+                        }
+                    }
+                }
+            }
+            //End of remove logic once API live
+            
+            
             self.triggerEvent("loadedNewProfile", dataBundle);
             // TODO this should be run after all dynamic stuff is run
             // Shouldn't be here

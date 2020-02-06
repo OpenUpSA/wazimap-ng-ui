@@ -58,7 +58,7 @@ export default function configureApplication(serverUrl, profileId) {
     controller.on("loadingNewProfile", payload => contentMapSpinner.start());
     controller.on("loadedNewProfile", payload => mapchip.clearAllMapChip());
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
-    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.indicators, payload => controller.onSubIndicatorClick(payload)))
+    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profile_data, payload => controller.onSubIndicatorClick(payload)))
     controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload.payload))
     controller.on('loadedNewProfile', payload => {
         const geography = payload.payload.profile.geography;

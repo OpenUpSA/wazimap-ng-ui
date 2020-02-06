@@ -18,6 +18,7 @@ const indicatorClass = '.indicator__sub-indicator';
 const indicatorTitleClass = '.sub-indicator__chart_header h4';
 
 const chartContainerClass = '.indicator__chart';
+const chartFootnoteClass = '.indicator__chart_footnote';
 
 const headerTitleClass = '.location-header__title h1';
 const breadcrumbsContainerClass = '.location-header__breadcrumbs';
@@ -66,45 +67,47 @@ function addKeyMetrics(container, profile) {
 
 export default class ProfileLoader {
 
-    addCategory(category, subcategories) {
+    addCategory(category, categoryDetail) {
         const newCategorySection = categoryTemplate.cloneNode(true);
         const wrapper = newCategorySection;
 
         $(categoryHeaderTitleClass, newCategorySection).text(category);
         // $(categoryHeaderSubtitleClass, newCategorySection).text(category.subTitle);
-        // $(categoryHeaderDescriptionClass, newCategorySection).text(category.description);
+         $(categoryHeaderDescriptionClass, newCategorySection).text(categoryDetail.description);
 
         profileHeader.append(newCategorySection);
-        for (const [subcategory, indicators] of Object.entries(subcategories)) {
-            this.addSubcategory(wrapper, subcategory, indicators);
+        for (const [subcategory, detail] of Object.entries(categoryDetail.subcategories)) {
+            this.addSubcategory(wrapper, subcategory, detail);
         }
     }
 
-    addSubcategory(wrapper, subcategory, indicators) {
+    addSubcategory(wrapper, subcategory, subcategoryDetail) {
         const newSubcategorySection = subcategoryTemplate.cloneNode(true);
         $(subcategoryTitleClass, newSubcategorySection).text(subcategory);
-        //$(subcategoryDescriptionClass).text(subcategory.description);
+        $(subcategoryDescriptionClass, newSubcategorySection).text(subcategoryDetail.description);
         wrapper.append(newSubcategorySection);
         //$(subcategoryMetricsClass).dosomethihn
 
-        for (const [indicator, classes] of Object.entries(indicators)) {
-            this.addIndicator(newSubcategorySection, indicator, classes);
+        for (const [indicator, detail] of Object.entries(subcategoryDetail.indicators)) {
+            this.addIndicator(newSubcategorySection, indicator, detail);
         }
     }
 
-    addIndicator(wrapper, indicator, classes) {
+    addIndicator(wrapper, indicator, indicatorDetail) {
         const newIndicatorSection = indicatorTemplate.cloneNode(true);
         const chartContainer = $(chartContainerClass, newIndicatorSection);
 
         $(indicatorTitleClass, newIndicatorSection).text(indicator);
+        $(chartFootnoteClass, newIndicatorSection).text(indicatorDetail.description);
         wrapper.append(newIndicatorSection);
-
-        if (classes != undefined && Array.isArray(classes)) {
-            classes.forEach((el) => {
+        
+        let subindicators = indicatorDetail.subindicators;
+        if (subindicators != undefined && Array.isArray(subindicators)) {
+            subindicators.forEach((el) => {
                 el["label"] = el.key
                 el["value"] = el["count"]
             })
-            this.addChart(chartContainer[0], classes)
+            this.addChart(chartContainer[0], subindicators)
         }
     }
 
@@ -137,7 +140,7 @@ export default class ProfileLoader {
 
     loadProfile(dataBundle) {
         const profile = dataBundle.profile;
-        const all_indicators = profile.indicators;
+        const all_categories = profile.profile_data;
 
         $(categoryClass).remove();
         $(subcategoryClass, categoryTemplate).remove();
@@ -147,8 +150,8 @@ export default class ProfileLoader {
         addKeyMetrics(profileHeader, profile);
 
 
-        for (const [category, subcategories] of Object.entries(all_indicators)) {
-            this.addCategory(category, subcategories);
+        for (const [category, detail] of Object.entries(all_categories)) {
+            this.addCategory(category, detail);
         }
     }
 }

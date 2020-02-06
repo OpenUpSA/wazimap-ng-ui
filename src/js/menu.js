@@ -55,8 +55,8 @@ export function loadMenu(data, subindicatorCallback) {
         var h3Wrapper = $(".sub-category__dropdown_wrapper", newSubCategory);
 
         $(".data-menu__indicator", h3Wrapper).remove();
-        for (const [indicator, subindicators] of Object.entries(indicators)) {
-            addSubIndicators(h3Wrapper, indicator, subindicators);
+        for (const [indicator, detail] of Object.entries(indicators)) {
+            addSubIndicators(h3Wrapper, indicator, detail.subindicators);
         }
     }
 
@@ -67,8 +67,8 @@ export function loadMenu(data, subindicatorCallback) {
         var h2Wrapper = $(".category__dropdown_wrapper", newCategory);
         $(".data-menu__subcategory", h2Wrapper).remove();
 
-        for (const [subcategory, indicators] of Object.entries(subcategories)) {
-            addIndicators(h2Wrapper, subcategory, indicators);
+        for (const [subcategory, detail] of Object.entries(subcategories)) {
+            addIndicators(h2Wrapper, subcategory, detail.indicators);
         };
     }
 
@@ -83,7 +83,7 @@ export function loadMenu(data, subindicatorCallback) {
 
     $(".data-menu__category").remove();
 
-    for (const [category, subcategories] of Object.entries(data)) {
-        addSubcategories(parentContainer, category, subcategories)
+    for (const [category, detail] of Object.entries(data)) {
+        addSubcategories(parentContainer, category, detail.subcategories)
     }
 }

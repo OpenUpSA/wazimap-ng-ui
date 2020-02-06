@@ -6,7 +6,7 @@ import {geography_config} from './geography_providers/geography_sa';
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-const tooltipClsName = 'content__map_tooltip';
+const tooltipClsName = '.content__map_tooltip';
 
 let tooltipItem = null;
 let popup = null;
@@ -42,7 +42,7 @@ class LayerStyler {
     }
 
     prepareDomElements = () => {
-        tooltipItem = $('.' + tooltipClsName)[0].cloneNode(true);
+        tooltipItem = $(tooltipClsName)[0].cloneNode(true);
     }
 
     setLayerStyle(layer, styles) {
@@ -75,10 +75,12 @@ export class MapControl extends Observable {
         super();
         config = config || {}
 
-        var coords = config.coords || defaultCoordinates;
-        var tileUrl = config.tileUrl || defaultTileUrl;
+        const coords = config.coords || defaultCoordinates;
+        const tileUrl = config.tileUrl || defaultTileUrl;
 
+        this.zoomControlEnabled = config.zoomControlEnabled || false;
         this.zoomEnabled = config.zoomMap || false;
+        this.zoomPosition = config.zoomPosition || 'bottomright'
         this.boundaryLayers = null;
         this.mainLayer = null;
 
@@ -86,14 +88,14 @@ export class MapControl extends Observable {
 
         this.map = this.configureMap(coords, tileUrl);
         this.layerCache = {};
-        this.map.on("zoomend", e => this.zoomChanged(e));
+        this.map.on("zoomend", e => this.onZoomChanged(e));
     };
 
     enableZoom(enabled) {
         this.zoomEnabled = enabled;
     }
 
-    zoomChanged(e) {
+    onZoomChanged(e) {
         if (!this.zoomEnabled)
             return;
 
@@ -124,6 +126,12 @@ export class MapControl extends Observable {
         }
     }
 
+    /**
+     * Resize the map according to the size of the container
+     * Add a delay in case the container is resizing using an animatio
+     * in order to wait for the animation to end.
+     * @return {[type]} [description]
+     */
     onSizeUpdate() {
         setTimeout(() => {
             this.map.invalidateSize(true);
@@ -133,11 +141,11 @@ export class MapControl extends Observable {
     configureMap(coords, tileUrl) {
 
         const map = L
-            .map('main-map', {zoomControl: false})
+            .map('main-map', {zoomControl: this.zoomControlEnabled})
             .setView([coords["lat"], coords["long"]], coords["zoom"])
 
         L.tileLayer(tileUrl).addTo(map);
-        L.control.zoom({position: 'bottomright'}).addTo(map);
+        L.control.zoom({position: this.zoomPosition}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
 
         return map;
@@ -148,7 +156,7 @@ export class MapControl extends Observable {
             autoPan: false
         })
 
-        let popupContent = this.createPopupContent(payload);
+        const popupContent = this.createPopupContent(payload);
 
         popup.setLatLng(payload.payload.element.latlng)
             .setContent(popupContent)
@@ -156,7 +164,6 @@ export class MapControl extends Observable {
     }
 
     updatePopupPosition(payload) {
-        //console.log(payload.payload.popup)
         payload.payload.popup.setLatLng(payload.payload.layer.element.latlng).openOn(this.map);
     }
 

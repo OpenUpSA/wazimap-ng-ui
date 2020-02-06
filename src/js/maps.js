@@ -186,17 +186,23 @@ export class MapControl extends Observable {
             const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
 
             if (subindicatorValues.length > 0) {
-                const subindicatorValue = subindicatorValues[0];
-                if (subindicatorValue != undefined && subindicatorValue.children != undefined) {
-                    for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
-                        if (geographyCode == areaCode) {
-                            const countFmt = numFmt(count);
+                let hoverAreaCode = payload.payload.layer.feature.properties.code;
 
-                            $('.map__tooltip_value .tooltip__value_label .truncate', item).text(state.subindicator.indicator + '(' + subindicatorValue.key + ')');
-                            $('.map__tooltip_value .tooltip__value_amount .truncate', item).text(countFmt);
-                            $('.map__tooltip_value .tooltip__value_detail .truncate', item).text('(' + (payload.payload.layer.feature.properties.percentage * 100).toFixed(2) + '%)');
+                if (typeof subindicators[0].children[hoverAreaCode] !== 'undefined') {
+                    const subindicatorValue = subindicatorValues[0];
+                    if (subindicatorValue != undefined && subindicatorValue.children != undefined) {
+                        for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
+                            if (geographyCode == areaCode) {
+                                const countFmt = numFmt(count);
+
+                                $('.map__tooltip_value .tooltip__value_label .truncate', item).text(state.subindicator.indicator + '(' + subindicatorValue.key + ')');
+                                $('.map__tooltip_value .tooltip__value_amount .truncate', item).text(countFmt);
+                                $('.map__tooltip_value .tooltip__value_detail .truncate', item).text('(' + (payload.payload.layer.feature.properties.percentage * 100).toFixed(2) + '%)');
+                            }
                         }
                     }
+                } else {
+                    $(item).find('.map__tooltip_value').remove();
                 }
             }
         } else {
@@ -264,7 +270,7 @@ export class MapControl extends Observable {
     limitGeoViewSelections = (level) => {
         $('nav#w-dropdown-list-0').find('a').show();
         $('nav#w-dropdown-list-0').find('a:nth-child(2)').text('Mainplaces when possible');
-        $('#w-dropdown-toggle-0').html($('#w-dropdown-toggle-0').html().toString().replace('Sub-place','Mainplace'))
+        $('#w-dropdown-toggle-0').html($('#w-dropdown-toggle-0').html().toString().replace('Sub-place', 'Mainplace'))
 
         //&& childLevel !== 'ward'
         if (level === 'mainplace' || level === 'subplace') {

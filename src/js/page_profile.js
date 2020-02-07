@@ -140,7 +140,7 @@ export default class ProfileLoader {
 
     loadProfile(dataBundle) {
         const profile = dataBundle.profile;
-        const all_categories = profile.profile_data;
+        const all_categories = profile.profileData;
 
         $(categoryClass).remove();
         $(subcategoryClass, categoryTemplate).remove();

@@ -25,7 +25,7 @@ export class Profile {
        this._geography = new Geography(js.geography);
        this._parents = js.geography.parents.map(el => new Geography(el));
        this._highlights = js.highlights;
-       this._indicators = js.indicators;
+       this._profileData = js.profile_data;
        this._keyMetrics = js.key_metrics
     }
 
@@ -41,8 +41,8 @@ export class Profile {
         return this._highlights;
     }
 
-    get indicators() {
-        return this._indicators;
+    get profileData() {
+        return this._profileData;
     }
 
     get keyMetrics() {

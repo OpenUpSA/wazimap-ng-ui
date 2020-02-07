@@ -1,15 +1,13 @@
 import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
-import {Observable, numFmt} from './utils';
-import {geography_config} from './geography_providers/geography_sa';
+import {Observable, numFmt} from '../utils';
+import {geography_config} from '../geography_providers/geography_sa';
+import {map_variables} from "./map_variables";
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const tooltipClsName = '.content__map_tooltip';
-
-let tooltipItem = null;
-let popup = null;
 
 var defaultStyles = {
     hoverOnly: {
@@ -36,13 +34,7 @@ var defaultStyles = {
 
 class LayerStyler {
     constructor(styles) {
-        this.prepareDomElements();
-
         this.styles = styles || defaultStyles;
-    }
-
-    prepareDomElements = () => {
-        tooltipItem = $(tooltipClsName)[0].cloneNode(true);
     }
 
     setLayerStyle(layer, styles) {
@@ -105,23 +97,23 @@ export class MapControl extends Observable {
 
         let area = e.sourceTarget._popup._content;
         let zoomLvl = e.sourceTarget._zoom;
-        let areaCode = e.sourceTarget._popup._source.feature.properties.code;
-        let level = e.sourceTarget._popup._source.feature.properties.level;
+        let areaCode = map_variables.hoverAreaCode;
+        let level = map_variables.hoverAreaLevel;
 
         const hash = decodeURI(window.location.hash);
         let parts = hash.split(":")
 
         if (zoomLvl < 7) {
             window.location.hash = "";
-        } else if (zoomLvl >= 11 && level === 'Subplace') {
+        } else if (zoomLvl >= 11 && level === geography_config.geographyLevels.subplace) {
             window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 10 && level === 'Mainplace') {
+        } else if (zoomLvl >= 10 && level === geography_config.geographyLevels.mainplace) {
             window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 9 && level === 'Municipality') {
+        } else if (zoomLvl >= 9 && level === geography_config.geographyLevels.municipality) {
             window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 8 && level === 'District') {
+        } else if (zoomLvl >= 8 && level === geography_config.geographyLevels.district) {
             window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 7 && level === 'Province') {
+        } else if (zoomLvl >= 7 && level === geography_config.geographyLevels.province) {
             window.location.hash = "#geo:" + areaCode;
         }
     }
@@ -150,68 +142,6 @@ export class MapControl extends Observable {
 
         return map;
     };
-
-    loadPopup(payload) {
-        popup = L.popup({
-            autoPan: false
-        })
-
-        const popupContent = this.createPopupContent(payload);
-
-        popup.setLatLng(payload.payload.element.latlng)
-            .setContent(popupContent)
-            .openOn(this.map);
-    }
-
-    updatePopupPosition(payload) {
-        payload.payload.popup.setLatLng(payload.payload.layer.element.latlng).openOn(this.map);
-    }
-
-    hidePopup(payload) {
-        this.map.closePopup();
-    }
-
-    createPopupContent = (payload) => {
-        let item = tooltipItem.cloneNode(true);
-
-        const state = payload.state;
-        $('.map__tooltip_name .text-block', item).text(payload.payload.properties.name);
-        $('.map__tooltip_geography-chip', item).text(payload.payload.properties.level);
-        var areaCode = payload.payload.areaCode;
-
-        if (state.subindicator != null) {
-            //if any subindicator selected
-            const subindicators = state.subindicator.subindicators;
-            const subindicator = state.subindicator.obj.key;
-            const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
-
-            if (subindicatorValues.length > 0) {
-                let hoverAreaCode = payload.payload.layer.feature.properties.code;
-
-                if (typeof subindicators[0].children[hoverAreaCode] !== 'undefined') {
-                    const subindicatorValue = subindicatorValues[0];
-                    if (subindicatorValue != undefined && subindicatorValue.children != undefined) {
-                        for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
-                            if (geographyCode == areaCode) {
-                                const countFmt = numFmt(count);
-
-                                $('.map__tooltip_value .tooltip__value_label .truncate', item).text(state.subindicator.indicator + '(' + subindicatorValue.key + ')');
-                                $('.map__tooltip_value .tooltip__value_amount .truncate', item).text(countFmt);
-                                $('.map__tooltip_value .tooltip__value_detail .truncate', item).text('(' + (payload.payload.layer.feature.properties.percentage * 100).toFixed(2) + '%)');
-                            }
-                        }
-                    }
-                } else {
-                    $(item).find('.map__tooltip_value').remove();
-                }
-            }
-        } else {
-            $(item).find('.map__tooltip_value').remove();
-        }
-
-        return $(item).html();
-    }
-
 
     /**
      * Handles creating a choropleth when a subindicator is clicked
@@ -272,10 +202,9 @@ export class MapControl extends Observable {
         $('nav#w-dropdown-list-0').find('a:nth-child(2)').text('Mainplaces when possible');
         $('#w-dropdown-toggle-0').html($('#w-dropdown-toggle-0').html().toString().replace('Sub-place', 'Mainplace'))
 
-        //&& childLevel !== 'ward'
-        if (level === 'mainplace' || level === 'subplace') {
+        if (geography_config.geoViewTypes.mainplace.indexOf(level) >= 0) {
             $('nav#w-dropdown-list-0').find('a:nth-child(1)').hide();
-        } else if (level === 'ward') {
+        } else if (geography_config.geoViewTypes.ward.indexOf(level) >= 0) {
             $('nav#w-dropdown-list-0').find('a:nth-child(2)').hide();
         }
     }
@@ -346,7 +275,7 @@ export class MapControl extends Observable {
                     self.triggerEvent("layerMouseOut", layerPayload(el));
                 })
                 .on("mousemove", (el) => {
-                    self.triggerEvent("layerMouseMove", {layer: layerPayload(el), popup: popup});
+                    self.triggerEvent("layerMouseMove", {layer: layerPayload(el), popup: map_variables.popup});
                 })
                 .addTo(self.map);
 

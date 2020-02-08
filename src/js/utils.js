@@ -31,12 +31,7 @@ export class Cache {
 
 const cache = new Cache();
 
-export function getJSON(url, skipCache=false) {
-  //if (queryCache[url] != undefined && !skipCache) {
-  if (cache.getItem(url) != null && !skipCache) {
-    return Promise.resolve(cache.getItem(url));
-    //return Promise.resolve(queryCache[url])
-  }
+export function getJSON(url, skipCache=true) {
 
   return new Promise((resolve, reject) => {
     const req = new XMLHttpRequest();
@@ -45,7 +40,6 @@ export function getJSON(url, skipCache=false) {
     req.onload = () => {
       if (req.status == 200) {
         const json = JSON.parse(req.response);
-       cache.setItem(url, json);
         resolve(json);
       } else {
         reject(Error(req.statusText));

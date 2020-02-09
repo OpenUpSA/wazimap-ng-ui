@@ -26,7 +26,6 @@ let categoryItem = null;
 let treeLineItem = null;
 let popupItem = null;
 let pointMarkerClone = null;
-let markers = null;
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
 let addrPointCancelTokens = {};
@@ -35,21 +34,18 @@ let addrPointCancelTokens = {};
  * this class creates the point data dialog
  */
 export class PointData extends Observable {
-    constructor(baseUrl, _map) {
+    constructor(baseUrl, map) {
 		super();
         this.baseUrl = baseUrl;
-        this.map = _map;
+        this.map = map;
         this.selectedThemes = [];
         this.selectedCategories = [];
         this.markerFactory = new MarkerFactory(
-                Number($(pointMarkerClsName).css('width').replace('px','')),
-                Number($(pointMarkerClsName).css('height').replace('px',''))
+            Number($(pointMarkerClsName).css('width').replace('px','')),
+            Number($(pointMarkerClsName).css('height').replace('px',''))
         );
 
-        function updateProgressBar(processed, total, elapsed, layersArray) {
-            console.log(`Elapsed: ${elapsed}, Total: ${total}`) 
-        } 
-        markers = L.markerClusterGroup({ chunkedLoading: true, chunkProgress: updateProgressBar });
+        this.markerGroups = {}
 
         this.prepareDomElements();
     }
@@ -249,7 +245,7 @@ export class PointData extends Observable {
         var token = { token: "" };
         
         addrPointCancelTokens[tokenIndex].push(token);
-        return this.getAddressPoints(themeUrl, iterationCounter, token).then((data) => {                
+        return this.getAddressPoints(themeUrl, iterationCounter, token).then((data) => {
             let index = addrPointCancelTokens[tokenIndex].indexOf(token);
             if(index !== -1) {
               addrPointCancelTokens[tokenIndex].splice(index, 1);
@@ -299,7 +295,8 @@ export class PointData extends Observable {
                         name: properties.data.Name,
                         categoryId: categoryId,
                         categoryName: properties.category.name,
-                        themeId: themeId
+                        themeId: themeId,
+                        data: properties.data
                     })
                 })
 
@@ -310,12 +307,25 @@ export class PointData extends Observable {
         })
     }
 
+    clearLayers() {
+        Object.values(this.markerGroups).forEach(mg => {
+            mg.clearLayers();
+        })
+    }
+
+    addLayers() {
+        const self = this;
+        Object.values(this.markerGroups).forEach(mg => {
+            self.map.addLayer(mg)
+        })
+    }
+
     /**
      * clears the map, puts back the points that are in activePoints array
      */
     showPointsOnMap = () => {
         self = this;
-        markers.clearLayers();
+        this.clearLayers();
 
         let newMarkers = [];
 
@@ -323,9 +333,15 @@ export class PointData extends Observable {
             activePoints.forEach(point => {
                 let marker = this.markerFactory.generateMarker(point);
                 newMarkers.push(marker);
+
+                const district = point.data.Municipality;
+                if (self.markerGroups[district] == undefined)
+                    self.markerGroups[district] =  L.markerClusterGroup({showCoverageOnHover: false});
+
+                self.markerGroups[district].addLayer(marker);
             })
-            markers.addLayers(newMarkers);
-            this.map.addLayer(markers);
+            this.addLayers();
+
         }
 
 

@@ -334,7 +334,7 @@ export class PointData extends Observable {
                 let marker = this.markerFactory.generateMarker(point);
                 newMarkers.push(marker);
 
-                const district = point.data.Municipality;
+                const district = point.data.District;
                 if (self.markerGroups[district] == undefined)
                     self.markerGroups[district] =  L.markerClusterGroup({showCoverageOnHover: false});
 

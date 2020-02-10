@@ -3,7 +3,6 @@ import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 import {Observable, numFmt} from '../utils';
 import {geography_config} from '../geography_providers/geography_sa';
-import {map_variables} from "./map_variables";
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -79,6 +78,13 @@ export class MapControl extends Observable {
         this.layerStyler = new LayerStyler();
 
         this.map = this.configureMap(coords, tileUrl);
+        this.map.map_variables = {
+            tooltipClsName: '.content__map_tooltip',
+            tooltipItem: null,
+            popup: null,
+            hoverAreaCode: null,
+            hoverAreaLevel: null
+        };
         this.layerCache = {};
         this.map.on("zoomend", e => this.onZoomChanged(e));
     };
@@ -97,8 +103,8 @@ export class MapControl extends Observable {
 
         let area = e.sourceTarget._popup._content;
         let zoomLvl = e.sourceTarget._zoom;
-        let areaCode = map_variables.hoverAreaCode;
-        let level = map_variables.hoverAreaLevel;
+        let areaCode = this.map.map_variables.hoverAreaCode;
+        let level = this.map.map_variables.hoverAreaLevel;
 
         const hash = decodeURI(window.location.hash);
         let parts = hash.split(":")
@@ -275,7 +281,7 @@ export class MapControl extends Observable {
                     self.triggerEvent("layerMouseOut", layerPayload(el));
                 })
                 .on("mousemove", (el) => {
-                    self.triggerEvent("layerMouseMove", {layer: layerPayload(el), popup: map_variables.popup});
+                    self.triggerEvent("layerMouseMove", {layer: layerPayload(el), popup: this.map.map_variables.popup});
                 })
                 .addTo(self.map);
 

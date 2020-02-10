@@ -1,5 +1,4 @@
 import {getJSON, numFmt, Observable} from "../utils";
-import {map_variables} from "./map_variables";
 
 /**
  * this class creates & manipulates the popup over the map
@@ -13,17 +12,17 @@ export class Popup extends Observable {
     }
 
     prepareDomElements = () => {
-        map_variables.tooltipItem = $(map_variables.tooltipClsName)[0].cloneNode(true);
+        this.map.map_variables.tooltipItem = $(this.map.map_variables.tooltipClsName)[0].cloneNode(true);
     }
 
     loadPopup(payload) {
-        map_variables.popup = L.popup({
+        this.map.map_variables.popup = L.popup({
             autoPan: false
         })
 
         const popupContent = this.createPopupContent(payload);
 
-        map_variables.popup.setLatLng(payload.payload.element.latlng)
+        this.map.map_variables.popup.setLatLng(payload.payload.element.latlng)
             .setContent(popupContent)
             .openOn(this.map);
     }
@@ -37,14 +36,14 @@ export class Popup extends Observable {
     }
 
     createPopupContent = (payload) => {
-        let item = map_variables.tooltipItem.cloneNode(true);
+        let item = this.map.map_variables.tooltipItem.cloneNode(true);
 
         const state = payload.state;
-        map_variables.hoverAreaLevel = payload.payload.properties.level;
-        map_variables.hoverAreaCode = payload.payload.layer.feature.properties.code;
+        this.map.map_variables.hoverAreaLevel = payload.payload.properties.level;
+        this.map.map_variables.hoverAreaCode = payload.payload.layer.feature.properties.code;
 
         $('.map__tooltip_name .text-block', item).text(payload.payload.properties.name);
-        $('.map__tooltip_geography-chip', item).text(map_variables.hoverAreaLevel);
+        $('.map__tooltip_geography-chip', item).text(this.map.map_variables.hoverAreaLevel);
         var areaCode = payload.payload.areaCode;
 
         if (state.subindicator != null) {
@@ -55,7 +54,7 @@ export class Popup extends Observable {
 
             if (subindicatorValues.length > 0) {
 
-                if (typeof subindicators[0].children[map_variables.hoverAreaCode] !== 'undefined') {
+                if (typeof subindicators[0].children !== 'undefined' && typeof subindicators[0].children[this.map.map_variables.hoverAreaCode] !== 'undefined') {
                     const subindicatorValue = subindicatorValues[0];
                     if (subindicatorValue != undefined && subindicatorValue.children != undefined) {
                         for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {

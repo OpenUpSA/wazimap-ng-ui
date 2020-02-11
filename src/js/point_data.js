@@ -36,20 +36,21 @@ let addrPointCancelTokens = {};
  */
 export class PointData extends Observable {
     constructor(baseUrl, _map) {
-		super();
+        super();
         this.baseUrl = baseUrl;
         this.map = _map;
         this.selectedThemes = [];
         this.selectedCategories = [];
         this.markerFactory = new MarkerFactory(
-                Number($(pointMarkerClsName).css('width').replace('px','')),
-                Number($(pointMarkerClsName).css('height').replace('px',''))
+            Number($(pointMarkerClsName).css('width').replace('px', '')),
+            Number($(pointMarkerClsName).css('height').replace('px', ''))
         );
 
         function updateProgressBar(processed, total, elapsed, layersArray) {
-            console.log(`Elapsed: ${elapsed}, Total: ${total}`) 
-        } 
-        markers = L.markerClusterGroup({ chunkedLoading: true, chunkProgress: updateProgressBar });
+            console.log(`Elapsed: ${elapsed}, Total: ${total}`)
+        }
+
+        markers = L.markerClusterGroup({chunkedLoading: true, chunkProgress: updateProgressBar});
 
         this.prepareDomElements();
     }
@@ -60,12 +61,12 @@ export class PointData extends Observable {
     prepareDomElements = () => {
         pointDataItem = $(pointDataItemClsName)[0].cloneNode(true);
         categoryItem = $(categoryItemClsName)[0].cloneNode(true);
-		$(categoryItem).find(categoryItemLoadingClsName).addClass('hide');
-		$(categoryItem).find(categoryItemDoneClsName).addClass('hide');
+        $(categoryItem).find(categoryItemLoadingClsName).addClass('hide');
+        $(categoryItem).find(categoryItemDoneClsName).addClass('hide');
         treeLineItem = $(treeLineClsName)[0].cloneNode(true);
         let pointMarkerDiv = $(pointMarkerPositionClsName);
         popupItem = pointMarkerDiv.find(popupItemClsName)[0].cloneNode(true);
-        pointMarkerClone  = pointMarkerDiv.find(pointMarkerClsName)[0].cloneNode(true);
+        pointMarkerClone = pointMarkerDiv.find(pointMarkerClsName)[0].cloneNode(true);
 
         $(wrapperClsName).html('');
     }
@@ -75,12 +76,12 @@ export class PointData extends Observable {
      * */
     loadThemes = () => {
         let self = this;
-		self.triggerEvent("loadingThemes", self);
+        self.triggerEvent("loadingThemes", self);
         const themeUrl = `${this.baseUrl}/${url}/`;
 
         getJSON(themeUrl).then((data) => {
             if (data.results !== null && data.results.length > 0) {
-                for (let i = 0; i < data.results.length; i++) {                    
+                for (let i = 0; i < data.results.length; i++) {
                     let item = pointDataItem.cloneNode(true);
                     $('.h1__trigger_title .truncate', item).text(data.results[i].name);
                     $('.point-data__h1_trigger', item).removeClass(defaultActiveClsName);
@@ -114,12 +115,12 @@ export class PointData extends Observable {
 
                     //Replace with correct icon and color
                     ThemeStyle.replaceChildDivWithThemeIcon(data.results[i].id, $(item).find('.point-data__h1_trigger'), $(item).find('.point-data__h1_trigger-icon'));
-                    
+
                     $(wrapperClsName).append(item);
                 }
             }
-			
-			self.triggerEvent("loadedThemes", data);
+
+            self.triggerEvent("loadedThemes", data);
         })
     }
 
@@ -132,64 +133,61 @@ export class PointData extends Observable {
             this.triggerEvent('categoryUnselected', {category: category, item: cItem});
 
             this.selectedCategories.splice(this.selectedCategories.indexOf(category.id), 1);
-            
+
             $(cItem).find('.point-data__h2').removeClass(activeClassName);
-            if($(item).find(categoryItemClsName).find('.' + activeClassName).length == 0)
-            {
+            if ($(item).find(categoryItemClsName).find('.' + activeClassName).length == 0) {
                 $('.point-data__h1_trigger', item).removeClass(activeClassName);
             }
-            
-            $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop( "checked", false );
-            
+
+            $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop("checked", false);
+
             this.removeCategoryPoints(category);
         } else {
             this.triggerEvent('categorySelected', {category: category, item: cItem});
             this.selectedCategories.push(category.id);
-            
+
             $(cItem).find('.point-data__h2').addClass(activeClassName);
             $('.point-data__h1_trigger', item).addClass(activeClassName);
-            
-            if($(item).find(categoryItemClsName).find('.' + activeClassName).length == $(item).find(categoryItemClsName).length)
-            {
-                $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop( "checked", true );
+
+            if ($(item).find(categoryItemClsName).find('.' + activeClassName).length == $(item).find(categoryItemClsName).length) {
+                $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop("checked", true);
             }
-            
+
             this.showCategoryPoint(category).then(data => {
-				this.triggerEvent('categoryPointLoaded', {data: data, item: cItem})
-			});
+                this.triggerEvent('categoryPointLoaded', {data: data, item: cItem})
+            });
         }
     }
 
     showCategoryPoint = (category) => {
         let categoryUrl = `${this.baseUrl}/${pointsByCategoryUrl}/${category.id}/`
         let iterationCounter = 0;
-        
+
         const tokenIndex = "category_id-" + category.id;
-        
-        if(addrPointCancelTokens[tokenIndex] == undefined)
+
+        if (addrPointCancelTokens[tokenIndex] == undefined)
             addrPointCancelTokens[tokenIndex] = []
 
-        const token = { token: "" };
-        
+        const token = {token: ""};
+
         addrPointCancelTokens[tokenIndex].push(token);
         return this.getAddressPoints(categoryUrl, iterationCounter, token).then((data) => {
-                let index = addrPointCancelTokens[tokenIndex].indexOf(token);
-                if(index !== -1) {
-                  addrPointCancelTokens[tokenIndex].splice(index, 1);
-                }
-                return data;
-            });
+            let index = addrPointCancelTokens[tokenIndex].indexOf(token);
+            if (index !== -1) {
+                addrPointCancelTokens[tokenIndex].splice(index, 1);
+            }
+            return data;
+        });
     }
 
     removeCategoryPoints = (category) => {
         const tokenIndex = "category_id-" + category.id;
-        if(addrPointCancelTokens[tokenIndex])
-        {
+        if (addrPointCancelTokens[tokenIndex]) {
             for (let i = 0; i < addrPointCancelTokens[tokenIndex].length; i++) {
                 addrPointCancelTokens[tokenIndex][i].token = "cancel";
             }
         }
-        
+
         activePoints = activePoints.filter((item) => {
             return item.categoryId !== category.id
         });
@@ -210,14 +208,14 @@ export class PointData extends Observable {
             this.selectedThemes.push(theme.id);
             this.showThemePoints(theme).then(data => {
                 this.triggerEvent('themeLoaded', {data: data, item: item})
-			});
+            });
 
             $(item).find(categoryItemClsName).each(function () {
                 if (!$(this).find('.point-data__h2').hasClass(activeClassName)) {
                     $(this).find('.point-data__h2').addClass(activeClassName);
                 }
             })
-            
+
             $('.point-data__h1_trigger', item).addClass(activeClassName);
         } else {
             //theme removed
@@ -231,7 +229,7 @@ export class PointData extends Observable {
                     $(this).find('.point-data__h2').removeClass(activeClassName);
                 }
             })
-            
+
             $('.point-data__h1_trigger', item).removeClass(activeClassName);
         }
     }
@@ -241,18 +239,18 @@ export class PointData extends Observable {
         this.removeThemePoints(theme);
         let themeUrl = `${this.baseUrl}/${pointsByThemeUrl}/${theme.id}/`;
         let iterationCounter = 0;
-        
+
         const tokenIndex = "theme_id-" + theme.id;
-        if(addrPointCancelTokens[tokenIndex] == undefined)
+        if (addrPointCancelTokens[tokenIndex] == undefined)
             addrPointCancelTokens[tokenIndex] = []
 
-        var token = { token: "" };
-        
+        var token = {token: ""};
+
         addrPointCancelTokens[tokenIndex].push(token);
-        return this.getAddressPoints(themeUrl, iterationCounter, token).then((data) => {                
+        return this.getAddressPoints(themeUrl, iterationCounter, token).then((data) => {
             let index = addrPointCancelTokens[tokenIndex].indexOf(token);
-            if(index !== -1) {
-              addrPointCancelTokens[tokenIndex].splice(index, 1);
+            if (index !== -1) {
+                addrPointCancelTokens[tokenIndex].splice(index, 1);
             }
             return data;
         });
@@ -260,13 +258,12 @@ export class PointData extends Observable {
 
     removeThemePoints = (theme) => {
         const themeIndex = "theme_id-" + theme.id;
-        if(addrPointCancelTokens[themeIndex])
-        {
+        if (addrPointCancelTokens[themeIndex]) {
             for (let i = 0; i < addrPointCancelTokens[themeIndex].length; i++) {
                 addrPointCancelTokens[themeIndex][i].token = "cancel";
             }
         }
-        
+
         activePoints = activePoints.filter((item) => {
             return item.themeId !== theme.id
         });
@@ -314,6 +311,7 @@ export class PointData extends Observable {
      * clears the map, puts back the points that are in activePoints array
      */
     showPointsOnMap = () => {
+        console.log('start : ' + new Date());
         self = this;
         markers.clearLayers();
 
@@ -328,16 +326,14 @@ export class PointData extends Observable {
             this.map.addLayer(markers);
         }
 
-
+        console.log('end : ' + new Date());
     }
 }
 
 class ThemeStyle {
-    static replaceChildDivWithThemeIcon(themeId, colorElement, iconElement)
-    {
+    static replaceChildDivWithThemeIcon(themeId, colorElement, iconElement) {
         let iconClass = '.';
-        switch(themeId)
-        {
+        switch (themeId) {
             case 1: //Health theme
                 iconClass += 'icon--health';
                 break;
@@ -356,14 +352,14 @@ class ThemeStyle {
             default:
                 return false;
         }
-        
+
         //clear icon element and add icon
         $(iconElement).empty().append($('.styles').find(iconClass).prop('outerHTML'));
         //remove classes
         $(colorElement).removeClass('_1 _2 _3 _4 _5');
         //Add correct color to element which requires it
         $(colorElement).addClass('_' + themeId);
-        
+
         return true;
     }
 }
@@ -373,7 +369,7 @@ class MarkerFactory {
         this.markerWidth = markerWidth;
         this.markerHeight = markerHeight;
     }
-    
+
     prepareSvgOptions(pointMarkerElement) {
         let markerSvgIcon = $(pointMarkerElement).find('.point-marker__pin').find('.svg-icon').children('svg');
         //Only when element is visible on the document does height/outerHeight work
@@ -381,9 +377,9 @@ class MarkerFactory {
         //As such retrieve height from attribute height/width or viewBox
         //let markerWidth = Number(markerSvgIcon.attr('width') || markerSvgIcon.attr('viewBox').split(" ")[2].trim());
         //let markerHeight = Number(markerSvgIcon.attr('height') || markerSvgIcon.attr('viewBox').split(" ")[3].trim());
-        
+
         $(pointMarkerElement).find('.point-marker__icon').css('z-index', 1000);
-        
+
         let divIcon = L.divIcon({
             html: $(pointMarkerElement).prop('outerHTML'),
             iconAnchor: L.point(this.markerWidth / 2, this.markerHeight),
@@ -392,28 +388,28 @@ class MarkerFactory {
             popupAnchor: L.point(0, -12),
             tooltipAnchor: L.point(0, -12)
         });
-                  
+
         const markerOptions = {icon: divIcon};
         return markerOptions
     }
 
     preparePopupItem(point) {
         const popupItemClone = popupItem.cloneNode(true);
-            
+
         let name = point.name;
         if (name == undefined || name == "")
             name = "Unknown";
         name = name.trim();
-            
+
         let categoryName = point.categoryName;
         if (categoryName == undefined || categoryName == "")
             categoryName = "Unknown Category";
         categoryName = categoryName.trim();
-            
+
         $(popupItemClone).find('.tooltip__card_title').text(name);
         $(popupItemClone).find('.tooltip__card_subtitle').text(categoryName);
         $(popupItemClone).show();
-        $(popupItemClone).css('opacity','');
+        $(popupItemClone).css('opacity', '');
         const existingStyles = $(popupItemClone).attr('style');
         // TODO remove inline styles and use existing class
         $(popupItemClone).attr('style', existingStyles + '; ' + 'font: unset; font-family: Roboto, sans-serif; font-size: 14px; line-height: 20px; text-align: left;');
@@ -424,14 +420,14 @@ class MarkerFactory {
     createMarker(popupItem, coords, markerOptions) {
         const marker = L.marker(new L.LatLng(coords.y, coords.x), markerOptions);
 
-        marker.on('mouseover', function(e) {
-            this.bindPopup($(popupItem).prop('outerHTML'), { maxWidth: "auto", closeButton: false });
+        marker.on('mouseover', function (e) {
+            this.bindPopup($(popupItem).prop('outerHTML'), {maxWidth: "auto", closeButton: false});
             this.openPopup();
             let popupElement = $(this.getPopup().getElement());
             popupElement.find('.leaflet-popup-content-wrapper').removeClass('leaflet-popup-content-wrapper');
             popupElement.find('.leaflet-popup-tip-container').remove();
         });
-        
+
         marker.on('mouseout', function (e) {
             this.closePopup();
         });
@@ -441,12 +437,8 @@ class MarkerFactory {
 
     generateMarker(point) {
         let markerOptions = {};
-        //let pointMarkerElement = pointMarkerClone.cloneNode(true);
 
-        if (ThemeStyle.replaceChildDivWithThemeIcon(point.themeId, $(pointMarkerClone), $(pointMarkerClone).find('.point-marker__icon')))
-            markerOptions = this.prepareSvgOptions(pointMarkerClone);
-
-        let popupItemClone = this.preparePopupItem(point)
+        let popupItemClone = null;// = this.preparePopupItem(point)
         let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
         return marker;
     }

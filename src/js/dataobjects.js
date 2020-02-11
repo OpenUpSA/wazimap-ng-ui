@@ -22,11 +22,19 @@ export class Geography {
 
 export class Profile {
     constructor(js) {
-       this._geography = new Geography(js.geography);
-       this._parents = js.geography.parents.map(el => new Geography(el));
-       this._highlights = js.highlights;
-       this._profileData = js.profile_data;
-       this._keyMetrics = js.key_metrics
+        this._geography = new Geography(js.geography);
+        this._parents = js.geography.parents.map(el => new Geography(el));
+        this._highlights = js.highlights;
+        this._profileData = js.profile_data;
+        this._keyMetrics = js.key_metrics
+
+        Object.values(this._profileData).forEach(category => {
+            Object.values(category.subcategories).forEach(subcategory => {
+                Object.values(subcategory.indicators).forEach(indicator => {
+                    indicator.subindicators = indicator.subindicators.map(s => new SubIndicator(s))
+                })
+            })
+        })
     }
 
     get parents() {
@@ -82,5 +90,46 @@ export class DataBundle {
         return geographies.features.map(feature => {
             return feature.properties.code;
         })
+    }
+}
+
+export class SubIndicator {
+    constructor(js) {
+        const copy = {...js}
+        delete copy["Count"];
+        delete copy["count"];
+        delete copy["label"]
+        delete copy["value"]
+        delete copy["children"]
+
+        this._keys = copy;
+        if (js["Count"] != undefined)
+            this._count = js["Count"];
+        else if (js["count"] != undefined)
+            this._count = js["count"];
+        else
+            this._count = 0; 
+
+        this._children = js.children;
+    }
+
+    get keys() {
+        return this._keys;
+    }
+
+    get label() {
+        return Object.values(this._keys).join("/")
+    }
+
+    get children() {
+        return this._children;
+    }
+
+    get count() {
+        return this._count;
+    }
+
+    get value() {
+        return this.count;
     }
 }

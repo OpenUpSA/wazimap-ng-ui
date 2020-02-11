@@ -1,49 +1,45 @@
+import {SubIndicator} from './dataobjects'
+
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
-    var parentContainer = $(".data-menu__links")
-    var categoryTemplate = $(".data-menu__category")[0].cloneNode(true);
-    var subCategoryTemplate = $(".data-menu__subcategory", categoryTemplate)[0].cloneNode(true);
-    var indicatorTemplate = $(".data-menu__indicator", subCategoryTemplate)[0].cloneNode(true);
+
+    const parentContainer = $(".data-menu__links")
+    const categoryTemplate = $(".data-menu__category")[0].cloneNode(true);
+    const subCategoryTemplate = $(".data-menu__subcategory", categoryTemplate)[0].cloneNode(true);
+    const indicatorTemplate = $(".data-menu__indicator", subCategoryTemplate)[0].cloneNode(true);
 
     function addSubIndicators(wrapper, indicator, subindicators) {
-        var indicatorLabel = indicator;
-        var newIndicator = indicatorTemplate.cloneNode(true);
-        $(".data-menu__indicator_trigger div", newIndicator).text(indicatorLabel);
-        wrapper.append(newIndicator);
+        const indicatorLabel = indicator;
+        const newIndicatorElement = indicatorTemplate.cloneNode(true);
+        $(".data-menu__indicator_trigger div", newIndicatorElement).text(indicatorLabel);
+        wrapper.append(newIndicatorElement);
 
-        var indicatorWrapper = $(".indicator__dropdown_wrapper", newIndicator);
-        var subIndicatorTemplate = $(".data-menu__sub-indicator", newIndicator)[0].cloneNode(true);
+        const indicatorWrapperElement = $(".indicator__dropdown_wrapper", newIndicatorElement);
+        const subIndicatorTemplate = $(".data-menu__sub-indicator", newIndicatorElement)[0].cloneNode(true);
 
-        // TODO ????
-        if (true) {
-            if (subindicators == undefined || !Array.isArray(subindicators)) {
-                console.log("Missing subindicators")
-            } else {
-                $(".data-menu__sub-indicator", indicatorWrapper).remove();
-                $(".menu__link_h4--active", indicatorWrapper).remove();
-                subindicators.forEach((obj) => {
-                    var newSubIndicator = subIndicatorTemplate.cloneNode(true);
-                    var text = obj.key
-                    $("div:nth-child(2)", newSubIndicator).text(text);
-                    indicatorWrapper.append(newSubIndicator);
-
-                    $(newSubIndicator).on("click", (el) => {
-                        setActive(el);
-                        if (subindicatorCallback != undefined)
-                            subindicatorCallback({
-                                el: el,
-                                data: data,
-                                indicator: indicator,
-                                subindicators: subindicators,
-                                obj: obj
-                            })
-                    });
-                })
-
-            }
-
+        if (subindicators == undefined || !Array.isArray(subindicators)) {
+            console.log("Missing subindicators")
         } else {
-            indicatorWrapper.remove();
+            $(".data-menu__sub-indicator", indicatorWrapperElement).remove();
+            $(".menu__link_h4--active", indicatorWrapperElement).remove();
+            subindicators.forEach(subIndicator => {
+
+                const newSubIndicatorElement = subIndicatorTemplate.cloneNode(true);
+                $("div:nth-child(2)", newSubIndicatorElement).text(subIndicator.label);
+                indicatorWrapperElement.append(newSubIndicatorElement);
+
+                $(newSubIndicatorElement).on("click", (el) => {
+                    setActive(el);
+                    if (subindicatorCallback != undefined)
+                        subindicatorCallback({
+                            el: el,
+                            data: data,
+                            indicator: indicator,
+                            subindicators: subindicators,
+                            obj: subIndicator
+                        })
+                });
+            })
         }
     }
 
@@ -56,7 +52,9 @@ export function loadMenu(data, subindicatorCallback) {
 
         $(".data-menu__indicator", h3Wrapper).remove();
         for (const [indicator, detail] of Object.entries(indicators)) {
-            addSubIndicators(h3Wrapper, indicator, detail.subindicators);
+            if (detail.subindicators.length > 0) {
+                addSubIndicators(h3Wrapper, indicator, detail.subindicators);
+            }
         }
     }
 

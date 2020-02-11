@@ -153,12 +153,12 @@ export class MapControl extends Observable {
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    choropleth(data) {
+    choropleth(subindicator) {
         const self = this
-        if (data.subindicator.obj.children == undefined)
+        if (subindicator.obj.children == undefined)
             return;
-        // const children = data.profile.children;
-        const childCodes = data.profile.childCodes;
+        
+        const childCodes = Object.keys(subindicator.obj.children);
 
         function resetLayers(childCodes) {
             childCodes.forEach(childCode => {
@@ -174,10 +174,10 @@ export class MapControl extends Observable {
         // if (children == undefined || children.length == 0)
         //     return
 
-        const childGeographies = Object.entries(data.subindicator.obj.children).map(childGeography => {
+        const childGeographies = Object.entries(subindicator.obj.children).map(childGeography => {
             const code = childGeography[0];
             const count = childGeography[1];
-            const universe = data.subindicator.subindicators.reduce((el1, el2) => {
+            const universe = subindicator.subindicators.reduce((el1, el2) => {
                 if (el2.children != undefined && el2.children[code] != undefined)
                     return el1 + el2.children[code];
             }, 0)
@@ -192,9 +192,11 @@ export class MapControl extends Observable {
 
         childGeographies.forEach((el) => {
             const layer = self.layerCache[el.code];
-            const color = scale(el.val);
-            layer.setStyle({fillColor: color});
-            layer.feature.properties.percentage = el.val;
+            if (layer != undefined) {
+                const color = scale(el.val);
+                layer.setStyle({fillColor: color});
+                layer.feature.properties.percentage = el.val;
+            }
         })
     };
 

@@ -33,7 +33,7 @@ export class MapChip extends Observable {
 	}
 
 	onSubIndicatorChange(payload) {
-		const label = `${payload.indicator} (${payload.obj.key})`
+		const label = `${payload.indicator} (${payload.obj.label})`
 		this.updateMapChipText(label);
 		this.showMapChip();
 	}

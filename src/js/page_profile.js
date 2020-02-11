@@ -103,10 +103,6 @@ export default class ProfileLoader {
         
         let subindicators = indicatorDetail.subindicators;
         if (subindicators != undefined && Array.isArray(subindicators)) {
-            subindicators.forEach((el) => {
-                el["label"] = el.key
-                el["value"] = el["count"]
-            })
             this.addChart(chartContainer[0], subindicators)
         }
     }

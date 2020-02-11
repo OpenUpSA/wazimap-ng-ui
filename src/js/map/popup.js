@@ -60,10 +60,11 @@ export class Popup extends Observable {
                         for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
                             if (geographyCode == areaCode) {
                                 const countFmt = numFmt(count);
+                                const perc = (payload.payload.layer.feature.properties.percentage * 100).toFixed(2);
 
-                                $('.map__tooltip_value .tooltip__value_label .truncate', item).text(state.subindicator.indicator + '(' + subindicatorValue.key + ')');
+                                $('.map__tooltip_value .tooltip__value_label .truncate', item).text(`${state.subindicator.indicator} (${subindicatorValue.label})`);
                                 $('.map__tooltip_value .tooltip__value_amount .truncate', item).text(countFmt);
-                                $('.map__tooltip_value .tooltip__value_detail .truncate', item).text('(' + (payload.payload.layer.feature.properties.percentage * 100).toFixed(2) + '%)');
+                                $('.map__tooltip_value .tooltip__value_detail .truncate', item).text(`(${perc} %)`);
                             }
                         }
                     }

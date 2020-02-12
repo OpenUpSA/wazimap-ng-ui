@@ -40,15 +40,18 @@ function updateGeography(container, profile) {
     const label = `${geography.name} (${geography.code})`;
     $(headerTitleClass, container).text(label);
 
-    addBreadCrumbs(breadcrumbsContainer, profile.parents);
+    //addBreadCrumbs(breadcrumbsContainer, profile.parents);
 }
 
-function addBreadCrumbs(container, parents) {
-    $(breadcrumbClass, container).remove();
+function addBreadCrumbs(container, parents, clear = true) {
+    if (clear) {
+        $(breadcrumbClass, container).remove();
+    }
 
     parents.forEach(parent => {
+        console.log(parent.name)
         let breadcrumb = breadcrumbTemplate.cloneNode(true);
-        $(".truncate", breadcrumb).text(parent.name) 
+        $(".truncate", breadcrumb).text('emreeeeee')
         container.append(breadcrumb);
     })
 }
@@ -73,7 +76,7 @@ export default class ProfileLoader {
 
         $(categoryHeaderTitleClass, newCategorySection).text(category);
         // $(categoryHeaderSubtitleClass, newCategorySection).text(category.subTitle);
-         $(categoryHeaderDescriptionClass, newCategorySection).text(categoryDetail.description);
+        $(categoryHeaderDescriptionClass, newCategorySection).text(categoryDetail.description);
 
         profileHeader.append(newCategorySection);
         for (const [subcategory, detail] of Object.entries(categoryDetail.subcategories)) {
@@ -99,8 +102,8 @@ export default class ProfileLoader {
 
         $(indicatorTitleClass, newIndicatorSection).text(indicator);
         $(chartFootnoteClass, newIndicatorSection).text(indicatorDetail.description);
-        wrapper.append(newIndicatorSection);
-        
+        wrapper.append(newIndicatorSection);   //adds the charts here
+
         let subindicators = indicatorDetail.subindicators;
         if (subindicators != undefined && Array.isArray(subindicators)) {
             subindicators.forEach((el) => {
@@ -128,14 +131,10 @@ export default class ProfileLoader {
         $("img", container).remove();
         $("svg", container).remove();
 
+        d3select(container).call(myChart.data(data));
 
-        d3select(container)
-            .call(myChart.data(data));
-            
         $(".d3-tip")
             .css("z-index", 100)
-
-
     }
 
     loadProfile(dataBundle) {
@@ -148,7 +147,6 @@ export default class ProfileLoader {
 
         updateGeography(profileHeader, profile);
         addKeyMetrics(profileHeader, profile);
-
 
         for (const [category, detail] of Object.entries(all_categories)) {
             this.addCategory(category, detail);

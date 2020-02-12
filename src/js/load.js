@@ -37,7 +37,8 @@ export default function configureApplication(serverUrl, profileId) {
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
     const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
-    const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
+    //const contentMapSpinner = new LoadingSpinner($('.content__map_loading'), {start: true});
+    const contentMapSpinner = new LoadingSpinner('.breadcrumb__loading', {start: true}, true);
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
@@ -57,7 +58,9 @@ export default function configureApplication(serverUrl, profileId) {
     controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
-    controller.on("loadingNewProfile", payload => contentMapSpinner.start());
+    controller.on("loadingNewProfile", payload => {
+        //contentMapSpinner.start()
+    });
     controller.on("loadedNewProfile", payload => mapchip.clearAllMapChip());
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
     controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => controller.onSubIndicatorClick(payload)))
@@ -110,7 +113,15 @@ export default function configureApplication(serverUrl, profileId) {
         mapcontrol.enableZoom(payload.payload.enabled)
     });
 
-    mapcontrol.on('layerClick', payload => controller.onLayerClick(payload))
+    mapcontrol.on('layerClick', payload => {
+        let properties = payload.properties;
+        let locations = [{
+            name: properties.name
+        }];
+        locationInfoBox.updateLocations(locations);
+
+        controller.onLayerClick(payload)
+    })
     mapcontrol.on('layerMouseOver', payload => controller.onLayerMouseOver(payload))
     mapcontrol.on('layerMouseOut', payload => controller.onLayerMouseOut(payload))
     mapcontrol.on("layerMouseMove", payload => controller.onLayerMouseMove(payload))

@@ -36,9 +36,11 @@ export class LocationInfoBox extends Observable {
         $(metric).addClass('last');
     }
 
-    updateBreadcrumbs(locations) {
+    updateBreadcrumbs(locations, clear = true) {
         const self = this;
-        $('.breadcrumb--map', breadcrumbsContainer).remove();
+        if (clear) {
+            $('.breadcrumb--map', breadcrumbsContainer).remove();
+        }
 
         let locationElement = null;
         locations.forEach(location => {
@@ -54,8 +56,13 @@ export class LocationInfoBox extends Observable {
 
         if (locationElement != null) {
             $(locationElement).addClass('last')
+            $(locationElement).removeClass('hide')
             $(locationElement).off("click")
         }
 
+    }
+
+    updateLocations(locations) {
+        this.updateBreadcrumbs(locations, false);
     }
 }

@@ -119,7 +119,7 @@ export default class Controller extends Observable {
         getJSON(url).then(js => {
             const dataBundle = new DataBundle(js);
             self.state.profile = dataBundle;
-            
+
             self.triggerEvent("loadedNewProfile", dataBundle);
             // TODO this should be run after all dynamic stuff is run
             // Shouldn't be here
@@ -232,7 +232,6 @@ export default class Controller extends Observable {
     }
 
     onSearchResults(payload) {
-        console.log(payload)
         this.triggerEvent("searchResults", payload)
     }
 

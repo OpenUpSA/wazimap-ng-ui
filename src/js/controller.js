@@ -16,7 +16,8 @@ export default class Controller extends Observable {
             profileId: profileId,
             // Set if a choropleth is currently active
             // TODO this state should possibly be stored in the mapcontrol
-            subindicator: null
+            subindicator: null,
+            selectedSubindicator: ''
         }
 
         const self = this;
@@ -95,6 +96,7 @@ export default class Controller extends Observable {
 
     onSubIndicatorClick(payload) {
         this.state.subindicator = payload;
+        this.state.selectedSubindicator = payload.obj._keys;
         this.triggerEvent("subindicatorClick", payload);
     };
 
@@ -119,7 +121,7 @@ export default class Controller extends Observable {
         getJSON(url).then(js => {
             const dataBundle = new DataBundle(js);
             self.state.profile = dataBundle;
-            
+
             self.triggerEvent("loadedNewProfile", dataBundle);
             // TODO this should be run after all dynamic stuff is run
             // Shouldn't be here

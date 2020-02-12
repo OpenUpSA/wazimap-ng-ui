@@ -51,11 +51,14 @@ export class Popup extends Observable {
             const subindicators = state.subindicator.subindicators;
             const subindicator = state.subindicator.obj.key;
             const subindicatorValues = subindicators.filter(s => (s.key == subindicator));
+            const selectedSubindicator = state.selectedSubindicator;
 
             if (subindicatorValues.length > 0) {
-
                 if (typeof subindicators[0].children !== 'undefined' && typeof subindicators[0].children[this.map.map_variables.hoverAreaCode] !== 'undefined') {
-                    const subindicatorValue = subindicatorValues[0];
+                    const subindicatorValue = subindicatorValues.filter((item) => {
+                        return item._keys ===selectedSubindicator;
+                    })[0];
+
                     if (subindicatorValue != undefined && subindicatorValue.children != undefined) {
                         for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
                             if (geographyCode == areaCode) {

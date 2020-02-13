@@ -46,7 +46,7 @@ export default function configureApplication(serverUrl, profileId) {
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
     controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.state.subindicator))
-    controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
+    controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload, mapcontrol.layerCache));
     controller.on('layerMouseOver', payload => popup.loadPopup(payload));
     controller.on('layerMouseOut', payload => popup.hidePopup(payload));
     controller.on('layerMouseMove', payload => popup.updatePopupPosition(payload));

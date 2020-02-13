@@ -157,7 +157,7 @@ export class MapControl extends Observable {
         const self = this
         if (subindicator.obj.children == undefined)
             return;
-        
+
         const childCodes = Object.keys(subindicator.obj.children);
 
         function resetLayers(childCodes) {
@@ -187,6 +187,8 @@ export class MapControl extends Observable {
 
         const values = childGeographies.map(el => el.val);
         const scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values), d3max(values)])
+
+        //console.log(self.layerCache)
 
         resetLayers(childCodes);
 

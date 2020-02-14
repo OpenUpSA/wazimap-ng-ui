@@ -1,5 +1,5 @@
 import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
-import {scaleSequential as d3scaleSequential} from 'd3-scale';
+import {scaleSequential as d3scaleSequential, scaleLinear} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 import {Observable, numFmt} from '../utils';
 import {geography_config} from '../geography_providers/geography_sa';
@@ -7,6 +7,7 @@ import {geography_config} from '../geography_providers/geography_sa';
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const tooltipClsName = '.content__map_tooltip';
+const legendCount = 10;
 
 var defaultStyles = {
     hoverOnly: {
@@ -74,6 +75,7 @@ export class MapControl extends Observable {
         this.zoomPosition = config.zoomPosition || 'bottomright'
         this.boundaryLayers = null;
         this.mainLayer = null;
+        this.legendColors = [];
 
         this.layerStyler = new LayerStyler();
 
@@ -186,9 +188,33 @@ export class MapControl extends Observable {
         })
 
         const values = childGeographies.map(el => el.val);
-        const scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values), d3max(values)])
+        const scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values) * 0.9, d3max(values) * 1.1])
 
-        //console.log(self.layerCache)
+        //const legendScale = d3scaleSequential(d3interpolateBlues).domain([0,100])
+
+        let legendPercentages = scaleLinear()
+            .domain([1, legendCount])
+            .range([d3min(values) * 0.9, d3max(values) * 1.1]);
+
+        console.log(values);
+
+        this.legendColors = [];
+
+        let tick = (d3max(values) * 1.1 - d3min(values) * 0.9) / (legendCount - 1);
+        let startPoint = d3min(values) * 0.9;
+        for (let i = 1; i <= legendCount; i++) {
+            let percentage = 0;
+            if ((((i - 1) * tick + startPoint) * 100) > 100) {
+                percentage = 100;
+                i = legendCount;
+            } else {
+                percentage = (((i - 1) * tick + startPoint) * 100).toFixed(1);
+            }
+            this.legendColors.push({
+                percentage: percentage,
+                fillColor: scale(legendPercentages(i))
+            });
+        }
 
         resetLayers(childCodes);
 

@@ -6,6 +6,7 @@ let clonedLegendBlock;
 let clonedLegend;
 
 const wrapperClsName = 'content__map_current-display';
+const lightStart = 6;
 
 /**
  * Represent the map chip at the bottom of the map
@@ -32,39 +33,24 @@ export class MapChip extends Observable {
         element.find('.chip__remove--map').on('click', () => this.removeMapChip(element));
     }
 
-    showLegend(payload, mapLayers) {
+    showLegend(payload, legendColors) {
         if (payload.subindicators === null || typeof payload.subindicators === 'undefined' || payload.subindicators.length <= 0) {
             return;
         }
 
-        let subIndicators = payload.subindicators;
-        let children = Object.keys(subIndicators[0].children);
         const legend = $(clonedLegend);
         $('.' + wrapperClsName).append(legend);	    //legend
         $('.' + wrapperClsName + ' .map_legend-block').remove(); //remove the previous legends
 
-        let blockArr = [];
-
-        for (let i = 0; i < children.length; i++) {
-            let currentChild = mapLayers[children[i]];
-
+        for (let i = 0; i < legendColors.length; i++) {
             const item = clonedLegendBlock.cloneNode(true);
-            const perc = parseFloat((currentChild.feature.properties.percentage * 100).toFixed(2));
-            const code = currentChild.feature.properties.code;
-            blockArr.push({
-                item: item,
-                perc: perc,
-                code: code,
-                fillColor: currentChild.options.fillColor
-            });
-        }
+            if (i >= lightStart) {
+                $(item).addClass('light');
+            }
 
-        blockArr.sort((a, b) => (a.perc < b.perc) ? 1 : ((b.perc < a.perc) ? -1 : 0));
-
-        for (let i = 0; i < blockArr.length; i++) {
-            $(blockArr[i].item).css('background-color', blockArr[i].fillColor);
-            $('.truncate', blockArr[i].item).text(blockArr[i].code + ' - ' + blockArr[i].perc + '%');
-            $('.' + wrapperClsName + ' .content__map_legend').append(blockArr[i].item);
+            $('.truncate', item).text(legendColors[i].percentage + '%');
+            $(item).css('background-color', legendColors[i].fillColor);
+            $('.' + wrapperClsName + ' .content__map_legend').append(item);
         }
     }
 
@@ -77,11 +63,11 @@ export class MapChip extends Observable {
         this.triggerEvent('mapChipRemoved', element);
     }
 
-    onSubIndicatorChange(payload, mapLayers) {
+    onSubIndicatorChange(payload, legendColors) {
         const label = `${payload.indicator} (${payload.obj.label})`
         this.updateMapChipText(label);
         this.showMapChip();
-        this.showLegend(payload, mapLayers);
+        this.showLegend(payload, legendColors);
     }
 
     updateMapChipText(textValue) {

@@ -311,7 +311,6 @@ export class PointData extends Observable {
      * clears the map, puts back the points that are in activePoints array
      */
     showPointsOnMap = () => {
-        console.log('start : ' + new Date());
         self = this;
         markers.clearLayers();
 
@@ -325,8 +324,6 @@ export class PointData extends Observable {
             markers.addLayers(newMarkers);
             this.map.addLayer(markers);
         }
-
-        console.log('end : ' + new Date());
     }
 }
 

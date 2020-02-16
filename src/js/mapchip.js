@@ -60,6 +60,7 @@ export class MapChip extends Observable {
 
     removeMapChip(element) {
         element.remove();
+        this.clearAllMapChip();
         this.triggerEvent('mapChipRemoved', element);
     }
 

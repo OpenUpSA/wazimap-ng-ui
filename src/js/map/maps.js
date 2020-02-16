@@ -196,8 +196,6 @@ export class MapControl extends Observable {
             .domain([1, legendCount])
             .range([d3min(values) * 0.9, d3max(values) * 1.1]);
 
-        console.log(values);
-
         this.legendColors = [];
 
         let tick = (d3max(values) * 1.1 - d3min(values) * 0.9) / (legendCount - 1);

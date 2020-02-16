@@ -299,16 +299,18 @@ export default class Controller extends Observable {
         // TODO remove SA specfic stuff
         geography_config.preferredChildren['municipality'] = childLevel;
 
-        this.reDrawChildren(childLevel);
+        this.reDrawChildren();
     }
 
-    reDrawChildren = (childLevel) => {
-        if (childLevel !== 'mainplace' && childLevel !== 'ward') {
+    reDrawChildren = () => {
+        let currentLevel = this.state.profile.profile.geography.level;
+
+        if (currentLevel !== 'municipality') {
             return;
         }
 
         const payload = {
-            profile: this.profile,
+            profile: this.state.profile.profile,
             areaCode: currentAreaCode,
             zoomNecessary: false
         }

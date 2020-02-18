@@ -6,7 +6,7 @@ let clonedLegendBlock;
 let clonedLegend;
 
 const wrapperClsName = 'content__map_current-display';
-const lightStart = 6;
+const lightStart = 3;
 
 /**
  * Represent the map chip at the bottom of the map

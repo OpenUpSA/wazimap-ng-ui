@@ -30,6 +30,7 @@ let markers = null;
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
 let addrPointCancelTokens = {};
+let mapPointMarkerClones = [];
 
 /**
  * this class creates the point data dialog
@@ -37,6 +38,7 @@ let addrPointCancelTokens = {};
 export class PointData extends Observable {
     constructor(baseUrl, _map) {
         super();
+        console.log('aaa');
         this.baseUrl = baseUrl;
         this.map = _map;
         this.selectedThemes = [];
@@ -67,8 +69,26 @@ export class PointData extends Observable {
         let pointMarkerDiv = $(pointMarkerPositionClsName);
         popupItem = pointMarkerDiv.find(popupItemClsName)[0].cloneNode(true);
         pointMarkerClone = pointMarkerDiv.find(pointMarkerClsName)[0].cloneNode(true);
+        this.getMapPointMarkerClones();
 
         $(wrapperClsName).html('');
+    }
+
+    /**
+     * gets the marker item clones, keeps them inside an object array
+     */
+    getMapPointMarkerClones = () => {
+        $(mapPointMarkerClsName).each(function () {
+            let currentClsName = $(this).find('.point-marker').attr('class');
+            if (currentClsName.indexOf('point-marker _') >= 0) {
+                let item = this.cloneNode(true);
+                let themeId = currentClsName.replace('point-marker _', '');
+                mapPointMarkerClones.push({
+                    themeId: parseInt(themeId),
+                    item: item
+                })
+            }
+        });
     }
 
     /**
@@ -436,6 +456,22 @@ class MarkerFactory {
         let markerOptions = {};
 
         let popupItemClone = null;// = this.preparePopupItem(point)
+
+        console.log(point.themeId)
+        console.log(mapPointMarkerClones)
+
+        let item = mapPointMarkerClones.filter((obj) => {
+            return obj.themeId === point.themeId
+        })[0].item;
+        let html = '<div class="map_point-marker">' + $(item).html() + '</div>';
+        console.log(html)
+        let testIcon = L.divIcon({
+            html: html,
+            iconSize: [30, 42],
+            iconAnchor: [15, 42]
+        });
+
+        markerOptions = {icon: testIcon}
         let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
         return marker;
     }

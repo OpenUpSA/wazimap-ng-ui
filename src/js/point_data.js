@@ -17,7 +17,6 @@ const categoryItemLoadingClsName = '.point-data__h2_loading';
 const categoryItemDoneClsName = '.point-data__h2_load-complete';
 const treeLineClsName = '.point-data__h2_tree-line-v';
 const pointMarkerPositionClsName = '.point-marker__position';
-const mapPointMarkerClsName = '.map_point-marker';
 const popupItemClsName = '.point-marker__tooltip';
 const pointMarkerClsName = '.point-marker';
 const defaultActiveClsName = 'active-1';
@@ -27,6 +26,7 @@ let treeLineItem = null;
 let popupItem = null;
 let pointMarkerClone = null;
 let markers = null;
+let markerOptionsArr = [];
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
 let addrPointCancelTokens = {};
@@ -38,7 +38,7 @@ let mapPointMarkerClones = [];
 export class PointData extends Observable {
     constructor(baseUrl, _map) {
         super();
-        console.log('aaa');
+
         this.baseUrl = baseUrl;
         this.map = _map;
         this.selectedThemes = [];
@@ -69,26 +69,8 @@ export class PointData extends Observable {
         let pointMarkerDiv = $(pointMarkerPositionClsName);
         popupItem = pointMarkerDiv.find(popupItemClsName)[0].cloneNode(true);
         pointMarkerClone = pointMarkerDiv.find(pointMarkerClsName)[0].cloneNode(true);
-        this.getMapPointMarkerClones();
 
         $(wrapperClsName).html('');
-    }
-
-    /**
-     * gets the marker item clones, keeps them inside an object array
-     */
-    getMapPointMarkerClones = () => {
-        $(mapPointMarkerClsName).each(function () {
-            let currentClsName = $(this).find('.point-marker').attr('class');
-            if (currentClsName.indexOf('point-marker _') >= 0) {
-                let item = this.cloneNode(true);
-                let themeId = currentClsName.replace('point-marker _', '');
-                mapPointMarkerClones.push({
-                    themeId: parseInt(themeId),
-                    item: item
-                })
-            }
-        });
     }
 
     /**
@@ -341,6 +323,7 @@ export class PointData extends Observable {
                 let marker = this.markerFactory.generateMarker(point);
                 newMarkers.push(marker);
             })
+
             markers.addLayers(newMarkers);
             this.map.addLayer(markers);
         }
@@ -388,7 +371,9 @@ class MarkerFactory {
     }
 
     prepareSvgOptions(pointMarkerElement) {
+        /*
         let markerSvgIcon = $(pointMarkerElement).find('.point-marker__pin').find('.svg-icon').children('svg');
+         */
         //Only when element is visible on the document does height/outerHeight work
         //Element is hidden and showing using .show doesn't help before calling height/outerHeight
         //As such retrieve height from attribute height/width or viewBox
@@ -454,25 +439,28 @@ class MarkerFactory {
 
     generateMarker(point) {
         let markerOptions = {};
+        let pointMarkerElement = pointMarkerClone.cloneNode(true);
 
-        let popupItemClone = null;// = this.preparePopupItem(point)
+        let options = markerOptionsArr.filter((item) => {
+            return item.themeId === point.themeId;
+        })[0];
 
-        console.log(point.themeId)
-        console.log(mapPointMarkerClones)
+        if (options === null || typeof options === 'undefined'){
+            if (ThemeStyle.replaceChildDivWithThemeIcon(point.themeId, $(pointMarkerElement), $(pointMarkerElement).find('.point-marker__icon'))) {
+                markerOptions = this.prepareSvgOptions(pointMarkerElement);
+            }
+            markerOptionsArr.push({
+                options : markerOptions,
+                themeId : point.themeId
+            })
+        }
+        else{
+            markerOptions = options.options;
+        }
 
-        let item = mapPointMarkerClones.filter((obj) => {
-            return obj.themeId === point.themeId
-        })[0].item;
-        let html = '<div class="map_point-marker">' + $(item).html() + '</div>';
-        console.log(html)
-        let testIcon = L.divIcon({
-            html: html,
-            iconSize: [30, 42],
-            iconAnchor: [15, 42]
-        });
-
-        markerOptions = {icon: testIcon}
+        let popupItemClone = this.preparePopupItem(point)
         let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
+
         return marker;
     }
 

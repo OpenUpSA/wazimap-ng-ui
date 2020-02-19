@@ -17,7 +17,6 @@ const categoryItemLoadingClsName = '.point-data__h2_loading';
 const categoryItemDoneClsName = '.point-data__h2_load-complete';
 const treeLineClsName = '.point-data__h2_tree-line-v';
 const pointMarkerPositionClsName = '.point-marker__position';
-const mapPointMarkerClsName = '.map_point-marker';
 const popupItemClsName = '.point-marker__tooltip';
 const pointMarkerClsName = '.point-marker';
 const defaultActiveClsName = 'active-1';
@@ -27,9 +26,11 @@ let treeLineItem = null;
 let popupItem = null;
 let pointMarkerClone = null;
 let markers = null;
+let markerOptionsArr = [];
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
 let addrPointCancelTokens = {};
+let mapPointMarkerClones = [];
 
 /**
  * this class creates the point data dialog
@@ -37,6 +38,7 @@ let addrPointCancelTokens = {};
 export class PointData extends Observable {
     constructor(baseUrl, _map) {
         super();
+
         this.baseUrl = baseUrl;
         this.map = _map;
         this.selectedThemes = [];
@@ -321,6 +323,7 @@ export class PointData extends Observable {
                 let marker = this.markerFactory.generateMarker(point);
                 newMarkers.push(marker);
             })
+
             markers.addLayers(newMarkers);
             this.map.addLayer(markers);
         }
@@ -368,7 +371,9 @@ class MarkerFactory {
     }
 
     prepareSvgOptions(pointMarkerElement) {
+        /*
         let markerSvgIcon = $(pointMarkerElement).find('.point-marker__pin').find('.svg-icon').children('svg');
+         */
         //Only when element is visible on the document does height/outerHeight work
         //Element is hidden and showing using .show doesn't help before calling height/outerHeight
         //As such retrieve height from attribute height/width or viewBox
@@ -434,9 +439,28 @@ class MarkerFactory {
 
     generateMarker(point) {
         let markerOptions = {};
+        let pointMarkerElement = pointMarkerClone.cloneNode(true);
 
-        let popupItemClone = null;// = this.preparePopupItem(point)
+        let options = markerOptionsArr.filter((item) => {
+            return item.themeId === point.themeId;
+        })[0];
+
+        if (options === null || typeof options === 'undefined'){
+            if (ThemeStyle.replaceChildDivWithThemeIcon(point.themeId, $(pointMarkerElement), $(pointMarkerElement).find('.point-marker__icon'))) {
+                markerOptions = this.prepareSvgOptions(pointMarkerElement);
+            }
+            markerOptionsArr.push({
+                options : markerOptions,
+                themeId : point.themeId
+            })
+        }
+        else{
+            markerOptions = options.options;
+        }
+
+        let popupItemClone = this.preparePopupItem(point)
         let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
+
         return marker;
     }
 

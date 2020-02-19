@@ -7,7 +7,7 @@ import {geography_config} from '../geography_providers/geography_sa';
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const tooltipClsName = '.content__map_tooltip';
-const legendCount = 10;
+const legendCount = 5;
 
 var defaultStyles = {
     hoverOnly: {
@@ -194,6 +194,7 @@ export class MapControl extends Observable {
 
         let legendPercentages = scaleLinear()
             .domain([1, legendCount])
+            .nice()
             .range([d3min(values) * 0.9, d3max(values) * 1.1]);
 
         this.legendColors = [];

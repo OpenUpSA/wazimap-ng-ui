@@ -154,7 +154,6 @@ export default class ProfileLoader {
         updateGeography(profileHeader, profile);
         addKeyMetrics(profileHeader, profile);
 
-
         for (const [category, detail] of Object.entries(all_categories)) {
             this.addCategory(category, detail);
         }

@@ -254,10 +254,11 @@ export class MapControl extends Observable {
         this.limitGeoViewSelections(level);
 
         self.triggerEvent("layerLoading", self.map);
-        if (Object.values(geometries.children).length == 0)
+        if (Object.values(geometries.children).length == 0) {
             selectedBoundary = geometries.boundary;
-        else
+        } else {
             selectedBoundary = geometries.children[preferredChild];
+        }
 
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
             const leafletLayer = L.geoJson(l);

@@ -1,6 +1,8 @@
 import {select as d3select} from 'd3-selection';
 import {format as d3format} from 'd3-format';
 import {reusableBarChart} from "data-visualisations/src/charts/bar/reusable-bar-chart/reusable-bar-chart";
+import {horizontalBarChart} from "./reusable-charts/horizontal-bar-chart";
+import {toLatLng} from "leaflet/src/geo/LatLng";
 
 const profileHeaderClass = '#profile-top';
 const categoryClass = '.data-category';
@@ -23,6 +25,9 @@ const chartFootnoteClass = '.indicator__chart_footnote';
 const headerTitleClass = '.location-header__title h1';
 const breadcrumbsContainerClass = '.location-header__breadcrumbs';
 const breadcrumbClass = '.breadcrumb';
+
+const tooltipClsName = 'bar-chart__row_tooltip';
+const tooltipClone = $('.sub-indicator__chart_area .' + tooltipClsName)[0].cloneNode(true);
 
 const profileHeader = $(profileHeaderClass);
 const categoryTemplate = $(categoryClass)[0].cloneNode(true);
@@ -48,7 +53,7 @@ function addBreadCrumbs(container, parents) {
 
     parents.forEach(parent => {
         let breadcrumb = breadcrumbTemplate.cloneNode(true);
-        $(".truncate", breadcrumb).text(parent.name) 
+        $(".truncate", breadcrumb).text(parent.name)
         container.append(breadcrumb);
     })
 }
@@ -73,7 +78,7 @@ export default class ProfileLoader {
 
         $(categoryHeaderTitleClass, newCategorySection).text(category);
         // $(categoryHeaderSubtitleClass, newCategorySection).text(category.subTitle);
-         $(categoryHeaderDescriptionClass, newCategorySection).text(categoryDetail.description);
+        $(categoryHeaderDescriptionClass, newCategorySection).text(categoryDetail.description);
 
         profileHeader.append(newCategorySection);
         for (const [subcategory, detail] of Object.entries(categoryDetail.subcategories)) {
@@ -100,7 +105,7 @@ export default class ProfileLoader {
         $(indicatorTitleClass, newIndicatorSection).text(indicator);
         $(chartFootnoteClass, newIndicatorSection).text(indicatorDetail.description);
         wrapper.append(newIndicatorSection);
-        
+
         let subindicators = indicatorDetail.subindicators;
         if (subindicators != undefined && Array.isArray(subindicators)) {
             this.addChart(chartContainer[0], subindicators)
@@ -108,30 +113,34 @@ export default class ProfileLoader {
     }
 
     addChart(container, data) {
-        // TODO need to hander different chart types
-        const chartType = 'bar';
-        const chartClass = `${chartContainerClass}--${chartType}`;
+        $('.bar-chart', container).remove();
+        $('svg', container).remove();
+
         const fmt = d3format(",.2f");
-        const myChart = reusableBarChart();
+        const myChart = horizontalBarChart();
+        let tooltip = tooltipClone.cloneNode(true);
+        tooltip = $(tooltip).removeAttr('style');
 
-        // TODO how big should this be?
-        myChart.height(100);
-        myChart.width(560);
+        /**
+         * optional settings
+         */
+        myChart.height(450);
+        myChart.width(760);
+        myChart.colors(['#39ad84', '#339b77']);
+        myChart.margin({
+            top: 15,
+            right: 25,
+            bottom: 15,
+            left: 140,
+        })
         myChart.tooltipFormatter((d) => {
-            return `${d.data.label}: ${fmt(d.data.value)}`;
-        });
+            $('.bar-chart__tooltip_value .truncate', tooltip).text(fmt(d.data.value));
+            $('.bar-chart__tooltip_description .truncate', tooltip).text(' - ' + d.data.label);
 
-        $("img", container).remove();
-        $("svg", container).remove();
+            return $(tooltip).prop('outerHTML');
+        })
 
-
-        d3select(container)
-            .call(myChart.data(data));
-            
-        $(".d3-tip")
-            .css("z-index", 100)
-
-
+        d3select(container).call(myChart.data(data));
     }
 
     loadProfile(dataBundle) {

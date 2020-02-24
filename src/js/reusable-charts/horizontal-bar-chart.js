@@ -5,6 +5,7 @@ import {easeLinear} from 'd3-ease';
 import d3Tip from 'd3-tip';
 import {selectAll} from 'd3-selection';
 import {axisBottom, axisLeft} from 'd3-axis';
+import {saveSvgAsPng} from 'save-svg-as-png';
 
 export function horizontalBarChart() {
     const initialConfiguration = {
@@ -151,6 +152,11 @@ export function horizontalBarChart() {
         $('.grid').css('color', '#999');
         $('.grid').css('stroke-opacity', '0.2');
     }
+
+    chart.saveAsPng = function (container) {
+        saveSvgAsPng($(container).find('svg')[0], "plot.png");
+    }
+
 
     chart.width = function (value) {
         if (!arguments.length) return width;

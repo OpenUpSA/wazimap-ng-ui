@@ -113,6 +113,9 @@ export default class ProfileLoader {
     }
 
     addChart(container, data) {
+        const containerParent = $(container).closest('.indicator__sub-indicator');
+        const saveImgButton = $(containerParent).find('.hover-menu__content_wrapper a.hover-menu__content_item:nth-child(1)');
+
         $('.bar-chart', container).remove();
         $('svg', container).remove();
 
@@ -138,6 +141,10 @@ export default class ProfileLoader {
             $('.bar-chart__tooltip_description .truncate', tooltip).text(' - ' + d.data.label);
 
             return $(tooltip).prop('outerHTML');
+        })
+
+        $(saveImgButton).on('click', () => {
+            myChart.saveAsPng(container);
         })
 
         d3select(container).call(myChart.data(data));

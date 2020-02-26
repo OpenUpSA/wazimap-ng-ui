@@ -130,6 +130,10 @@ export default class ProfileLoader {
         myChart.height(450);
         myChart.width(760);
         myChart.colors(['#39ad84', '#339b77']);
+        myChart.xAxisPadding(10);
+        myChart.yAxisPadding(10);
+        myChart.barHeight(30);
+        myChart.barPadding(10);
         myChart.margin({
             top: 15,
             right: 25,
@@ -137,7 +141,7 @@ export default class ProfileLoader {
             left: 140,
         })
         myChart.tooltipFormatter((d) => {
-            $('.bar-chart__tooltip_value .truncate', tooltip).text(fmt(d.data.value));
+            $('.bc__tooltip_value', tooltip).text(fmt(d.data.value));
             $('.bar-chart__tooltip_description .truncate', tooltip).text(' - ' + d.data.label);
 
             return $(tooltip).prop('outerHTML');

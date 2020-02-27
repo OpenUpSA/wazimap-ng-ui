@@ -132,8 +132,8 @@ export default class ProfileLoader {
         myChart.colors(['#39ad84', '#339b77']);
         myChart.xAxisPadding(10);
         myChart.yAxisPadding(10);
-        myChart.barHeight(30);
-        myChart.barPadding(10);
+        myChart.barHeight(24);
+        myChart.barPadding(6);
         myChart.margin({
             top: 15,
             right: 25,

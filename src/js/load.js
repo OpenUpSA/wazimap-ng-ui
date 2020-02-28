@@ -115,7 +115,8 @@ export default function configureApplication(serverUrl, profileId) {
     mapcontrol.on('layerClick', payload => {
         let properties = payload.properties;
         let locations = [{
-            name: properties.name
+            name: properties.name,
+            level: properties.level
         }];
         locationInfoBox.updateLocations(locations);
 

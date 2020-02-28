@@ -85,7 +85,9 @@ export class MapControl extends Observable {
             tooltipItem: null,
             popup: null,
             hoverAreaCode: null,
-            hoverAreaLevel: null
+            hoverAreaLevel: null,
+            currentLevel: null,
+            children: []
         };
         this.layerCache = {};
         this.map.on("zoomend", e => this.onZoomChanged(e));
@@ -251,13 +253,16 @@ export class MapControl extends Observable {
         let selectedBoundary;
         const parentBoundaries = geometries.parents;
 
+        this.map.map_variables.currentLevel = level;
+
         this.limitGeoViewSelections(level);
 
         self.triggerEvent("layerLoading", self.map);
-        if (Object.values(geometries.children).length == 0)
+        if (Object.values(geometries.children).length == 0) {
             selectedBoundary = geometries.boundary;
-        else
+        } else {
             selectedBoundary = geometries.children[preferredChild];
+        }
 
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
             const leafletLayer = L.geoJson(l);
@@ -266,8 +271,21 @@ export class MapControl extends Observable {
                 self.layerCache[code] = l;
             })
             self.layerCache[geography.code] = leafletLayer;
+
             return leafletLayer;
         });
+
+        this.map.map_variables.children = [];
+
+        selectedBoundary.features.map((item, i) => {
+            let x = item.geometry.coordinates[0][0].reduce((total, next) => total + next[0], 0) / (item.geometry.coordinates[0][0].length)
+            let y = item.geometry.coordinates[0][0].reduce((total, next) => total + next[1], 0) / (item.geometry.coordinates[0][0].length)
+            this.map.map_variables.children.push({
+                name: item.properties.name,
+                code: item.properties.code,
+                center: [x, y]
+            })
+        })
 
         self.boundaryLayers.clearLayers();
 

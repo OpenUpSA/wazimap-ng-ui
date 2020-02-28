@@ -2,6 +2,8 @@ import {getJSON, Observable} from './utils';
 import 'leaflet.markercluster/dist/leaflet.markercluster'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import {geography_config} from "./geography_providers/geography_sa";
+import {count} from "d3-array";
 
 
 const url = 'points/themes';
@@ -20,6 +22,12 @@ const pointMarkerPositionClsName = '.point-marker__position';
 const popupItemClsName = '.point-marker__tooltip';
 const pointMarkerClsName = '.point-marker';
 const defaultActiveClsName = 'active-1';
+const clusterClsName = '.map__point-cluster';
+const clusterClasses = [{count: 300, cls: 5}, {count: 100, cls: 4}, {count: 30, cls: 3}, {count: 10, cls: 2}, {
+    count: 0,
+    cls: 1
+}];    //determines the color class according to the number of points
+let activeLayers = [];
 let pointDataItem = null;
 let categoryItem = null;
 let treeLineItem = null;
@@ -30,7 +38,7 @@ let markerOptionsArr = [];
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
 let addrPointCancelTokens = {};
-let mapPointMarkerClones = [];
+let clusterClone = null;
 
 /**
  * this class creates the point data dialog
@@ -69,6 +77,7 @@ export class PointData extends Observable {
         let pointMarkerDiv = $(pointMarkerPositionClsName);
         popupItem = pointMarkerDiv.find(popupItemClsName)[0].cloneNode(true);
         pointMarkerClone = pointMarkerDiv.find(pointMarkerClsName)[0].cloneNode(true);
+        clusterClone = $(clusterClsName)[0].cloneNode(true);
 
         $(wrapperClsName).html('');
     }
@@ -298,7 +307,8 @@ export class PointData extends Observable {
                         name: properties.data.Name,
                         categoryId: categoryId,
                         categoryName: properties.category.name,
-                        themeId: themeId
+                        themeId: themeId,
+                        data: properties.data
                     })
                 })
 
@@ -313,6 +323,44 @@ export class PointData extends Observable {
      * clears the map, puts back the points that are in activePoints array
      */
     showPointsOnMap = () => {
+        if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
+            this.showIndividualMarkers()
+        } else {
+            this.showClusterMarkers();
+        }
+    }
+
+    /**
+     * 1 custom marker per child geography
+     */
+    showClusterMarkers = () => {
+        //1 for each child
+        for (let i = 0; i < activeLayers.length; i++) {
+            this.map.removeLayer(activeLayers[i]);
+        }
+
+        this.map.map_variables.children.map((child, i) => {
+            let childrenPoints = activePoints.filter((point) => {
+                return point.data[geography_config.geographyLevels[geography_config.preferredChildren[this.map.map_variables.currentLevel]]] === child.code
+            })
+            if (childrenPoints.length > 0) {
+                let marker = this.markerFactory.generateClusterMarker({
+                    x: child.center[0],
+                    y: child.center[1],
+                    count: childrenPoints.length
+                })
+
+                activeLayers.push(marker);
+
+                this.map.addLayer(marker);
+            }
+        });
+    }
+
+    /**
+     * individual markers
+     */
+    showIndividualMarkers = () => {
         self = this;
         markers.clearLayers();
 
@@ -445,16 +493,15 @@ class MarkerFactory {
             return item.themeId === point.themeId;
         })[0];
 
-        if (options === null || typeof options === 'undefined'){
+        if (options === null || typeof options === 'undefined') {
             if (ThemeStyle.replaceChildDivWithThemeIcon(point.themeId, $(pointMarkerElement), $(pointMarkerElement).find('.point-marker__icon'))) {
                 markerOptions = this.prepareSvgOptions(pointMarkerElement);
             }
             markerOptionsArr.push({
-                options : markerOptions,
-                themeId : point.themeId
+                options: markerOptions,
+                themeId: point.themeId
             })
-        }
-        else{
+        } else {
             markerOptions = options.options;
         }
 
@@ -464,4 +511,33 @@ class MarkerFactory {
         return marker;
     }
 
+    /**
+     * generates cluster marker using the html clone
+     */
+    generateClusterMarker(point) {
+        let cluster = clusterClone.cloneNode(true);
+        $(cluster).removeClass('_1');
+        for (let i = 0; i < clusterClasses.length; i++) {
+            if (point.count > clusterClasses[i].count) {
+                $(cluster).addClass('_' + clusterClasses[i].cls);
+                break;
+            }
+        }
+        $('div', cluster).text(point.count);
+
+        let myIcon = L.divIcon({
+            html: cluster,
+            iconAnchor: L.point(this.markerWidth / 2, this.markerHeight),
+            className: '',
+            iconSize: L.point(this.markerWidth, this.markerHeight),
+            popupAnchor: L.point(0, -12),
+            tooltipAnchor: L.point(0, -12)
+        });
+        let markerOptions = {icon: myIcon};
+
+        let popupItemClone = null;
+        let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
+
+        return marker;
+    }
 }

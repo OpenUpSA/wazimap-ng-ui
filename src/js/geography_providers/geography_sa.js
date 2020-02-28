@@ -7,17 +7,18 @@ export const geography_config = {
         municipality: 'mainplace',
         mainplace: 'subplace'
     },
-    geoViewTypes:{
-        mainplace:['mainplace','subplace'],
-        ward:['ward']
+    geoViewTypes: {
+        mainplace: ['mainplace', 'subplace'],
+        ward: ['ward']
     },
-    geographyLevels:{
-        country:'Country',
-        province:'Province',
-        district:'District',
-        municipality:'Municipality',
-        mainplace:'Mainplace',
-        subplace:'Subplace',
-        ward:'Ward'
-    }
+    geographyLevels: {
+        country: 'Country',
+        province: 'Province',
+        district: 'District',
+        municipality: 'Municipality',
+        mainplace: 'Mainplace',
+        subplace: 'Subplace',
+        ward: 'Ward'
+    },
+    individualMarkerLevels: ['mainplace', 'subplace', 'ward']
 }

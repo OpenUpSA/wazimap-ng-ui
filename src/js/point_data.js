@@ -102,7 +102,8 @@ export class PointData extends Observable {
                         for (let j = 0; j < data.results[i].categories.length; j++) {
                             themeCategories.push({
                                 themeId: data.results[i].id,
-                                categoryId: data.results[i].categories[j].id
+                                categoryId: data.results[i].categories[j].id,
+                                categoryName: data.results[i].categories[j].name
                             })
                             let cItem = categoryItem.cloneNode(true);
                             $(cItem).on('click', () => self.selectedCategoriesChanged(cItem, item, data.results[i].categories[j], data.results[i].id));
@@ -343,6 +344,7 @@ export class PointData extends Observable {
             let childrenPoints = activePoints.filter((point) => {
                 return point.data[geography_config.geographyLevels[geography_config.preferredChildren[this.map.map_variables.currentLevel]]] === child.code
             })
+            let arr = [];
             if (childrenPoints.length > 0) {
                 let marker = this.markerFactory.generateClusterMarker({
                     x: child.center[0],
@@ -350,12 +352,38 @@ export class PointData extends Observable {
                     count: childrenPoints.length
                 })
 
+                //child.themes.push('test');
+                let grouped = this.groupBy(childrenPoints, 'categoryId');
+                let categories = Object.keys(grouped);
+                categories.forEach((category, j) => {
+                    let categoryName = themeCategories.filter((c) => {
+                        return parseInt(c.categoryId) === parseInt(category);
+                    })[0].categoryName;
+                    arr.push({
+                        categoryId: category,
+                        count: Object.values(grouped)[j].length,
+                        categoryName: categoryName
+                    })
+                })
+
                 activeLayers.push(marker);
 
                 this.map.addLayer(marker);
             }
+            child.categories = arr;
         });
     }
+
+    groupBy = (items, key) => items.reduce(
+        (result, item) => ({
+            ...result,
+            [item[key]]: [
+                ...(result[item[key]] || []),
+                item,
+            ],
+        }),
+        {},
+    );
 
     /**
      * individual markers

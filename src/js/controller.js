@@ -297,7 +297,7 @@ export default class Controller extends Observable {
         this.state.preferredChild = childLevel;
         this.triggerEvent("preferredChildChange", childLevel);
         // TODO remove SA specfic stuff
-        geography_config.preferredChildren['municipality'] = childLevel;
+        geography_config.preferredChildren['municipality'] = [childLevel];
 
         this.reDrawChildren();
     }

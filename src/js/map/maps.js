@@ -6,7 +6,6 @@ import {geography_config} from '../geography_providers/geography_sa';
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-const tooltipClsName = '.content__map_tooltip';
 const legendCount = 5;
 
 var defaultStyles = {
@@ -171,9 +170,7 @@ export class MapControl extends Observable {
                 if (layer != undefined)
                     layer.setStyle({fillColor: color});
             });
-
         }
-
 
         // if (children == undefined || children.length == 0)
         //     return
@@ -249,7 +246,7 @@ export class MapControl extends Observable {
     overlayBoundaries(geography, geometries, zoomNeeded = false) {
         const self = this;
         const level = geography.level;
-        const preferredChild = geography_config.preferredChildren[level];
+        const preferredChildren = geography_config.preferredChildren[level];
         let selectedBoundary;
         const parentBoundaries = geometries.parents;
 
@@ -261,8 +258,29 @@ export class MapControl extends Observable {
         if (Object.values(geometries.children).length == 0) {
             selectedBoundary = geometries.boundary;
         } else {
-            selectedBoundary = geometries.children[preferredChild];
+            preferredChildren.forEach((preferredChild, i) => {
+                if (i === 0) {
+                    selectedBoundary = geometries.children[preferredChild];
+                } else {
+                    let secondarySelectedBoundary = geometries.children[preferredChild];
+
+                    secondarySelectedBoundary.features.forEach((feature) => {
+                        let alreadyContained = false;
+                        selectedBoundary.features.forEach(sb => {
+                            if (sb.properties.code === feature.properties.code) {
+                                alreadyContained = true;
+                            }
+                        })
+
+                        if (!alreadyContained) {
+                            selectedBoundary.features.push(feature);
+                        }
+                    })
+                }
+            })
         }
+
+        //municipality
 
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
             const leafletLayer = L.geoJson(l);
@@ -283,7 +301,8 @@ export class MapControl extends Observable {
             this.map.map_variables.children.push({
                 name: item.properties.name,
                 code: item.properties.code,
-                center: [x, y]
+                center: [x, y],
+                categories: []
             })
         })
 

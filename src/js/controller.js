@@ -97,6 +97,7 @@ export default class Controller extends Observable {
     onSubIndicatorClick(payload) {
         this.state.subindicator = payload;
         this.state.selectedSubindicator = payload.obj._keys;
+
         this.triggerEvent("subindicatorClick", payload);
     };
 
@@ -121,6 +122,8 @@ export default class Controller extends Observable {
         getJSON(url).then(js => {
             const dataBundle = new DataBundle(js);
             self.state.profile = dataBundle;
+
+            console.log(url);
 
             self.triggerEvent("loadedNewProfile", dataBundle);
             // TODO this should be run after all dynamic stuff is run

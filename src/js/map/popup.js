@@ -34,7 +34,7 @@ export class Popup extends Observable {
 
         $('.content__map_tooltip').css('position', 'inherit');
         $('.content__map_tooltip').css('border', 'none');
-        $('.content__map_tooltip').css('min-width', '180px');
+        $('.content__map_tooltip').css('min-width', '250px');
         $('.content__map_tooltip').css('font-size', '14px');
         $('.leaflet-popup-content').css('margin', '0');     /*automatically added parent class*/
         $('.leaflet-popup-content-wrapper').css('padding', '0');    /*automatically added parent class*/
@@ -115,9 +115,11 @@ export class Popup extends Observable {
                                 const countFmt = numFmt(count);
                                 const perc = (payload.payload.layer.feature.properties.percentage * 100).toFixed(2);
 
-                                $('.map__tooltip_value .tooltip__value_label .truncate', item).text(`${state.subindicator.indicator} (${subindicatorValue.label})`);
-                                $('.map__tooltip_value .tooltip__value_amount .truncate', item).text(countFmt);
-                                $('.map__tooltip_value .tooltip__value_detail .truncate', item).text(`(${perc} %)`);
+                                console.log(state.subindicator.indicator);
+
+                                $('.map__tooltip_value .tooltip__value_label div', item).text(`${state.subindicator.indicator} (${subindicatorValue.label})`);
+                                $('.map__tooltip_value .tooltip__value_amount div', item).text(countFmt);
+                                $('.map__tooltip_value .tooltip__value_detail div', item).text(`(${perc} %)`);
                             }
                         }
                     }

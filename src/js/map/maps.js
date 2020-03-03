@@ -264,18 +264,20 @@ export class MapControl extends Observable {
                 } else {
                     let secondarySelectedBoundary = geometries.children[preferredChild];
 
-                    secondarySelectedBoundary.features.forEach((feature) => {
-                        let alreadyContained = false;
-                        selectedBoundary.features.forEach(sb => {
-                            if (sb.properties.code === feature.properties.code) {
-                                alreadyContained = true;
-                            }
-                        })
+                  if (typeof secondarySelectedBoundary !== 'undefined' && secondarySelectedBoundary !== null){
+                      secondarySelectedBoundary.features.forEach((feature) => {
+                          let alreadyContained = false;
+                          selectedBoundary.features.forEach(sb => {
+                              if (sb.properties.code === feature.properties.code) {
+                                  alreadyContained = true;
+                              }
+                          })
 
-                        if (!alreadyContained) {
-                            selectedBoundary.features.push(feature);
-                        }
-                    })
+                          if (!alreadyContained) {
+                              selectedBoundary.features.push(feature);
+                          }
+                      })
+                  }
                 }
             })
         }

@@ -3,6 +3,7 @@ import {scaleSequential as d3scaleSequential, scaleLinear} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 import {Observable, numFmt} from '../utils';
 import {geography_config} from '../geography_providers/geography_sa';
+import {polygon} from "leaflet/dist/leaflet-src.esm";
 
 const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
 const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -243,6 +244,23 @@ export class MapControl extends Observable {
         }
     }
 
+    isMarkerInsidePolygon = (marker, poly) => {
+        let polyPoints = poly.getLatLngs()[0][0];
+        let x = marker.lng, y = marker.lat;
+
+        let inside = false;
+        for (let i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
+            let xi = polyPoints[i].lat, yi = polyPoints[i].lng;
+            let xj = polyPoints[j].lat, yj = polyPoints[j].lng;
+
+            let intersect = ((yi > y) != (yj > y))
+                && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            if (intersect) inside = !inside;
+        }
+
+        return inside;
+    };
+
     overlayBoundaries(geography, geometries, zoomNeeded = false) {
         const self = this;
         const level = geography.level;
@@ -264,25 +282,23 @@ export class MapControl extends Observable {
                 } else {
                     let secondarySelectedBoundary = geometries.children[preferredChild];
 
-                  if (typeof secondarySelectedBoundary !== 'undefined' && secondarySelectedBoundary !== null){
-                      secondarySelectedBoundary.features.forEach((feature) => {
-                          let alreadyContained = false;
-                          selectedBoundary.features.forEach(sb => {
-                              if (sb.properties.code === feature.properties.code) {
-                                  alreadyContained = true;
-                              }
-                          })
+                    if (typeof secondarySelectedBoundary !== 'undefined' && secondarySelectedBoundary !== null) {
+                        secondarySelectedBoundary.features.forEach((feature) => {
+                            let alreadyContained = false;
+                            selectedBoundary.features.forEach(sb => {
+                                if (sb.properties.code === feature.properties.code) {
+                                    alreadyContained = true;
+                                }
+                            })
 
-                          if (!alreadyContained) {
-                              selectedBoundary.features.push(feature);
-                          }
-                      })
-                  }
+                            if (!alreadyContained) {
+                                selectedBoundary.features.push(feature);
+                            }
+                        })
+                    }
                 }
             })
         }
-
-        //municipality
 
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
             const leafletLayer = L.geoJson(l);
@@ -298,13 +314,22 @@ export class MapControl extends Observable {
         this.map.map_variables.children = [];
 
         selectedBoundary.features.map((item, i) => {
-            let x = item.geometry.coordinates[0][0].reduce((total, next) => total + next[0], 0) / (item.geometry.coordinates[0][0].length)
-            let y = item.geometry.coordinates[0][0].reduce((total, next) => total + next[1], 0) / (item.geometry.coordinates[0][0].length)
+            const l = L.geoJSON(item);
+            let center = l.getBounds().getCenter();
+            if (!this.isMarkerInsidePolygon(center, L.polygon(item.geometry.coordinates))) {
+                center = {
+                    lng: item.geometry.coordinates[0][0].reduce((total, next) => total + next[0], 0) / (item.geometry.coordinates[0][0].length),
+                    lat: item.geometry.coordinates[0][0].reduce((total, next) => total + next[1], 0) / (item.geometry.coordinates[0][0].length)
+                }
+            }
+            let x = center.lng
+            let y = center.lat
             this.map.map_variables.children.push({
                 name: item.properties.name,
                 code: item.properties.code,
                 center: [x, y],
-                categories: []
+                categories: [],
+                themes:item.properties.themes
             })
         })
 

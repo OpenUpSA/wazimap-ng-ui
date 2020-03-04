@@ -23,10 +23,10 @@ const popupItemClsName = '.point-marker__tooltip';
 const pointMarkerClsName = '.point-marker';
 const defaultActiveClsName = 'active-1';
 const clusterClsName = '.map__point-cluster';
-const clusterClasses = [{count: 300, cls: 5}, {count: 100, cls: 4}, {count: 30, cls: 3}, {count: 10, cls: 2}, {
-    count: 0,
-    cls: 1
-}];    //determines the color class according to the number of points
+const clusterClasses = [{count: 1500, cls: 5}, {count: 1000, cls: 4}, {count: 500, cls: 3}, {
+    count: 200,
+    cls: 2
+}, {count: 0, cls: 1}];  //determines the color class according to the number of points
 let activeLayers = [];
 let pointDataItem = null;
 let categoryItem = null;
@@ -218,9 +218,6 @@ export class PointData extends Observable {
             this.triggerEvent('themeSelected', {theme: theme, item: item});
 
             this.selectedThemes.push(theme.id);
-            this.showThemePoints(theme).then(data => {
-                this.triggerEvent('themeLoaded', {data: data, item: item})
-            });
 
             $(item).find(categoryItemClsName).each(function () {
                 if (!$(this).find('.point-data__h2').hasClass(activeClassName)) {
@@ -229,6 +226,10 @@ export class PointData extends Observable {
             })
 
             $('.point-data__h1_trigger', item).addClass(activeClassName);
+
+            this.showThemePoints(theme).then(data => {
+                this.triggerEvent('themeLoaded', {data: data, item: item})
+            });
         } else {
             //theme removed
             this.triggerEvent('themeUnselected', {theme: theme, item: item});
@@ -325,7 +326,7 @@ export class PointData extends Observable {
      */
     showPointsOnMap = () => {
         if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
-            this.showIndividualMarkers()
+            this.showIndividualMarkers();
         } else {
             this.showClusterMarkers();
         }
@@ -341,9 +342,15 @@ export class PointData extends Observable {
         }
 
         this.map.map_variables.children.map((child, i) => {
-            let childrenPoints = activePoints.filter((point) => {
-                return point.data[geography_config.geographyLevels[geography_config.preferredChildren[this.map.map_variables.currentLevel]]] === child.code
+            let childrenPoints = [];
+            let preferredArr = geography_config.preferredChildren[this.map.map_variables.currentLevel];
+            preferredArr.forEach((preferredChild) => {
+                let tempArr = activePoints.filter((point) => {
+                    return point.data[geography_config.geographyLevels[preferredChild]] === child.code
+                })
+                childrenPoints = childrenPoints.concat(tempArr)
             })
+
             let arr = [];
             if (childrenPoints.length > 0) {
                 let marker = this.markerFactory.generateClusterMarker({

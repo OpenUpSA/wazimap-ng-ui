@@ -1,6 +1,6 @@
 import configureApplication from "./load";
-import {geography_config} from './geography_providers/geography_sa';
-import {geography_config as gcro_config} from './geography_providers/geography_gcro';
+import {geography_config} from './configurations/geography_sa';
+import {geography_config as gcro_config} from './configurations/geography_gcro';
 
 let profileId = 1;
 let baseUrl;

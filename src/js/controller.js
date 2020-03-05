@@ -1,15 +1,13 @@
 import {Observable, getJSON} from './utils';
 import {Geography, Profile, DataBundle} from './dataobjects';
-import {geography_config} from './geography_providers/geography_sa';
-
-const defaultGeography = geography_config.rootGeography;
 
 let currentAreaCode = '';
 
 export default class Controller extends Observable {
-    constructor(baseUrl, profileId = 1) {
+    constructor(baseUrl, config, profileId = 1) {
         super();
         this.baseUrl = baseUrl;
+        this.config = config
         this.profileId = profileId;
 
         this.state = {
@@ -40,7 +38,7 @@ export default class Controller extends Observable {
                 else
                     areaCode = parts[1];
             } else {
-                areaCode = defaultGeography;
+                areaCode = config.rootGeography;
             }
 
             currentAreaCode = areaCode;
@@ -300,7 +298,7 @@ export default class Controller extends Observable {
         this.state.preferredChild = childLevel;
         this.triggerEvent("preferredChildChange", childLevel);
         // TODO remove SA specfic stuff
-        geography_config.preferredChildren['municipality'] = [childLevel];
+        this.config.preferredChildren['municipality'] = [childLevel];
 
         this.reDrawChildren();
     }

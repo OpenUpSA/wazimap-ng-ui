@@ -1,5 +1,6 @@
+// TODO temporary until we decide how to deal with configuration
 export const geography_config = {
-    rootGeography: 'ZA',
+    rootGeography: 'GT',
     preferredChildren: {
         country: ['province'],
         province: ['district', 'municipality'],
@@ -22,7 +23,7 @@ export const geography_config = {
     },
     individualMarkerLevels: ['mainplace', 'subplace', 'ward'],
     map: {
-        defaultCoordinates: {'lat': -28.995409163308832, 'long': 25.093833387362697, 'zoom': 6},
+        defaultCoordinates: {'lat': -26.0123951, 'long': 27.0061074, 'zoom': 10},
         tileUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         zoomControlEnabled: false,
         zoomEnabled: false,

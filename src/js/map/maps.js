@@ -2,11 +2,8 @@ import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
 import {scaleSequential as d3scaleSequential, scaleLinear} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 import {Observable, numFmt} from '../utils';
-import {geography_config} from '../geography_providers/geography_sa';
 import {polygon} from "leaflet/dist/leaflet-src.esm";
 
-const defaultCoordinates = {"lat": -28.995409163308832, "long": 25.093833387362697, "zoom": 6};
-const defaultTileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const legendCount = 5;
 
 var defaultStyles = {
@@ -63,16 +60,17 @@ class LayerStyler {
 }
 
 export class MapControl extends Observable {
-    constructor(geographyProvider, config) {
+    constructor(config) {
         super();
-        config = config || {}
 
-        const coords = config.coords || defaultCoordinates;
-        const tileUrl = config.tileUrl || defaultTileUrl;
+        this.config = config;
 
-        this.zoomControlEnabled = config.zoomControlEnabled || false;
-        this.zoomEnabled = config.zoomMap || false;
-        this.zoomPosition = config.zoomPosition || 'bottomright'
+        const coords = config.map.defaultCoordinates;
+        const tileUrl = config.map.tileUrl;
+
+        this.zoomControlEnabled = config.map.zoomControlEnabled;
+        this.zoomEnabled = config.map.zoomEnabled;
+        this.zoomPosition = config.map.zoomPosition;
         this.boundaryLayers = null;
         this.mainLayer = null;
         this.legendColors = [];
@@ -115,15 +113,15 @@ export class MapControl extends Observable {
 
         if (zoomLvl < 7) {
             window.location.hash = "";
-        } else if (zoomLvl >= 11 && level === geography_config.geographyLevels.subplace) {
+        } else if (zoomLvl >= 11 && level === this.config.geographyLevels.subplace) {
             window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 10 && level === geography_config.geographyLevels.mainplace) {
+        } else if (zoomLvl >= 10 && level === this.config.geographyLevels.mainplace) {
             window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 9 && level === geography_config.geographyLevels.municipality) {
+        } else if (zoomLvl >= 9 && level === this.config.geographyLevels.municipality) {
             window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 8 && level === geography_config.geographyLevels.district) {
+        } else if (zoomLvl >= 8 && level === this.config.geographyLevels.district) {
             window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 7 && level === geography_config.geographyLevels.province) {
+        } else if (zoomLvl >= 7 && level === this.config.geographyLevels.province) {
             window.location.hash = "#geo:" + areaCode;
         }
     }
@@ -237,9 +235,9 @@ export class MapControl extends Observable {
         $('nav#w-dropdown-list-0').find('a:nth-child(2)').text('Mainplaces when possible');
         $('#w-dropdown-toggle-0').html($('#w-dropdown-toggle-0').html().toString().replace('Sub-place', 'Mainplace'))
 
-        if (geography_config.geoViewTypes.mainplace.indexOf(level) >= 0) {
+        if (this.config.geoViewTypes.mainplace.indexOf(level) >= 0) {
             $('nav#w-dropdown-list-0').find('a:nth-child(1)').hide();
-        } else if (geography_config.geoViewTypes.ward.indexOf(level) >= 0) {
+        } else if (this.config.geoViewTypes.ward.indexOf(level) >= 0) {
             $('nav#w-dropdown-list-0').find('a:nth-child(2)').hide();
         }
     }
@@ -264,7 +262,7 @@ export class MapControl extends Observable {
     overlayBoundaries(geography, geometries, zoomNeeded = false) {
         const self = this;
         const level = geography.level;
-        const preferredChildren = geography_config.preferredChildren[level];
+        const preferredChildren = this.config.preferredChildren[level];
         let selectedBoundary;
         const parentBoundaries = geometries.parents;
 

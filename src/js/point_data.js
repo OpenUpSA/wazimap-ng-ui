@@ -2,7 +2,6 @@ import {getJSON, Observable} from './utils';
 import 'leaflet.markercluster/dist/leaflet.markercluster'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
-import {geography_config} from "./geography_providers/geography_sa";
 import {count} from "d3-array";
 
 
@@ -44,11 +43,13 @@ let clusterClone = null;
  * this class creates the point data dialog
  */
 export class PointData extends Observable {
-    constructor(baseUrl, _map) {
+    constructor(baseUrl, _map, config) {
         super();
 
         this.baseUrl = baseUrl;
         this.map = _map;
+        this.config = config;
+
         this.selectedThemes = [];
         this.selectedCategories = [];
         this.markerFactory = new MarkerFactory(
@@ -325,7 +326,7 @@ export class PointData extends Observable {
      * clears the map, puts back the points that are in activePoints array
      */
     showPointsOnMap = () => {
-        if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
+        if (this.config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
             this.showIndividualMarkers();
         } else {
             this.showClusterMarkers();
@@ -343,10 +344,10 @@ export class PointData extends Observable {
 
         this.map.map_variables.children.map((child, i) => {
             let childrenPoints = [];
-            let preferredArr = geography_config.preferredChildren[this.map.map_variables.currentLevel];
+            let preferredArr = this.config.preferredChildren[this.map.map_variables.currentLevel];
             preferredArr.forEach((preferredChild) => {
                 let tempArr = activePoints.filter((point) => {
-                    return point.data[geography_config.geographyLevels[preferredChild]] === child.code
+                    return point.data[this.config.geographyLevels[preferredChild]] === child.code
                 })
                 childrenPoints = childrenPoints.concat(tempArr)
             })

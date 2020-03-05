@@ -7,27 +7,23 @@ import {MapControl} from './map/maps';
 import {getJSON, numFmt} from './utils';
 import {Profile} from './profile';
 import {onProfileLoaded as onProfileLoadedSearch, Search} from './search';
-import {MapItGeographyProvider} from './geography_providers/mapit';
-import {WazimapProvider} from './geography_providers/wazimap';
 import {MapChip} from './mapchip';
 import {LocationInfoBox} from './location_info_box';
 import {LoadingSpinner} from './loading_spinner';
 import {PointData} from "./point_data";
 import {ZoomToggle} from "./mapmenu/zoomtoggle";
 import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
-import {geography_config} from './geography_providers/geography_sa';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 import {Popup} from "./map/popup";
 
-export default function configureApplication(serverUrl, profileId) {
+export default function configureApplication(serverUrl, profileId, config) {
     const baseUrl = `${serverUrl}/api/v1`;
-    const geographyProvider = new WazimapProvider(baseUrl)
-    const mapcontrol = new MapControl(geographyProvider);
+    const mapcontrol = new MapControl(config);
     const popup = new Popup(mapcontrol.map);
-    const pointData = new PointData(baseUrl, mapcontrol.map);
-    const controller = new Controller(baseUrl, profileId);
+    const pointData = new PointData(baseUrl, mapcontrol.map, config);
+    const controller = new Controller(baseUrl, config, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
     const mapchip = new MapChip();

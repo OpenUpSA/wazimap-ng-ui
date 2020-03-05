@@ -5,7 +5,6 @@ import {geography_config as gcro_config} from './geography_providers/geography_g
 let profileId = 1;
 let baseUrl;
 let config = geography_config;
-config = gcro_config;
 
 if (window.location.href.search("wazi.webflow.io") >= 0)
     baseUrl = "https://wazimap-ng.openup.org.za";

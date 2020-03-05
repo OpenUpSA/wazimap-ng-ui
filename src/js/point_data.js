@@ -23,6 +23,7 @@ const popupItemClsName = '.point-marker__tooltip';
 const pointMarkerClsName = '.point-marker';
 const defaultActiveClsName = 'active-1';
 const clusterClsName = '.map__point-cluster';
+const hideondeployClsName = 'hideondeploy';
 const clusterClasses = [{count: 1500, cls: 5}, {count: 1000, cls: 4}, {count: 500, cls: 3}, {
     count: 200,
     cls: 2
@@ -49,8 +50,9 @@ export class PointData extends Observable {
 
         this.baseUrl = baseUrl;
         this.map = _map;
-        this.selectedThemes = [];
+        //this.selectedThemes = [];
         this.selectedCategories = [];
+        this.selectedCategoryNames = []; //remove this when we have categoryId on all_details API
         this.markerFactory = new MarkerFactory(
             Number($(pointMarkerClsName).css('width').replace('px', '')),
             Number($(pointMarkerClsName).css('height').replace('px', ''))
@@ -94,6 +96,7 @@ export class PointData extends Observable {
             if (data.results !== null && data.results.length > 0) {
                 for (let i = 0; i < data.results.length; i++) {
                     let item = pointDataItem.cloneNode(true);
+                    $(item).removeClass(hideondeployClsName);
                     $('.h1__trigger_title .truncate', item).text(data.results[i].name);
                     $('.point-data__h1_trigger', item).removeClass(defaultActiveClsName);
                     $(categoryWrapperClsName, item).html('');
@@ -144,7 +147,10 @@ export class PointData extends Observable {
         if ($(cItem).find('.point-data__h2').hasClass(activeClassName)) {
             this.triggerEvent('categoryUnselected', {category: category, item: cItem});
 
-            this.selectedCategories.splice(this.selectedCategories.indexOf(category.id), 1);
+            if (this.selectedCategories.indexOf(category.id) >= 0) {
+                this.selectedCategories.splice(this.selectedCategories.indexOf(category.id), 1);
+                this.selectedCategoryNames.splice(this.selectedCategoryNames.indexOf(category.name), 1);
+            }
 
             $(cItem).find('.point-data__h2').removeClass(activeClassName);
             if ($(item).find(categoryItemClsName).find('.' + activeClassName).length == 0) {
@@ -157,6 +163,7 @@ export class PointData extends Observable {
         } else {
             this.triggerEvent('categorySelected', {category: category, item: cItem});
             this.selectedCategories.push(category.id);
+            this.selectedCategoryNames.push(category.name);
 
             $(cItem).find('.point-data__h2').addClass(activeClassName);
             $('.point-data__h1_trigger', item).addClass(activeClassName);
@@ -165,9 +172,14 @@ export class PointData extends Observable {
                 $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop("checked", true);
             }
 
-            this.showCategoryPoint(category).then(data => {
-                this.triggerEvent('categoryPointLoaded', {data: data, item: cItem})
-            });
+            if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
+                this.showCategoryPoint(category).then(data => {
+                    this.triggerEvent('categoryPointLoaded', {data: data, item: cItem})
+                });
+            } else {
+                this.showClusterMarkers();
+                this.triggerEvent('categoryPointLoaded', {data: null, item: cItem})
+            }
         }
     }
 
@@ -217,7 +229,13 @@ export class PointData extends Observable {
             //theme added
             this.triggerEvent('themeSelected', {theme: theme, item: item});
 
-            this.selectedThemes.push(theme.id);
+            //this.selectedThemes.push(theme.id);
+            themeCategories.forEach((tc) => {
+                if (tc.themeId === theme.id) {
+                    this.selectedCategories.push(tc.categoryId);
+                    this.selectedCategoryNames.push(tc.categoryName);
+                }
+            })
 
             $(item).find(categoryItemClsName).each(function () {
                 if (!$(this).find('.point-data__h2').hasClass(activeClassName)) {
@@ -227,14 +245,26 @@ export class PointData extends Observable {
 
             $('.point-data__h1_trigger', item).addClass(activeClassName);
 
-            this.showThemePoints(theme).then(data => {
-                this.triggerEvent('themeLoaded', {data: data, item: item})
-            });
+            if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
+                this.showThemePoints(theme).then(data => {
+                    this.triggerEvent('themeLoaded', {data: data, item: item})
+                });
+            } else {
+                this.showClusterMarkers();
+                this.triggerEvent('themeLoaded', {data: null, item: item})
+            }
         } else {
             //theme removed
             this.triggerEvent('themeUnselected', {theme: theme, item: item});
 
-            this.selectedThemes.splice(this.selectedThemes.indexOf(theme.id), 1);
+            //this.selectedThemes.splice(this.selectedThemes.indexOf(theme.id), 1);
+            themeCategories.forEach((tc) => {
+                if (tc.themeId === theme.id && this.selectedCategories.indexOf(tc.categoryId) >= 0) {
+                    this.selectedCategories.splice(this.selectedCategories.indexOf(tc.categoryId), 1);
+                    this.selectedCategoryNames.splice(this.selectedCategories.indexOf(tc.categoryName), 1);
+                }
+            })
+
             this.removeThemePoints(theme);
 
             $(item).find(categoryItemClsName).each(function () {
@@ -342,55 +372,68 @@ export class PointData extends Observable {
         }
 
         this.map.map_variables.children.map((child, i) => {
-            let childrenPoints = [];
-            let preferredArr = geography_config.preferredChildren[this.map.map_variables.currentLevel];
-            preferredArr.forEach((preferredChild) => {
-                let tempArr = activePoints.filter((point) => {
-                    return point.data[geography_config.geographyLevels[preferredChild]] === child.code
+            let childCategories = [];
+
+            //todo:convert this to selectedCategories when we have categoryId on all_details API
+            this.selectedCategoryNames.forEach((category) => {
+                child.themes.forEach((cTheme) => {
+                    let categoriesToAdd = cTheme.categories.filter((c) => {
+                        return c.name === category;
+                    })
+
+                    if (typeof categoriesToAdd[0] !== 'undefined') {
+                        let contains = childCategories.filter((ch) => {
+                            return ch.name === categoriesToAdd[0].name  //todo:change this to Id when we have categoryId on all_details API
+                        })
+                        if (contains.length <= 0) {
+                            childCategories = childCategories.concat(categoriesToAdd[0]);
+                        }
+                    }
                 })
-                childrenPoints = childrenPoints.concat(tempArr)
             })
 
-            let arr = [];
-            if (childrenPoints.length > 0) {
-                let marker = this.markerFactory.generateClusterMarker({
-                    x: child.center[0],
-                    y: child.center[1],
-                    count: childrenPoints.length
-                })
+            console.log(childCategories)
 
-                //child.themes.push('test');
-                let grouped = this.groupBy(childrenPoints, 'categoryId');
-                let categories = Object.keys(grouped);
-                categories.forEach((category, j) => {
-                    let categoryName = themeCategories.filter((c) => {
-                        return parseInt(c.categoryId) === parseInt(category);
-                    })[0].categoryName;
+            let arr = [];
+            if (childCategories.length > 0) {
+                let totalCount = 0;
+                childCategories.forEach((cc) => {
+                    totalCount += cc.count;
+
                     arr.push({
-                        categoryId: category,
-                        count: Object.values(grouped)[j].length,
-                        categoryName: categoryName
+                        categoryId: cc.categoryId,
+                        count: cc.count,
+                        categoryName: cc.name
                     })
                 })
 
-                activeLayers.push(marker);
+                let marker = this.markerFactory.generateClusterMarker({
+                    x: child.center[0],
+                    y: child.center[1],
+                    count: totalCount
+                })
 
+                activeLayers.push(marker);
                 this.map.addLayer(marker);
             }
             child.categories = arr;
         });
     }
 
-    groupBy = (items, key) => items.reduce(
-        (result, item) => ({
-            ...result,
-            [item[key]]: [
-                ...(result[item[key]] || []),
-                item,
-            ],
-        }),
-        {},
-    );
+    showClusterOrIndividualMarkers = () => {
+        if (this.selectedCategories.length <= 0) {
+            return;
+        }
+
+        if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
+            //get markers
+            this.selectedCategories.forEach((cId) => {
+                this.showCategoryPoint({id: cId});
+            })
+        } else {
+            this.showClusterMarkers();
+        }
+    }
 
     /**
      * individual markers

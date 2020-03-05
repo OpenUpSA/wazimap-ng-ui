@@ -73,6 +73,9 @@ export default function configureApplication(serverUrl, profileId) {
         const geometries = payload.payload.geometries;
         mapcontrol.overlayBoundaries(geography, geometries)
     });
+    controller.on('loadedNewProfile', payload => {
+        pointData.showClusterOrIndividualMarkers();
+    })
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());
     controller.on("searchResults", payload => searchLoadSpinner.stop());

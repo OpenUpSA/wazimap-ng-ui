@@ -44,7 +44,9 @@ export default function configureApplication(serverUrl, profileId) {
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
-    controller.on('subindicatorClick', payload => mapcontrol.choropleth(payload.state.subindicator))
+    controller.on('subindicatorClick', payload => {
+        mapcontrol.choropleth(payload.state.subindicator)
+    })
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload, mapcontrol.legendColors));
     controller.on('layerMouseOver', payload => popup.loadPopup(payload));
     controller.on('layerMouseOut', payload => popup.hidePopup(payload));
@@ -62,7 +64,9 @@ export default function configureApplication(serverUrl, profileId) {
     });
     controller.on("loadedNewProfile", payload => mapchip.clearAllMapChip());
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
-    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => controller.onSubIndicatorClick(payload)))
+    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
+        controller.onSubIndicatorClick(payload)
+    }))
     controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload.payload))
     controller.on('loadedNewProfile', payload => {
         const geography = payload.payload.profile.geography;

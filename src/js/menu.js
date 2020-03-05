@@ -2,7 +2,6 @@ import {SubIndicator} from './dataobjects'
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
-
     const parentContainer = $(".data-menu__links")
     const categoryTemplate = $(".data-menu__category")[0].cloneNode(true);
     const subCategoryTemplate = $(".data-menu__subcategory", categoryTemplate)[0].cloneNode(true);

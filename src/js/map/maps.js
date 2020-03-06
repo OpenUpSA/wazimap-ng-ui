@@ -231,14 +231,16 @@ export class MapControl extends Observable {
     }
 
     limitGeoViewSelections = (level) => {
-        $('nav#w-dropdown-list-0').find('a').show();
-        $('nav#w-dropdown-list-0').find('a:nth-child(2)').text('Mainplaces when possible');
-        $('#w-dropdown-toggle-0').html($('#w-dropdown-toggle-0').html().toString().replace('Sub-place', 'Mainplace'))
+        if (this.config.limitGeoViewSelections) {
+            $('nav#w-dropdown-list-0').find('a').show();
+            $('nav#w-dropdown-list-0').find('a:nth-child(2)').text('Mainplaces when possible');
+            $('#w-dropdown-toggle-0').html($('#w-dropdown-toggle-0').html().toString().replace('Sub-place', 'Mainplace'))
 
-        if (this.config.geoViewTypes.mainplace.indexOf(level) >= 0) {
-            $('nav#w-dropdown-list-0').find('a:nth-child(1)').hide();
-        } else if (this.config.geoViewTypes.ward.indexOf(level) >= 0) {
-            $('nav#w-dropdown-list-0').find('a:nth-child(2)').hide();
+            if (this.config.geoViewTypes.mainplace.indexOf(level) >= 0) {
+                $('nav#w-dropdown-list-0').find('a:nth-child(1)').hide();
+            } else if (this.config.geoViewTypes.ward.indexOf(level) >= 0) {
+                $('nav#w-dropdown-list-0').find('a:nth-child(2)').hide();
+            }
         }
     }
 

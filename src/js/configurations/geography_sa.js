@@ -26,6 +26,7 @@ export const geography_config = {
         tileUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         zoomControlEnabled: false,
         zoomEnabled: false,
-        zoomPosition: 'bottomright'
+        zoomPosition: 'bottomright',
+        limitGeoViewSelections: true // TODO temporary until specific geographies are factored out of the code
     }
 }

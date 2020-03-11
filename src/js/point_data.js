@@ -28,6 +28,7 @@ const clusterClasses = [{count: 1500, cls: 5}, {count: 1000, cls: 4}, {count: 50
     count: 200,
     cls: 2
 }, {count: 0, cls: 1}];  //determines the color class according to the number of points
+let activeMarkers = [];
 let activeLayers = [];
 let pointDataItem = null;
 let categoryItem = null;
@@ -172,14 +173,9 @@ export class PointData extends Observable {
                 $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop("checked", true);
             }
 
-            if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
-                this.showCategoryPoint(category).then(data => {
-                    this.triggerEvent('categoryPointLoaded', {data: data, item: cItem})
-                });
-            } else {
-                this.showClusterMarkers();
-                this.triggerEvent('categoryPointLoaded', {data: null, item: cItem})
-            }
+            this.showCategoryPoint(category).then(data => {
+                this.triggerEvent('categoryPointLoaded', {data: data, item: cItem})
+            });
         }
     }
 
@@ -245,14 +241,9 @@ export class PointData extends Observable {
 
             $('.point-data__h1_trigger', item).addClass(activeClassName);
 
-            if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
-                this.showThemePoints(theme).then(data => {
-                    this.triggerEvent('themeLoaded', {data: data, item: item})
-                });
-            } else {
-                this.showClusterMarkers();
-                this.triggerEvent('themeLoaded', {data: null, item: item})
-            }
+            this.showThemePoints(theme).then(data => {
+                this.triggerEvent('themeLoaded', {data: data, item: item})
+            });
         } else {
             //theme removed
             this.triggerEvent('themeUnselected', {theme: theme, item: item});
@@ -355,11 +346,7 @@ export class PointData extends Observable {
      * clears the map, puts back the points that are in activePoints array
      */
     showPointsOnMap = () => {
-        if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
-            this.showIndividualMarkers();
-        } else {
-            this.showClusterMarkers();
-        }
+        this.showIndividualMarkers();
     }
 
     /**
@@ -367,10 +354,6 @@ export class PointData extends Observable {
      */
     showClusterMarkers = () => {
         //1 for each child
-        for (let i = 0; i < activeLayers.length; i++) {
-            this.map.removeLayer(activeLayers[i]);
-        }
-
         this.map.map_variables.children.map((child, i) => {
             let childCategories = [];
 
@@ -392,8 +375,6 @@ export class PointData extends Observable {
                 })
             })
 
-            console.log(childCategories)
-
             let arr = [];
             if (childCategories.length > 0) {
                 let totalCount = 0;
@@ -411,9 +392,9 @@ export class PointData extends Observable {
                     x: child.center[0],
                     y: child.center[1],
                     count: totalCount
-                })
+                }, this.map)
 
-                activeLayers.push(marker);
+                //activeLayers.push(marker);
                 this.map.addLayer(marker);
             }
             child.categories = arr;
@@ -421,37 +402,66 @@ export class PointData extends Observable {
     }
 
     showClusterOrIndividualMarkers = () => {
+        /*
         if (this.selectedCategories.length <= 0) {
             return;
         }
 
-        if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
-            //get markers
-            this.selectedCategories.forEach((cId) => {
-                this.showCategoryPoint({id: cId});
-            })
-        } else {
-            this.showClusterMarkers();
-        }
+        this.selectedCategories.forEach((cId) => {
+            this.showCategoryPoint({id: cId});
+        })
+         */
+
+        this.showIndividualMarkers();
     }
 
     /**
      * individual markers
      */
     showIndividualMarkers = () => {
-        self = this;
-        markers.clearLayers();
-
-        let newMarkers = [];
+        for (let i = 0; i < activeMarkers.length; i++) {
+            activeMarkers[i].remove();
+        }
+        for (let i = 0; i < activeLayers.length; i++) {
+            this.map.removeLayer(activeLayers[i]);
+        }
 
         if (activePoints !== null && activePoints != undefined && activePoints.length > 0) {
-            activePoints.forEach(point => {
-                let marker = this.markerFactory.generateMarker(point);
-                newMarkers.push(marker);
-            })
+            if (geography_config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) < 0) {
+                let renderer = L.canvas({padding: 0.5});
+                activePoints.forEach(point => {
+                    let marker = L.circleMarker([point.y, point.x], {
+                        renderer: renderer,
+                        color: $('.active-' + point.themeId).css('color'),
+                        radius: 1
+                    }).addTo(this.map);
 
-            markers.addLayers(newMarkers);
-            this.map.addLayer(markers);
+                    activeMarkers.push(marker);
+                })
+            } else {
+                let newMarkers = [];
+                let preferredArr = geography_config.preferredChildren[this.map.map_variables.currentLevel];
+                this.map.map_variables.children.map((child, i) => {
+                    let childrenPoints = [];
+                    let preferredArr = geography_config.preferredChildren[this.map.map_variables.currentLevel];
+                    preferredArr.forEach((preferredChild) => {
+                        let tempArr = activePoints.filter((point) => {
+                            return point.data[geography_config.geographyLevels[preferredChild]] === child.code
+                        })
+                        childrenPoints = childrenPoints.concat(tempArr)
+                    })
+
+                    console.log(childrenPoints)
+                });
+                /*
+                activePoints.forEach(point => {
+                    let marker = this.markerFactory.generateMarker(point);
+
+                    activeLayers.push(marker);
+                    this.map.addLayer(marker);
+                })
+                 */
+            }
         }
     }
 }
@@ -592,7 +602,7 @@ class MarkerFactory {
     /**
      * generates cluster marker using the html clone
      */
-    generateClusterMarker(point) {
+    generateClusterMarker(point, map) {
         let cluster = clusterClone.cloneNode(true);
         $(cluster).removeClass('_1');
         for (let i = 0; i < clusterClasses.length; i++) {

@@ -280,7 +280,9 @@ export class MapControl extends Observable {
                 if (i === 0) {
                     selectedBoundary = geometries.children[preferredChild];
                 } else {
-                    selectedBoundary = {features:[]};
+                    if (selectedBoundary === null || typeof selectedBoundary === 'undefined') {
+                        selectedBoundary = {features: []};
+                    }
                     let secondarySelectedBoundary = geometries.children[preferredChild];
 
                     if (typeof secondarySelectedBoundary !== 'undefined' && secondarySelectedBoundary !== null) {
@@ -301,8 +303,6 @@ export class MapControl extends Observable {
             })
         }
 
-        console.log(selectedBoundary)
-
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
             const leafletLayer = L.geoJson(l);
             leafletLayer.eachLayer(l => {
@@ -316,7 +316,7 @@ export class MapControl extends Observable {
 
         this.map.map_variables.children = [];
 
-        if (typeof selectedBoundary.features !== 'undefined' && typeof selectedBoundary.features.map !== 'undefined'){
+        if (typeof selectedBoundary.features !== 'undefined' && typeof selectedBoundary.features.map !== 'undefined') {
             selectedBoundary.features.map((item, i) => {
                 const l = L.geoJSON(item);
                 let center = l.getBounds().getCenter();
@@ -333,7 +333,7 @@ export class MapControl extends Observable {
                     code: item.properties.code,
                     center: [x, y],
                     categories: [],
-                    themes:item.properties.themes
+                    themes: item.properties.themes
                 })
             })
         }
@@ -398,4 +398,5 @@ export class MapControl extends Observable {
 
         self.triggerEvent("layerLoadingDone", self.map);
     };
+
 }

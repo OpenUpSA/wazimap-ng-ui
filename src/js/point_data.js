@@ -173,7 +173,7 @@ export class PointData extends Observable {
     }
 
     showCategoryPoint = (category) => {
-        let categoryUrl = `${this.baseUrl}/${pointsByCategoryUrl}/${category.id}/`
+        let categoryUrl = `${this.baseUrl}/${pointsByCategoryUrl}/${category.id}/?format=json`
         let iterationCounter = 0;
 
         const tokenIndex = "category_id-" + category.id;

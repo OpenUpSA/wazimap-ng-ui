@@ -17,6 +17,11 @@ else if (window.location.href.search("gcro.openup.org.za") >= 0) {
     config = gcro_config;
     profileId = 1;
 }
+else if (window.location.href.search("geo.vulekamali.gov.za") >= 0) {
+    baseUrl = "https://staging.wazimap-ng.openup.org.za";
+    config = geography_config;
+    profileId = 2;
+}
 else
     baseUrl = "https://staging.wazimap-ng.openup.org.za"
 

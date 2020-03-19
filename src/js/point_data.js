@@ -46,11 +46,12 @@ let clusterClone = null;
  * this class creates the point data dialog
  */
 export class PointData extends Observable {
-    constructor(baseUrl, _map, config) {
+    constructor(baseUrl, _map, profileId, config) {
         super();
 
         this.baseUrl = baseUrl;
         this.map = _map;
+        this.profileId = profileId;
         this.config = config;
         this.payload = null;
 
@@ -94,7 +95,7 @@ export class PointData extends Observable {
     loadThemes = () => {
         let self = this;
         self.triggerEvent("loadingThemes", self);
-        const themeUrl = `${this.baseUrl}/${url}/`;
+        const themeUrl = `${this.baseUrl}/${url}/${this.profileId}/`;
 
         getJSON(themeUrl).then((data) => {
             if (data.results !== null && data.results.length > 0) {

@@ -22,7 +22,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     const baseUrl = `${serverUrl}/api/v1`;
     const mapcontrol = new MapControl(config);
     const popup = new Popup(mapcontrol.map);
-    const pointData = new PointData(baseUrl, mapcontrol.map, config);
+    const pointData = new PointData(baseUrl, mapcontrol.map, profileId, config);
     const controller = new Controller(baseUrl, config, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");

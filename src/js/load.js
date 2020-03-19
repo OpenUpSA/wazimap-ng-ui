@@ -28,7 +28,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     const printButton = $("#profile-print");
     const mapchip = new MapChip();
     const search = new Search(baseUrl, 2);
-    const profileLoader = new ProfileLoader();
+    const profileLoader = new ProfileLoader(config);
     const locationInfoBox = new LocationInfoBox();
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
@@ -70,7 +70,7 @@ export default function configureApplication(serverUrl, profileId, config) {
         mapcontrol.overlayBoundaries(geography, geometries)
     });
     controller.on('loadedNewProfile', payload => {
-        pointData.showClusterOrIndividualMarkers();
+        pointData.showClusterOrIndividualMarkers(payload.payload);
     })
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());

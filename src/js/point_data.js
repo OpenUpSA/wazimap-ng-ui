@@ -38,6 +38,7 @@ let markers = null;
 let markerOptionsArr = [];
 let themeCategories = [];
 let activePoints = [];  //the visible points on the map
+let activeIndividualPoints = [];
 let addrPointCancelTokens = {};
 let clusterClone = null;
 
@@ -402,7 +403,7 @@ export class PointData extends Observable {
         });
     }
 
-    showClusterOrIndividualMarkers = () => {
+    showClusterOrIndividualMarkers = (payload) => {
         /*
         if (this.selectedCategories.length <= 0) {
             return;
@@ -412,6 +413,24 @@ export class PointData extends Observable {
             this.showCategoryPoint({id: cId});
         })
          */
+
+        if (this.config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
+            let selectedPoints = payload.geometries.themes.filter((theme) => {
+                return this.selectedCategories.indexOf(theme.subtheme_id) >= 0
+            });
+
+            let prevPoints = activePoints;
+            activeIndividualPoints = [];
+            selectedPoints.forEach((sp) => {
+                sp.locations.list.forEach((listItem) => {
+                    activeIndividualPoints.push(
+                        prevPoints.filter((pp) => {
+                            return pp.x === listItem.coordinates.coordinates[0] && pp.y === listItem.coordinates.coordinates[1]
+                        })[0]
+                    );
+                });
+            });
+        }
 
         this.showIndividualMarkers();
     }
@@ -440,28 +459,12 @@ export class PointData extends Observable {
                     activeMarkers.push(marker);
                 })
             } else {
-                let newMarkers = [];
-                let preferredArr = this.config.preferredChildren[this.map.map_variables.currentLevel];
-                this.map.map_variables.children.map((child, i) => {
-                    let childrenPoints = [];
-                    let preferredArr = this.config.preferredChildren[this.map.map_variables.currentLevel];
-                    preferredArr.forEach((preferredChild) => {
-                        let tempArr = activePoints.filter((point) => {
-                            return point.data[this.config.geographyLevels[preferredChild]] === child.code
-                        })
-                        childrenPoints = childrenPoints.concat(tempArr)
-                    })
-
-                    console.log(childrenPoints)
-                });
-                /*
-                activePoints.forEach(point => {
+                activeIndividualPoints.forEach(point => {
                     let marker = this.markerFactory.generateMarker(point);
 
                     activeLayers.push(marker);
                     this.map.addLayer(marker);
                 })
-                 */
             }
         }
     }

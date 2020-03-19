@@ -1,7 +1,7 @@
 import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
 import {scaleSequential as d3scaleSequential, scaleLinear} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
-import {Observable, numFmt} from '../utils';
+import {Observable, numFmt, getSelectedBoundary} from '../utils';
 import {polygon} from "leaflet/dist/leaflet-src.esm";
 
 const legendCount = 5;
@@ -276,28 +276,7 @@ export class MapControl extends Observable {
         if (Object.values(geometries.children).length == 0) {
             selectedBoundary = geometries.boundary;
         } else {
-            preferredChildren.forEach((preferredChild, i) => {
-                if (i === 0) {
-                    selectedBoundary = geometries.children[preferredChild];
-                } else {
-                    let secondarySelectedBoundary = geometries.children[preferredChild];
-
-                    if (typeof secondarySelectedBoundary !== 'undefined' && secondarySelectedBoundary !== null) {
-                        secondarySelectedBoundary.features.forEach((feature) => {
-                            let alreadyContained = false;
-                            selectedBoundary.features.forEach(sb => {
-                                if (sb.properties.code === feature.properties.code) {
-                                    alreadyContained = true;
-                                }
-                            })
-
-                            if (!alreadyContained) {
-                                selectedBoundary.features.push(feature);
-                            }
-                        })
-                    }
-                }
-            })
+            selectedBoundary = getSelectedBoundary(level, geometries, this.config);
         }
 
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
@@ -313,25 +292,27 @@ export class MapControl extends Observable {
 
         this.map.map_variables.children = [];
 
-        selectedBoundary.features.map((item, i) => {
-            const l = L.geoJSON(item);
-            let center = l.getBounds().getCenter();
-            if (!this.isMarkerInsidePolygon(center, L.polygon(item.geometry.coordinates))) {
-                center = {
-                    lng: item.geometry.coordinates[0][0].reduce((total, next) => total + next[0], 0) / (item.geometry.coordinates[0][0].length),
-                    lat: item.geometry.coordinates[0][0].reduce((total, next) => total + next[1], 0) / (item.geometry.coordinates[0][0].length)
+        if (typeof selectedBoundary.features !== 'undefined' && typeof selectedBoundary.features.map !== 'undefined') {
+            selectedBoundary.features.map((item, i) => {
+                const l = L.geoJSON(item);
+                let center = l.getBounds().getCenter();
+                if (!this.isMarkerInsidePolygon(center, L.polygon(item.geometry.coordinates))) {
+                    center = {
+                        lng: item.geometry.coordinates[0][0].reduce((total, next) => total + next[0], 0) / (item.geometry.coordinates[0][0].length),
+                        lat: item.geometry.coordinates[0][0].reduce((total, next) => total + next[1], 0) / (item.geometry.coordinates[0][0].length)
+                    }
                 }
-            }
-            let x = center.lng
-            let y = center.lat
-            this.map.map_variables.children.push({
-                name: item.properties.name,
-                code: item.properties.code,
-                center: [x, y],
-                categories: [],
-                themes:item.properties.themes
+                let x = center.lng
+                let y = center.lat
+                this.map.map_variables.children.push({
+                    name: item.properties.name,
+                    code: item.properties.code,
+                    center: [x, y],
+                    categories: [],
+                    themes: item.properties.themes
+                })
             })
-        })
+        }
 
         self.boundaryLayers.clearLayers();
 

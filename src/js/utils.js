@@ -55,6 +55,74 @@ export function getJSON(url, skipCache=true) {
   });
 }
 
+export function getSelectedBoundary(level, geometries, config) {
+  let selectedBoundary;
+
+  const preferredChildren = config.preferredChildren[level];
+
+  preferredChildren.forEach((preferredChild, i) => {
+    if (i === 0) {
+      selectedBoundary = geometries.children[preferredChild];
+    } else {
+      if (selectedBoundary === null || typeof selectedBoundary === 'undefined') {
+        selectedBoundary = {features: []};
+      }
+      let secondarySelectedBoundary = geometries.children[preferredChild];
+
+      if (typeof secondarySelectedBoundary !== 'undefined' && secondarySelectedBoundary !== null) {
+        secondarySelectedBoundary.features.forEach((feature) => {
+          let alreadyContained = false;
+          selectedBoundary.features.forEach(sb => {
+            if (sb.properties.code === feature.properties.code) {
+              alreadyContained = true;
+            }
+          })
+
+          if (!alreadyContained) {
+            selectedBoundary.features.push(feature);
+          }
+        })
+      }
+    }
+  })
+
+  return selectedBoundary;
+}
+
+export class ThemeStyle {
+  static replaceChildDivWithThemeIcon(themeId, colorElement, iconElement) {
+    let iconClass = '.';
+    switch (themeId) {
+      case 1: //Health theme
+        iconClass += 'icon--health';
+        break;
+      case 2: //Education theme
+        iconClass += 'icon--education';
+        break;
+      case 3: //Labour theme
+        iconClass += 'icon--elections';
+        break;
+      case 4: //Transport theme
+        iconClass += 'icon--transport';
+        break;
+      case 5: //Social theme
+        iconClass += 'icon--people';
+        break;
+      default:
+        return false;
+    }
+
+    //clear icon element and add icon
+    $(iconElement).empty().append($('.styles').find(iconClass).prop('outerHTML'));
+    //remove classes
+    $(colorElement).removeClass('_1 _2 _3 _4 _5');
+    //Add correct color to element which requires it
+    $(colorElement).addClass('_' + themeId);
+
+    return true;
+  }
+}
+
 export class Observable {
   constructor() {
     this.eventListeners = {}

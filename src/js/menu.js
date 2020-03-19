@@ -1,11 +1,16 @@
 import {SubIndicator} from './dataobjects'
 
+const hideondeployClsName = 'hideondeploy';
+
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
     const parentContainer = $(".data-menu__links")
     const categoryTemplate = $(".data-menu__category")[0].cloneNode(true);
     const subCategoryTemplate = $(".data-menu__subcategory", categoryTemplate)[0].cloneNode(true);
     const indicatorTemplate = $(".data-menu__indicator", subCategoryTemplate)[0].cloneNode(true);
+    if(!$('.data-menu__no-data').hasClass(hideondeployClsName)){
+        $('.data-menu__no-data').addClass(hideondeployClsName);
+    }
 
     function addSubIndicators(wrapper, indicator, subindicators) {
         const indicatorLabel = indicator;
@@ -59,6 +64,7 @@ export function loadMenu(data, subindicatorCallback) {
 
     function addSubcategories(wrapper, category, subcategories) {
         var newCategory = categoryTemplate.cloneNode(true)
+        $(newCategory).removeClass(hideondeployClsName);
         $(".link__h1_title div", newCategory).text(category);
         parentContainer.append(newCategory);
         var h2Wrapper = $(".category__dropdown_wrapper", newCategory);

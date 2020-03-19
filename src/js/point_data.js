@@ -1,4 +1,4 @@
-import {getJSON, Observable} from './utils';
+import {getJSON, Observable, ThemeStyle} from './utils';
 import 'leaflet.markercluster/dist/leaflet.markercluster'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
@@ -22,10 +22,12 @@ const popupItemClsName = '.point-marker__tooltip';
 const pointMarkerClsName = '.point-marker';
 const defaultActiveClsName = 'active-1';
 const clusterClsName = '.map__point-cluster';
+const hideondeployClsName = 'hideondeploy';
 const clusterClasses = [{count: 1500, cls: 5}, {count: 1000, cls: 4}, {count: 500, cls: 3}, {
     count: 200,
     cls: 2
 }, {count: 0, cls: 1}];  //determines the color class according to the number of points
+let activeMarkers = [];
 let activeLayers = [];
 let pointDataItem = null;
 let categoryItem = null;
@@ -50,8 +52,9 @@ export class PointData extends Observable {
         this.map = _map;
         this.config = config;
 
-        this.selectedThemes = [];
+        //this.selectedThemes = [];
         this.selectedCategories = [];
+        this.selectedCategoryNames = []; //remove this when we have categoryId on all_details API
         this.markerFactory = new MarkerFactory(
             Number($(pointMarkerClsName).css('width').replace('px', '')),
             Number($(pointMarkerClsName).css('height').replace('px', ''))
@@ -95,6 +98,7 @@ export class PointData extends Observable {
             if (data.results !== null && data.results.length > 0) {
                 for (let i = 0; i < data.results.length; i++) {
                     let item = pointDataItem.cloneNode(true);
+                    $(item).removeClass(hideondeployClsName);
                     $('.h1__trigger_title .truncate', item).text(data.results[i].name);
                     $('.point-data__h1_trigger', item).removeClass(defaultActiveClsName);
                     $(categoryWrapperClsName, item).html('');
@@ -145,7 +149,10 @@ export class PointData extends Observable {
         if ($(cItem).find('.point-data__h2').hasClass(activeClassName)) {
             this.triggerEvent('categoryUnselected', {category: category, item: cItem});
 
-            this.selectedCategories.splice(this.selectedCategories.indexOf(category.id), 1);
+            if (this.selectedCategories.indexOf(category.id) >= 0) {
+                this.selectedCategories.splice(this.selectedCategories.indexOf(category.id), 1);
+                this.selectedCategoryNames.splice(this.selectedCategoryNames.indexOf(category.name), 1);
+            }
 
             $(cItem).find('.point-data__h2').removeClass(activeClassName);
             if ($(item).find(categoryItemClsName).find('.' + activeClassName).length == 0) {
@@ -158,6 +165,7 @@ export class PointData extends Observable {
         } else {
             this.triggerEvent('categorySelected', {category: category, item: cItem});
             this.selectedCategories.push(category.id);
+            this.selectedCategoryNames.push(category.name);
 
             $(cItem).find('.point-data__h2').addClass(activeClassName);
             $('.point-data__h1_trigger', item).addClass(activeClassName);
@@ -218,7 +226,13 @@ export class PointData extends Observable {
             //theme added
             this.triggerEvent('themeSelected', {theme: theme, item: item});
 
-            this.selectedThemes.push(theme.id);
+            //this.selectedThemes.push(theme.id);
+            themeCategories.forEach((tc) => {
+                if (tc.themeId === theme.id) {
+                    this.selectedCategories.push(tc.categoryId);
+                    this.selectedCategoryNames.push(tc.categoryName);
+                }
+            })
 
             $(item).find(categoryItemClsName).each(function () {
                 if (!$(this).find('.point-data__h2').hasClass(activeClassName)) {
@@ -235,7 +249,14 @@ export class PointData extends Observable {
             //theme removed
             this.triggerEvent('themeUnselected', {theme: theme, item: item});
 
-            this.selectedThemes.splice(this.selectedThemes.indexOf(theme.id), 1);
+            //this.selectedThemes.splice(this.selectedThemes.indexOf(theme.id), 1);
+            themeCategories.forEach((tc) => {
+                if (tc.themeId === theme.id && this.selectedCategories.indexOf(tc.categoryId) >= 0) {
+                    this.selectedCategories.splice(this.selectedCategories.indexOf(tc.categoryId), 1);
+                    this.selectedCategoryNames.splice(this.selectedCategories.indexOf(tc.categoryName), 1);
+                }
+            })
+
             this.removeThemePoints(theme);
 
             $(item).find(categoryItemClsName).each(function () {
@@ -326,11 +347,7 @@ export class PointData extends Observable {
      * clears the map, puts back the points that are in activePoints array
      */
     showPointsOnMap = () => {
-        if (this.config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
-            this.showIndividualMarkers();
-        } else {
-            this.showClusterMarkers();
-        }
+        this.showIndividualMarkers();
     }
 
     /**
@@ -338,113 +355,115 @@ export class PointData extends Observable {
      */
     showClusterMarkers = () => {
         //1 for each child
-        for (let i = 0; i < activeLayers.length; i++) {
-            this.map.removeLayer(activeLayers[i]);
-        }
-
         this.map.map_variables.children.map((child, i) => {
-            let childrenPoints = [];
-            let preferredArr = this.config.preferredChildren[this.map.map_variables.currentLevel];
-            preferredArr.forEach((preferredChild) => {
-                let tempArr = activePoints.filter((point) => {
-                    return point.data[this.config.geographyLevels[preferredChild]] === child.code
+            let childCategories = [];
+
+            //todo:convert this to selectedCategories when we have categoryId on all_details API
+            this.selectedCategoryNames.forEach((category) => {
+                child.themes.forEach((cTheme) => {
+                    let categoriesToAdd = cTheme.categories.filter((c) => {
+                        return c.name === category;
+                    })
+
+                    if (typeof categoriesToAdd[0] !== 'undefined') {
+                        let contains = childCategories.filter((ch) => {
+                            return ch.name === categoriesToAdd[0].name  //todo:change this to Id when we have categoryId on all_details API
+                        })
+                        if (contains.length <= 0) {
+                            childCategories = childCategories.concat(categoriesToAdd[0]);
+                        }
+                    }
                 })
-                childrenPoints = childrenPoints.concat(tempArr)
             })
 
             let arr = [];
-            if (childrenPoints.length > 0) {
-                let marker = this.markerFactory.generateClusterMarker({
-                    x: child.center[0],
-                    y: child.center[1],
-                    count: childrenPoints.length
-                })
+            if (childCategories.length > 0) {
+                let totalCount = 0;
+                childCategories.forEach((cc) => {
+                    totalCount += cc.count;
 
-                //child.themes.push('test');
-                let grouped = this.groupBy(childrenPoints, 'categoryId');
-                let categories = Object.keys(grouped);
-                categories.forEach((category, j) => {
-                    let categoryName = themeCategories.filter((c) => {
-                        return parseInt(c.categoryId) === parseInt(category);
-                    })[0].categoryName;
                     arr.push({
-                        categoryId: category,
-                        count: Object.values(grouped)[j].length,
-                        categoryName: categoryName
+                        categoryId: cc.categoryId,
+                        count: cc.count,
+                        categoryName: cc.name
                     })
                 })
 
-                activeLayers.push(marker);
+                let marker = this.markerFactory.generateClusterMarker({
+                    x: child.center[0],
+                    y: child.center[1],
+                    count: totalCount
+                }, this.map)
 
+                //activeLayers.push(marker);
                 this.map.addLayer(marker);
             }
             child.categories = arr;
         });
     }
 
-    groupBy = (items, key) => items.reduce(
-        (result, item) => ({
-            ...result,
-            [item[key]]: [
-                ...(result[item[key]] || []),
-                item,
-            ],
-        }),
-        {},
-    );
+    showClusterOrIndividualMarkers = () => {
+        /*
+        if (this.selectedCategories.length <= 0) {
+            return;
+        }
+
+        this.selectedCategories.forEach((cId) => {
+            this.showCategoryPoint({id: cId});
+        })
+         */
+
+        this.showIndividualMarkers();
+    }
 
     /**
      * individual markers
      */
     showIndividualMarkers = () => {
-        self = this;
-        markers.clearLayers();
-
-        let newMarkers = [];
+        for (let i = 0; i < activeMarkers.length; i++) {
+            activeMarkers[i].remove();
+        }
+        for (let i = 0; i < activeLayers.length; i++) {
+            this.map.removeLayer(activeLayers[i]);
+        }
 
         if (activePoints !== null && activePoints != undefined && activePoints.length > 0) {
-            activePoints.forEach(point => {
-                let marker = this.markerFactory.generateMarker(point);
-                newMarkers.push(marker);
-            })
+            if (this.config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) < 0) {
+                let renderer = L.canvas({padding: 0.5});
+                activePoints.forEach(point => {
+                    let marker = L.circleMarker([point.y, point.x], {
+                        renderer: renderer,
+                        color: $('.active-' + point.themeId).css('color'),
+                        radius: 1
+                    }).addTo(this.map);
 
-            markers.addLayers(newMarkers);
-            this.map.addLayer(markers);
+                    activeMarkers.push(marker);
+                })
+            } else {
+                let newMarkers = [];
+                let preferredArr = this.config.preferredChildren[this.map.map_variables.currentLevel];
+                this.map.map_variables.children.map((child, i) => {
+                    let childrenPoints = [];
+                    let preferredArr = this.config.preferredChildren[this.map.map_variables.currentLevel];
+                    preferredArr.forEach((preferredChild) => {
+                        let tempArr = activePoints.filter((point) => {
+                            return point.data[this.config.geographyLevels[preferredChild]] === child.code
+                        })
+                        childrenPoints = childrenPoints.concat(tempArr)
+                    })
+
+                    console.log(childrenPoints)
+                });
+                /*
+                activePoints.forEach(point => {
+                    let marker = this.markerFactory.generateMarker(point);
+
+                    activeLayers.push(marker);
+                    this.map.addLayer(marker);
+                })
+                 */
+            }
         }
-    }
-}
-
-class ThemeStyle {
-    static replaceChildDivWithThemeIcon(themeId, colorElement, iconElement) {
-        let iconClass = '.';
-        switch (themeId) {
-            case 1: //Health theme
-                iconClass += 'icon--health';
-                break;
-            case 2: //Education theme
-                iconClass += 'icon--education';
-                break;
-            case 3: //Labour theme
-                iconClass += 'icon--elections';
-                break;
-            case 4: //Transport theme
-                iconClass += 'icon--transport';
-                break;
-            case 5: //Social theme
-                iconClass += 'icon--people';
-                break;
-            default:
-                return false;
-        }
-
-        //clear icon element and add icon
-        $(iconElement).empty().append($('.styles').find(iconClass).prop('outerHTML'));
-        //remove classes
-        $(colorElement).removeClass('_1 _2 _3 _4 _5');
-        //Add correct color to element which requires it
-        $(colorElement).addClass('_' + themeId);
-
-        return true;
     }
 }
 
@@ -550,7 +569,7 @@ class MarkerFactory {
     /**
      * generates cluster marker using the html clone
      */
-    generateClusterMarker(point) {
+    generateClusterMarker(point, map) {
         let cluster = clusterClone.cloneNode(true);
         $(cluster).removeClass('_1');
         for (let i = 0; i < clusterClasses.length; i++) {

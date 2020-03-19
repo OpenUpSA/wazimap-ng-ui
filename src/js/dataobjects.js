@@ -1,4 +1,4 @@
-// import {geography_config} from './geography_providers/geography_sa';
+import {geography_config} from './geography_providers/geography_sa';
 
 export class Geography {
     constructor(js) {
@@ -77,20 +77,20 @@ export class DataBundle {
         return this._profile;
     }
 
-    // get childGeographies() {
-    //     let preferredChild;
-    //     const level = this.profile.geography.level;
-    //     preferredChild = geography_config.preferredChildren[level];
+    get childGeographies() {
+        let preferredChild;
+        const level = this.profile.geography.level;
+        preferredChild = geography_config.preferredChildren[level];
 
-    //     return this.geometries.children[preferredChild];
-    // }
+        return this.geometries.children[preferredChild];
+    }
 
-    // get childCodes() {
-    //     const geographies = this.childGeographies;
-    //     return geographies.features.map(feature => {
-    //         return feature.properties.code;
-    //     })
-    // }
+    get childCodes() {
+        const geographies = this.childGeographies;
+        return geographies.features.map(feature => {
+            return feature.properties.code;
+        })
+    }
 }
 
 export class SubIndicator {

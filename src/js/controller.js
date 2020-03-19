@@ -1,13 +1,15 @@
 import {Observable, getJSON} from './utils';
 import {Geography, Profile, DataBundle} from './dataobjects';
+import {geography_config} from './geography_providers/geography_sa';
+
+const defaultGeography = geography_config.rootGeography;
 
 let currentAreaCode = '';
 
 export default class Controller extends Observable {
-    constructor(baseUrl, config, profileId = 1) {
+    constructor(baseUrl, profileId = 1) {
         super();
         this.baseUrl = baseUrl;
-        this.config = config
         this.profileId = profileId;
 
         this.state = {
@@ -38,7 +40,7 @@ export default class Controller extends Observable {
                 else
                     areaCode = parts[1];
             } else {
-                areaCode = config.rootGeography;
+                areaCode = defaultGeography;
             }
 
             currentAreaCode = areaCode;
@@ -108,12 +110,12 @@ export default class Controller extends Observable {
      * @param  {[type]} payload [description]
      * @return {[type]}         [description]
      */
-    onHashChange(payload) {
+    onHashChange(payload, callRegisterFunction = true) {
         this.triggerEvent("hashChange", payload);
-        this.loadProfile(payload)
+        this.loadProfile(payload, callRegisterFunction)
     };
 
-    loadProfile(payload) {
+    loadProfile(payload, callRegisterFunction) {
         const self = this;
         this.triggerEvent("loadingNewProfile", payload.geography);
         const url = `${this.baseUrl}/all_details/profile/${this.profileId}/geography/${payload.areaCode}/`;
@@ -121,15 +123,15 @@ export default class Controller extends Observable {
             const dataBundle = new DataBundle(js);
             self.state.profile = dataBundle;
 
-            console.log(url);
-
             self.triggerEvent("loadedNewProfile", dataBundle);
             // TODO this should be run after all dynamic stuff is run
             // Shouldn't be here
             setTimeout(() => {
-                console.log("initialising webflow")
-                Webflow.require('ix2').init()
-                self.registerWebflowEvents();
+                if (callRegisterFunction) {
+                    console.log("initialising webflow")
+                    Webflow.require('ix2').init()
+                    self.registerWebflowEvents();
+                }
             }, 600)
         })
     }
@@ -298,7 +300,7 @@ export default class Controller extends Observable {
         this.state.preferredChild = childLevel;
         this.triggerEvent("preferredChildChange", childLevel);
         // TODO remove SA specfic stuff
-        this.config.preferredChildren['municipality'] = [childLevel];
+        geography_config.preferredChildren['municipality'] = [childLevel];
 
         this.reDrawChildren();
     }
@@ -316,8 +318,7 @@ export default class Controller extends Observable {
             zoomNecessary: false
         }
 
-        this.triggerEvent("hashChange", payload);
-        this.onHashChange(payload);
+        this.onHashChange(payload, false);
     }
 
     registerWebflowEvents() {

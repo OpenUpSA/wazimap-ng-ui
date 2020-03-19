@@ -3411,7 +3411,10 @@ a {
 }
 
 .data-menu__menu-chips {
-  display: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   margin-bottom: 24px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -4681,6 +4684,8 @@ a {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
+  -webkit-transition: background-color 200ms ease;
+  transition: background-color 200ms ease;
 }
 
 .content__map_location {
@@ -6052,8 +6057,8 @@ a {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 32px;
-  margin-bottom: 8px;
+  height: 24px;
+  margin-bottom: 6px;
   -webkit-box-pack: start;
   -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
@@ -6762,6 +6767,10 @@ a {
   color: #ccc;
 }
 
+.more-info__tooltip--right.hide {
+  display: none;
+}
+
 .more-info__tooltip_notch {
   position: absolute;
   left: auto;
@@ -7026,6 +7035,55 @@ a {
 .styles__icon-colours {
   overflow: hidden;
   height: 0px;
+}
+
+.data-menu__no-data {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 16px;
+  padding: 6px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 2px;
+  background-color: #fd6d6f;
+  -webkit-transition: background-color 200ms ease;
+  transition: background-color 200ms ease;
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.data-menu__no-data:hover {
+  background-color: #e96f71;
+}
+
+.data-menu__no-data_icon {
+  padding-right: 6px;
+}
+
+.point-data__cluster-legend {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.point-data__cluster-legend_item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 @media screen and (max-width: 991px) {

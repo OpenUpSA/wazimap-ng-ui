@@ -7,23 +7,27 @@ import {MapControl} from './map/maps';
 import {getJSON, numFmt} from './utils';
 import {Profile} from './profile';
 import {onProfileLoaded as onProfileLoadedSearch, Search} from './search';
+import {MapItGeographyProvider} from './geography_providers/mapit';
+import {WazimapProvider} from './geography_providers/wazimap';
 import {MapChip} from './mapchip';
 import {LocationInfoBox} from './location_info_box';
 import {LoadingSpinner} from './loading_spinner';
 import {PointData} from "./point_data";
 import {ZoomToggle} from "./mapmenu/zoomtoggle";
 import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
+import {geography_config} from './geography_providers/geography_sa';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 import {Popup} from "./map/popup";
 
-export default function configureApplication(serverUrl, profileId, config) {
+export default function configureApplication(serverUrl, profileId) {
     const baseUrl = `${serverUrl}/api/v1`;
-    const mapcontrol = new MapControl(config);
+    const geographyProvider = new WazimapProvider(baseUrl)
+    const mapcontrol = new MapControl(geographyProvider);
     const popup = new Popup(mapcontrol.map);
-    const pointData = new PointData(baseUrl, mapcontrol.map, config);
-    const controller = new Controller(baseUrl, config, profileId);
+    const pointData = new PointData(baseUrl, mapcontrol.map);
+    const controller = new Controller(baseUrl, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
     const mapchip = new MapChip();
@@ -60,15 +64,20 @@ export default function configureApplication(serverUrl, profileId, config) {
     });
     controller.on("loadedNewProfile", payload => mapchip.clearAllMapChip());
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
-    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
-        controller.onSubIndicatorClick(payload)
-    }))
+    controller.on('loadedNewProfile', payload => {
+        loadMenu(payload.payload.profile.profileData, payload => {
+            controller.onSubIndicatorClick(payload)
+        })
+    })
     controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload.payload))
     controller.on('loadedNewProfile', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
         mapcontrol.overlayBoundaries(geography, geometries)
     });
+    controller.on('loadedNewProfile', payload => {
+        pointData.showClusterOrIndividualMarkers();
+    })
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());
     controller.on("searchResults", payload => searchLoadSpinner.stop());

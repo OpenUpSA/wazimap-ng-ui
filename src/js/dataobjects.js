@@ -64,7 +64,8 @@ export class DataBundle {
         this._geometries = {
             boundary: js.boundary,
             children: js.children, // Dictionary keyed by child type
-            parents: js.parent_layers // Array of parent geographies
+            parents: js.parent_layers, // Array of parent geographies
+            themes: js.themes
         }
         this._profile = new Profile(js.profile);
     }
@@ -108,7 +109,7 @@ export class SubIndicator {
         else if (js["count"] != undefined)
             this._count = js["count"];
         else
-            this._count = 0; 
+            this._count = 0;
 
         this._children = js.children;
     }

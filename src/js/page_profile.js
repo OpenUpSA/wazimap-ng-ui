@@ -72,50 +72,20 @@ function addKeyMetrics(container, profile) {
     })
 }
 
-function addFacilities(geometries, profile) {
-    return;
-
+function addFacilities(geometries, profile, config) {
     $('.location-facility', facilityWrapper).remove();
 
     let categoryArr = [];
     let themeIds = [];
     let themes = [];
     const level = profile.geography.level;
-    let selectedBoundary = getSelectedBoundary(level, geometries);
+    let selectedBoundary = getSelectedBoundary(level, geometries, config);
 
-    selectedBoundary.features.forEach((f) => {
-        f.properties.themes.forEach((theme) => {
-            theme.categories.forEach((c) => {
-                let cFilter = categoryArr.filter((x) => {
-                    return x.themeId === theme.id && x.name === c.name
-                })[0];
-
-                if (cFilter === null || typeof cFilter === 'undefined') {
-                    categoryArr.push({
-                        name: c.name,
-                        count: c.count,
-                        themeId: theme.id
-                    });
-                } else {
-                    cFilter.count += c.count;
-                }
-            })
-
-            if (themeIds.indexOf(theme.id) < 0) {
-                themeIds.push(theme.id);
-                themes.push({
-                    id: theme.id,
-                    name: theme.name,
-                    count: theme.count,
-                    icon: theme.icon
-                })
-            } else {
-                themes.filter((t) => {
-                    return t.id === theme.id
-                })[0].count += theme.count;
-            }
-        })
-    })
+    /*
+    geometries.themes.forEach((theme) => {
+        console.log(theme);
+    });
+     */
 
     themes.forEach((theme) => {
         let facilityItem = facilityTemplate.cloneNode(true);
@@ -147,6 +117,10 @@ function addFacilities(geometries, profile) {
 
 
 export default class ProfileLoader {
+    constructor(config) {
+        this.config = config;
+    }
+
 
     addCategory(category, categoryDetail) {
         const newCategorySection = categoryTemplate.cloneNode(true);
@@ -241,7 +215,7 @@ export default class ProfileLoader {
 
         updateGeography(profileHeader, profile);
         addKeyMetrics(profileHeader, profile);
-        addFacilities(geometries, profile);
+        addFacilities(geometries, profile, this.config);
 
         for (const [category, detail] of Object.entries(all_categories)) {
             this.addCategory(category, detail);

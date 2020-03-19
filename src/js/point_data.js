@@ -52,6 +52,7 @@ export class PointData extends Observable {
         this.baseUrl = baseUrl;
         this.map = _map;
         this.config = config;
+        this.payload = null;
 
         //this.selectedThemes = [];
         this.selectedCategories = [];
@@ -414,23 +415,7 @@ export class PointData extends Observable {
         })
          */
 
-        if (this.config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) >= 0) {
-            let selectedPoints = payload.geometries.themes.filter((theme) => {
-                return this.selectedCategories.indexOf(theme.subtheme_id) >= 0
-            });
-
-            let prevPoints = activePoints;
-            activeIndividualPoints = [];
-            selectedPoints.forEach((sp) => {
-                sp.locations.list.forEach((listItem) => {
-                    activeIndividualPoints.push(
-                        prevPoints.filter((pp) => {
-                            return pp.x === listItem.coordinates.coordinates[0] && pp.y === listItem.coordinates.coordinates[1]
-                        })[0]
-                    );
-                });
-            });
-        }
+        this.payload = payload;
 
         this.showIndividualMarkers();
     }
@@ -459,6 +444,22 @@ export class PointData extends Observable {
                     activeMarkers.push(marker);
                 })
             } else {
+                let selectedPoints = this.payload.geometries.themes.filter((theme) => {
+                    return this.selectedCategories.indexOf(theme.subtheme_id) >= 0
+                });
+
+                let prevPoints = activePoints;
+                activeIndividualPoints = [];
+                selectedPoints.forEach((sp) => {
+                    sp.locations.list.forEach((listItem) => {
+                        activeIndividualPoints.push(
+                            prevPoints.filter((pp) => {
+                                return pp.x === listItem.coordinates.coordinates[0] && pp.y === listItem.coordinates.coordinates[1]
+                            })[0]
+                        );
+                    });
+                });
+
                 activeIndividualPoints.forEach(point => {
                     let marker = this.markerFactory.generateMarker(point);
 

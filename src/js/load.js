@@ -13,6 +13,7 @@ import {LoadingSpinner} from './loading_spinner';
 import {PointData} from "./point_data";
 import {ZoomToggle} from "./mapmenu/zoomtoggle";
 import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
+import {ProfileLayout} from "./profile_layout";
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -32,6 +33,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     const locationInfoBox = new LocationInfoBox();
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
+    const profileLayout = new ProfileLayout(serverUrl);
     const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
     const contentMapSpinner = new LoadingSpinner('.breadcrumb__loading', {start: true}, true);
 
@@ -71,6 +73,9 @@ export default function configureApplication(serverUrl, profileId, config) {
     });
     controller.on('loadedNewProfile', payload => {
         pointData.showClusterOrIndividualMarkers(payload.payload);
+    })
+    controller.on('loadedNewProfile', payload => {
+        profileLayout.displayLogo(payload.payload.logo);
     })
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());

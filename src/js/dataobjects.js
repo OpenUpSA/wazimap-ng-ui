@@ -65,9 +65,10 @@ export class DataBundle {
             boundary: js.boundary,
             children: js.children, // Dictionary keyed by child type
             parents: js.parent_layers, // Array of parent geographies
-            themes: js.themes
+            themes: js.themes,
         }
         this._profile = new Profile(js.profile);
+        this._logo = js.profile.logo;
     }
 
     get geometries() {
@@ -76,6 +77,10 @@ export class DataBundle {
 
     get profile() {
         return this._profile;
+    }
+
+    get logo() {
+        return this._logo;
     }
 
     // get childGeographies() {

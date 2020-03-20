@@ -45,13 +45,14 @@ export class LocationInfoBox extends Observable {
         let locationElement = null;
         locations.forEach(location => {
             locationElement = breadcrumbTemplate.cloneNode(true);
-            breadcrumbsContainer.append(locationElement);
             $('.truncate', locationElement).text(location.name);
             $('.breadcrumb__geography-chip div', locationElement).text(location.level);
 
             $(locationElement).on('click', el => {
                 self.triggerEvent('breadcrumbSelected', location);
             })
+
+            breadcrumbsContainer.append(locationElement);
         })
 
         if (locationElement != null) {

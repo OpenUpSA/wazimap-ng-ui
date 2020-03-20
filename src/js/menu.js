@@ -13,7 +13,6 @@ export function loadMenu(data, subindicatorCallback) {
         $('.data-menu__no-data').addClass(hideondeployClsName);
     }
 
-
     function addSubIndicators(wrapper, indicator, subindicators) {
         const indicatorLabel = indicator;
         const newIndicatorElement = indicatorTemplate.cloneNode(true);

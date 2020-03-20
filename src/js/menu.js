@@ -7,6 +7,32 @@ const categoryTemplate = $(".data-menu__category")[0].cloneNode(true);
 const subCategoryTemplate = $(".data-menu__subcategory", categoryTemplate)[0].cloneNode(true);
 const indicatorTemplate = $(".data-menu__indicator", subCategoryTemplate)[0].cloneNode(true);
 
+function subindicatorsInCategory(category) {
+    let count = 0;
+    let subcategories = Object.values(category.subcategories);
+    for (const idx in subcategories) {
+        let subcategory = subcategories[idx];
+        count += subindicatorsInSubCategory(subcategory);
+    }
+
+    return count;
+}
+
+function subindicatorsInSubCategory(subcategory) {
+    let indicators = Object.values(subcategory.indicators);
+    let count = 0;
+    for (const idx in indicators) {
+        let indicator = indicators[idx];
+        count += subindicatorsInIndicator(indicator);
+    }
+
+    return count;
+}
+
+function subindicatorsInIndicator(indicator) {
+    return Object.values(indicator.subindicators).length;
+}
+
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
     if(!$('.data-menu__no-data').hasClass(hideondeployClsName)){
@@ -72,7 +98,9 @@ export function loadMenu(data, subindicatorCallback) {
         $(".data-menu__subcategory", h2Wrapper).remove();
 
         for (const [subcategory, detail] of Object.entries(subcategories)) {
-            addIndicators(h2Wrapper, subcategory, detail.indicators);
+            let count = subindicatorsInSubCategory(detail);
+            if (count > 0)
+                addIndicators(h2Wrapper, subcategory, detail.indicators);
         };
     }
 
@@ -87,7 +115,11 @@ export function loadMenu(data, subindicatorCallback) {
 
     $(".data-menu__category").remove();
 
+
     for (const [category, detail] of Object.entries(data)) {
-        addSubcategories(parentContainer, category, detail.subcategories)
+        let count = subindicatorsInCategory(detail);
+
+        if (count > 0)
+            addSubcategories(parentContainer, category, detail.subcategories)
     }
 }

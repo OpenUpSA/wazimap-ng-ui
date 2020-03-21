@@ -31,6 +31,7 @@ export class Popup extends Observable {
             .openOn(this.map);
 
         $('.leaflet-popup-content').addClass('content__map_tooltip');
+        $('.leaflet-popup-close-button').css('display', 'none');
 
         $('.content__map_tooltip').css('position', 'inherit');
         $('.content__map_tooltip').css('border', 'none');

@@ -144,7 +144,6 @@ export default class Controller extends Observable {
         this.changeHash(areaCode)
 
         this.triggerEvent("layerClick", areaCode);
-        window.location.hashh = "#geo:" + areaCode + ":clicked";
     };
 
     onLayerMouseOver(payload) {

@@ -1,5 +1,5 @@
-import {Observable, getJSON, numFmt} from './utils';
-import {Profile} from './profile';
+import {Observable, getJSON, numFmt} from '../utils';
+import {Profile} from '../profile';
 
 const container = $('.content__map_location');
 const breadcrumbsContainer = $('.map__location-tags_wrapper', container);

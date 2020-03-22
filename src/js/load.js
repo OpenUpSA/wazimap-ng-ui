@@ -1,19 +1,19 @@
 import {select as d3select} from 'd3-selection';
 import Controller from './controller';
 import ProfileLoader from './page_profile';
-import {loadMenu} from './menu';
+import {loadMenu} from './elements/menu';
 import PDFPrinter from './print';
 import {MapControl} from './map/maps';
 import {getJSON, numFmt} from './utils';
 import {Profile} from './profile';
-import {onProfileLoaded as onProfileLoadedSearch, Search} from './search';
+import {onProfileLoaded as onProfileLoadedSearch, Search} from './elements/search';
 import {MapChip} from './mapchip';
-import {LocationInfoBox} from './location_info_box';
+import {LocationInfoBox} from './elements/location_info_box';
 import {LoadingSpinner} from './loading_spinner';
-import {PointData} from "./point_data";
+import {PointData} from "./map/point_data";
 import {ZoomToggle} from "./mapmenu/zoomtoggle";
 import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
-import {ProfileLayout} from "./profile_layout";
+import {ProfileLayout} from "./elements/profile_layout";
 import {PointDataTray} from './elements/point_tray/tray';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";

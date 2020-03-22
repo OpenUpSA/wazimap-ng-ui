@@ -1,4 +1,4 @@
-import {SubIndicator} from './dataobjects'
+import {SubIndicator} from '../dataobjects'
 
 
 const hideondeployClsName = 'hideondeploy';

@@ -4125,6 +4125,11 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
+leaflet-event-forwarder@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/leaflet-event-forwarder/-/leaflet-event-forwarder-0.0.3.tgz#0b97d1f687dd8cabd3d523c3aeb8624050b0a593"
+  integrity sha512-vLBZTtnjCODq9vaY9E9OxPPqU6AJMKuOt7pw+D7RZ0EPG92W8JfA1F/l7M1M++h3ByypMidkmKNfCFfEkWjuVw==
+
 leaflet.markercluster@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.4.1.tgz#b53f2c4f2ca7306ddab1dbb6f1861d5e8aa6c5e5"

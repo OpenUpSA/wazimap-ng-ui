@@ -110,7 +110,7 @@ export class PointData extends Observable {
      * individual markers
      */
     createMarkers = (points, layer) => {
-        let renderer = L.svg({padding: 0.5, pane: 'markerPane'});
+        let renderer = L.canvas({padding: 0.5, pane: 'markerPane'});
         checkIterate(points, point => {
             let marker = L.circleMarker([point.y, point.x], {
                 renderer: renderer,

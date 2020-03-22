@@ -4,6 +4,8 @@ import {min as d3min, max as d3max} from 'd3-array';
 import {Observable, numFmt, getSelectedBoundary} from '../utils';
 import {polygon} from "leaflet/dist/leaflet-src.esm";
 
+import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
+
 const legendCount = 5;
 
 var defaultStyles = {
@@ -141,16 +143,37 @@ export class MapControl extends Observable {
     configureMap(coords, tileUrl) {
 
         const map = L
-            .map('main-map', {zoomControl: this.zoomControlEnabled})
+            .map('main-map', {zoomControl: this.zoomControlEnabled, preferCanvas: true})
             .setView([coords["lat"], coords["long"]], coords["zoom"])
 
         L.tileLayer(tileUrl).addTo(map);
         L.control.zoom({position: this.zoomPosition}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
-
+        this.configureForwarder(map);
 
         return map;
     };
+
+    configureForwarder(map) {
+        this.myEventForwarder = new L.eventForwarder({
+            map: map,
+            events: {
+                click: true,
+                mousemove: true
+            },
+            // throttle options for mousemove events (same as underscore.js)
+            throttleMs: 100,
+            throttleOptions: {
+                leading: true,
+                trailing: false
+              }
+        });
+        this.myEventForwarder.enable();
+        // Unfortunate hack to make sure that this pane is drawn on top of the markers pane
+        // otherwise the mouse events don't work.
+        $(".leaflet-overlay-pane").css("z-index", 601);
+    }
+
 
     /**
      * Handles creating a choropleth when a subindicator is clicked

@@ -22,9 +22,12 @@ export class PointData extends Observable {
         this.profileId = profileId;
         this.config = config;
 
-        this.markerLayer = L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
+        this.markerLayer = this.genLayer();
+        this.categoryLayers = {}
+    }
 
-
+    genLayer() {
+        return L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
     }
 
     /**
@@ -32,50 +35,64 @@ export class PointData extends Observable {
      * */
 
     showCategoryPoint = (category) => {
+        const self = this;
         let categoryUrl = `${this.baseUrl}/${pointsByCategoryUrl}/${category.id}/?format=json`
-        this.triggerEvent('loadingCategoryPoints', category);
-        return this.getAddressPoints(categoryUrl).then(data => {
-            // TODO should rather listen for the event
+        let layer = this.categoryLayers[category.id];
+
+        if (layer != undefined) {
+            this.map.addLayer(layer);
             category.showLoading(false);
             category.showDone(true);
-            this.triggerEvent('loadedCategoryPoints', {category: category, points: data});
+            return;
+        } else {
+            layer = this.genLayer()
+            this.categoryLayers[category.id] = layer;
 
-        });
+            this.triggerEvent('loadingCategoryPoints', category);
+            return this.getAddressPoints(categoryUrl)
+                .then(data => {
+                    self.createMarkers(data, layer);
+                    self.map.addLayer(layer);
+                    return data;
+                })
+                .then(data => {
+                    // TODO should rather listen for the event
+                    category.showLoading(false);
+                    category.showDone(true);
+                    this.triggerEvent('loadedCategoryPoints', {category: category, points: data});
+                    return data;
+                });
+
+        }
+
     }
 
     removeCategoryPoints = (category) => {
-        activePoints = activePoints.filter(item => {
-            return item.category.id !== category.id
-        });
+        let layer = this.categoryLayers[category.id];
 
-        this.showPointsOnMap();
+        if (layer != undefined) {
+            this.map.removeLayer(layer);
+        }
     }
     /** end of category functions **/
 
     showThemePoints = (theme) => {
-        //need to remove for in case its already showing some from selected item
-        this.removeThemePoints(theme);
-        let themeUrl = `${this.baseUrl}/${pointsByThemeUrl}/${theme.id}/`;
-
-        return this.getAddressPoints(themeUrl)
+        checkIterate(theme.categories, category => showCategoryPoint(category))
     }
 
     removeThemePoints = (theme) => {
-        activePoints = activePoints.filter((item) => {
-            return item.theme.id !== theme.id
-        });
-
-        this.showPointsOnMap();
+        checkIterate(theme.categories, category => removeCategoryPoints(category))
     }
     /** end of theme functions **/
 
     getAddressPoints(requestUrl) {
+        const points = [];
         return getJSON(requestUrl).then(data => {
             checkIterate(data.features, feature => {
                 const prop = feature.properties;
                 const geometry = feature.geometry;
 
-                activePoints.push({
+                points.push({
                     x: geometry.coordinates[0],
                     y: geometry.coordinates[1],
                     name: prop.data.Name,
@@ -83,25 +100,18 @@ export class PointData extends Observable {
                     theme: prop.category.theme,
                     data: prop.data
                 })
-
             })
 
-            this.showPointsOnMap();
-            return data;
+            return points;
         })
     }
 
     /**
      * individual markers
      */
-    showPointsOnMap = () => {
-        for (let i = 0; i < activeMarkers.length; i++) {
-            activeMarkers[i].remove();
-        }
-
+    createMarkers = (points, layer) => {
         let renderer = L.svg({padding: 0.5, pane: 'markerPane'});
-        checkIterate(activePoints, point => {
-            console.log('.active-' + point.theme.id)
+        checkIterate(points, point => {
             let marker = L.circleMarker([point.y, point.x], {
                 renderer: renderer,
                 color: $('._' + point.theme.id).css('color'),
@@ -112,9 +122,7 @@ export class PointData extends Observable {
                 `<div><strong>Name: ${point.name}</strong></div>`,
                 {autoClose: false}
             );
-            this.markerLayer.addLayer(marker)
-
-            activeMarkers.push(marker);
+            layer.addLayer(marker)
         })
     }
 }

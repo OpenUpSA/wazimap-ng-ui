@@ -70,7 +70,7 @@ export default function configureApplication(serverUrl, profileId, config) {
         const geometries = payload.payload.geometries;
         mapcontrol.overlayBoundaries(geography, geometries)
     });
-    controller.on('loadedNewProfile', payload => pointData.showPointsOnMap())
+    
     controller.on('loadedNewProfile', payload => profileLayout.displayLogo(payload.payload.logo))
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());

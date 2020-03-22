@@ -30,6 +30,8 @@ export class PointDataTray extends Observable {
         const theme = new Theme(datum);
         theme.on("categorySelected", category => this.triggerEvent("categorySelected", category))
         theme.on("categoryUnselected", category => this.triggerEvent("categoryUnselected", category))
+        theme.on("themeSelected", theme => this.triggerEvent("themeSelected", theme))
+        theme.on("themeUnselected", theme => this.triggerEvent("themeUnselected", theme))
         return theme
 
     }

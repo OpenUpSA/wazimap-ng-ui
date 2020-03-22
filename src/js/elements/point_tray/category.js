@@ -41,18 +41,25 @@ export class Category extends Observable {
 
     toggleOff() {
         this.active = false;
-        this.triggerEvent("categoryUnselected", this);
-        $(this.element).find('.point-data__h2').removeClass(this.activeClassName);
+        this.highlight(false);
         this.showLoading(false);
         this.showDone(false);
+        this.triggerEvent("categoryUnselected", this);
     }
 
     toggleOn() {
         this.active = true;
-        this.triggerEvent("categorySelected", this)
-        $(this.element).find('.point-data__h2').addClass(this.activeClassName);
+        this.highlight(true);
         this.showLoading(true);
         this.showDone(false);
+        this.triggerEvent("categorySelected", this)
+    }
+
+    highlight(flag) {
+        if (flag)
+            $(this.element).find('.point-data__h2').addClass(this.activeClassName);
+        else
+            $(this.element).find('.point-data__h2').removeClass(this.activeClassName);
     }
 
     showLoading(flag) {

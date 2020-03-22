@@ -58,25 +58,32 @@ export class Theme extends Observable {
 
     toggleOff() {
         this.active = false;
-        $(this.element).find('.point-data__h2').removeClass(this.activeClassName);
-        this.triggerEvent("categoryUnselected", this);
+        this.categories.forEach(category => {
+            category.toggleOff();
+        })
+        this.highlight(false);
+        this.triggerEvent("themeUnselected", this);
     }
 
     toggleOn() {
-        const self = this;
-        let activeClassName = 'active-' + this.id;
+        this.active = true;
         this.categories.forEach(category => {
             category.toggleOn();
         })
 
-         $(this.element).find(categoryItemClsName).each(function () {
-            if (!$(this).find('.point-data__h2').hasClass(activeClassName)) {
-                $(this).find('.point-data__h2').addClass(activeClassName);
-            }
-        })
-
-        $('.point-data__h1_trigger', this.element).addClass(activeClassName);
+        this.highlight(true);
         this.triggerEvent("themeSelected", this)
+    }
+
+    highlight(flag) {
+        let activeClassName = 'active-' + this.id;
+        if (flag) {
+            $('.point-data__h1_trigger', this.element).addClass(activeClassName);
+        }
+        else {
+            $('.point-data__h1_trigger', this.element).removeClass(activeClassName);
+        }
+
     }
 
     get name() {

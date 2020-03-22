@@ -95,7 +95,7 @@ export class PointData extends Observable {
                 points.push({
                     x: geometry.coordinates[0],
                     y: geometry.coordinates[1],
-                    name: prop.data.Name,
+                    name: prop.name,
                     category: prop.category,
                     theme: prop.category.theme,
                     data: prop.data

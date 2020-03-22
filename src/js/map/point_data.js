@@ -1,4 +1,4 @@
-import {getJSON, Observable, ThemeStyle, hasElements, checkIterate} from './utils';
+import {getJSON, Observable, ThemeStyle, hasElements, checkIterate} from '../utils';
 import {count} from "d3-array";
 
 

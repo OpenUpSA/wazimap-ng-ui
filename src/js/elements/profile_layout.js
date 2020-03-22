@@ -1,4 +1,4 @@
-import {Observable} from './utils';
+import {Observable} from '../utils';
 
 const logoContainer = $('img.nav__logo');
 

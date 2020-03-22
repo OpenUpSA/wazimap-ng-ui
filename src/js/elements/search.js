@@ -1,6 +1,5 @@
-import {Observable} from './utils';
+import {Observable, getJSON} from '../utils';
 import {select as d3select} from 'd3-selection';
-import {getJSON} from './utils';
 
 // TODO should change this to jquery instead
 var navSearch = d3select(".nav__search");

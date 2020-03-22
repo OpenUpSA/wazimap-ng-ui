@@ -148,6 +148,7 @@ export class MapControl extends Observable {
         L.control.zoom({position: this.zoomPosition}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
 
+
         return map;
     };
 

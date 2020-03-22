@@ -5,6 +5,7 @@
   "author": "Adi Eyal <adi@openup.org.za>",
   "license": "MIT",
   "dependencies": {
+    "category": "^0.1.2",
     "controller": "^1.0.0",
     "css": "^2.2.4",
     "d3-array": "^2.4.0",

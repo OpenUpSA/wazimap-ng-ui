@@ -1,46 +1,14 @@
-import {getJSON, Observable, ThemeStyle} from './utils';
-import 'leaflet.markercluster/dist/leaflet.markercluster'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import {getJSON, Observable, ThemeStyle, hasElements, checkIterate} from './utils';
 import {count} from "d3-array";
+
 
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
 const pointsByCategoryUrl = 'points/categories';
 
-const iterationLimit = 10;  //iteration limit of the xhr calls, ideally we shouldn't have this
-const wrapperClsName = '.point-data__content_wrapper';
-const pointDataItemClsName = '.point-data__h1--dropdown';
-const categoryWrapperClsName = '.point-data__h1_content';
-const categoryItemClsName = '.point-data__h2_wrapper';
-const categoryItemLoadingClsName = '.point-data__h2_loading';
-const categoryItemDoneClsName = '.point-data__h2_load-complete';
-const treeLineClsName = '.point-data__h2_tree-line-v';
-const pointMarkerPositionClsName = '.point-marker__position';
-const popupItemClsName = '.point-marker__tooltip';
-const pointMarkerClsName = '.point-marker';
-const defaultActiveClsName = 'active-1';
-const clusterClsName = '.map__point-cluster';
-const hideondeployClsName = 'hideondeploy';
-const clusterClasses = [{count: 1500, cls: 5}, {count: 1000, cls: 4}, {count: 500, cls: 3}, {
-    count: 200,
-    cls: 2
-}, {count: 0, cls: 1}];  //determines the color class according to the number of points
 let activeMarkers = [];
-let activeLayers = [];
-let pointDataItem = null;
-let categoryItem = null;
-let treeLineItem = null;
-let popupItem = null;
-let pointMarkerClone = null;
-let markers = null;
-let markerOptionsArr = [];
-let themeCategories = [];
 let activePoints = [];  //the visible points on the map
-let activeIndividualPoints = [];
-let addrPointCancelTokens = {};
-let clusterClone = null;
 
 /**
  * this class creates the point data dialog
@@ -53,551 +21,100 @@ export class PointData extends Observable {
         this.map = _map;
         this.profileId = profileId;
         this.config = config;
-        this.payload = null;
 
-        //this.selectedThemes = [];
-        this.selectedCategories = [];
-        this.selectedCategoryNames = []; //remove this when we have categoryId on all_details API
-        this.markerFactory = new MarkerFactory(
-            Number($(pointMarkerClsName).css('width').replace('px', '')),
-            Number($(pointMarkerClsName).css('height').replace('px', ''))
-        );
+        this.markerLayer = L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
 
-        function updateProgressBar(processed, total, elapsed, layersArray) {
-            console.log(`Elapsed: ${elapsed}, Total: ${total}`)
-        }
 
-        markers = L.markerClusterGroup({chunkedLoading: true, chunkProgress: updateProgressBar});
-
-        this.prepareDomElements();
-    }
-
-    /**
-     * gets the necessary classes, removes unneeded elements
-     */
-    prepareDomElements = () => {
-        pointDataItem = $(pointDataItemClsName)[0].cloneNode(true);
-        categoryItem = $(categoryItemClsName)[0].cloneNode(true);
-        $(categoryItem).find(categoryItemLoadingClsName).addClass('hide');
-        $(categoryItem).find(categoryItemDoneClsName).addClass('hide');
-        treeLineItem = $(treeLineClsName)[0].cloneNode(true);
-        let pointMarkerDiv = $(pointMarkerPositionClsName);
-        popupItem = pointMarkerDiv.find(popupItemClsName)[0].cloneNode(true);
-        pointMarkerClone = pointMarkerDiv.find(pointMarkerClsName)[0].cloneNode(true);
-        clusterClone = $(clusterClsName)[0].cloneNode(true);
-
-        $(wrapperClsName).html('');
-    }
-
-    /**
-     * gets the themes and creates the point data dialog
-     * */
-    loadThemes = () => {
-        let self = this;
-        self.triggerEvent("loadingThemes", self);
-        const themeUrl = `${this.baseUrl}/${url}/${this.profileId}/`;
-
-        getJSON(themeUrl).then((data) => {
-            if (data.results !== null && data.results.length > 0) {
-                for (let i = 0; i < data.results.length; i++) {
-                    let item = pointDataItem.cloneNode(true);
-                    $(item).removeClass(hideondeployClsName);
-                    $('.h1__trigger_title .truncate', item).text(data.results[i].name);
-                    $('.point-data__h1_trigger', item).removeClass(defaultActiveClsName);
-                    $(categoryWrapperClsName, item).html('');
-
-                    if (data.results[i].categories !== null && data.results[i].categories.length > 0) {
-                        for (let j = 0; j < data.results[i].categories.length; j++) {
-                            themeCategories.push({
-                                themeId: data.results[i].id,
-                                categoryId: data.results[i].categories[j].id,
-                                categoryName: data.results[i].categories[j].name
-                            })
-                            let cItem = categoryItem.cloneNode(true);
-                            $(cItem).on('click', () => self.selectedCategoriesChanged(cItem, item, data.results[i].categories[j], data.results[i].id));
-                            $(cItem).find('.point-data__h2').removeClass(defaultActiveClsName);
-                            $('.truncate', cItem).text(data.results[i].categories[j].name);
-                            $('.point-data__h2_link', cItem).removeClass('point-data__h2_link').addClass('point-data__h2_link--disabled');
-
-                            $(item).find(categoryWrapperClsName).append(cItem);
-
-                            if (j === data.results[i].categories.length - 1) {
-                                //last
-                                $(cItem).find('.point-data__h2').addClass('last');
-                            }
-                        }
-                    }
-                    //append tree
-                    let treeItem = treeLineItem.cloneNode(true);
-                    $(categoryWrapperClsName, item).append(treeItem);
-
-                    $(item).find('.point-data__h1_checkbox input[type=checkbox]').on('click', () => self.selectedThemesChanged(item, data.results[i], i));
-
-                    //Replace with correct icon and color
-                    ThemeStyle.replaceChildDivWithThemeIcon(data.results[i].id, $(item).find('.point-data__h1_trigger'), $(item).find('.point-data__h1_trigger-icon'));
-
-                    $(wrapperClsName).append(item);
-                }
-            }
-
-            self.triggerEvent("loadedThemes", data);
-        })
     }
 
     /**
      * this function is called when a category is toggled
      * */
-    selectedCategoriesChanged = (cItem, item, category, themeId) => {
-        let activeClassName = 'active-' + themeId;
-        if ($(cItem).find('.point-data__h2').hasClass(activeClassName)) {
-            this.triggerEvent('categoryUnselected', {category: category, item: cItem});
-
-            if (this.selectedCategories.indexOf(category.id) >= 0) {
-                this.selectedCategories.splice(this.selectedCategories.indexOf(category.id), 1);
-                this.selectedCategoryNames.splice(this.selectedCategoryNames.indexOf(category.name), 1);
-            }
-
-            $(cItem).find('.point-data__h2').removeClass(activeClassName);
-            if ($(item).find(categoryItemClsName).find('.' + activeClassName).length == 0) {
-                $('.point-data__h1_trigger', item).removeClass(activeClassName);
-            }
-
-            $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop("checked", false);
-
-            this.removeCategoryPoints(category);
-        } else {
-            this.triggerEvent('categorySelected', {category: category, item: cItem});
-            this.selectedCategories.push(category.id);
-            this.selectedCategoryNames.push(category.name);
-
-            $(cItem).find('.point-data__h2').addClass(activeClassName);
-            $('.point-data__h1_trigger', item).addClass(activeClassName);
-
-            if ($(item).find(categoryItemClsName).find('.' + activeClassName).length == $(item).find(categoryItemClsName).length) {
-                $(item).find('.point-data__h1_checkbox input[type=checkbox]').prop("checked", true);
-            }
-
-            this.showCategoryPoint(category).then(data => {
-                this.triggerEvent('categoryPointLoaded', {data: data, item: cItem})
-            });
-        }
-    }
 
     showCategoryPoint = (category) => {
         let categoryUrl = `${this.baseUrl}/${pointsByCategoryUrl}/${category.id}/?format=json`
-        let iterationCounter = 0;
+        this.triggerEvent('loadingCategoryPoints', category);
+        return this.getAddressPoints(categoryUrl).then(data => {
+            // TODO should rather listen for the event
+            category.showLoading(false);
+            category.showDone(true);
+            this.triggerEvent('loadedCategoryPoints', {category: category, points: data});
 
-        const tokenIndex = "category_id-" + category.id;
-
-        if (addrPointCancelTokens[tokenIndex] == undefined)
-            addrPointCancelTokens[tokenIndex] = []
-
-        const token = {token: ""};
-
-        addrPointCancelTokens[tokenIndex].push(token);
-        return this.getAddressPoints(categoryUrl, iterationCounter, token).then((data) => {
-            let index = addrPointCancelTokens[tokenIndex].indexOf(token);
-            if (index !== -1) {
-                addrPointCancelTokens[tokenIndex].splice(index, 1);
-            }
-            return data;
         });
     }
 
     removeCategoryPoints = (category) => {
-        const tokenIndex = "category_id-" + category.id;
-        if (addrPointCancelTokens[tokenIndex]) {
-            for (let i = 0; i < addrPointCancelTokens[tokenIndex].length; i++) {
-                addrPointCancelTokens[tokenIndex][i].token = "cancel";
-            }
-        }
-
-        activePoints = activePoints.filter((item) => {
-            return item.categoryId !== category.id
+        activePoints = activePoints.filter(item => {
+            return item.category.id !== category.id
         });
 
         this.showPointsOnMap();
     }
     /** end of category functions **/
 
-    /**
-     * this function is called when a theme is toggled
-     * */
-    selectedThemesChanged = (item, theme, index) => {
-        let activeClassName = 'active-' + theme.id;
-        if ($(item).find('.point-data__h1_checkbox input[type=checkbox]').is(':checked')) {
-            //theme added
-            this.triggerEvent('themeSelected', {theme: theme, item: item});
-
-            //this.selectedThemes.push(theme.id);
-            themeCategories.forEach((tc) => {
-                if (tc.themeId === theme.id) {
-                    this.selectedCategories.push(tc.categoryId);
-                    this.selectedCategoryNames.push(tc.categoryName);
-                }
-            })
-
-            $(item).find(categoryItemClsName).each(function () {
-                if (!$(this).find('.point-data__h2').hasClass(activeClassName)) {
-                    $(this).find('.point-data__h2').addClass(activeClassName);
-                }
-            })
-
-            $('.point-data__h1_trigger', item).addClass(activeClassName);
-
-            this.showThemePoints(theme).then(data => {
-                this.triggerEvent('themeLoaded', {data: data, item: item})
-            });
-        } else {
-            //theme removed
-            this.triggerEvent('themeUnselected', {theme: theme, item: item});
-
-            //this.selectedThemes.splice(this.selectedThemes.indexOf(theme.id), 1);
-            themeCategories.forEach((tc) => {
-                if (tc.themeId === theme.id && this.selectedCategories.indexOf(tc.categoryId) >= 0) {
-                    this.selectedCategories.splice(this.selectedCategories.indexOf(tc.categoryId), 1);
-                    this.selectedCategoryNames.splice(this.selectedCategories.indexOf(tc.categoryName), 1);
-                }
-            })
-
-            this.removeThemePoints(theme);
-
-            $(item).find(categoryItemClsName).each(function () {
-                if ($(this).find('.point-data__h2').hasClass(activeClassName)) {
-                    $(this).find('.point-data__h2').removeClass(activeClassName);
-                }
-            })
-
-            $('.point-data__h1_trigger', item).removeClass(activeClassName);
-        }
-    }
-
     showThemePoints = (theme) => {
         //need to remove for in case its already showing some from selected item
         this.removeThemePoints(theme);
         let themeUrl = `${this.baseUrl}/${pointsByThemeUrl}/${theme.id}/`;
-        let iterationCounter = 0;
 
-        const tokenIndex = "theme_id-" + theme.id;
-        if (addrPointCancelTokens[tokenIndex] == undefined)
-            addrPointCancelTokens[tokenIndex] = []
-
-        var token = {token: ""};
-
-        addrPointCancelTokens[tokenIndex].push(token);
-        return this.getAddressPoints(themeUrl, iterationCounter, token).then((data) => {
-            let index = addrPointCancelTokens[tokenIndex].indexOf(token);
-            if (index !== -1) {
-                addrPointCancelTokens[tokenIndex].splice(index, 1);
-            }
-            return data;
-        });
+        return this.getAddressPoints(themeUrl)
     }
 
     removeThemePoints = (theme) => {
-        const themeIndex = "theme_id-" + theme.id;
-        if (addrPointCancelTokens[themeIndex]) {
-            for (let i = 0; i < addrPointCancelTokens[themeIndex].length; i++) {
-                addrPointCancelTokens[themeIndex][i].token = "cancel";
-            }
-        }
-
         activePoints = activePoints.filter((item) => {
-            return item.themeId !== theme.id
+            return item.theme.id !== theme.id
         });
 
         this.showPointsOnMap();
     }
     /** end of theme functions **/
 
-    /**
-     * calls the API iteratively to get the points
-     * requestUrl : API url, can be pointsByThemeUrl or pointsByCategoryUrl
-     * iterationCounter : this parameter is used to check if we hit the iteration limit or not
-     * id : id of category or theme requested
-     * type : 'Category' or 'Theme'
-     */
-    getAddressPoints = (requestUrl, iterationCounter, cancelToken = undefined) => {
+    getAddressPoints(requestUrl) {
         return getJSON(requestUrl).then(data => {
-            if (data.features !== null && data.features.length > 0) {
-                data.features.forEach(feature => {
-                    const properties = feature.properties;
-                    const geometry = feature.geometry;
-                    const categoryId = properties.category.id;
-                    const themeId = themeCategories.filter(item => {
-                        return item.categoryId === categoryId
-                    })[0].themeId;
+            checkIterate(data.features, feature => {
+                const prop = feature.properties;
+                const geometry = feature.geometry;
 
-                    activePoints.push({
-                        x: geometry.coordinates[0],
-                        y: geometry.coordinates[1],
-                        name: properties.data.Name,
-                        categoryId: categoryId,
-                        categoryName: properties.category.name,
-                        themeId: themeId,
-                        data: properties.data
-                    })
+                activePoints.push({
+                    x: geometry.coordinates[0],
+                    y: geometry.coordinates[1],
+                    name: prop.data.Name,
+                    category: prop.category,
+                    theme: prop.category.theme,
+                    data: prop.data
                 })
 
-                this.triggerEvent('addressPointsTake', {data: data});
-                this.showPointsOnMap();
-                return data;
-            }
-        })
-    }
-
-    /**
-     * clears the map, puts back the points that are in activePoints array
-     */
-    showPointsOnMap = () => {
-        this.showIndividualMarkers();
-    }
-
-    /**
-     * 1 custom marker per child geography
-     */
-    showClusterMarkers = () => {
-        //1 for each child
-        this.map.map_variables.children.map((child, i) => {
-            let childCategories = [];
-
-            //todo:convert this to selectedCategories when we have categoryId on all_details API
-            this.selectedCategoryNames.forEach((category) => {
-                child.themes.forEach((cTheme) => {
-                    let categoriesToAdd = cTheme.categories.filter((c) => {
-                        return c.name === category;
-                    })
-
-                    if (typeof categoriesToAdd[0] !== 'undefined') {
-                        let contains = childCategories.filter((ch) => {
-                            return ch.name === categoriesToAdd[0].name  //todo:change this to Id when we have categoryId on all_details API
-                        })
-                        if (contains.length <= 0) {
-                            childCategories = childCategories.concat(categoriesToAdd[0]);
-                        }
-                    }
-                })
             })
 
-            let arr = [];
-            if (childCategories.length > 0) {
-                let totalCount = 0;
-                childCategories.forEach((cc) => {
-                    totalCount += cc.count;
-
-                    arr.push({
-                        categoryId: cc.categoryId,
-                        count: cc.count,
-                        categoryName: cc.name
-                    })
-                })
-
-                let marker = this.markerFactory.generateClusterMarker({
-                    x: child.center[0],
-                    y: child.center[1],
-                    count: totalCount
-                }, this.map)
-
-                //activeLayers.push(marker);
-                this.map.addLayer(marker);
-            }
-            child.categories = arr;
-        });
-    }
-
-    showClusterOrIndividualMarkers = (payload) => {
-        /*
-        if (this.selectedCategories.length <= 0) {
-            return;
-        }
-
-        this.selectedCategories.forEach((cId) => {
-            this.showCategoryPoint({id: cId});
+            this.showPointsOnMap();
+            return data;
         })
-         */
-
-        this.payload = payload;
-
-        this.showIndividualMarkers();
     }
 
     /**
      * individual markers
      */
-    showIndividualMarkers = () => {
+    showPointsOnMap = () => {
         for (let i = 0; i < activeMarkers.length; i++) {
             activeMarkers[i].remove();
         }
-        for (let i = 0; i < activeLayers.length; i++) {
-            this.map.removeLayer(activeLayers[i]);
-        }
 
-        if (activePoints !== null && activePoints != undefined && activePoints.length > 0) {
-            if (this.config.individualMarkerLevels.indexOf(this.map.map_variables.currentLevel) < 0) {
-                let renderer = L.canvas({padding: 0.5});
-                activePoints.forEach(point => {
-                    let marker = L.circleMarker([point.y, point.x], {
-                        renderer: renderer,
-                        color: $('.active-' + point.themeId).css('color'),
-                        radius: 1
-                    }).addTo(this.map);
-
-                    activeMarkers.push(marker);
-                })
-            } else {
-                let selectedPoints = this.payload.geometries.themes.filter((theme) => {
-                    return this.selectedCategories.indexOf(theme.subtheme_id) >= 0
-                });
-
-                let prevPoints = activePoints;
-                activeIndividualPoints = [];
-                selectedPoints.forEach((sp) => {
-                    sp.locations.list.forEach((listItem) => {
-                        activeIndividualPoints.push(
-                            prevPoints.filter((pp) => {
-                                return pp.x === listItem.coordinates.coordinates[0] && pp.y === listItem.coordinates.coordinates[1]
-                            })[0]
-                        );
-                    });
-                });
-
-                activeIndividualPoints.forEach(point => {
-                    let marker = this.markerFactory.generateMarker(point);
-
-                    activeLayers.push(marker);
-                    this.map.addLayer(marker);
-                })
-            }
-        }
-    }
-}
-
-class MarkerFactory {
-    constructor(markerWidth, markerHeight) {
-        this.markerWidth = markerWidth;
-        this.markerHeight = markerHeight;
-    }
-
-    prepareSvgOptions(pointMarkerElement) {
-        /*
-        let markerSvgIcon = $(pointMarkerElement).find('.point-marker__pin').find('.svg-icon').children('svg');
-         */
-        //Only when element is visible on the document does height/outerHeight work
-        //Element is hidden and showing using .show doesn't help before calling height/outerHeight
-        //As such retrieve height from attribute height/width or viewBox
-        //let markerWidth = Number(markerSvgIcon.attr('width') || markerSvgIcon.attr('viewBox').split(" ")[2].trim());
-        //let markerHeight = Number(markerSvgIcon.attr('height') || markerSvgIcon.attr('viewBox').split(" ")[3].trim());
-
-        $(pointMarkerElement).find('.point-marker__icon').css('z-index', 1000);
-
-        let divIcon = L.divIcon({
-            html: $(pointMarkerElement).prop('outerHTML'),
-            iconAnchor: L.point(this.markerWidth / 2, this.markerHeight),
-            className: '',
-            iconSize: L.point(this.markerWidth, this.markerHeight),
-            popupAnchor: L.point(0, -12),
-            tooltipAnchor: L.point(0, -12)
-        });
-
-        const markerOptions = {icon: divIcon};
-        return markerOptions
-    }
-
-    preparePopupItem(point) {
-        const popupItemClone = popupItem.cloneNode(true);
-
-        let name = point.name;
-        if (name == undefined || name == "")
-            name = "Unknown";
-        name = name.trim();
-
-        let categoryName = point.categoryName;
-        if (categoryName == undefined || categoryName == "")
-            categoryName = "Unknown Category";
-        categoryName = categoryName.trim();
-
-        $(popupItemClone).find('.tooltip__card_title').text(name);
-        $(popupItemClone).find('.tooltip__card_subtitle').text(categoryName);
-        $(popupItemClone).show();
-        $(popupItemClone).css('opacity', '');
-        const existingStyles = $(popupItemClone).attr('style');
-        // TODO remove inline styles and use existing class
-        $(popupItemClone).attr('style', existingStyles + '; ' + 'font: unset; font-family: Roboto, sans-serif; font-size: 14px; line-height: 20px; text-align: left;');
-
-        return popupItemClone;
-    }
-
-    createMarker(popupItem, coords, markerOptions) {
-        const marker = L.marker(new L.LatLng(coords.y, coords.x), markerOptions);
-
-        marker.on('mouseover', function (e) {
-            this.bindPopup($(popupItem).prop('outerHTML'), {maxWidth: "auto", closeButton: false});
-            this.openPopup();
-            let popupElement = $(this.getPopup().getElement());
-            popupElement.find('.leaflet-popup-content-wrapper').removeClass('leaflet-popup-content-wrapper');
-            popupElement.find('.leaflet-popup-tip-container').remove();
-        });
-
-        marker.on('mouseout', function (e) {
-            this.closePopup();
-        });
-
-        return marker;
-    }
-
-    generateMarker(point) {
-        let markerOptions = {};
-        let pointMarkerElement = pointMarkerClone.cloneNode(true);
-
-        let options = markerOptionsArr.filter((item) => {
-            return item.themeId === point.themeId;
-        })[0];
-
-        if (options === null || typeof options === 'undefined') {
-            if (ThemeStyle.replaceChildDivWithThemeIcon(point.themeId, $(pointMarkerElement), $(pointMarkerElement).find('.point-marker__icon'))) {
-                markerOptions = this.prepareSvgOptions(pointMarkerElement);
-            }
-            markerOptionsArr.push({
-                options: markerOptions,
-                themeId: point.themeId
+        let renderer = L.svg({padding: 0.5, pane: 'markerPane'});
+        checkIterate(activePoints, point => {
+            console.log('.active-' + point.theme.id)
+            let marker = L.circleMarker([point.y, point.x], {
+                renderer: renderer,
+                color: $('._' + point.theme.id).css('color'),
+                radius: 1,
             })
-        } else {
-            markerOptions = options.options;
-        }
+            //marker.bindTooltip(point.name);
+            marker.bindPopup(
+                `<div><strong>Name: ${point.name}</strong></div>`,
+                {autoClose: false}
+            );
+            this.markerLayer.addLayer(marker)
 
-        let popupItemClone = this.preparePopupItem(point)
-        let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
-
-        return marker;
-    }
-
-    /**
-     * generates cluster marker using the html clone
-     */
-    generateClusterMarker(point, map) {
-        let cluster = clusterClone.cloneNode(true);
-        $(cluster).removeClass('_1');
-        for (let i = 0; i < clusterClasses.length; i++) {
-            if (point.count > clusterClasses[i].count) {
-                $(cluster).addClass('_' + clusterClasses[i].cls);
-                break;
-            }
-        }
-        $('div', cluster).text(point.count);
-
-        let myIcon = L.divIcon({
-            html: cluster,
-            iconAnchor: L.point(this.markerWidth / 2, this.markerHeight),
-            className: '',
-            iconSize: L.point(this.markerWidth, this.markerHeight),
-            popupAnchor: L.point(0, -12),
-            tooltipAnchor: L.point(0, -12)
-        });
-        let markerOptions = {icon: myIcon};
-
-        let popupItemClone = null;
-        let marker = this.createMarker(popupItemClone, {x: point.x, y: point.y}, markerOptions);
-
-        return marker;
+            activeMarkers.push(marker);
+        })
     }
 }

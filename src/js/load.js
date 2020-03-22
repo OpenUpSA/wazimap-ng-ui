@@ -14,6 +14,7 @@ import {PointData} from "./point_data";
 import {ZoomToggle} from "./mapmenu/zoomtoggle";
 import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
 import {ProfileLayout} from "./profile_layout";
+import {PointDataTray} from './elements/point_tray/tray';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -24,6 +25,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     const mapcontrol = new MapControl(config);
     const popup = new Popup(mapcontrol.map);
     const pointData = new PointData(baseUrl, mapcontrol.map, profileId, config);
+    const pointDataTray = new PointDataTray(baseUrl, profileId);
     const controller = new Controller(baseUrl, config, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
@@ -71,12 +73,8 @@ export default function configureApplication(serverUrl, profileId, config) {
         const geometries = payload.payload.geometries;
         mapcontrol.overlayBoundaries(geography, geometries)
     });
-    controller.on('loadedNewProfile', payload => {
-        pointData.showClusterOrIndividualMarkers(payload.payload);
-    })
-    controller.on('loadedNewProfile', payload => {
-        profileLayout.displayLogo(payload.payload.logo);
-    })
+    controller.on('loadedNewProfile', payload => pointData.showPointsOnMap())
+    controller.on('loadedNewProfile', payload => profileLayout.displayLogo(payload.payload.logo))
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());
     controller.on("searchResults", payload => searchLoadSpinner.stop());
@@ -100,22 +98,14 @@ export default function configureApplication(serverUrl, profileId, config) {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
     });
 
-    controller.on("categorySelected", payload => {
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
-    });
-
-    controller.on('categoryUnselected', payload => {
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
-    });
+    controller.on("categorySelected", payload => pointData.showCategoryPoint(payload.payload));
+    controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
 
     controller.on('categoryPointLoaded', payload => {
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
         new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
     });
-
-    controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
+ controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
     controller.on('zoomToggled', payload => {
         mapcontrol.enableZoom(payload.payload.enabled)
     });
@@ -148,16 +138,18 @@ export default function configureApplication(serverUrl, profileId, config) {
 
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
 
-    pointData.on('themeSelected', payload => controller.onThemeSelected(payload))
-    pointData.on('themeUnselected', payload => controller.onThemeUnselected(payload))
-    pointData.on('themeLoaded', payload => controller.onThemePointLoaded(payload));
-    pointData.on('loadingThemes', payload => controller.onLoadingThemes(payload));
-    pointData.on('loadedThemes', payload => controller.onLoadedThemes(payload));
-    pointData.on('categorySelected', payload => controller.onCategorySelected(payload));
-    pointData.on('categoryUnselected', payload => controller.onCategoryUnselected(payload));
-    pointData.on('categoryPointLoaded', payload => controller.onCategoryPointLoaded(payload));
+    pointDataTray.on('themeSelected', payload => controller.onThemeSelected(payload))
+    pointDataTray.on('themeUnselected', payload => controller.onThemeUnselected(payload))
+    pointDataTray.on('themeLoaded', payload => controller.onThemePointLoaded(payload));
+    pointDataTray.on('loadingThemes', payload => controller.onLoadingThemes(payload));
+    pointDataTray.on('loadedThemes', payload => controller.onLoadedThemes(payload));
+    pointDataTray.on('categorySelected', payload => controller.onCategorySelected(payload));
+    pointDataTray.on('categoryUnselected', payload => controller.onCategoryUnselected(payload));
 
-    pointData.loadThemes();
+    // pointData.on('categoryPointLoaded', payload => controller.onCategoryPointLoaded(payload));
+
+
+    pointDataTray.loadThemes();
 
     zoomToggle.on('zoomToggled', payload => controller.onZoomToggled(payload));
     preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))

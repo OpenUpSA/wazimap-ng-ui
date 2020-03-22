@@ -145,3 +145,17 @@ export class Observable {
 
 export const numFmt = d3format(",.2d");
 
+export function hasElements(arr) {
+  if (arr != null && arr != undefined && arr.length > 0)
+    return true
+  return false;
+}
+
+export function checkIterate(arr, func) {
+  if (!hasElements(arr))
+    return
+
+  arr.forEach(el => {
+    func(el);
+  }) 
+}

@@ -35,7 +35,7 @@ class LayerStyler {
     }
 
     setLayerStyle(layer, styles) {
-        layer.resetStyle();
+        layer.resetStyle(layer);
         layer.eachLayer((feature) => {
             feature.setStyle(styles.out);
 

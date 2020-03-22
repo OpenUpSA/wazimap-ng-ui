@@ -59,9 +59,6 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
-    controller.on("loadingNewProfile", payload => {
-        //contentMapSpinner.start()
-    });
     controller.on("loadedNewProfile", payload => mapchip.clearAllMapChip());
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
     controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
@@ -79,33 +76,11 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on("searchBefore", payload => searchLoadSpinner.start());
     controller.on("searchResults", payload => searchLoadSpinner.stop());
     controller.on("layerLoadingDone", payload => contentMapSpinner.stop());
-    controller.on("themeSelected", payload => {
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {start: true})
-    });
-    controller.on("themeUnselected", payload => {
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
-    });
-
-    controller.on("themeLoaded", payload => {
-        if (payload.payload.data == "cancel") {
-            new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-            new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {stop: true})
-            return;
-        }
-
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
-    });
 
     controller.on("categorySelected", payload => pointData.showCategoryPoint(payload.payload));
     controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
 
-    controller.on('categoryPointLoaded', payload => {
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_loading'), {stop: true})
-        new LoadingSpinner($(payload.payload.item).find('.point-data__h2_load-complete'), {start: true})
-    });
- controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
+     controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
     controller.on('zoomToggled', payload => {
         mapcontrol.enableZoom(payload.payload.enabled)
     });

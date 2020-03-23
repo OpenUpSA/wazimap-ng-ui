@@ -216,22 +216,6 @@ export class MapControl extends Observable {
         }
     }
 
-    isMarkerInsidePolygon = (marker, poly) => {
-        let polyPoints = poly.getLatLngs()[0][0];
-        let x = marker.lng, y = marker.lat;
-
-        let inside = false;
-        for (let i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
-            let xi = polyPoints[i].lat, yi = polyPoints[i].lng;
-            let xj = polyPoints[j].lat, yj = polyPoints[j].lng;
-
-            let intersect = ((yi > y) != (yj > y))
-                && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-            if (intersect) inside = !inside;
-        }
-
-        return inside;
-    };
 
     overlayBoundaries(geography, geometries, zoomNeeded = false) {
         const self = this;
@@ -261,30 +245,6 @@ export class MapControl extends Observable {
 
             return leafletLayer;
         });
-
-        this.map.map_variables.children = [];
-
-        if (typeof selectedBoundary.features !== 'undefined' && typeof selectedBoundary.features.map !== 'undefined') {
-            selectedBoundary.features.map((item, i) => {
-                const l = L.geoJSON(item);
-                let center = l.getBounds().getCenter();
-                if (!this.isMarkerInsidePolygon(center, L.polygon(item.geometry.coordinates))) {
-                    center = {
-                        lng: item.geometry.coordinates[0][0].reduce((total, next) => total + next[0], 0) / (item.geometry.coordinates[0][0].length),
-                        lat: item.geometry.coordinates[0][0].reduce((total, next) => total + next[1], 0) / (item.geometry.coordinates[0][0].length)
-                    }
-                }
-                let x = center.lng
-                let y = center.lat
-                this.map.map_variables.children.push({
-                    name: item.properties.name,
-                    code: item.properties.code,
-                    center: [x, y],
-                    categories: [],
-                    themes: item.properties.themes
-                })
-            })
-        }
 
         self.boundaryLayers.clearLayers();
 

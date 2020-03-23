@@ -72,30 +72,43 @@ function addKeyMetrics(container, profile) {
     })
 }
 
-function addFacilities(geometries, profile, config) {
+function addFacilities(geometries) {
+    return
     $('.location-facility', facilityWrapper).remove();
 
     let categoryArr = [];
     let themeIds = [];
     let themes = [];
-    const level = profile.geography.level;
 
-    /*
     geometries.themes.forEach((theme) => {
-        console.log(theme);
+        if (themeIds.indexOf(theme.theme_id) < 0) {
+            themeIds.push(theme.theme_id);
+            themes.push({
+                theme_id: theme.theme_id,
+                name: theme.theme,
+                icon: theme.theme_icon,
+                count: theme.locations.count,
+                desc:theme.description
+            });
+        } else {
+            themes.filter((t) => {
+                return t.theme_id === theme.theme_id
+            })[0].count += theme.locations.count
+        }
+
+        categoryArr.push(theme);
     });
-     */
 
     themes.forEach((theme) => {
         let facilityItem = facilityTemplate.cloneNode(true);
         $('.location-facility__name .truncate', facilityItem).text(theme.name);
-        ThemeStyle.replaceChildDivWithThemeIcon(theme.id, $(facilityItem).find('.location-facility__icon'), $(facilityItem).find('.location-facility__icon'));
+        ThemeStyle.replaceChildDivWithThemeIcon(theme.theme_id, $(facilityItem).find('.location-facility__icon'), $(facilityItem).find('.location-facility__icon'));
         $('.location-facility__value div', facilityItem).text(theme.count);
 
         //.location-facility__item .tooltip__points_label .truncate
         $('.location-facility__list', facilityItem).html('');
         let themeCategories = categoryArr.filter((c) => {
-            return c.themeId === theme.id
+            return c.theme_id === theme.theme_id
         });
 
         for (let i = 0; i < themeCategories.length; i++) {
@@ -104,16 +117,16 @@ function addFacilities(geometries, profile, config) {
                 $(rowItem).addClass('last');
             }
 
-            $('.tooltip__points_label .truncate', rowItem).text(themeCategories[i].name);
-            $('.tooltip__value_amount div', rowItem).text(themeCategories[i].count);
+            $('.tooltip__points_label .truncate', rowItem).text(themeCategories[i].label);
+            $('.tooltip__value_amount div', rowItem).text(themeCategories[i].locations.count);
 
             $('.location-facility__list', facilityItem).append(rowItem);
         }
+        $('.location-facility__description div', facilityItem).text(theme.desc);
 
         facilityWrapper.append(facilityItem);
     })
 }
-
 
 export default class ProfileLoader {
     constructor(config) {
@@ -214,7 +227,7 @@ export default class ProfileLoader {
 
         updateGeography(profileHeader, profile);
         addKeyMetrics(profileHeader, profile);
-        addFacilities(geometries, profile, this.config);
+        addFacilities(geometries);
 
         for (const [category, detail] of Object.entries(all_categories)) {
             this.addCategory(category, detail);

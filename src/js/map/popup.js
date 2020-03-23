@@ -69,6 +69,9 @@ export class Popup extends Observable {
     }
 
     setTooltipThemes = (item, areaCode) => {
+        $(item).find('.map__tooltip_points').html('');  //empty wrapper first, then append the items
+        return; // No longer display theme counts
+
         let child = this.map.map_variables.children.filter((c) => {
             return c.code === areaCode
         })[0];

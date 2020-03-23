@@ -2,64 +2,12 @@ import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
 import {scaleSequential as d3scaleSequential, scaleLinear} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 import {Observable, numFmt, getSelectedBoundary} from '../utils';
-import {polygon} from "leaflet/dist/leaflet-src.esm";
+import {polygon} from 'leaflet/dist/leaflet-src.esm';
+import {LayerStyler} from "./layerstyler";
 
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
 
 const legendCount = 5;
-
-var defaultStyles = {
-    hoverOnly: {
-        over: {
-            fillColor: "darkred",
-        },
-        out: {
-            fillColor: "#ffffff",
-            opacity: "0%",
-            stroke: false,
-        }
-    },
-    selected: {
-        over: {
-            color: "darkred"
-        },
-        out: {
-            color: "red",
-            opacity: 1,
-            weight: 1
-        }
-    }
-}
-
-class LayerStyler {
-    constructor(styles) {
-        this.styles = styles || defaultStyles;
-    }
-
-    setLayerStyle(layer, styles) {
-        layer.resetStyle(layer);
-        layer.eachLayer((feature) => {
-            feature.setStyle(styles.out);
-
-            feature
-                .off("mouseover mouseout")
-                .on("mouseover", (el) => {
-                    feature.setStyle(styles.over);
-                })
-                .on("mouseout", (el) => {
-                    feature.setStyle(styles.out);
-                })
-        })
-    };
-
-    setLayerToHoverOnly(layer) {
-        this.setLayerStyle(layer, this.styles.hoverOnly);
-    };
-
-    setLayerToSelected(layer) {
-        this.setLayerStyle(layer, this.styles.selected);
-    };
-}
 
 export class MapControl extends Observable {
     constructor(config) {

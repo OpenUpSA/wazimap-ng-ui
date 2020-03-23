@@ -117,9 +117,6 @@ export class MapControl extends Observable {
               }
         });
         this.myEventForwarder.enable();
-        // Unfortunate hack to make sure that this pane is drawn on top of the markers pane
-        // otherwise the mouse events don't work.
-        $(".leaflet-overlay-pane").css("z-index", 601);
     }
 
 

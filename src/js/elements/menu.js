@@ -35,7 +35,7 @@ function subindicatorsInIndicator(indicator) {
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
-    if(!$('.data-menu__no-data').hasClass(hideondeployClsName)){
+    if (!$('.data-menu__no-data').hasClass(hideondeployClsName)) {
         $('.data-menu__no-data').addClass(hideondeployClsName);
     }
 
@@ -54,22 +54,23 @@ export function loadMenu(data, subindicatorCallback) {
             $(".data-menu__sub-indicator", indicatorWrapperElement).remove();
             $(".menu__link_h4--active", indicatorWrapperElement).remove();
             subindicators.forEach(subIndicator => {
+                if (subIndicator.label !== '') {
+                    const newSubIndicatorElement = subIndicatorTemplate.cloneNode(true);
+                    $("div:nth-child(2)", newSubIndicatorElement).text(subIndicator.label);
+                    indicatorWrapperElement.append(newSubIndicatorElement);
 
-                const newSubIndicatorElement = subIndicatorTemplate.cloneNode(true);
-                $("div:nth-child(2)", newSubIndicatorElement).text(subIndicator.label);
-                indicatorWrapperElement.append(newSubIndicatorElement);
-
-                $(newSubIndicatorElement).on("click", (el) => {
-                    setActive(el);
-                    if (subindicatorCallback != undefined)
-                        subindicatorCallback({
-                            el: el,
-                            data: data,
-                            indicator: indicator,
-                            subindicators: subindicators,
-                            obj: subIndicator
-                        })
-                });
+                    $(newSubIndicatorElement).on("click", (el) => {
+                        setActive(el);
+                        if (subindicatorCallback != undefined)
+                            subindicatorCallback({
+                                el: el,
+                                data: data,
+                                indicator: indicator,
+                                subindicators: subindicators,
+                                obj: subIndicator
+                            })
+                    });
+                }
             })
         }
     }
@@ -101,7 +102,8 @@ export function loadMenu(data, subindicatorCallback) {
             let count = subindicatorsInSubCategory(detail);
             if (count > 0)
                 addIndicators(h2Wrapper, subcategory, detail.indicators);
-        };
+        }
+        ;
     }
 
     function setActive(el) {

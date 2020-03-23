@@ -1,4 +1,4 @@
-import {getJSON, numFmt, Observable} from "../utils";
+import {getJSON, numFmt, Observable} from '../utils';
 
 let tooltipCategoryItem = null;
 

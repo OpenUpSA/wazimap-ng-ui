@@ -79,7 +79,6 @@ function addFacilities(geometries, profile, config) {
     let themeIds = [];
     let themes = [];
     const level = profile.geography.level;
-    let selectedBoundary = getSelectedBoundary(level, geometries, config);
 
     /*
     geometries.themes.forEach((theme) => {

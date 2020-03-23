@@ -1,4 +1,4 @@
-import {Observable} from './utils';
+import {Observable} from '../utils';
 import {map} from "leaflet/dist/leaflet-src.esm";
 
 let clonedMapChip;

@@ -114,7 +114,7 @@ export class MapControl extends Observable {
             throttleOptions: {
                 leading: true,
                 trailing: false
-              }
+            }
         });
         this.myEventForwarder.enable();
     }
@@ -273,9 +273,11 @@ export class MapControl extends Observable {
             layer
                 .off("click")
                 .on("click", (el) => {
-                    const prop = el.layer.feature.properties;
-                    const areaCode = prop.code;
-                    self.triggerEvent("layerClick", layerPayload(el));
+                    if (Object.keys(geometries.children).length > 0) {
+                        const prop = el.layer.feature.properties;
+                        const areaCode = prop.code;
+                        self.triggerEvent("layerClick", layerPayload(el));
+                    }
                 })
                 .on("mouseover", (el) => {
                     self.triggerEvent("layerMouseOver", layerPayload(el));

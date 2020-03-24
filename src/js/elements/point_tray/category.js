@@ -86,7 +86,6 @@ export class Category extends Observable {
     }
 
     get theme() {
-        console.log(this.data);
         return this.data.theme;
     }
 }

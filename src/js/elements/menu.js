@@ -6,6 +6,7 @@ const parentContainer = $(".data-menu__links")
 const categoryTemplate = $(".data-menu__category")[0].cloneNode(true);
 const subCategoryTemplate = $(".data-menu__subcategory", categoryTemplate)[0].cloneNode(true);
 const indicatorTemplate = $(".data-menu__indicator", subCategoryTemplate)[0].cloneNode(true);
+const noDataWrapperClsName = 'data-menu__no-data';
 
 function subindicatorsInCategory(category) {
     let count = 0;
@@ -35,10 +36,6 @@ function subindicatorsInIndicator(indicator) {
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
-    if (!$('.data-menu__no-data').hasClass(hideondeployClsName)) {
-        $('.data-menu__no-data').addClass(hideondeployClsName);
-    }
-
     function addSubIndicators(wrapper, indicator, subindicators) {
         const indicatorLabel = indicator;
         const newIndicatorElement = indicatorTemplate.cloneNode(true);
@@ -116,12 +113,24 @@ export function loadMenu(data, subindicatorCallback) {
     }
 
     $(".data-menu__category").remove();
-
+    let hasNoItems = true;
 
     for (const [category, detail] of Object.entries(data)) {
         let count = subindicatorsInCategory(detail);
 
-        if (count > 0)
+        if (count > 0) {
+            if (!$('.' + noDataWrapperClsName).hasClass(hideondeployClsName)) {
+                $('.' + noDataWrapperClsName).addClass(hideondeployClsName);
+            }
+            hasNoItems = false;
             addSubcategories(parentContainer, category, detail.subcategories)
+        }
+    }
+
+    if (hasNoItems) {
+        console.log('no')
+        if ($('.' + noDataWrapperClsName).hasClass(hideondeployClsName)) {
+            $('.' + noDataWrapperClsName).removeClass(hideondeployClsName);
+        }
     }
 }

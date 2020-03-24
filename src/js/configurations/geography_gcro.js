@@ -4,7 +4,7 @@ export const geography_config = {
     preferredChildren: {
         country: ['province'],
         province: ['district', 'municipality'],
-        district: ['municipality', 'planning_region'],
+        district: ['municipality'],
         municipality: ['mainplace', 'planning_region'],
         mainplace: ['subplace']
     },

@@ -128,7 +128,6 @@ export function loadMenu(data, subindicatorCallback) {
     }
 
     if (hasNoItems) {
-        console.log('no')
         if ($('.' + noDataWrapperClsName).hasClass(hideondeployClsName)) {
             $('.' + noDataWrapperClsName).removeClass(hideondeployClsName);
         }

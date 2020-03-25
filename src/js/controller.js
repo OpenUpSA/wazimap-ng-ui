@@ -175,7 +175,7 @@ export default class Controller extends Observable {
     onPrintProfile(payload) {
         let filename = "geography";
         if (this.state.profile != null) {
-            filename = this.state.profile.data.geography.name
+            filename = this.state.profile.profile.geography.name
         }
         this.triggerEvent("printProfile", filename)
     }

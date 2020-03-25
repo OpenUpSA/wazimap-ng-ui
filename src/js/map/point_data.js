@@ -106,16 +106,26 @@ export class PointData extends Observable {
         })
     }
 
+    markerRadius() {
+        return this.map.getZoom() / 2;
+    }
+
     /**
      * individual markers
      */
     createMarkers = (points, layer) => {
         let renderer = L.canvas({padding: 0.5, pane: 'markerPane'});
+        const self =  this;
+
         checkIterate(points, point => {
+            const col = $('._' + point.theme.id).css('color');
             let marker = L.circleMarker([point.y, point.x], {
                 renderer: renderer,
-                color: $('._' + point.theme.id).css('color'),
-                radius: 1,
+                color: col,
+                radius: self.markerRadius(),
+                fill: true,
+                fillColor: col,
+                fillOpacity: 1
             })
             //marker.bindTooltip(point.name);
             marker.bindPopup(
@@ -123,6 +133,15 @@ export class PointData extends Observable {
                 {autoClose: false}
             );
             layer.addLayer(marker)
+        })
+    }
+
+    onMapZoomed(map) {
+        const radius = this.markerRadius();
+        Object.values(this.categoryLayers).forEach(layer => {
+            layer.eachLayer(point => {
+                point.setRadius(radius);
+            })
         })
     }
 }

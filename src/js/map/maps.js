@@ -39,6 +39,7 @@ export class MapControl extends Observable {
         };
         this.layerCache = {};
         this.map.on("zoomend", e => this.onZoomChanged(e));
+        this.map.on("zoomend", e => this.triggerEvent("mapZoomed", this.map))
     };
 
     enableZoom(enabled) {

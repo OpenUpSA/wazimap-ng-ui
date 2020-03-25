@@ -293,6 +293,10 @@ export default class Controller extends Observable {
         this.triggerEvent("zoomToggled", payload);
     }
 
+    onMapZoomed(payload) {
+        this.triggerEvent("mapZoomed", payload);
+    }
+
     onPreferredChildChange(childLevel) {
         this.state.preferredChild = childLevel;
         this.triggerEvent("preferredChildChange", childLevel);

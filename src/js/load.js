@@ -79,6 +79,7 @@ export default function configureApplication(serverUrl, profileId, config) {
 
     controller.on("categorySelected", payload => pointData.showCategoryPoint(payload.payload));
     controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
+    controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
      controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
     controller.on('zoomToggled', payload => {
@@ -100,6 +101,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     mapcontrol.on("layerMouseMove", payload => controller.onLayerMouseMove(payload))
     mapcontrol.on('layerLoading', payload => controller.onLayerLoading(payload))
     mapcontrol.on('layerLoadingDone', payload => controller.onLayerLoadingDone(payload))
+    mapcontrol.on('mapZoomed', payload => controller.onMapZoomed(payload))
 
 
     search.on('beforeSearch', payload => controller.onSearchBefore(payload));

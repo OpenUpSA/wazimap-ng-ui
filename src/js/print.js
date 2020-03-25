@@ -10,7 +10,8 @@ export default class PDFPrinter extends Observable {
 
         const style = `
             <title style='display:none'>${filename}</title>
-        `
+            <link href="css/wazi.webflow.css" rel="stylesheet" type="text/css">
+            `
         const printWindow = document.getElementsByClassName('content__charts-area_main')[0];
         const div = document.createElement('div');
 

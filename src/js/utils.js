@@ -55,6 +55,28 @@ export function getJSON(url, skipCache=true) {
   });
 }
 
+export function setPopupStyle(clsName) {
+  $('.leaflet-popup-close-button').css('display', 'none');
+  $('.leaflet-popup-content-wrapper').css('border-radius', $('.' + clsName).css('border-radius'));
+  $('.leaflet-popup-content-wrapper').css('font-family', $('.' + clsName).css('font-family'));
+  $('.leaflet-popup-content-wrapper').css('font-size', $('.' + clsName).css('font-size'));
+  $('.leaflet-popup-content').css('margin', $('.' + clsName).css('padding'));
+  $('.leaflet-popup-content').css('min-width', $('.' + clsName).css('min-width'));
+  $('.leaflet-popup-content').css('display', 'inline-table');
+  $('.map__tooltip_value').css('white-space', 'nowrap');
+  $('.map__tooltip_geography-chip').css('left', (($('.leaflet-popup-content').width() - $('.map__tooltip_geography-chip').width()) / 2));
+
+  /*
+  $('.leaflet-popup-content').addClass(clsName);
+  $('.' + clsName).css('position', 'inherit');
+  $('.' + clsName).css('border', 'none');
+  $('.' + clsName).css('min-width', '250px');
+  $('.' + clsName).css('font-size', '14px');
+  $('.leaflet-popup-content').css('margin', '0');
+  $('.leaflet-popup-content-wrapper').css('padding', '0');
+   */
+}
+
 export function getSelectedBoundary(level, geometries, config) {
   let selectedBoundary;
 

@@ -1,4 +1,4 @@
-import {getJSON, numFmt, Observable} from '../utils';
+import {getJSON, numFmt, Observable, setPopupStyle} from '../utils';
 
 let tooltipCategoryItem = null;
 
@@ -18,47 +18,42 @@ export class Popup extends Observable {
         tooltipCategoryItem = $('.tooltip__point_item')[0].cloneNode(true);
     }
 
-    loadPopup(payload) {
-        const popupContent = this.createPopupContent(payload);
+    loadPopup(payload, state) {
+        const popupContent = this.createPopupContent(payload, state);
 
         this.map.map_variables.popup = L.popup({
             autoPan: false,
-            offset: [-18, 6]
+            offset: [-10, 0]
         })
 
-        this.map.map_variables.popup.setLatLng(payload.payload.element.latlng)
+        this.map.map_variables.popup.setLatLng(payload.element.latlng)
             .setContent(popupContent)
             .openOn(this.map);
 
-        $('.leaflet-popup-content').addClass('content__map_tooltip');
-        $('.leaflet-popup-close-button').css('display', 'none');
-
-        $('.content__map_tooltip').css('position', 'inherit');
-        $('.content__map_tooltip').css('border', 'none');
-        $('.content__map_tooltip').css('min-width', '250px');
-        $('.content__map_tooltip').css('font-size', '14px');
-        $('.leaflet-popup-content').css('margin', '0');     /*automatically added parent class*/
-        $('.leaflet-popup-content-wrapper').css('padding', '0');    /*automatically added parent class*/
+        setPopupStyle('content__map_tooltip')
     }
 
     updatePopupPosition(payload) {
-        payload.payload.popup.setLatLng(payload.payload.layer.element.latlng).openOn(this.map);
+        if (this.map.map_variables.popup === null) {
+            this.loadPopup(payload.payload.layer, payload.state);
+        } else {
+            payload.payload.popup.setLatLng(payload.payload.layer.element.latlng).openOn(this.map);
+        }
     }
 
     hidePopup(payload) {
         this.map.closePopup();
     }
 
-    createPopupContent = (payload) => {
+    createPopupContent = (payload, state) => {
         let item = this.map.map_variables.tooltipItem.cloneNode(true);
 
-        const state = payload.state;
-        this.map.map_variables.hoverAreaLevel = payload.payload.properties.level;
-        this.map.map_variables.hoverAreaCode = payload.payload.layer.feature.properties.code;
+        this.map.map_variables.hoverAreaLevel = payload.properties.level;
+        this.map.map_variables.hoverAreaCode = payload.layer.feature.properties.code;
 
-        $('.map__tooltip_name .text-block', item).text(payload.payload.properties.name);
+        $('.map__tooltip_name .text-block', item).text(payload.properties.name);
         $('.map__tooltip_geography-chip div', item).text(this.map.map_variables.hoverAreaLevel);
-        var areaCode = payload.payload.areaCode;
+        var areaCode = payload.areaCode;
 
         this.setTooltipSubindicators(payload, state, item, areaCode);
         this.setTooltipThemes(item, areaCode);
@@ -117,9 +112,7 @@ export class Popup extends Observable {
                         for (const [geographyCode, count] of Object.entries(subindicatorValue.children)) {
                             if (geographyCode == areaCode) {
                                 const countFmt = numFmt(count);
-                                const perc = (payload.payload.layer.feature.properties.percentage * 100).toFixed(2);
-
-                                console.log(state.subindicator.indicator);
+                                const perc = (payload.layer.feature.properties.percentage * 100).toFixed(2);
 
                                 $('.map__tooltip_value .tooltip__value_label div', item).text(`${state.subindicator.indicator} (${subindicatorValue.label})`);
                                 $('.map__tooltip_value .tooltip__value_amount div', item).text(countFmt);

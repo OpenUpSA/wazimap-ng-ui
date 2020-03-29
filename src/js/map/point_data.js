@@ -1,12 +1,14 @@
-import {getJSON, Observable, ThemeStyle, hasElements, checkIterate} from '../utils';
+import {getJSON, Observable, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
 import {count} from "d3-array";
-
-
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
 const pointsByCategoryUrl = 'points/categories';
+const tooltipClsName = 'content__map_facility-tooltip';
+const tooltipRowClsName = 'tooltip__facility_item';
 
+let tooltipItem = null;
+let tooltipRowItem = null;
 let activeMarkers = [];
 let activePoints = [];  //the visible points on the map
 
@@ -23,7 +25,14 @@ export class PointData extends Observable {
         this.config = config;
 
         this.markerLayer = this.genLayer();
-        this.categoryLayers = {}
+        this.categoryLayers = {};
+
+        this.prepareDomElements();
+    }
+
+    prepareDomElements = () => {
+        tooltipItem = $('.' + tooltipClsName)[0].cloneNode(true);
+        tooltipRowItem = $('.' + tooltipRowClsName)[0].cloneNode(true);
     }
 
     genLayer() {
@@ -120,20 +129,77 @@ export class PointData extends Observable {
         checkIterate(points, point => {
             const col = $('._' + point.theme.id).css('color');
             let marker = L.circleMarker([point.y, point.x], {
-                renderer: renderer,
                 color: col,
+                radius: 2,
                 radius: self.markerRadius(),
                 fill: true,
                 fillColor: col,
                 fillOpacity: 1
             })
             //marker.bindTooltip(point.name);
-            marker.bindPopup(
-                `<div><strong>Name: ${point.name}</strong></div>`,
-                {autoClose: false}
-            );
-            layer.addLayer(marker)
+            marker.on('mouseover', (e) => {
+                this.showMarkerPopup(e, point);
+            }).on('mouseout', () => {
+                this.hideMarkerPopup();
+            });
+            layer.addLayer(marker);
         })
+    }
+
+    showMarkerPopup = (e, point) => {
+        this.map.closePopup();
+        const popupContent = this.createPopupContent(point);
+        this.map.map_variables.popup = L.popup({
+            autoPan: false,
+            autoClose: true
+        })
+
+        this.map.map_variables.popup.setLatLng(e.latlng)
+            .setContent(popupContent)
+            .openOn(this.map);
+
+        setPopupStyle('content__map_facility-tooltip');
+    }
+
+    hideMarkerPopup = () => {
+        this.map.closePopup();    //dont forget this
+        this.map.map_variables.popup = null;
+    }
+
+    createPopupContent = (point) => {
+        let item = tooltipItem.cloneNode(true);
+
+        $(item).find('.map-tooltip__notch').remove();   //leafletjs already creates this
+        $('.map__tooltip-tooltip_name .text-block', item).text(point.name);
+        ThemeStyle.replaceChildDivWithThemeIcon(
+            point.theme.id,
+            $(item).find('.map__facility-tooltip_icon'),
+            $(item).find('.map__facility-tooltip_icon')
+        );
+
+        $('.map__facility-tooltip_items', item).html('');
+
+        let arr = [];
+        for (let key in point.data) {
+            if (point.data.hasOwnProperty(key)) {
+                arr.push({key: key, value: point.data[key]});
+            }
+        }
+
+        arr.forEach((a, i) => {
+            if (Object.prototype.toString.call(a.value) == '[object String]') {
+                let itemRow = tooltipRowItem.cloneNode(true);
+                $('.tooltip__facility-item_label div', itemRow).text(a.key);
+                $('.tooltip__facility-item_value div', itemRow).text(a.value);
+                if (i === arr.length - 1){
+                    $(itemRow).addClass('last')
+                }
+
+                $('.map__facility-tooltip_items', item).append(itemRow);
+            }
+        })
+
+        return $(item).html();
     }
 
     onMapZoomed(map) {

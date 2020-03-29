@@ -48,9 +48,14 @@ export default function configureApplication(serverUrl, profileId, config) {
         mapcontrol.choropleth(payload.state.subindicator)
     })
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload, mapcontrol.legendColors));
-    controller.on('layerMouseOver', payload => popup.loadPopup(payload));
+    controller.on('layerMouseOver', payload => {
+        popup.loadPopup(payload.payload, payload.state)
+    });
     controller.on('layerMouseOut', payload => popup.hidePopup(payload));
-    controller.on('layerMouseMove', payload => popup.updatePopupPosition(payload));
+    controller.on('layerMouseMove', payload => {
+        popup.updatePopupPosition(payload)
+        //popup.loadPopup(payload)
+    });
     controller.on('profileLoaded', onProfileLoadedSearch);
     controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))

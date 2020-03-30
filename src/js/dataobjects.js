@@ -31,7 +31,7 @@ export class Profile {
         Object.values(this._profileData).forEach(category => {
             Object.values(category.subcategories).forEach(subcategory => {
                 Object.values(subcategory.indicators).forEach(indicator => {
-                    indicator.subindicators = indicator.subindicators.map(s => new SubIndicator(s))
+                    indicator.subindicators = indicator.subindicators.map(s => new SubIndicator(s, indicator.choropleth_method))
                 })
             })
         })
@@ -100,13 +100,15 @@ export class DataBundle {
 }
 
 export class SubIndicator {
-    constructor(js) {
+    constructor(js, choropleth_method) {
         const copy = {...js}
         delete copy["Count"];
         delete copy["count"];
         delete copy["label"]
         delete copy["value"]
         delete copy["children"]
+
+        this._choropleth_method = choropleth_method;
 
         this._keys = copy;
         if (js["Count"] != undefined)
@@ -117,6 +119,10 @@ export class SubIndicator {
             this._count = 0;
 
         this._children = js.children;
+    }
+
+    get choropleth_method() {
+        return this._choropleth_method;
     }
 
     get keys() {

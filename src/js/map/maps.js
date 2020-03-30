@@ -3,8 +3,8 @@ import {polygon} from 'leaflet/dist/leaflet-src.esm';
 import {LayerStyler} from "./layerstyler";
 
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
-import {LevelBasedCalculator} from "./choropleth/level_based_calculator";
-import {GeoBasedCalculator} from "./choropleth/geo_based_calculator";
+import {SubindicatorCalculator} from "./choropleth/subindicator_calculator";
+import {SiblingCalculator} from "./choropleth/sibling_calculator";
 import {Choropleth} from "./choropleth/choropleth";
 
 let ch = null;
@@ -125,20 +125,24 @@ export class MapControl extends Observable {
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    choropleth(subindicator) {
+    choropleth(subindicator, method) {
         if (subindicator.obj.children == undefined)
             return;
 
-        let type = 'levelBasedValues';   //todo:get this value from API when it is ready
         this.legendColors = []; //this is used by mapchip too
 
-        let calculations = {
-            levelBasedValues: LevelBasedCalculator(subindicator),
-            geographyBasedValues: GeoBasedCalculator(subindicator)
-        }[type];
+        let calculationFunc = {
+            subindicator: SubindicatorCalculator,
+            sibling: SiblingCalculator
+        }[method];
+
+        if (calculationFunc == undefined)
+            calculationFunc = SubindicatorCalculator
+
+        const calculation = calculationFunc(subindicator);
 
         ch = new Choropleth(subindicator, this.layerCache, this.legendColors);
-        ch.showChoropleth(calculations);
+        ch.showChoropleth(calculation);
     };
 
     resetChoropleth() {

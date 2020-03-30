@@ -1,5 +1,5 @@
-export function GeoBasedCalculator(subindicator) {
-    let result = Object.entries(subindicator.obj.children).map(childGeography => {
+export function SubindicatorCalculator(subindicator) {
+    const result = Object.entries(subindicator.obj.children).map(childGeography => {
         const code = childGeography[0];
         const count = childGeography[1];
         const universe = subindicator.subindicators.reduce((el1, el2) => {

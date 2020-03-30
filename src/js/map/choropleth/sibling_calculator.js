@@ -1,5 +1,6 @@
-export function LevelBasedCalculator(subindicator) {
-    let result = Object.entries(subindicator.obj.children).map(childGeography => {
+export function SiblingCalculator(subindicator) {
+
+    const result = Object.entries(subindicator.obj.children).map(childGeography => {
         const code = childGeography[0];
         const count = childGeography[1];
         let universe = 0;
@@ -11,5 +12,5 @@ export function LevelBasedCalculator(subindicator) {
         return {code: code, val: val};
     })
 
-    return result;
+    return result
 }

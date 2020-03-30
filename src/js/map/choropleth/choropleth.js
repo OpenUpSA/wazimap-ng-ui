@@ -16,6 +16,7 @@ export class Choropleth extends Observable {
         this.subindicator = _subindicator;
         this.layerCache = _layerCache;
         this.childCodes = Object.keys(_subindicator.obj.children);
+        this.buffer = 0.1;
     }
 
     resetLayers = (scale) => {
@@ -30,8 +31,10 @@ export class Choropleth extends Observable {
     }
 
     getLegendColors = (legendPercentages, values, scale) => {
-        let tick = (d3max(values) * 1.1 - d3min(values) * 0.9) / (legendCount - 1);
-        let startPoint = d3min(values) * 0.9;
+        const lowerBound = 1 - this.buffer;
+        const upperBound = 1 + this.buffer;
+        const tick = (d3max(values) * upperBound - d3min(values) * lowerBound) / (legendCount - 1);
+        const startPoint = d3min(values) * lowerBound;
         for (let i = 1; i <= legendCount; i++) {
             let percentage = 0;
             if ((((i - 1) * tick + startPoint) * 100) > 100) {
@@ -48,16 +51,19 @@ export class Choropleth extends Observable {
     }
 
     showChoropleth = (calculations) => {
-        let self = this;
+        const self = this;
         const childGeographyValues = calculations;
+        const lowerBound = 1 - this.buffer;
+        const upperBound = 1 + this.buffer;
 
         const values = childGeographyValues.map(el => el.val);
-        const scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values) * 0.9, d3max(values) * 1.1]);
+        const scale = d3scaleSequential(d3interpolateBlues)
+            .domain([d3min(values) * lowerBound, d3max(values) * upperBound]);
 
         let legendPercentages = scaleLinear()
             .domain([1, legendCount])
             .nice()
-            .range([d3min(values) * 0.9, d3max(values) * 1.1]);
+            .range([d3min(values) * lowerBound, d3max(values) * upperBound]);
 
         this.getLegendColors(legendPercentages, values, scale);
         this.resetLayers(scale);

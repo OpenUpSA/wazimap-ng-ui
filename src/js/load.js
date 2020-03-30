@@ -47,7 +47,9 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('subindicatorClick', payload => {
         mapcontrol.choropleth(payload.state.subindicator)
     })
-    controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload, mapcontrol.legendColors));
+    controller.on('subindicatorClick', payload => {
+        mapchip.onSubIndicatorChange(payload.payload, mapcontrol.legendColors)
+    });
     controller.on('layerMouseOver', payload => {
         popup.loadPopup(payload.payload, payload.state)
     });
@@ -75,7 +77,7 @@ export default function configureApplication(serverUrl, profileId, config) {
         const geometries = payload.payload.geometries;
         mapcontrol.overlayBoundaries(geography, geometries)
     });
-    
+
     controller.on('loadedNewProfile', payload => profileLayout.displayLogo(payload.payload.logo))
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());
@@ -86,7 +88,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
     controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
-     controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
+    controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
     controller.on('zoomToggled', payload => {
         mapcontrol.enableZoom(payload.payload.enabled)
     });

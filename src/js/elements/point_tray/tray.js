@@ -39,6 +39,7 @@ export class PointDataTray extends Observable {
     loadThemes() {
         const self = this;
         const themeUrl = `${this.baseUrl}/${url}/${this.profileId}/`;
+        console.log(themeUrl);
 
         self.triggerEvent("loadingThemes", self);
 

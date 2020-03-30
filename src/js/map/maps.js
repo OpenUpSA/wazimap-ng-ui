@@ -1,13 +1,11 @@
-import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
-import {scaleSequential as d3scaleSequential, scaleLinear} from 'd3-scale';
-import {min as d3min, max as d3max} from 'd3-array';
 import {Observable, numFmt, getSelectedBoundary} from '../utils';
 import {polygon} from 'leaflet/dist/leaflet-src.esm';
 import {LayerStyler} from "./layerstyler";
 
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
+import {Choropleth} from "./choropleth";
 
-const legendCount = 5;
+let ch = null;
 
 export class MapControl extends Observable {
     constructor(config) {
@@ -126,73 +124,13 @@ export class MapControl extends Observable {
      * @param  {[type]} data    An object that contains subindictors and obj
      */
     choropleth(subindicator) {
-        const self = this
         if (subindicator.obj.children == undefined)
             return;
 
-        const childCodes = Object.keys(subindicator.obj.children);
-
-        function resetLayers(childCodes) {
-            childCodes.forEach(childCode => {
-                const layer = self.layerCache[childCode];
-                const color = scale(0);
-                if (layer != undefined)
-                    layer.setStyle({fillColor: color});
-            });
-        }
-
-        // if (children == undefined || children.length == 0)
-        //     return
-
-        const childGeographies = Object.entries(subindicator.obj.children).map(childGeography => {
-            const code = childGeography[0];
-            const count = childGeography[1];
-            const universe = subindicator.subindicators.reduce((el1, el2) => {
-                if (el2.children != undefined && el2.children[code] != undefined)
-                    return el1 + el2.children[code];
-            }, 0)
-            const val = count / universe;
-            return {code: code, val: val};
-        })
-
-        const values = childGeographies.map(el => el.val);
-        const scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values) * 0.9, d3max(values) * 1.1])
-
-        //const legendScale = d3scaleSequential(d3interpolateBlues).domain([0,100])
-
-        let legendPercentages = scaleLinear()
-            .domain([1, legendCount])
-            .nice()
-            .range([d3min(values) * 0.9, d3max(values) * 1.1]);
-
-        this.legendColors = [];
-
-        let tick = (d3max(values) * 1.1 - d3min(values) * 0.9) / (legendCount - 1);
-        let startPoint = d3min(values) * 0.9;
-        for (let i = 1; i <= legendCount; i++) {
-            let percentage = 0;
-            if ((((i - 1) * tick + startPoint) * 100) > 100) {
-                percentage = 100;
-                i = legendCount;
-            } else {
-                percentage = (((i - 1) * tick + startPoint) * 100).toFixed(1);
-            }
-            this.legendColors.push({
-                percentage: percentage,
-                fillColor: scale(legendPercentages(i))
-            });
-        }
-
-        resetLayers(childCodes);
-
-        childGeographies.forEach((el) => {
-            const layer = self.layerCache[el.code];
-            if (layer != undefined) {
-                const color = scale(el.val);
-                layer.setStyle({fillColor: color});
-                layer.feature.properties.percentage = el.val;
-            }
-        })
+        let type = 2;   //todo:get this value from API when it is ready
+        this.legendColors = []; //this is used by mapchip too
+        ch = new Choropleth(subindicator, this.layerCache, this.legendColors);
+        ch.showChoropleth(type);
     };
 
     resetChoropleth() {

@@ -1,4 +1,4 @@
-import {Observable} from '../utils';
+import {Observable} from '../../utils';
 import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
 import {scaleSequential as d3scaleSequential, scaleLinear} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
@@ -29,52 +29,6 @@ export class Choropleth extends Observable {
         });
     }
 
-    getChildGeographyValues = (type) => {
-        let result = null;
-
-        switch (type) {
-            case 1:
-                result = this.getGeographyBasedValues();
-                break;
-            case 2:
-                result = this.getLevelBasedValues();
-                break;
-        }
-
-        return result;
-    }
-
-    getGeographyBasedValues = () => {
-        let result = Object.entries(this.subindicator.obj.children).map(childGeography => {
-            const code = childGeography[0];
-            const count = childGeography[1];
-            const universe = this.subindicator.subindicators.reduce((el1, el2) => {
-                if (el2.children != undefined && el2.children[code] != undefined)
-                    return el1 + el2.children[code];
-            }, 0)
-            const val = count / universe;
-            return {code: code, val: val};
-        })
-
-        return result;
-    }
-
-    getLevelBasedValues = () => {
-        let result = Object.entries(this.subindicator.obj.children).map(childGeography => {
-            const code = childGeography[0];
-            const count = childGeography[1];
-            let universe = 0;
-            Object.entries(this.subindicator.obj.children).map(c => {
-                universe += c[1];
-            })
-
-            const val = count / universe;
-            return {code: code, val: val};
-        })
-
-        return result;
-    }
-
     getLegendColors = (legendPercentages, values, scale) => {
         let tick = (d3max(values) * 1.1 - d3min(values) * 0.9) / (legendCount - 1);
         let startPoint = d3min(values) * 0.9;
@@ -93,9 +47,9 @@ export class Choropleth extends Observable {
         }
     }
 
-    showChoropleth = (type) => {
+    showChoropleth = (calculations) => {
         let self = this;
-        const childGeographyValues = this.getChildGeographyValues(type);
+        const childGeographyValues = calculations;
 
         const values = childGeographyValues.map(el => el.val);
         const scale = d3scaleSequential(d3interpolateBlues).domain([d3min(values) * 0.9, d3max(values) * 1.1]);

@@ -12,7 +12,7 @@ const profiles = {
         config: geography_config
     },
     'localhost': {
-        profile: 1,
+        profile: 2,
         baseUrl: mainUrl,
         config: geography_config
     },

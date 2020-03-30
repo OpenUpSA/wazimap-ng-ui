@@ -3,7 +3,9 @@ import {polygon} from 'leaflet/dist/leaflet-src.esm';
 import {LayerStyler} from "./layerstyler";
 
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
-import {Choropleth} from "./choropleth";
+import {LevelBasedCalculator} from "./choropleth/level_based_calculator";
+import {GeoBasedCalculator} from "./choropleth/geo_based_calculator";
+import {Choropleth} from "./choropleth/choropleth";
 
 let ch = null;
 
@@ -127,10 +129,16 @@ export class MapControl extends Observable {
         if (subindicator.obj.children == undefined)
             return;
 
-        let type = 2;   //todo:get this value from API when it is ready
+        let type = 'levelBasedValues';   //todo:get this value from API when it is ready
         this.legendColors = []; //this is used by mapchip too
+
+        let calculations = {
+            levelBasedValues: LevelBasedCalculator(subindicator),
+            geographyBasedValues: GeoBasedCalculator(subindicator)
+        }[type];
+
         ch = new Choropleth(subindicator, this.layerCache, this.legendColors);
-        ch.showChoropleth(type);
+        ch.showChoropleth(calculations);
     };
 
     resetChoropleth() {

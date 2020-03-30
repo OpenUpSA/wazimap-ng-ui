@@ -30,7 +30,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
     const mapchip = new MapChip();
-    const search = new Search(baseUrl, 2);
+    const search = new Search(baseUrl, profileId, 2);
     const profileLoader = new ProfileLoader(config);
     const locationInfoBox = new LocationInfoBox();
     const zoomToggle = new ZoomToggle();

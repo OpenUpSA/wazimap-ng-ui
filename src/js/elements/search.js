@@ -25,12 +25,13 @@ export class Search extends Observable {
      * constructor of the class
      * sets the default values, calls init function(this.setSearchInput)
      * */
-    constructor(baseUrl, minChars) {
+    constructor(baseUrl, profileId, minChars) {
         super();
 
         minLength = minChars;
         this.baseUrl = baseUrl;
-        this.searchUrl = `${baseUrl}/geography/search/`;
+        this.profileId = profileId;
+        this.searchUrl = `${baseUrl}/geography/search/${profileId}/`;
 
         this.prepareDomElements();
         this.setSearchInput();

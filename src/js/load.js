@@ -45,7 +45,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
     controller.on('subindicatorClick', payload => {
-        const method = payload.state.subindicator.obj.method;
+        const method = payload.state.subindicator.obj.choropleth_method;
         mapcontrol.choropleth(payload.state.subindicator, method)
     })
     controller.on('subindicatorClick', payload => {

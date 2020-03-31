@@ -1,24 +1,21 @@
 import {Observable} from '../../utils';
 
-const categoryItemClsName = '.point-data__h2_wrapper';
 const defaultActiveClsName = 'active-1';
 const categoryItemDoneClsName = '.point-data__h2_load-complete';
 const categoryItemLoadingClsName = '.point-data__h2_loading';
 
 export class Category extends Observable {
-    constructor(data) {
+    constructor(data, categoryItem) {
         super()
 
         this.active = false;
         this.data = data;
+        this.categoryItem = categoryItem;
         this.prepareDomElements();
-
     }
 
     prepareDomElements() {
-
         this.activeClassName = 'active-' + this.theme.id;
-        this.categoryItem = $(categoryItemClsName)[0].cloneNode(true);
         this.element = this.categoryItem.cloneNode(true);
 
         $(this.element).on('click', () => this.toggle())

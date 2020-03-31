@@ -2,18 +2,18 @@ import {Observable, checkIterate} from '../../utils';
 import {Category} from './category';
 
 const defaultActiveClsName = 'active-1';
-const pointDataItemClsName = '.point-data__h1--dropdown';
 const hideondeployClsName = 'hideondeploy';
 const categoryWrapperClsName = '.point-data__h1_content';
-const categoryItemClsName = '.point-data__h2_wrapper';
 
 export class Theme extends Observable {
-    constructor(data) {
+    constructor(data, pointDataItem, categoryItem) {
         super()
 
         this.active = false;
         this.data = data;
         this.categories = [];
+        this.pointDataItem = pointDataItem;
+        this.categoryItem = categoryItem;
 
         this.prepareDomElements();
         this.createCategories();
@@ -21,7 +21,6 @@ export class Theme extends Observable {
 
     prepareDomElements() {
         const self = this;
-        this.pointDataItem = $(pointDataItemClsName)[0].cloneNode(true);
         this.element = this.pointDataItem.cloneNode(true);
         $(this.element).removeClass(hideondeployClsName);
         $(this.element).find('.point-data__h1_checkbox input[type=checkbox]').on('click', () => self.toggle());
@@ -32,9 +31,10 @@ export class Theme extends Observable {
     }
 
     createCategory(categoryDatum) {
-        const category = new Category(categoryDatum);
+        const category = new Category(categoryDatum,this.categoryItem);
         category.on("categorySelected", category => this.triggerEvent("categorySelected", category))
         category.on("categoryUnselected", category => this.triggerEvent("categoryUnselected", category))
+
         return category;
     }
 

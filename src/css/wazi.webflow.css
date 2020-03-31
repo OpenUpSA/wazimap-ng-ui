@@ -2998,7 +2998,7 @@ a {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 30px;
+  height: 34px;
   margin-bottom: 4px;
   padding-right: 32px;
   padding-left: 12px;
@@ -3119,7 +3119,7 @@ a {
   right: auto;
   bottom: 0%;
   width: 1px;
-  margin-bottom: 28px;
+  margin-bottom: 30px;
   margin-left: 12px;
   background-color: rgba(0, 0, 0, 0.11);
 }
@@ -5238,7 +5238,7 @@ a {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 20%;
+  width: 50%;
   padding-top: 48px;
   padding-right: 16px;
   padding-left: 16px;
@@ -6765,10 +6765,7 @@ a {
   top: 100%;
   right: 0%;
   bottom: 0%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   -webkit-box-pack: end;
   -webkit-justify-content: flex-end;
   -ms-flex-pack: end;
@@ -7325,6 +7322,79 @@ a {
   -webkit-justify-content: flex-end;
   -ms-flex-pack: end;
   justify-content: flex-end;
+}
+
+.point-data__source {
+  position: relative;
+  z-index: 1;
+  width: 20px;
+  border-radius: 100%;
+}
+
+.point-data__source:hover {
+  color: #303030;
+}
+
+.point-data__source.h2 {
+  width: 18px;
+  margin-left: 6px;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.point-data__source.h2:hover {
+  color: #333;
+}
+
+.point-data__label_wrap {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.point-data__label {
+  line-height: 100%;
+}
+
+.point-data__label_source {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 3px;
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 0.85em;
+  line-height: 100%;
+}
+
+.point-data__label_source:hover {
+  color: #333;
+}
+
+.point-data__source-link {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.point-data__source-link:hover {
+  color: #333;
+}
+
+.link {
+  color: rgba(0, 0, 0, 0.3);
 }
 
 @media screen and (max-width: 991px) {

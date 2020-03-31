@@ -146,6 +146,18 @@ export default class ProfileLoader {
         }
     }
 
+    ignoreIndicator(indicator) {
+        // Ignoring an indicator if it has a dummy value
+        const subindicators = indicator.subindicators;
+        if (subindicators == undefined || subindicators.length == 0)
+            return true
+
+        if (subindicators[0].count == -1)
+            return true
+
+        return false
+    }
+
     addSubcategory(wrapper, subcategory, subcategoryDetail) {
         const newSubcategorySection = subcategoryTemplate.cloneNode(true);
         $(subcategoryTitleClass, newSubcategorySection).text(subcategory);
@@ -154,7 +166,8 @@ export default class ProfileLoader {
         //$(subcategoryMetricsClass).dosomethihn
 
         for (const [indicator, detail] of Object.entries(subcategoryDetail.indicators)) {
-            this.addIndicator(newSubcategorySection, indicator, detail);
+            if (!this.ignoreIndicator(detail))
+                this.addIndicator(newSubcategorySection, indicator, detail);
         }
     }
 

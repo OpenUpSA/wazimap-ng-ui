@@ -34,6 +34,19 @@ function subindicatorsInIndicator(indicator) {
     return Object.values(indicator.subindicators).length;
 }
 
+function indicatorHasChildren(indicator) {
+    const subindicators = indicator.subindicators;
+
+    if (subindicators == undefined || subindicators.length == 0)
+        return false
+
+    const hasChildren = subindicators.every(subindicator => {
+        return subindicator.children != undefined && Object.values(subindicator.children).length > 0
+    })
+
+    return hasChildren
+}
+
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
     function addSubIndicators(wrapper, indicator, subindicators) {
@@ -81,6 +94,9 @@ export function loadMenu(data, subindicatorCallback) {
 
         $(".data-menu__indicator", h3Wrapper).remove();
         for (const [indicator, detail] of Object.entries(indicators)) {
+            if (!indicatorHasChildren(detail))
+                continue
+
             if (detail.subindicators.length > 0) {
                 addSubIndicators(h3Wrapper, indicator, detail.subindicators);
             }

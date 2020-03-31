@@ -96,7 +96,6 @@ export default function configureApplication(serverUrl, profileId, config) {
 
     controller.on('layerClick', payload => {
         if (payload.state.mapLoading == true) {
-            console.log("Ignoring click while layer is loading")
             return
         }
 

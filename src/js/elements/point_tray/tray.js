@@ -1,5 +1,4 @@
 import {getJSON, numFmt, Observable, hasElements, ThemeStyle, checkIterate} from '../../utils';
-import {Category} from './category';
 import {Theme} from './theme';
 
 const url = 'points/themes';
@@ -7,6 +6,8 @@ const url = 'points/themes';
 const categoryWrapperClsName = '.point-data__h1_content';
 const treeLineClsName = '.point-data__h2_tree-line-v';
 const wrapperClsName = '.point-data__content_wrapper';
+const pointDataItemClsName = '.point-data__h1--dropdown';
+const categoryItemClsName = '.point-data__h2_wrapper';
 
 export class PointDataTray extends Observable {
     constructor(baseUrl, profileId) {
@@ -19,6 +20,9 @@ export class PointDataTray extends Observable {
 
     prepareDomElements() {
         this.treeLineItem = $(treeLineClsName)[0].cloneNode(true);
+        this.pointDataItem = $(pointDataItemClsName)[0].cloneNode(true);
+        this.categoryItem = $(categoryItemClsName)[0].cloneNode(true);
+
         this.clearText();
     }
 
@@ -27,13 +31,13 @@ export class PointDataTray extends Observable {
     }
 
     createTheme(datum) {
-        const theme = new Theme(datum);
+        const theme = new Theme(datum, this.pointDataItem, this.categoryItem);
         theme.on("categorySelected", category => this.triggerEvent("categorySelected", category))
         theme.on("categoryUnselected", category => this.triggerEvent("categoryUnselected", category))
         theme.on("themeSelected", theme => this.triggerEvent("themeSelected", theme))
         theme.on("themeUnselected", theme => this.triggerEvent("themeUnselected", theme))
-        return theme
 
+        return theme;
     }
 
     loadThemes() {

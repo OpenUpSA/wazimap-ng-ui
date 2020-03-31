@@ -24,7 +24,9 @@ export class Category extends Observable {
         this.showDone(false);
         $(this.element).find('.point-data__h2').removeClass(defaultActiveClsName);
 
-        $('.truncate', this.element).text(this.name);
+        $('.point-data__label .truncate', this.element).text(this.name);
+        $('.point-data__label_source .truncate', this.element).text(this.data.metadata.source);
+        $('.point-data__label_source .truncate', this.element).attr('title', this.data.metadata.source);
         $('.point-data__h2_link', this.element).removeClass('point-data__h2_link').addClass('point-data__h2_link--disabled');
     }
 

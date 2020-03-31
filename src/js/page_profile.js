@@ -23,6 +23,8 @@ const indicatorTitleClass = '.sub-indicator__chart_header h4';
 const chartContainerClass = '.indicator__chart';
 const chartFootnoteClass = '.indicator__chart_footnote';
 
+const sourceClass = '.chart__data-source';
+
 const headerTitleClass = '.location-header__title h1';
 const breadcrumbsContainerClass = '.location-header__breadcrumbs';
 const breadcrumbClass = '.breadcrumb';
@@ -177,6 +179,10 @@ export default class ProfileLoader {
 
         $(indicatorTitleClass, newIndicatorSection).text(indicator);
         $(chartFootnoteClass, newIndicatorSection).text(indicatorDetail.description);
+        $(sourceClass, newIndicatorSection).text(indicatorDetail.metadata.source);
+        if (indicatorDetail.metadata.source === ''){
+            $('.indicator__chart_source', newIndicatorSection).remove();
+        }
         wrapper.append(newIndicatorSection);
 
         let subindicators = indicatorDetail.subindicators;

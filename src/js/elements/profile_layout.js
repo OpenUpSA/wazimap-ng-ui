@@ -8,10 +8,12 @@ export class ProfileLayout extends Observable {
         this.baseUrl = baseUrl;
     }
 
-    displayLogo(logoUrl) {
-        let fullUrl = `${this.baseUrl}${logoUrl}`;
+    displayLogo(logo) {
+        let fullUrl = `${this.baseUrl}${logo.image}`;
         $('.nav__title div').css('display', 'none');
         logoContainer.attr('src', fullUrl);
         logoContainer.css('display', 'block')
+
+        $(".nav__title").attr("href", logo.url);
     }
 }

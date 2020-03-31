@@ -64,7 +64,8 @@ function addBreadCrumbs(container, parents) {
 }
 
 function addKeyMetrics(container, profile) {
-    $(".key-metric", metricWrapper).remove()
+
+    $('.key-metric", metricWrapper').remove()
 
     profile.keyMetrics.forEach(el => {
         let metric = metricTemplate.cloneNode(true)
@@ -165,7 +166,6 @@ export default class ProfileLoader {
         $(subcategoryTitleClass, newSubcategorySection).text(subcategory);
         $(subcategoryDescriptionClass, newSubcategorySection).text(subcategoryDetail.description);
         wrapper.append(newSubcategorySection);
-        //$(subcategoryMetricsClass).dosomethihn
 
         for (const [indicator, detail] of Object.entries(subcategoryDetail.indicators)) {
             if (!this.ignoreIndicator(detail))
@@ -243,11 +243,16 @@ export default class ProfileLoader {
         $(indicatorClass, subcategoryTemplate).remove();
 
         updateGeography(profileHeader, profile);
-        addKeyMetrics(profileHeader, profile);
+        // addKeyMetrics(profileHeader, profile);
         addFacilities(geometries);
 
         for (const [category, detail] of Object.entries(all_categories)) {
             this.addCategory(category, detail);
         }
+
+        $('.indicator__key-metrics_title').css('display', 'none')
+        $('.indicator__key-metrics').css('display', 'none')
+        $('.location-header__key-metrics_source').css('display', 'none')
+
     }
 }

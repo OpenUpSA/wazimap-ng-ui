@@ -41,6 +41,11 @@ const profiles = {
         baseUrl: mainUrl,
         config: geography_config
     },
+    'covid-wazi.openup.org.za': {
+        profile: 4,
+        baseUrl: mainUrl,
+        config: geography_config
+    },
 }
 
 const pc = profiles[hostname]

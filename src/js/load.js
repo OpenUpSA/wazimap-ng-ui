@@ -94,16 +94,21 @@ export default function configureApplication(serverUrl, profileId, config) {
         mapcontrol.enableZoom(payload.payload.enabled)
     });
 
-    mapcontrol.on('layerClick', payload => {
-        let properties = payload.properties;
+    controller.on('layerClick', payload => {
+        if (payload.state.mapLoading == true) {
+            console.log("Ignoring click while layer is loading")
+            return
+        }
+
+        let properties = payload.payload.properties;
         let locations = [{
             name: properties.name,
             level: properties.level
         }];
         locationInfoBox.updateLocations(locations);
-
-        controller.onLayerClick(payload)
     })
+
+    mapcontrol.on('layerClick', payload => controller.onLayerClick(payload));
     mapcontrol.on('layerMouseOver', payload => controller.onLayerMouseOver(payload))
     mapcontrol.on('layerMouseOut', payload => controller.onLayerMouseOut(payload))
     mapcontrol.on("layerMouseMove", payload => controller.onLayerMouseMove(payload))

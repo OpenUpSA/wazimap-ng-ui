@@ -140,10 +140,16 @@ export default class Controller extends Observable {
 
 
     onLayerClick(payload) {
+        if (this.state.mapLoading == true) {
+            console.log("ignoring click from onLayer click") 
+            return;
+        }
+        this.state.mapLoading = true;
+
         const areaCode = payload.areaCode;
         this.changeHash(areaCode)
 
-        this.triggerEvent("layerClick", areaCode);
+        this.triggerEvent("layerClick", payload);
     };
 
     onLayerMouseOver(payload) {
@@ -159,10 +165,12 @@ export default class Controller extends Observable {
     }
 
     onLayerLoading(payload) {
+        this.state.mapLoading = true;
         this.triggerEvent("layerLoading", payload);
     };
 
     onLayerLoadingDone(payload) {
+        this.state.mapLoading = false;
         this.triggerEvent("layerLoadingDone", payload);
     };
 

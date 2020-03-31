@@ -223,12 +223,10 @@ export class MapControl extends Observable {
         layers.forEach(layer => {
             layer
                 .off("click")
-                .on("click", (el) => {
-                    if (Object.keys(geometries.children).length > 0) {
-                        const prop = el.layer.feature.properties;
-                        const areaCode = prop.code;
-                        self.triggerEvent("layerClick", layerPayload(el));
-                    }
+                .on("click", el => {
+                    const prop = el.layer.feature.properties;
+                    const areaCode = prop.code;
+                    self.triggerEvent("layerClick", layerPayload(el));
                 })
                 .on("mouseover", (el) => {
                     self.triggerEvent("layerMouseOver", layerPayload(el));

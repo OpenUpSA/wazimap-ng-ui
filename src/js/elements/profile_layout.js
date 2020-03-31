@@ -9,7 +9,7 @@ export class ProfileLayout extends Observable {
     }
 
     displayLogo(logo) {
-        let fullUrl = `${this.baseUrl}${logo.image}`;
+        let fullUrl = `${logo.image}`;
         $('.nav__title div').css('display', 'none');
         logoContainer.attr('src', fullUrl);
         logoContainer.css('display', 'block')

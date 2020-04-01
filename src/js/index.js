@@ -32,9 +32,9 @@ const profiles = {
         baseUrl: 'https://api.gcro.openup.org.za',
         config: gcro_config
     },
-    'staging.youthexplorer.org.za': {
+    'beta.youthexplorer.org.za': {
         profile: 1,
-        baseUrl: mainUrl,
+        baseUrl: productionUrl,
         config: geography_config
     },
     'capetownagainstcovid19.openup.org.za': {

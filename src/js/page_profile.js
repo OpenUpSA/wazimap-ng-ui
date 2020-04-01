@@ -253,6 +253,11 @@ export default class ProfileLoader {
         $('.indicator__key-metrics_title').css('display', 'none')
         $('.indicator__key-metrics').css('display', 'none')
         $('.location-header__key-metrics_source').css('display', 'none')
+        $('.location-facility__description').css('display', 'none')
+        $('#profile-print').css('display', 'none')
+        $('#profile-share').css('display', 'none')
+        $('.map-settings__header').css('display', 'none')
+        $('.map-settings__list').css('display', 'none')
 
     }
 }

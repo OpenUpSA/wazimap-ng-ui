@@ -65,7 +65,7 @@ function addBreadCrumbs(container, parents) {
 
 function addKeyMetrics(container, profile) {
 
-    $('.key-metric", metricWrapper').remove()
+    $('.key-metric', metricWrapper).remove()
 
     profile.keyMetrics.forEach(el => {
         let metric = metricTemplate.cloneNode(true)
@@ -243,7 +243,7 @@ export default class ProfileLoader {
         $(indicatorClass, subcategoryTemplate).remove();
 
         updateGeography(profileHeader, profile);
-        // addKeyMetrics(profileHeader, profile);
+        addKeyMetrics(profileHeader, profile);
         addFacilities(geometries);
 
         for (const [category, detail] of Object.entries(all_categories)) {

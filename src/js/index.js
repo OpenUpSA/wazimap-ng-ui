@@ -3,6 +3,7 @@ import {geography_config} from './configurations/geography_sa';
 import {geography_config as gcro_config} from './configurations/geography_gcro';
 
 const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
+const productionUrl = 'https://production.wazimap-ng.openup.org.za';
 
 const hostname = window.location.hostname;
 const profiles = {
@@ -23,7 +24,7 @@ const profiles = {
     },
     'geo.vulekamali.gov.za': {
         profile: 2,
-        baseUrl: mainUrl,
+        baseUrl: productionUrl,
         config: geography_config
     },
     'gcro.openup.org.za': {

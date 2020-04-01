@@ -140,11 +140,13 @@ export default class Controller extends Observable {
 
 
     onLayerClick(payload) {
-        if (this.state.mapLoading == true) {
+        const self = this;
+        if (payload.maplocker.locked) {
             console.log("ignoring click from onLayer click") 
             return;
         }
-        this.state.mapLoading = true;
+
+        payload.maplocker.lock();
 
         const areaCode = payload.areaCode;
         this.changeHash(areaCode)
@@ -165,12 +167,11 @@ export default class Controller extends Observable {
     }
 
     onLayerLoading(payload) {
-        this.state.mapLoading = true;
         this.triggerEvent("layerLoading", payload);
     };
 
     onLayerLoadingDone(payload) {
-        this.state.mapLoading = false;
+        payload.maplocker.unlock();
         this.triggerEvent("layerLoadingDone", payload);
     };
 

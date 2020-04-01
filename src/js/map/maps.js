@@ -9,6 +9,37 @@ import {Choropleth} from "./choropleth/choropleth";
 
 let ch = null;
 
+class MapLocker {
+    constructor(delay=3000) {
+        this._timeout = null;
+        this._locked = false
+        this._delay = delay;
+    }
+
+    get locked() {
+        return this._locked;
+    }
+
+    clearTimeout() {
+        if (this._timeout != null) {
+            clearTimeout(this._timeout);
+            this._timeout = null;
+        }
+    }
+
+    lock() {
+        const self = this;
+        this.clearTimeout();
+        this._timeout = setTimeout(() => self.unlock(), this._delay)
+        this._locked = true;
+    }
+
+    unlock() {
+        this._locked = false
+        this.clearTimeout()
+    }
+}
+
 export class MapControl extends Observable {
     constructor(config) {
         super();
@@ -26,6 +57,7 @@ export class MapControl extends Observable {
         this.legendColors = [];
 
         this.layerStyler = new LayerStyler();
+        this.maplocker = new MapLocker();
 
         this.map = this.configureMap(coords, tileUrl);
         this.map.map_variables = {
@@ -176,7 +208,7 @@ export class MapControl extends Observable {
 
         this.limitGeoViewSelections(level);
 
-        self.triggerEvent("layerLoading", self.map);
+        self.triggerEvent("layerLoading", this);
         if (Object.values(geometries.children).length == 0) {
             selectedBoundary = geometries.boundary;
         } else {
@@ -217,6 +249,7 @@ export class MapControl extends Observable {
                 layer: layer.layer,
                 element: layer,
                 properties: prop,
+                maplocker: self.maplocker
             }
         }
 
@@ -224,8 +257,6 @@ export class MapControl extends Observable {
             layer
                 .off("click")
                 .on("click", el => {
-                    const prop = el.layer.feature.properties;
-                    const areaCode = prop.code;
                     self.triggerEvent("layerClick", layerPayload(el));
                 })
                 .on("mouseover", (el) => {
@@ -252,6 +283,6 @@ export class MapControl extends Observable {
             }
         })
 
-        self.triggerEvent("layerLoadingDone", self.map);
+        self.triggerEvent("layerLoadingDone", self);
     };
 }

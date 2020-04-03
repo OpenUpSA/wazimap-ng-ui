@@ -4,7 +4,7 @@ export const geography_config = {
         country: ['province'],
         province: ['district', 'municipality'],
         district: ['municipality'],
-        municipality: ['mainplace', 'planning_region'],
+        municipality: ['mainplace', 'planning_region', 'ward'],
         mainplace: ['subplace']
     },
     geoViewTypes: {

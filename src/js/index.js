@@ -49,7 +49,7 @@ const profiles = {
     },
     'covid-ibp.openup.org.za': {
         profile: 5,
-        baseUrl: mainUrl,
+        baseUrl: productionUrl,
         config: geography_config
     },
 }

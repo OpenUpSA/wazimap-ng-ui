@@ -1,20 +1,20 @@
 const defaultStyles = {
     hoverOnly: {
         over: {
-            fillColor: "darkred",
+            fillColor: "green",
         },
         out: {
             fillColor: "#ffffff",
-            opacity: "0%",
             stroke: false,
         }
     },
     selected: {
         over: {
-            color: "darkred"
+            color: "green",
+            opacity: 1,
         },
         out: {
-            color: "red",
+            color: "#999999",
             opacity: 1,
             weight: 1
         }

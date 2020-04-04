@@ -154,6 +154,10 @@ export default class Controller extends Observable {
         this.triggerEvent("layerClick", payload);
     };
 
+    onChoropleth(payload) {
+        this.triggerEvent("choropleth", payload);
+    };
+
     onLayerMouseOver(payload) {
         this.triggerEvent("layerMouseOver", payload);
     };

@@ -1,3 +1,5 @@
+import {schemeBlues as d3schemeBlues} from 'd3-scale-chromatic';
+
 export const geography_config = {
     rootGeography: 'ZA',
     preferredChildren: {
@@ -27,6 +29,7 @@ export const geography_config = {
         zoomControlEnabled: false,
         zoomEnabled: false,
         zoomPosition: 'bottomright',
-        limitGeoViewSelections: true // TODO temporary until specific geographies are factored out of the code
+        limitGeoViewSelections: true, // TODO temporary until specific geographies are factored out of the code
+        choroplethColors: d3schemeBlues[5]
     }
 }

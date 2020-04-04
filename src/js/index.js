@@ -14,7 +14,7 @@ const profiles = {
     },
     'localhost': {
         profile: 2,
-        baseUrl: mainUrl,
+        baseUrl: productionUrl,
         config: geography_config
     },
     'localhost-dev': {

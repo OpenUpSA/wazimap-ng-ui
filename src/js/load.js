@@ -46,11 +46,10 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.registerWebflowEvents();
     controller.on('subindicatorClick', payload => {
         const method = payload.state.subindicator.obj.choropleth_method;
-        mapcontrol.choropleth(payload.state.subindicator, method)
+        mapcontrol.displayChoropleth(payload.state.subindicator, method)
     })
-    controller.on('subindicatorClick', payload => {
-        mapchip.onSubIndicatorChange(payload.payload, mapcontrol.legendColors)
-    });
+    controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
+    controller.on('choropleth', payload => mapchip.onChoropleth(payload.payload));
     controller.on('layerMouseOver', payload => {
         popup.loadPopup(payload.payload, payload.state)
     });
@@ -67,7 +66,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
-    controller.on("loadedNewProfile", payload => mapchip.clearAllMapChip());
+    controller.on("loadedNewProfile", payload => mapchip.removeMapChip());
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
     controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
         controller.onSubIndicatorClick(payload)
@@ -114,6 +113,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     mapcontrol.on('layerLoading', payload => controller.onLayerLoading(payload))
     mapcontrol.on('layerLoadingDone', payload => controller.onLayerLoadingDone(payload))
     mapcontrol.on('mapZoomed', payload => controller.onMapZoomed(payload))
+    mapcontrol.on('choropleth', payload => controller.onChoropleth(payload))
 
 
     search.on('beforeSearch', payload => controller.onSearchBefore(payload));

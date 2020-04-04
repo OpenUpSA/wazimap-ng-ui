@@ -1,44 +1,13 @@
 import {Observable, numFmt, getSelectedBoundary} from '../utils';
 import {polygon} from 'leaflet/dist/leaflet-src.esm';
-import {LayerStyler} from "./layerstyler";
+import {LayerStyler} from './layerstyler';
 
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
-import {SubindicatorCalculator} from "./choropleth/subindicator_calculator";
-import {SiblingCalculator} from "./choropleth/sibling_calculator";
-import {Choropleth} from "./choropleth/choropleth";
+import {SubindicatorCalculator} from './choropleth/subindicator_calculator';
+import {SiblingCalculator} from './choropleth/sibling_calculator';
+import {Choropleth} from './choropleth/choropleth';
+import {MapLocker} from './maplocker';
 
-let ch = null;
-
-class MapLocker {
-    constructor(delay=3000) {
-        this._timeout = null;
-        this._locked = false
-        this._delay = delay;
-    }
-
-    get locked() {
-        return this._locked;
-    }
-
-    clearTimeout() {
-        if (this._timeout != null) {
-            clearTimeout(this._timeout);
-            this._timeout = null;
-        }
-    }
-
-    lock() {
-        const self = this;
-        this.clearTimeout();
-        this._timeout = setTimeout(() => self.unlock(), this._delay)
-        this._locked = true;
-    }
-
-    unlock() {
-        this._locked = false
-        this.clearTimeout()
-    }
-}
 
 export class MapControl extends Observable {
     constructor(config) {
@@ -54,7 +23,6 @@ export class MapControl extends Observable {
         this.zoomPosition = config.map.zoomPosition;
         this.boundaryLayers = null;
         this.mainLayer = null;
-        this.legendColors = [];
 
         this.layerStyler = new LayerStyler();
         this.maplocker = new MapLocker();
@@ -69,9 +37,12 @@ export class MapControl extends Observable {
             currentLevel: null,
             children: []
         };
+
         this.layerCache = {};
         this.map.on("zoomend", e => this.onZoomChanged(e));
         this.map.on("zoomend", e => this.triggerEvent("mapZoomed", this.map))
+
+        this.choropleth = new Choropleth(this.layerCache, this.layerStyler, config.map.choroplethColors);
     };
 
     enableZoom(enabled) {
@@ -157,11 +128,9 @@ export class MapControl extends Observable {
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    choropleth(subindicator, method) {
+    displayChoropleth(subindicator, method) {
         if (subindicator.obj.children == undefined)
             return;
-
-        this.legendColors = []; //this is used by mapchip too
 
         let calculationFunc = {
             subindicator: SubindicatorCalculator,
@@ -172,14 +141,20 @@ export class MapControl extends Observable {
             calculationFunc = SubindicatorCalculator
 
         const calculation = calculationFunc(subindicator);
+        const values = calculation.map(el => el.val)
 
-        ch = new Choropleth(subindicator, this.layerCache, this.legendColors);
-        ch.showChoropleth(calculation);
+        this.choropleth.showChoropleth(calculation);
+        const intervals = this.choropleth.getIntervals(values)
+
+        this.triggerEvent("choropleth", {
+            data: calculation,
+            colors: this.choropleth.legendColors,
+            intervals: intervals
+        })
     };
 
     resetChoropleth() {
-        self = this;
-        self.layerStyler.setLayerToSelected(self.mainLayer);
+        this.choropleth.reset();
     }
 
     limitGeoViewSelections = (level) => {

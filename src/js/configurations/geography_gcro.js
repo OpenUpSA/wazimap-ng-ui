@@ -1,3 +1,5 @@
+import {schemeBlues as d3schemeBlues} from 'd3-scale-chromatic';
+
 // TODO temporary until we decide how to deal with configuration
 export const geography_config = {
     rootGeography: 'GT',
@@ -28,6 +30,7 @@ export const geography_config = {
         zoomControlEnabled: false,
         zoomEnabled: false,
         zoomPosition: 'bottomright',
-        limitGeoViewSelections: false // TODO temporary until specific geographies are factored out of the code
+        limitGeoViewSelections: false, // TODO temporary until specific geographies are factored out of the code
+        choroplethColors: d3schemeBlues[5]
     }
 }

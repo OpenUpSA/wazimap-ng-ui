@@ -1,80 +1,68 @@
 import {Observable} from '../../utils';
-import {interpolateBlues as d3interpolateBlues} from 'd3-scale-chromatic';
-import {scaleSequential as d3scaleSequential, scaleLinear} from 'd3-scale';
+import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 
-const legendCount = 5;
-
-/**
- * this class manages choropleth
- */
-export class Choropleth extends Observable {
-    constructor(_subindicator, _layerCache, _legendColors) {
-        super();
-
-        this.legendColors = _legendColors;
-        this.subindicator = _subindicator;
-        this.layerCache = _layerCache;
-        this.childCodes = Object.keys(_subindicator.obj.children);
-        this.buffer = 0.1;
+export class Choropleth {
+    constructor(layers, layerStyler, legendColors, buffer=0.1) {
+        this.layers = layers;
+        this.layerStyler = layerStyler;
+        this.legendColors = legendColors
+        this.buffer = buffer;
+        this.currentLayers = [];
     }
 
-    resetLayers = (scale) => {
-        let self = this;
+    getIntervals(values) {
+        const bounds = this.getBounds(values);
+        const numIntervals = this.legendColors.length;
+        const domain = [...Array(numIntervals).keys()]
+        const scale = d3scaleSequential()
+            .domain(domain)
+            .range([bounds.lower, bounds.upper])
 
-        this.childCodes.forEach(childCode => {
-            const layer = self.layerCache[childCode];
-            const color = scale(0);
-            if (layer != undefined)
-                layer.setStyle({fillColor: color});
-        });
+        const intervals = domain.map(idx => scale(idx))
+
+        return intervals
     }
 
-    getLegendColors = (legendPercentages, values, scale) => {
-        const lowerBound = 1 - this.buffer;
-        const upperBound = 1 + this.buffer;
-        const tick = (d3max(values) * upperBound - d3min(values) * lowerBound) / (legendCount - 1);
-        const startPoint = d3min(values) * lowerBound;
-        for (let i = 1; i <= legendCount; i++) {
-            let percentage = 0;
-            if ((((i - 1) * tick + startPoint) * 100) > 100) {
-                percentage = 100;
-                i = legendCount;
-            } else {
-                percentage = (((i - 1) * tick + startPoint) * 100).toFixed(1);
-            }
-            this.legendColors.push({
-                percentage: percentage,
-                fillColor: scale(legendPercentages(i))
-            });
+    reset() {
+        const self = this;
+        this.currentLayers.forEach(layer => {
+            self.layerStyler.setLayerToSelected(layer);
+        })
+
+        this.currentLayers = [];
+
+    }
+
+    getBounds(values) {
+        return {
+            lower: (1 - this.buffer) * d3min(values),
+            upper: (1 + this.buffer) * d3max(values)
         }
     }
 
-    showChoropleth = (calculations) => {
+    showChoropleth(calculations) {
         const self = this;
-        const childGeographyValues = calculations;
-        const lowerBound = 1 - this.buffer;
-        const upperBound = 1 + this.buffer;
-
+        const childGeographyValues = [...calculations];
         const values = childGeographyValues.map(el => el.val);
-        const scale = d3scaleSequential(d3interpolateBlues)
-            .domain([d3min(values) * lowerBound, d3max(values) * upperBound]);
+        const bounds = this.getBounds(values);
 
-        let legendPercentages = scaleLinear()
-            .domain([1, legendCount])
-            .nice()
-            .range([d3min(values) * lowerBound, d3max(values) * upperBound]);
+        const scale = d3scaleSequential()
+            .domain([bounds.lower, bounds.upper])
+            .range(this.legendColors);
 
-        this.getLegendColors(legendPercentages, values, scale);
-        this.resetLayers(scale);
+        this.reset();
 
-        childGeographyValues.forEach((el) => {
-            const layer = self.layerCache[el.code];
+        childGeographyValues.forEach(el => {
+            const layer = self.layers[el.code];
+            self.currentLayers.push(layer);
             if (layer != undefined) {
                 const color = scale(el.val);
                 layer.setStyle({fillColor: color});
+                layer.setStyle({fillOpacity: 0.8});
                 layer.feature.properties.percentage = el.val;
             }
         })
+
     }
 }

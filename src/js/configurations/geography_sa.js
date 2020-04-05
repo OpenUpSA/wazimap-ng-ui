@@ -113,7 +113,7 @@ export class Config {
                 over: {
                     color: "#666666",
                     fillColor: colors.main.hover,
-                    opacity: 1,
+                    fillOpacity: 0.6,
                 },
                 out: {
                     color: "#666666",

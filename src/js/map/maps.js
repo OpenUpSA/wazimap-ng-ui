@@ -130,7 +130,6 @@ export class MapControl extends Observable {
         this.myEventForwarder.enable();
     }
 
-
     /**
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj

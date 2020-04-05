@@ -64,8 +64,6 @@ export class Choropleth {
                     over: {fillColor: color, fillOpacity: 0.8},
                     out: {fillColor: color, fillOpacity: 1.0},
                 })
-                // layer.setStyle({fillColor: color});
-                // layer.setStyle({fillOpacity: 0.8});
                 layer.feature.properties.percentage = el.val;
             }
         })

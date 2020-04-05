@@ -26,7 +26,8 @@ export class Popup extends Observable {
             offset: [-10, 0]
         })
 
-        this.map.map_variables.popup.setLatLng(payload.element.latlng)
+        this.map.map_variables.popup
+            .setLatLng(payload.element.latlng)
             .setContent(popupContent)
             .openOn(this.map);
 
@@ -37,7 +38,7 @@ export class Popup extends Observable {
         if (this.map.map_variables.popup === null) {
             this.loadPopup(payload.payload.layer, payload.state);
         } else {
-            payload.payload.popup.setLatLng(payload.payload.layer.element.latlng).openOn(this.map);
+            payload.payload.popup.setLatLng(payload.payload.layer.element.latlng);
         }
     }
 

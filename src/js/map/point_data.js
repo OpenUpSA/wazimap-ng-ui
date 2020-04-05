@@ -150,10 +150,12 @@ export class PointData extends Observable {
         const popupContent = this.createPopupContent(point);
         this.map.map_variables.popup = L.popup({
             autoPan: false,
-            autoClose: true
+            autoClose: true,
+            offset: [9, 0]
         })
 
-        this.map.map_variables.popup.setLatLng(e.latlng)
+        this.map.map_variables.popup
+            .setLatLng({lat: point.y, lng: point.x})
             .setContent(popupContent)
             .openOn(this.map);
 
@@ -161,7 +163,7 @@ export class PointData extends Observable {
     }
 
     hideMarkerPopup = () => {
-        this.map.closePopup();    //dont forget this
+        this.map.closePopup();
         this.map.map_variables.popup = null;
     }
 

@@ -56,7 +56,6 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('layerMouseOut', payload => popup.hidePopup(payload));
     controller.on('layerMouseMove', payload => {
         popup.updatePopupPosition(payload)
-        //popup.loadPopup(payload)
     });
     controller.on('profileLoaded', onProfileLoadedSearch);
     controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))

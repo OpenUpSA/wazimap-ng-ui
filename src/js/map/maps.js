@@ -33,7 +33,8 @@ export class MapControl extends Observable {
             hoverAreaCode: null,
             hoverAreaLevel: null,
             currentLevel: null,
-            children: []
+            children: [],
+            isLoading: false
         };
 
         this.layerCache = {};
@@ -185,6 +186,7 @@ export class MapControl extends Observable {
         const parentBoundaries = geometries.parents;
 
         this.map.map_variables.currentLevel = level;
+        this.map.map_variables.isLoading = false;
 
         this.limitGeoViewSelections(level);
 
@@ -237,7 +239,15 @@ export class MapControl extends Observable {
             layer
                 .off("click")
                 .on("click", el => {
-                    self.triggerEvent("layerClick", layerPayload(el));
+                    if (!this.map.map_variables.isLoading && (Object.values(geometries.children).length > 0 || el.layer.feature.properties.code !== geography.code)) {
+                        /**
+                         * (Object.values(geometries.children).length > 0 || el.layer.feature.properties.code !== geography.code) -> check if the current geo has children
+                         * or user clicked some other geo
+                         */
+
+                        this.map.map_variables.isLoading = true;
+                        self.triggerEvent("layerClick", layerPayload(el));
+                    }
                 })
                 .on("mouseover", (el) => {
                     self.triggerEvent("layerMouseOver", layerPayload(el));

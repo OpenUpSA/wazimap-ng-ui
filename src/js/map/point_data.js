@@ -116,14 +116,13 @@ export class PointData extends Observable {
     }
 
     markerRadius() {
-        return this.map.getZoom() / 2;
+        return this.map.getZoom() / 4;
     }
 
     /**
      * individual markers
      */
     createMarkers = (points, layer) => {
-        let renderer = L.canvas({padding: 0.5, pane: 'markerPane'});
         const self =  this;
 
         checkIterate(points, point => {
@@ -131,10 +130,10 @@ export class PointData extends Observable {
             let marker = L.circleMarker([point.y, point.x], {
                 color: col,
                 radius: 2,
-                radius: self.markerRadius(),
                 fill: true,
                 fillColor: col,
-                fillOpacity: 1
+                fillOpacity: 1,
+                pane: 'markerPane'
             })
             //marker.bindTooltip(point.name);
             marker.on('mouseover', (e) => {

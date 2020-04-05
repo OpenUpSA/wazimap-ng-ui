@@ -62,7 +62,7 @@ export class Config {
     get tileLayers() {
         return  [
             {
-                url: 'http://a.tiles.wmflabs.org/osm-no-labels/{z}/{x}/{y}.png',
+                url: 'https://a.tiles.wmflabs.org/osm-no-labels/{z}/{x}/{y}.png',
                 pane: 'tilePane',
                 zIndex: 200
             },

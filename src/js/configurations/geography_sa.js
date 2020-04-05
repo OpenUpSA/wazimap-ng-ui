@@ -43,7 +43,8 @@ export class Config {
             zoomPosition: 'bottomright',
             limitGeoViewSelections: true, // TODO temporary until specific geographies are factored out of the code
             choroplethColors: this.choroplethColors,
-            leafletOptions: this.leafletOptions
+            leafletOptions: this.leafletOptions,
+            layerStyles: this.layerStyles
         }
     }
 
@@ -80,5 +81,51 @@ export class Config {
 
     get choroplethColors() {
         return d3schemeBlues[5]
+    }
+
+    get mapColors() {
+        return {
+            main: {
+                fill: "#cccccc",
+                hover: "#3BAD84"
+            },
+            secondary: {
+                fill: "#ffffff",
+                hover: "#3BAD84"
+            }
+        }
+    }
+
+    get layerStyles() {
+        const colors = this.mapColors;
+
+        return {
+            hoverOnly: {
+                over: {
+                    fillColor: colors.secondary.hover
+                },
+                out: {
+                    fillColor: colors.secondary.fill,
+                    stroke: false,
+                }
+            },
+            selected: {
+                over: {
+                    color: "#666666",
+                    fillColor: colors.main.hover,
+                    opacity: 1,
+                },
+                out: {
+                    color: "#666666",
+                    fillColor: colors.main.fill,
+
+                    opacity: 0.5,
+                    fillOpacity: 0.5,
+
+                    weight: 1,
+                }
+            }
+
+        }
     }
 }

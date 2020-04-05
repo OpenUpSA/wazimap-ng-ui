@@ -23,7 +23,7 @@ export class MapControl extends Observable {
         this.boundaryLayers = null;
         this.mainLayer = null;
 
-        this.layerStyler = new LayerStyler();
+        this.layerStyler = new LayerStyler(this.config.layerStyles);
         this.maplocker = new MapLocker();
 
         this.map = this.configureMap(coords, config.map);

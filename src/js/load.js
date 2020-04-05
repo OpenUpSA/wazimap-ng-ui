@@ -29,7 +29,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     const controller = new Controller(baseUrl, config, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
-    const mapchip = new MapChip();
+    const mapchip = new MapChip(config.choropleth);
     const search = new Search(baseUrl, profileId, 2);
     const profileLoader = new ProfileLoader(config);
     const locationInfoBox = new LocationInfoBox();

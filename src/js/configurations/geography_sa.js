@@ -42,7 +42,7 @@ export class Config {
             zoomEnabled: false,
             zoomPosition: 'bottomright',
             limitGeoViewSelections: true, // TODO temporary until specific geographies are factored out of the code
-            choroplethColors: this.choroplethColors,
+            choropleth: this.choropleth,
             leafletOptions: this.leafletOptions,
             layerStyles: this.layerStyles
         }
@@ -74,13 +74,12 @@ export class Config {
         ]
     }
 
-    get tileUrl() {
-        //return 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        return 'https://a.tiles.wmflabs.org/osm-no-labels/{z}/{x}/{y}.png'
-    }
-
-    get choroplethColors() {
-        return d3schemeBlues[5]
+    get choropleth() {
+        return {
+            colors: d3schemeBlues[5],
+            opacity: 0.7,
+            opacity_over: 0.8
+        }
     }
 
     get mapColors() {

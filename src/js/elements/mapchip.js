@@ -9,8 +9,9 @@ const lightStart = 3;
  * Represent the map chip at the bottom of the map
  */
 export class MapChip extends Observable {
-    constructor() {
+    constructor(legendColors) {
         super();
+        this.legendColors = legendColors;
         this.prepareDomElements();
     }
 
@@ -51,6 +52,7 @@ export class MapChip extends Observable {
 
             $('.truncate', item).text(label);
             $(item).css('background-color', colors[i]);
+            $(item).css('opacity', this.legendColors.opacity);
             $('.' + wrapperClsName + ' .content__map_legend').append(item);
         }
     }

@@ -16,7 +16,6 @@ export class MapControl extends Observable {
         this.config = config;
 
         const coords = config.map.defaultCoordinates;
-        const tileUrl = config.map.tileUrl;
 
         this.zoomEnabled = config.map.zoomEnabled;
         this.zoomPosition = config.map.zoomPosition;
@@ -41,7 +40,7 @@ export class MapControl extends Observable {
         this.map.on("zoomend", e => this.onZoomChanged(e));
         this.map.on("zoomend", e => this.triggerEvent("mapZoomed", this.map))
 
-        this.choropleth = new Choropleth(this.layerCache, this.layerStyler, config.map.choroplethColors);
+        this.choropleth = new Choropleth(this.layerCache, this.layerStyler, config.map.choropleth);
     };
 
     enableZoom(enabled) {

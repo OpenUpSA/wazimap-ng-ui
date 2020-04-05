@@ -3,10 +3,11 @@ import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 
 export class Choropleth {
-    constructor(layers, layerStyler, legendColors, buffer=0.1) {
+    constructor(layers, layerStyler, options, buffer=0.1) {
         this.layers = layers;
         this.layerStyler = layerStyler;
-        this.legendColors = legendColors
+        this.legendColors = options.colors;
+        this.options = options;
         this.buffer = buffer;
         this.currentLayers = [];
     }
@@ -61,8 +62,8 @@ export class Choropleth {
             if (layer != undefined) {
                 const color = scale(el.val);
                 self.layerStyler.setLayerStyle(layer, {
-                    over: {fillColor: color, fillOpacity: 0.8},
-                    out: {fillColor: color, fillOpacity: 1.0},
+                    over: {fillColor: color, fillOpacity: self.options.opacity_over},
+                    out: {fillColor: color, fillOpacity: self.options.opacity},
                 })
                 layer.feature.properties.percentage = el.val;
             }

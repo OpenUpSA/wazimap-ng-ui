@@ -8,6 +8,7 @@ const treeLineClsName = '.point-data__h2_tree-line-v';
 const wrapperClsName = '.point-data__content_wrapper';
 const pointDataItemClsName = '.point-data__h1--dropdown';
 const categoryItemClsName = '.point-data__h2_wrapper';
+const stylesClsName = '.styles';
 
 export class PointDataTray extends Observable {
     constructor(baseUrl, profileId) {
@@ -28,6 +29,7 @@ export class PointDataTray extends Observable {
 
     clearText() {
         $(wrapperClsName).html('');
+        $(stylesClsName).find(wrapperClsName).remove(); //need to remove the cloned objects, or js keeps styling the wrong element
     }
 
     createTheme(datum) {
@@ -43,7 +45,6 @@ export class PointDataTray extends Observable {
     loadThemes() {
         const self = this;
         const themeUrl = `${this.baseUrl}/${url}/${this.profileId}/`;
-        console.log(themeUrl);
 
         self.triggerEvent("loadingThemes", self);
 

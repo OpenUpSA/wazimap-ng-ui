@@ -64,17 +64,9 @@ export function setPopupStyle(clsName) {
   $('.leaflet-popup-content').css('min-width', $('.' + clsName).css('min-width'));
   $('.leaflet-popup-content').css('display', 'inline-table');
   $('.map__tooltip_value').css('white-space', 'nowrap');
-  $('.map__tooltip_geography-chip').css('left', (($('.leaflet-popup-content').width() - $('.map__tooltip_geography-chip').width()) / 2));
 
-  /*
-  $('.leaflet-popup-content').addClass(clsName);
-  $('.' + clsName).css('position', 'inherit');
-  $('.' + clsName).css('border', 'none');
-  $('.' + clsName).css('min-width', '250px');
-  $('.' + clsName).css('font-size', '14px');
-  $('.leaflet-popup-content').css('margin', '0');
-  $('.leaflet-popup-content-wrapper').css('padding', '0');
-   */
+  let leftOffset = ($('.leaflet-popup-content').width() - $('.map__tooltip_geography-chip').width()) / 2;
+  $('.map__tooltip_geography-chip').css('left', leftOffset);
 }
 
 export function getSelectedBoundary(level, geometries, config) {
@@ -177,7 +169,7 @@ export function checkIterate(arr, func) {
   if (!hasElements(arr))
     return
 
-  arr.forEach(el => {
-    func(el);
-  }) 
+  arr.forEach((el, i) => {
+    func(el, i);
+  })
 }

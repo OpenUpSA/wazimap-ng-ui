@@ -5,12 +5,13 @@ const categoryItemDoneClsName = '.point-data__h2_load-complete';
 const categoryItemLoadingClsName = '.point-data__h2_loading';
 
 export class Category extends Observable {
-    constructor(data, categoryItem) {
+    constructor(data, categoryItem, isLast) {
         super()
 
         this.active = false;
         this.data = data;
         this.categoryItem = categoryItem;
+        this.isLast = isLast;
         this.prepareDomElements();
     }
 
@@ -23,6 +24,9 @@ export class Category extends Observable {
         this.showLoading(false);
         this.showDone(false);
         $(this.element).find('.point-data__h2').removeClass(defaultActiveClsName);
+        if (this.isLast) {
+            $(this.element).find('.point-data__h2').addClass('last');
+        }
 
         $('.point-data__label .truncate', this.element).text(this.name);
         $('.point-data__label_source .truncate', this.element).text(this.data.metadata.source);

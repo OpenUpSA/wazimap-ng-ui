@@ -215,9 +215,9 @@ export default class ProfileLoader {
         myChart.barPadding(6);
         myChart.margin({
             top: 15,
-            right: 25,
+            right: 0,
             bottom: 15,
-            left: 140,
+            left: 120,
         })
         myChart.tooltipFormatter((d) => {
             $('.bc__tooltip_value', tooltip).text(fmt(d.data.value));

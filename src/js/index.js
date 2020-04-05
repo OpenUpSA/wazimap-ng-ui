@@ -15,7 +15,7 @@ const profiles = {
     },
     'localhost': {
         profile: 2,
-        baseUrl: productionUrl,
+        baseUrl: mainUrl,
         config: config
     },
     'localhost-dev': {

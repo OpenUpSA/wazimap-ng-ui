@@ -3,9 +3,10 @@ import {max} from 'd3-array';
 import 'd3-transition';
 import {easeLinear} from 'd3-ease';
 import d3Tip from 'd3-tip';
-import {selectAll} from 'd3-selection';
+import {selectAll, select} from 'd3-selection';
 import {axisBottom, axisLeft} from 'd3-axis';
 import {saveSvgAsPng} from 'save-svg-as-png';
+import html2canvas from 'html2canvas';
 
 export function horizontalBarChart() {
     const initialConfiguration = {
@@ -41,7 +42,6 @@ export function horizontalBarChart() {
 
     function chart(selection) {
         selection.each(() => {
-
             width = width - margin.left - margin.right;
             height = data.length * (barHeight + barPadding);
 
@@ -49,13 +49,15 @@ export function horizontalBarChart() {
              * settings - width, height etc
              */
             const barChartSvg = selection.append('svg')
-                .attr('height', height + margin.top + margin.bottom + xAxisPadding)
-                .attr('width', width + margin.left + margin.right)
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom + xAxisPadding))
+                /*.attr('height', height + margin.top + margin.bottom + xAxisPadding)
+                .attr('width', width + margin.left + margin.right)*/
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
             const x = scaleLinear()
-                .range([0, width])
+                .range([0, width]) //**
                 .domain([0, max(data, (d) => d.value)]);
 
             const y = scaleBand()
@@ -163,7 +165,9 @@ export function horizontalBarChart() {
                 .attr('y', (d) => y(d.label))
                 .attr('height', barHeight)
                 .attr('x', (d) => x(d.value))
-                .attr('width', (d) => width - x(d.value))
+                .attr('width', (d) => {
+                    return width - x(d.value)
+                })
                 .style('cursor', 'pointer')
                 .on("mouseover", function (d) {
                     let bar = $(this).closest('g').find('rect:nth-child(1)');
@@ -190,9 +194,40 @@ export function horizontalBarChart() {
     }
 
     chart.saveAsPng = function (container) {
-        saveSvgAsPng($(container).find('svg')[0], "plot.png");
+        let element = $(container).closest('.indicator__sub-indicator')[0];
+        $(element).find('.sub-indicator__chart_options').attr('data-html2canvas-ignore', true);
+
+        let options = {
+            x: $(element).offset().left - 30,
+            y: $(element).offset().top - 50,
+            width: $(element).width() + 30
+        }
+
+        html2canvas(element, options).then(function (canvas) {
+            saveAs(canvas.toDataURL(), 'chart.png');
+        });
     }
 
+    function saveAs(uri, filename) {
+        let link = document.createElement('a');
+        if (typeof link.download === 'string') {
+
+            link.href = uri;
+            link.download = filename;
+
+            //Firefox requires the link to be in the body
+            document.body.appendChild(link);
+
+            //simulate click
+            link.click();
+
+            //remove the link when done
+            document.body.removeChild(link);
+
+        } else {
+            window.open(uri);
+        }
+    }
 
     chart.width = function (value) {
         if (!arguments.length) return width;

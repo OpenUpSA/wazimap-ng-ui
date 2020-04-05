@@ -26,12 +26,12 @@ export class Theme extends Observable {
         $(this.element).find('.point-data__h1_checkbox input[type=checkbox]').on('click', () => self.toggle());
         $('.h1__trigger_title .truncate', this.element).text(this.name);
         $('.point-data__h1_trigger', this.element).removeClass(defaultActiveClsName);
-        $(categoryWrapperClsName, this.element).html('');
 
+        $(categoryWrapperClsName, this.element).html('');
     }
 
-    createCategory(categoryDatum) {
-        const category = new Category(categoryDatum,this.categoryItem);
+    createCategory(categoryDatum, isLast) {
+        const category = new Category(categoryDatum, this.categoryItem, isLast);
         category.on("categorySelected", category => this.triggerEvent("categorySelected", category))
         category.on("categoryUnselected", category => this.triggerEvent("categoryUnselected", category))
 
@@ -40,9 +40,10 @@ export class Theme extends Observable {
 
     createCategories() {
         const self = this;
-        checkIterate(this.data.categories, categoryDatum => {
+        checkIterate(this.data.categories, (categoryDatum, i) => {
+            let isLast = i === (this.data.categories.length - 1);
             categoryDatum.theme = this.data;
-            let category = self.createCategory(categoryDatum);
+            let category = self.createCategory(categoryDatum, isLast);
             this.categories.push(category);
 
             $(self.element).find(categoryWrapperClsName).append(category.element);
@@ -79,8 +80,7 @@ export class Theme extends Observable {
         let activeClassName = 'active-' + this.id;
         if (flag) {
             $('.point-data__h1_trigger', this.element).addClass(activeClassName);
-        }
-        else {
+        } else {
             $('.point-data__h1_trigger', this.element).removeClass(activeClassName);
         }
 

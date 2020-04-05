@@ -1,7 +1,7 @@
 const defaultStyles = {
     hoverOnly: {
         over: {
-            fillColor: "green",
+            fillColor: "#3BAD84",
         },
         out: {
             fillColor: "#ffffff",
@@ -10,12 +10,13 @@ const defaultStyles = {
     },
     selected: {
         over: {
-            color: "green",
+            color: "#3BAD84",
             opacity: 1,
         },
         out: {
-            color: "#999999",
-            opacity: 1,
+            color: "#cccccc",
+            opacity: 0.5,
+            fillOpacity: 0.5,
             weight: 1
         }
     }
@@ -27,17 +28,24 @@ export class LayerStyler {
     }
 
     setLayerStyle(layer, styles) {
-        layer.resetStyle(layer);
-        layer.eachLayer((feature) => {
-            feature.setStyle(styles.out);
+        let layers = null;
 
-            feature
+        if (layer._layers != undefined)
+            layers = Object.values(layer._layers)
+        else
+            layers = [layer];
+
+        // layer.resetStyle(layer);
+        layers.forEach(layer => {
+            layer.setStyle(styles.out);
+
+            layer
                 .off("mouseover mouseout")
-                .on("mouseover", (el) => {
-                    feature.setStyle(styles.over);
+                .on("mouseover", el => {
+                    layer.setStyle(styles.over);
                 })
-                .on("mouseout", (el) => {
-                    feature.setStyle(styles.out);
+                .on("mouseout", el => {
+                    layer.setStyle(styles.out);
                 })
         })
     };

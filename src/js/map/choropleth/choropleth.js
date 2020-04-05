@@ -16,7 +16,7 @@ export class Choropleth {
         const numIntervals = this.legendColors.length;
         const domain = [...Array(numIntervals).keys()]
         const scale = d3scaleSequential()
-            .domain(domain)
+            .domain([0, numIntervals - 1])
             .range([bounds.lower, bounds.upper])
 
         const intervals = domain.map(idx => scale(idx))
@@ -26,7 +26,8 @@ export class Choropleth {
 
     reset() {
         const self = this;
-        this.currentLayers.forEach(layer => {
+        this.currentLayers.forEach(code => {
+            const layer = self.layers[code];
             self.layerStyler.setLayerToSelected(layer);
         })
 
@@ -46,20 +47,25 @@ export class Choropleth {
         const childGeographyValues = [...calculations];
         const values = childGeographyValues.map(el => el.val);
         const bounds = this.getBounds(values);
+        const numIntervals = this.legendColors.length;
 
         const scale = d3scaleSequential()
             .domain([bounds.lower, bounds.upper])
-            .range(this.legendColors);
+            .range([this.legendColors[0], this.legendColors[numIntervals - 1]]);
 
         this.reset();
 
         childGeographyValues.forEach(el => {
             const layer = self.layers[el.code];
-            self.currentLayers.push(layer);
+            self.currentLayers.push(el.code);
             if (layer != undefined) {
                 const color = scale(el.val);
-                layer.setStyle({fillColor: color});
-                layer.setStyle({fillOpacity: 0.8});
+                self.layerStyler.setLayerStyle(layer, {
+                    over: {fillColor: color, fillOpacity: 0.8},
+                    out: {fillColor: color, fillOpacity: 1.0},
+                })
+                // layer.setStyle({fillColor: color});
+                // layer.setStyle({fillOpacity: 0.8});
                 layer.feature.properties.percentage = el.val;
             }
         })

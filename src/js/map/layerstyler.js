@@ -10,11 +10,11 @@ const defaultStyles = {
     },
     selected: {
         over: {
-            color: "#3BAD84",
+            fillColor: "#3BAD84",
             opacity: 1,
         },
         out: {
-            color: "#cccccc",
+            fillColor: "#cccccc",
             opacity: 0.5,
             fillOpacity: 0.5,
             weight: 1

@@ -16,15 +16,7 @@ export class Config extends ConfigSA {
         }        
     }
 
-    get map() {
-        return {
-            defaultCoordinates: {'lat': -28.995409163308832, 'long': 25.093833387362697, 'zoom': 6},
-            tileUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            zoomControlEnabled: false,
-            zoomEnabled: false,
-            zoomPosition: 'bottomright',
-            limitGeoViewSelections: true, // TODO temporary until specific geographies are factored out of the code
-            choroplethColors: d3schemeBlues[5]
-        }
+    get defaultCoordinates() {
+        return {'lat': -26.0123951, 'long': 27.0061074, 'zoom': 10}
     }
 }

@@ -18,7 +18,6 @@ export class MapControl extends Observable {
         const coords = config.map.defaultCoordinates;
         const tileUrl = config.map.tileUrl;
 
-        this.zoomControlEnabled = config.map.zoomControlEnabled;
         this.zoomEnabled = config.map.zoomEnabled;
         this.zoomPosition = config.map.zoomPosition;
         this.boundaryLayers = null;
@@ -27,7 +26,7 @@ export class MapControl extends Observable {
         this.layerStyler = new LayerStyler();
         this.maplocker = new MapLocker();
 
-        this.map = this.configureMap(coords, tileUrl);
+        this.map = this.configureMap(coords, config.map);
         this.map.map_variables = {
             tooltipClsName: '.content__map_tooltip',
             tooltipItem: null,
@@ -92,13 +91,21 @@ export class MapControl extends Observable {
         }, 500);
     }
 
-    configureMap(coords, tileUrl) {
+    configureMap(coords, mapOptions) {
 
         const map = L
-            .map('main-map', {zoomControl: this.zoomControlEnabled, preferCanvas: true})
+            .map('main-map', mapOptions.leafletOptions) 
             .setView([coords["lat"], coords["long"]], coords["zoom"])
 
-        L.tileLayer(tileUrl).addTo(map);
+        mapOptions.tileLayers.forEach(layer => {
+            const pane = layer.pane;
+            map.createPane(pane)
+            map.getPane(pane).style.zIndex = layer.zIndex;
+            map.getPane(pane).style.pointerEvents = 'none';
+
+            L.tileLayer(layer.url, {pane: pane}).addTo(map).addTo(map);
+        })
+
         L.control.zoom({position: this.zoomPosition}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
         this.configureForwarder(map);

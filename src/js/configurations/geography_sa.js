@@ -101,7 +101,8 @@ export class Config {
         return {
             hoverOnly: {
                 over: {
-                    fillColor: colors.secondary.hover
+                    fillColor: colors.secondary.hover,
+                    fillOpacity: 0.5,
                 },
                 out: {
                     fillColor: colors.secondary.fill,

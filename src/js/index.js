@@ -48,9 +48,19 @@ const profiles = {
         baseUrl: mainUrl,
         config: config
     },
+    'wazimap-ng.africa': {
+        profile: 1,
+        baseUrl: mainUrl,
+        config: config
+    },
     'covid-ibp.openup.org.za': {
         profile: 5,
         baseUrl: productionUrl,
+        config: config
+    },
+    'covid-ccij.openup.org.za': {
+        profile: 5,
+        baseUrl: mainUrl,
         config: config
     },
 }

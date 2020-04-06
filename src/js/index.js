@@ -62,7 +62,7 @@ const profiles = {
     'covid-ccij.openup.org.za': {
         profile: 5,
         baseUrl: mainUrl,
-        config: WorldConfig()
+        config: new WorldConfig()
     },
 }
 

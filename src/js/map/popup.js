@@ -47,6 +47,8 @@ export class Popup extends Observable {
     }
 
     createPopupContent = (payload, state) => {
+        $('.leaflet-popup-tip-container').hide();
+        $('.leaflet-popup-content-wrapper').html('');
         let item = this.map.map_variables.tooltipItem.cloneNode(true);
 
         this.map.map_variables.hoverAreaLevel = payload.properties.level;

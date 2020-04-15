@@ -92,6 +92,7 @@ export class PointData extends Observable {
     removeThemePoints = (theme) => {
         checkIterate(theme.categories, category => removeCategoryPoints(category))
     }
+
     /** end of theme functions **/
 
     getAddressPoints(requestUrl) {
@@ -123,7 +124,7 @@ export class PointData extends Observable {
      * individual markers
      */
     createMarkers = (points, layer) => {
-        const self =  this;
+        const self = this;
 
         checkIterate(points, point => {
             const col = $('._' + point.theme.id).css('color');
@@ -192,7 +193,7 @@ export class PointData extends Observable {
                 let itemRow = tooltipRowItem.cloneNode(true);
                 $('.tooltip__facility-item_label div', itemRow).text(a.key);
                 $('.tooltip__facility-item_value div', itemRow).text(a.value);
-                if (i === arr.length - 1){
+                if (i === arr.length - 1) {
                     $(itemRow).addClass('last')
                 }
 

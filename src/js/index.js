@@ -53,6 +53,16 @@ const profiles = {
         baseUrl: productionUrl,
         config: config
     },
+    'covid-ccij.openup.org.za': {
+        profile: 5,
+        baseUrl: mainUrl,
+        config: new WorldConfig()
+    },
+    'mapyourcity.org.za': {
+        profile: 7,
+        baseUrl: productionUrl,
+        config: new config
+    },
 }
 
 const pc = profiles[hostname]

@@ -56,7 +56,7 @@ const profiles = {
     'mapyourcity.org.za': {
         profile: 7,
         baseUrl: productionUrl,
-        config: new config
+        config: config
     },
 }
 

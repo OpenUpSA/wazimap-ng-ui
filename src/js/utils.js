@@ -65,7 +65,14 @@ export function setPopupStyle(clsName) {
     $('.leaflet-popup-content').css('display', 'inline-table');
     $('.map__tooltip_value').css('white-space', 'nowrap');
 
-    let leftOffset = ($('.leaflet-popup-content').width() - $('.map__tooltip_geography-chip').width()) / 2;
+    let popupWidth = 0;
+    $('.leaflet-popup-content').each(function () {
+        if ($(this).width() < popupWidth || popupWidth <= 0) {
+            popupWidth = $(this).width();
+        }
+    });
+
+    let leftOffset = (popupWidth - $('.map__tooltip_geography-chip').width()) / 2;
     $('.map__tooltip_geography-chip').css('left', leftOffset);
 }
 

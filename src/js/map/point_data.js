@@ -1,5 +1,6 @@
 import {getJSON, Observable, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
 import {count} from "d3-array";
+import {stopPropagation} from "leaflet/src/dom/DomEvent";
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
@@ -130,14 +131,16 @@ export class PointData extends Observable {
             const col = $('._' + point.theme.id).css('color');
             let marker = L.circleMarker([point.y, point.x], {
                 color: col,
-                radius: 2,
+                radius: 3,
                 fill: true,
                 fillColor: col,
                 fillOpacity: 1,
                 pane: 'markerPane'
             })
-            //marker.bindTooltip(point.name);
-            marker.on('mouseover', (e) => {
+            marker.on('click', (e) => {
+                this.showMarkerPopup(e, point, true);
+                stopPropagation(e); //prevent map click event
+            }).on('mouseover', (e) => {
                 this.showMarkerPopup(e, point);
             }).on('mouseout', () => {
                 this.hideMarkerPopup();
@@ -146,19 +149,26 @@ export class PointData extends Observable {
         })
     }
 
-    showMarkerPopup = (e, point) => {
+    showMarkerPopup = (e, point, isClicked = false) => {
         this.map.closePopup();
         const popupContent = this.createPopupContent(point);
-        this.map.map_variables.popup = L.popup({
+        let popup = L.popup({
             autoPan: false,
-            autoClose: true,
+            autoClose: !isClicked,
             offset: [9, 0]
         })
 
-        this.map.map_variables.popup
-            .setLatLng({lat: point.y, lng: point.x})
-            .setContent(popupContent)
-            .openOn(this.map);
+        if (isClicked) {
+            popup
+                .setLatLng({lat: point.y, lng: point.x})
+                .setContent(popupContent)
+                .addTo(this.map);
+        } else {
+            popup
+                .setLatLng({lat: point.y, lng: point.x})
+                .setContent(popupContent)
+                .openOn(this.map);
+        }
 
         setPopupStyle('content__map_facility-tooltip');
     }
@@ -172,7 +182,7 @@ export class PointData extends Observable {
         let item = tooltipItem.cloneNode(true);
 
         $(item).find('.map-tooltip__notch').remove();   //leafletjs already creates this
-        $('.map__tooltip-tooltip_name .text-block', item).text(point.name);
+        $('.map__facility-tooltip_name div', item).text(point.name);
         ThemeStyle.replaceChildDivWithThemeIcon(
             point.theme.id,
             $(item).find('.map__facility-tooltip_icon'),

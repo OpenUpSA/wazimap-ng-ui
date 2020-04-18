@@ -4,6 +4,7 @@ import {reusableBarChart} from "data-visualisations/src/charts/bar/reusable-bar-
 import {horizontalBarChart} from "./reusable-charts/horizontal-bar-chart";
 import {toLatLng} from "leaflet/src/geo/LatLng";
 import {getSelectedBoundary, groupBy, ThemeStyle} from "./utils";
+import {MISSING_VALUE} from "./dataobjects";
 
 const profileHeaderClass = '#profile-top';
 const categoryClass = '.data-category';
@@ -151,25 +152,35 @@ export default class ProfileLoader {
 
     ignoreIndicator(indicator) {
         // Ignoring an indicator if it has a dummy value
-        const subindicators = indicator.subindicators;
-        if (subindicators == undefined || subindicators.length == 0)
+        if (indicator.subindicators == undefined)
             return true
 
-        if (subindicators[0].count == -1)
+        const subindicators = Object.values(indicator.subindicators);
+        if (subindicators.length == 0)
+            return true
+
+        if (subindicators[0].count == undefined || subindicators[0].count == MISSING_VALUE)
             return true
 
         return false
     }
 
-    addSubcategory(wrapper, subcategory, subcategoryDetail) {
-        const newSubcategorySection = subcategoryTemplate.cloneNode(true);
-        $(subcategoryTitleClass, newSubcategorySection).text(subcategory);
-        $(subcategoryDescriptionClass, newSubcategorySection).text(subcategoryDetail.description);
-        wrapper.append(newSubcategorySection);
+    ignoreSubcategory(subcategory) {
+        return subcategory.indicators == undefined;
+    }
 
-        for (const [indicator, detail] of Object.entries(subcategoryDetail.indicators)) {
-            if (!this.ignoreIndicator(detail))
-                this.addIndicator(newSubcategorySection, indicator, detail);
+    addSubcategory(wrapper, subcategory, subcategoryDetail) {
+        if (!this.ignoreSubcategory(subcategoryDetail)) {
+            const newSubcategorySection = subcategoryTemplate.cloneNode(true);
+            $(subcategoryTitleClass, newSubcategorySection).text(subcategory);
+            $(subcategoryDescriptionClass, newSubcategorySection).text(subcategoryDetail.description);
+            wrapper.append(newSubcategorySection);
+
+            for (const [indicator, detail] of Object.entries(subcategoryDetail.indicators)) {
+                if (!this.ignoreIndicator(detail))
+                    this.addIndicator(newSubcategorySection, indicator, detail);
+            }
+
         }
     }
 

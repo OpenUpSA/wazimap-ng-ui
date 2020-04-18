@@ -20,11 +20,14 @@ function subindicatorsInCategory(category) {
 }
 
 function subindicatorsInSubCategory(subcategory) {
-    let indicators = Object.values(subcategory.indicators);
+
     let count = 0;
-    for (const idx in indicators) {
-        let indicator = indicators[idx];
-        count += subindicatorsInIndicator(indicator);
+    if (subcategory.indicators != undefined) {
+        let indicators = Object.values(subcategory.indicators);
+        for (const idx in indicators) {
+            let indicator = indicators[idx];
+            count += subindicatorsInIndicator(indicator);
+        }
     }
 
     return count;
@@ -40,7 +43,8 @@ function indicatorHasChildren(indicator) {
     if (subindicators == undefined || subindicators.length == 0)
         return false
 
-    const hasChildren = subindicators.every(subindicator => {
+    const hasChildren = Object.entries(subindicators).every(item => {
+        const subindicator = item[1];
         return subindicator.children != undefined && Object.values(subindicator.children).length > 0
     })
 

@@ -21,6 +21,7 @@ export class Geography {
 }
 
 export class Profile {
+
     constructor(js) {
         this._geography = new Geography(js.geography);
         this._parents = js.geography.parents.map(el => new Geography(el));
@@ -28,12 +29,23 @@ export class Profile {
         this._profileData = js.profile_data;
         this._keyMetrics = js.key_metrics
 
+        const isNotMissing = function(el) {
+            return el != undefined;
+        }
+
         Object.values(this._profileData).forEach(category => {
-            Object.values(category.subcategories).forEach(subcategory => {
-                Object.values(subcategory.indicators).forEach(indicator => {
-                    indicator.subindicators = indicator.subindicators.map(s => new SubIndicator(s, indicator.choropleth_method))
+            if (isNotMissing(category.subcategories)) {
+                Object.values(category.subcategories).forEach(subcategory => {
+                    if (isNotMissing(subcategory.indicators)) {
+                        Object.values(subcategory.indicators).forEach(indicator => {
+                            indicator.subindicators = Object
+                                .entries(indicator.subindicators)
+                                .map(s => new SubIndicator(s, indicator.choropleth_method))
+                        })
+                    }
                 })
-            })
+            }
+
         })
     }
 
@@ -99,24 +111,22 @@ export class DataBundle {
     // }
 }
 
+export const MISSING_VALUE = "N/A";
+
 export class SubIndicator {
-    constructor(js, choropleth_method) {
-        const copy = {...js}
-        delete copy["Count"];
-        delete copy["count"];
-        delete copy["label"]
-        delete copy["value"]
-        delete copy["children"]
+    constructor(entry, choropleth_method) {
+        const key = entry[0]
+        const js = entry[1]
 
         this._choropleth_method = choropleth_method;
 
-        this._keys = copy;
+        this._keys = key;
         if (js["Count"] != undefined)
             this._count = js["Count"];
         else if (js["count"] != undefined)
             this._count = js["count"];
         else
-            this._count = 0;
+            this._count = MISSING_VALUE;
 
         this._children = js.children;
     }
@@ -130,7 +140,9 @@ export class SubIndicator {
     }
 
     get label() {
-        return Object.values(this._keys).join("/")
+        if (Array.isArray(this._keys))
+            return Object.values(this._keys).join("/")
+        return this._keys
     }
 
     get children() {

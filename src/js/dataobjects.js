@@ -23,30 +23,41 @@ export class Geography {
 export class Profile {
 
     constructor(js) {
+        const self = this;
         this._geography = new Geography(js.geography);
         this._parents = js.geography.parents.map(el => new Geography(el));
         this._highlights = js.highlights;
         this._profileData = js.profile_data;
         this._keyMetrics = js.key_metrics
 
-        const isNotMissing = function(el) {
-            return el != undefined;
-        }
-
         Object.values(this._profileData).forEach(category => {
-            if (isNotMissing(category.subcategories)) {
-                Object.values(category.subcategories).forEach(subcategory => {
-                    if (isNotMissing(subcategory.indicators)) {
-                        Object.values(subcategory.indicators).forEach(indicator => {
-                            indicator.subindicators = Object
-                                .entries(indicator.subindicators)
-                                .map(s => new SubIndicator(s, indicator.choropleth_method))
-                        })
-                    }
+            category = self._fixCategory(category)
+            Object.values(category.subcategories).forEach(subcategory => {
+                subcategory = self._fixSubcategory(subcategory)
+                Object.values(subcategory.indicators).forEach(indicator => {
+                    indicator.subindicators = Object
+                        .entries(indicator.subindicators)
+                        .map(s => new SubIndicator(s, indicator.choropleth_method))
                 })
-            }
-
+            })
         })
+    }
+
+    _fixCategory(category) {
+        if (category.subcategories == undefined)
+            category.subcategories = {}
+
+        return category
+    }
+
+    _fixSubcategory(subcategory) {
+        if (subcategory.indicators == undefined)
+            subcategory.indicators = {}
+
+        if (subcategory.keyMetrics == undefined)
+            subcategory.keyMetrics = {}
+
+        return subcategory
     }
 
     get parents() {

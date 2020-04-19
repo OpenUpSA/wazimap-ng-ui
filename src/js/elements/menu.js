@@ -22,8 +22,8 @@ function subindicatorsInCategory(category) {
 function subindicatorsInSubCategory(subcategory) {
 
     let count = 0;
-    if (subcategory.indicators != undefined) {
-        let indicators = Object.values(subcategory.indicators);
+    const indicators = Object.values(subcategory.indicators);
+    if (indicators.length > 0) {
         for (const idx in indicators) {
             let indicator = indicators[idx];
             count += subindicatorsInIndicator(indicator);

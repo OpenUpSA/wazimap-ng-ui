@@ -157,7 +157,10 @@ export default class ProfileLoader {
     }
 
     ignoreSubcategory(subcategory) {
-        return subcategory.indicators == undefined && subcategory.key_metrics == undefined;
+        return [
+            subcategory.indicators,
+            subcategory.key_metrics
+        ].every(el => el.length == 0)
     }
 
     addSubcategory(wrapper, subcategory, subcategoryDetail) {

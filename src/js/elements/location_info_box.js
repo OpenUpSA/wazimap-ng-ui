@@ -26,12 +26,13 @@ export class LocationInfoBox extends Observable {
     updateHighlights(highlights) {
         const metricContainers = $('.map__location-info_metric').remove()
         let metric = null;
-        for (const [name, highlight] of Object.entries(highlights)) {
+        highlights.forEach(function(highlight) {
             metric = metricTemplate.cloneNode(true);
-            $('.map__location-info_value', metric).text(numFmt(highlight.count));
+            $('.map__location-info_value', metric).text(highlight.value);
             $('.map__location-info_title', metric).text(highlight.label);
             metricContainer.append(metric);
-        }
+
+        })
 
         $(metric).addClass('last');
     }

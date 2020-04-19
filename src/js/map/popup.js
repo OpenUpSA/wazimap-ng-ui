@@ -31,13 +31,18 @@ export class Popup extends Observable {
             .setContent(popupContent)
             .openOn(this.map);
 
+        //openOn -> closes with map.closePopup()
+        //addTo -> doesnt close with map.closePopup()
+
         setPopupStyle('content__map_tooltip')
     }
 
     updatePopupPosition(payload) {
         if (this.map.map_variables.popup === null) {
+            console.log('a');
             this.loadPopup(payload.payload.layer, payload.state);
         } else {
+            console.log('b');
             payload.payload.popup.setLatLng(payload.payload.layer.element.latlng);
         }
     }
@@ -47,12 +52,16 @@ export class Popup extends Observable {
     }
 
     createPopupContent = (payload, state) => {
+        /*
+        $('.leaflet-popup-tip-container').hide();
+        $('.leaflet-popup-content-wrapper').html('');
+        */
         let item = this.map.map_variables.tooltipItem.cloneNode(true);
 
         this.map.map_variables.hoverAreaLevel = payload.properties.level;
         this.map.map_variables.hoverAreaCode = payload.layer.feature.properties.code;
 
-        $('.map__tooltip_name .text-block', item).text(payload.properties.name);
+        $('.map__tooltip_name div', item).text(payload.properties.name);
         $('.map__tooltip_geography-chip div', item).text(this.map.map_variables.hoverAreaLevel);
         var areaCode = payload.areaCode;
 

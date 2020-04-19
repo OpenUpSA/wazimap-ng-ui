@@ -94,7 +94,7 @@ export class MapControl extends Observable {
     configureMap(coords, mapOptions) {
 
         const map = L
-            .map('main-map', mapOptions.leafletOptions) 
+            .map('main-map', mapOptions.leafletOptions)
             .setView([coords["lat"], coords["long"]], coords["zoom"])
 
         mapOptions.tileLayers.forEach(layer => {

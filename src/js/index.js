@@ -59,17 +59,15 @@ const profiles = {
         baseUrl: productionUrl,
         config: config
     },
-<<<<<<< HEAD
     'mapyourcity.org.za': {
         profile: 7,
         baseUrl: productionUrl,
         config: config
-=======
+    },
     'covid-ccij.openup.org.za': {
         profile: 5,
         baseUrl: mainUrl,
         config: new WorldConfig()
->>>>>>> staging
     },
 }
 

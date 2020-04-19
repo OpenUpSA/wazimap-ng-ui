@@ -24,11 +24,11 @@ export class Profile {
 
     constructor(js) {
         const self = this;
+        js = self._fixProfile(js);
         this._geography = new Geography(js.geography);
         this._parents = js.geography.parents.map(el => new Geography(el));
         this._highlights = js.highlights;
         this._profileData = js.profile_data;
-        this._keyMetrics = js.key_metrics
 
         Object.values(this._profileData).forEach(category => {
             category = self._fixCategory(category)
@@ -41,6 +41,13 @@ export class Profile {
                 })
             })
         })
+    }
+
+    _fixProfile(profile) {
+        if (profile.highlights == undefined)
+            profile.highlights = [];
+
+        return profile
     }
 
     _fixCategory(category) {

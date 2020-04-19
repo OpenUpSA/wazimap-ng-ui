@@ -272,8 +272,6 @@ export default class ProfileLoader {
             this.addCategory(category, detail);
         }
 
-        $('.indicator__key-metrics_title').css('display', 'none')
-        $('.indicator__key-metrics').css('display', 'none')
         $('.location-header__key-metrics_source').css('display', 'none')
         $('.location-facility__description').css('display', 'none')
         $('#profile-print').css('display', 'none')

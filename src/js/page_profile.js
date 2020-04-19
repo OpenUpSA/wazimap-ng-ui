@@ -168,7 +168,7 @@ export default class ProfileLoader {
 
             wrapper.append(newSubcategorySection);
 
-            if (subcategory.indicators != undefined) {
+            if (subcategoryDetail.indicators != undefined) {
                 for (const [indicator, detail] of Object.entries(subcategoryDetail.indicators)) {
                     if (!this.ignoreIndicator(detail))
                         this.addIndicator(newSubcategorySection, indicator, detail);

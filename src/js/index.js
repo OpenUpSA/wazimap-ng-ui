@@ -1,6 +1,7 @@
 import configureApplication from './load';
 import {Config as SAConfig} from './configurations/geography_sa';
 import {Config as GCROConfig} from './configurations/geography_gcro';
+import {Config as WorldConfig} from './configurations/geography_world';
 
 const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
 const productionUrl = 'https://production.wazimap-ng.openup.org.za';
@@ -48,15 +49,27 @@ const profiles = {
         baseUrl: mainUrl,
         config: config
     },
+    'wazimap-ng.africa': {
+        profile: 1,
+        baseUrl: mainUrl,
+        config: config
+    },
     'covid-ibp.openup.org.za': {
         profile: 5,
         baseUrl: productionUrl,
         config: config
     },
+<<<<<<< HEAD
     'mapyourcity.org.za': {
         profile: 7,
         baseUrl: productionUrl,
         config: config
+=======
+    'covid-ccij.openup.org.za': {
+        profile: 5,
+        baseUrl: mainUrl,
+        config: new WorldConfig()
+>>>>>>> staging
     },
 }
 

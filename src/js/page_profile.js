@@ -21,6 +21,9 @@ const subcategoryMetricsClass = '.indicator__key-metrics';
 const indicatorClass = '.indicator__sub-indicator';
 const indicatorTitleClass = '.sub-indicator__chart_header h4';
 
+const keyMetricWrapperClass = '.indicator__key-metrics'
+const keyMetricClass = '.key-metric'
+
 const chartContainerClass = '.indicator__chart';
 const chartFootnoteClass = '.indicator__chart_footnote';
 
@@ -40,8 +43,8 @@ const subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(t
 const indicatorTemplate = $(indicatorClass, subcategoryTemplate)[0].cloneNode(true);
 const breadcrumbsContainer = $(breadcrumbsContainerClass, profileHeader);
 const breadcrumbTemplate = $(".breadcrumb", breadcrumbsContainer)[0].cloneNode(true);
-const metricWrapper = $(".location-header__key-metrics", profileHeader);
-const metricTemplate = $(".key-metric", metricWrapper)[0].cloneNode(true);
+// const metricWrapper = $(".indicator__key", profileHeader);
+const metricTemplate = $(keyMetricClass)[0].cloneNode(true);
 const facilityWrapper = $('.location-facilities__wrapper', profileHeader);
 const facilityTemplate = $('.location-facility', facilityWrapper)[0].cloneNode(true);
 const facilityRowClone = $('.location-facilities__wrapper').find('.location-facility__item')[0].cloneNode(true);
@@ -61,18 +64,6 @@ function addBreadCrumbs(container, parents) {
         let breadcrumb = breadcrumbTemplate.cloneNode(true);
         $(".truncate", breadcrumb).text(parent.name)
         container.append(breadcrumb);
-    })
-}
-
-function addKeyMetrics(container, profile) {
-
-    $('.key-metric', metricWrapper).remove()
-
-    profile.keyMetrics.forEach(el => {
-        let metric = metricTemplate.cloneNode(true)
-        $(".key-metric_value div", metric).text(el.value)
-        $(".key-metric_title", metric).text(el.label)
-        metricWrapper.append(metric)
     })
 }
 
@@ -166,7 +157,7 @@ export default class ProfileLoader {
     }
 
     ignoreSubcategory(subcategory) {
-        return subcategory.indicators == undefined;
+        return subcategory.indicators == undefined && subcategory.key_metrics == undefined;
     }
 
     addSubcategory(wrapper, subcategory, subcategoryDetail) {
@@ -174,15 +165,36 @@ export default class ProfileLoader {
             const newSubcategorySection = subcategoryTemplate.cloneNode(true);
             $(subcategoryTitleClass, newSubcategorySection).text(subcategory);
             $(subcategoryDescriptionClass, newSubcategorySection).text(subcategoryDetail.description);
+
             wrapper.append(newSubcategorySection);
 
-            for (const [indicator, detail] of Object.entries(subcategoryDetail.indicators)) {
-                if (!this.ignoreIndicator(detail))
-                    this.addIndicator(newSubcategorySection, indicator, detail);
+            if (subcategory.indicators != undefined) {
+                for (const [indicator, detail] of Object.entries(subcategoryDetail.indicators)) {
+                    if (!this.ignoreIndicator(detail))
+                        this.addIndicator(newSubcategorySection, indicator, detail);
+                }
             }
+                
+            this.addKeyMetrics(newSubcategorySection, subcategoryDetail.key_metrics)
 
         }
     }
+
+    addKeyMetrics(container, key_metrics) {
+
+        const wrapper = $(keyMetricWrapperClass, container)
+        $(keyMetricClass, wrapper).remove()
+
+        if (key_metrics != undefined && Array.isArray(key_metrics)) {
+            key_metrics.forEach(el => {
+                let metric = metricTemplate.cloneNode(true)
+                $(".key-metric_value div", metric).text(el.value)
+                $(".key-metric_title", metric).text(el.label)
+                wrapper.append(metric)
+            })
+        }
+    }
+
 
     addIndicator(wrapper, indicator, indicatorDetail) {
         const newIndicatorSection = indicatorTemplate.cloneNode(true);
@@ -254,7 +266,6 @@ export default class ProfileLoader {
         $(indicatorClass, subcategoryTemplate).remove();
 
         updateGeography(profileHeader, profile);
-        addKeyMetrics(profileHeader, profile);
         addFacilities(geometries);
 
         for (const [category, detail] of Object.entries(all_categories)) {

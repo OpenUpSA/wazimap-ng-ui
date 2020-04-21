@@ -177,7 +177,7 @@ export default class ProfileLoader {
                         this.addIndicator(newSubcategorySection, indicator, detail);
                 }
             }
-                
+
             this.addKeyMetrics(newSubcategorySection, subcategoryDetail.key_metrics)
 
         }
@@ -206,15 +206,47 @@ export default class ProfileLoader {
         $(indicatorTitleClass, newIndicatorSection).text(indicator);
         $(chartFootnoteClass, newIndicatorSection).text(indicatorDetail.description);
         $(sourceClass, newIndicatorSection).text(indicatorDetail.metadata.source);
-        if (indicatorDetail.metadata.source === ''){
+        if (indicatorDetail.metadata.source === '') {
             $('.indicator__chart_source', newIndicatorSection).remove();
         }
         wrapper.append(newIndicatorSection);
 
+        let showPercentages = true;
         let subindicators = indicatorDetail.subindicators;
-        if (subindicators != undefined && Array.isArray(subindicators)) {
-            this.addChart(chartContainer[0], subindicators)
+        let valueArr = this.getValuesFromSubindicators(subindicators, showPercentages);
+
+        if (valueArr != undefined && Array.isArray(valueArr)) {
+            this.addChart(chartContainer[0], valueArr)
         }
+    }
+
+    getValuesFromSubindicators(subindicators, showPercentages) {
+        const fmt = d3format(",.2f");
+        let arr = [];
+        subindicators.forEach((s) => {
+            let value = showPercentages ? this.getPercentageValue(s.value, subindicators) : s.value;
+
+            arr.push({
+                label: s.label,
+                value: value,
+                valueText: showPercentages ? fmt(value) + ' %' : fmt(value)
+            })
+        });
+
+        return arr;
+    }
+
+    getPercentageValue(currentValue, subindicators) {
+        let percentage = 0;
+        let total = 0;
+
+        subindicators.forEach((s) => {
+            total += s.value;
+        })
+
+        percentage = currentValue / total * 100;
+
+        return percentage;
     }
 
     addChart(container, data) {
@@ -224,39 +256,43 @@ export default class ProfileLoader {
         $('.bar-chart', container).remove();
         $('svg', container).remove();
 
-        const fmt = d3format(",.2f");
-        const myChart = horizontalBarChart();
-        let tooltip = tooltipClone.cloneNode(true);
-        tooltip = $(tooltip).removeAttr('style');
+        const barChart = horizontalBarChart();
 
         /**
          * optional settings
          */
-        myChart.height(450);
-        myChart.width(760);
-        myChart.colors(['#39ad84', '#339b77']);
-        myChart.xAxisPadding(10);
-        myChart.yAxisPadding(10);
-        myChart.barHeight(24);
-        myChart.barPadding(6);
-        myChart.margin({
+        this.setChartOptions(barChart);
+
+        $(saveImgButton).on('click', () => {
+            barChart.saveAsPng(container);
+        })
+
+        d3select(container).call(barChart.data(data));
+    }
+
+    setChartOptions(chart) {
+        let tooltip = tooltipClone.cloneNode(true);
+        tooltip = $(tooltip).removeAttr('style');
+
+        chart.height(450);
+        chart.width(760);
+        chart.colors(['#39ad84', '#339b77']);
+        chart.xAxisPadding(10);
+        chart.yAxisPadding(10);
+        chart.barHeight(24);
+        chart.barPadding(6);
+        chart.margin({
             top: 15,
             right: 0,
             bottom: 15,
             left: 120,
         })
-        myChart.tooltipFormatter((d) => {
-            $('.bc__tooltip_value', tooltip).text(fmt(d.data.value));
+        chart.tooltipFormatter((d) => {
+            $('.bc__tooltip_value', tooltip).text(d.data.valueText);
             $('.bar-chart__tooltip_description .truncate', tooltip).text(' - ' + d.data.label);
 
             return $(tooltip).prop('outerHTML');
         })
-
-        $(saveImgButton).on('click', () => {
-            myChart.saveAsPng(container);
-        })
-
-        d3select(container).call(myChart.data(data));
     }
 
     loadProfile(dataBundle) {

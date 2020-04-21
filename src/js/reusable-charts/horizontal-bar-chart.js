@@ -42,6 +42,7 @@ export function horizontalBarChart() {
 
     function chart(selection) {
         selection.each(() => {
+
             width = width - margin.left - margin.right;
             height = data.length * (barHeight + barPadding);
 
@@ -51,8 +52,6 @@ export function horizontalBarChart() {
             const barChartSvg = selection.append('svg')
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom + xAxisPadding))
-                /*.attr('height', height + margin.top + margin.bottom + xAxisPadding)
-                .attr('width', width + margin.left + margin.right)*/
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 

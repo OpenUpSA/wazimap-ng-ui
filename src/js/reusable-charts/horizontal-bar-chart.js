@@ -26,6 +26,9 @@ export function horizontalBarChart() {
         },
         tooltipFormatter: (d) => {
             return `${d.data.label}: ${d.data.value}`;
+        },
+        xAxisFormatter: (d) => {
+            return d;
         }
     };
 
@@ -37,6 +40,7 @@ export function horizontalBarChart() {
     let margin = initialConfiguration.margin;
     let xAxisPadding = initialConfiguration.xAxisPadding;
     let yAxisPadding = initialConfiguration.yAxisPadding;
+    let xAxisFormatter = initialConfiguration.xAxisFormatter;
     let barHeight = initialConfiguration.barHeight;
     let barPadding = initialConfiguration.barPadding;
 
@@ -72,7 +76,8 @@ export function horizontalBarChart() {
                 .tickPadding(yAxisPadding);
             const xAxis = axisBottom(x)
                 .tickSize(0)
-                .tickPadding(xAxisPadding);
+                .tickPadding(xAxisPadding)
+                .tickFormat(xAxisFormatter);
 
             /**
              * append y axis
@@ -285,6 +290,20 @@ export function horizontalBarChart() {
             } else {
                 tooltipFormatter = value;
             }
+            return chart;
+        }
+    };
+
+    chart.xAxisFormatter = function (value) {
+        if (!arguments.length) {
+            return xAxisFormatter;
+        } else {
+            if (value === null) {
+                xAxisFormatter = initialConfiguration.xAxisFormatter;
+            } else {
+                xAxisFormatter = value;
+            }
+
             return chart;
         }
     };

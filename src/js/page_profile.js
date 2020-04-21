@@ -49,6 +49,8 @@ const facilityWrapper = $('.location-facilities__wrapper', profileHeader);
 const facilityTemplate = $('.location-facility', facilityWrapper)[0].cloneNode(true);
 const facilityRowClone = $('.location-facilities__wrapper').find('.location-facility__item')[0].cloneNode(true);
 
+const graphValueTypes = ['Percentage', 'Value'];
+
 function updateGeography(container, profile) {
     const geography = profile.geography
     const label = `${geography.name} (${geography.code})`;
@@ -125,6 +127,8 @@ function addFacilities(geometries) {
 export default class ProfileLoader {
     constructor(config) {
         this.config = config;
+
+        this.graphValueType = graphValueTypes[0];
     }
 
     addCategory(category, categoryDetail) {
@@ -198,7 +202,6 @@ export default class ProfileLoader {
         }
     }
 
-
     addIndicator(wrapper, indicator, indicatorDetail) {
         const newIndicatorSection = indicatorTemplate.cloneNode(true);
         const chartContainer = $(chartContainerClass, newIndicatorSection);
@@ -211,25 +214,24 @@ export default class ProfileLoader {
         }
         wrapper.append(newIndicatorSection);
 
-        let showPercentages = true;
         let subindicators = indicatorDetail.subindicators;
-        let valueArr = this.getValuesFromSubindicators(subindicators, showPercentages);
+        let valueArr = this.getValuesFromSubindicators(subindicators);
 
         if (valueArr != undefined && Array.isArray(valueArr)) {
-            this.addChart(chartContainer[0], valueArr)
+            this.addChart(chartContainer[0], valueArr, subindicators)
         }
     }
 
-    getValuesFromSubindicators(subindicators, showPercentages) {
+    getValuesFromSubindicators(subindicators) {
         const fmt = d3format(",.2f");
         let arr = [];
         subindicators.forEach((s) => {
-            let value = showPercentages ? this.getPercentageValue(s.value, subindicators) : s.value;
+            let value = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(s.value, subindicators) : s.value;
 
             arr.push({
                 label: s.label,
                 value: value,
-                valueText: showPercentages ? fmt(value) + ' %' : fmt(value)
+                valueText: this.graphValueType === graphValueTypes[0] ? fmt(value) + ' %' : fmt(value)
             })
         });
 
@@ -249,10 +251,7 @@ export default class ProfileLoader {
         return percentage;
     }
 
-    addChart(container, data) {
-        const containerParent = $(container).closest('.indicator__sub-indicator');
-        const saveImgButton = $(containerParent).find('.hover-menu__content_wrapper a.hover-menu__content_item:nth-child(1)');
-
+    addChart(container, data, subindicators) {
         $('.bar-chart', container).remove();
         $('svg', container).remove();
 
@@ -263,11 +262,46 @@ export default class ProfileLoader {
          */
         this.setChartOptions(barChart);
 
+        this.setChartMenu(container, barChart, subindicators);
+
+        d3select(container).call(barChart.data(data));
+    }
+
+    setChartMenu(container, barChart, subindicators) {
+        const self = this;
+        const containerParent = $(container).closest('.indicator__sub-indicator');
+
+        //save as image button
+        const saveImgButton = $(containerParent).find('.hover-menu__content_wrapper a.hover-menu__content_item:nth-child(1)');
+
         $(saveImgButton).on('click', () => {
             barChart.saveAsPng(container);
         })
 
-        d3select(container).call(barChart.data(data));
+        //show as percentage / value
+        //todo:don't use index, specific class names should be used here when the classes are ready
+        $(containerParent).find('.hover-menu__content_list a').each(function (index) {
+            $(this).on('click', () => {
+                self.selectedGraphValueTypeChanged(container, index, containerParent, subindicators);
+            })
+        });
+    }
+
+    selectedGraphValueTypeChanged(container, index, containerParent, subindicators) {
+        this.graphValueType = graphValueTypes[index];
+        $(containerParent).find('.hover-menu__content_list a').each(function (itemIndex) {
+            $(this).removeClass('active');
+
+            if (index === itemIndex) {
+                $(this).addClass('active');
+            }
+        });
+
+        let valueArr = this.getValuesFromSubindicators(subindicators);
+
+        if (valueArr != undefined && Array.isArray(valueArr)) {
+            this.addChart(container, valueArr, subindicators)
+        }
     }
 
     setChartOptions(chart) {
@@ -293,6 +327,11 @@ export default class ProfileLoader {
 
             return $(tooltip).prop('outerHTML');
         })
+        if (this.graphValueType === graphValueTypes[0]) {
+            chart.xAxisFormatter((d) => {
+                return d + ' %';
+            })
+        }
     }
 
     loadProfile(dataBundle) {

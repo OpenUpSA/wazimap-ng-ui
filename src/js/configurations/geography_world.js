@@ -7,7 +7,10 @@ export class Config extends ConfigSA {
 
     get preferredChildren() {
         return {
-            world: ['country']
+            world: ['country'],
+            country: ['province'],
+            province: ['district', 'municipality'],
+            district: ['municipality']
         }        
     }
 

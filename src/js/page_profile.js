@@ -3,7 +3,7 @@ import {format as d3format} from 'd3-format';
 import {reusableBarChart} from "data-visualisations/src/charts/bar/reusable-bar-chart/reusable-bar-chart";
 import {horizontalBarChart} from "./reusable-charts/horizontal-bar-chart";
 import {toLatLng} from "leaflet/src/geo/LatLng";
-import {getSelectedBoundary, groupBy, ThemeStyle} from "./utils";
+import {getSelectedBoundary, groupBy, numFmtAlt, ThemeStyle} from "./utils";
 import {MISSING_VALUE} from "./dataobjects";
 
 const profileHeaderClass = '#profile-top';
@@ -337,6 +337,11 @@ export default class ProfileLoader {
         if (this.graphValueType === graphValueTypes[0]) {
             chart.xAxisFormatter((d) => {
                 return d + ' %';
+            })
+        }
+        else {
+            chart.xAxisFormatter((d) => {
+                return numFmtAlt(d);
             })
         }
     }

@@ -56,7 +56,9 @@ export function getJSON(url, skipCache = true) {
 }
 
 export function setPopupStyle(clsName) {
-    $('.leaflet-popup-close-button').css('display', 'none');
+    $('.leaflet-popup-close-button').html($('.map__facility-tooltip_close').html());
+    $('.leaflet-popup-close-button').css('padding', 0);
+    $('.map__facility-tooltip_close').css('display', 'none');
     $('.leaflet-popup-content-wrapper').css('border-radius', $('.' + clsName).css('border-radius'));
     $('.leaflet-popup-content-wrapper').css('font-family', $('.' + clsName).css('font-family'));
     $('.leaflet-popup-content-wrapper').css('font-size', $('.' + clsName).css('font-size'));
@@ -165,6 +167,7 @@ export class Observable {
 }
 
 export const numFmt = d3format(",.2d");
+export const numFmtAlt = d3format("~s");
 
 export function hasElements(arr) {
     if (arr != null && arr != undefined && arr.length > 0)

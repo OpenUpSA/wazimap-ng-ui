@@ -23,7 +23,8 @@ export class Popup extends Observable {
 
         this.map.map_variables.popup = L.popup({
             autoPan: false,
-            offset: [-10, 0]
+            offset: [-10, 0],
+            closeButton: false
         })
 
         this.map.map_variables.popup

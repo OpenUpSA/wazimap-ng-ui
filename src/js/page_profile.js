@@ -200,6 +200,12 @@ export default class ProfileLoader {
                 $(".key-metric_title", metric).text(el.label)
                 wrapper.append(metric)
             })
+            // Show key metrics title
+            wrapper.prev().css('display', 'block');
+        } else {
+            // Hide key metrics title
+            wrapper.prev().css('display', 'none');
+
         }
     }
 

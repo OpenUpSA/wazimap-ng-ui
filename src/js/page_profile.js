@@ -21,7 +21,8 @@ const subcategoryMetricsClass = '.indicator__key-metrics';
 const indicatorClass = '.indicator__sub-indicator';
 const indicatorTitleClass = '.sub-indicator__chart_header h4';
 
-const keyMetricWrapperClass = '.indicator__key-metrics'
+// const keyMetricWrapperClass = '.indicator__key-metrics'
+const keyMetricWrapperClass = '.indicator__key-metrics_wrap'
 const keyMetricClass = '.key-metric'
 
 const chartContainerClass = '.indicator__chart';
@@ -43,11 +44,11 @@ const subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(t
 const indicatorTemplate = $(indicatorClass, subcategoryTemplate)[0].cloneNode(true);
 const breadcrumbsContainer = $(breadcrumbsContainerClass, profileHeader);
 const breadcrumbTemplate = $(".breadcrumb", breadcrumbsContainer)[0].cloneNode(true);
-// const metricWrapper = $(".indicator__key", profileHeader);
+const metricWrapper = $(".indicator__key", profileHeader);
 const metricTemplate = $(keyMetricClass)[0].cloneNode(true);
-const facilityWrapper = $('.location-facilities__wrapper', profileHeader);
+const facilityWrapper = $('.location-header__facilities__wrap', profileHeader);
 const facilityTemplate = $('.location-facility', facilityWrapper)[0].cloneNode(true);
-const facilityRowClone = $('.location-facilities__wrapper').find('.location-facility__item')[0].cloneNode(true);
+const facilityRowClone = facilityWrapper.find('.location-facility__item')[0].cloneNode(true);
 
 const graphValueTypes = ['Percentage', 'Value'];
 

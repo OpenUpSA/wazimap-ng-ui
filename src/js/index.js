@@ -10,7 +10,7 @@ const config = new SAConfig();
 const hostname = window.location.hostname;
 const defaultProfile = 1;
 const defaultUrl = productionUrl;
-const defaultConfig = SAConfig();
+const defaultConfig = new SAConfig();
 
 const profiles = {
     'wazi.webflow.io': {

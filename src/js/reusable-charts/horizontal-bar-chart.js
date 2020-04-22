@@ -26,6 +26,9 @@ export function horizontalBarChart() {
         },
         tooltipFormatter: (d) => {
             return `${d.data.label}: ${d.data.value}`;
+        },
+        xAxisFormatter: (d) => {
+            return d;
         }
     };
 
@@ -37,11 +40,13 @@ export function horizontalBarChart() {
     let margin = initialConfiguration.margin;
     let xAxisPadding = initialConfiguration.xAxisPadding;
     let yAxisPadding = initialConfiguration.yAxisPadding;
+    let xAxisFormatter = initialConfiguration.xAxisFormatter;
     let barHeight = initialConfiguration.barHeight;
     let barPadding = initialConfiguration.barPadding;
 
     function chart(selection) {
         selection.each(() => {
+
             width = width - margin.left - margin.right;
             height = data.length * (barHeight + barPadding);
 
@@ -51,8 +56,6 @@ export function horizontalBarChart() {
             const barChartSvg = selection.append('svg')
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom + xAxisPadding))
-                /*.attr('height', height + margin.top + margin.bottom + xAxisPadding)
-                .attr('width', width + margin.left + margin.right)*/
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -73,7 +76,8 @@ export function horizontalBarChart() {
                 .tickPadding(yAxisPadding);
             const xAxis = axisBottom(x)
                 .tickSize(0)
-                .tickPadding(xAxisPadding);
+                .tickPadding(xAxisPadding)
+                .tickFormat(xAxisFormatter);
 
             /**
              * append y axis
@@ -286,6 +290,20 @@ export function horizontalBarChart() {
             } else {
                 tooltipFormatter = value;
             }
+            return chart;
+        }
+    };
+
+    chart.xAxisFormatter = function (value) {
+        if (!arguments.length) {
+            return xAxisFormatter;
+        } else {
+            if (value === null) {
+                xAxisFormatter = initialConfiguration.xAxisFormatter;
+            } else {
+                xAxisFormatter = value;
+            }
+
             return chart;
         }
     };

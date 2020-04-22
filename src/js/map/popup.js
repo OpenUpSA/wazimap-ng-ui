@@ -39,10 +39,8 @@ export class Popup extends Observable {
 
     updatePopupPosition(payload) {
         if (this.map.map_variables.popup === null) {
-            console.log('a');
             this.loadPopup(payload.payload.layer, payload.state);
         } else {
-            console.log('b');
             payload.payload.popup.setLatLng(payload.payload.layer.element.latlng);
         }
     }

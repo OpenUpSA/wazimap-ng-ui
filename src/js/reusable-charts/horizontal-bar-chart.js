@@ -201,15 +201,10 @@ export function horizontalBarChart() {
         let element = $(container).closest('.indicator__sub-indicator')[0];
         $(element).find('.sub-indicator__chart_options').attr('data-html2canvas-ignore', true);
 
-        $(element).find('svg').each(function () {
-            this.setAttribute("width", this.getBoundingClientRect().width);
-            this.style.width = null;
-        });
-
         let options = {
             x: $(element).offset().left - 30,
             y: $(element).offset().top - 50,
-            width: $(element).width() + 50
+            width: $(element).width() + 30
         }
 
         html2canvas(element, options).then(function (canvas) {

@@ -8,6 +8,10 @@ const productionUrl = 'https://production.wazimap-ng.openup.org.za';
 const config = new SAConfig();
 
 const hostname = window.location.hostname;
+const defaultProfile = 1;
+const defaultUrl = productionUrl;
+const defaultConfig = new SAConfig();
+
 const profiles = {
     'wazi.webflow.io': {
         profile: 1,
@@ -15,7 +19,7 @@ const profiles = {
         config: config
     },
     'localhost': {
-        profile: 2,
+        profile: 1,
         baseUrl: mainUrl,
         config: config
     },
@@ -74,8 +78,6 @@ const profiles = {
 const pc = profiles[hostname]
 if (pc != undefined) {
     configureApplication(pc.baseUrl, pc.profile, pc.config);
-} else if (window.location.href.search('openup.org.za/wazimap-ng-ui') >= 0) {
-    configureApplication('https://wazimap-ng.openup.org.za', 1, config);
 } else {
-    configureApplication(mainUrl, 1, config);
+    configureApplication(defaultUrl, defaultProfile, defaultConfig);
 }

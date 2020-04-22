@@ -116,7 +116,7 @@ export default class Controller extends Observable {
     loadProfile(payload, callRegisterFunction) {
         const self = this;
         this.triggerEvent("loadingNewProfile", payload.geography);
-        const url = `${this.baseUrl}/all_details/profile/${this.profileId}/geography/${payload.areaCode}/`;
+        const url = `${this.baseUrl}/all_details/profile/${this.profileId}/geography/${payload.areaCode}/?format=json`;
         getJSON(url).then(js => {
             const dataBundle = new DataBundle(js);
             self.state.profile = dataBundle;

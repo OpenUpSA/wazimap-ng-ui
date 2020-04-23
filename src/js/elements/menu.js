@@ -71,6 +71,8 @@ export function loadMenu(data, subindicatorCallback) {
                 if (subIndicator.label !== '') {
                     const newSubIndicatorElement = subIndicatorTemplate.cloneNode(true);
                     $("div:nth-child(2)", newSubIndicatorElement).text(subIndicator.label);
+                    $(newSubIndicatorElement).attr('title', subIndicator.label);
+
                     indicatorWrapperElement.append(newSubIndicatorElement);
 
                     $(newSubIndicatorElement).on("click", (el) => {
@@ -120,7 +122,6 @@ export function loadMenu(data, subindicatorCallback) {
             if (count > 0)
                 addIndicators(h2Wrapper, subcategory, detail.indicators);
         }
-        ;
     }
 
     function setActive(el) {

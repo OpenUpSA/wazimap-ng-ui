@@ -27,7 +27,7 @@ export class MapChip extends Observable {
     showMapChip() {
         const element = $(this.clonedMapChip);
 
-        $('.' + wrapperClsName).append(element);	//chip
+        $('.' + wrapperClsName).prepend(element);	//chip
         element.find('.chip__remove--map').on('click', () => this.removeMapChip());
     }
 

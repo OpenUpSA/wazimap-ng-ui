@@ -155,7 +155,8 @@ export class PointData extends Observable {
         let popup = L.popup({
             autoPan: false,
             autoClose: !isClicked,
-            offset: [9, 0]
+            offset: [9, 0],
+            closeButton: isClicked
         })
 
         if (isClicked) {
@@ -182,6 +183,7 @@ export class PointData extends Observable {
         let item = tooltipItem.cloneNode(true);
 
         $(item).find('.map-tooltip__notch').remove();   //leafletjs already creates this
+
         $('.map__facility-tooltip_name div', item).text(point.name);
         ThemeStyle.replaceChildDivWithThemeIcon(
             point.theme.id,

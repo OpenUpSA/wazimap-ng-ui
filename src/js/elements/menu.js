@@ -134,6 +134,8 @@ export function loadMenu(data, subindicatorCallback) {
     }
 
     $(".data-menu__category").remove();
+    // there seems to be a bug where menu items close if this is not set
+    $(".sub-category__dropdown_wrapper a").attr("href", "#")
     let hasNoItems = true;
 
     for (const [category, detail] of Object.entries(data)) {

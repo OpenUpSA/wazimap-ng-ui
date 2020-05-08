@@ -72,6 +72,10 @@ export default function configureApplication(serverUrl, profileId, config) {
     }))
     controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload.payload))
     controller.on('loadedNewProfile', payload => {
+        // there seems to be a bug where menu items close if this is not set
+        $(".sub-category__dropdown_wrapper a").attr("href", "#")
+    }) 
+    controller.on('loadedNewProfile', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
         mapcontrol.overlayBoundaries(geography, geometries)

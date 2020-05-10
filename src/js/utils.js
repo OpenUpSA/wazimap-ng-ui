@@ -41,7 +41,10 @@ export function getJSON(url, skipCache = true) {
             if (req.status == 200) {
                 const json = JSON.parse(req.response);
                 resolve(json);
-            } else {
+            } else if (req.status == 401 || request.status == 403) {
+                alert("Not logged in")
+            }
+            else {
                 reject(Error(req.statusText));
             }
         };
@@ -183,3 +186,4 @@ export function checkIterate(arr, func) {
         func(el, i);
     })
 }
+

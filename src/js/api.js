@@ -2,6 +2,7 @@ import {Observable} from './utils'
 import {LoginHandler} from './authentication'
 
 const loginHandler = new LoginHandler();
+const AUTHENTICATION_ERROR = "Not Authenticated";
 
 export class API extends Observable {
     constructor(serverUrl) {
@@ -12,24 +13,32 @@ export class API extends Observable {
 
     getProfile(profileId, areaCode) {
         const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?format=json`;
-        return getJSON(url)
+        return this.loadUrl(url);
     }
 
     loadThemes(profileId) {
         const url = `${this.baseUrl}/points/profile/${profileId}/themes/?format=json`;
-        return getJSON(url)
-
+        return this.loadUrl(url);
     }
 
     search(profileId, searchTerm) {
         const url = `${this.baseUrl}/geography/search/${profileId}/?q=${searchTerm}&format=json`;
-        return getJSON(url)
+        return this.loadUrl(url);
     }
 
     loadPoints(profileId, categoryId) {
-        const url = `${this.baseUrl}/points/profile/${profileId}/category/${categoryId}/points/?format=json`
-        return getJSON(url)
+        const url = `${this.baseUrl}/points/profile/${profileId}/category/${categoryId}/points/?format=json`;
+        return this.loadUrl(url);
+    }
 
+    loadUrl(url) {
+        return getJSON(url).catch(error => {
+            if (error.message == AUTHENTICATION_ERROR) {
+                alert("not not not logged in")
+            } else {
+                throw error;
+            }
+        })
     }
 }
 
@@ -43,8 +52,8 @@ export function getJSON(url, skipCache = true) {
             if (req.status == 200) {
                 const json = JSON.parse(req.response);
                 resolve(json);
-            } else if (req.status == 401 || request.status == 403) {
-                alert("Not logged in")
+            } else if (req.status == 401 || req.status == 403) {
+                reject(Error(AUTHENTICATION_ERROR));
                 loginHandler.triggerEvent("authentication_request", {});    
             }
             else {

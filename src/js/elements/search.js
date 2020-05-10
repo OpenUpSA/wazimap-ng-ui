@@ -1,4 +1,4 @@
-import {Observable, getJSON} from '../utils';
+import {Observable} from '../utils';
 import {select as d3select} from 'd3-selection';
 
 // TODO should change this to jquery instead
@@ -25,13 +25,12 @@ export class Search extends Observable {
      * constructor of the class
      * sets the default values, calls init function(this.setSearchInput)
      * */
-    constructor(baseUrl, profileId, minChars) {
+    constructor(api, profileId, minChars) {
         super();
 
         minLength = minChars;
-        this.baseUrl = baseUrl;
+        this.api = api;
         this.profileId = profileId;
-        this.searchUrl = `${baseUrl}/geography/search/${profileId}/`;
 
         this.prepareDomElements();
         this.setSearchInput();
@@ -56,9 +55,9 @@ export class Search extends Observable {
                 source: function (request, response) {
                     self.triggerEvent('beforeSearch', {term: request.term});
                     self.emptySearchResults();
-                    const url = `${self.searchUrl}?q=${request.term}`;
+                    const searchTerm = request.term;
 
-                    getJSON(url).then(data => {
+                    self.api.search(self.profileId, searchTerm).then(data => {
                         self.triggerEvent('searchResults', {items: data});
 
                         count = data.length;

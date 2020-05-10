@@ -1,4 +1,4 @@
-import {getJSON, numFmt, Observable, setPopupStyle} from '../utils';
+import {numFmt, Observable, setPopupStyle} from '../utils';
 
 let tooltipCategoryItem = null;
 

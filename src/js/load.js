@@ -4,7 +4,7 @@ import ProfileLoader from './page_profile';
 import {loadMenu} from './elements/menu';
 import PDFPrinter from './print';
 import {MapControl} from './map/maps';
-import {getJSON, numFmt} from './utils';
+import {numFmt} from './utils';
 import {Profile} from './profile';
 import {onProfileLoaded as onProfileLoadedSearch, Search} from './elements/search';
 import {MapChip} from './elements/mapchip';
@@ -22,15 +22,16 @@ import {Popup} from "./map/popup";
 
 export default function configureApplication(serverUrl, profileId, config) {
     const baseUrl = `${serverUrl}/api/v1`;
+    const controller = new Controller(baseUrl, config, profileId);
+
     const mapcontrol = new MapControl(config);
     const popup = new Popup(mapcontrol.map);
-    const pointData = new PointData(baseUrl, mapcontrol.map, profileId, config);
-    const pointDataTray = new PointDataTray(baseUrl, profileId);
-    const controller = new Controller(baseUrl, config, profileId);
+    const pointData = new PointData(controller.api, mapcontrol.map, profileId, config);
+    const pointDataTray = new PointDataTray(controller.api, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
     const mapchip = new MapChip(config.choropleth);
-    const search = new Search(baseUrl, profileId, 2);
+    const search = new Search(controller.api, profileId, 2);
     const profileLoader = new ProfileLoader(config);
     const locationInfoBox = new LocationInfoBox();
     const zoomToggle = new ZoomToggle();

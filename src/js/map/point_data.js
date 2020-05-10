@@ -1,4 +1,5 @@
-import {getJSON, Observable, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
+import {Observable, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
+import {getJSON} from '../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
 
@@ -17,10 +18,10 @@ let activePoints = [];  //the visible points on the map
  * this class creates the point data dialog
  */
 export class PointData extends Observable {
-    constructor(baseUrl, _map, profileId, config) {
+    constructor(api, _map, profileId, config) {
         super();
 
-        this.baseUrl = baseUrl;
+        this.api = api;
         this.map = _map;
         this.profileId = profileId;
         this.config = config;
@@ -59,7 +60,7 @@ export class PointData extends Observable {
             this.categoryLayers[category.id] = layer;
 
             this.triggerEvent('loadingCategoryPoints', category);
-            return this.getAddressPoints(categoryUrl)
+            return this.getAddressPoints(category)
                 .then(data => {
                     self.createMarkers(data, layer);
                     self.map.addLayer(layer);
@@ -86,19 +87,9 @@ export class PointData extends Observable {
     }
     /** end of category functions **/
 
-    showThemePoints = (theme) => {
-        checkIterate(theme.categories, category => showCategoryPoint(category))
-    }
-
-    removeThemePoints = (theme) => {
-        checkIterate(theme.categories, category => removeCategoryPoints(category))
-    }
-
-    /** end of theme functions **/
-
-    getAddressPoints(requestUrl) {
+    getAddressPoints(category) {
         const points = [];
-        return getJSON(requestUrl).then(data => {
+        return this.api.loadPoints(this.profileId, category.id).then(data => {
             checkIterate(data.features, feature => {
                 const prop = feature.properties;
                 const geometry = feature.geometry;

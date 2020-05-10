@@ -1,4 +1,4 @@
-import {Observable, getJSON, numFmt} from '../utils';
+import {Observable, numFmt} from '../utils';
 import {Profile} from '../profile';
 
 const container = $('.content__map_location');

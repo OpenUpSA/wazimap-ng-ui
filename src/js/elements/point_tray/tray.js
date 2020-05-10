@@ -1,7 +1,5 @@
-import {getJSON, numFmt, Observable, hasElements, ThemeStyle, checkIterate} from '../../utils';
+import {numFmt, Observable, hasElements, ThemeStyle, checkIterate} from '../../utils';
 import {Theme} from './theme';
-
-const url = 'points/themes';
 
 const categoryWrapperClsName = '.point-data__h1_content';
 const treeLineClsName = '.point-data__h2_tree-line-v';
@@ -11,9 +9,9 @@ const categoryItemClsName = '.point-data__h2_wrapper';
 const stylesClsName = '.styles';
 
 export class PointDataTray extends Observable {
-    constructor(baseUrl, profileId) {
+    constructor(api, profileId) {
         super();
-        this.baseUrl = baseUrl;
+        this.api = api;
         this.profileId = profileId;
 
         this.prepareDomElements();
@@ -44,11 +42,10 @@ export class PointDataTray extends Observable {
 
     loadThemes() {
         const self = this;
-        const themeUrl = `${this.baseUrl}/${url}/${this.profileId}/?format=json`;
 
         self.triggerEvent("loadingThemes", self);
 
-        getJSON(themeUrl).then(data => {
+        self.api.loadThemes(this.profileId).then(data => {
             checkIterate(data.results, themeDatum => {
                 let theme = self.createTheme(themeDatum);
                 let item = theme.element;

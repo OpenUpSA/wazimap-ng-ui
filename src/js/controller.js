@@ -1,4 +1,5 @@
-import {Observable, getJSON} from './utils';
+import {Observable} from './utils';
+import {API} from './api';
 import {Geography, Profile, DataBundle} from './dataobjects';
 
 let currentAreaCode = '';
@@ -9,6 +10,7 @@ export default class Controller extends Observable {
         this.baseUrl = baseUrl;
         this.config = config
         this.profileId = profileId;
+        this.api = new API(baseUrl);
 
         this.state = {
             profileId: profileId,
@@ -116,8 +118,7 @@ export default class Controller extends Observable {
     loadProfile(payload, callRegisterFunction) {
         const self = this;
         this.triggerEvent("loadingNewProfile", payload.geography);
-        const url = `${this.baseUrl}/all_details/profile/${this.profileId}/geography/${payload.areaCode}/?format=json`;
-        getJSON(url).then(js => {
+        this.api.getProfile(this.profileId, payload.areaCode).then(js => {
             const dataBundle = new DataBundle(js);
             self.state.profile = dataBundle;
 

@@ -1,4 +1,5 @@
 import {Observable, checkIterate} from '../../utils';
+import {API} from '../../api';
 import {Category} from './category';
 
 const defaultActiveClsName = 'active-1';

@@ -5,7 +5,6 @@ const logoContainer = $('img.nav__logo');
 export class ProfileLayout extends Observable {
     constructor(baseUrl) {
         super();
-        this.baseUrl = baseUrl;
     }
 
     displayLogo(logo) {

@@ -15,6 +15,7 @@ import {ZoomToggle} from "./mapmenu/zoomtoggle";
 import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
 import {ProfileLayout} from "./elements/profile_layout";
 import {PointDataTray} from './elements/point_tray/tray';
+import {API} from './api';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -22,16 +23,17 @@ import {Popup} from "./map/popup";
 
 export default function configureApplication(serverUrl, profileId, config) {
     const baseUrl = `${serverUrl}/api/v1`;
+    const api = new API(baseUrl);
     const controller = new Controller(baseUrl, config, profileId);
 
     const mapcontrol = new MapControl(config);
     const popup = new Popup(mapcontrol.map);
-    const pointData = new PointData(controller.api, mapcontrol.map, profileId, config);
-    const pointDataTray = new PointDataTray(controller.api, profileId);
+    const pointData = new PointData(api, mapcontrol.map, profileId, config);
+    const pointDataTray = new PointDataTray(api, profileId);
     const pdfprinter = new PDFPrinter();
     const printButton = $("#profile-print");
     const mapchip = new MapChip(config.choropleth);
-    const search = new Search(controller.api, profileId, 2);
+    const search = new Search(api, profileId, 2);
     const profileLoader = new ProfileLoader(config);
     const locationInfoBox = new LocationInfoBox();
     const zoomToggle = new ZoomToggle();

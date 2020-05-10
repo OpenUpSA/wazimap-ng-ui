@@ -4,9 +4,10 @@ import {LoginHandler} from './authentication'
 const loginHandler = new LoginHandler();
 
 export class API extends Observable {
-    constructor(baseUrl) {
+    constructor(serverUrl) {
         super();
-        this.baseUrl = baseUrl;
+        this.token = null;
+        this.baseUrl = `${serverUrl}/api/v1`;
     }
 
     getProfile(profileId, areaCode) {

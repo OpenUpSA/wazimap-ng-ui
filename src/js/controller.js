@@ -1,16 +1,14 @@
 import {Observable} from './utils';
-import {API} from './api';
 import {Geography, Profile, DataBundle} from './dataobjects';
 
 let currentAreaCode = '';
 
 export default class Controller extends Observable {
-    constructor(baseUrl, config, profileId = 1) {
+    constructor(api, config, profileId = 1) {
         super();
-        this.baseUrl = baseUrl;
         this.config = config
         this.profileId = profileId;
-        this.api = new API(baseUrl);
+        this.api = api;
 
         this.state = {
             profileId: profileId,

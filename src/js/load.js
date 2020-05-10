@@ -70,7 +70,9 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
         controller.onSubIndicatorClick(payload)
     }))
-    controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload.payload))
+    controller.on('loadedNewProfile', payload => {
+        profileLoader.loadProfile(payload.payload)
+    })
     controller.on('loadedNewProfile', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;

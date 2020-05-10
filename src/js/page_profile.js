@@ -38,10 +38,10 @@ const tooltipClsName = 'bar-chart__row_tooltip';
 const tooltipClone = $('.sub-indicator__chart_area .' + tooltipClsName)[0].cloneNode(true);
 
 const profileHeader = $(profileHeaderClass);
-const categoryTemplate = $(categoryClass)[0].cloneNode(true);
-const subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(true);
+let categoryTemplate = null;
+let subcategoryTemplate = null;
 
-const indicatorTemplate = $(indicatorClass, subcategoryTemplate)[0].cloneNode(true);
+let indicatorTemplate = null;
 const breadcrumbsContainer = $(breadcrumbsContainerClass, profileHeader);
 const breadcrumbTemplate = $(".breadcrumb", breadcrumbsContainer)[0].cloneNode(true);
 const metricWrapper = $(".indicator__key", profileHeader);
@@ -142,50 +142,129 @@ export default class ProfileLoader {
 
         profileHeader.append(newCategorySection);
         for (const [subcategory, detail] of Object.entries(categoryDetail.subcategories)) {
-            this.addSubcategory(wrapper, subcategory, detail);
+            this.addSubCategoryChart(wrapper, subcategory, detail);
         }
     }
 
-    ignoreIndicator(indicator) {
-        // Ignoring an indicator if it has a dummy value
-        if (indicator.subindicators == undefined)
-            return true
+    addSubCategoryChart(wrapper, subcategory, detail) {
+        const subCategoryNode = indicatorTemplate.cloneNode(true);
 
-        const subindicators = Object.values(indicator.subindicators);
-        if (subindicators.length == 0)
-            return true
+        let groups = [];
+        let subindicators = [];
 
-        if (subindicators[0].count == undefined || subindicators[0].count == MISSING_VALUE)
-            return true
+        $(indicatorTitleClass, subCategoryNode).text(subcategory);
+        for (const [indicator, indicators] of Object.entries(detail.indicators)) {
+            for (const [item, subindicator] of Object.entries(indicators.subindicators)) {
+                subindicators.push(subindicator)
+            }
+            for (const [group, items] of Object.entries(indicators.groups)) {
+                groups.push(group);
+            }
+        }
 
-        return false
+        let dropdowns = $(subCategoryNode).find('.filter__dropdown_wrap');
+        let indicatorDd = $(dropdowns[0]);
+        let subindicatorDd = $(dropdowns[1]);
+
+        let callback = (selected) => this.groupSelected(subCategoryNode, selected, detail, subindicatorDd);
+        this.populateDropdown(indicatorDd, groups, callback);
+
+        const chartContainer = $(chartContainerClass, subCategoryNode);
+
+        this.addChart(chartContainer[0], subindicators);
+
+        wrapper.append(subCategoryNode);
     }
 
-    ignoreSubcategory(subcategory) {
-        return [
-            subcategory.indicators,
-            subcategory.key_metrics
-        ].every(el => el.length == 0)
+    groupSelected(subCategoryNode, selectedGroup, detail, subindicatorDd) {
+        const chartContainer = $(chartContainerClass, subCategoryNode);
+        let subindicators = [];
+        for (const [obj, subindicator] of Object.entries(detail.indicators)) {
+            for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
+                subindicators.push(key)
+            }
+        }
+
+        let callback = (selectedFilter) => this.filterChartValues(chartContainer[0], selectedFilter, selectedGroup, detail);
+
+        this.populateDropdown(subindicatorDd, subindicators, callback);
     }
 
-    addSubcategory(wrapper, subcategory, subcategoryDetail) {
-        if (!this.ignoreSubcategory(subcategoryDetail)) {
-            const newSubcategorySection = subcategoryTemplate.cloneNode(true);
-            $(subcategoryTitleClass, newSubcategorySection).text(subcategory);
-            $(subcategoryDescriptionClass, newSubcategorySection).text(subcategoryDetail.description);
-
-            wrapper.append(newSubcategorySection);
-
-            if (subcategoryDetail.indicators != undefined) {
-                for (const [indicator, detail] of Object.entries(subcategoryDetail.indicators)) {
-                    if (!this.ignoreIndicator(detail))
-                        this.addIndicator(newSubcategorySection, indicator, detail);
+    filterChartValues(chartContainer, selectedFilter, selectedGroup, detail) {
+        let chartData = null;
+        for (const [obj, subindicator] of Object.entries(detail.indicators)) {
+            for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
+                if (key === selectedFilter) {
+                    chartData = value;
                 }
             }
-
-            this.addKeyMetrics(newSubcategorySection, subcategoryDetail.key_metrics)
-
         }
+
+        let labelColumn = this.getLabelColumnName(chartData);
+
+        if (chartData !== null) {
+            this.addChart(chartContainer, chartData, {valueColumn: 'count', labelColumn: labelColumn});
+        }
+    }
+
+    getLabelColumnName(chartData) {
+        //this function returns the key to get the labels from i.e age group, gender..
+        let dkey = '';
+
+        if (typeof chartData[0] !== 'undefined' && chartData[0] !== null) {
+            Object.keys(chartData[0]).forEach(function eachKey(key) {
+                if (key !== 'count') {
+                    dkey = key;
+                }
+            });
+        }
+
+        return dkey;
+    }
+
+    populateDropdown(dropdown, itemList, callback) {
+        if ($(dropdown).hasClass('disabled')) {
+            $(dropdown).removeClass('disabled')
+        }
+
+        let ddWrapper = $(dropdown).find('.dropdown-menu__content');
+        let listItem = $(dropdown).find('.dropdown__list_item')[0].cloneNode(true);
+
+        $(ddWrapper).html('');
+
+        itemList = ['All values'].concat(itemList);
+
+        itemList.forEach((item, i) => {
+            let li = listItem.cloneNode(true);
+            if (i !== 0 && $(li).hasClass('selected')) {
+                //leave the first item selected in default
+                $(li).removeClass('selected')
+            }
+            $('.truncate', li).text(item);
+            $(li).on('click', () => {
+                this.dropdownOptionSelected(dropdown, li, callback);
+            })
+            $(ddWrapper).append(li);
+        })
+    }
+
+    dropdownOptionSelected(dropdown, li, callback) {
+        const selectedClsName = 'selected';
+        let selected = $(li).text().trim();
+        $(dropdown).find('.dropdown__list_item').each(function () {
+            if ($(this).hasClass(selectedClsName)) {
+                $(this).removeClass(selectedClsName);
+            }
+
+            if ($(this).text() === $(li).text()) {
+                $(this).addClass(selectedClsName);
+            }
+        })
+
+        $(dropdown).find('.dropdown-menu__selected-item .truncate-2').text(selected);
+        $(dropdown).find('.dropdown-menu__content').hide();
+
+        callback(selected);
     }
 
     addKeyMetrics(container, key_metrics) {
@@ -209,34 +288,14 @@ export default class ProfileLoader {
         }
     }
 
-    addIndicator(wrapper, indicator, indicatorDetail) {
-        const newIndicatorSection = indicatorTemplate.cloneNode(true);
-        const chartContainer = $(chartContainerClass, newIndicatorSection);
-
-        $(indicatorTitleClass, newIndicatorSection).text(indicator);
-        $(chartFootnoteClass, newIndicatorSection).text(indicatorDetail.description);
-        $(sourceClass, newIndicatorSection).text(indicatorDetail.metadata.source);
-        if (indicatorDetail.metadata.source === '') {
-            $('.indicator__chart_source', newIndicatorSection).remove();
-        }
-        wrapper.append(newIndicatorSection);
-
-        let subindicators = indicatorDetail.subindicators;
-        let valueArr = this.getValuesFromSubindicators(subindicators);
-
-        if (valueArr != undefined && Array.isArray(valueArr)) {
-            this.addChart(chartContainer[0], valueArr, subindicators)
-        }
-    }
-
-    getValuesFromSubindicators(subindicators) {
+    getValuesFromSubindicators(subindicators, attrOptions) {
         const fmt = d3format(",.2f");
         let arr = [];
         subindicators.forEach((s) => {
-            let value = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(s.value, subindicators) : s.value;
+            let value = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(s[attrOptions.valueColumn], subindicators, attrOptions) : s[attrOptions.valueColumn];
 
             arr.push({
-                label: s.label,
+                label: s[attrOptions.labelColumn],
                 value: value,
                 valueText: this.graphValueType === graphValueTypes[0] ? fmt(value) + ' %' : fmt(value)
             })
@@ -245,12 +304,12 @@ export default class ProfileLoader {
         return arr;
     }
 
-    getPercentageValue(currentValue, subindicators) {
+    getPercentageValue(currentValue, subindicators, attrOptions) {
         let percentage = 0;
         let total = 0;
 
         subindicators.forEach((s) => {
-            total += s.value;
+            total += s[attrOptions.valueColumn];
         })
 
         percentage = currentValue / total * 100;
@@ -258,10 +317,11 @@ export default class ProfileLoader {
         return percentage;
     }
 
-    addChart(container, data, subindicators) {
+    addChart(container, subindicators, attrOptions = {labelColumn: 'label', valueColumn: 'value'}) {
         $('.bar-chart', container).remove();
         $('svg', container).remove();
 
+        let data = this.getValuesFromSubindicators(subindicators, attrOptions);
         const barChart = horizontalBarChart();
 
         /**
@@ -269,12 +329,12 @@ export default class ProfileLoader {
          */
         this.setChartOptions(barChart);
 
-        this.setChartMenu(container, barChart, subindicators);
+        this.setChartMenu(container, barChart, subindicators, attrOptions);
 
         d3select(container).call(barChart.data(data));
     }
 
-    setChartMenu(container, barChart, subindicators) {
+    setChartMenu(container, barChart, subindicators, attrOptions) {
         const self = this;
         const containerParent = $(container).closest('.indicator__sub-indicator');
 
@@ -288,13 +348,14 @@ export default class ProfileLoader {
         //show as percentage / value
         //todo:don't use index, specific class names should be used here when the classes are ready
         $(containerParent).find('.hover-menu__content_list a').each(function (index) {
+            $(this).off('click');
             $(this).on('click', () => {
-                self.selectedGraphValueTypeChanged(container, index, containerParent, subindicators);
+                self.selectedGraphValueTypeChanged(container, index, containerParent, subindicators, attrOptions);
             })
         });
     }
 
-    selectedGraphValueTypeChanged(container, index, containerParent, subindicators) {
+    selectedGraphValueTypeChanged(container, index, containerParent, subindicators, attrOptions) {
         this.graphValueType = graphValueTypes[index];
         $(containerParent).find('.hover-menu__content_list a').each(function (itemIndex) {
             $(this).removeClass('active');
@@ -304,11 +365,7 @@ export default class ProfileLoader {
             }
         });
 
-        let valueArr = this.getValuesFromSubindicators(subindicators);
-
-        if (valueArr != undefined && Array.isArray(valueArr)) {
-            this.addChart(container, valueArr, subindicators)
-        }
+        this.addChart(container, subindicators, attrOptions);
     }
 
     setChartOptions(chart) {
@@ -338,8 +395,7 @@ export default class ProfileLoader {
             chart.xAxisFormatter((d) => {
                 return d + ' %';
             })
-        }
-        else {
+        } else {
             chart.xAxisFormatter((d) => {
                 return numFmtAlt(d);
             })
@@ -350,6 +406,10 @@ export default class ProfileLoader {
         const profile = dataBundle.profile;
         const all_categories = profile.profileData;
         const geometries = dataBundle.geometries;
+
+        categoryTemplate = $(categoryClass)[0].cloneNode(true);
+        subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(true);
+        indicatorTemplate = $(indicatorClass, subcategoryTemplate)[0].cloneNode(true);
 
         $(categoryClass).remove();
         $(subcategoryClass, categoryTemplate).remove();

@@ -22,9 +22,8 @@ import "../css/barchart.css";
 import {Popup} from "./map/popup";
 
 export default function configureApplication(serverUrl, profileId, config) {
-    const baseUrl = `${serverUrl}/api/v1`;
-    const api = new API(baseUrl);
-    const controller = new Controller(baseUrl, config, profileId);
+    const api = new API(serverUrl);
+    const controller = new Controller(api, config, profileId);
 
     const mapcontrol = new MapControl(config);
     const popup = new Popup(mapcontrol.map);

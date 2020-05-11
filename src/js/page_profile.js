@@ -408,12 +408,12 @@ export default class ProfileLoader {
         const geometries = dataBundle.geometries;
 
         categoryTemplate = $(categoryClass)[0].cloneNode(true);
-        subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(true);
+        //subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(true);
         indicatorTemplate = $(indicatorClass, subcategoryTemplate)[0].cloneNode(true);
 
         $(categoryClass).remove();
         $(subcategoryClass, categoryTemplate).remove();
-        $(indicatorClass, subcategoryTemplate).remove();
+        //$(indicatorClass, subcategoryTemplate).remove();
 
         updateGeography(profileHeader, profile);
         addFacilities(geometries);

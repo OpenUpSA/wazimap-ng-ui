@@ -72,7 +72,9 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
         controller.onSubIndicatorClick(payload)
     }))
-    controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload.payload))
+    controller.on('loadedNewProfile', payload => {
+        profileLoader.loadProfile(payload.payload)
+    })
     controller.on('loadedNewProfile', payload => {
         // there seems to be a bug where menu items close if this is not set
         $(".sub-category__dropdown_wrapper a").attr("href", "#")

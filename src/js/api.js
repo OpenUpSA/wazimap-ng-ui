@@ -1,7 +1,4 @@
 import {Observable} from './utils'
-import {LoginHandler} from './authentication'
-
-const loginHandler = new LoginHandler();
 const AUTHENTICATION_ERROR = "Not Authenticated";
 
 export class API extends Observable {
@@ -48,7 +45,7 @@ export class API extends Observable {
             console.log("Not logged in")
         else
             console.log("Currently looged in");
-        
+
         const self = this;
         return getJSON(url, "GET", self.getToken())
             .catch(error => {

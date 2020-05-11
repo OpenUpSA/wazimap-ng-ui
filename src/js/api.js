@@ -94,15 +94,6 @@ export class API extends Observable {
 }
 
 
-function createQueryString(params) {
-    const args = Object.entries(params).map(function(el) {
-        return `${el[0]}=${el[1]}`
-    });
-    return args.join("&")
- }
-        
-
-
 function setPostHeaders(xhr) {
     // xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
     xhr.setRequestHeader('Content-Type', 'application/json');

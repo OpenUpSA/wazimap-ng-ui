@@ -1,8 +1,6 @@
 import {Observable} from './utils';
 import {Geography, Profile, DataBundle} from './dataobjects';
 
-let currentAreaCode = '';
-
 export default class Controller extends Observable {
     constructor(api, config, profileId = 1) {
         super();
@@ -24,37 +22,43 @@ export default class Controller extends Observable {
             // On every hash change the render function is called with the new hash.
             // This is how the navigation of our app happens.
             const hash = decodeURI(window.location.hash);
-            let parts = hash.split(":")
-            let areaCode = null;
-            let zoomNecessary = false;
+            let parts = hash.split(':')
+            let payload = null;
 
-            if (parts.length == 2 && parts[2] == 'clicked')
-                zoomNecessary = true;
+            if (hash == '') {
+                const areaCode = this.config.rootGeography;
+                payload = self.changeGeography(areaCode)
 
-            if (parts[0] == "#geo") {
-                parts = parts[1].split(",")
-                if (parts.length == 1)
-                    areaCode = parts[0];
-                else
-                    areaCode = parts[1];
-            } else {
-                areaCode = config.rootGeography;
-            }
-
-            currentAreaCode = areaCode;
-
-            const payload = {
-                // TODO need to change this to profileId
-                profile: self.profile,
-                // TODO need to change this to areaCode
-                areaCode: areaCode,
-                zoomNecessary: zoomNecessary
+            } else if (parts[0] == '#geo') {
+                payload = self.changeGeography(parts[1])
+            } else if (parts[0] == '#logout') {
+                self.onLogout();
             }
 
             self.triggerEvent("hashChange", payload);
             self.onHashChange(payload);
         });
     };
+
+    changeGeography(areaCode) {
+        const payload = {
+            // TODO need to change this to profileId
+            profile: self.profile,
+            areaCode: areaCode,
+        }
+
+        this.onGeographyChange(payload);
+        return payload;
+    };
+
+    onLogout() {
+        this.triggerEvent("loggingOut");
+        this.api.logout().then(e => {
+            window.location.hash = '';
+            console.log(e);
+            this.triggerEvent("loggedOut");
+        })
+    }
 
     triggerEvent(event, payload) {
         payload = {
@@ -108,10 +112,14 @@ export default class Controller extends Observable {
      * @param  {[type]} payload [description]
      * @return {[type]}         [description]
      */
-    onHashChange(payload, callRegisterFunction = true) {
+    onHashChange(payload) {
         this.triggerEvent("hashChange", payload);
-        this.loadProfile(payload, callRegisterFunction)
     };
+
+    onGeographyChange(payload) {
+        this.loadProfile(payload, true)
+    }
+
 
     loadProfile(payload, callRegisterFunction) {
         const self = this;
@@ -327,8 +335,6 @@ export default class Controller extends Observable {
 
         const payload = {
             profile: this.state.profile.profile,
-            areaCode: currentAreaCode,
-            zoomNecessary: false
         }
 
         this.onHashChange(payload, false);

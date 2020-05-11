@@ -11,6 +11,18 @@ export class API extends Observable {
         this.baseUrl = `${serverUrl}/api/v1`;
     }
 
+    getToken() {
+        return sessionStorage.getItem("token");
+    }
+
+    setToken(token) {
+        if (token == null)
+            sessionStorage.removeItem("token")
+        else
+            sessionStorage.setItem("token", token);
+
+    }
+
     getProfile(profileId, areaCode) {
         const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?format=json`;
         return this.loadUrl(url);
@@ -32,40 +44,114 @@ export class API extends Observable {
     }
 
     loadUrl(url) {
-        return getJSON(url).catch(error => {
-            if (error.message == AUTHENTICATION_ERROR) {
-                alert("not not not logged in")
-            } else {
-                throw error;
+        if (this.getToken() == null)
+            console.log("Not logged in")
+        else
+            console.log("Currently looged in");
+        
+        const self = this;
+        return getJSON(url, "GET", self.getToken())
+            .catch(error => {
+                if (error.message == AUTHENTICATION_ERROR) {
+                    self.authenticate(url, "ye", "trythisathome")
+                        .then(resp => {
+                            getJSON(url, "GET", self.getToken());
+                        })
+                } else {
+                    throw error;
+                }
+            })
+    }
+
+    authenticate(nextUrl, username, password) {
+        const self = this;
+        const url = `${this.baseUrl}/rest-auth/login/`;
+        // console.log(`Authenticating: ${url}`)
+        return getJSON(url, "POST", null, {username:username, password:password}).then(resp => {
+            console.log(`Awesome. Got a key:${resp['key']}`);
+            if (resp['key'] != undefined) {
+                self.setToken(resp['key']);
             }
+            // TODO deal with rejection
         })
+    }
+
+    logout() {
+        const self = this;
+        if (this.getToken() != null) {
+            const url = `${this.baseUrl}/rest-auth/logout/`;
+            return getJSON(url, "POST", this.token).then(resp => {
+                console.log("logging out - really really")
+                self.setToken(null);
+
+            })
+        }
+
+        console.log("logging out but not really")
+
+        return Promise.resolve();
     }
 }
 
-export function getJSON(url, skipCache = true) {
+
+function createQueryString(params) {
+    const args = Object.entries(params).map(function(el) {
+        return `${el[0]}=${el[1]}`
+    });
+    return args.join("&")
+ }
+        
+
+
+function setPostHeaders(xhr) {
+    // xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Accept', 'application/json');
+}
+
+
+export function getJSON(url, method='GET', token=null, params=null) {
 
     return new Promise((resolve, reject) => {
-        const req = new XMLHttpRequest();
-        req.open('GET', url);
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url);
 
-        req.onload = () => {
-            if (req.status == 200) {
-                const json = JSON.parse(req.response);
+        if (token != null)
+            xhr.setRequestHeader('Authorization', `Token ${token}`);
+
+        if (params != null) {
+            setPostHeaders(xhr);
+            xhr.send(JSON.stringify(params));
+        } else {
+            xhr.send();
+        }
+
+
+        xhr.onreadystatechange = function() { // Call a function when the state changes.
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                const resp = JSON.parse(this.response);
+                resolve(resp);
+            }
+        }
+
+        xhr.onload = () => {
+            if (xhr.status == 200) {
+                console.log("Ignoring 200 event")
+                /*
+                const json = JSON.parse(xhr.response);
                 resolve(json);
-            } else if (req.status == 401 || req.status == 403) {
+                */
+            } else if (xhr.status == 401 || xhr.status == 403) {
                 reject(Error(AUTHENTICATION_ERROR));
-                loginHandler.triggerEvent("authentication_request", {});    
             }
             else {
-                reject(Error(req.statusText));
+                reject(Error(xhr.statusText));
             }
         };
 
         // Handle network errors
-        req.onerror = () => {
+        xhr.onerror = () => {
             reject(Error("Network Error"));
         };
-
-        req.send();
     });
 }

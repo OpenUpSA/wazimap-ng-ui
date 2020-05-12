@@ -1,11 +1,17 @@
 import {Observable} from './utils'
+import {LoginDialogue} from './elements/login_dialogue';
+
+const loginDialogue = new LoginDialogue();
 const AUTHENTICATION_ERROR = "Not Authenticated";
 
+const MAX_FAILURES = 3;
 export class API extends Observable {
     constructor(serverUrl) {
         super();
         this.token = null;
         this.baseUrl = `${serverUrl}/api/v1`;
+        this.busyLoggingIn = false;
+        this.failedLogins = 0;
     }
 
     getToken() {
@@ -40,13 +46,40 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
+    async waitToLogIn() {
+        let count = 0;
+        while (true) {
+            if (!this.busyLoggingIn)
+                break
+            console.log("Another login request already sent. Waiting")
+            await new Promise(resolve => setTimeout(resolve, 200))
+
+            count += 1
+
+            if (count > 50) {
+                throw "Tired of waiting for login. Something went wrong"
+            }
+        }
+    }
+
     async loadUrl(url) {
         let response;
         const self = this;
         response = await this.getTokenJSON(url, self.getToken())
         if (response.status == 401 || response.status == 403) {
-            await self.authenticate(url, "ye", "trythisathome");
-            response = await this.getTokenJSON(url, self.getToken());
+            await this.waitToLogIn();
+            try {
+                await self.authenticate(url);
+                response = await this.getTokenJSON(url, self.getToken());
+            } catch (err) {
+                console.error(err)
+
+            } finally {
+                console.log("stopped logging in")
+
+                this.busyLoggingIn = false;
+
+            }
         }
 
         const json = await response.json();
@@ -54,32 +87,53 @@ export class API extends Observable {
         return json;
     }
 
-    async authenticate(nextUrl, username, password) {
-        const self = this;
+    async authenticate(nextUrl) {
         const url = `${this.baseUrl}/rest-auth/login/`;
-        const response = await postJSON(url, {username:username, password:password})
-        if (response.ok) {
-            const json = await response.json();
-            if (json['key'] != undefined)
-                self.setToken(json['key'])
-            else
-                throw 'Expected to receive a token';
-        } else {
-            throw 'Error occurred authenticating';
+
+        if (this.getToken() != null) {
+            console.log("Already logged in. Not authenticating") 
+            return
         }
+
+        if (this.busyLoggingIn)
+            return;
+
+        // This is a race condition but shouldn't be a big deal if two requests happen simultaneously
+        this.busyLoggingIn = true;
+        while (true) {
+            if (this.failedLogins >= MAX_FAILURES)
+                throw 'Too many failed logins';
+
+            const credentials = loginDialogue.displayLogin(nextUrl);
+            const response = await postJSON(url, credentials)
+            if (response.ok) {
+                const json = await response.json();
+                if (json['key'] != undefined) {
+                    this.setToken(json['key'])
+                    this.failedLogins = 0;
+                    break;
+                }
+                else {
+                    throw 'Expected to receive a token';
+                }
+            } else if (response.status == 400 || response.status == 403) {
+                this.failedLogins += 1
+                continue
+            } else {
+                throw "Some network exception occurred: " + response.status;
+            }
+
+        }
+        this.busyLoggingIn = false;
     }
 
     async logout() {
         const self = this;
         if (this.getToken() != null) {
-            console.log("logging out really really")
             const url = `${this.baseUrl}/rest-auth/logout/`;
             const response =  await postJSON(url, this.token)
             self.setToken(null);
-        } else {
-            console.log("logging out but not really")
         }
-
     }
 
     async getTokenJSON(url) {

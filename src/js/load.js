@@ -1,6 +1,7 @@
 import {select as d3select} from 'd3-selection';
 import Controller from './controller';
-import ProfileLoader from './page_profile';
+import ProfileLoader from './page_profile';   //emre - older
+//import ProfileLoader from "./profile/profile_loader";   //emre - newer
 import {loadMenu} from './elements/menu';
 import PDFPrinter from './print';
 import {MapControl} from './map/maps';

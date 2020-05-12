@@ -40,106 +40,79 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
-    loadUrl(url) {
-        if (this.getToken() == null)
-            console.log("Not logged in")
-        else
-            console.log("Currently looged in");
-
+    async loadUrl(url) {
+        let response;
         const self = this;
-        return getJSON(url, "GET", self.getToken())
-            .catch(error => {
-                if (error.message == AUTHENTICATION_ERROR) {
-                    self.authenticate(url, "ye", "trythisathome")
-                        .then(resp => {
-                            getJSON(url, "GET", self.getToken());
-                        })
-                } else {
-                    throw error;
-                }
-            })
+        response = await this.getTokenJSON(url, self.getToken())
+        if (response.status == 401 || response.status == 403) {
+            await self.authenticate(url, "ye", "trythisathome");
+            response = await this.getTokenJSON(url, self.getToken());
+        }
+
+        const json = await response.json();
+
+        return json;
     }
 
-    authenticate(nextUrl, username, password) {
+    async authenticate(nextUrl, username, password) {
         const self = this;
         const url = `${this.baseUrl}/rest-auth/login/`;
-        // console.log(`Authenticating: ${url}`)
-        return getJSON(url, "POST", null, {username:username, password:password}).then(resp => {
-            console.log(`Awesome. Got a key:${resp['key']}`);
-            if (resp['key'] != undefined) {
-                self.setToken(resp['key']);
-            }
-            // TODO deal with rejection
-        })
+        const response = await postJSON(url, {username:username, password:password})
+        if (response.ok) {
+            const json = await response.json();
+            if (json['key'] != undefined)
+                self.setToken(json['key'])
+            else
+                throw 'Expected to receive a token';
+        } else {
+            throw 'Error occurred authenticating';
+        }
     }
 
-    logout() {
+    async logout() {
         const self = this;
         if (this.getToken() != null) {
+            console.log("logging out really really")
             const url = `${this.baseUrl}/rest-auth/logout/`;
-            return getJSON(url, "POST", this.token).then(resp => {
-                console.log("logging out - really really")
-                self.setToken(null);
-
-            })
-        }
-
-        console.log("logging out but not really")
-
-        return Promise.resolve();
-    }
-}
-
-
-function setPostHeaders(xhr) {
-    // xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Accept', 'application/json');
-}
-
-
-export function getJSON(url, method='GET', token=null, params=null) {
-
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open(method, url);
-
-        if (token != null)
-            xhr.setRequestHeader('Authorization', `Token ${token}`);
-
-        if (params != null) {
-            setPostHeaders(xhr);
-            xhr.send(JSON.stringify(params));
+            const response =  await postJSON(url, this.token)
+            self.setToken(null);
         } else {
-            xhr.send();
+            console.log("logging out but not really")
         }
 
+    }
 
-        xhr.onreadystatechange = function() { // Call a function when the state changes.
-            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                const resp = JSON.parse(this.response);
-                resolve(resp);
-            }
-        }
+    async getTokenJSON(url) {
+        let headers;
+        const token = this.getToken();
+        if (token != '')
+            headers = {Authorization: `Token ${token}`}
+        else
+            headers = {}
 
-        xhr.onload = () => {
-            if (xhr.status == 200) {
-                console.log("Ignoring 200 event")
-                /*
-                const json = JSON.parse(xhr.response);
-                resolve(json);
-                */
-            } else if (xhr.status == 401 || xhr.status == 403) {
-                reject(Error(AUTHENTICATION_ERROR));
-            }
-            else {
-                reject(Error(xhr.statusText));
-            }
-        };
+        return getJSON(url, headers)
+    }
 
-        // Handle network errors
-        xhr.onerror = () => {
-            reject(Error("Network Error"));
-        };
+}
+
+async function postJSON(url, data ={}, headers={}) {
+    const defaultHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+
+    headers = {...defaultHeaders, ...headers};
+    const response = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, *cors, same-origin
+        headers: headers,
+        redirect: 'follow',
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
+    return response;
+}
+
+async function getJSON(url, headers={}) {
+    const response = await fetch(url, {headers: headers})
+    return response;
 }

@@ -4,18 +4,29 @@ import {horizontalBarChart} from "../reusable-charts/horizontal-bar-chart";
 import {select as d3select} from "d3-selection";
 
 const graphValueTypes = ['Percentage', 'Value'];
+const allValues = 'All values';
+const chartContainerClass = '.indicator__chart';
+
+let tooltipClone = null;
+let subCategoryNode = null;
 
 export class Chart extends Observable {
-    constructor(container, subindicators, attrOptions, graphValueType) {
+    constructor(container, subindicators, groups, attrOptions, detail, graphValueType, _tooltipClone, _subCategoryNode) {
         super();
 
         this.container = container;
         this.attrOptions = attrOptions;
         this.subindicators = subindicators;
         this.graphValueType = graphValueType;
+
+        tooltipClone = _tooltipClone;
+        subCategoryNode = _subCategoryNode;
+
+        this.handleChartFilter(detail, groups);
+        this.addChart();
     }
 
-    addChart = () => {
+    addChart = (ret = false) => {
         $('.bar-chart', this.container).remove();
         $('svg', this.container).remove();
 
@@ -65,6 +76,7 @@ export class Chart extends Observable {
         const fmt = d3format(",.2f");
         let arr = [];
         this.subindicators.forEach((s) => {
+            console.log({'s': s})
             let value = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(s[this.attrOptions.valueColumn], this.subindicators, this.attrOptions) : s[this.attrOptions.valueColumn];
 
             arr.push({
@@ -94,12 +106,12 @@ export class Chart extends Observable {
         $(containerParent).find('.hover-menu__content_list a').each(function (index) {
             $(this).off('click');
             $(this).on('click', () => {
-                self.selectedGraphValueTypeChanged(containerParent);
+                self.selectedGraphValueTypeChanged(containerParent, index);
             })
         });
     }
 
-    selectedGraphValueTypeChanged = (containerParent) => {
+    selectedGraphValueTypeChanged = (containerParent, index) => {
         this.graphValueType = graphValueTypes[index];
         $(containerParent).find('.hover-menu__content_list a').each(function (itemIndex) {
             $(this).removeClass('active');
@@ -110,5 +122,128 @@ export class Chart extends Observable {
         });
 
         this.addChart();
+    }
+
+    getPercentageValue = (currentValue, subindicators, attrOptions) => {
+        let percentage = 0;
+        let total = 0;
+
+        subindicators.forEach((s) => {
+            total += s[attrOptions.valueColumn];
+        })
+
+        percentage = currentValue / total * 100;
+
+        return percentage;
+    }
+
+    handleChartFilter = (detail, groups) => {
+        let dropdowns = $(subCategoryNode).find('.filter__dropdown_wrap');
+        let indicatorDd = $(dropdowns[0]);
+        let subindicatorDd = $(dropdowns[1]);
+
+        let callback = (selected) => this.groupSelected(subCategoryNode, selected, detail, subindicatorDd);
+        this.populateDropdown(indicatorDd, groups, callback);
+    }
+
+    populateDropdown = (dropdown, itemList, callback) => {
+        if ($(dropdown).hasClass('disabled')) {
+            $(dropdown).removeClass('disabled')
+        }
+
+        let ddWrapper = $(dropdown).find('.dropdown-menu__content');
+        let listItem = $(dropdown).find('.dropdown__list_item')[0].cloneNode(true);
+
+        $(ddWrapper).html('');
+
+        itemList = [allValues].concat(itemList);
+
+        itemList.forEach((item, i) => {
+            let li = listItem.cloneNode(true);
+            if (i !== 0 && $(li).hasClass('selected')) {
+                //leave the first item selected in default
+                $(li).removeClass('selected')
+            }
+            $('.truncate', li).text(item);
+            $(li).on('click', () => {
+                this.dropdownOptionSelected(dropdown, li, callback);
+            })
+            $(ddWrapper).append(li);
+        })
+    }
+
+    dropdownOptionSelected = (dropdown, li, callback) => {
+        const selectedClsName = 'selected';
+        let selected = $(li).text().trim();
+        $(dropdown).find('.dropdown__list_item').each(function () {
+            if ($(this).hasClass(selectedClsName)) {
+                $(this).removeClass(selectedClsName);
+            }
+
+            if ($(this).text() === $(li).text()) {
+                $(this).addClass(selectedClsName);
+            }
+        })
+
+        $(dropdown).find('.dropdown-menu__selected-item .truncate-2').text(selected);
+        $(dropdown).find('.dropdown-menu__content').hide();
+
+        callback(selected);
+    }
+
+    groupSelected = (subCategoryNode, selectedGroup, detail, subindicatorDd) => {
+        const chartContainer = $(chartContainerClass, subCategoryNode);
+        let subindicators = [];
+        for (const [obj, subindicator] of Object.entries(detail.indicators)) {
+            for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
+                subindicators.push(key)
+            }
+        }
+
+        let callback = (selectedFilter) => this.filterChartValues(chartContainer[0], selectedFilter, selectedGroup, detail);
+
+        this.populateDropdown(subindicatorDd, subindicators, callback);
+    }
+
+    filterChartValues = (chartContainer, selectedFilter, selectedGroup, detail) => {
+        let chartData = null;
+        if (selectedFilter !== allValues) {
+            for (const [obj, subindicator] of Object.entries(detail.indicators)) {
+                for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
+                    if (key === selectedFilter) {
+                        chartData = value;
+                    }
+                }
+            }
+
+            let labelColumn = this.getLabelColumnName(chartData);
+            this.attrOptions = {valueColumn: 'count', labelColumn: labelColumn};
+        } else {
+            for (const [obj, subindicator] of Object.entries(detail.indicators)) {
+                chartData = subindicator.subindicators;
+            }
+
+            this.attrOptions = {labelColumn: 'label', valueColumn: 'value'};
+        }
+
+        if (chartData !== null) {
+            this.subindicators = chartData;
+            this.addChart();
+        }
+    }
+
+    getLabelColumnName = (chartData) => {
+        //this function returns the key to get the labels from i.e age group, gender..
+        let dkey = '';
+
+        if (typeof chartData[0] !== 'undefined' && chartData[0] !== null) {
+            Object.keys(chartData[0]).forEach(function eachKey(key) {
+                if (key !== 'count') {
+                    dkey = key;
+                }
+            });
+        }
+
+        return dkey;
     }
 }

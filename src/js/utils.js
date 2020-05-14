@@ -31,33 +31,6 @@ export class Cache {
 
 const cache = new Cache();
 
-export function getJSON(url, skipCache = true) {
-
-    return new Promise((resolve, reject) => {
-        const req = new XMLHttpRequest();
-        req.open('GET', url);
-
-        req.onload = () => {
-            if (req.status == 200) {
-                const json = JSON.parse(req.response);
-                resolve(json);
-            } else if (req.status == 401 || request.status == 403) {
-                alert("Not logged in")
-            }
-            else {
-                reject(Error(req.statusText));
-            }
-        };
-
-        // Handle network errors
-        req.onerror = () => {
-            reject(Error("Network Error"));
-        };
-
-        req.send();
-    });
-}
-
 export function setPopupStyle(clsName) {
     $('.leaflet-popup-close-button').html($('.map__facility-tooltip_close').html());
     $('.leaflet-popup-close-button').css('padding', 0);

@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import configureApplication from './load';
 import {Config as SAConfig} from './configurations/geography_sa';
 import {Config as GCROConfig} from './configurations/geography_gcro';
@@ -40,7 +41,7 @@ const profiles = {
         config: new GCROConfig()
     },
     'beta.youthexplorer.org.za': {
-        profile: 1,
+        profile: 8,
         baseUrl: productionUrl,
         config: config
     },

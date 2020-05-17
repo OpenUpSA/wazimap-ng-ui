@@ -35,7 +35,7 @@ export class Popup extends Observable {
         //openOn -> closes with map.closePopup()
         //addTo -> doesnt close with map.closePopup()
 
-        setPopupStyle('content__map_tooltip')
+        setPopupStyle('map-tooltip')
     }
 
     updatePopupPosition(payload) {
@@ -51,29 +51,25 @@ export class Popup extends Observable {
     }
 
     createPopupContent = (payload, state) => {
-        /*
-        $('.leaflet-popup-tip-container').hide();
-        $('.leaflet-popup-content-wrapper').html('');
-        */
         let item = this.map.map_variables.tooltipItem.cloneNode(true);
 
         this.map.map_variables.hoverAreaLevel = payload.properties.level;
         this.map.map_variables.hoverAreaCode = payload.layer.feature.properties.code;
 
-        $('.map__tooltip_name div', item).text(payload.properties.name);
-        $('.map__tooltip_geography-chip div', item).text(this.map.map_variables.hoverAreaLevel);
+        $('.map-tooltip__name div', item).text(payload.properties.name);
+        $('.map-tooltip__geography-chip div', item).text(this.map.map_variables.hoverAreaLevel);
         var areaCode = payload.areaCode;
 
         this.setTooltipSubindicators(payload, state, item, areaCode);
         this.setTooltipThemes(item, areaCode);
 
-        $(item).find('.map-tooltip__notch').remove();   //leafletjs already creates this
+        $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
 
         return $(item).html();
     }
 
     setTooltipThemes = (item, areaCode) => {
-        $(item).find('.map__tooltip_points').html('');  //empty wrapper first, then append the items
+        $(item).find('.map-tooltip__points').html('');  //empty wrapper first, then append the items
         return; // No longer display theme counts
 
         let child = this.map.map_variables.children.filter((c) => {
@@ -93,13 +89,13 @@ export class Popup extends Observable {
                     $('.tooltip__points_label div', tooltipRow).text(c.categoryName);
                     $('.tooltip__value_amount div', tooltipRow).text(c.count);
 
-                    $(item).find('.map__tooltip_points').append(tooltipRow);
+                    $(item).find('.map-tooltip__points').append(tooltipRow);
                 })
             } else {
-                $(item).find('.map__tooltip_points').remove();
+                $(item).find('.map-tooltip__points').remove();
             }
         } else {
-            $(item).find('.map__tooltip_points').remove();
+            $(item).find('.map-tooltip__points').remove();
         }
     }
 
@@ -123,18 +119,18 @@ export class Popup extends Observable {
                                 const countFmt = numFmt(count);
                                 const perc = (payload.layer.feature.properties.percentage * 100).toFixed(2);
 
-                                $('.map__tooltip_value .tooltip__value_label div', item).text(`${state.subindicator.indicator} (${subindicatorValue.label})`);
-                                $('.map__tooltip_value .tooltip__value_amount div', item).text(countFmt);
-                                $('.map__tooltip_value .tooltip__value_detail div', item).text(`(${perc} %)`);
+                                $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicator} (${subindicatorValue.label})`);
+                                $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
+                                $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc} %)`);
                             }
                         }
                     }
                 } else {
-                    $(item).find('.map__tooltip_value').remove();
+                    $(item).find('.map-tooltip__value').remove();
                 }
             }
         } else {
-            $(item).find('.map__tooltip_value').remove();
+            $(item).find('.map-tooltip__value').remove();
         }
     }
 }

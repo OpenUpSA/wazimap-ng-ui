@@ -1,12 +1,12 @@
 import {Observable, numFmt} from '../utils';
 import {Profile} from '../profile';
 
-const container = $('.content__map_location');
-const breadcrumbsContainer = $('.map__location-tags_wrapper', container);
-const metricContainer = $('.map__location-info_inner', container);
+const container = $('.map-location');
+const breadcrumbsContainer = $('.map-location__tags', container);
+const metricContainer = $('.map-location__info', container);
 
-const breadcrumbTemplate = $('.breadcrumb--map', breadcrumbsContainer)[0];
-const metricTemplate = $('.map__location-info_metric')[0].cloneNode(true);
+const breadcrumbTemplate = $('.location-tag')[0];
+const metricTemplate = $('.location-highlight')[0].cloneNode(true);
 
 const infoContainer = $('.map__location-info', container);
 
@@ -24,12 +24,12 @@ export class LocationInfoBox extends Observable {
     }
 
     updateHighlights(highlights) {
-        const metricContainers = $('.map__location-info_metric').remove()
+        const metricContainers = $('.location-highlight').remove();
         let metric = null;
-        highlights.forEach(function(highlight) {
+        highlights.forEach(function (highlight) {
             metric = metricTemplate.cloneNode(true);
-            $('.map__location-info_value', metric).text(highlight.value);
-            $('.map__location-info_title', metric).text(highlight.label);
+            $('.location-highlight__value', metric).text(highlight.value);
+            $('.location-highlight__title', metric).text(highlight.label);
             metricContainer.append(metric);
 
         })
@@ -38,31 +38,36 @@ export class LocationInfoBox extends Observable {
     }
 
     updateBreadcrumbs(locations, clear = true) {
+        //clear = false when user clicks the map, clear = true on page load
+
         const self = this;
         if (clear) {
-            $('.breadcrumb--map', breadcrumbsContainer).remove();
+            $('.location-tag', breadcrumbsContainer).remove();
+            $('.location-tag__loading', breadcrumbsContainer).remove();
         }
 
         let locationElement = null;
-        locations.forEach(location => {
+        locations.forEach((location, i) => {
             locationElement = breadcrumbTemplate.cloneNode(true);
 
             $('.truncate', locationElement).text(location.name);
-            $('.breadcrumb__geography-chip div', locationElement).text(location.level);
+            $('.location-tag__type div', locationElement).text(location.level);
+            if (clear) {
+                $(locationElement).find('.location-tag__loading-icon').addClass('hidden');
+            }
+
+            if (i === locations.length - 1) {
+                //last item
+                $(locationElement).addClass('active');
+            }
 
             $(locationElement).on('click', el => {
                 self.triggerEvent('breadcrumbSelected', location);
+                $(locationElement).off("click")
             })
 
             breadcrumbsContainer.append(locationElement);
         })
-
-        if (locationElement != null) {
-            $(locationElement).addClass('last')
-            $(locationElement).removeClass('hide')
-            $(locationElement).off("click")
-        }
-
     }
 
     updateLocations(locations) {

@@ -2,9 +2,9 @@ import {Observable, checkIterate} from '../../utils';
 import {API} from '../../api';
 import {Category} from './category';
 
-const defaultActiveClsName = 'active-1';
+const activeClsName = 'active';
 const hideondeployClsName = 'hideondeploy';
-const categoryWrapperClsName = '.point-data__h1_content';
+const categoryWrapperClsName = '.point-mapper__h2_wrapper';
 
 export class Theme extends Observable {
     constructor(data, pointDataItem, categoryItem) {
@@ -24,9 +24,9 @@ export class Theme extends Observable {
         const self = this;
         this.element = this.pointDataItem.cloneNode(true);
         $(this.element).removeClass(hideondeployClsName);
-        $(this.element).find('.point-data__h1_checkbox input[type=checkbox]').on('click', () => self.toggle());
-        $('.h1__trigger_title .truncate', this.element).text(this.name);
-        $('.point-data__h1_trigger', this.element).removeClass(defaultActiveClsName);
+        $(this.element).find('.point-mapper__h1_checkbox input[type=checkbox]').on('click', () => self.toggle());
+        $('.point-data__h1_name .truncate', this.element).text(this.name);
+        $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName);
 
         $(categoryWrapperClsName, this.element).html('');
     }
@@ -71,18 +71,17 @@ export class Theme extends Observable {
         this.active = true;
         this.categories.forEach(category => {
             category.toggleOn();
-        })
+    })
 
         this.highlight(true);
         this.triggerEvent("themeSelected", this)
     }
 
     highlight(flag) {
-        let activeClassName = 'active-' + this.id;
         if (flag) {
-            $('.point-data__h1_trigger', this.element).addClass(activeClassName);
+            $('.point-mapper__h1_trigger', this.element).addClass(activeClsName).addClass('theme-' + this.data.id);
         } else {
-            $('.point-data__h1_trigger', this.element).removeClass(activeClassName);
+            $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName).removeClass('theme-' + this.data.id);
         }
 
     }

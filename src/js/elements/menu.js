@@ -2,11 +2,13 @@ import {SubIndicator} from '../dataobjects'
 
 
 const hideondeployClsName = 'hideondeploy';
-const parentContainer = $(".data-menu__links")
-const categoryTemplate = $(".data-menu__category")[0].cloneNode(true);
-const subCategoryTemplate = $(".data-menu__subcategory", categoryTemplate)[0].cloneNode(true);
-const indicatorTemplate = $(".data-menu__indicator", subCategoryTemplate)[0].cloneNode(true);
+const parentContainer = $(".data-mapper-content__list");
+const categoryTemplate = $(".data-category")[0].cloneNode(true);
+const subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
+const indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
+const indicatorItemTemplate = $(".data-category__h3", subCategoryTemplate)[0].cloneNode(true);
 const noDataWrapperClsName = 'data-menu__no-data';
+const loadingClsName = 'data-mapper-content__loading';
 
 function subindicatorsInCategory(category) {
     let count = 0;
@@ -54,26 +56,26 @@ function indicatorHasChildren(indicator) {
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
     function addSubIndicators(wrapper, indicator, subindicators) {
+
         const indicatorLabel = indicator;
         const newIndicatorElement = indicatorTemplate.cloneNode(true);
         $(".data-menu__indicator_trigger div", newIndicatorElement).text(indicatorLabel);
-        wrapper.append(newIndicatorElement);
 
-        const indicatorWrapperElement = $(".indicator__dropdown_wrapper", newIndicatorElement);
-        const subIndicatorTemplate = $(".data-menu__sub-indicator", newIndicatorElement)[0].cloneNode(true);
+        const subIndicatorTemplate = indicatorItemTemplate.cloneNode(true);
 
         if (subindicators == undefined || !Array.isArray(subindicators)) {
             console.log("Missing subindicators")
         } else {
-            $(".data-menu__sub-indicator", indicatorWrapperElement).remove();
-            $(".menu__link_h4--active", indicatorWrapperElement).remove();
+            $(".data-category__h3", wrapper).remove();
+            $(".menu__link_h4--active", wrapper).remove();
+
             subindicators.forEach(subIndicator => {
                 if (subIndicator.label !== '') {
                     const newSubIndicatorElement = subIndicatorTemplate.cloneNode(true);
-                    $("div:nth-child(2)", newSubIndicatorElement).text(subIndicator.label);
+                    $(".truncate", newSubIndicatorElement).text(subIndicator.label);
                     $(newSubIndicatorElement).attr('title', subIndicator.label);
 
-                    indicatorWrapperElement.append(newSubIndicatorElement);
+                    wrapper.append(newSubIndicatorElement);
 
                     $(newSubIndicatorElement).on("click", (el) => {
                         setActive(el);
@@ -93,10 +95,11 @@ export function loadMenu(data, subindicatorCallback) {
 
     function addIndicators(wrapper, subcategory, indicators) {
         var newSubCategory = subCategoryTemplate.cloneNode(true);
-        $(".data-menu__sub-category_trigger div", newSubCategory).text(subcategory);
+
+        $(".data-category__h2_trigger div", newSubCategory).text(subcategory);
         wrapper.append(newSubCategory);
 
-        var h3Wrapper = $(".sub-category__dropdown_wrapper", newSubCategory);
+        var h3Wrapper = $(".data-category__h2_wrapper", newSubCategory);
 
         $(".data-menu__indicator", h3Wrapper).remove();
         for (const [indicator, detail] of Object.entries(indicators)) {
@@ -112,10 +115,11 @@ export function loadMenu(data, subindicatorCallback) {
     function addSubcategories(wrapper, category, subcategories) {
         var newCategory = categoryTemplate.cloneNode(true)
         $(newCategory).removeClass(hideondeployClsName);
-        $(".link__h1_title div", newCategory).text(category);
+        $(".data-category__h1_title div", newCategory).text(category);
+        $('.' + loadingClsName).addClass('hidden');
         parentContainer.append(newCategory);
-        var h2Wrapper = $(".category__dropdown_wrapper", newCategory);
-        $(".data-menu__subcategory", h2Wrapper).remove();
+        var h2Wrapper = $(".data-category__h1_wrapper", newCategory);
+        $(".data-category__h2", h2Wrapper).remove();
 
         for (const [subcategory, detail] of Object.entries(subcategories)) {
             let count = subindicatorsInSubCategory(detail);

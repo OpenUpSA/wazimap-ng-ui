@@ -13,11 +13,11 @@ export class Category {
 
         this.id = _id;
 
-        this.setDomElements();
+        this.prepareDomElements();
         this.addCategory(category, detail);
     }
 
-    setDomElements = () => {
+    prepareDomElements = () => {
         //profileWrapper.find(categoryClass).remove();
     }
 

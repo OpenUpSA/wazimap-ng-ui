@@ -21,14 +21,14 @@ export default class ProfileLoader {
         const profile = dataBundle.profile;
         const geometries = dataBundle.geometries;
 
-        this.setDomElements();
+        this.prepareDomElements();
         this.loadCategories(profile);
         this.updateGeography(profile);
 
         let profileHeader = new ProfileHeader(profile.parents, geometries);
     }
 
-    setDomElements = () => {
+    prepareDomElements = () => {
         //get the objects first, them remove defaults
         indicatorTemplate = $(indicatorClass)[0].cloneNode(true);
         profileWrapper = $(profileWrapperClass);

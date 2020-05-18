@@ -78,7 +78,7 @@ const profiles = {
     'cfafrica.openup.org.za': {
         profile: 6,
         baseUrl: mainUrl,
-        config: new config
+        config: config
     },
 }
 

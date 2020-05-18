@@ -75,6 +75,11 @@ const profiles = {
         baseUrl: mainUrl,
         config: new WorldConfig()
     },
+    'cfafrica.openup.org.za': {
+        profile: 6,
+        baseUrl: mainUrl,
+        config: config
+    },
 }
 
 const pc = profiles[hostname]

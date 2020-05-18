@@ -91,7 +91,7 @@ export class API extends Observable {
         const url = `${this.baseUrl}/rest-auth/login/`;
 
         if (this.getToken() != null) {
-            console.log("Already logged in. Not authenticating")
+            console.log("Already logged in. Not authenticating") 
             return
         }
 
@@ -151,8 +151,8 @@ export class API extends Observable {
 
 async function postJSON(url, data ={}, headers={}) {
     const defaultHeaders = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     }
 
     headers = {...defaultHeaders, ...headers};

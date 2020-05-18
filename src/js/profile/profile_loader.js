@@ -1,5 +1,5 @@
 import {Category} from "./category";
-import {ProfileHeader} from "./profile-header";
+import {Profile_header} from "./profile_header";
 
 const profileWrapperClass = '.rich-data-content';
 const navWrapperClass = '.rich-data-nav__list';
@@ -25,7 +25,7 @@ export default class ProfileLoader {
         this.loadCategories(profile);
         this.updateGeography(profile);
 
-        let profileHeader = new ProfileHeader(profile.parents, geometries);
+        let profileHeader = new Profile_header(profile.parents, geometries);
     }
 
     prepareDomElements = () => {

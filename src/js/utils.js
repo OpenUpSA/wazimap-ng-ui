@@ -59,9 +59,9 @@ export function getJSON(url, skipCache = true) {
 }
 
 export function setPopupStyle(clsName) {
-    $('.leaflet-popup-close-button').html($('.map__facility-tooltip_close').html());
+    $('.leaflet-popup-close-button').html($('.facility-tooltip__close').html());
     $('.leaflet-popup-close-button').css('padding', 0);
-    $('.map__facility-tooltip_close').css('display', 'none');
+    $('.facility-tooltip__close').css('display', 'none');
     $('.leaflet-popup-content-wrapper').css('border-radius', $('.' + clsName).css('border-radius'));
     $('.leaflet-popup-content-wrapper').css('font-family', $('.' + clsName).css('font-family'));
     $('.leaflet-popup-content-wrapper').css('font-size', $('.' + clsName).css('font-size'));
@@ -77,8 +77,8 @@ export function setPopupStyle(clsName) {
         }
     });
 
-    let leftOffset = (popupWidth - $('.map__tooltip_geography-chip').width()) / 2;
-    $('.map__tooltip_geography-chip').css('left', leftOffset);
+    let leftOffset = (popupWidth - $('.map-tooltip__geography-chip').width()) / 2;
+    $('.map-tooltip__geography-chip').css('left', leftOffset);
 }
 
 export function getSelectedBoundary(level, geometries, config) {

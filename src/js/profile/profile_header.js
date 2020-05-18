@@ -12,7 +12,7 @@ let geometries = null;
 
 const breadcrumbClass = '.breadcrumb';
 
-export class ProfileHeader {
+export class Profile_header {
     constructor(_parents, _geometries) {
         parents = _parents;
         geometries = _geometries;
@@ -89,9 +89,17 @@ export class ProfileHeader {
             }
             //$('.location-facility__description div', facilityItem).text(theme.desc);
 
+            $(facilityItem).on('click', () => {
+                this.downloadPointData();
+            })
+
             facilityWrapper.append(facilityItem);
         })
 
         $(facilityWrapper).find('.location__facilities_loading').addClass('hidden');
+    }
+
+    downloadPointData = () => {
+        //alert('bb')
     }
 }

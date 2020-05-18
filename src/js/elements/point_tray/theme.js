@@ -71,7 +71,7 @@ export class Theme extends Observable {
         this.active = true;
         this.categories.forEach(category => {
             category.toggleOn();
-    })
+        })
 
         this.highlight(true);
         this.triggerEvent("themeSelected", this)

@@ -411,9 +411,8 @@ export default class ProfileLoader {
         //subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(true);
         indicatorTemplate = $(indicatorClass, subcategoryTemplate)[0].cloneNode(true);
 
-        $(categoryClass).remove();
+        $(categoryClass).addClass('hide');
         $(subcategoryClass, categoryTemplate).remove();
-        //$(indicatorClass, subcategoryTemplate).remove();
 
         updateGeography(profileHeader, profile);
         addFacilities(geometries);

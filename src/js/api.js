@@ -139,7 +139,7 @@ export class API extends Observable {
     async getTokenJSON(url) {
         let headers;
         const token = this.getToken();
-        if (token != '')
+        if (token != '' && token != null)
             headers = {Authorization: `Token ${token}`}
         else
             headers = {}

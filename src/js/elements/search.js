@@ -61,7 +61,7 @@ export class Search extends Observable {
                         self.triggerEvent('searchResults', {items: data});
 
                         count = data.length;
-                        $('.search__dropdown_label').html(count + ' Results');  //this needs to be here because if 0 row returns from the API, render function is not fired
+                        $('.search__dropdown_results-value').html(count);  //this needs to be here because if 0 row returns from the API, render function is not fired
 
                         response(data);
                     })
@@ -74,9 +74,9 @@ export class Search extends Observable {
 
                 const resultItem = searchResultItem.cloneNode(true);
                 const labels = self.generateSearchLabel(item);
-                $(".search__list-item_title .truncate", resultItem).text(labels.name);
-                $(".search__list-item_parent .truncate", resultItem).text(labels.parents);
-                $(".search__list-item_geography-type div", resultItem).text(item.level);
+                $(".search__list-item_location-name .truncate", resultItem).text(labels.name);
+                $(".search__list-item_location-parent .truncate", resultItem).text(labels.parents);
+                $(".search__list-item_location-type div", resultItem).text(item.level);
 
                 return $("<div>")
                     .append(resultItem)

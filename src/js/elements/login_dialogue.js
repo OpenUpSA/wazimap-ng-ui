@@ -8,8 +8,8 @@ export class LoginDialogue extends Observable {
     }
 
     displayLogin(msg) {
-        const username = prompt(`Please enter your name (${msg})`, "Harry Potter");
-        const password = prompt("Please enter your password", "Passwordd");
+        const username = prompt(`Please enter your name (${msg})`, "");
+        const password = prompt("Please enter your password", "");
 
         return {
             username: username,

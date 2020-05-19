@@ -1,43 +1,56 @@
 import {Subcategory} from "./subcategory";
 
 let categoryTemplate = null;
-let profileHeader = null;
-let indicatorTemplate = null;
-let tooltipClone = null;
+let profileWrapper = null;
 
-const categoryHeaderTitleClass = '.data-category__header h2';
-const categoryHeaderDescriptionClass = '.data-category__header_description p';
-const subcategoryClass = '.data-category__indicator';
+const categoryClass = 'div.section';
+const categoryTitleClass = '.section-header__text h2';
 
 export class Category {
-    constructor(category, detail, _categoryTemplate, _profileHeader, _indicatorTemplate, _tooltipClone) {
-        categoryTemplate = _categoryTemplate;
-        profileHeader = _profileHeader;
-        indicatorTemplate = _indicatorTemplate;
-        tooltipClone = _tooltipClone;
+    constructor(category, detail, _profileWrapper, _id) {
+        categoryTemplate = $(categoryClass)[0].cloneNode(true);
+        profileWrapper = _profileWrapper;
 
-        this.setDomElements();
+        this.id = _id;
+
+        this.prepareDomElements();
         this.addCategory(category, detail);
     }
 
-    setDomElements = () => {
-        $(subcategoryClass, categoryTemplate).remove();
+    prepareDomElements = () => {
+        //profileWrapper.find(categoryClass).remove();
     }
 
     addCategory = (category, detail) => {
         const newCategorySection = categoryTemplate.cloneNode(true);
-        const wrapper = newCategorySection;
+        const sectionHeader = $('.section-header')[0].cloneNode(true);
+        const indicatorHeader = $('.indicator-header')[0].cloneNode(true);
 
-        $(categoryHeaderTitleClass, newCategorySection).text(category);
-        $(categoryHeaderDescriptionClass, newCategorySection).text(detail.description);
+        $(newCategorySection).html('');
+        $(newCategorySection).append(this.getSectionLink());
+        $(newCategorySection).append(sectionHeader);
+        $(newCategorySection).append(indicatorHeader);
 
-        profileHeader.append(newCategorySection);
-        this.loadSubcategories(wrapper, detail);
+        $(categoryTitleClass, newCategorySection).text(category);
+
+        this.loadSubcategories(newCategorySection, detail);
+        profileWrapper.append(newCategorySection);
+    }
+
+    getSectionLink = () => {
+        const sectionLink = $('.section-link')[0].cloneNode(true);
+        $(sectionLink).attr('id', this.id);
+
+        return sectionLink;
     }
 
     loadSubcategories = (wrapper, detail) => {
+        let index = 0;
+        let lastIndex = Object.entries(detail.subcategories).length - 1;
         for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-            let sc = new Subcategory(wrapper, subcategory, detail, indicatorTemplate, tooltipClone);
+            let isLast = index === lastIndex;
+            let sc = new Subcategory(wrapper, subcategory, detail, isLast);
+            index++;
         }
     }
 }

@@ -41,7 +41,7 @@ const profiles = {
         config: new GCROConfig()
     },
     'beta.youthexplorer.org.za': {
-        profile: 1,
+        profile: 8,
         baseUrl: productionUrl,
         config: config
     },
@@ -74,6 +74,11 @@ const profiles = {
         profile: 5,
         baseUrl: mainUrl,
         config: new WorldConfig()
+    },
+    'cfafrica.openup.org.za': {
+        profile: 6,
+        baseUrl: mainUrl,
+        config: config
     },
 }
 

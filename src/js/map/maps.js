@@ -27,7 +27,7 @@ export class MapControl extends Observable {
 
         this.map = this.configureMap(coords, config.map);
         this.map.map_variables = {
-            tooltipClsName: '.content__map_tooltip',
+            tooltipClsName: '.map-tooltip',
             tooltipItem: null,
             popup: null,
             hoverAreaCode: null,

@@ -6,21 +6,24 @@ import {select as d3select} from "d3-selection";
 const graphValueTypes = ['Percentage', 'Value'];
 const allValues = 'All values';
 const chartContainerClass = '.indicator__chart';
+const tooltipClass = '.bar-chart__row_tooltip';
 
 let tooltipClone = null;
 let subCategoryNode = null;
 
 export class Chart extends Observable {
-    constructor(container, subindicators, groups, attrOptions, detail, graphValueType, _tooltipClone, _subCategoryNode) {
+    constructor(subindicators, groups, attrOptions, detail, graphValueType, _subCategoryNode) {
         super();
 
-        this.container = container;
         this.attrOptions = attrOptions;
         this.subindicators = subindicators;
         this.graphValueType = graphValueType;
 
-        tooltipClone = _tooltipClone;
+        tooltipClone = $(tooltipClass)[0].cloneNode(true);
         subCategoryNode = _subCategoryNode;
+
+        const chartContainer = $(chartContainerClass, subCategoryNode);
+        this.container = chartContainer[0];
 
         this.handleChartFilter(detail, groups);
         this.addChart();
@@ -55,9 +58,10 @@ export class Chart extends Observable {
             bottom: 15,
             left: 120,
         })
+
         chart.tooltipFormatter((d) => {
-            $('.bc__tooltip_value', tooltip).text(d.data.valueText);
-            $('.bar-chart__tooltip_description .truncate', tooltip).text(' - ' + d.data.label);
+            $('.bar-chart__tooltip_value', tooltip).text(d.data.valueText);
+            $('.bar-chart__tooltip_alt-value div', tooltip).text(d.data.label);
 
             return $(tooltip).prop('outerHTML');
         })
@@ -76,7 +80,6 @@ export class Chart extends Observable {
         const fmt = d3format(",.2f");
         let arr = [];
         this.subindicators.forEach((s) => {
-            console.log({'s': s})
             let value = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(s[this.attrOptions.valueColumn], this.subindicators, this.attrOptions) : s[this.attrOptions.valueColumn];
 
             arr.push({
@@ -91,14 +94,14 @@ export class Chart extends Observable {
 
     setChartMenu = (barChart) => {
         const self = this;
-        const containerParent = $(this.container).closest('.indicator__sub-indicator');
+        const containerParent = $(this.container).closest('.sub-indicator');
 
         //save as image button
-        const saveImgButton = $(containerParent).find('.hover-menu__content_wrapper a.hover-menu__content_item:nth-child(1)');
+        const saveImgButton = $(containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');
 
         $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
-            barChart.saveAsPng(container);
+            barChart.saveAsPng(this.container);
         })
 
         //show as percentage / value
@@ -185,7 +188,7 @@ export class Chart extends Observable {
             }
         })
 
-        $(dropdown).find('.dropdown-menu__selected-item .truncate-2').text(selected);
+        $(dropdown).find('.dropdown-menu__selected-item .truncate').text(selected);
         $(dropdown).find('.dropdown-menu__content').hide();
 
         callback(selected);

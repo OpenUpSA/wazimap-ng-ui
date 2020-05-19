@@ -1,26 +1,27 @@
 import {Chart} from "./chart";
 
-let indicatorTemplate = null;
 let tooltipClone = null;
+let isLast = false;
 
-const indicatorTitleClass = '.sub-indicator__chart_header h4';
-const chartContainerClass = '.indicator__chart';
+const indicatorTitleClass = '.sub-indicator__title h4';
+const chartDescClass = '.sub-indicator__chart_footnote p';
+const tooltipClass = '.bar-chart__row_tooltip';
 
 export class Subcategory {
-    constructor(wrapper, subcategory, detail, _indicatorTemplate, _tooltipClone) {
+    constructor(wrapper, subcategory, detail, _isLast) {
         this.groups = [];
         this.subindicators = [];
 
-        indicatorTemplate = _indicatorTemplate;
-        tooltipClone = _tooltipClone;
+        tooltipClone = $(tooltipClass)[0].cloneNode(true);
+        isLast = _isLast;
 
         this.addSubCategoryChart(wrapper, subcategory, detail);
     }
 
     addSubCategoryChart(wrapper, subcategory, detail) {
-        const subCategoryNode = indicatorTemplate.cloneNode(true);
-        $(indicatorTitleClass, subCategoryNode).text(subcategory);
-
+        const subIndicator = $('.sub-indicator')[0].cloneNode(true);
+        $(indicatorTitleClass, subIndicator).text(subcategory);
+        $(chartDescClass, subIndicator).text(detail.description);
 
         for (const [indicator, indicators] of Object.entries(detail.indicators)) {
             for (const [item, subindicator] of Object.entries(indicators.subindicators)) {
@@ -30,13 +31,17 @@ export class Subcategory {
                 this.groups.push(group);
             }
         }
-        const chartContainer = $(chartContainerClass, subCategoryNode);
-        let c = new Chart(chartContainer[0], this.subindicators, this.groups, {
+        let c = new Chart( this.subindicators, this.groups, {
             labelColumn: 'label',
             valueColumn: 'value'
-        }, detail, 'Percentage', tooltipClone, subCategoryNode);
+        }, detail, 'Percentage', subIndicator);
 
+        $(subIndicator).removeClass('last');
 
-        wrapper.append(subCategoryNode);
+        if (isLast) {
+            $(subIndicator).addClass('last');
+        }
+
+        wrapper.append(subIndicator);
     }
 }

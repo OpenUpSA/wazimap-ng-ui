@@ -25,14 +25,14 @@ export default class Controller extends Observable {
             let parts = hash.split(':')
             let payload = null;
 
-            if (hash == '') {
-                const areaCode = this.config.rootGeography;
-                payload = self.changeGeography(areaCode)
-
-            } else if (parts[0] == '#geo') {
+            if (parts[0] == '#geo') {
                 payload = self.changeGeography(parts[1])
             } else if (parts[0] == '#logout') {
                 self.onLogout();
+            } else {
+                //if a category nav is clicked, the hash becomes something like #divId, in that case it should behave same as if hash == ''
+                const areaCode = this.config.rootGeography;
+                payload = self.changeGeography(areaCode)
             }
 
             self.triggerEvent("hashChange", payload);
@@ -149,7 +149,7 @@ export default class Controller extends Observable {
     onLayerClick(payload) {
         const self = this;
         if (payload.maplocker.locked) {
-            console.log("ignoring click from onLayer click") 
+            console.log("ignoring click from onLayer click")
             return;
         }
 

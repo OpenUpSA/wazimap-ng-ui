@@ -1,6 +1,7 @@
 import {select as d3select} from 'd3-selection';
 import Controller from './controller';
-import ProfileLoader from './page_profile';
+//import ProfileLoader from './page_profile';   //emre - older
+import ProfileLoader from "./profile/profile_loader";   //emre - newer
 import {loadMenu} from './elements/menu';
 import PDFPrinter from './print';
 import {MapControl} from './map/maps';
@@ -78,7 +79,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('loadedNewProfile', payload => {
         // there seems to be a bug where menu items close if this is not set
         $(".sub-category__dropdown_wrapper a").attr("href", "#")
-    }) 
+    })
     controller.on('loadedNewProfile', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
@@ -143,7 +144,6 @@ export default function configureApplication(serverUrl, profileId, config) {
     pointDataTray.on('categoryUnselected', payload => controller.onCategoryUnselected(payload));
 
     // pointData.on('categoryPointLoaded', payload => controller.onCategoryPointLoaded(payload));
-
 
     pointDataTray.loadThemes();
 

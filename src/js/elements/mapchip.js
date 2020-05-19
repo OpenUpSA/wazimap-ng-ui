@@ -16,12 +16,14 @@ export class MapChip extends Observable {
     }
 
     prepareDomElements() {
+        /*
         this.clonedMapChip = $('.chip--map')[0].cloneNode(true);	//chip
         this.clonedLegendBlock = $('.map_legend-block')[0].cloneNode(true);	//a legend block
         this.clonedLegend = $('.content__map_legend')[0].cloneNode(true);	//the legend itself
 
         $(this.clonedMapChip).removeClass('hide');
         this.clearLegend();
+         */
     }
 
     showMapChip() {

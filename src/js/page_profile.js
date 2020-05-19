@@ -51,6 +51,7 @@ const facilityTemplate = $('.location-facility', facilityWrapper)[0].cloneNode(t
 const facilityRowClone = facilityWrapper.find('.location-facility__item')[0].cloneNode(true);
 
 const graphValueTypes = ['Percentage', 'Value'];
+const allValues = 'All values';
 
 function updateGeography(container, profile) {
     const geography = profile.geography
@@ -179,7 +180,7 @@ export default class ProfileLoader {
         const chartContainer = $(chartContainerClass, subCategoryNode);
 
         this.addChart(chartContainer[0], subindicators);
-        //this.addKeyMetrics(chartContainer[0], detail.key_metrics);
+        this.setChartFooter(subCategoryNode, detail);
 
         wrapper.append(subCategoryNode);
     }
@@ -200,18 +201,28 @@ export default class ProfileLoader {
 
     filterChartValues(chartContainer, selectedFilter, selectedGroup, detail) {
         let chartData = null;
-        for (const [obj, subindicator] of Object.entries(detail.indicators)) {
-            for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
-                if (key === selectedFilter) {
-                    chartData = value;
+        let attrOptions = null;
+        if (selectedFilter !== allValues) {
+            for (const [obj, subindicator] of Object.entries(detail.indicators)) {
+                for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
+                    if (key === selectedFilter) {
+                        chartData = value;
+                    }
                 }
             }
+
+            let labelColumn = this.getLabelColumnName(chartData);
+            attrOptions = {valueColumn: 'count', labelColumn: labelColumn};
+        } else {
+            for (const [obj, subindicator] of Object.entries(detail.indicators)) {
+                chartData = subindicator.subindicators;
+            }
+
+            attrOptions = {labelColumn: 'label', valueColumn: 'value'};
         }
 
-        let labelColumn = this.getLabelColumnName(chartData);
-
         if (chartData !== null) {
-            this.addChart(chartContainer, chartData, {valueColumn: 'count', labelColumn: labelColumn});
+            this.addChart(chartContainer, chartData, attrOptions);
         }
     }
 
@@ -230,6 +241,10 @@ export default class ProfileLoader {
         return dkey;
     }
 
+    setChartFooter(subCategoryNode, detail) {
+        $(chartFootnoteClass, subCategoryNode).text(detail.description)
+    }
+
     populateDropdown(dropdown, itemList, callback) {
         if ($(dropdown).hasClass('disabled')) {
             $(dropdown).removeClass('disabled')
@@ -240,7 +255,7 @@ export default class ProfileLoader {
 
         $(ddWrapper).html('');
 
-        itemList = ['All values'].concat(itemList);
+        itemList = [allValues].concat(itemList);
 
         itemList.forEach((item, i) => {
             let li = listItem.cloneNode(true);
@@ -355,6 +370,7 @@ export default class ProfileLoader {
         //save as image button
         const saveImgButton = $(containerParent).find('.hover-menu__content_wrapper a.hover-menu__content_item:nth-child(1)');
 
+        $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
             barChart.saveAsPng(container);
         })
@@ -422,7 +438,6 @@ export default class ProfileLoader {
         const geometries = dataBundle.geometries;
 
         categoryTemplate = $(categoryClass)[0].cloneNode(true);
-        subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(true);
         indicatorTemplate = $(indicatorClass, subcategoryTemplate)[0].cloneNode(true);
 
         $(categoryClass).addClass('hide');

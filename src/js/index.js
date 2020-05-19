@@ -52,7 +52,7 @@ const profiles = {
     },
     'covid-wazi.openup.org.za': {
         profile: 4,
-        baseUrl: mainUrl,
+        baseUrl: productionUrl,
         config: config
     },
     'wazimap-ng.africa': {

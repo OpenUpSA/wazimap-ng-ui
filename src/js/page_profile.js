@@ -133,7 +133,14 @@ export default class ProfileLoader {
     }
 
     addCategory(category, categoryDetail) {
+        const metricsArea = subcategoryTemplate.cloneNode(true);
+        $(metricsArea).find('.indicator__sub-indicator').remove();
+        $(metricsArea).find('.indicator__title').remove();
+        $(metricsArea).find('.indicator__description p').text(categoryDetail.description);
+        this.addKeyMetrics(metricsArea, categoryDetail);
+
         const newCategorySection = categoryTemplate.cloneNode(true);
+        $(newCategorySection).find('.data-category__header').after(metricsArea);
         const wrapper = newCategorySection;
 
         $(categoryHeaderTitleClass, newCategorySection).text(category);
@@ -172,6 +179,7 @@ export default class ProfileLoader {
         const chartContainer = $(chartContainerClass, subCategoryNode);
 
         this.addChart(chartContainer[0], subindicators);
+        //this.addKeyMetrics(chartContainer[0], detail.key_metrics);
 
         wrapper.append(subCategoryNode);
     }
@@ -267,17 +275,23 @@ export default class ProfileLoader {
         callback(selected);
     }
 
-    addKeyMetrics(container, key_metrics) {
+    addKeyMetrics(container, categoryDetail) {
+        let key_metrics = [];
+        for (const [description, subcategories] of Object.entries(categoryDetail.subcategories)) {
+            key_metrics = key_metrics.concat(subcategories.key_metrics);
+        }
 
         const wrapper = $(keyMetricWrapperClass, container)
         $(keyMetricClass, wrapper).remove()
 
         if (key_metrics != undefined && Array.isArray(key_metrics)) {
             key_metrics.forEach(el => {
-                let metric = metricTemplate.cloneNode(true)
-                $(".key-metric_value div", metric).text(el.value)
-                $(".key-metric_title", metric).text(el.label)
-                wrapper.append(metric)
+                if(typeof el !== 'undefined'){
+                    let metric = metricTemplate.cloneNode(true)
+                    $(".key-metric_value div", metric).text(el.value)
+                    $(".key-metric_title", metric).text(el.label)
+                    wrapper.append(metric)
+                }
             })
             // Show key metrics title
             wrapper.prev().css('display', 'block');
@@ -408,7 +422,7 @@ export default class ProfileLoader {
         const geometries = dataBundle.geometries;
 
         categoryTemplate = $(categoryClass)[0].cloneNode(true);
-        //subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(true);
+        subcategoryTemplate = $(subcategoryClass, categoryTemplate)[0].cloneNode(true);
         indicatorTemplate = $(indicatorClass, subcategoryTemplate)[0].cloneNode(true);
 
         $(categoryClass).addClass('hide');

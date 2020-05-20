@@ -2332,6 +2332,10 @@ a {
   font-size: 1.2em;
 }
 
+.location__search_input:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
 .nav__content_menu {
   display: -webkit-box;
   display: -webkit-flex;
@@ -2492,10 +2496,6 @@ a {
   border-width: 1px;
   border-color: #e0e0e0;
   border-radius: 2px;
-}
-
-.nav__content_search:hover {
-  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .nav__search-deselect {
@@ -3648,6 +3648,7 @@ a {
   top: auto;
   right: 0%;
   bottom: 24px;
+  z-index: 999;
   display: block;
   width: 400px;
   margin-right: auto;
@@ -3674,6 +3675,7 @@ a {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  height: 19px;
   margin-right: -2px;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
@@ -3710,6 +3712,10 @@ a {
   text-align: center;
   letter-spacing: 0.2px;
   text-transform: uppercase;
+}
+
+.map_legend-block.light {
+  color: #fff;
 }
 
 .map-options__filters_header {
@@ -4656,6 +4662,66 @@ a {
   margin-right: 6px;
   margin-left: 6px;
   background-color: #c7c7c7;
+}
+
+.map-options__legend_loading {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 19px;
+  min-width: 60px;
+  margin-right: 2px;
+  margin-left: 2px;
+  padding-right: 4px;
+  padding-left: 4px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.06);
+  font-size: 0.6em;
+  text-align: center;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.map-options__legend_loading.light {
+  color: #fff;
+}
+
+.legend-block__loading-icon {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 24px;
+  margin-right: 4px;
+  margin-left: 2px;
+  padding: 4px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  opacity: 1;
+  font-size: 0.8em;
+}
+
+.legend-block__loading-icon.hidden {
+  display: none;
 }
 
 @media screen and (max-width: 991px) {

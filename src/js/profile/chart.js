@@ -67,7 +67,7 @@ export class Chart extends Observable {
         })
         if (this.graphValueType === graphValueTypes[0]) {
             chart.xAxisFormatter((d) => {
-                return d + ' %';
+                return d + '%';
             })
         } else {
             chart.xAxisFormatter((d) => {
@@ -85,7 +85,7 @@ export class Chart extends Observable {
             arr.push({
                 label: s[this.attrOptions.labelColumn],
                 value: value,
-                valueText: this.graphValueType === graphValueTypes[0] ? fmt(value) + ' %' : fmt(value)
+                valueText: this.graphValueType === graphValueTypes[0] ? fmt(value) + '%' : fmt(value)
             })
         });
 

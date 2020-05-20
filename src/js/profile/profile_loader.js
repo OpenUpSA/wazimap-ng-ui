@@ -1,3 +1,4 @@
+import {Observable} from "../utils";
 import {Category} from "./category";
 import {Profile_header} from "./profile_header";
 
@@ -12,8 +13,9 @@ let indicatorTemplate = null;
 let profileWrapper = null;
 
 
-export default class ProfileLoader {
+export default class ProfileLoader extends Observable {
     constructor() {
+        super();
     }
 
     loadProfile = (dataBundle) => {
@@ -26,6 +28,7 @@ export default class ProfileLoader {
         this.updateGeography(profile);
 
         let profileHeader = new Profile_header(profile.parents, geometries);
+        profileHeader.on('breadcrumbSelected', parent => this.triggerEvent('breadcrumbSelected', parent));
     }
 
     prepareDomElements = () => {
@@ -43,12 +46,15 @@ export default class ProfileLoader {
     }
 
     loadCategories = (profile) => {
+        let removePrevCategories = true;
         const categories = profile.profileData;
         this.createNavItem('top', 'Summary');
         for (const [category, detail] of Object.entries(categories)) {
             const id = this.getNewId();
             this.createNavItem(id, category);
-            let c = new Category(category, detail, profileWrapper, id);
+            let c = new Category(category, detail, profileWrapper, id, removePrevCategories);
+
+            removePrevCategories = false;
         }
     }
 

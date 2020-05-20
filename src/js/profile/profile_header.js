@@ -1,4 +1,4 @@
-import {ThemeStyle} from "../utils";
+import {Observable, ThemeStyle} from "../utils";
 
 let breadcrumbsContainer = null;
 let breadcrumbTemplate = null;
@@ -12,8 +12,10 @@ let geometries = null;
 
 const breadcrumbClass = '.breadcrumb';
 
-export class Profile_header {
+export class Profile_header extends Observable {
     constructor(_parents, _geometries) {
+        super();
+
         parents = _parents;
         geometries = _geometries;
 
@@ -29,11 +31,17 @@ export class Profile_header {
     }
 
     addBreadCrumbs = () => {
+        let self = this;
         $(breadcrumbClass, breadcrumbsContainer).remove();
 
         parents.forEach(parent => {
             let breadcrumb = breadcrumbTemplate.cloneNode(true);
-            $(".truncate", breadcrumb).text(parent.name)
+            $(".truncate", breadcrumb).text(parent.name);
+            $(breadcrumb).on('click', () => {
+                self.triggerEvent('breadcrumbSelected', parent);
+                $(breadcrumb).off("click")
+            })
+
             breadcrumbsContainer.append(breadcrumb);
         })
     }

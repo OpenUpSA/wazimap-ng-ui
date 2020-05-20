@@ -123,6 +123,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     mapcontrol.on('mapZoomed', payload => controller.onMapZoomed(payload))
     mapcontrol.on('choropleth', payload => controller.onChoropleth(payload))
 
+    profileLoader.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
 
     search.on('beforeSearch', payload => controller.onSearchBefore(payload));
     search.on('searchResults', payload => controller.onSearchResults(payload));

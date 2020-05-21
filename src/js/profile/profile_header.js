@@ -95,7 +95,7 @@ export class Profile_header extends Observable {
 
                 $('.location-facility__list', facilityItem).append(rowItem);
             }
-            //$('.location-facility__description div', facilityItem).text(theme.desc);
+            $('.location-facility__description', facilityItem).addClass('hidden')
 
             $(facilityItem).on('click', () => {
                 this.downloadPointData();

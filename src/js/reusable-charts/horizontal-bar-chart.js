@@ -198,8 +198,8 @@ export function horizontalBarChart() {
     }
 
     chart.saveAsPng = function (container) {
-        let element = $(container).closest('.sub-indicator')[0];
-        $(element).find('.sub-indicator__options').attr('data-html2canvas-ignore', true);
+        let element = $(container).closest('.profile-indicator')[0];
+        $(element).find('.profile-indicator__options').attr('data-html2canvas-ignore', true);
 
         let options = {
             x: $(element).offset().left - 30,

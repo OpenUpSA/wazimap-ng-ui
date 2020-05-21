@@ -13,6 +13,8 @@ let subCategoryNode = null;
 
 export class Chart extends Observable {
     constructor(subindicators, groups, attrOptions, detail, graphValueType, _subCategoryNode) {
+        //we need the detail parameter to be able to filter
+        //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
 
         this.attrOptions = attrOptions;
@@ -94,7 +96,7 @@ export class Chart extends Observable {
 
     setChartMenu = (barChart) => {
         const self = this;
-        const containerParent = $(this.container).closest('.sub-indicator');
+        const containerParent = $(this.container).closest('.profile-indicator');
 
         //save as image button
         const saveImgButton = $(containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');

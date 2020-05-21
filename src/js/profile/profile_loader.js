@@ -5,7 +5,7 @@ import {Profile_header} from "./profile_header";
 const profileWrapperClass = '.rich-data-content';
 const navWrapperClass = '.rich-data-nav__list';
 const navItemClass = '.rich-data-nav__item';
-const indicatorClass = '.sub-indicator';
+const indicatorClass = '.profile-indicator';
 const activeNavClass = 'w--current';
 
 let maxId = 0;

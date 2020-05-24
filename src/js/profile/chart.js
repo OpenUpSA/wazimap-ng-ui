@@ -2,17 +2,17 @@ import {numFmtAlt, Observable} from "../utils";
 import {format as d3format} from "d3-format/src/defaultLocale";
 import {horizontalBarChart} from "../reusable-charts/horizontal-bar-chart";
 import {select as d3select} from "d3-selection";
+import {SubindicatorFilter} from "./subindicator_filter";
 
 const graphValueTypes = ['Percentage', 'Value'];
-const allValues = 'All values';
 const chartContainerClass = '.indicator__chart';
 const tooltipClass = '.bar-chart__row_tooltip';
 
 let tooltipClone = null;
-let subCategoryNode = null;
+let siFilter = null;
 
 export class Chart extends Observable {
-    constructor(subindicators, groups, attrOptions, detail, graphValueType, _subCategoryNode) {
+    constructor(subindicators, groups, attrOptions, detail, graphValueType, _subCategoryNode, title) {
         //we need the detail parameter to be able to filter
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
@@ -22,16 +22,16 @@ export class Chart extends Observable {
         this.graphValueType = graphValueType;
 
         tooltipClone = $(tooltipClass)[0].cloneNode(true);
-        subCategoryNode = _subCategoryNode;
+        this.subCategoryNode = _subCategoryNode;
 
-        const chartContainer = $(chartContainerClass, subCategoryNode);
+        const chartContainer = $(chartContainerClass, this.subCategoryNode);
         this.container = chartContainer[0];
 
-        this.handleChartFilter(detail, groups);
+        this.handleChartFilter(detail, groups, title);
         this.addChart();
     }
 
-    addChart = (ret = false) => {
+    addChart = () => {
         $('.bar-chart', this.container).remove();
         $('svg', this.container).remove();
 
@@ -142,113 +142,15 @@ export class Chart extends Observable {
         return percentage;
     }
 
-    handleChartFilter = (detail, groups) => {
-        let dropdowns = $(subCategoryNode).find('.filter__dropdown_wrap');
-        let indicatorDd = $(dropdowns[0]);
-        let subindicatorDd = $(dropdowns[1]);
-
-        let callback = (selected) => this.groupSelected(subCategoryNode, selected, detail, subindicatorDd);
-        this.populateDropdown(indicatorDd, groups, callback);
+    handleChartFilter = (detail, groups, title) => {
+        siFilter = new SubindicatorFilter();
+        siFilter.handleFilter(detail.indicators, groups, title, this);
     }
 
-    populateDropdown = (dropdown, itemList, callback) => {
-        if ($(dropdown).hasClass('disabled')) {
-            $(dropdown).removeClass('disabled')
-        }
-
-        let ddWrapper = $(dropdown).find('.dropdown-menu__content');
-        let listItem = $(dropdown).find('.dropdown__list_item')[0].cloneNode(true);
-
-        $(ddWrapper).html('');
-
-        itemList = [allValues].concat(itemList);
-
-        itemList.forEach((item, i) => {
-            let li = listItem.cloneNode(true);
-            if (i !== 0 && $(li).hasClass('selected')) {
-                //leave the first item selected in default
-                $(li).removeClass('selected')
-            }
-            $('.truncate', li).text(item);
-            $(li).on('click', () => {
-                this.dropdownOptionSelected(dropdown, li, callback);
-            })
-            $(ddWrapper).append(li);
-        })
-    }
-
-    dropdownOptionSelected = (dropdown, li, callback) => {
-        const selectedClsName = 'selected';
-        let selected = $(li).text().trim();
-        $(dropdown).find('.dropdown__list_item').each(function () {
-            if ($(this).hasClass(selectedClsName)) {
-                $(this).removeClass(selectedClsName);
-            }
-
-            if ($(this).text() === $(li).text()) {
-                $(this).addClass(selectedClsName);
-            }
-        })
-
-        $(dropdown).find('.dropdown-menu__selected-item .truncate').text(selected);
-        $(dropdown).find('.dropdown-menu__content').hide();
-
-        callback(selected);
-    }
-
-    groupSelected = (subCategoryNode, selectedGroup, detail, subindicatorDd) => {
-        const chartContainer = $(chartContainerClass, subCategoryNode);
-        let subindicators = [];
-        for (const [obj, subindicator] of Object.entries(detail.indicators)) {
-            for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
-                subindicators.push(key)
-            }
-        }
-
-        let callback = (selectedFilter) => this.filterChartValues(chartContainer[0], selectedFilter, selectedGroup, detail);
-
-        this.populateDropdown(subindicatorDd, subindicators, callback);
-    }
-
-    filterChartValues = (chartContainer, selectedFilter, selectedGroup, detail) => {
-        let chartData = null;
-        if (selectedFilter !== allValues) {
-            for (const [obj, subindicator] of Object.entries(detail.indicators)) {
-                for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
-                    if (key === selectedFilter) {
-                        chartData = value;
-                    }
-                }
-            }
-
-            let labelColumn = this.getLabelColumnName(chartData);
-            this.attrOptions = {valueColumn: 'count', labelColumn: labelColumn};
-        } else {
-            for (const [obj, subindicator] of Object.entries(detail.indicators)) {
-                chartData = subindicator.subindicators;
-            }
-
-            this.attrOptions = {labelColumn: 'label', valueColumn: 'value'};
-        }
-
+    applyFilter = (chartData) => {
         if (chartData !== null) {
             this.subindicators = chartData;
             this.addChart();
         }
-    }
-
-    getLabelColumnName = (chartData) => {
-        //this function returns the key to get the labels from i.e age group, gender..
-        let dkey = '';
-
-        if (typeof chartData[0] !== 'undefined' && chartData[0] !== null) {
-            Object.keys(chartData[0]).forEach(function eachKey(key) {
-                if (key !== 'count') {
-                    dkey = key;
-                }
-            });
-        }
-
-        return dkey;
     }
 }

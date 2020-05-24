@@ -34,7 +34,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     const printButton = $("#profile-print");
     const mapchip = new MapChip(config.choropleth);
     const search = new Search(api, profileId, 2);
-    const profileLoader = new ProfileLoader(config);
+    const profileLoader = new ProfileLoader(config, api, profileId);
     const locationInfoBox = new LocationInfoBox();
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();

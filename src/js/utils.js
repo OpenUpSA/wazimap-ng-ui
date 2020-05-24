@@ -43,8 +43,7 @@ export function getJSON(url, skipCache = true) {
                 resolve(json);
             } else if (req.status == 401 || request.status == 403) {
                 alert("Not logged in")
-            }
-            else {
+            } else {
                 reject(Error(req.statusText));
             }
         };

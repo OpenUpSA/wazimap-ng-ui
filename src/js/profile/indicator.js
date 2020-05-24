@@ -6,7 +6,7 @@ let isLast = false;
 const indicatorClass = '.profile-indicator';
 const indicatorTitleClass = '.profile-indicator__title h4';
 const chartDescClass = '.profile-indicator__chart_description p';
-const sourceClass= '.data-source';
+const sourceClass = '.data-source';
 
 export class Indicator {
     constructor(wrapper, title, indicatorData, detail, _isLast) {
@@ -24,7 +24,7 @@ export class Indicator {
         let indicator = indicatorClone.cloneNode(true);
         $(indicatorTitleClass, indicator).text(title);
         $(chartDescClass, indicator).text(indicatorData.description);
-        $(sourceClass,indicator).text(indicatorData.metadata.source);
+        $(sourceClass, indicator).text(indicatorData.metadata.source);
 
         for (const [item, subindicator] of Object.entries(indicatorData.subindicators)) {
             this.subindicators.push(subindicator)
@@ -37,7 +37,7 @@ export class Indicator {
         let c = new Chart(this.subindicators, this.groups, {
             labelColumn: 'label',
             valueColumn: 'value'
-        }, detail, 'Percentage', indicator);
+        }, detail, 'Percentage', indicator, title);
 
         if (!isLast) {
             $(indicator).removeClass('last');

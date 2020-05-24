@@ -1,4 +1,5 @@
-import {Observable, ThemeStyle} from "../utils";
+import {checkIterate, Observable, ThemeStyle} from "../utils";
+import xlsExport from 'xlsexport/xls-export.js';
 
 let breadcrumbsContainer = null;
 let breadcrumbTemplate = null;
@@ -13,8 +14,11 @@ let geometries = null;
 const breadcrumbClass = '.breadcrumb';
 
 export class Profile_header extends Observable {
-    constructor(_parents, _geometries) {
+    constructor(_parents, _geometries, _api, _profileId) {
         super();
+
+        this.api = _api;
+        this.profileId = _profileId;
 
         parents = _parents;
         geometries = _geometries;
@@ -48,6 +52,7 @@ export class Profile_header extends Observable {
 
     addFacilities = () => {
         $('.location-facility', facilityWrapper).remove();
+        let self = this;
 
         let categoryArr = [];
         let themes = [];
@@ -60,7 +65,8 @@ export class Profile_header extends Observable {
                 categoryArr.push({
                     theme_id: theme.id,
                     count: st.count,
-                    label: st.label
+                    label: st.label,
+                    category_id: st.id
                 });
             });
 
@@ -94,12 +100,12 @@ export class Profile_header extends Observable {
                 $('.location-facility__item_value div', rowItem).text(themeCategories[i].count);
 
                 $('.location-facility__list', facilityItem).append(rowItem);
+
+                $(rowItem).on('click', () => {
+                    self.downloadPointData(themeCategories[i]);
+                })
             }
             $('.location-facility__description', facilityItem).addClass('hidden')
-
-            $(facilityItem).on('click', () => {
-                this.downloadPointData();
-            })
 
             facilityWrapper.append(facilityItem);
         })
@@ -107,7 +113,33 @@ export class Profile_header extends Observable {
         $(facilityWrapper).find('.location__facilities_loading').addClass('hidden');
     }
 
-    downloadPointData = () => {
-        //alert('bb')
+    downloadPointData = (category) => {
+        const sheetName = category.label;
+        const fileName = 'Export-' + category.label + '.xls';
+        this.getAddressPoints(category)
+            .then((points) => {
+                const xls = new xlsExport(points, sheetName);
+                xls.exportToXLS(fileName);
+            });
+    }
+
+    getAddressPoints = (category) => {
+        const points = [];
+        return this.api.loadPoints(this.profileId, category.category_id).then(data => {
+            checkIterate(data.features, feature => {
+                console.log(feature)
+                const prop = feature.properties;
+                const geometry = feature.geometry;
+
+                points.push({
+                    Name: prop.name,
+                    Coordinate: '[' + geometry.coordinates[0] + ' , ' + geometry.coordinates[1] + ']',
+                    Category: prop.category.name,
+                    Theme: prop.category.theme.name
+                })
+            })
+
+            return points;
+        })
     }
 }

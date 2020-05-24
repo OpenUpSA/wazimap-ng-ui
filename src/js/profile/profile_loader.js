@@ -14,8 +14,11 @@ let profileWrapper = null;
 
 
 export default class ProfileLoader extends Observable {
-    constructor() {
+    constructor(_config, _api, _profileId) {
         super();
+
+        this.api = _api;
+        this.profileId = _profileId;
     }
 
     loadProfile = (dataBundle) => {
@@ -27,7 +30,7 @@ export default class ProfileLoader extends Observable {
         this.loadCategories(profile);
         this.updateGeography(profile);
 
-        let profileHeader = new Profile_header(profile.parents, geometries);
+        let profileHeader = new Profile_header(profile.parents, geometries, this.api, this.profileId);
         profileHeader.on('breadcrumbSelected', parent => this.triggerEvent('breadcrumbSelected', parent));
     }
 

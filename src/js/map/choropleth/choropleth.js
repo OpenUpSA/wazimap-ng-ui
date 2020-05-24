@@ -1,15 +1,20 @@
 import {Observable} from '../../utils';
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
+import {SubindicatorFilter} from "../../profile/subindicator_filter";
+
+let siFilter = null;
 
 export class Choropleth {
-    constructor(layers, layerStyler, options, buffer=0.1) {
+    constructor(layers, layerStyler, options, buffer = 0.1) {
         this.layers = layers;
         this.layerStyler = layerStyler;
         this.legendColors = options.colors;
         this.options = options;
         this.buffer = buffer;
         this.currentLayers = [];
+
+        this.handleChoroplethFilter();
     }
 
     getIntervals(values) {
@@ -37,9 +42,12 @@ export class Choropleth {
     }
 
     getBounds(values) {
+        const lowest = (1 - this.buffer) * d3min(values) < 0 ? 0 : (1 - this.buffer) * d3min(values);
+        const highest = (1 + this.buffer) * d3max(values) > 1 ? 1 : (1 + this.buffer) * d3max(values);
+
         return {
-            lower: (1 - this.buffer) * d3min(values),
-            upper: (1 + this.buffer) * d3max(values)
+            lower: lowest,
+            upper: highest
         }
     }
 
@@ -68,6 +76,13 @@ export class Choropleth {
                 layer.feature.properties.percentage = el.val;
             }
         })
+    }
 
+    handleChoroplethFilter() {
+
+        /*
+        siFilter = new SubindicatorFilter();
+        siFilter.handleFilter(detail, groups, title, this);
+        */
     }
 }

@@ -147,7 +147,7 @@ export class MapControl extends Observable {
             calculationFunc = SubindicatorCalculator
 
         const calculation = calculationFunc(subindicator);
-        const values = calculation.map(el => el.val)
+        const values = calculation.map(el => el.val);
 
         this.choropleth.showChoropleth(calculation);
         const intervals = this.choropleth.getIntervals(values)

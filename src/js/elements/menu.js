@@ -56,7 +56,6 @@ function indicatorHasChildren(indicator) {
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
     function addSubIndicators(wrapper, indicator, subindicators) {
-
         const indicatorLabel = indicator;
         const newIndicatorElement = indicatorTemplate.cloneNode(true);
         $(".data-menu__indicator_trigger div", newIndicatorElement).text(indicatorLabel);
@@ -139,6 +138,8 @@ export function loadMenu(data, subindicatorCallback) {
 
     $(".data-menu__category").remove();
     let hasNoItems = true;
+    $(parentContainer).find('.data-category').remove();
+
 
     for (const [category, detail] of Object.entries(data)) {
         let count = subindicatorsInCategory(detail);

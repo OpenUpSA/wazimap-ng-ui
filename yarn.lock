@@ -7287,6 +7287,11 @@ ws@^6.1.2:
   dependencies:
     async-limiter "~1.0.0"
 
+xlsexport@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/xlsexport/-/xlsexport-1.5.2.tgz#1799cbbc27f366e60add9361c8f41e3a4fc11b08"
+  integrity sha512-cyyDdZBjlxNl7IIz3/v8CeYwRxb5dXCclDJAv42mrjbUER1ILlWP33zXj7Q/lUc9RUOF5cU4L7iSzQVXSrq8oA==
+
 xml-name-validator@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-3.0.0.tgz#6ae73e06de4d8c6e47f9fb181f78d648ad457c6a"

@@ -1,47 +1,74 @@
-import {Chart} from "./chart";
+import {Indicator} from "./indicator";
 
-let tooltipClone = null;
-let isLast = false;
+let isFirst = false;
+let scHeaderClone = null;
 
-const indicatorTitleClass = '.sub-indicator__title h4';
-const chartDescClass = '.sub-indicator__chart_footnote p';
-const tooltipClass = '.bar-chart__row_tooltip';
+const subcategoryHeaderClass = '.sub-category-header';
+const subcategoryTitleClass = '.indicator__title_wrapper h3';
+const keyMetricWrapperClass = '.sub-category-header__key-metrics';
+const keyMetricClass = '.key-metric';
+const descriptionTextClass = '.sub-category-header__description p';
+const descriptionClass = '.sub-category-header__description';
 
 export class Subcategory {
-    constructor(wrapper, subcategory, detail, _isLast) {
-        this.groups = [];
-        this.subindicators = [];
+    constructor(wrapper, subcategory, detail, _isFirst) {
+        scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
+        isFirst = _isFirst;
 
-        tooltipClone = $(tooltipClass)[0].cloneNode(true);
-        isLast = _isLast;
-
-        this.addSubCategoryChart(wrapper, subcategory, detail);
+        this.addKeyMetrics($(scHeaderClone), detail);
+        this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
+        this.addIndicators(wrapper, detail);
     }
 
-    addSubCategoryChart(wrapper, subcategory, detail) {
-        const subIndicator = $('.sub-indicator')[0].cloneNode(true);
-        $(indicatorTitleClass, subIndicator).text(subcategory);
-        $(chartDescClass, subIndicator).text(detail.description);
+    addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
+        let scHeader = scHeaderClone.cloneNode(true);
 
-        for (const [indicator, indicators] of Object.entries(detail.indicators)) {
-            for (const [item, subindicator] of Object.entries(indicators.subindicators)) {
-                this.subindicators.push(subindicator)
-            }
-            for (const [group, items] of Object.entries(indicators.groups)) {
-                this.groups.push(group);
-            }
-        }
-        let c = new Chart( this.subindicators, this.groups, {
-            labelColumn: 'label',
-            valueColumn: 'value'
-        }, detail, 'Percentage', subIndicator);
-
-        $(subIndicator).removeClass('last');
-
-        if (isLast) {
-            $(subIndicator).addClass('last');
+        if (isFirst) {
+            $(wrapper).find(subcategoryHeaderClass).remove();
+        } else {
+            $(scHeader).removeClass('first');
         }
 
-        wrapper.append(subIndicator);
+        $(subcategoryTitleClass, scHeader).text(subcategory);
+        $(descriptionTextClass, scHeader).text(detail.description);
+
+        if (detail.description === ''){
+            $(descriptionClass, scHeader).addClass('hidden');
+        }
+
+        wrapper.append(scHeader);
+    }
+
+    addIndicators = (wrapper, detail) => {
+        let index = 0;
+        let lastIndex = Object.entries(detail.indicators).length - 1;
+        for (const [title, indicatorData] of Object.entries(detail.indicators)) {
+            let isLast = index === lastIndex;
+            let i = new Indicator(wrapper, title, indicatorData, detail, isLast);
+            index++;
+        }
+    }
+
+    addKeyMetrics = (wrapper, detail) => {
+        let key_metrics = detail.key_metrics;
+
+        let metricWrapper = $(wrapper).find(keyMetricWrapperClass);
+        $(metricWrapper).find(keyMetricClass).remove();
+
+        if (typeof key_metrics === 'undefined' || key_metrics.length <= 0) {
+            $(wrapper).find(keyMetricWrapperClass).addClass('hidden');
+
+            return;
+        }
+
+        let metricTemplate = $(keyMetricClass)[0].cloneNode(true);
+
+        key_metrics.forEach((km) => {
+            let item = metricTemplate.cloneNode(true);
+            $('.key-metric__value div', item).text(km.value);
+            $('.key-metric__title', item).text(km.label);
+            $('.key-metric__description', item).addClass('hidden');
+            metricWrapper.append(item);
+        })
     }
 }

@@ -59,7 +59,6 @@ export class MapChip extends Observable {
     }
 
     updateMapChipText(textValue) {
-        console.log(textValue)
         $(mapOptionsClass).find('.filters__header_name div').text(textValue);
     }
 

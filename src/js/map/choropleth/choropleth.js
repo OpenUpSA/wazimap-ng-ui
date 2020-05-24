@@ -42,9 +42,12 @@ export class Choropleth {
     }
 
     getBounds(values) {
+        const lowest = (1 - this.buffer) * d3min(values) < 0 ? 0 : (1 - this.buffer) * d3min(values);
+        const highest = (1 + this.buffer) * d3max(values) > 1 ? 1 : (1 + this.buffer) * d3max(values);
+
         return {
-            lower: (1 - this.buffer) * d3min(values),
-            upper: (1 + this.buffer) * d3max(values)
+            lower: lowest,
+            upper: highest
         }
     }
 

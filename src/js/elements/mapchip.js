@@ -1,6 +1,6 @@
 import {Observable} from '../utils';
-import {map} from "leaflet/dist/leaflet-src.esm";
 import {format as d3format} from 'd3-format';
+import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 const wrapperClsName = 'content__map_current-display';
 const mapOptionsClass = '.map-options';
@@ -23,10 +23,33 @@ export class MapChip extends Observable {
         this.clearLegend();
     }
 
-    showMapChip() {
+    showMapChip(payload) {
         $(mapOptionsClass).removeClass('hidden');
         $(mapOptionsClass).show();  //webflow.js adds display:none when clicked on x
         $(mapOptionsClass).find('.filters__header_close').on('click', () => this.removeMapChip());
+
+        this.handleChoroplethFilter(payload);
+    }
+
+    handleChoroplethFilter(payload) {
+        let groups = [];
+
+        for (const [title, detail] of Object.entries(payload.indicators)) {
+            for (const [group, items] of Object.entries(detail.groups)) {
+                groups.push(group);
+            }
+        }
+
+        let siFilter = new SubindicatorFilter();
+        let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
+        let indicators = payload.indicators;
+        siFilter.handleFilter(indicators, groups, payload.indicatorTitle, this, dropdowns);
+    }
+
+    applyFilter = (chartData) => {
+        if (chartData !== null) {
+            console.log(chartData)
+        }
     }
 
     showMapOptions() {
@@ -77,8 +100,8 @@ export class MapChip extends Observable {
     }
 
     onSubIndicatorChange(payload, colors) {
-        const label = `${payload.indicator} (${payload.obj.label})`
+        const label = `${payload.indicatorTitle} (${payload.obj.label})`
         this.updateMapChipText(label);
-        this.showMapChip();
+        this.showMapChip(payload);
     }
 }

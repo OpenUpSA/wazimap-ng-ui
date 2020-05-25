@@ -7,6 +7,7 @@ import {SubindicatorCalculator} from './choropleth/subindicator_calculator';
 import {SiblingCalculator} from './choropleth/sibling_calculator';
 import {Choropleth} from './choropleth/choropleth';
 import {MapLocker} from './maplocker';
+import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 
 export class MapControl extends Observable {
@@ -148,6 +149,8 @@ export class MapControl extends Observable {
 
         const calculation = calculationFunc(subindicator);
         const values = calculation.map(el => el.val);
+
+        console.log(subindicator.obj.children)
 
         this.choropleth.showChoropleth(calculation);
         const intervals = this.choropleth.getIntervals(values)

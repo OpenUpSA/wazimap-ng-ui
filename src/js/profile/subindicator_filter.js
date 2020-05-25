@@ -1,3 +1,5 @@
+import {SubIndicator} from "../dataobjects";
+
 const allValues = 'All values';
 
 export class SubindicatorFilter {
@@ -5,9 +7,9 @@ export class SubindicatorFilter {
 
     }
 
-    handleFilter = (indicators, groups, title, _parent) => {
+    handleFilter = (indicators, groups, title, _parent, _dropdowns) => {
         this.parent = _parent;
-        let dropdowns = $(this.parent.subCategoryNode).find('.filter__dropdown_wrap');
+        let dropdowns = _dropdowns;
         let indicatorDd = $(dropdowns[0]);
         let subindicatorDd = $(dropdowns[1]);
 
@@ -77,41 +79,23 @@ export class SubindicatorFilter {
     }
 
     getFilteredData = (selectedFilter, indicators, selectedGroup) => {
-        let chartData = null;
+        let chartData = [];
         if (selectedFilter !== allValues) {
             for (const [obj, subindicator] of Object.entries(indicators)) {
                 for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
                     if (key === selectedFilter) {
-                        chartData = value;
+                        Object.entries(value).forEach((cd) => {
+                            chartData.push(new SubIndicator(cd))
+                        })
                     }
                 }
             }
-
-            let labelColumn = this.getLabelColumnName(chartData);
-            this.parent.attrOptions = {valueColumn: 'count', labelColumn: labelColumn};
         } else {
             for (const [obj, subindicator] of Object.entries(indicators)) {
                 chartData = subindicator.subindicators;
             }
-
-            this.parent.attrOptions = {labelColumn: 'label', valueColumn: 'value'};
         }
 
         return chartData;
-    }
-
-    getLabelColumnName = (chartData) => {
-        //this function returns the key to get the labels from i.e age group, gender..
-        let dkey = '';
-
-        if (typeof chartData[0] !== 'undefined' && chartData[0] !== null) {
-            Object.keys(chartData[0]).forEach(function eachKey(key) {
-                if (key !== 'count') {
-                    dkey = key;
-                }
-            });
-        }
-
-        return dkey;
     }
 }

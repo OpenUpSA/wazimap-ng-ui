@@ -10,8 +10,8 @@ const sourceClass = '.data-source';
 
 export class Indicator {
     constructor(wrapper, title, indicatorData, detail, _isLast) {
-        this.subindicators = [];
         this.groups = [];
+        this.subindicators = indicatorData.subindicators;
 
         indicatorClone = $(indicatorClass)[0].cloneNode(true);
 
@@ -26,18 +26,11 @@ export class Indicator {
         $(chartDescClass, indicator).text(indicatorData.description);
         $(sourceClass, indicator).text(indicatorData.metadata.source);
 
-        for (const [item, subindicator] of Object.entries(indicatorData.subindicators)) {
-            this.subindicators.push(subindicator)
-        }
-
         for (const [group, items] of Object.entries(indicatorData.groups)) {
             this.groups.push(group);
         }
 
-        let c = new Chart(this.subindicators, this.groups, {
-            labelColumn: 'label',
-            valueColumn: 'value'
-        }, detail, 'Percentage', indicator, title);
+        let c = new Chart(this.subindicators, this.groups, detail, 'Percentage', indicator, title);
 
         if (!isLast) {
             $(indicator).removeClass('last');

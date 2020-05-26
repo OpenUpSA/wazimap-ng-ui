@@ -36,8 +36,9 @@ const profiles = {
         config: config
     },
     'gcro.openup.org.za': {
-        profile: 1,
-        baseUrl: 'https://api.gcro.openup.org.za',
+        profile: 10,
+        //baseUrl: 'https://api.gcro.openup.org.za',
+        baseUrl: productionUrl,
         config: new GCROConfig()
     },
     'beta.youthexplorer.org.za': {

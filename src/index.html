@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Wed May 20 2020 09:47:43 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="5eb3f86b73bbb2dc035b8126" data-wf-site="5eb15896d338d282555182fd">
+<!--  Last Published: Mon May 25 2020 08:45:27 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="5ecb7ed6bb713f67e148319d" data-wf-site="5ecb7ed6bb713f2f4b48319b">
 <head>
   <meta charset="utf-8">
-  <title>Wazimap 2.0 - 12052020</title>
+  <title>Wazimap 2.0 - 25052020</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/webflow.css" rel="stylesheet" type="text/css">
-  <link href="css/wazi-update-12052020.webflow.css" rel="stylesheet" type="text/css">
+  <link href="css/wazi-update-25052020.webflow.css" rel="stylesheet" type="text/css">
   <style>@media (max-width:479px) {html.w-mod-js:not(.w-mod-ix) [data-w-id="daa39c00-4f7f-ebc9-ea04-511e668d9825"] {-webkit-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);}html.w-mod-js:not(.w-mod-ix) [data-w-id="5c312e8d-57e5-7c96-7f71-b6b8b8f96a50"] {width:44PX;}html.w-mod-js:not(.w-mod-ix) [data-w-id="67e8fb10-ba62-0c25-f511-60f23abff4b7"] {-webkit-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0DEG) skew(0, 0);-moz-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0DEG) skew(0, 0);-ms-transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0DEG) skew(0, 0);transform:translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0DEG) skew(0, 0);}}</style>
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">WebFont.load({  google: {    families: ["Roboto:300,regular,italic,500,500italic,700,900"]  }});</script>
@@ -113,28 +113,94 @@ input:checked + .slider:before {
 </style>
 </head>
 <body class="body no-scroll">
+  <div class="login-modal">
+    <div class="login">
+      <div id="w-node-11a67e6ccd44-e148319d" class="login__title">
+        <h1 class="clear">Login Required</h1>
+      </div>
+      <div id="w-node-31f6ef2aede4-e148319d" data-w-id="138f8096-55b2-2cf7-756a-31f6ef2aede4" class="login__close">
+        <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+</svg></div>
+      </div>
+      <div id="w-node-09c3cf7a9fe2-e148319d" class="login__description">
+        <div>This is private instance of Wazimap and requires you to be an authorized user to access it.</div>
+      </div>
+      <div id="w-node-222d0aaebade-e148319d" class="login__form">
+        <div class="form-block w-form">
+          <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form"><label for="Email">Username</label><input type="email" class="text-field w-input" maxlength="256" name="Email" data-name="Email" placeholder="" id="Email" required=""><label for="Password">Password</label><input type="password" class="text-field w-input" maxlength="256" name="Password" data-name="Password" id="Password" required="">
+            <div class="login-form__actions"><label id="w-node-2ab4a8cdff88-e148319d" class="w-checkbox login__form-checkbox"><div class="w-checkbox-input w-checkbox-input--inputType-custom custom-checkbox"></div><input type="checkbox" id="checkbox" name="checkbox" data-name="Checkbox" style="opacity:0;position:absolute;z-index:-1"><span class="checkbox-label w-form-label">Remember me</span></label><input type="submit" value="Login" data-wait="Please wait..." id="w-node-fceb1157e41b-e148319d" class="button w-button"><a id="w-node-25fe1e234621-e148319d" href="#">Forgot your password?</a></div>
+          </form>
+          <div class="w-form-done">
+            <div>Thank you! Your submission has been received!</div>
+          </div>
+          <div class="w-form-fail">
+            <div>Oops! Something went wrong while submitting the form.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tutorial-modal">
+    <div class="tutorial">
+      <div id="w-node-11837bc90d1a-e148319d" class="tutorial__title">
+        <h1 class="clear">Getting started</h1>
+      </div>
+      <div id="w-node-11837bc90d1d-e148319d" data-w-id="6ca2d157-b860-d2c0-78da-11837bc90d1d" class="tutorial__close">
+        <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+</svg></div>
+      </div>
+      <div data-animation="over" data-nav-spacing="4" data-duration="500" id="w-node-d1064d900402-e148319d" class="tutorial__slider w-slider">
+        <div class="mask w-slider-mask">
+          <div class="slide w-slide">
+            <div class="tutorial__slide_content">
+              <div class="tutorial__slide_gradient top"></div>
+              <div class="tutorial__slide_gradient bottom"></div>
+              <div class="tutorial__slide_image _1"></div>
+              <div class="tutorial__slide_label">
+                <div><strong>Step 1:</strong> Use the search box to find a location</div>
+              </div>
+            </div>
+          </div>
+          <div class="w-slide"></div>
+          <div class="w-slide"></div>
+          <div class="w-slide"></div>
+        </div>
+        <div class="left-arrow w-slider-arrow-left">
+          <div class="tutorial__slide_button previous">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+</svg></div>
+          </div>
+        </div>
+        <div class="right-arrow w-slider-arrow-right">
+          <div class="tutorial__slide_button next">
+            <div class="text-block">Next step</div>
+          </div>
+        </div>
+        <div class="slide-nav w-slider-nav w-slider-nav-invert w-round"></div>
+      </div>
+      <div id="w-node-fd080d3da3ea-e148319d" class="tutorial__dismiss">
+        <div class="dismiss__no-show">
+          <div class="html-embed w-embed">
+            <p><input type="checkbox" class="custom-checkbox" name="dismiss__no-show" id="no-show"></p>
+          </div>
+          <div class="checkbox-label">Don&#x27;t show next time</div>
+        </div><a id="w-node-ce80f6ac26c6-e148319d" data-w-id="e36b296a-2837-4075-3849-ce80f6ac26c6" href="#" class="button text w-button">Dismiss</a></div>
+    </div>
+  </div>
   <div class="main">
     <div class="nav">
       <div data-w-id="66ee4f1f-99f3-8310-c69c-b5d00bdac74c" style="opacity:1;display:none" class="nav__search-deselect"></div>
       <div class="nav__shadow"></div>
       <div class="nav__content">
-        <a href="#" class="nav__content_title w-inline-block">
+        <a id="w-node-926b3e9c855a-e148319d" href="#" class="nav__content_title w-inline-block">
           <div class="nav__logo_wrap">
             <div class="nav__logo_placeholder"></div>
           </div>
         </a>
-        <div class="nav__content_links">
-          <a href="#" class="nav__link w-inline-block">
-            <div>Nav Item</div>
-          </a>
-          <a href="#" class="nav__link w-inline-block">
-            <div>Nav Item</div>
-          </a>
-          <a href="#" class="nav__link w-inline-block">
-            <div>Nav Item</div>
-          </a>
-        </div>
-        <div class="nav__content_search">
+        <div id="w-node-926b3e9c8568-e148319d" class="nav__content_search">
           <div class="nav__search_input">
             <div data-w-id="2331a044-806f-907c-13ce-926b3e9c8576" class="search__input w-form">
               <form id="email-form" name="email-form" data-name="Email Form" method="post" class="form"><input type="text" class="location__search_input w-input" autocomplete="off" maxlength="256" name="Location" data-name="Location" placeholder="Search for a location..." id="Location">
@@ -179,9 +245,19 @@ input:checked + .slider:before {
             </div>
           </div>
         </div>
-        <div class="nav__content_menu">
+        <div id="w-node-926b3e9c85a0-e148319d" class="nav__content_menu">
+          <a data-w-id="2331a044-806f-907c-13ce-926b3e9c8565" href="#" class="nav__link w-inline-block">
+            <div class="nav__link_icon">
+              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"></path>
+</svg></div>
+            </div>
+            <div class="nav__link_text">
+              <div>Tutorial</div>
+            </div>
+          </a>
           <div class="nav__menu_trigger hidden">
-            <div class="icon--menu w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+            <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
 </svg></div>
           </div>
@@ -207,11 +283,6 @@ input:checked + .slider:before {
         <div class="map-options__filters">
           <div class="map-options__filters_header">
             <div class="filter__header_sub-indicator">
-              <div class="filters__header_icon">
-                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M1.13,13.11,3.42,18a1.23,1.23,0,0,1-.28,1.52L3,19.66a.72.72,0,0,0-.08.85l.28.44.28.45a3.23,3.23,0,0,0,3.55,1.51l5.17-1.29a11.68,11.68,0,0,0,5.84-3.55l3.06-3.4a7.41,7.41,0,0,0,1.74-3.52l0-.16A1,1,0,0,0,22,9.81h-.27A.68.68,0,0,1,21,9.07l.06-.76a.67.67,0,0,1,.37-.58h0a1.46,1.46,0,0,0,.73-1.59l-.53-2.55a2.53,2.53,0,0,0-2.57-2.07h0a3,3,0,0,0-2.28,1.3l-2.6,4.6A1.56,1.56,0,0,1,12.29,8l-.46-.19c-.75-.31-1.6,1.56-2.09,2.23l-.42.58c-.33.46-.88.24-1.15-.25S7.27,7,7,6.39a.74.74,0,0,0-.63-.52H6a.67.67,0,0,0-.65.64l.12,4.12A1.67,1.67,0,0,1,3,12.05l-.39-.24a.62.62,0,0,0-.75.07l-.51.45A.73.73,0,0,0,1.13,13.11Z"></path>
-</svg></div>
-              </div>
               <div class="filters__header_name">
                 <div>Sub-indicator name</div>
               </div>
@@ -236,7 +307,7 @@ input:checked + .slider:before {
                 <div>Select a value:</div>
               </div>
               <div data-w-id="c3edb6cb-8fc8-3508-f112-94613483dd79" class="mapping-options__filter_menu">
-                <div class="dropdown-menu__trigger">
+                <div class="dropdown-menu__trigger narrow">
                   <div class="dropdown-menu__selected-item">
                     <div class="truncate">All values</div>
                   </div>
@@ -261,7 +332,7 @@ input:checked + .slider:before {
                 <div>FILTER BY:</div>
               </div>
               <div data-w-id="fd26a4e0-f0f7-aaf0-9eee-32c6e9fb2e19" class="mapping-options__filter_menu">
-                <div class="dropdown-menu__trigger">
+                <div class="dropdown-menu__trigger narrow">
                   <div class="dropdown-menu__selected-item">
                     <div class="truncate">All filters</div>
                   </div>
@@ -1577,7 +1648,7 @@ input:checked + .slider:before {
                   <div class="location-facility__item_value">
                     <div>0000</div>
                   </div>
-                  <div id="w-node-30bc8b667f9c-035b8126" class="location-facility__item_download">
+                  <div id="w-node-30bc8b667f9c-e148319d" class="location-facility__item_download">
                     <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
 </svg></div>
@@ -1590,7 +1661,7 @@ input:checked + .slider:before {
                   <div class="location-facility__item_value">
                     <div>0000</div>
                   </div>
-                  <div id="w-node-d352b1b0934a-035b8126" class="location-facility__item_download">
+                  <div id="w-node-d352b1b0934a-e148319d" class="location-facility__item_download">
                     <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
 </svg></div>
@@ -1619,7 +1690,7 @@ input:checked + .slider:before {
             <div class="search__list-item_location-parent">
               <div class="truncate">Parent </div>
             </div>
-            <div id="w-node-908692429659-035b8126" class="search__list-item_location-type">
+            <div id="w-node-908692429659-e148319d" class="search__list-item_location-type">
               <div class="truncate">Location Type</div>
             </div>
           </div>
@@ -2129,7 +2200,7 @@ input:checked + .slider:before {
       </div>
     </div>
   </div>
-  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js?site=5eb15896d338d282555182fd" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js?site=5ecb7ed6bb713f2f4b48319b" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>
   <!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
   <!--  Used for the autocomplete search box  -->

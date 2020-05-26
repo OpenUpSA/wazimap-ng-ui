@@ -55,7 +55,7 @@ function indicatorHasChildren(indicator) {
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
-    function addSubIndicators(wrapper, indicator, subindicators) {
+    function addSubIndicators(wrapper, indicator, subindicators, indicators) {
         const indicatorLabel = indicator;
         const newIndicatorElement = indicatorTemplate.cloneNode(true);
         $(".data-menu__indicator_trigger div", newIndicatorElement).text(indicatorLabel);
@@ -82,9 +82,10 @@ export function loadMenu(data, subindicatorCallback) {
                             subindicatorCallback({
                                 el: el,
                                 data: data,
-                                indicator: indicator,
+                                indicatorTitle: indicator,
                                 subindicators: subindicators,
-                                obj: subIndicator
+                                obj: subIndicator,
+                                indicators: indicators
                             })
                     });
                 }
@@ -102,11 +103,12 @@ export function loadMenu(data, subindicatorCallback) {
 
         $(".data-menu__indicator", h3Wrapper).remove();
         for (const [indicator, detail] of Object.entries(indicators)) {
+
             if (!indicatorHasChildren(detail))
                 continue
 
             if (detail.subindicators.length > 0) {
-                addSubIndicators(h3Wrapper, indicator, detail.subindicators);
+                addSubIndicators(h3Wrapper, indicator, detail.subindicators, indicators);
             }
         }
     }

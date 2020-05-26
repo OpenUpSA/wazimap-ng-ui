@@ -42,6 +42,7 @@ export class Subcategory {
     addIndicators = (wrapper, detail) => {
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
+
         for (const [title, indicatorData] of Object.entries(detail.indicators)) {
             let isLast = index === lastIndex;
             let i = new Indicator(wrapper, title, indicatorData, detail, isLast);

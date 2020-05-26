@@ -51,6 +51,7 @@ export default class ProfileLoader extends Observable {
     loadCategories = (profile) => {
         let removePrevCategories = true;
         const categories = profile.profileData;
+
         this.createNavItem('top', 'Summary');
         for (const [category, detail] of Object.entries(categories)) {
             const id = this.getNewId();

@@ -7,6 +7,7 @@ import {SubindicatorCalculator} from './choropleth/subindicator_calculator';
 import {SiblingCalculator} from './choropleth/sibling_calculator';
 import {Choropleth} from './choropleth/choropleth';
 import {MapLocker} from './maplocker';
+import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 
 export class MapControl extends Observable {
@@ -134,10 +135,14 @@ export class MapControl extends Observable {
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    displayChoropleth(subindicator, method) {
-        if (subindicator.obj.children == undefined)
+    handleChoropleth(subindicator, method) {
+        if (subindicator.children == undefined)
             return;
 
+        this.displayChoropleth(subindicator.children, subindicator.subindicatorArr, method);
+    };
+
+    displayChoropleth(data, subindicatorArr, method) {
         let calculationFunc = {
             subindicator: SubindicatorCalculator,
             sibling: SiblingCalculator
@@ -146,18 +151,23 @@ export class MapControl extends Observable {
         if (calculationFunc == undefined)
             calculationFunc = SubindicatorCalculator
 
-        const calculation = calculationFunc(subindicator);
+        const args = {
+            data: data,
+            subindicatorArr: subindicatorArr
+        }
+
+        const calculation = calculationFunc(args);
         const values = calculation.map(el => el.val);
 
         this.choropleth.showChoropleth(calculation);
-        const intervals = this.choropleth.getIntervals(values)
+        const intervals = this.choropleth.getIntervals(values);
 
         this.triggerEvent("choropleth", {
             data: calculation,
             colors: this.choropleth.legendColors,
             intervals: intervals
         })
-    };
+    }
 
     resetChoropleth() {
         this.choropleth.reset();

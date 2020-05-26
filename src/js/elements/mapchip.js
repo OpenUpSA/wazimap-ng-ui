@@ -1,10 +1,12 @@
-import {Observable} from '../utils';
-import {map} from "leaflet/dist/leaflet-src.esm";
+import {checkIterate, Observable} from '../utils';
 import {format as d3format} from 'd3-format';
+import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 const wrapperClsName = 'content__map_current-display';
 const mapOptionsClass = '.map-options';
 const lightStart = 3;
+
+let subindicatorKey = '';
 
 /**
  * Represent the map chip at the bottom of the map
@@ -23,10 +25,43 @@ export class MapChip extends Observable {
         this.clearLegend();
     }
 
-    showMapChip() {
+    showMapChip(payload) {
         $(mapOptionsClass).removeClass('hidden');
         $(mapOptionsClass).show();  //webflow.js adds display:none when clicked on x
         $(mapOptionsClass).find('.filters__header_close').on('click', () => this.removeMapChip());
+
+        this.handleChoroplethFilter(payload);
+    }
+
+    handleChoroplethFilter(payload) {
+        let groups = [];
+        subindicatorKey = payload.obj.keys;
+
+        for (const [title, detail] of Object.entries(payload.indicators)) {
+            for (const [group, items] of Object.entries(detail.groups)) {
+                groups.push(group);
+            }
+        }
+
+        let siFilter = new SubindicatorFilter();
+        let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
+        let indicators = payload.indicators;
+        siFilter.handleFilter(indicators, groups, payload.indicatorTitle, this, dropdowns);
+    }
+
+    applyFilter = (subindicatorArr) => {
+        if (subindicatorArr !== null) {
+            checkIterate(subindicatorArr, (s) => {
+                if (s.keys === subindicatorKey) {
+                    const payload = {
+                        data: s.children,
+                        subindicatorArr: subindicatorArr
+                    }
+
+                    this.triggerEvent("choroplethFiltered", payload)
+                }
+            })
+        }
     }
 
     showMapOptions() {
@@ -77,8 +112,8 @@ export class MapChip extends Observable {
     }
 
     onSubIndicatorChange(payload, colors) {
-        const label = `${payload.indicator} (${payload.obj.label})`
+        const label = `${payload.indicatorTitle} (${payload.obj.label})`
         this.updateMapChipText(label);
-        this.showMapChip();
+        this.showMapChip(payload);
     }
 }

@@ -1,10 +1,10 @@
-export function SiblingCalculator(subindicator) {
+export function SiblingCalculator(args) {
 
-    const result = Object.entries(subindicator.obj.children).map(childGeography => {
+    const result = Object.entries(args.data).map(childGeography => {
         const code = childGeography[0];
         const count = childGeography[1];
         let universe = 0;
-        Object.entries(subindicator.obj.children).map(c => {
+        Object.entries(args.data).map(c => {
             universe += c[1];
         })
 

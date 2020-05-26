@@ -9,15 +9,13 @@ const chartContainerClass = '.indicator__chart';
 const tooltipClass = '.bar-chart__row_tooltip';
 
 let tooltipClone = null;
-let siFilter = null;
 
 export class Chart extends Observable {
-    constructor(subindicators, groups, attrOptions, detail, graphValueType, _subCategoryNode, title) {
+    constructor(subindicators, groups, detail, graphValueType, _subCategoryNode, title) {
         //we need the detail parameter to be able to filter
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
 
-        this.attrOptions = attrOptions;
         this.subindicators = subindicators;
         this.graphValueType = graphValueType;
 
@@ -81,15 +79,15 @@ export class Chart extends Observable {
     getValuesFromSubindicators = () => {
         const fmt = d3format(",.2f");
         let arr = [];
-        this.subindicators.forEach((s) => {
-            let value = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(s[this.attrOptions.valueColumn], this.subindicators, this.attrOptions) : s[this.attrOptions.valueColumn];
-
+        for (const [label, subindicator] of Object.entries(this.subindicators)) {
+            let count = subindicator.count;
+            let val = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(count, this.subindicators) : count;
             arr.push({
-                label: s[this.attrOptions.labelColumn],
-                value: value,
-                valueText: this.graphValueType === graphValueTypes[0] ? fmt(value) + '%' : fmt(value)
+                label: subindicator.keys,
+                value: val,
+                valueText: this.graphValueType === graphValueTypes[0] ? fmt(val) + '%' : fmt(val)
             })
-        });
+        }
 
         return arr;
     }
@@ -129,13 +127,13 @@ export class Chart extends Observable {
         this.addChart();
     }
 
-    getPercentageValue = (currentValue, subindicators, attrOptions) => {
+    getPercentageValue = (currentValue, subindicators) => {
         let percentage = 0;
         let total = 0;
 
-        subindicators.forEach((s) => {
-            total += s[attrOptions.valueColumn];
-        })
+        for (const [label, value] of Object.entries(subindicators)) {
+            total += value.count;
+        }
 
         percentage = currentValue / total * 100;
 
@@ -143,8 +141,10 @@ export class Chart extends Observable {
     }
 
     handleChartFilter = (detail, groups, title) => {
-        siFilter = new SubindicatorFilter();
-        siFilter.handleFilter(detail.indicators, groups, title, this);
+        let siFilter = new SubindicatorFilter();
+        let dropdowns = $(this.subCategoryNode).find('.filter__dropdown_wrap');
+
+        siFilter.handleFilter(detail.indicators, groups, title, this, dropdowns);
     }
 
     applyFilter = (chartData) => {

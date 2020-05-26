@@ -97,11 +97,30 @@ export default class Controller extends Observable {
     }
 
     onSubIndicatorClick(payload) {
-        this.state.subindicator = payload;
+        const children = payload.subindicators.filter((s) => {
+            return s.keys === payload.obj.keys;
+        })[0].children;
+        const subindicator = {
+            indicatorTitle: payload.indicatorTitle,
+            children: children,
+            selectedSubindicator: payload.obj.keys,
+            choropleth_method: payload.obj.choropleth_method,
+            subindicatorArr: payload.subindicators
+        }
+        this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.obj._keys;
 
         this.triggerEvent("subindicatorClick", payload);
     };
+
+    onChoroplethFiltered(payload) {
+        //update this.state.subindicator with the filtered values
+        let subindicator = this.state.subindicator;
+        subindicator.subindicatorArr = payload.subindicatorArr;
+        subindicator.children = payload.data;
+
+        this.state.subindicator = subindicator;
+    }
 
     /**
      * Payload includes profile and geography, e.g.
@@ -254,7 +273,6 @@ export default class Controller extends Observable {
     }
 
     onSearchResults(payload) {
-        console.log(payload)
         this.triggerEvent("searchResults", payload)
     }
 

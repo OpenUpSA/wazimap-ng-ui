@@ -1,10 +1,12 @@
-import {Observable} from '../utils';
+import {checkIterate, Observable} from '../utils';
 import {format as d3format} from 'd3-format';
 import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 const wrapperClsName = 'content__map_current-display';
 const mapOptionsClass = '.map-options';
 const lightStart = 3;
+
+let subindicatorKey = '';
 
 /**
  * Represent the map chip at the bottom of the map
@@ -33,6 +35,7 @@ export class MapChip extends Observable {
 
     handleChoroplethFilter(payload) {
         let groups = [];
+        subindicatorKey = payload.obj.keys;
 
         for (const [title, detail] of Object.entries(payload.indicators)) {
             for (const [group, items] of Object.entries(detail.groups)) {
@@ -46,9 +49,18 @@ export class MapChip extends Observable {
         siFilter.handleFilter(indicators, groups, payload.indicatorTitle, this, dropdowns);
     }
 
-    applyFilter = (chartData) => {
-        if (chartData !== null) {
-            console.log(chartData)
+    applyFilter = (subindicatorArr) => {
+        if (subindicatorArr !== null) {
+            checkIterate(subindicatorArr, (s) => {
+                if (s.keys === subindicatorKey) {
+                    const payload = {
+                        data: s.children,
+                        subindicatorArr: subindicatorArr
+                    }
+
+                    this.triggerEvent("choroplethFiltered", payload)
+                }
+            })
         }
     }
 

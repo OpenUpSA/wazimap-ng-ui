@@ -48,8 +48,8 @@ export default function configureApplication(serverUrl, profileId, config) {
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
     controller.on('subindicatorClick', payload => {
-        const method = payload.state.subindicator.obj.choropleth_method;
-        mapcontrol.displayChoropleth(payload.state.subindicator, method)
+        const method = payload.state.subindicator.choropleth_method;
+        mapcontrol.handleChoropleth(payload.state.subindicator, method)
     })
     controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
     controller.on('choropleth', payload => mapchip.onChoropleth(payload.payload));
@@ -135,6 +135,10 @@ export default function configureApplication(serverUrl, profileId, config) {
     locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
 
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
+    mapchip.on('choroplethFiltered', payload => {
+        mapcontrol.displayChoropleth(payload.data, payload.subindicatorArr, null);
+        controller.onChoroplethFiltered(payload);
+    })
 
     pointDataTray.on('themeSelected', payload => controller.onThemeSelected(payload))
     pointDataTray.on('themeUnselected', payload => controller.onThemeUnselected(payload))

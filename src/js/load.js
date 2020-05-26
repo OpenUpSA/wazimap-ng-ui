@@ -97,6 +97,9 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
     controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
+    controller.on('choroplethFiltered', payload => {
+        mapcontrol.displayChoropleth(payload.payload.data, payload.payload.subindicatorArr, payload.state.subindicator.choropleth_method);
+    })
     controller.on('zoomToggled', payload => {
         mapcontrol.enableZoom(payload.payload.enabled)
     });
@@ -136,7 +139,6 @@ export default function configureApplication(serverUrl, profileId, config) {
 
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
     mapchip.on('choroplethFiltered', payload => {
-        mapcontrol.displayChoropleth(payload.data, payload.subindicatorArr, null);
         controller.onChoroplethFiltered(payload);
     })
 

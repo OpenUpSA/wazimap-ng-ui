@@ -120,6 +120,8 @@ export default class Controller extends Observable {
         subindicator.children = payload.data;
 
         this.state.subindicator = subindicator;
+
+        this.triggerEvent("choroplethFiltered", payload);
     }
 
     /**

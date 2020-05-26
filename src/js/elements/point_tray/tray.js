@@ -55,12 +55,7 @@ export class PointDataTray extends Observable {
                 let treeItem = this.treeLineItem.cloneNode(true);
                 $(categoryWrapperClsName, item).append(treeItem);
 
-                //Replace with correct icon and color
-                ThemeStyle.replaceChildDivWithThemeIcon(
-                    themeDatum.id,
-                    $(item).find('.point-data__h1_trigger'),
-                    $(item).find('.point-data__h1_trigger-icon')
-                );
+                ThemeStyle.replaceChildDivWithIcon($(item).find('.point-data__h1_icon'), themeDatum.icon)
 
                 $(loadingClsName).addClass('hidden');
                 $(wrapperClsName).append(item);

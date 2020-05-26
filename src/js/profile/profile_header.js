@@ -81,7 +81,7 @@ export class Profile_header extends Observable {
         themes.forEach((theme) => {
             let facilityItem = facilityTemplate.cloneNode(true);
             $('.location-facility__name div', facilityItem).text(theme.name);
-            ThemeStyle.replaceChildDivWithThemeIcon(theme.theme_id, $(facilityItem).find('.location-facility__icon'), $(facilityItem).find('.location-facility__icon'));
+            ThemeStyle.replaceChildDivWithIcon($(facilityItem).find('.location-facility__icon'), theme.icon);
             $('.location-facility__value div', facilityItem).text(theme.count);
 
             //.location-facility__item .tooltip__points_label .truncate

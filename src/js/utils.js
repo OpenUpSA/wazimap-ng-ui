@@ -146,6 +146,10 @@ export class ThemeStyle {
 
         return true;
     }
+
+    static replaceChildDivWithIcon(element, icon) {
+        $(element).empty().append('<i class="material-icons">' + icon + '</i>');
+    }
 }
 
 export class Observable {

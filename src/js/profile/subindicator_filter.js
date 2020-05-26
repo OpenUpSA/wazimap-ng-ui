@@ -13,6 +13,7 @@ export class SubindicatorFilter {
         let indicatorDd = $(dropdowns[0]);
         let subindicatorDd = $(dropdowns[1]);
 
+        this.resetDropdowns(dropdowns);
         let callback = (selected) => this.groupSelected(selected, indicators, subindicatorDd, title);
         this.populateDropdown(indicatorDd, groups, callback);
     }
@@ -59,7 +60,9 @@ export class SubindicatorFilter {
         $(dropdown).find('.dropdown-menu__selected-item .truncate').text(selected);
         $(dropdown).find('.dropdown-menu__content').hide();
 
-        callback(selected);
+        if (callback !== null) {
+            callback(selected);
+        }
     }
 
     groupSelected = (selectedGroup, indicators, subindicatorDd, title) => {
@@ -97,5 +100,18 @@ export class SubindicatorFilter {
         }
 
         return chartData;
+    }
+
+    resetDropdowns = (dropdowns) => {
+        let self = this;
+        for (let i = 0; i < dropdowns.length; i++) {
+            const dropdown = dropdowns[i];
+            $(dropdown).find('.dropdown__list_item').each(function () {
+                const li = $(this);
+                if (li.text().trim() === allValues) {
+                    self.dropdownOptionSelected(dropdown, li, null);
+                }
+            })
+        }
     }
 }

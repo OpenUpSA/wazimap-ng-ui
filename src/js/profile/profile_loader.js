@@ -45,7 +45,7 @@ export default class ProfileLoader extends Observable {
 
     updateGeography = (profile) => {
         $('.location__title h1').text(profile.geography.name);
-        $('.current-location .truncate', profileWrapper).text(profile.geography.name);
+        $('.sticky-header__current-location .truncate', profileWrapper).text(profile.geography.name);
     }
 
     loadCategories = (profile) => {

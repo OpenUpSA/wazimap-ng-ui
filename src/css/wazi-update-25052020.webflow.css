@@ -598,7 +598,9 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  margin: -3px -3px 16px;
+  margin-top: -3px;
+  margin-right: -3px;
+  margin-left: -3px;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
@@ -761,7 +763,7 @@ label {
   display: -ms-flexbox;
   display: flex;
   height: 100%;
-  padding: 8px 12px 12px;
+  padding: 8px 10px 12px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -820,7 +822,7 @@ label {
 
 .location-facility__list_item:hover {
   border-bottom-color: transparent;
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.1);
   color: #333;
 }
 
@@ -1046,7 +1048,12 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  width: 100%;
   margin-left: -16px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
   -webkit-box-align: center;
   -webkit-align-items: center;
   -ms-flex-align: center;
@@ -1213,12 +1220,12 @@ label {
   -ms-flex-align: center;
   align-items: center;
   border-radius: 2px;
-  background-color: #f0f0f0;
+  background-color: rgba(0, 0, 0, 0.06);
   cursor: pointer;
 }
 
 .link-block:hover {
-  background-color: #ebebeb;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .key-metric {
@@ -1232,7 +1239,7 @@ label {
   display: -ms-flexbox;
   display: flex;
   height: 100%;
-  padding: 10px 12px 12px;
+  padding: 10px 10px 12px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -1493,6 +1500,8 @@ label {
 
 .dropdown-menu__trigger.narrow {
   height: 28px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .filter__dropdown_wrap {
@@ -1577,6 +1586,17 @@ label {
 }
 
 .dropdown-menu__selected-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-self: stretch;
+  -ms-flex-item-align: stretch;
+  align-self: stretch;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
   -ms-flex: 1;
@@ -1858,13 +1878,6 @@ label {
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.08);
 }
 
-.icon--menu {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-}
-
 .hover-menu__content_list {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1953,7 +1966,7 @@ label {
   margin-left: 6px;
 }
 
-.current-location {
+.sticky-header__current-location {
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -2319,19 +2332,6 @@ label {
   color: #000;
 }
 
-.nav__content_links {
-  display: -ms-grid;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr;
-  grid-column-gap: 16px;
-  grid-row-gap: 16px;
-  -ms-grid-columns: 1fr;
-  grid-template-columns: 1fr;
-  -ms-grid-rows: auto;
-  grid-template-rows: auto;
-}
-
 .nav__logo_wrap {
   position: relative;
   display: -webkit-box;
@@ -2452,10 +2452,10 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: stretch;
-  -webkit-align-items: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 .search__input {
@@ -2548,7 +2548,8 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  padding-right: 8px;
+  height: 32px;
+  padding-right: 10px;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
@@ -2558,18 +2559,20 @@ label {
   -ms-flex-align: center;
   align-items: center;
   border-radius: 2px;
+  background-color: rgba(57, 173, 132, 0.06);
   color: #707070;
+  font-size: 0.85em;
   text-align: center;
   text-decoration: none;
 }
 
 .nav__link:hover {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(57, 173, 132, 0.1);
   color: #333;
 }
 
 .nav__link:active {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(57, 173, 132, 0.2);
 }
 
 .search__dropdown_list {
@@ -2830,8 +2833,8 @@ label {
 }
 
 .point-mapper__h2:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #f0f0f0, #f0f0f0);
   color: #000;
 }
 
@@ -2850,8 +2853,8 @@ label {
 }
 
 .point-mapper__h2.theme-2:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-2.active {
@@ -2860,13 +2863,13 @@ label {
 }
 
 .point-mapper__h2.theme-2.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#eadbfa), to(#eadbfa)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #eadbfa, #eadbfa), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#eadbfa), to(#eadbfa)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #eadbfa, #eadbfa), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-3:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-3.active {
@@ -2875,8 +2878,8 @@ label {
 }
 
 .point-mapper__h2.theme-3.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#ffd1e7), to(#ffd1e7)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #ffd1e7, #ffd1e7), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#ffd1e7), to(#ffd1e7)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #ffd1e7, #ffd1e7), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-4.active {
@@ -2885,8 +2888,8 @@ label {
 }
 
 .point-mapper__h2.theme-4.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#ffd7d7), to(#ffd7d7)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #ffd7d7, #ffd7d7), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#ffd7d7), to(#ffd7d7)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #ffd7d7, #ffd7d7), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-5.active {
@@ -2895,8 +2898,8 @@ label {
 }
 
 .point-mapper__h2.theme-5.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#ffe3fc), to(#ffe3fc)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #ffe3fc, #ffe3fc), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#ffe3fc), to(#ffe3fc)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #ffe3fc, #ffe3fc), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-6.active {
@@ -2905,8 +2908,8 @@ label {
 }
 
 .point-mapper__h2.theme-6.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#ffeadd), to(#ffeadd)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #ffeadd, #ffeadd), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#ffeadd), to(#ffeadd)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #ffeadd, #ffeadd), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-7.active {
@@ -2915,8 +2918,8 @@ label {
 }
 
 .point-mapper__h2.theme-7.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#fff8e4), to(#fff8e4)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #fff8e4, #fff8e4), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#fff8e4), to(#fff8e4)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #fff8e4, #fff8e4), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-8.active {
@@ -2925,8 +2928,8 @@ label {
 }
 
 .point-mapper__h2.theme-8.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#cef3b2), to(#cef3b2)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #cef3b2, #cef3b2), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#cef3b2), to(#cef3b2)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #cef3b2, #cef3b2), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-9.active {
@@ -2935,8 +2938,8 @@ label {
 }
 
 .point-mapper__h2.theme-9.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#cdfaf2), to(#cdfaf2)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #cdfaf2, #cdfaf2), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#cdfaf2), to(#cdfaf2)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #cdfaf2, #cdfaf2), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h2.theme-10.active {
@@ -2945,8 +2948,8 @@ label {
 }
 
 .point-mapper__h2.theme-10.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#d6eaeb), to(#d6eaeb)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #d6eaeb, #d6eaeb), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#d6eaeb), to(#d6eaeb)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #d6eaeb, #d6eaeb), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1 {
@@ -3059,8 +3062,8 @@ label {
 }
 
 .point-mapper__h1_trigger:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #f0f0f0, #f0f0f0);
   color: #000;
 }
 
@@ -3074,8 +3077,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-1.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#dee7ff), to(#dee7ff)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #dee7ff, #dee7ff), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#dee7ff), to(#dee7ff)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #dee7ff, #dee7ff), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1_trigger.theme-2 {
@@ -3088,8 +3091,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-2.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#eadbfa), to(#eadbfa)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #eadbfa, #eadbfa), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#eadbfa), to(#eadbfa)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #eadbfa, #eadbfa), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1_trigger.theme-3 {
@@ -3102,8 +3105,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-3.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#ffd1e7), to(#ffd1e7)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #ffd1e7, #ffd1e7), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#ffd1e7), to(#ffd1e7)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #ffd1e7, #ffd1e7), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1_trigger.theme-4 {
@@ -3116,8 +3119,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-4.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#ffd7d7), to(#ffd7d7)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #ffd7d7, #ffd7d7), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#ffd7d7), to(#ffd7d7)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #ffd7d7, #ffd7d7), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1_trigger.theme-5 {
@@ -3130,8 +3133,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-5.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#ffe3fc), to(#ffe3fc)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #ffe3fc, #ffe3fc), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#ffe3fc), to(#ffe3fc)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #ffe3fc, #ffe3fc), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1_trigger.theme-6 {
@@ -3144,8 +3147,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-6.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#ffeadd), to(#ffeadd)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #ffeadd, #ffeadd), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#ffeadd), to(#ffeadd)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #ffeadd, #ffeadd), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1_trigger.theme-7 {
@@ -3158,8 +3161,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-7.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#fff8e4), to(#fff8e4)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #fff8e4, #fff8e4), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#fff8e4), to(#fff8e4)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #fff8e4, #fff8e4), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1_trigger.theme-8 {
@@ -3172,8 +3175,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-8.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#cef3b2), to(#cef3b2)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #cef3b2, #cef3b2), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#cef3b2), to(#cef3b2)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #cef3b2, #cef3b2), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1_trigger.theme-9 {
@@ -3186,8 +3189,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-9.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#cdfaf2), to(#cdfaf2)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #cdfaf2, #cdfaf2), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#cdfaf2), to(#cdfaf2)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #cdfaf2, #cdfaf2), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .point-mapper__h1_trigger.theme-10 {
@@ -3200,8 +3203,8 @@ label {
 }
 
 .point-mapper__h1_trigger.theme-10.active:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06))), -webkit-gradient(linear, left top, left bottom, from(#d6eaeb), to(#d6eaeb)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), linear-gradient(180deg, #d6eaeb, #d6eaeb), linear-gradient(180deg, #f0f0f0, #f0f0f0);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1))), -webkit-gradient(linear, left top, left bottom, from(#d6eaeb), to(#d6eaeb)), -webkit-gradient(linear, left top, left bottom, from(#f0f0f0), to(#f0f0f0));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), linear-gradient(180deg, #d6eaeb, #d6eaeb), linear-gradient(180deg, #f0f0f0, #f0f0f0);
 }
 
 .custom-checkbox {
@@ -3230,6 +3233,14 @@ label {
   border-color: #39ad84;
   background-color: #39ad84;
   background-size: 20px 20px;
+}
+
+.custom-checkbox.point-data-toggle {
+  width: 36px;
+  height: 36px;
+  margin-right: 4px;
+  padding: 6px 2px 2px;
+  background-color: hsla(0, 0%, 100%, 0);
 }
 
 .point-mapper__h2_source {
@@ -3871,7 +3882,10 @@ label {
 .filters__header_icon {
   height: 24px;
   margin-right: 8px;
-  color: #113a2c;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
 }
 
 .map-options__filters_content {
@@ -3881,7 +3895,7 @@ label {
   display: flex;
   padding-top: 8px;
   padding-right: 10px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .mapping-options__filter {
@@ -4801,7 +4815,7 @@ label {
   -ms-flex: 1;
   flex: 1;
   border-radius: 2px;
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.1);
   font-size: 0.6em;
   text-align: center;
   letter-spacing: 0.2px;
@@ -4914,7 +4928,7 @@ label {
 }
 
 .login__close:hover {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.1);
   color: #39ad84;
 }
 
@@ -4925,7 +4939,7 @@ label {
 
 .login__description {
   padding: 12px;
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .button {
@@ -4939,8 +4953,8 @@ label {
 }
 
 .button:hover {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.06)), to(rgba(0, 0, 0, 0.06)));
-  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06));
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1)));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
 }
 
 .button.text {
@@ -5008,10 +5022,17 @@ label {
 
 .tutorial {
   position: absolute;
-  display: -ms-grid;
-  display: grid;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   width: 450px;
-  padding: 16px 24px;
+  padding: 10px 24px 12px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   grid-auto-columns: 1fr;
   grid-column-gap: 16px;
   grid-row-gap: 12px;
@@ -5032,7 +5053,7 @@ label {
   grid-template-columns: 4.5fr 1fr;
   -ms-grid-rows: auto;
   grid-template-rows: auto;
-  font-size: 0.8em;
+  font-size: 0.7em;
 }
 
 .tutorial__close {
@@ -5056,21 +5077,22 @@ label {
 }
 
 .tutorial__close:hover {
-  background-color: rgba(0, 0, 0, 0.06);
   color: #39ad84;
 }
 
 .tutorial__slider {
+  height: 400px;
   margin-right: -24px;
-  margin-bottom: 100px;
+  margin-bottom: 62px;
   margin-left: -24px;
+  background-color: #fff;
 }
 
 .left-arrow {
   left: 0%;
   top: auto;
   right: auto;
-  bottom: -95px;
+  bottom: -62px;
   width: 20%;
   height: 56px;
   -webkit-box-pack: center;
@@ -5089,7 +5111,7 @@ label {
   left: auto;
   top: auto;
   right: 0%;
-  bottom: -95px;
+  bottom: -62px;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -5103,7 +5125,7 @@ label {
   font-size: 1.1em;
 }
 
-.tutorial__slide_content {
+.tutorial__slide-content {
   position: absolute;
   left: 0%;
   top: 0%;
@@ -5113,7 +5135,6 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  padding: 24px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -5129,12 +5150,10 @@ label {
   left: 0%;
   top: auto;
   right: 0%;
-  bottom: -40px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  height: 40px;
+  bottom: -32px;
+  display: none;
+  height: 32px;
+  padding-top: 0px;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
@@ -5149,45 +5168,75 @@ label {
   transform-style: preserve-3d;
 }
 
-.tutorial__slide_label {
-  position: absolute;
-  left: auto;
-  top: auto;
-  right: auto;
-  bottom: 24px;
+.tutorial__slide-info {
+  position: relative;
   z-index: 1;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  margin-right: auto;
-  margin-left: auto;
-  padding: 4px 8px;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  border-radius: 2px;
-  background-color: #39ad84;
+  width: 100%;
+  padding: 12px 24px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  background-color: #333;
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3);
   color: #fff;
-  text-align: center;
+  line-height: 140%;
+  text-align: left;
 }
 
-.tutorial__slide_image {
+.tutorial__slide-image {
   width: 100%;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
   background-image: url('https://d3e54v103j8qbb.cloudfront.net/img/example-bg.png');
-  background-position: 50% 50%;
+  background-position: 50% 0%;
   background-size: cover;
 }
 
-.tutorial__slide_image._1 {
-  position: absolute;
-  left: 0%;
-  top: 0%;
-  right: 0%;
-  bottom: 0%;
-  background-image: url('../images/search-tutorial.png');
+.tutorial__slide-image._1 {
+  position: relative;
+  height: 350px;
+  background-image: url('../images/slide-1.jpg');
+  background-position: 50% 0%;
+}
+
+.tutorial__slide-image._2 {
+  background-image: url('../images/slide-2.jpg');
+}
+
+.tutorial__slide-image._4 {
+  background-image: url('../images/slide-3.jpg');
+  background-position: 0% 0%;
+}
+
+.tutorial__slide-image._3 {
+  background-image: url('../images/slide-4.jpg');
+  background-position: 0% 0%;
+}
+
+.tutorial__slide-image._5 {
+  background-image: url('../images/slide-5.jpg');
+  background-position: 0% 0%;
+}
+
+.tutorial__slide-image._2b {
+  background-image: url('../images/slide-2b.jpg');
+}
+
+.tutorial__slide-image._7 {
+  background-image: url('../images/slide-7.jpg');
+  background-position: 50% 100%;
 }
 
 .tutorial__slide_button {
@@ -5212,7 +5261,7 @@ label {
   -ms-flex-align: center;
   align-items: center;
   border-radius: 2px;
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.1);
   color: #333;
   cursor: pointer;
 }
@@ -5247,13 +5296,6 @@ label {
   background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), transparent 103%);
 }
 
-.tutorial__slide_gradient.top {
-  left: 0%;
-  top: 0%;
-  right: 0%;
-  bottom: auto;
-}
-
 .tutorial__slide_gradient.bottom {
   left: 0%;
   top: auto;
@@ -5266,7 +5308,7 @@ label {
 .tutorial__dismiss {
   display: -ms-grid;
   display: grid;
-  margin-bottom: 0px;
+  margin-top: 8px;
   -webkit-box-align: center;
   -webkit-align-items: center;
   -ms-flex-align: center;
@@ -5293,7 +5335,8 @@ label {
 }
 
 .nav__link_icon {
-  margin-left: 8px;
+  margin-left: 6px;
+  color: #39ad84;
 }
 
 .login-modal {
@@ -5356,6 +5399,129 @@ label {
   height: 24px;
 }
 
+.sticky-header__tutorial {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 32px;
+  height: 32px;
+  margin-top: 16px;
+  margin-right: -64px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 3px;
+  color: #39ad84;
+  cursor: pointer;
+}
+
+.sticky-header__tutorial:hover {
+  background-color: rgba(57, 173, 132, 0.06);
+}
+
+.location__header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 8px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.location__tutorial {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 32px;
+  padding-right: 6px;
+  padding-left: 6px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 3px;
+  background-color: rgba(57, 173, 132, 0.06);
+  color: #333;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+.location__tutorial:hover {
+  background-color: rgba(57, 173, 132, 0.1);
+}
+
+.location__tutorial_icon {
+  margin-right: 2px;
+  color: #39ad84;
+}
+
+.location__tutorial_text {
+  margin-right: 2px;
+  margin-left: 2px;
+}
+
+.tutorial__header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 8px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.tutorial__slide-number {
+  position: absolute;
+  left: 24px;
+  top: auto;
+  right: auto;
+  bottom: 16px;
+  z-index: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 2px 6px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 6px -3px #000;
+  color: #fff;
+}
+
+.slide-info__title {
+  display: inline-block;
+  padding: 1px 4px;
+  border-radius: 2px;
+  background-color: #39ad84;
+  font-weight: 500;
+}
+
 @media screen and (max-width: 991px) {
   .rich-data-content {
     padding-top: 44px;
@@ -5369,7 +5535,7 @@ label {
     width: 44px;
   }
   .rich-data-nav__list {
-    padding-top: 24px;
+    padding-top: 72px;
   }
   .location__facilities {
     display: -webkit-box;
@@ -5494,9 +5660,6 @@ label {
     width: 100%;
     min-width: 100px;
   }
-  .nav__content_links {
-    display: none;
-  }
   .nav__menu_trigger {
     margin-left: 6px;
   }
@@ -5579,7 +5742,7 @@ label {
   .dropdown-menu {
     z-index: 1;
   }
-  .current-location {
+  .sticky-header__current-location {
     height: 32px;
     padding-right: 12px;
     padding-left: 12px;
@@ -5612,15 +5775,20 @@ label {
   }
   .tutorial {
     width: 90%;
-    padding: 12px 16px;
+    padding: 4px 16px;
+    grid-row-gap: 4px;
+  }
+  .tutorial__close {
+    margin-right: -6px;
   }
   .tutorial__slider {
     margin-right: -16px;
     margin-left: -16px;
   }
-  .tutorial__slide_label {
+  .tutorial__slide-info {
     left: 16px;
     right: 16px;
+    padding: 6px 16px;
     -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -5632,6 +5800,13 @@ label {
   .tutorial__slide_button.previous {
     margin-right: 8px;
     margin-left: 16px;
+  }
+  .location__tutorial {
+    width: 24px;
+    height: 24px;
+  }
+  .location__tutorial_text {
+    display: none;
   }
 }
 
@@ -5712,34 +5887,6 @@ label {
   grid-column-end: 3;
   -ms-grid-row-align: center;
   align-self: center;
-}
-
-#w-node-11837bc90d1a-e148319d {
-  -ms-grid-row: 1;
-  grid-row-start: 1;
-  -ms-grid-row-span: 1;
-  grid-row-end: 2;
-  -ms-grid-column: 1;
-  grid-column-start: 1;
-  -ms-grid-column-span: 3;
-  grid-column-end: 4;
-  -ms-grid-row-align: center;
-  align-self: center;
-}
-
-#w-node-11837bc90d1d-e148319d {
-  -ms-grid-row-align: start;
-  align-self: start;
-  -ms-grid-column-align: end;
-  justify-self: end;
-  -ms-grid-column-span: 1;
-  grid-column-end: 5;
-  -ms-grid-column: 4;
-  grid-column-start: 4;
-  -ms-grid-row-span: 1;
-  grid-row-end: 2;
-  -ms-grid-row: 1;
-  grid-row-start: 1;
 }
 
 #w-node-d1064d900402-e148319d {
@@ -5870,7 +6017,7 @@ label {
   justify-self: end;
 }
 
-#w-node-6dea5a5a685a-354831a0 {
+#w-node-d7658f87982b-354831a0 {
   -ms-grid-row: span 1;
   grid-row-start: span 1;
   -ms-grid-row-span: 1;
@@ -5881,7 +6028,7 @@ label {
   grid-column-end: span 4;
 }
 
-#w-node-6dea5a5a685d-354831a0 {
+#w-node-d7658f87982e-354831a0 {
   -webkit-align-self: start;
   -ms-flex-item-align: start;
   -ms-grid-row-align: start;
@@ -5890,7 +6037,7 @@ label {
   justify-self: end;
 }
 
-#w-node-6dea5a5a685f-354831a0 {
+#w-node-d7658f879830-354831a0 {
   -ms-grid-row: span 1;
   grid-row-start: span 1;
   -ms-grid-row-span: 1;
@@ -5901,7 +6048,7 @@ label {
   grid-column-end: span 5;
 }
 
-#w-node-6dea5a5a6862-354831a0 {
+#w-node-d7658f879833-354831a0 {
   -ms-grid-row: span 1;
   grid-row-start: span 1;
   -ms-grid-row-span: 1;
@@ -5912,7 +6059,7 @@ label {
   grid-column-end: span 5;
 }
 
-#w-node-6dea5a5a686c-354831a0 {
+#w-node-d7658f87983d-354831a0 {
   -ms-grid-row: 1;
   grid-row-start: 1;
   -ms-grid-row-span: 1;
@@ -5923,7 +6070,7 @@ label {
   grid-column-end: 3;
 }
 
-#w-node-6dea5a5a6870-354831a0 {
+#w-node-d7658f879841-354831a0 {
   -ms-grid-row: 2;
   grid-row-start: 2;
   -ms-grid-row-span: 1;
@@ -5934,7 +6081,7 @@ label {
   grid-column-end: 2;
 }
 
-#w-node-6dea5a5a6871-354831a0 {
+#w-node-d7658f879842-354831a0 {
   -ms-grid-column-align: start;
   justify-self: start;
   -ms-grid-row: 2;
@@ -5949,35 +6096,7 @@ label {
   align-self: center;
 }
 
-#w-node-f27c2f747396-354831a0 {
-  -ms-grid-row: 1;
-  grid-row-start: 1;
-  -ms-grid-row-span: 1;
-  grid-row-end: 2;
-  -ms-grid-column: 1;
-  grid-column-start: 1;
-  -ms-grid-column-span: 3;
-  grid-column-end: 4;
-  -ms-grid-row-align: center;
-  align-self: center;
-}
-
-#w-node-f27c2f747399-354831a0 {
-  -ms-grid-row-align: start;
-  align-self: start;
-  -ms-grid-column-align: end;
-  justify-self: end;
-  -ms-grid-column-span: 1;
-  grid-column-end: 5;
-  -ms-grid-column: 4;
-  grid-column-start: 4;
-  -ms-grid-row-span: 1;
-  grid-row-end: 2;
-  -ms-grid-row: 1;
-  grid-row-start: 1;
-}
-
-#w-node-f27c2f74739b-354831a0 {
+#w-node-bb8bfd26e0f9-354831a0 {
   -ms-grid-column-span: 4;
   grid-column-end: 5;
   -ms-grid-column: 1;
@@ -5988,7 +6107,7 @@ label {
   grid-row-start: 2;
 }
 
-#w-node-f27c2f7473b2-354831a0 {
+#w-node-bb8bfd26e15c-354831a0 {
   -ms-grid-row: 3;
   grid-row-start: 3;
   -ms-grid-row-span: 1;
@@ -5997,6 +6116,50 @@ label {
   grid-column-start: 1;
   -ms-grid-column-span: 4;
   grid-column-end: 5;
+}
+
+#w-node-bb8bfd26e161-354831a0 {
+  -ms-grid-column-align: end;
+  justify-self: end;
+}
+
+#w-node-5ba024366da9-354831a0 {
+  -ms-grid-column-span: 1;
+  grid-column-end: 2;
+  -ms-grid-column: 1;
+  grid-column-start: 1;
+  -ms-grid-row-span: 1;
+  grid-row-end: 2;
+  -ms-grid-row: 1;
+  grid-row-start: 1;
+  -ms-grid-column-align: start;
+  justify-self: start;
+}
+
+#w-node-5ba024366dac-354831a0 {
+  -ms-grid-column-span: 2;
+  grid-column-end: 4;
+  -ms-grid-column: 2;
+  grid-column-start: 2;
+  -ms-grid-row-span: 1;
+  grid-row-end: 2;
+  -ms-grid-row: 1;
+  grid-row-start: 1;
+  -ms-grid-column-align: center;
+  justify-self: center;
+}
+
+#w-node-5ba024366dcd-354831a0 {
+  -ms-grid-column-span: 1;
+  grid-column-end: 5;
+  -ms-grid-column: 4;
+  grid-column-start: 4;
+  -ms-grid-row-span: 1;
+  grid-row-end: 2;
+  -ms-grid-row: 1;
+  grid-row-start: 1;
+  -ms-grid-column-align: end;
+  justify-self: end;
 }
 
 #w-node-2a17871ce54b-354831a0 {
@@ -6141,6 +6304,12 @@ label {
     -ms-grid-column-span: 2;
     grid-column-end: 4;
   }
+  #w-node-5ba024366dac-354831a0 {
+    -ms-grid-column: 2;
+    grid-column-start: 2;
+    -ms-grid-column-span: 2;
+    grid-column-end: 4;
+  }
 }
 
 @media screen and (max-width: 479px) {
@@ -6156,11 +6325,11 @@ label {
     -ms-grid-column: 1;
     grid-column-start: 1;
   }
-  #w-node-6dea5a5a6870-354831a0 {
+  #w-node-d7658f879841-354831a0 {
     -ms-grid-column-span: 3;
     grid-column-end: 3;
   }
-  #w-node-6dea5a5a6871-354831a0 {
+  #w-node-d7658f879842-354831a0 {
     -ms-grid-row: 3;
     grid-row-start: 3;
     -ms-grid-row-span: 1;
@@ -6170,3 +6339,14 @@ label {
   }
 }
 
+
+
+/*emre*/
+.bar-tooltip {
+  z-index: 100;
+}
+
+line, .grid {
+  stroke: #999;
+  stroke-opacity: 0.2;
+}

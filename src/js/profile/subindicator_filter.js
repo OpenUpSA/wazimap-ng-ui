@@ -76,25 +76,28 @@ export class SubindicatorFilter {
             }
         }
 
-        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, indicators, selectedGroup));
+        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, indicators, selectedGroup, title));
 
         this.populateDropdown(subindicatorDd, subindicators, callback);
     }
 
-    getFilteredData = (selectedFilter, indicators, selectedGroup) => {
+    getFilteredData = (selectedFilter, indicators, selectedGroup, title) => {
         let chartData = [];
         if (selectedFilter !== allValues) {
-            for (const [obj, subindicator] of Object.entries(indicators)) {
-                for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
-                    if (key === selectedFilter) {
-                        Object.entries(value).forEach((cd) => {
-                            chartData.push(new SubIndicator(cd))
-                        })
+            for (const [indicatorTitle, subindicator] of Object.entries(indicators)) {
+                //filter indicatorTitle
+                if (indicatorTitle === title) {
+                    for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
+                        if (key === selectedFilter) {
+                            Object.entries(value).forEach((cd) => {
+                                chartData.push(new SubIndicator(cd))
+                            })
+                        }
                     }
                 }
             }
         } else {
-            for (const [obj, subindicator] of Object.entries(indicators)) {
+            for (const [indicatorTitle, subindicator] of Object.entries(indicators)) {
                 chartData = subindicator.subindicators;
             }
         }

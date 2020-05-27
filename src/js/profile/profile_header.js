@@ -127,7 +127,6 @@ export class Profile_header extends Observable {
         const points = [];
         return this.api.loadPoints(this.profileId, category.category_id).then(data => {
             checkIterate(data.features, feature => {
-                console.log(feature)
                 const prop = feature.properties;
                 const geometry = feature.geometry;
 

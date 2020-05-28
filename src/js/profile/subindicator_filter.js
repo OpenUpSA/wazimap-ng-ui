@@ -13,6 +13,7 @@ export class SubindicatorFilter {
         let indicatorDd = $(dropdowns[0]);
         let subindicatorDd = $(dropdowns[1]);
 
+        this.resetDropdowns(dropdowns);
         let callback = (selected) => this.groupSelected(selected, indicators, subindicatorDd, title);
         this.populateDropdown(indicatorDd, groups, callback);
     }
@@ -59,7 +60,9 @@ export class SubindicatorFilter {
         $(dropdown).find('.dropdown-menu__selected-item .truncate').text(selected);
         $(dropdown).find('.dropdown-menu__content').hide();
 
-        callback(selected);
+        if (callback !== null) {
+            callback(selected);
+        }
     }
 
     groupSelected = (selectedGroup, indicators, subindicatorDd, title) => {
@@ -73,29 +76,45 @@ export class SubindicatorFilter {
             }
         }
 
-        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, indicators, selectedGroup));
+        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, indicators, selectedGroup, title));
 
         this.populateDropdown(subindicatorDd, subindicators, callback);
     }
 
-    getFilteredData = (selectedFilter, indicators, selectedGroup) => {
+    getFilteredData = (selectedFilter, indicators, selectedGroup, title) => {
         let chartData = [];
         if (selectedFilter !== allValues) {
-            for (const [obj, subindicator] of Object.entries(indicators)) {
-                for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
-                    if (key === selectedFilter) {
-                        Object.entries(value).forEach((cd) => {
-                            chartData.push(new SubIndicator(cd))
-                        })
+            for (const [indicatorTitle, subindicator] of Object.entries(indicators)) {
+                //filter indicatorTitle
+                if (indicatorTitle === title) {
+                    for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
+                        if (key === selectedFilter) {
+                            Object.entries(value).forEach((cd) => {
+                                chartData.push(new SubIndicator(cd))
+                            })
+                        }
                     }
                 }
             }
         } else {
-            for (const [obj, subindicator] of Object.entries(indicators)) {
+            for (const [indicatorTitle, subindicator] of Object.entries(indicators)) {
                 chartData = subindicator.subindicators;
             }
         }
 
         return chartData;
+    }
+
+    resetDropdowns = (dropdowns) => {
+        let self = this;
+        for (let i = 0; i < dropdowns.length; i++) {
+            const dropdown = dropdowns[i];
+            $(dropdown).find('.dropdown__list_item').each(function () {
+                const li = $(this);
+                if (li.text().trim() === allValues) {
+                    self.dropdownOptionSelected(dropdown, li, null);
+                }
+            })
+        }
     }
 }

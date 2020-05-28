@@ -18,6 +18,7 @@ export class Chart extends Observable {
 
         this.subindicators = subindicators;
         this.graphValueType = graphValueType;
+        this.title = title;
 
         tooltipClone = $(tooltipClass)[0].cloneNode(true);
         this.subCategoryNode = _subCategoryNode;
@@ -37,6 +38,7 @@ export class Chart extends Observable {
         const barChart = horizontalBarChart();
 
         this.setChartOptions(barChart);
+
         this.setChartMenu(barChart);
         d3select(this.container).call(barChart.data(data));
     }
@@ -48,8 +50,9 @@ export class Chart extends Observable {
         chart.height(450);
         chart.width(760);
         chart.colors(['#39ad84', '#339b77']);
-        chart.xAxisPadding(10);
+        chart.xAxisPadding(10); //padding of the xAxis values(numbers)
         chart.yAxisPadding(10);
+        chart.xLabelPadding(30);    //padding of the label
         chart.barHeight(24);
         chart.barPadding(6);
         chart.margin({
@@ -110,6 +113,20 @@ export class Chart extends Observable {
             $(this).off('click');
             $(this).on('click', () => {
                 self.selectedGraphValueTypeChanged(containerParent, index);
+            })
+        });
+
+        $(containerParent).find('.hover-menu__content_list--last a').each(function (index) {
+            $(this).off('click');
+            $(this).on('click', () => {
+                const downloadFn = {
+                    0: barChart.exportAsCsv,
+                    1: barChart.exportAsExcel,
+                    2: barChart.exportAsJson,
+                    3: barChart.exportAsKml
+                }[index];
+
+                downloadFn(self.title);
             })
         });
     }

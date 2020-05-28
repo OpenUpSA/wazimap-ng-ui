@@ -42,7 +42,7 @@ export class Category {
         $(categoryTitleClass, newCategorySection).text(category);
         $(descriptionTextClass, newCategorySection).text(detail.description);
 
-        if (detail.description === ''){
+        if (detail.description === '') {
             $(descriptionClass, newCategorySection).addClass('hidden');
         }
 

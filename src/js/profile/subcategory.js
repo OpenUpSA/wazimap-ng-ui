@@ -5,7 +5,7 @@ let scHeaderClone = null;
 
 const subcategoryHeaderClass = '.sub-category-header';
 const subcategoryTitleClass = '.indicator__title_wrapper h3';
-const keyMetricWrapperClass = '.sub-category-header__key-metrics';
+const keyMetricWrapperClass = '.sub-category-header__key-metrics_wrap';
 const keyMetricClass = '.key-metric';
 const descriptionTextClass = '.sub-category-header__description p';
 const descriptionClass = '.sub-category-header__description';

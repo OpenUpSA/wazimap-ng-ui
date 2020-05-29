@@ -70,6 +70,11 @@ const profiles = {
         baseUrl: productionUrl,
         config: config
     },
+    'giz-projects.openup.org.za': {
+        profile: 11,
+        baseUrl: productionUrl,
+        config: config
+    },
     'covid-ccij.openup.org.za': {
         profile: 5,
         baseUrl: mainUrl,

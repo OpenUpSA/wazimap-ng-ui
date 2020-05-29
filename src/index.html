@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Wed May 27 2020 07:04:06 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Thu May 28 2020 11:27:51 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="5ecb7ed6bb713f67e148319d" data-wf-site="5ecb7ed6bb713f2f4b48319b">
 <head>
     <meta charset="utf-8">
@@ -42,11 +42,6 @@
     <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="images/webclip.png" rel="apple-touch-icon">
     <style>
-        /*------------------------------------- Height without nav */
-        .full-height {
-            height: calc(100vh - 60px)
-        }
-
         /*------------------------------------- Truncation */
         .truncate {
             width: 100%;
@@ -150,10 +145,20 @@
         .slider.round:before {
             border-radius: 50%;
         }
+
+        /*-------- Fixing Chart Lines */
+        .bar-tooltip {
+            z-index: 100;
+        }
+
+        line, .grid {
+            stroke: #999;
+            stroke-opacity: 0.2;
+        }
     </style>
 </head>
 <body class="body no-scroll">
-<div class="login-modal">
+<div class="login-modal hidden">
     <div class="login">
         <div id="w-node-11a67e6ccd44-e148319d" class="login__title">
             <h1 class="clear">Login Required</h1>
@@ -177,10 +182,10 @@
                         placeholder="" id="Email" required=""><label for="Password">Password</label><input
                         type="password" class="text-field w-input" maxlength="256" name="Password" data-name="Password"
                         id="Password" required="">
-                    <div class="login-form__actions"><label id="w-node-2ab4a8cdff88-e148319d"
-                                                            class="w-checkbox login__form-checkbox">
+                    <div class="login-form__actions"><label id="w-node-fefcf113a3cc-e148319d"
+                                                            class="w-checkbox login-form__checkbox">
                         <div class="w-checkbox-input w-checkbox-input--inputType-custom custom-checkbox"></div>
-                        <input type="checkbox" id="checkbox" name="checkbox" data-name="Checkbox"
+                        <input type="checkbox" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2"
                                style="opacity:0;position:absolute;z-index:-1"><span class="checkbox-label w-form-label">Remember me</span></label><input
                             type="submit" value="Login" data-wait="Please wait..." id="w-node-fceb1157e41b-e148319d"
                             class="button w-button"><a id="w-node-25fe1e234621-e148319d" href="#">Forgot your
@@ -349,15 +354,6 @@
             </div>
             <div class="slide-nav w-slider-nav w-slider-nav-invert w-round"></div>
         </div>
-        <div id="w-node-fd080d3da3ea-e148319d" class="tutorial__dismiss">
-            <div class="dismiss__no-show">
-                <div class="html-embed w-embed">
-                    <p><input type="checkbox" class="custom-checkbox" name="dismiss__no-show" id="no-show"></p>
-                </div>
-                <div class="checkbox-label">Don&#x27;t show next time</div>
-            </div>
-            <a id="w-node-ce80f6ac26c6-e148319d" data-w-id="e36b296a-2837-4075-3849-ce80f6ac26c6" href="#"
-               class="button text w-button">Dismiss</a></div>
     </div>
 </div>
 <div class="main">
@@ -429,21 +425,38 @@
                 </div>
             </div>
             <div id="w-node-926b3e9c85a0-e148319d" class="nav__content_menu">
-                <a data-w-id="2331a044-806f-907c-13ce-926b3e9c8565" href="#" class="nav__link w-inline-block">
-                    <div class="nav__link_icon">
-                        <div class="svg-icon w-embed">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
-                                <path d="M0 0h24v24H0z" fill="none"></path>
-                                <path fill="currentColor"
-                                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"></path>
-                            </svg>
+                <div class="nav__link-wrap">
+                    <a data-w-id="2331a044-806f-907c-13ce-926b3e9c8565" href="#" class="nav__link w-inline-block">
+                        <div class="nav__link_icon">
+                            <div class="svg-icon w-embed">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path fill="currentColor"
+                                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"></path>
+                                </svg>
+                            </div>
                         </div>
-                    </div>
-                    <div class="nav__link_text">
-                        <div>Tutorial</div>
-                    </div>
-                </a>
-                <div class="nav__menu_trigger hidden">
+                        <div class="nav__link_text">
+                            <div>Tutorial</div>
+                        </div>
+                    </a>
+                    <a data-w-id="9ed47308-e332-9825-644e-4ad6bb204fab" href="#"
+                       class="nav__link hidden w-inline-block">
+                        <div class="nav__link_icon">
+                            <div class="svg-icon w-embed">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path fill="currentColor"
+                                          d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="nav__link_text">
+                            <div>Login</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="nav__menu-trigger hidden">
                     <div class="svg-icon w-embed">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
                             <path fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
@@ -454,6 +467,22 @@
         </div>
     </div>
     <div class="map">
+        <div class="map-about">
+            <div class="map-about__icon">
+                <div class="svg-icon small w-embed">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path fill="currentColor"
+                              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div>Created by</div>
+            <div class="map-about__creator-name">
+                <div>Creator name</div>
+            </div>
+            <div>. <a href="#">Learn more</a><a href="#"></a></div>
+        </div>
         <div class="map-location">
             <div class="map-location__tags">
                 <div title="Click to make this your primary search" class="location-tag__loading">

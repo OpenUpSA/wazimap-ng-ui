@@ -105,7 +105,8 @@ export default class Controller extends Observable {
             children: children,
             selectedSubindicator: payload.obj.keys,
             choropleth_method: payload.obj.choropleth_method,
-            subindicatorArr: payload.subindicators
+            subindicatorArr: payload.subindicators,
+            parents: payload.parents
         }
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.obj._keys;
@@ -122,6 +123,38 @@ export default class Controller extends Observable {
         this.state.subindicator = subindicator;
 
         this.triggerEvent("choroplethFiltered", payload);
+    }
+
+    handleNewProfileChoropleth() {
+        if (this.state.subindicator === null) {
+            return;
+        }
+
+        //this means we need to show choropleth for the new children. update payload.state.subindicator.children and payload.state.subindicator.subindicatorArr
+        let indicators = this.state.profile.profile
+            .profileData[this.state.subindicator.parents.category]
+            .subcategories[this.state.subindicator.parents.subcategory]
+            .indicators;
+
+        let subindicatorArr = indicators[this.state.subindicator.parents.indicator].subindicators;
+
+        let selectedSubindicator = subindicatorArr.filter((s) => {
+            return s.keys === this.state.subindicator.selectedSubindicator
+        })[0];
+        let children = selectedSubindicator.children;
+        let choropleth_method = selectedSubindicator.choropleth_method;
+
+        this.state.subindicator.selectedSubindicator = selectedSubindicator.keys;
+        this.state.subindicator.children = children;
+        this.state.subindicator.choropleth_method = choropleth_method;
+
+        const args = {
+            data: children,
+            subindicatorArr: subindicatorArr,
+            indicators: indicators
+        }
+
+        this.triggerEvent("newProfileWithChoropleth", args);
     }
 
     /**
@@ -209,7 +242,6 @@ export default class Controller extends Observable {
 
     onProfileLoaded(payload) {
         this.state.profile = payload;
-        this.state.subindicators = null; // unset when a new profile is loaded
         this.triggerEvent("profileLoaded", payload);
     };
 

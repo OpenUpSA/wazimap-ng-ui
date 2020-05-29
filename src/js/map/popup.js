@@ -102,8 +102,10 @@ export class Popup extends Observable {
     setTooltipSubindicators = (payload, state, item, areaCode) => {
         if (state.subindicator != null) {
             //if any subindicator selected
+            let isChild = false;
             for (const [geographyCode, count] of Object.entries(state.subindicator.children)) {
                 if (geographyCode == areaCode) {
+                    isChild = true;
                     const countFmt = numFmt(count);
                     const perc = (payload.layer.feature.properties.percentage * 100).toFixed(2);
 
@@ -111,6 +113,10 @@ export class Popup extends Observable {
                     $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
                     $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc} %)`);
                 }
+            }
+
+            if (!isChild){
+                $(item).find('.map-tooltip__value').remove();
             }
         } else {
             $(item).find('.map-tooltip__value').remove();

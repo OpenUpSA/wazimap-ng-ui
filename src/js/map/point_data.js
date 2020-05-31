@@ -121,7 +121,7 @@ export class PointData extends Observable {
         const self = this;
 
         checkIterate(points, point => {
-            const col = $('._' + point.theme.id).css('color');
+            const col = $('.theme-' + point.theme.id).css('color');
             let marker = L.circleMarker([point.y, point.x], {
                 color: col,
                 radius: 3,

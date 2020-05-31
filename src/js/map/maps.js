@@ -159,7 +159,7 @@ export class MapControl extends Observable {
         const calculation = calculationFunc(args);
         const values = calculation.map(el => el.val);
 
-        this.choropleth.showChoropleth(calculation);
+        this.choropleth.showChoropleth(calculation, false);
         const intervals = this.choropleth.getIntervals(values);
 
         this.triggerEvent("choropleth", {
@@ -169,8 +169,8 @@ export class MapControl extends Observable {
         })
     }
 
-    resetChoropleth() {
-        this.choropleth.reset();
+    resetChoropleth(setLayerToSelected) {
+        this.choropleth.reset(setLayerToSelected);
     }
 
     limitGeoViewSelections = (level) => {
@@ -185,6 +185,10 @@ export class MapControl extends Observable {
                 $('nav#w-dropdown-list-0').find('a:nth-child(2)').hide();
             }
         }
+    }
+
+    resetChoroplethLayers() {
+        this.choropleth.resetLayers(this.layerCache);
     }
 
 

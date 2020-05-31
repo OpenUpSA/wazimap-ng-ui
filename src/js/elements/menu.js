@@ -55,7 +55,7 @@ function indicatorHasChildren(indicator) {
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
-    function addSubIndicators(wrapper, indicator, subindicators, indicators) {
+    function addSubIndicators(wrapper, category, subcategory, indicator, subindicators, indicators) {
         const indicatorLabel = indicator;
         const newIndicatorElement = indicatorTemplate.cloneNode(true);
         $(".data-menu__indicator_trigger div", newIndicatorElement).text(indicatorLabel);
@@ -76,6 +76,12 @@ export function loadMenu(data, subindicatorCallback) {
 
                     wrapper.append(newSubIndicatorElement);
 
+                    const parents = {
+                        category: category,
+                        subcategory: subcategory,
+                        indicator: indicator
+                    }
+
                     $(newSubIndicatorElement).on("click", (el) => {
                         setActive(el);
                         if (subindicatorCallback != undefined)
@@ -85,7 +91,8 @@ export function loadMenu(data, subindicatorCallback) {
                                 indicatorTitle: indicator,
                                 subindicators: subindicators,
                                 obj: subIndicator,
-                                indicators: indicators
+                                indicators: indicators,
+                                parents: parents
                             })
                     });
                 }
@@ -93,7 +100,7 @@ export function loadMenu(data, subindicatorCallback) {
         }
     }
 
-    function addIndicators(wrapper, subcategory, indicators) {
+    function addIndicators(wrapper, category, subcategory, indicators) {
         var newSubCategory = subCategoryTemplate.cloneNode(true);
 
         $(".data-category__h2_trigger div", newSubCategory).text(subcategory);
@@ -108,7 +115,9 @@ export function loadMenu(data, subindicatorCallback) {
                 continue
 
             if (detail.subindicators.length > 0) {
-                addSubIndicators(h3Wrapper, indicator, detail.subindicators, indicators);
+                {
+                    addSubIndicators(h3Wrapper, category, subcategory, indicator, detail.subindicators, indicators);
+                }
             }
         }
     }
@@ -124,8 +133,9 @@ export function loadMenu(data, subindicatorCallback) {
 
         for (const [subcategory, detail] of Object.entries(subcategories)) {
             let count = subindicatorsInSubCategory(detail);
-            if (count > 0)
-                addIndicators(h2Wrapper, subcategory, detail.indicators);
+            if (count > 0) {
+                addIndicators(h2Wrapper, category, subcategory, detail.indicators);
+            }
         }
     }
 
@@ -151,6 +161,7 @@ export function loadMenu(data, subindicatorCallback) {
                 $('.' + noDataWrapperClsName).addClass(hideondeployClsName);
             }
             hasNoItems = false;
+
             addSubcategories(parentContainer, category, detail.subcategories)
         }
     }

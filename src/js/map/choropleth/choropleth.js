@@ -1,9 +1,5 @@
-import {Observable} from '../../utils';
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
-import {SubindicatorFilter} from "../../profile/subindicator_filter";
-
-let siFilter = null;
 
 export class Choropleth {
     constructor(layers, layerStyler, options, buffer = 0.1) {
@@ -13,8 +9,6 @@ export class Choropleth {
         this.options = options;
         this.buffer = buffer;
         this.currentLayers = [];
-
-        this.handleChoroplethFilter();
     }
 
     getIntervals(values) {
@@ -30,15 +24,22 @@ export class Choropleth {
         return intervals
     }
 
-    reset() {
+    reset(setLayerToSelected) {
         const self = this;
         this.currentLayers.forEach(code => {
+            //setLayerToSelected -> removemapchip
+            //setLayerToHoverOnly -> display
             const layer = self.layers[code];
-            self.layerStyler.setLayerToSelected(layer);
+            if (setLayerToSelected) {
+                self.layerStyler.setLayerToSelected(layer);
+            }
         })
 
         this.currentLayers = [];
+    }
 
+    resetLayers(_layers) {
+        this.layers = _layers;
     }
 
     getBounds(values) {
@@ -51,7 +52,7 @@ export class Choropleth {
         }
     }
 
-    showChoropleth(calculations) {
+    showChoropleth(calculations, setLayerToSelected) {
         const self = this;
         const childGeographyValues = [...calculations];
         const values = childGeographyValues.map(el => el.val);
@@ -62,7 +63,7 @@ export class Choropleth {
             .domain([bounds.lower, bounds.upper])
             .range([this.legendColors[0], this.legendColors[numIntervals - 1]]);
 
-        this.reset();
+        this.reset(setLayerToSelected);
 
         childGeographyValues.forEach(el => {
             const layer = self.layers[el.code];
@@ -76,13 +77,5 @@ export class Choropleth {
                 layer.feature.properties.percentage = el.val;
             }
         })
-    }
-
-    handleChoroplethFilter() {
-
-        /*
-        siFilter = new SubindicatorFilter();
-        siFilter.handleFilter(detail, groups, title, this);
-        */
     }
 }

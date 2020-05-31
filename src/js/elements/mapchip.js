@@ -25,19 +25,19 @@ export class MapChip extends Observable {
         this.clearLegend();
     }
 
-    showMapChip(payload) {
+    showMapChip(args) {
         $(mapOptionsClass).removeClass('hidden');
         $(mapOptionsClass).show();  //webflow.js adds display:none when clicked on x
         $(mapOptionsClass).find('.filters__header_close').on('click', () => this.removeMapChip());
 
-        this.handleChoroplethFilter(payload);
+        this.handleChoroplethFilter(args);
     }
 
-    handleChoroplethFilter(payload) {
+    handleChoroplethFilter(args) {
         let groups = [];
-        subindicatorKey = payload.obj.keys;
+        subindicatorKey = args.subindicatorKey;
 
-        for (const [title, detail] of Object.entries(payload.indicators)) {
+        for (const [title, detail] of Object.entries(args.indicators)) {
             for (const [group, items] of Object.entries(detail.groups)) {
                 groups.push(group);
             }
@@ -45,8 +45,8 @@ export class MapChip extends Observable {
 
         let siFilter = new SubindicatorFilter();
         let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
-        let indicators = payload.indicators;
-        siFilter.handleFilter(indicators, groups, payload.indicatorTitle, this, dropdowns);
+        let indicators = args.indicators;
+        siFilter.handleFilter(indicators, groups, args.indicatorTitle, this, dropdowns);
     }
 
     applyFilter = (subindicatorArr) => {
@@ -111,9 +111,9 @@ export class MapChip extends Observable {
         this.showLegend(payload.colors, payload.intervals);
     }
 
-    onSubIndicatorChange(payload, colors) {
-        const label = `${payload.indicatorTitle} (${payload.obj.label})`
+    onSubIndicatorChange(args) {
+        const label = `${args.indicatorTitle} (${args.subindicatorKey})`
         this.updateMapChipText(label);
-        this.showMapChip(payload);
+        this.showMapChip(args);
     }
 }

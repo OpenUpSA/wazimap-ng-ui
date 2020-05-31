@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Thu May 28 2020 11:27:51 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Fri May 29 2020 12:39:14 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="5ecb7ed6bb713f67e148319d" data-wf-site="5ecb7ed6bb713f2f4b48319b">
 <head>
     <meta charset="utf-8">
-    <title>Wazimap 2.0 - 25052020</title>
+    <title>Wazimap NG</title>
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta content="Webflow" name="generator">
     <link href="css/normalize.css" rel="stylesheet" type="text/css">
     <link href="css/webflow.css" rel="stylesheet" type="text/css">
-    <link href="css/wazi-update-25052020.webflow.css" rel="stylesheet" type="text/css">
+    <link href="css/wazimap-ng-v1.webflow.css" rel="stylesheet" type="text/css">
     <style>@media (max-width: 479px) {
         html.w-mod-js:not(.w-mod-ix) [data-w-id="daa39c00-4f7f-ebc9-ea04-511e668d9825"] {
             -webkit-transform: translate3d(0PX, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
@@ -38,7 +38,8 @@
         var n = c.documentElement, t = " w-mod-";
         n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
     }(window, document);</script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
     <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="images/webclip.png" rel="apple-touch-icon">
     <style>
@@ -178,7 +179,7 @@
         <div id="w-node-222d0aaebade-e148319d" class="login__form">
             <div class="form-block w-form">
                 <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form"><label for="Email">Username</label><input
-                        type="email" class="text-field w-input" maxlength="256" name="Email" data-name="Email"
+                        type="text" class="text-field w-input" maxlength="256" name="Email" data-name="Email"
                         placeholder="" id="Email" required=""><label for="Password">Password</label><input
                         type="password" class="text-field w-input" maxlength="256" name="Password" data-name="Password"
                         id="Password" required="">
@@ -205,7 +206,7 @@
     <div class="tutorial">
         <div class="tutorial__header">
             <div class="tutorial__title">
-                <h1 class="clear">How to use Wazimap</h1>
+                <h1 class="clear">How to use <span class="profile-name">Profile Name</span></h1>
             </div>
             <div data-w-id="6ca2d157-b860-d2c0-78da-11837bc90d1d" class="tutorial__close">
                 <div class="svg-icon w-embed">
@@ -223,15 +224,15 @@
                 <div class="slide w-slide">
                     <div class="tutorial__slide-content">
                         <div class="tutorial__slide-info">
-                            <div><span class="slide-info__title">Introduction:</span> Wazimap helps users visualise and
-                                better understand South African data without specialised tools or training.
+                            <div><span class="slide-info__title">Introduction:</span> <span
+                                    class="slide-info__introduction">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi porta nibh ligula, id venenatis lectus consequat eu. Sed a augue sit amet eros convallis vulputate.</span>
                             </div>
                         </div>
                         <div class="tutorial__slide-image _1">
-                            <div class="tutorial__slide-number">
-                                <div>1/10</div>
-                            </div>
                             <div class="tutorial__slide_gradient bottom"></div>
+                            <div class="tutorial__slide-number">
+                                <div>1/8</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -245,7 +246,7 @@
                         </div>
                         <div class="tutorial__slide-image _2">
                             <div class="tutorial__slide-number">
-                                <div>2/10</div>
+                                <div>2/8</div>
                             </div>
                         </div>
                     </div>
@@ -260,7 +261,7 @@
                         </div>
                         <div class="tutorial__slide-image _2b">
                             <div class="tutorial__slide-number">
-                                <div>3/10</div>
+                                <div>3/8</div>
                             </div>
                         </div>
                     </div>
@@ -274,7 +275,7 @@
                         </div>
                         <div class="tutorial__slide-image _3">
                             <div class="tutorial__slide-number">
-                                <div>4/10</div>
+                                <div>4/8</div>
                             </div>
                         </div>
                     </div>
@@ -288,7 +289,7 @@
                         </div>
                         <div class="tutorial__slide-image _4">
                             <div class="tutorial__slide-number">
-                                <div>5/10</div>
+                                <div>5/8</div>
                             </div>
                         </div>
                     </div>
@@ -302,7 +303,7 @@
                         </div>
                         <div class="tutorial__slide-image _5">
                             <div class="tutorial__slide-number">
-                                <div>6/10</div>
+                                <div>6/8</div>
                             </div>
                         </div>
                     </div>
@@ -317,7 +318,7 @@
                         </div>
                         <div class="tutorial__slide-image _7">
                             <div class="tutorial__slide-number">
-                                <div>7/10</div>
+                                <div>7/8</div>
                             </div>
                         </div>
                     </div>
@@ -325,13 +326,15 @@
                 <div class="slide w-slide">
                     <div class="tutorial__slide-content">
                         <div class="tutorial__slide-info">
-                            <div><span class="slide-info__title">Learn more:</span> For more tutorials on how to use
-                                specific tools in Wazimap, look out for the tutorial icons.
+                            <div><span class="slide-info__title">Learn more:</span> For more information on how to use
+                                specific features, look out for tutorial icons. For an in-depth guide on using this
+                                site, please see our <a href="https://openup.gitbook.io/wazimap-ng-user-guide/"
+                                                        target="_blank">user manual</a>.
                             </div>
                         </div>
                         <div class="tutorial__slide-image _7">
                             <div class="tutorial__slide-number">
-                                <div>7/10</div>
+                                <div>8/8</div>
                             </div>
                         </div>
                     </div>
@@ -363,9 +366,9 @@
         <div class="nav__shadow"></div>
         <div class="nav__content">
             <a id="w-node-926b3e9c855a-e148319d" href="#" class="nav__content_title w-inline-block">
-                <div class="nav__logo_wrap">
-                    <div class="nav__logo_placeholder"></div>
-                </div>
+                <div class="nav__profile-logo"><img
+                        src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
+                        alt="" class="profile-logo"></div>
             </a>
             <div id="w-node-926b3e9c8568-e148319d" class="nav__content_search">
                 <div class="nav__search_input">
@@ -467,7 +470,7 @@
         </div>
     </div>
     <div class="map">
-        <div class="map-about">
+        <div class="map-about hidden">
             <div class="map-about__icon">
                 <div class="svg-icon small w-embed">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -477,9 +480,8 @@
                     </svg>
                 </div>
             </div>
-            <div>Created by</div>
-            <div class="map-about__creator-name">
-                <div>Creator name</div>
+            <div class="map-about__profile-name">
+                <div>Profile name</div>
             </div>
             <div>. <a href="#">Learn more</a><a href="#"></a></div>
         </div>
@@ -511,7 +513,7 @@
                             </div>
                         </div>
                         <div class="filters__header_name">
-                            <div>Sub-indicator name</div>
+                            <div>indicator name</div>
                         </div>
                     </div>
                     <div data-w-id="a0a0a80b-723d-9f06-08f8-22ecf4a4bddb" class="filters__header_toggle">
@@ -614,6 +616,28 @@
                     </div>
                 </div>
             </div>
+            <div style="display:flex" class="map-options__context">
+                <div class="map-option__context_text">
+                    <div>Indicator context</div>
+                </div>
+                <div data-w-id="dfcf026d-123b-ec2d-3d1f-5646d4025e7b" class="map-options__context_tooltip">
+                    <div style="display:none" class="tooltip">
+                        <div class="tooltip-card dark">
+                            <div class="tooltip-text">
+                                <div>Tooltip text</div>
+                            </div>
+                            <div class="tooltip-notch dark"></div>
+                        </div>
+                    </div>
+                    <div class="svg-icon small w-embed">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                            <path fill="currentColor"
+                                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="main-map" class="map-area"></div>
     </div>
@@ -653,7 +677,7 @@
                 <div title="Click to make this your primary search" class="sticky-header__current-location">
                     <div class="truncate text-center">Location name</div>
                 </div>
-                <div class="sticky-header__tutorial">
+                <div class="sticky-header__tutorial hidden">
                     <div class="svg-icon w-embed">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
                             <path d="M0 0h24v24H0z" fill="none"></path>
@@ -671,7 +695,7 @@
                             <div class="truncate">Parent geography</div>
                         </div>
                     </div>
-                    <div class="location__tutorial">
+                    <div class="location__tutorial hidden">
                         <div class="location__tutorial_icon">
                             <div class="svg-icon w-embed">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
@@ -686,6 +710,30 @@
                 </div>
                 <div data-w-id="a462ef20-a798-735c-f166-106a34080855" class="location__title">
                     <h1 class="cc-clear">Location name</h1>
+                </div>
+                <div class="location__description hidden">
+                    <div>A <span class="location-type">Location type</span> in <span class="parent-geography">parent geography</span>
+                    </div>
+                </div>
+                <div class="location__sources">
+                    <div class="label">
+                        <div>Sources used:</div>
+                    </div>
+                    <div class="location__sources_loading">
+                        <div class="loading">
+                            <div class="loading__icon"><img src="images/loading.gif" alt=""></div>
+                            <div class="loading__text">
+                                <div>Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="location__sources_no-data hidden">
+                        <div class="no-data">
+                            <div class="no-data__text">
+                                <div>No source data available</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="location__facilities">
                     <div class="location__facilities_title">
@@ -712,26 +760,6 @@
                             </div>
                             <div class="no-data__text">
                                 <div>No facilities for this location</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="location__sources">
-                    <div class="label">
-                        <div>Sources:</div>
-                    </div>
-                    <div class="location__sources_loading">
-                        <div class="loading">
-                            <div class="loading__icon"><img src="images/loading.gif" alt=""></div>
-                            <div class="loading__text">
-                                <div>Loading...</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="location__sources_no-data hidden">
-                        <div class="no-data">
-                            <div class="no-data__text">
-                                <div>No source data available</div>
                             </div>
                         </div>
                     </div>

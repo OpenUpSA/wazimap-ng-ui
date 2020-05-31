@@ -13,9 +13,13 @@ export function onProfileLoaded(payload) {
     navSearch.select(".search-chip .truncate").text(profile.getFullName());
 }
 
-let minLength = 3;
-const clsName = 'location__search_input';
+const inputClassName = '.location__search_input';
+const parentClassName = '.nav__search_input';
+const searchDdClassName = '.nav__search_dropdown';
+
+let startSearchingClone = null;
 let searchResultItem = '';
+let minLength = 3;
 
 /**
  * This class is responsible for handling the search box with all of its events
@@ -36,9 +40,11 @@ export class Search extends Observable {
         this.setSearchInput();
     };
 
-    prepareDomElements = () =>{
+    prepareDomElements = () => {
+        startSearchingClone = $('.search__dropdown_plate')[0].cloneNode(true);
         searchResultItem = $('.search__dropdown_list-item')[0].cloneNode(true);
-        this.emptySearchResults();
+        $(parentClassName).find('.w-form-fail').remove();
+        $(parentClassName).find('.w-form-done').remove();
     }
 
     /**
@@ -47,7 +53,7 @@ export class Search extends Observable {
     setSearchInput = () => {
         let self = this;
         let count = 0;
-        $('.' + clsName).each(function () {
+        $(inputClassName).each(function () {
             let element = $(this);
 
             $(this).autocomplete({
@@ -86,7 +92,7 @@ export class Search extends Observable {
         });
     }
 
-    generateSearchLabel(profile, skipTopLevel=true, skipDuplicates=true) {
+    generateSearchLabel(profile, skipTopLevel = true, skipDuplicates = true) {
         let parents = profile.parents;
         let label = '';
         let previous = '';
@@ -120,24 +126,20 @@ export class Search extends Observable {
         /**
          * the callback function that is triggered when a result item is selected
          */
-        this.triggerEvent('resultClick', item)
+        this.triggerEvent('resultClick', item);
+
+        const clone = startSearchingClone.cloneNode(true);
 
         $('.nav__search_deselect').click();
         $(element).val('');
         this.emptySearchResults();
 
-        let chipWrapper = $('.search__chips_wrapper');
-        let chip = $('.search-chip')[0].cloneNode(true);
-        $('.truncate', chip).text(item.name + ' (' + item.code + ')');
-        $('.search-chip', chipWrapper).remove();
-        chipWrapper.append(chip);
-
-        $('.search-chip').find('.chip__action-icon').on('click', () => this.selectedChipRemoved(item, element))
+        $(searchDdClassName).html('');
+        $(searchDdClassName).append(clone);
     }
 
-    emptySearchResults = () =>{
+    emptySearchResults = () => {
         $('.search__dropdown_list').html('');
-        $('.search__dropdown_label').html('No Results');
     }
 
     /**

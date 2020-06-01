@@ -5,6 +5,7 @@ let scHeaderClone = null;
 
 const subcategoryHeaderClass = '.sub-category-header';
 const subcategoryTitleClass = '.indicator__title_wrapper h3';
+const keyMetricParentClass = '.sub-category-header__key-metrics';
 const keyMetricWrapperClass = '.sub-category-header__key-metrics_wrap';
 const keyMetricClass = '.key-metric';
 const descriptionTextClass = '.sub-category-header__description p';
@@ -57,7 +58,7 @@ export class Subcategory {
         $(metricWrapper).find(keyMetricClass).remove();
 
         if (typeof key_metrics === 'undefined' || key_metrics.length <= 0) {
-            $(wrapper).find(keyMetricWrapperClass).addClass('hidden');
+            $(wrapper).find(keyMetricParentClass).addClass('hidden');
 
             return;
         }

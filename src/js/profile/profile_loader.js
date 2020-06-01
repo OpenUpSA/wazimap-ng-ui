@@ -25,12 +25,13 @@ export default class ProfileLoader extends Observable {
         //todo - make this constructor
         const profile = dataBundle.profile;
         const geometries = dataBundle.geometries;
+        const geography = profile.geography;
 
         this.prepareDomElements();
         this.loadCategories(profile);
         this.updateGeography(profile);
 
-        let profileHeader = new Profile_header(profile.parents, geometries, this.api, this.profileId);
+        let profileHeader = new Profile_header(profile.parents, geometries, this.api, this.profileId, geography);
         profileHeader.on('breadcrumbSelected', parent => this.triggerEvent('breadcrumbSelected', parent));
     }
 

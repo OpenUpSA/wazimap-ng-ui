@@ -24,10 +24,15 @@ export class Indicator {
         let indicator = indicatorClone.cloneNode(true);
         $(indicatorTitleClass, indicator).text(title);
         $(chartDescClass, indicator).text(indicatorData.description);
-        $(sourceClass, indicator).text(indicatorData.metadata.source);
 
-        for (const [group, items] of Object.entries(indicatorData.groups)) {
-            this.groups.push(group);
+        if (typeof indicatorData.metadata !== 'undefined') {
+            $(sourceClass, indicator).text(indicatorData.metadata.source);
+        }
+
+        if (indicatorData.groups !== null && typeof indicatorData.groups !== 'undefined') {
+            for (const [group, items] of Object.entries(indicatorData.groups)) {
+                this.groups.push(group);
+            }
         }
 
         let c = new Chart(this.subindicators, this.groups, detail, 'Percentage', indicator, title);

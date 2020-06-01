@@ -1,9 +1,12 @@
-import {Observable} from '../utils';
-import {map} from "leaflet/dist/leaflet-src.esm";
+import {checkIterate, Observable} from '../utils';
 import {format as d3format} from 'd3-format';
+import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 const wrapperClsName = 'content__map_current-display';
+const mapOptionsClass = '.map-options';
 const lightStart = 3;
+
+let subindicatorKey = '';
 
 /**
  * Represent the map chip at the bottom of the map
@@ -16,19 +19,53 @@ export class MapChip extends Observable {
     }
 
     prepareDomElements() {
-        this.clonedMapChip = $('.chip--map')[0].cloneNode(true);	//chip
+        $(mapOptionsClass)
         this.clonedLegendBlock = $('.map_legend-block')[0].cloneNode(true);	//a legend block
-        this.clonedLegend = $('.content__map_legend')[0].cloneNode(true);	//the legend itself
-
-        $(this.clonedMapChip).removeClass('hide');
+        this.clonedLegend = $('.map-options__legend')[0].cloneNode(true);	//the legend itself
         this.clearLegend();
     }
 
-    showMapChip() {
-        const element = $(this.clonedMapChip);
+    showMapChip(args) {
+        $(mapOptionsClass).removeClass('hidden');
+        $(mapOptionsClass).show();  //webflow.js adds display:none when clicked on x
+        $(mapOptionsClass).find('.filters__header_close').on('click', () => this.removeMapChip());
 
-        $('.' + wrapperClsName).prepend(element);	//chip
-        element.find('.chip__remove--map').on('click', () => this.removeMapChip());
+        this.handleChoroplethFilter(args);
+    }
+
+    handleChoroplethFilter(args) {
+        let groups = [];
+        subindicatorKey = args.subindicatorKey;
+
+        for (const [title, detail] of Object.entries(args.indicators)) {
+            for (const [group, items] of Object.entries(detail.groups)) {
+                groups.push(group);
+            }
+        }
+
+        let siFilter = new SubindicatorFilter();
+        let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
+        let indicators = args.indicators;
+        siFilter.handleFilter(indicators, groups, args.indicatorTitle, this, dropdowns);
+    }
+
+    applyFilter = (subindicatorArr) => {
+        if (subindicatorArr !== null) {
+            checkIterate(subindicatorArr, (s) => {
+                if (s.keys === subindicatorKey) {
+                    const payload = {
+                        data: s.children,
+                        subindicatorArr: subindicatorArr
+                    }
+
+                    this.triggerEvent("choroplethFiltered", payload)
+                }
+            })
+        }
+    }
+
+    showMapOptions() {
+        $(mapOptionsClass).removeClass('hidden');
     }
 
     showLegend(colors, intervals) {
@@ -38,8 +75,7 @@ export class MapChip extends Observable {
         const legend = $(this.clonedLegend);
         const fmt = d3format(".1%")
 
-        $('.' + wrapperClsName).append(legend);	    //legend
-        $('.' + wrapperClsName + ' .map_legend-block').remove(); //remove the previous legends
+        $(mapOptionsClass).find('.map-options__legend_wrap').html('');
 
         for (let i = 0; i < intervals.length; i++) {
             const interval = intervals[i];
@@ -53,20 +89,20 @@ export class MapChip extends Observable {
             $('.truncate', item).text(label);
             $(item).css('background-color', colors[i]);
             $(item).css('opacity', this.legendColors.opacity);
-            $('.' + wrapperClsName + ' .content__map_legend').append(item);
+            $(mapOptionsClass).find('.map-options__legend_wrap').append(item);
         }
     }
 
     updateMapChipText(textValue) {
-        $(this.clonedMapChip).find('.truncate').text(textValue);
+        $(mapOptionsClass).find('.filters__header_name div').text(textValue);
     }
 
     clearLegend() {
-        $('.' + wrapperClsName).html('');
+        $(mapOptionsClass).addClass('hidden');
     }
 
     removeMapChip() {
-        const element = $(this.clonedMapChip);
+        const element = $(mapOptionsClass)[0];
         this.clearLegend();
         this.triggerEvent('mapChipRemoved', element);
     }
@@ -75,9 +111,9 @@ export class MapChip extends Observable {
         this.showLegend(payload.colors, payload.intervals);
     }
 
-    onSubIndicatorChange(payload, colors) {
-        const label = `${payload.indicator} (${payload.obj.label})`
+    onSubIndicatorChange(args) {
+        const label = `${args.indicatorTitle} (${args.subindicatorKey})`
         this.updateMapChipText(label);
-        this.showMapChip();
+        this.showMapChip(args);
     }
 }

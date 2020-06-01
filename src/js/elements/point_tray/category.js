@@ -1,8 +1,8 @@
 import {Observable} from '../../utils';
 
-const defaultActiveClsName = 'active-1';
-const categoryItemDoneClsName = '.point-data__h2_load-complete';
-const categoryItemLoadingClsName = '.point-data__h2_loading';
+const activeClsName = 'active';
+const categoryItemDoneClsName = '.point-mapper__h2_load-complete';
+const categoryItemLoadingClsName = '.point-mapper__h2_loading';
 
 export class Category extends Observable {
     constructor(data, categoryItem, isLast) {
@@ -16,19 +16,19 @@ export class Category extends Observable {
     }
 
     prepareDomElements() {
-        this.activeClassName = 'active-' + this.theme.id;
+        this.activeClassName = activeClsName;
         this.element = this.categoryItem.cloneNode(true);
 
         $(this.element).on('click', () => this.toggle())
-        $(this.element).find(categoryItemLoadingClsName).addClass('hide');
+        $(this.element).find(categoryItemLoadingClsName).addClass('hidden');
         this.showLoading(false);
         this.showDone(false);
-        $(this.element).find('.point-data__h2').removeClass(defaultActiveClsName);
+        $(this.element).removeClass(activeClsName);
         if (this.isLast) {
-            $(this.element).find('.point-data__h2').addClass('last');
+            $(this.element).addClass('last');
         }
 
-        $('.point-data__label .truncate', this.element).text(this.name);
+        $('.point-mapper__h2_name .truncate', this.element).text(this.name);
         $('.point-data__label_source .truncate', this.element).text(this.data.metadata.source);
         $('.point-data__label_source .truncate', this.element).attr('title', this.data.metadata.source);
         $('.point-data__h2_link', this.element).removeClass('point-data__h2_link').addClass('point-data__h2_link--disabled');
@@ -60,23 +60,23 @@ export class Category extends Observable {
 
     highlight(flag) {
         if (flag)
-            $(this.element).find('.point-data__h2').addClass(this.activeClassName);
+            $(this.element).addClass(this.activeClassName);
         else
-            $(this.element).find('.point-data__h2').removeClass(this.activeClassName);
+            $(this.element).removeClass(this.activeClassName);
     }
 
     showLoading(flag) {
         if (flag)
-            $(this.element).find(categoryItemLoadingClsName).removeClass('hide');
+            $(this.element).find(categoryItemLoadingClsName).removeClass('hidden');
         else
-            $(this.element).find(categoryItemLoadingClsName).addClass('hide');
+            $(this.element).find(categoryItemLoadingClsName).addClass('hidden');
     }
 
     showDone(flag) {
         if (flag)
-            $(this.element).find(categoryItemDoneClsName).removeClass('hide');
+            $(this.element).find(categoryItemDoneClsName).removeClass('hidden');
         else
-            $(this.element).find(categoryItemDoneClsName).addClass('hide');
+            $(this.element).find(categoryItemDoneClsName).addClass('hidden');
     }
 
 

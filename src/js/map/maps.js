@@ -7,6 +7,7 @@ import {SubindicatorCalculator} from './choropleth/subindicator_calculator';
 import {SiblingCalculator} from './choropleth/sibling_calculator';
 import {Choropleth} from './choropleth/choropleth';
 import {MapLocker} from './maplocker';
+import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 
 export class MapControl extends Observable {
@@ -27,7 +28,7 @@ export class MapControl extends Observable {
 
         this.map = this.configureMap(coords, config.map);
         this.map.map_variables = {
-            tooltipClsName: '.content__map_tooltip',
+            tooltipClsName: '.map-tooltip',
             tooltipItem: null,
             popup: null,
             hoverAreaCode: null,
@@ -134,10 +135,14 @@ export class MapControl extends Observable {
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    displayChoropleth(subindicator, method) {
-        if (subindicator.obj.children == undefined)
+    handleChoropleth(subindicator, method) {
+        if (subindicator.children == undefined)
             return;
 
+        this.displayChoropleth(subindicator.children, subindicator.subindicatorArr, method);
+    };
+
+    displayChoropleth(data, subindicatorArr, method) {
         let calculationFunc = {
             subindicator: SubindicatorCalculator,
             sibling: SiblingCalculator
@@ -146,21 +151,26 @@ export class MapControl extends Observable {
         if (calculationFunc == undefined)
             calculationFunc = SubindicatorCalculator
 
-        const calculation = calculationFunc(subindicator);
-        const values = calculation.map(el => el.val)
+        const args = {
+            data: data,
+            subindicatorArr: subindicatorArr
+        }
 
-        this.choropleth.showChoropleth(calculation);
-        const intervals = this.choropleth.getIntervals(values)
+        const calculation = calculationFunc(args);
+        const values = calculation.map(el => el.val);
+
+        this.choropleth.showChoropleth(calculation, false);
+        const intervals = this.choropleth.getIntervals(values);
 
         this.triggerEvent("choropleth", {
             data: calculation,
             colors: this.choropleth.legendColors,
             intervals: intervals
         })
-    };
+    }
 
-    resetChoropleth() {
-        this.choropleth.reset();
+    resetChoropleth(setLayerToSelected) {
+        this.choropleth.reset(setLayerToSelected);
     }
 
     limitGeoViewSelections = (level) => {
@@ -175,6 +185,10 @@ export class MapControl extends Observable {
                 $('nav#w-dropdown-list-0').find('a:nth-child(2)').hide();
             }
         }
+    }
+
+    resetChoroplethLayers() {
+        this.choropleth.resetLayers(this.layerCache);
     }
 
 

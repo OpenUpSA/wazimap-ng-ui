@@ -25,14 +25,14 @@ export default class Controller extends Observable {
             let parts = hash.split(':')
             let payload = null;
 
-            if (hash == '') {
-                const areaCode = this.config.rootGeography;
-                payload = self.changeGeography(areaCode)
-
-            } else if (parts[0] == '#geo') {
+            if (parts[0] == '#geo') {
                 payload = self.changeGeography(parts[1])
             } else if (parts[0] == '#logout') {
                 self.onLogout();
+            } else {
+                //if a category nav is clicked, the hash becomes something like #divId, in that case it should behave same as if hash == ''
+                const areaCode = this.config.rootGeography;
+                payload = self.changeGeography(areaCode)
             }
 
             self.triggerEvent("hashChange", payload);
@@ -97,11 +97,65 @@ export default class Controller extends Observable {
     }
 
     onSubIndicatorClick(payload) {
-        this.state.subindicator = payload;
+        const children = payload.subindicators.filter((s) => {
+            return s.keys === payload.obj.keys;
+        })[0].children;
+        const subindicator = {
+            indicatorTitle: payload.indicatorTitle,
+            children: children,
+            selectedSubindicator: payload.obj.keys,
+            choropleth_method: payload.obj.choropleth_method,
+            subindicatorArr: payload.subindicators,
+            parents: payload.parents
+        }
+        this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.obj._keys;
 
         this.triggerEvent("subindicatorClick", payload);
     };
+
+    onChoroplethFiltered(payload) {
+        //update this.state.subindicator with the filtered values
+        let subindicator = this.state.subindicator;
+        subindicator.subindicatorArr = payload.subindicatorArr;
+        subindicator.children = payload.data;
+
+        this.state.subindicator = subindicator;
+
+        this.triggerEvent("choroplethFiltered", payload);
+    }
+
+    handleNewProfileChoropleth() {
+        if (this.state.subindicator === null) {
+            return;
+        }
+
+        //this means we need to show choropleth for the new children. update payload.state.subindicator.children and payload.state.subindicator.subindicatorArr
+        let indicators = this.state.profile.profile
+            .profileData[this.state.subindicator.parents.category]
+            .subcategories[this.state.subindicator.parents.subcategory]
+            .indicators;
+
+        let subindicatorArr = indicators[this.state.subindicator.parents.indicator].subindicators;
+
+        let selectedSubindicator = subindicatorArr.filter((s) => {
+            return s.keys === this.state.subindicator.selectedSubindicator
+        })[0];
+        let children = selectedSubindicator.children;
+        let choropleth_method = selectedSubindicator.choropleth_method;
+
+        this.state.subindicator.selectedSubindicator = selectedSubindicator.keys;
+        this.state.subindicator.children = children;
+        this.state.subindicator.choropleth_method = choropleth_method;
+
+        const args = {
+            data: children,
+            subindicatorArr: subindicatorArr,
+            indicators: indicators
+        }
+
+        this.triggerEvent("newProfileWithChoropleth", args);
+    }
 
     /**
      * Payload includes profile and geography, e.g.
@@ -149,7 +203,7 @@ export default class Controller extends Observable {
     onLayerClick(payload) {
         const self = this;
         if (payload.maplocker.locked) {
-            console.log("ignoring click from onLayer click") 
+            console.log("ignoring click from onLayer click")
             return;
         }
 
@@ -188,7 +242,6 @@ export default class Controller extends Observable {
 
     onProfileLoaded(payload) {
         this.state.profile = payload;
-        this.state.subindicators = null; // unset when a new profile is loaded
         this.triggerEvent("profileLoaded", payload);
     };
 
@@ -254,7 +307,6 @@ export default class Controller extends Observable {
     }
 
     onSearchResults(payload) {
-        console.log(payload)
         this.triggerEvent("searchResults", payload)
     }
 

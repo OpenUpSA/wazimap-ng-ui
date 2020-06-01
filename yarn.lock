@@ -4847,6 +4847,11 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+material-design-icons@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/material-design-icons/-/material-design-icons-3.0.1.tgz#9a71c48747218ebca51e51a66da682038cdcb7bf"
+  integrity sha1-mnHEh0chjrylHlGmbaaCA4zct78=
+
 md5.js@^1.3.4:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/md5.js/-/md5.js-1.3.5.tgz#b5d07b8e3216e3e27cd728d72f70d1e6a342005f"
@@ -7286,6 +7291,11 @@ ws@^6.1.2:
   integrity sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
   dependencies:
     async-limiter "~1.0.0"
+
+xlsexport@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/xlsexport/-/xlsexport-1.5.2.tgz#1799cbbc27f366e60add9361c8f41e3a4fc11b08"
+  integrity sha512-cyyDdZBjlxNl7IIz3/v8CeYwRxb5dXCclDJAv42mrjbUER1ILlWP33zXj7Q/lUc9RUOF5cU4L7iSzQVXSrq8oA==
 
 xml-name-validator@^3.0.0:
   version "3.0.0"

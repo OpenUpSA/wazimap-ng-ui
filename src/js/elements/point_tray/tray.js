@@ -1,12 +1,13 @@
 import {numFmt, Observable, hasElements, ThemeStyle, checkIterate} from '../../utils';
 import {Theme} from './theme';
 
-const categoryWrapperClsName = '.point-data__h1_content';
-const treeLineClsName = '.point-data__h2_tree-line-v';
-const wrapperClsName = '.point-data__content_wrapper';
-const pointDataItemClsName = '.point-data__h1--dropdown';
-const categoryItemClsName = '.point-data__h2_wrapper';
+const categoryWrapperClsName = '.point-mapper__h1_content';
+const treeLineClsName = '.point-data__h2_line-v';
+const wrapperClsName = '.point-mapper-content__list';
+const pointDataItemClsName = '.point-mapper__h1';
+const categoryItemClsName = '.point-mapper__h2'; //'.point-mapper__h2_wrapper';
 const stylesClsName = '.styles';
+const loadingClsName = '.point-mapper-content__loading';
 
 export class PointDataTray extends Observable {
     constructor(api, profileId) {
@@ -54,17 +55,12 @@ export class PointDataTray extends Observable {
                 let treeItem = this.treeLineItem.cloneNode(true);
                 $(categoryWrapperClsName, item).append(treeItem);
 
-                //Replace with correct icon and color
-                ThemeStyle.replaceChildDivWithThemeIcon(
-                    themeDatum.id,
-                    $(item).find('.point-data__h1_trigger'),
-                    $(item).find('.point-data__h1_trigger-icon')
-                );
+                ThemeStyle.replaceChildDivWithIcon($(item).find('.point-data__h1_icon'), themeDatum.icon)
 
+                $(loadingClsName).addClass('hidden');
                 $(wrapperClsName).append(item);
                 self.triggerEvent("loadedThemes", data);
             })
-
         })
     }
 }

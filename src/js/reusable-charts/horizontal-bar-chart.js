@@ -7,6 +7,7 @@ import {selectAll, select} from 'd3-selection';
 import {axisBottom, axisLeft} from 'd3-axis';
 import {saveSvgAsPng} from 'save-svg-as-png';
 import html2canvas from 'html2canvas';
+import xlsExport from "xlsexport";
 
 export function horizontalBarChart() {
     const initialConfiguration = {
@@ -16,6 +17,7 @@ export function horizontalBarChart() {
         colors: ['#39ad84', '#339b77'],
         xAxisPadding: 10,
         yAxisPadding: 10,
+        xLabelPadding: 10,
         barHeight: 30,
         barPadding: 10,
         margin: {
@@ -40,13 +42,13 @@ export function horizontalBarChart() {
     let margin = initialConfiguration.margin;
     let xAxisPadding = initialConfiguration.xAxisPadding;
     let yAxisPadding = initialConfiguration.yAxisPadding;
+    let xLabelPadding = initialConfiguration.xLabelPadding;
     let xAxisFormatter = initialConfiguration.xAxisFormatter;
     let barHeight = initialConfiguration.barHeight;
     let barPadding = initialConfiguration.barPadding;
 
     function chart(selection) {
         selection.each(() => {
-
             width = width - margin.left - margin.right;
             height = data.length * (barHeight + barPadding);
 
@@ -55,7 +57,7 @@ export function horizontalBarChart() {
              */
             const barChartSvg = selection.append('svg')
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom + xAxisPadding))
+                .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom + xAxisPadding + xLabelPadding))
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -185,25 +187,26 @@ export function horizontalBarChart() {
                     $(this).attr("fill", 'transparent');
                     $(bar).attr("fill", colors[0]);
                 });
-        });
 
-        /**
-         * we need these stylings
-         */
-        $(".bar-tooltip").css("z-index", 100);
-        $('line').css('stroke', '#999');
-        $('line').css('stroke-opacity', '0.2');
-        $('.grid').css('color', '#999');
-        $('.grid').css('stroke-opacity', '0.2');
+            // text label for the x axis
+            barChartSvg.append("text")
+                .attr("transform",
+                    "translate(" + (width / 2) + " ," +
+                    (height + margin.top + xLabelPadding) + ")")
+                .attr("class", "bar-chart__x-label")
+                .style("text-anchor", "middle")
+                .style("fill", "#999")
+                .text("LABEL GOES HERE");
+        });
     }
 
     chart.saveAsPng = function (container) {
-        let element = $(container).closest('.indicator__sub-indicator')[0];
-        $(element).find('.sub-indicator__chart_options').attr('data-html2canvas-ignore', true);
+        let element = $(container).closest('.profile-indicator')[0];
+        $(element).find('.profile-indicator__options').attr('data-html2canvas-ignore', true);
 
         let options = {
             x: $(element).offset().left - 30,
-            y: $(element).offset().top - 50,
+            y: $(element).offset().top - 5,
             width: $(element).width() + 30
         }
 
@@ -231,6 +234,59 @@ export function horizontalBarChart() {
         } else {
             window.open(uri);
         }
+    }
+
+    chart.exportAsCsv = function (title) {
+        const exportData = getExportData();
+        const fileName = title + '.xls';
+        const sheetName = 'Chart Data';
+        const xls = new xlsExport(exportData, sheetName);
+
+        xls.exportToCSV(fileName);
+    }
+
+    chart.exportAsExcel = function (title) {
+        const exportData = getExportData();
+        const fileName = title + '.xls';
+        const sheetName = 'Chart Data';
+        const xls = new xlsExport(exportData, sheetName);
+
+        xls.exportToXLS(fileName);
+    }
+
+    chart.exportAsJson = function (title) {
+        const exportData = getExportData();
+
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", title + ".json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    chart.exportAsKml = function (title) {
+        const exportData = getExportData();
+
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", title + ".kml");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    function getExportData() {
+        const exportData = data.map((d) => {
+            return {
+                'Sub-indicator': d.label.toString(),
+                'Value': d.valueText.toString()
+            }
+        })
+
+        return exportData;
     }
 
     chart.width = function (value) {
@@ -266,6 +322,12 @@ export function horizontalBarChart() {
     chart.yAxisPadding = function (value) {
         if (!arguments.length) return yAxisPadding;
         yAxisPadding = value;
+        return chart;
+    };
+
+    chart.xLabelPadding = function (value) {
+        if (!arguments.length) return xLabelPadding;
+        xLabelPadding = value;
         return chart;
     };
 

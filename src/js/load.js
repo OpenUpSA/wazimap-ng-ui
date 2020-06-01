@@ -1,6 +1,7 @@
 import {select as d3select} from 'd3-selection';
 import Controller from './controller';
-import ProfileLoader from './page_profile';
+//import ProfileLoader from './page_profile';   //emre - older
+import ProfileLoader from "./profile/profile_loader";   //emre - newer
 import {loadMenu} from './elements/menu';
 import PDFPrinter from './print';
 import {MapControl} from './map/maps';
@@ -33,7 +34,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     const printButton = $("#profile-print");
     const mapchip = new MapChip(config.choropleth);
     const search = new Search(api, profileId, 2);
-    const profileLoader = new ProfileLoader(config);
+    const profileLoader = new ProfileLoader(config, api, profileId);
     const locationInfoBox = new LocationInfoBox();
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
@@ -47,10 +48,18 @@ export default function configureApplication(serverUrl, profileId, config) {
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
     controller.on('subindicatorClick', payload => {
-        const method = payload.state.subindicator.obj.choropleth_method;
-        mapcontrol.displayChoropleth(payload.state.subindicator, method)
+        const method = payload.state.subindicator.choropleth_method;
+        mapcontrol.handleChoropleth(payload.state.subindicator, method)
     })
-    controller.on('subindicatorClick', payload => mapchip.onSubIndicatorChange(payload.payload));
+    controller.on('subindicatorClick', payload => {
+        const args = {
+            indicators: payload.payload.indicators,
+            subindicatorKey: payload.payload.obj.keys,
+            indicatorTitle: payload.payload.indicatorTitle
+        }
+
+        mapchip.onSubIndicatorChange(args);
+    });
     controller.on('choropleth', payload => mapchip.onChoropleth(payload.payload));
     controller.on('layerMouseOver', payload => {
         popup.loadPopup(payload.payload, payload.state)
@@ -67,7 +76,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
     controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
-    controller.on("loadedNewProfile", payload => mapchip.removeMapChip());
+    //controller.on("loadedNewProfile", payload => mapchip.removeMapChip());    //emre:dont trigger removeMapChip on geo selection, we need choropleth persist
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
     controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
         controller.onSubIndicatorClick(payload)
@@ -76,9 +85,13 @@ export default function configureApplication(serverUrl, profileId, config) {
         profileLoader.loadProfile(payload.payload)
     })
     controller.on('loadedNewProfile', payload => {
+        //let the choropleth persist
+        controller.handleNewProfileChoropleth();
+    })
+    controller.on('loadedNewProfile', payload => {
         // there seems to be a bug where menu items close if this is not set
         $(".sub-category__dropdown_wrapper a").attr("href", "#")
-    }) 
+    })
     controller.on('loadedNewProfile', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
@@ -95,7 +108,29 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
     controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
-    controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth());
+    controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth(true));
+    controller.on('choroplethFiltered', payload => {
+        mapcontrol.displayChoropleth(payload.payload.data, payload.payload.subindicatorArr, payload.state.subindicator.choropleth_method);
+    })
+
+    controller.on('newProfileWithChoropleth', payload => {
+        mapcontrol.resetChoroplethLayers();
+        setTimeout(() => {
+            mapcontrol.displayChoropleth(payload.payload.data, payload.payload.subindicatorArr, payload.state.subindicator.choropleth_method);
+
+            if (typeof payload.payload.indicators !== 'undefined') {
+                //indicators changed -- trigger onSubIndicatorChange
+                const args = {
+                    indicators: payload.payload.indicators,
+                    subindicatorKey: payload.state.selectedSubindicator,
+                    indicatorTitle: payload.state.subindicator.indicatorTitle
+                }
+
+                mapchip.onSubIndicatorChange(args);
+            }
+        }, 0);
+    })
+
     controller.on('zoomToggled', payload => {
         mapcontrol.enableZoom(payload.payload.enabled)
     });
@@ -122,6 +157,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     mapcontrol.on('mapZoomed', payload => controller.onMapZoomed(payload))
     mapcontrol.on('choropleth', payload => controller.onChoropleth(payload))
 
+    profileLoader.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
 
     search.on('beforeSearch', payload => controller.onSearchBefore(payload));
     search.on('searchResults', payload => controller.onSearchResults(payload));
@@ -133,6 +169,9 @@ export default function configureApplication(serverUrl, profileId, config) {
     locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
 
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
+    mapchip.on('choroplethFiltered', payload => {
+        controller.onChoroplethFiltered(payload);
+    })
 
     pointDataTray.on('themeSelected', payload => controller.onThemeSelected(payload))
     pointDataTray.on('themeUnselected', payload => controller.onThemeUnselected(payload))
@@ -143,7 +182,6 @@ export default function configureApplication(serverUrl, profileId, config) {
     pointDataTray.on('categoryUnselected', payload => controller.onCategoryUnselected(payload));
 
     // pointData.on('categoryPointLoaded', payload => controller.onCategoryPointLoaded(payload));
-
 
     pointDataTray.loadThemes();
 

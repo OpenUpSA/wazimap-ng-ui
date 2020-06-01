@@ -6,8 +6,9 @@ import {stopPropagation} from "leaflet/src/dom/DomEvent";
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
 const pointsByCategoryUrl = 'points/categories';
-const tooltipClsName = 'content__map_facility-tooltip';
-const tooltipRowClsName = 'tooltip__facility_item';
+const tooltipClsName = 'facility-tooltip';
+const tooltipRowClsName = 'facility-tooltip__item';
+const tooltipItemsClsName = 'facility-tooltip__items';
 
 let tooltipItem = null;
 let tooltipRowItem = null;
@@ -85,6 +86,7 @@ export class PointData extends Observable {
             this.map.removeLayer(layer);
         }
     }
+
     /** end of category functions **/
 
     getAddressPoints(category) {
@@ -119,7 +121,7 @@ export class PointData extends Observable {
         const self = this;
 
         checkIterate(points, point => {
-            const col = $('._' + point.theme.id).css('color');
+            const col = $('.theme-' + point.theme.id).css('color');
             let marker = L.circleMarker([point.y, point.x], {
                 color: col,
                 radius: 3,
@@ -162,7 +164,7 @@ export class PointData extends Observable {
                 .openOn(this.map);
         }
 
-        setPopupStyle('content__map_facility-tooltip');
+        setPopupStyle('facility-tooltip');
     }
 
     hideMarkerPopup = () => {
@@ -173,16 +175,16 @@ export class PointData extends Observable {
     createPopupContent = (point) => {
         let item = tooltipItem.cloneNode(true);
 
-        $(item).find('.map-tooltip__notch').remove();   //leafletjs already creates this
+        $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
 
-        $('.map__facility-tooltip_name div', item).text(point.name);
+        $('.facility-tooltip__header_name div', item).text(point.name);
         ThemeStyle.replaceChildDivWithThemeIcon(
             point.theme.id,
             $(item).find('.map__facility-tooltip_icon'),
             $(item).find('.map__facility-tooltip_icon')
         );
 
-        $('.map__facility-tooltip_items', item).html('');
+        $('.' + tooltipItemsClsName, item).html('');
 
         let arr = [];
         for (let key in point.data) {
@@ -200,7 +202,7 @@ export class PointData extends Observable {
                     $(itemRow).addClass('last')
                 }
 
-                $('.map__facility-tooltip_items', item).append(itemRow);
+                $('.' + tooltipItemsClsName, item).append(itemRow);
             }
         })
 

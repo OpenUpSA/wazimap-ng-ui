@@ -65,6 +65,11 @@ const profiles = {
         baseUrl: productionUrl,
         config: config
     },
+    'sifar-wazi.openup.org.za': {
+        profile: 6,
+        baseUrl: productionUrl,
+        config: config
+    },
     'mapyourcity.org.za': {
         profile: 7,
         baseUrl: productionUrl,

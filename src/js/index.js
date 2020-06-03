@@ -86,7 +86,7 @@ const profiles = {
         config: new WorldConfig()
     },
     'cfafrica.wazimap-ng.africa': {
-        profile: 5,
+        profile: 8,
         baseUrl: 'https://api.cfafrica.wazimap-ng.africa',
         config: config
     }

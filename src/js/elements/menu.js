@@ -109,6 +109,7 @@ export function loadMenu(data, subindicatorCallback) {
         var h3Wrapper = $(".data-category__h2_wrapper", newSubCategory);
 
         $(".data-menu__indicator", h3Wrapper).remove();
+
         for (const [indicator, detail] of Object.entries(indicators)) {
 
             if (!indicatorHasChildren(detail))

@@ -85,6 +85,11 @@ const profiles = {
         baseUrl: mainUrl,
         config: new WorldConfig()
     },
+    'cfafrica.wazimap-ng.africa': {
+        profile: 5,
+        baseUrl: 'https://api.cfafrica.wazimap-ng.africa',
+        config: config
+    }
 }
 
 const pc = profiles[hostname]

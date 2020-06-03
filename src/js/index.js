@@ -65,8 +65,18 @@ const profiles = {
         baseUrl: productionUrl,
         config: config
     },
+    'sifar-wazi.openup.org.za': {
+        profile: 6,
+        baseUrl: productionUrl,
+        config: config
+    },
     'mapyourcity.org.za': {
         profile: 7,
+        baseUrl: productionUrl,
+        config: config
+    },
+    'giz-projects.openup.org.za': {
+        profile: 11,
         baseUrl: productionUrl,
         config: config
     },
@@ -75,11 +85,11 @@ const profiles = {
         baseUrl: mainUrl,
         config: new WorldConfig()
     },
-    'cfafrica.openup.org.za': {
-        profile: 6,
-        baseUrl: mainUrl,
+    'cfafrica.wazimap-ng.africa': {
+        profile: 8,
+        baseUrl: 'https://api.cfafrica.wazimap-ng.africa',
         config: config
-    },
+    }
 }
 
 const pc = profiles[hostname]

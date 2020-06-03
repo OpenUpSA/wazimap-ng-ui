@@ -35,12 +35,26 @@ export class Profile {
             Object.values(category.subcategories).forEach(subcategory => {
                 subcategory = self._fixSubcategory(subcategory)
                 Object.values(subcategory.indicators).forEach(indicator => {
+                    self._fixMetadata(indicator)
                     indicator.subindicators = Object
                         .entries(indicator.subindicators)
                         .map(s => new SubIndicator(s, indicator.choropleth_method))
                 })
             })
         })
+    }
+
+    _fixMetadata(indicator) {
+        if (indicator.metadata == undefined)
+            indicator.metadata = {
+                source: "",
+                description: "",
+                licence: {
+                    name: "",
+                    url: ""
+                }
+
+            }
     }
 
     _fixProfile(profile) {

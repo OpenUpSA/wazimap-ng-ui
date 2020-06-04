@@ -6,6 +6,7 @@ export function SubindicatorCalculator(args) {
             if (el2.children != undefined && el2.children[code] != undefined)
                 return el1 + el2.children[code];
         }, 0)
+
         const val = count / universe;
         return {code: code, val: val};
     })

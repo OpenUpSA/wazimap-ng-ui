@@ -109,7 +109,7 @@ export class SubindicatorFilter {
                         if (key === selectedFilter) {
                             Object.entries(value).forEach((cd) => {
                                 chartData.push(new SubIndicator(cd))
-                            })
+                            }) 
                         }
                     }
                 }

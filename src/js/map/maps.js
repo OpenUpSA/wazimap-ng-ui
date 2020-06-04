@@ -136,6 +136,7 @@ export class MapControl extends Observable {
      * @param  {[type]} data    An object that contains subindictors and obj
      */
     handleChoropleth(subindicator, method) {
+        console.log({'subindicator':subindicator})
         if (subindicator.children == undefined)
             return;
 

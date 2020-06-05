@@ -7,7 +7,7 @@ export class SubindicatorFilter {
 
     }
 
-    handleFilter = (indicators, groups, title, _parent, _dropdowns) => {
+    handleFilter = (indicators, groups, title, _parent, _dropdowns, _defaultFilter) => {
         this.parent = _parent;
         let dropdowns = _dropdowns;
         let indicatorDd = $(dropdowns[0]);
@@ -16,6 +16,24 @@ export class SubindicatorFilter {
         this.resetDropdowns(dropdowns);
         let callback = (selected) => this.groupSelected(selected, indicators, subindicatorDd, title);
         this.populateDropdown(indicatorDd, groups, callback);
+        this.handleDefaultFilter(_defaultFilter, indicatorDd, subindicatorDd, indicators, title);
+    }
+
+    /**
+     * this function enables choropleth filters to be remained when user clicks on a child geo
+     */
+    handleDefaultFilter = (defaultFilter, indicatorDd, subindicatorDd, indicators, title) => {
+        if (typeof defaultFilter === 'undefined') {
+            return;
+        }
+
+        const selectedGroup = defaultFilter.group;
+        const selectedFilter = defaultFilter.value;
+
+        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, indicators, selectedGroup, title), selectedGroup, selectedFilter);
+
+        this.setOptionSelected(indicatorDd, selectedGroup, null);
+        this.setOptionSelected(subindicatorDd, selectedFilter, callback);
     }
 
     populateDropdown = (dropdown, itemList, callback) => {
@@ -76,7 +94,7 @@ export class SubindicatorFilter {
             }
         }
 
-        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, indicators, selectedGroup, title));
+        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, indicators, selectedGroup, title), selectedGroup, selectedFilter);
 
         this.populateDropdown(subindicatorDd, subindicators, callback);
     }
@@ -91,7 +109,7 @@ export class SubindicatorFilter {
                         if (key === selectedFilter) {
                             Object.entries(value).forEach((cd) => {
                                 chartData.push(new SubIndicator(cd))
-                            })
+                            }) 
                         }
                     }
                 }
@@ -109,12 +127,18 @@ export class SubindicatorFilter {
         let self = this;
         for (let i = 0; i < dropdowns.length; i++) {
             const dropdown = dropdowns[i];
-            $(dropdown).find('.dropdown__list_item').each(function () {
-                const li = $(this);
-                if (li.text().trim() === allValues) {
-                    self.dropdownOptionSelected(dropdown, li, null);
-                }
-            })
+            self.setOptionSelected(dropdown, allValues, null);
         }
+    }
+
+    setOptionSelected = (dropdown, value, callback) => {
+        let self = this;
+
+        $(dropdown).find('.dropdown__list_item').each(function () {
+            const li = $(this);
+            if (li.text().trim() === value) {
+                self.dropdownOptionSelected(dropdown, li, callback);
+            }
+        })
     }
 }

@@ -1,6 +1,6 @@
 import {Observable} from '../utils';
 
-const logoContainer = $('img.nav__logo');
+const logoContainer = $('img.profile-logo');
 
 export class ProfileLayout extends Observable {
     constructor(baseUrl) {

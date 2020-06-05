@@ -6,7 +6,7 @@ const parentContainer = $(".data-mapper-content__list");
 const categoryTemplate = $(".data-category")[0].cloneNode(true);
 const subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
 const indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
-const indicatorItemTemplate = $(".data-category__h3", subCategoryTemplate)[0].cloneNode(true);
+const indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
 const noDataWrapperClsName = 'data-menu__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 
@@ -56,21 +56,16 @@ function indicatorHasChildren(indicator) {
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
     function addSubIndicators(wrapper, category, subcategory, indicator, subindicators, indicators) {
-        const indicatorLabel = indicator;
-        const newIndicatorElement = indicatorTemplate.cloneNode(true);
-        $(".data-menu__indicator_trigger div", newIndicatorElement).text(indicatorLabel);
-
-        const subIndicatorTemplate = indicatorItemTemplate.cloneNode(true);
 
         if (subindicators == undefined || !Array.isArray(subindicators)) {
             console.log("Missing subindicators")
         } else {
             $(".data-category__h3", wrapper).remove();
-            $(".menu__link_h4--active", wrapper).remove();
+            $(".data-category__h4", wrapper).remove();
 
             subindicators.forEach(subIndicator => {
                 if (subIndicator.label !== '') {
-                    const newSubIndicatorElement = subIndicatorTemplate.cloneNode(true);
+                    const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
                     $(".truncate", newSubIndicatorElement).text(subIndicator.label);
                     $(newSubIndicatorElement).attr('title', subIndicator.label);
 
@@ -108,17 +103,16 @@ export function loadMenu(data, subindicatorCallback) {
 
         var h3Wrapper = $(".data-category__h2_wrapper", newSubCategory);
 
-        $(".data-menu__indicator", h3Wrapper).remove();
+        let indicatorClone = $(h3Wrapper).find('.data-category__h3')[0].cloneNode(true);
+        $(".data-category__h3", h3Wrapper).remove();
+
         for (const [indicator, detail] of Object.entries(indicators)) {
+            let newIndicator = indicatorClone.cloneNode(true);
+            $('.truncate', newIndicator).text(indicator);
+            $(h3Wrapper).append(newIndicator);
+            const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
 
-            if (!indicatorHasChildren(detail))
-                continue
-
-            if (detail.subindicators.length > 0) {
-                {
-                    addSubIndicators(h3Wrapper, category, subcategory, indicator, detail.subindicators, indicators);
-                }
-            }
+            addSubIndicators(childWrapper, category, subcategory, indicator, detail.subindicators, indicators);
         }
     }
 

@@ -5,6 +5,7 @@ const loginDialogue = new LoginDialogue();
 const AUTHENTICATION_ERROR = "Not Authenticated";
 
 const MAX_FAILURES = 3;
+
 export class API extends Observable {
     constructor(serverUrl) {
         super();
@@ -56,7 +57,7 @@ export class API extends Observable {
 
             count += 1
 
-            if (count > 50) {
+            if (count > 500) {
                 throw "Tired of waiting for login. Something went wrong"
             }
         }
@@ -91,7 +92,7 @@ export class API extends Observable {
         const url = `${this.baseUrl}/rest-auth/login/`;
 
         if (this.getToken() != null) {
-            console.log("Already logged in. Not authenticating") 
+            console.log("Already logged in. Not authenticating")
             return
         }
 
@@ -104,7 +105,7 @@ export class API extends Observable {
             if (this.failedLogins >= MAX_FAILURES)
                 throw 'Too many failed logins';
 
-            const credentials = loginDialogue.displayLogin(nextUrl);
+            const credentials = await loginDialogue.displayLogin(nextUrl);
             const response = await postJSON(url, credentials)
             if (response.ok) {
                 const json = await response.json();
@@ -112,8 +113,7 @@ export class API extends Observable {
                     this.setToken(json['key'])
                     this.failedLogins = 0;
                     break;
-                }
-                else {
+                } else {
                     throw 'Expected to receive a token';
                 }
             } else if (response.status == 400 || response.status == 403) {
@@ -131,7 +131,7 @@ export class API extends Observable {
         const self = this;
         if (this.getToken() != null) {
             const url = `${this.baseUrl}/rest-auth/logout/`;
-            const response =  await postJSON(url, this.token)
+            const response = await postJSON(url, this.token)
             self.setToken(null);
         }
     }
@@ -149,10 +149,10 @@ export class API extends Observable {
 
 }
 
-async function postJSON(url, data ={}, headers={}) {
+async function postJSON(url, data = {}, headers = {}) {
     const defaultHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
     }
 
     headers = {...defaultHeaders, ...headers};
@@ -166,7 +166,7 @@ async function postJSON(url, data ={}, headers={}) {
     return response;
 }
 
-async function getJSON(url, headers={}) {
+async function getJSON(url, headers = {}) {
     const response = await fetch(url, {headers: headers})
     return response;
 }

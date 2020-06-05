@@ -10,11 +10,13 @@ let facilityRowClone = null;
 
 let parents = null;
 let geometries = null;
+let geography = null;
 
 const breadcrumbClass = '.breadcrumb';
+const locationDescriptionClass = '.location__description';
 
 export class Profile_header extends Observable {
-    constructor(_parents, _geometries, _api, _profileId) {
+    constructor(_parents, _geometries, _api, _profileId, _geography) {
         super();
 
         this.api = _api;
@@ -22,6 +24,7 @@ export class Profile_header extends Observable {
 
         parents = _parents;
         geometries = _geometries;
+        geography = _geography;
 
         breadcrumbsContainer = $('.location__breadcrumbs');
         breadcrumbTemplate = $('.styles').find(breadcrumbClass)[0];
@@ -30,8 +33,10 @@ export class Profile_header extends Observable {
         facilityTemplate = $('.location-facility')[0].cloneNode(true);
         facilityRowClone = $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
+        this.setPointSource();
         this.addBreadCrumbs();
         this.addFacilities();
+        this.setLocationDescription();
     }
 
     addBreadCrumbs = () => {
@@ -140,5 +145,21 @@ export class Profile_header extends Observable {
 
             return points;
         })
+    }
+
+    setPointSource = () => {
+        //todo:change this when the API is ready
+        $('.location__sources_loading').addClass('hidden');
+        $('.location__sources_no-data').removeClass('hidden');
+    }
+
+    setLocationDescription = () => {
+        if (parents !== null && parents.length > 0) {
+            $(locationDescriptionClass).find('.location-type').text(geography.level);
+            $(locationDescriptionClass).find('.parent-geography').text(parents[parents.length - 1].name);
+            $(locationDescriptionClass).removeClass('hidden');
+        } else {
+            $(locationDescriptionClass).addClass('hidden');
+        }
     }
 }

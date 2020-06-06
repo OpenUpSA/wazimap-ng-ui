@@ -10,7 +10,7 @@ export class Config extends ConfigSA {
             world: ['country'],
             country: ['province', 'district'], // district is used in Lesotho
             province: ['district', 'municipality', 'community council'], // community council is used in Lesotho
-            district: ['municipality']
+            district: ['municipality', 'community council']
         }        
     }
 

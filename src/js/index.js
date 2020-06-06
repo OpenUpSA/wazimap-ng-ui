@@ -93,7 +93,7 @@ const profiles = {
     'ccij-water.openup.org.za': {
         profile: 16,
         baseUrl: productionUrl,
-        config: config
+        config: new WorldConfig()
     }
 }
 

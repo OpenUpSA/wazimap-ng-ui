@@ -89,6 +89,11 @@ const profiles = {
         profile: 8,
         baseUrl: 'https://api.cfafrica.wazimap-ng.africa',
         config: config
+    },
+    'ccij-water.openup.org.za': {
+        profile: 16,
+        baseUrl: productionUrl,
+        config: config
     }
 }
 

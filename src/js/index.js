@@ -15,7 +15,7 @@ const defaultConfig = new SAConfig();
 
 const profiles = {
     'wazi.webflow.io': {
-        profile: 1,
+        profile: defaultProfile,
         baseUrl: mainUrl,
         config: config
     },

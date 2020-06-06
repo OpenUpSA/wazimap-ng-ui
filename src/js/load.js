@@ -123,7 +123,8 @@ export default function configureApplication(serverUrl, profileId, config) {
                 const args = {
                     indicators: payload.payload.indicators,
                     subindicatorKey: payload.state.selectedSubindicator,
-                    indicatorTitle: payload.state.subindicator.indicatorTitle
+                    indicatorTitle: payload.state.subindicator.indicatorTitle,
+                    filter: payload.state.subindicator.filter
                 }
 
                 mapchip.onSubIndicatorChange(args);

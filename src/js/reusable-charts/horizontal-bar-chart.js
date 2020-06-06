@@ -238,11 +238,31 @@ export function horizontalBarChart() {
 
     chart.exportAsCsv = function (title) {
         const exportData = getExportData();
-        const fileName = title + '.xls';
-        const sheetName = 'Chart Data';
-        const xls = new xlsExport(exportData, sheetName);
+        let rows = [];
 
-        xls.exportToCSV(fileName);
+        rows.push(['Sub-indicator', 'Value']);
+
+        exportData.forEach(function (rowArray) {
+            let row = [];
+            for (const [label, value] of Object.entries(rowArray)) {
+                row.push(value);
+            }
+            rows.push(row);
+        });
+
+        const fileName = title + '.csv';
+
+        let csvContent = "data:text/csv;charset=utf-8,"
+            + rows.map(e => e.join(",")).join("\n");
+
+        let encodedUri = encodeURI(csvContent);
+        let link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link); // Required for FF
+
+        link.click();
+        document.body.removeChild(link);
     }
 
     chart.exportAsExcel = function (title) {

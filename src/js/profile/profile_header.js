@@ -155,8 +155,6 @@ export class Profile_header extends Observable {
 
     setLocationDescription = () => {
         if (parents !== null && parents.length > 0) {
-            console.log(parents);
-
             $(locationDescriptionClass).find('.location-type').text(geography.level);
             $(locationDescriptionClass).find('.parent-geography').text(parents[parents.length - 1].name);
             $(locationDescriptionClass).removeClass('hidden');

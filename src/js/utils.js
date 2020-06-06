@@ -81,33 +81,28 @@ export function setPopupStyle(clsName) {
 }
 
 export function getSelectedBoundary(level, geometries, config) {
-    let selectedBoundary;
+    let selectedBoundary = null;
 
     const preferredChildren = config.preferredChildren[level];
 
     preferredChildren.forEach((preferredChild, i) => {
-        if (i === 0) {
+        if (geometries.children[preferredChild] == undefined)
+            return;
+
+        if (selectedBoundary == null) {
             selectedBoundary = geometries.children[preferredChild];
-        } else {
-            if (selectedBoundary === null || typeof selectedBoundary === 'undefined') {
-                selectedBoundary = {features: []};
-            }
+        }
+        else {
             let secondarySelectedBoundary = geometries.children[preferredChild];
+            let loaded_codes = selectedBoundary.features.map((feature) => {
+                return feature.properties.code;
+            })
 
-            if (typeof secondarySelectedBoundary !== 'undefined' && secondarySelectedBoundary !== null) {
-                secondarySelectedBoundary.features.forEach((feature) => {
-                    let alreadyContained = false;
-                    selectedBoundary.features.forEach(sb => {
-                        if (sb.properties.code === feature.properties.code) {
-                            alreadyContained = true;
-                        }
-                    })
+            let new_features = secondarySelectedBoundary.features.filter((feature) => {
+                return !loaded_codes.includes(feature.properties.code);
+            })
 
-                    if (!alreadyContained) {
-                        selectedBoundary.features.push(feature);
-                    }
-                })
-            }
+            selectedBoundary.features.concat(new_features);
         }
     })
 

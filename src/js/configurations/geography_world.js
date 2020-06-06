@@ -8,9 +8,9 @@ export class Config extends ConfigSA {
     get preferredChildren() {
         return {
             world: ['country'],
-            country: ['province'],
-            province: ['district', 'municipality'],
-            district: ['municipality']
+            country: ['province', 'district'], // district is used in Lesotho
+            province: ['district', 'municipality', 'community council'], // community council is used in Lesotho
+            district: ['municipality', 'community council']
         }        
     }
 

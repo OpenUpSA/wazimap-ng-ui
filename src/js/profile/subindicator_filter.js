@@ -2,27 +2,31 @@ import {SubIndicator} from "../dataobjects";
 
 const allValues = 'All values';
 
+let indicators = null;
+
 export class SubindicatorFilter {
     constructor() {
 
     }
 
-    handleFilter = (indicators, groups, title, _parent, _dropdowns, _defaultFilter) => {
+    handleFilter = (_indicators, groups, title, _parent, _dropdowns, _defaultFilter) => {
         this.parent = _parent;
         let dropdowns = _dropdowns;
         let indicatorDd = $(dropdowns[0]);
         let subindicatorDd = $(dropdowns[1]);
 
+        indicators = _indicators;
+
         this.resetDropdowns(dropdowns);
-        let callback = (selected) => this.groupSelected(selected, indicators, subindicatorDd, title);
+        let callback = (selected) => this.groupSelected(selected, subindicatorDd, title);
         this.populateDropdown(indicatorDd, groups, callback);
-        this.handleDefaultFilter(_defaultFilter, indicatorDd, subindicatorDd, indicators, title);
+        this.handleDefaultFilter(_defaultFilter, indicatorDd, subindicatorDd, title);
     }
 
     /**
      * this function enables choropleth filters to be remained when user clicks on a child geo
      */
-    handleDefaultFilter = (defaultFilter, indicatorDd, subindicatorDd, indicators, title) => {
+    handleDefaultFilter = (defaultFilter, indicatorDd, subindicatorDd, title) => {
         if (typeof defaultFilter === 'undefined') {
             return;
         }
@@ -30,7 +34,9 @@ export class SubindicatorFilter {
         const selectedGroup = defaultFilter.group;
         const selectedFilter = defaultFilter.value;
 
-        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, indicators, selectedGroup, title), selectedGroup, selectedFilter);
+        console.log({'handleDefaultFilter': indicators})
+
+        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, selectedGroup, title), selectedGroup, selectedFilter);
 
         this.setOptionSelected(indicatorDd, selectedGroup, null);
         this.setOptionSelected(subindicatorDd, selectedFilter, callback);
@@ -83,7 +89,7 @@ export class SubindicatorFilter {
         }
     }
 
-    groupSelected = (selectedGroup, indicators, subindicatorDd, title) => {
+    groupSelected = (selectedGroup, subindicatorDd, title) => {
         let subindicators = [];
         for (const [obj, subindicator] of Object.entries(indicators)) {
             if (obj === title) {
@@ -94,13 +100,16 @@ export class SubindicatorFilter {
             }
         }
 
-        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, indicators, selectedGroup, title), selectedGroup, selectedFilter);
+        console.log({'groupSelected': indicators})
+
+        let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, selectedGroup, title), selectedGroup, selectedFilter);
 
         this.populateDropdown(subindicatorDd, subindicators, callback);
     }
 
-    getFilteredData = (selectedFilter, indicators, selectedGroup, title) => {
+    getFilteredData = (selectedFilter, selectedGroup, title) => {
         let chartData = [];
+
         if (selectedFilter !== allValues) {
             for (const [indicatorTitle, subindicator] of Object.entries(indicators)) {
                 //filter indicatorTitle
@@ -109,7 +118,7 @@ export class SubindicatorFilter {
                         if (key === selectedFilter) {
                             Object.entries(value).forEach((cd) => {
                                 chartData.push(new SubIndicator(cd))
-                            }) 
+                            })
                         }
                     }
                 }

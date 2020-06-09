@@ -120,8 +120,8 @@ export default class Controller extends Observable {
         subindicator.subindicatorArr = payload.subindicatorArr;
         subindicator.children = payload.data;
         subindicator.filter = {
-            group:payload.selectedGroup,
-            value:payload.selectedFilter
+            group: payload.selectedGroup,
+            value: payload.selectedFilter
         }
 
         this.state.subindicator = subindicator;

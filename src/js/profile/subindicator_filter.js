@@ -34,8 +34,6 @@ export class SubindicatorFilter {
         const selectedGroup = defaultFilter.group;
         const selectedFilter = defaultFilter.value;
 
-        console.log({'handleDefaultFilter': indicators})
-
         let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, selectedGroup, title), selectedGroup, selectedFilter);
 
         this.setOptionSelected(indicatorDd, selectedGroup, null);
@@ -99,8 +97,6 @@ export class SubindicatorFilter {
                 }
             }
         }
-
-        console.log({'groupSelected': indicators})
 
         let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, selectedGroup, title), selectedGroup, selectedFilter);
 

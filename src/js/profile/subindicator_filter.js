@@ -2,21 +2,25 @@ import {SubIndicator} from "../dataobjects";
 
 const allValues = 'All values';
 
-let indicators = null;
-
 export class SubindicatorFilter {
     constructor() {
-
+        this.indicators = null;
     }
 
-    handleFilter = (_indicators, groups, title, _parent, _dropdowns, _defaultFilter) => {
+    handleFilter = (_indicators, filterArea, groups, title, _parent, _dropdowns, _defaultFilter) => {
         this.parent = _parent;
         let dropdowns = _dropdowns;
         let indicatorDd = $(dropdowns[0]);
         let subindicatorDd = $(dropdowns[1]);
 
-        indicators = _indicators;
+        this.indicators = _indicators;
 
+        const filtersAvailable = this.checkGroups(groups);
+        if (filtersAvailable) {
+            this.showFilterArea(filterArea);
+        } else {
+            this.hideFilterArea(filterArea);
+        }
         this.resetDropdowns(dropdowns);
         let callback = (selected) => this.groupSelected(selected, subindicatorDd, title);
         this.populateDropdown(indicatorDd, groups, callback);
@@ -34,10 +38,35 @@ export class SubindicatorFilter {
         const selectedGroup = defaultFilter.group;
         const selectedFilter = defaultFilter.value;
 
+        let groupCallback = (selected) => this.groupSelected(selected, subindicatorDd, title);
         let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, selectedGroup, title), selectedGroup, selectedFilter);
 
-        this.setOptionSelected(indicatorDd, selectedGroup, null);
+        this.setOptionSelected(indicatorDd, selectedGroup, groupCallback);
         this.setOptionSelected(subindicatorDd, selectedFilter, callback);
+    }
+
+    /**
+     * check if the selected subindicator has groups to filter
+     */
+    checkGroups = (groups) => {
+        let hasGroups = true;
+        if (groups === null || typeof groups === 'undefined' || groups.length <= 0) {
+            hasGroups = false;
+        }
+
+        return hasGroups;
+    }
+
+    hideFilterArea = (filterArea) => {
+        if (!$(filterArea).hasClass('hidden')) {
+            $(filterArea).addClass('hidden')
+        }
+    }
+
+    showFilterArea = (filterArea) => {
+        if ($(filterArea).hasClass('hidden')) {
+            $(filterArea).removeClass('hidden')
+        }
     }
 
     populateDropdown = (dropdown, itemList, callback) => {
@@ -59,6 +88,7 @@ export class SubindicatorFilter {
                 $(li).removeClass('selected')
             }
             $('.truncate', li).text(item);
+            $(li).off('click');
             $(li).on('click', () => {
                 this.dropdownOptionSelected(dropdown, li, callback);
             })
@@ -89,7 +119,7 @@ export class SubindicatorFilter {
 
     groupSelected = (selectedGroup, subindicatorDd, title) => {
         let subindicators = [];
-        for (const [obj, subindicator] of Object.entries(indicators)) {
+        for (const [obj, subindicator] of Object.entries(this.indicators)) {
             if (obj === title) {
                 //there can be more than 1 chart for every category, that's why we need this if
                 for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
@@ -107,7 +137,7 @@ export class SubindicatorFilter {
         let chartData = [];
 
         if (selectedFilter !== allValues) {
-            for (const [indicatorTitle, subindicator] of Object.entries(indicators)) {
+            for (const [indicatorTitle, subindicator] of Object.entries(this.indicators)) {
                 //filter indicatorTitle
                 if (indicatorTitle === title) {
                     for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
@@ -120,7 +150,7 @@ export class SubindicatorFilter {
                 }
             }
         } else {
-            for (const [indicatorTitle, subindicator] of Object.entries(indicators)) {
+            for (const [indicatorTitle, subindicator] of Object.entries(this.indicators)) {
                 chartData = subindicator.subindicators;
             }
         }

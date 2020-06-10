@@ -102,7 +102,7 @@ export function getSelectedBoundary(level, geometries, config) {
                 return !loaded_codes.includes(feature.properties.code);
             })
 
-            selectedBoundary.features.concat(new_features);
+            selectedBoundary.features = selectedBoundary.features.concat(new_features);
         }
     })
 

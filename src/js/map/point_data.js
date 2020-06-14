@@ -63,8 +63,10 @@ export class PointData extends Observable {
             this.triggerEvent('loadingCategoryPoints', category);
             return this.getAddressPoints(category)
                 .then(data => {
+                    data.icon = category.theme.icon;
                     self.createMarkers(data, layer);
                     self.map.addLayer(layer);
+
                     return data;
                 })
                 .then(data => {
@@ -102,7 +104,8 @@ export class PointData extends Observable {
                     name: prop.name,
                     category: prop.category,
                     theme: prop.category.theme,
-                    data: prop.data
+                    data: prop.data,
+                    icon: category.theme.icon
                 })
             })
 
@@ -178,11 +181,7 @@ export class PointData extends Observable {
         $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
 
         $('.facility-tooltip__header_name div', item).text(point.name);
-        ThemeStyle.replaceChildDivWithThemeIcon(
-            point.theme.id,
-            $(item).find('.map__facility-tooltip_icon'),
-            $(item).find('.map__facility-tooltip_icon')
-        );
+        ThemeStyle.replaceChildDivWithIcon($(item).find('.facility-tooltip__header_icon'), point.icon)
 
         $('.' + tooltipItemsClsName, item).html('');
 

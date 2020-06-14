@@ -16,6 +16,7 @@ export function onProfileLoaded(payload) {
 const inputClassName = '.location__search_input';
 const parentClassName = '.nav__search_input';
 const searchDdClassName = '.nav__search_dropdown';
+const resultItemClassName = '.search__dropdown_list-item';
 
 let startSearchingClone = null;
 let searchResultItem = '';
@@ -42,7 +43,7 @@ export class Search extends Observable {
 
     prepareDomElements = () => {
         startSearchingClone = $('.search__dropdown_plate')[0].cloneNode(true);
-        searchResultItem = $('.search__dropdown_list-item')[0].cloneNode(true);
+        searchResultItem = $(resultItemClassName)[0].cloneNode(true);
         $(parentClassName).find('.w-form-fail').remove();
         $(parentClassName).find('.w-form-done').remove();
     }
@@ -53,26 +54,52 @@ export class Search extends Observable {
     setSearchInput = () => {
         let self = this;
         let count = 0;
+        let lastKey = 0;
+        let activeItemIndex = -1;
         $(inputClassName).each(function () {
             let element = $(this);
 
             $(this).autocomplete({
                 minLength: minLength,
                 source: function (request, response) {
-                    self.triggerEvent('beforeSearch', {term: request.term});
-                    self.emptySearchResults();
-                    const searchTerm = request.term;
+                    setTimeout(() => {
+                        if (lastKey === 38 || lastKey === 40) {
+                            //arrow keys -- add active class to result item
+                            const maxIndex = $(searchDdClassName).find(resultItemClassName).length - 1;
+                            activeItemIndex = lastKey == 38 ? activeItemIndex - 1 : activeItemIndex + 1;
+                            activeItemIndex = activeItemIndex < 0 ? 0 : activeItemIndex;
+                            activeItemIndex = activeItemIndex > maxIndex ? maxIndex : activeItemIndex;
+                            $(resultItemClassName + '.active').removeClass('active');
+                            $($(resultItemClassName)[activeItemIndex]).addClass('active');
+                            return;
+                        } else {
+                            activeItemIndex = -1;
+                        }
+                        self.triggerEvent('beforeSearch', {term: request.term});
+                        self.emptySearchResults();
+                        const searchTerm = request.term;
 
-                    self.api.search(self.profileId, searchTerm).then(data => {
-                        self.triggerEvent('searchResults', {items: data});
+                        self.api.search(self.profileId, searchTerm).then(data => {
+                            self.triggerEvent('searchResults', {items: data});
 
-                        count = data.length;
-                        $('.search__dropdown_results-value').html(count);  //this needs to be here because if 0 row returns from the API, render function is not fired
+                            count = data.length;
+                            $('.search__dropdown_results-value').html(count);  //this needs to be here because if 0 row returns from the API, render function is not fired
 
-                        response(data);
-                    })
+                            response(data);
+                        })
+                    }, 0)
                 }
-            }).autocomplete('instance')._renderItem = function (ul, item) {
+            })
+                .keydown(function (event) {
+                    const key = event.keyCode;
+                    lastKey = key;
+
+                    if (lastKey === 13) {
+                        //enter
+                        $(resultItemClassName + '.active').click();
+                    }
+                })
+                .autocomplete('instance')._renderItem = function (ul, item) {
                 /**
                  * styling the result items
                  */

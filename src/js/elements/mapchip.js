@@ -19,8 +19,8 @@ export class MapChip extends Observable {
     }
 
     prepareDomElements() {
-        $(mapOptionsClass)
-        this.clonedLegendBlock = $('.map_legend-block')[0].cloneNode(true);	//a legend block
+        const legendBlock = $('.map_legend-block')[0];
+        this.clonedLegendBlock = legendBlock.cloneNode(true);	//a legend block
         this.clonedLegend = $('.map-options__legend')[0].cloneNode(true);	//the legend itself
         this.clearLegend();
     }

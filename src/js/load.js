@@ -21,6 +21,7 @@ import {API} from './api';
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 import {Popup} from "./map/popup";
+import {TutorialBox} from "./elements/tutorial_box";
 
 export default function configureApplication(serverUrl, profileId, config) {
     const api = new API(serverUrl);
@@ -41,6 +42,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     const profileLayout = new ProfileLayout(serverUrl);
     const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
     const contentMapSpinner = new LoadingSpinner('.breadcrumb__loading', {start: true}, true);
+    const tutorialBox = new TutorialBox();
 
     $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
     $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
@@ -83,6 +85,9 @@ export default function configureApplication(serverUrl, profileId, config) {
     }))
     controller.on('loadedNewProfile', payload => {
         profileLoader.loadProfile(payload.payload)
+    })
+    controller.on('loadedNewProfile', payload => {
+        tutorialBox.prepTutorialBox(payload.payload)
     })
     controller.on('loadedNewProfile', payload => {
         //let the choropleth persist

@@ -113,6 +113,7 @@ export class DataBundle {
         }
         this._profile = new Profile(js.profile);
         this._logo = js.profile.logo;
+        this._overview = js.profile.overview;
     }
 
     get geometries() {
@@ -125,6 +126,10 @@ export class DataBundle {
 
     get logo() {
         return this._logo;
+    }
+
+    get overview(){
+        return this._overview;
     }
 
     // get childGeographies() {

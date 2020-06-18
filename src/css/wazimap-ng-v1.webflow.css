@@ -2332,7 +2332,12 @@ label {
 }
 
 .search__dropdown_list-item:hover {
-  background-color: #e0e0e0;
+  background-color: #d6eaeb;
+  color: #000;
+}
+
+.search__dropdown_list-item.active {
+  background-color: #d6eaeb;
   color: #000;
 }
 
@@ -6608,7 +6613,12 @@ label {
   justify-self: end;
 }
 
-#w-node-908692429659-e148319d {
+#w-node-6bd36b98a8c8-e148319d {
+  -ms-grid-column-align: end;
+  justify-self: end;
+}
+
+#w-node-bca9e2f0f20f-e148319d {
   -ms-grid-column-align: end;
   justify-self: end;
 }

@@ -34,28 +34,34 @@ export class MapChip extends Observable {
     }
 
     handleChoroplethFilter(args) {
+        console.log('handleChoroplethFilter')
         let groups = [];
         subindicatorKey = args.subindicatorKey;
 
         for (const [title, detail] of Object.entries(args.indicators)) {
-            for (const [group, items] of Object.entries(detail.groups)) {
-                groups.push(group);
+            if (typeof detail.groups !== 'undefined') {
+                for (const [group, items] of Object.entries(detail.groups)) {
+                    groups.push(group);
+                }
             }
         }
 
         let siFilter = new SubindicatorFilter();
         let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
+        const filterArea = $(mapOptionsClass).find('.map-options__filters_content');
         let indicators = args.indicators;
-        siFilter.handleFilter(indicators, groups, args.indicatorTitle, this, dropdowns);
+        siFilter.handleFilter(indicators, filterArea, groups, args.indicatorTitle, this, dropdowns, args.filter);
     }
 
-    applyFilter = (subindicatorArr) => {
+    applyFilter = (subindicatorArr, selectedGroup, selectedFilter) => {
         if (subindicatorArr !== null) {
             checkIterate(subindicatorArr, (s) => {
                 if (s.keys === subindicatorKey) {
                     const payload = {
                         data: s.children,
-                        subindicatorArr: subindicatorArr
+                        subindicatorArr: subindicatorArr,
+                        selectedGroup: selectedGroup,
+                        selectedFilter: selectedFilter
                     }
 
                     this.triggerEvent("choroplethFiltered", payload)

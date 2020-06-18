@@ -160,8 +160,9 @@ export class Chart extends Observable {
     handleChartFilter = (detail, groups, title) => {
         let siFilter = new SubindicatorFilter();
         let dropdowns = $(this.subCategoryNode).find('.filter__dropdown_wrap');
+        const filterArea = $(this.subCategoryNode).find('.profile-indicator__filters');
 
-        siFilter.handleFilter(detail.indicators, groups, title, this, dropdowns);
+        siFilter.handleFilter(detail.indicators, filterArea, groups, title, this, dropdowns);
     }
 
     applyFilter = (chartData) => {

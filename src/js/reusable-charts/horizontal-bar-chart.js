@@ -203,15 +203,24 @@ export function horizontalBarChart() {
     chart.saveAsPng = function (container) {
         let element = $(container).closest('.profile-indicator')[0];
         $(element).find('.profile-indicator__options').attr('data-html2canvas-ignore', true);
+        $(element).find('.profile-indicator__filters').attr('data-html2canvas-ignore', true);
 
         let options = {
             x: $(element).offset().left - 30,
             y: $(element).offset().top - 5,
-            width: $(element).width() + 30
+            width: $(element).width() + 60,
+            height: $(element).height(),
+            //fix the size of the chart so it doesn't get affected by the client's resolution
+            windowWidth: 1920,
+            windowHeight: 1080,
+            scale: 0.9
         }
 
         html2canvas(element, options).then(function (canvas) {
             saveAs(canvas.toDataURL(), 'chart.png');
+
+            $(element).find('.profile-indicator__options').removeAttr('data-html2canvas-ignore');
+            $(element).find('.profile-indicator__filters').removeAttr('data-html2canvas-ignore');
         });
     }
 
@@ -238,11 +247,31 @@ export function horizontalBarChart() {
 
     chart.exportAsCsv = function (title) {
         const exportData = getExportData();
-        const fileName = title + '.xls';
-        const sheetName = 'Chart Data';
-        const xls = new xlsExport(exportData, sheetName);
+        let rows = [];
 
-        xls.exportToCSV(fileName);
+        rows.push(['Sub-indicator', 'Value']);
+
+        exportData.forEach(function (rowArray) {
+            let row = [];
+            for (const [label, value] of Object.entries(rowArray)) {
+                row.push(value);
+            }
+            rows.push(row);
+        });
+
+        const fileName = title + '.csv';
+
+        let csvContent = "data:text/csv;charset=utf-8,"
+            + rows.map(e => e.join(",")).join("\n");
+
+        let encodedUri = encodeURI(csvContent);
+        let link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link); // Required for FF
+
+        link.click();
+        document.body.removeChild(link);
     }
 
     chart.exportAsExcel = function (title) {

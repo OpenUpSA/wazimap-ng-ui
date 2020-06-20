@@ -80,18 +80,7 @@ export class MapControl extends Observable {
         }
     }
 
-    /**
-     * Resize the map according to the size of the container
-     * Add a delay in case the container is resizing using an animatio
-     * in order to wait for the animation to end.
-     * @return {[type]} [description]
-     */
-    onSizeUpdate() {
-        setTimeout(() => {
-            this.map.invalidateSize(true);
-        }, 500);
-    }
-
+    // Leaflet
     configureMap(coords, mapOptions) {
 
         const map = L

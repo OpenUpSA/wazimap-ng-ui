@@ -42,9 +42,6 @@ export default function configureApplication(serverUrl, profileId, config) {
     const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
     const contentMapSpinner = new LoadingSpinner('.breadcrumb__loading', {start: true}, true);
 
-    $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
-    $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
-
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
     controller.on('subindicatorClick', payload => {
@@ -73,8 +70,6 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))
 
 
-    controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
-    controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
     //controller.on("loadedNewProfile", payload => mapchip.removeMapChip());    //emre:dont trigger removeMapChip on geo selection, we need choropleth persist
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))

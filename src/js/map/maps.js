@@ -19,6 +19,7 @@ export class MapControl extends Observable {
         this.zoomPosition = config.map.zoomPosition;
         this.boundaryLayers = null;
         this.mainLayer = null;
+        this.layerCache = {};
 
         this.layerStyler = new LayerStyler(this.config.layerStyles);
         this.maplocker = new MapLocker();
@@ -35,7 +36,6 @@ export class MapControl extends Observable {
             isLoading: false
         };
 
-        this.layerCache = {};
         this.registerEvents();
 
         this.choropleth = new Choropleth(this.layerCache, this.layerStyler, config.map.choropleth);

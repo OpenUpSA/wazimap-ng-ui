@@ -1,10 +1,7 @@
 import {Observable, numFmt, getSelectedBoundary} from '../utils';
 import {polygon} from 'leaflet/dist/leaflet-src.esm';
 import {LayerStyler} from './layerstyler';
-
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
-import {SubindicatorCalculator} from './choropleth/subindicator_calculator';
-import {SiblingCalculator} from './choropleth/sibling_calculator';
 import {Choropleth} from './choropleth/choropleth';
 import {MapLocker} from './maplocker';
 import {SubindicatorFilter} from "../profile/subindicator_filter";
@@ -133,13 +130,7 @@ export class MapControl extends Observable {
     };
 
     displayChoropleth(data, subindicatorArr, method) {
-        let calculationFunc = {
-            subindicator: SubindicatorCalculator,
-            sibling: SiblingCalculator
-        }[method];
-
-        if (calculationFunc == undefined)
-            calculationFunc = SubindicatorCalculator
+        const calculationFunc = this.choropleth.getCalculator(method);
 
         const args = {
             data: data,

@@ -42,41 +42,42 @@ export class PointData extends Observable {
         return L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
     }
 
+    showLoading(category) {
+        category.showLoading(true);
+        category.showDone(false);
+    }
+
+    showDone(category) {
+        category.showLoading(false);
+        category.showDone(true);
+    }
+
     /**
      * this function is called when a category is toggled
      * */
 
-    showCategoryPoint = (category) => {
+    async showCategoryPoint(category) {
+
         const self = this;
-        let categoryUrl = `${this.baseUrl}/${pointsByCategoryUrl}/${category.id}/?format=json`
         let layer = this.categoryLayers[category.id];
 
         if (layer != undefined) {
             this.map.addLayer(layer);
-            category.showLoading(false);
-            category.showDone(true);
-            return;
+            this.showDone(category)
         } else {
             layer = this.genLayer()
             this.categoryLayers[category.id] = layer;
 
             this.triggerEvent('loadingCategoryPoints', category);
-            return this.getAddressPoints(category)
-                .then(data => {
-                    self.createMarkers(data, layer);
-                    self.map.addLayer(layer);
-                    return data;
-                })
-                .then(data => {
-                    // TODO should rather listen for the event
-                    category.showLoading(false);
-                    category.showDone(true);
-                    this.triggerEvent('loadedCategoryPoints', {category: category, points: data});
-                    return data;
-                });
+
+            const data = await this.getAddressPoints(category)
+            self.createMarkers(data, layer);
+            self.map.addLayer(layer);
+            self.showDone(category);
+
+            self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
 
         }
-
     }
 
     removeCategoryPoints = (category) => {
@@ -89,29 +90,28 @@ export class PointData extends Observable {
 
     /** end of category functions **/
 
-    getAddressPoints(category) {
+    async getAddressPoints(category) {
         const points = [];
-        return this.api.loadPoints(this.profileId, category.id).then(data => {
-            checkIterate(data.features, feature => {
-                const prop = feature.properties;
-                const geometry = feature.geometry;
+        const data = await this.api.loadPoints(this.profileId, category.id)
+        checkIterate(data.features, feature => {
+            const prop = feature.properties;
+            const geometry = feature.geometry;
 
-                points.push({
-                    x: geometry.coordinates[0],
-                    y: geometry.coordinates[1],
-                    name: prop.name,
-                    category: prop.category,
-                    theme: prop.category.theme,
-                    data: prop.data
-                })
+            points.push({
+                x: geometry.coordinates[0],
+                y: geometry.coordinates[1],
+                name: prop.name,
+                category: prop.category,
+                theme: prop.category.theme,
+                data: prop.data
             })
-
-            return points;
         })
+
+        return points;
     }
 
     markerRadius() {
-        return this.map.getZoom() / 4;
+        return this.map.getZoom() / 2;
     }
 
     /**
@@ -124,7 +124,7 @@ export class PointData extends Observable {
             const col = $('.theme-' + point.theme.id).css('color');
             let marker = L.circleMarker([point.y, point.x], {
                 color: col,
-                radius: 3,
+                radius: self.markerRadius(),
                 fill: true,
                 fillColor: col,
                 fillOpacity: 1,

@@ -125,7 +125,6 @@ export class MapControl extends Observable {
      * @param  {[type]} data    An object that contains subindictors and obj
      */
     handleChoropleth(subindicator, method) {
-        console.log({'subindicator':subindicator})
         if (subindicator.children == undefined)
             return;
 
@@ -153,10 +152,6 @@ export class MapControl extends Observable {
         })
     }
 
-    resetChoropleth(setLayerToSelected) {
-        this.choropleth.reset(setLayerToSelected);
-    }
-
     limitGeoViewSelections = (level) => {
         if (this.config.limitGeoViewSelections) {
             $('nav#w-dropdown-list-0').find('a').show();
@@ -169,10 +164,6 @@ export class MapControl extends Observable {
                 $('nav#w-dropdown-list-0').find('a:nth-child(2)').hide();
             }
         }
-    }
-
-    resetChoroplethLayers() {
-        this.choropleth.resetLayers(this.layerCache);
     }
 
 

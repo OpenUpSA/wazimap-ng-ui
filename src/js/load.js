@@ -103,13 +103,12 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
     controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
-    controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth(true));
+    controller.on('mapChipRemoved', payload => mapcontrol.choropleth.reset(true));
     controller.on('choroplethFiltered', payload => {
         mapcontrol.displayChoropleth(payload.payload.data, payload.payload.subindicatorArr, payload.state.subindicator.choropleth_method);
     })
 
     controller.on('newProfileWithChoropleth', payload => {
-        mapcontrol.resetChoroplethLayers();
         setTimeout(() => {
             mapcontrol.displayChoropleth(payload.payload.data, payload.payload.subindicatorArr, payload.state.subindicator.choropleth_method);
 

@@ -19,8 +19,8 @@ export class MapChip extends Observable {
     }
 
     prepareDomElements() {
-        $(mapOptionsClass)
-        this.clonedLegendBlock = $('.map_legend-block')[0].cloneNode(true);	//a legend block
+        const legendBlock = $('.map_legend-block')[0];
+        this.clonedLegendBlock = legendBlock.cloneNode(true);	//a legend block
         this.clonedLegend = $('.map-options__legend')[0].cloneNode(true);	//the legend itself
         this.clearLegend();
     }
@@ -34,19 +34,23 @@ export class MapChip extends Observable {
     }
 
     handleChoroplethFilter(args) {
+        console.log('handleChoroplethFilter')
         let groups = [];
         subindicatorKey = args.subindicatorKey;
 
         for (const [title, detail] of Object.entries(args.indicators)) {
-            for (const [group, items] of Object.entries(detail.groups)) {
-                groups.push(group);
+            if (typeof detail.groups !== 'undefined') {
+                for (const [group, items] of Object.entries(detail.groups)) {
+                    groups.push(group);
+                }
             }
         }
 
         let siFilter = new SubindicatorFilter();
         let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
+        const filterArea = $(mapOptionsClass).find('.map-options__filters_content');
         let indicators = args.indicators;
-        siFilter.handleFilter(indicators, groups, args.indicatorTitle, this, dropdowns, args.filter);
+        siFilter.handleFilter(indicators, filterArea, groups, args.indicatorTitle, this, dropdowns, args.filter);
     }
 
     applyFilter = (subindicatorArr, selectedGroup, selectedFilter) => {

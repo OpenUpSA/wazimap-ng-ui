@@ -33,7 +33,7 @@ export class Subcategory {
         $(subcategoryTitleClass, scHeader).text(subcategory);
         $(descriptionTextClass, scHeader).text(detail.description);
 
-        if (detail.description === ''){
+        if (detail.description === '') {
             $(descriptionClass, scHeader).addClass('hidden');
         }
 
@@ -62,6 +62,8 @@ export class Subcategory {
 
             return;
         }
+
+        $(wrapper).find(keyMetricParentClass).removeClass('hidden');
 
         let metricTemplate = $(keyMetricClass)[0].cloneNode(true);
 

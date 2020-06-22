@@ -5,6 +5,8 @@ export class TutorialBox {
 
     prepTutorialBox = (payload) => {
         const overview = payload.overview;
-        $('.tutorial .profile-name').text(overview.name);
+        if (typeof overview !== 'undefined') {
+            $('.tutorial .profile-name').text(overview.name);
+        }
     }
 }

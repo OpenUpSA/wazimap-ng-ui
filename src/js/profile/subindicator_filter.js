@@ -14,6 +14,7 @@ export class SubindicatorFilter {
         let subindicatorDd = $(dropdowns[1]);
 
         this.indicators = _indicators;
+        console.log({'groups': groups, 'title': title})
 
         const filtersAvailable = this.checkGroups(groups);
         if (filtersAvailable) {

@@ -34,12 +34,11 @@ export class MapChip extends Observable {
     }
 
     handleChoroplethFilter(args) {
-        console.log('handleChoroplethFilter')
         let groups = [];
         subindicatorKey = args.subindicatorKey;
 
         for (const [title, detail] of Object.entries(args.indicators)) {
-            if (typeof detail.groups !== 'undefined') {
+            if (title === args.indicatorTitle && typeof detail.groups !== 'undefined') {
                 for (const [group, items] of Object.entries(detail.groups)) {
                     groups.push(group);
                 }

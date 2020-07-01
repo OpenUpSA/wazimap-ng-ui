@@ -13,6 +13,6 @@ export class ProfileLayout extends Observable {
         logoContainer.attr('src', fullUrl);
         logoContainer.css('display', 'block')
 
-        $(".nav__title").attr("href", logo.url);
+        $(".nav__content_title").attr("href", logo.url);
     }
 }

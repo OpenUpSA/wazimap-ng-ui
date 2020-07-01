@@ -28,6 +28,8 @@ export class Category extends Observable {
             $(this.element).addClass('last');
         }
 
+        $(this.element).removeClass('theme-1').addClass('theme-' + this.theme.id);
+
         $('.point-mapper__h2_name .truncate', this.element).text(this.name);
         $('.point-data__label_source .truncate', this.element).text(this.data.metadata.source);
         $('.point-data__label_source .truncate', this.element).attr('title', this.data.metadata.source);

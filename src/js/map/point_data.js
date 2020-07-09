@@ -63,7 +63,7 @@ export class PointData extends Observable {
             this.triggerEvent('loadingCategoryPoints', category);
             return this.getAddressPoints(category)
                 .then(data => {
-                    data.icon = category.theme.icon;
+                    data.icon = category.data.theme.icon;
                     self.createMarkers(data, layer);
                     self.map.addLayer(layer);
 

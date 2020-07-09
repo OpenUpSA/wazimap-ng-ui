@@ -89,13 +89,6 @@ export default class Controller extends Observable {
      * @param  {[type]} payload [description]
      * @return {[type]}         [description]
      */
-    onRichDataDrawer(payload) {
-        if (payload.open == true)
-            this.triggerEvent("richDataDrawerOpen", {})
-        else
-            this.triggerEvent("richDataDrawerClose", {})
-    }
-
     onSubIndicatorClick(payload) {
         const children = payload.subindicators.filter((s) => {
             return s.keys === payload.obj.keys;

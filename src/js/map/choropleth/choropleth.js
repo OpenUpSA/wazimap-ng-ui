@@ -1,6 +1,9 @@
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 
+import {SubindicatorCalculator} from './subindicator_calculator';
+import {SiblingCalculator} from './sibling_calculator';
+
 export class Choropleth {
     constructor(layers, layerStyler, options, buffer = 0.1) {
         this.layers = layers;
@@ -9,6 +12,20 @@ export class Choropleth {
         this.options = options;
         this.buffer = buffer;
         this.currentLayers = [];
+    }
+
+    getCalculator(method) {
+        let calculationFunc = {
+            subindicator: SubindicatorCalculator,
+            sibling: SiblingCalculator
+        }[method];
+
+
+        if (calculationFunc == undefined)
+            calculationFunc = SubindicatorCalculator
+
+        return calculationFunc;
+
     }
 
     getIntervals(values) {
@@ -36,10 +53,6 @@ export class Choropleth {
         })
 
         this.currentLayers = [];
-    }
-
-    resetLayers(_layers) {
-        this.layers = _layers;
     }
 
     getBounds(values) {

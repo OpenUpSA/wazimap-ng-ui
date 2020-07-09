@@ -44,9 +44,6 @@ export default function configureApplication(serverUrl, profileId, config) {
     const contentMapSpinner = new LoadingSpinner('.breadcrumb__loading', {start: true}, true);
     const tutorialBox = new TutorialBox();
 
-    $('.content__rich-data_toggle').click(() => controller.onRichDataDrawer({opening: true}));
-    $('.content__rich-data--close').click(() => controller.onRichDataDrawer({opening: false}));
-
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
     controller.on('subindicatorClick', payload => {
@@ -75,8 +72,6 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))
 
 
-    controller.on('richDataDrawerOpen', payload => mapcontrol.onSizeUpdate(payload))
-    controller.on('richDataDrawerClose', payload => mapcontrol.onSizeUpdate(payload))
 
     //controller.on("loadedNewProfile", payload => mapchip.removeMapChip());    //emre:dont trigger removeMapChip on geo selection, we need choropleth persist
     controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
@@ -113,13 +108,12 @@ export default function configureApplication(serverUrl, profileId, config) {
     controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
     controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
-    controller.on('mapChipRemoved', payload => mapcontrol.resetChoropleth(true));
+    controller.on('mapChipRemoved', payload => mapcontrol.choropleth.reset(true));
     controller.on('choroplethFiltered', payload => {
         mapcontrol.displayChoropleth(payload.payload.data, payload.payload.subindicatorArr, payload.state.subindicator.choropleth_method);
     })
 
     controller.on('newProfileWithChoropleth', payload => {
-        mapcontrol.resetChoroplethLayers();
         setTimeout(() => {
             mapcontrol.displayChoropleth(payload.payload.data, payload.payload.subindicatorArr, payload.state.subindicator.choropleth_method);
 

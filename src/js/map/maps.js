@@ -1,10 +1,7 @@
 import {Observable, numFmt, getSelectedBoundary} from '../utils';
 import {polygon} from 'leaflet/dist/leaflet-src.esm';
 import {LayerStyler} from './layerstyler';
-
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
-import {SubindicatorCalculator} from './choropleth/subindicator_calculator';
-import {SiblingCalculator} from './choropleth/sibling_calculator';
 import {Choropleth} from './choropleth/choropleth';
 import {MapLocker} from './maplocker';
 import {SubindicatorFilter} from "../profile/subindicator_filter";
@@ -22,6 +19,7 @@ export class MapControl extends Observable {
         this.zoomPosition = config.map.zoomPosition;
         this.boundaryLayers = null;
         this.mainLayer = null;
+        this.layerCache = {};
 
         this.layerStyler = new LayerStyler(this.config.layerStyles);
         this.maplocker = new MapLocker();
@@ -38,13 +36,15 @@ export class MapControl extends Observable {
             isLoading: false
         };
 
-        this.layerCache = {};
-        this.map.on("zoomend", e => this.onZoomChanged(e));
-        this.map.on("zoomend", e => this.triggerEvent("mapZoomed", this.map))
+        this.registerEvents();
 
         this.choropleth = new Choropleth(this.layerCache, this.layerStyler, config.map.choropleth);
     };
 
+    registerEvents() {
+        this.map.on("zoomend", e => this.onZoomChanged(e));
+        this.map.on("zoomend", e => this.triggerEvent("mapZoomed", this.map))
+    }
     enableZoom(enabled) {
         this.zoomEnabled = enabled;
     }
@@ -80,18 +80,7 @@ export class MapControl extends Observable {
         }
     }
 
-    /**
-     * Resize the map according to the size of the container
-     * Add a delay in case the container is resizing using an animatio
-     * in order to wait for the animation to end.
-     * @return {[type]} [description]
-     */
-    onSizeUpdate() {
-        setTimeout(() => {
-            this.map.invalidateSize(true);
-        }, 500);
-    }
-
+    // Leaflet
     configureMap(coords, mapOptions) {
 
         const map = L
@@ -143,13 +132,7 @@ export class MapControl extends Observable {
     };
 
     displayChoropleth(data, subindicatorArr, method) {
-        let calculationFunc = {
-            subindicator: SubindicatorCalculator,
-            sibling: SiblingCalculator
-        }[method];
-
-        if (calculationFunc == undefined)
-            calculationFunc = SubindicatorCalculator
+        const calculationFunc = this.choropleth.getCalculator(method);
 
         const args = {
             data: data,
@@ -169,10 +152,6 @@ export class MapControl extends Observable {
         })
     }
 
-    resetChoropleth(setLayerToSelected) {
-        this.choropleth.reset(setLayerToSelected);
-    }
-
     limitGeoViewSelections = (level) => {
         if (this.config.limitGeoViewSelections) {
             $('nav#w-dropdown-list-0').find('a').show();
@@ -185,10 +164,6 @@ export class MapControl extends Observable {
                 $('nav#w-dropdown-list-0').find('a:nth-child(2)').hide();
             }
         }
-    }
-
-    resetChoroplethLayers() {
-        this.choropleth.resetLayers(this.layerCache);
     }
 
 

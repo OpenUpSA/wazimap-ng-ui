@@ -42,8 +42,12 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
-    loadPoints(profileId, categoryId) {
-        const url = `${this.baseUrl}/points/profile/${profileId}/category/${categoryId}/points/?format=json`;
+    loadPoints(profileId, categoryId, areaCode) {
+        let url = '';
+        if (areaCode == undefined)
+            url = `${this.baseUrl}/points/profile/${profileId}/category/${categoryId}/points/?format=json`;
+        else
+            url = `${this.baseUrl}/points/profile/${profileId}/category/${categoryId}/geography/${areaCode}/points/?format=json`;
         return this.loadUrl(url);
     }
 

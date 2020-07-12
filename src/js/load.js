@@ -17,6 +17,7 @@ import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
 import {ProfileLayout} from "./elements/profile_layout";
 import {PointDataTray} from './elements/point_tray/tray';
 import {API} from './api';
+import Analytics from './analytics';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -26,6 +27,8 @@ import {TutorialBox} from "./elements/tutorial_box";
 export default function configureApplication(serverUrl, profileId, config) {
     const api = new API(serverUrl);
     const controller = new Controller(api, config, profileId);
+    if (config.analytics)
+        config.analytics.registerEvents(controller);
 
     const mapcontrol = new MapControl(config);
     const popup = new Popup(mapcontrol.map);
@@ -102,7 +105,7 @@ export default function configureApplication(serverUrl, profileId, config) {
 
     controller.on("searchBefore", payload => searchLoadSpinner.start());
     controller.on("searchResults", payload => searchLoadSpinner.stop());
-    controller.on("layerLoadingDone", payload => contentMapSpinner.stop());
+    controller.on("layerLoaded", payload => contentMapSpinner.stop());
 
     controller.on("categorySelected", payload => pointData.showCategoryPoint(payload.payload));
     controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
@@ -153,7 +156,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     mapcontrol.on('layerMouseOut', payload => controller.onLayerMouseOut(payload))
     mapcontrol.on("layerMouseMove", payload => controller.onLayerMouseMove(payload))
     mapcontrol.on('layerLoading', payload => controller.onLayerLoading(payload))
-    mapcontrol.on('layerLoadingDone', payload => controller.onLayerLoadingDone(payload))
+    mapcontrol.on('layerLoaded', payload => controller.onLayerLoaded(payload))
     mapcontrol.on('mapZoomed', payload => controller.onMapZoomed(payload))
     mapcontrol.on('choropleth', payload => controller.onChoropleth(payload))
 
@@ -181,7 +184,8 @@ export default function configureApplication(serverUrl, profileId, config) {
     pointDataTray.on('categorySelected', payload => controller.onCategorySelected(payload));
     pointDataTray.on('categoryUnselected', payload => controller.onCategoryUnselected(payload));
 
-    // pointData.on('categoryPointLoaded', payload => controller.onCategoryPointLoaded(payload));
+    pointData.on('loadingCategoryPoints', payload => controller.onCategoryPointLoading(payload));
+    pointData.on('loadedCategoryPoints', payload => controller.onCategoryPointLoaded(payload));
 
     pointDataTray.loadThemes();
 

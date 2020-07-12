@@ -19,6 +19,40 @@
           rel="stylesheet">
   <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon">
   <link href="images/webclip.png" rel="apple-touch-icon">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-93649482-25"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+          dataLayer.push(arguments);
+      }
+
+      const analyticsId = 'UA-93649482-25';
+      gtag('js', new Date());
+      gtag('config', analyticsId, { 'send_page_view': false });
+      gtag('config', analyticsId, {
+          'custom_map': {'dimension1': 'profile'}
+      });
+      window.gtag = gtag;
+  </script>
+
+
+
+<!--   <script>
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-93649482-25', 'auto');
+
+    // Replace the following lines with the plugins you want to use.
+    ga('require', 'eventTracker');
+    ga('require', 'outboundLinkTracker');
+    ga('require', 'urlChangeTracker');
+    // ...
+
+    ga('send', 'pageview');
+  </script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+ -->
   <style>
 /*------------------------------------- Truncation */
 .truncate {

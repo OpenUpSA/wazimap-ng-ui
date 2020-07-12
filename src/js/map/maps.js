@@ -179,7 +179,8 @@ export class MapControl extends Observable {
 
         this.limitGeoViewSelections(level);
 
-        self.triggerEvent("layerLoading", this);
+        // self.triggerEvent("layerLoading", this);
+        self.triggerEvent("layerLoading", geography);
         if (Object.values(geometries.children).length == 0) {
             selectedBoundary = geometries.boundary;
         } else {
@@ -262,6 +263,6 @@ export class MapControl extends Observable {
             }
         })
 
-        self.triggerEvent("layerLoadingDone", self);
+        self.triggerEvent("layerLoaded", {geography: geography, mapControl: this});
     };
 }

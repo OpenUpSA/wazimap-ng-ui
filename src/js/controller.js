@@ -174,7 +174,7 @@ export default class Controller extends Observable {
 
     loadProfile(payload, callRegisterFunction) {
         const self = this;
-        this.triggerEvent("loadingNewProfile", payload.geography);
+        this.triggerEvent("loadingNewProfile", payload.areaCode);
         this.api.getProfile(this.profileId, payload.areaCode).then(js => {
             const dataBundle = new DataBundle(js);
             self.state.profile = dataBundle;
@@ -232,9 +232,9 @@ export default class Controller extends Observable {
         this.triggerEvent("layerLoading", payload);
     };
 
-    onLayerLoadingDone(payload) {
-        payload.maplocker.unlock();
-        this.triggerEvent("layerLoadingDone", payload);
+    onLayerLoaded(payload) {
+        payload.mapControl.maplocker.unlock();
+        this.triggerEvent("layerLoaded", payload);
     };
 
     onProfileLoaded(payload) {
@@ -274,6 +274,10 @@ export default class Controller extends Observable {
 
     onCategoryUnselected(payload) {
         this.triggerEvent('categoryUnselected', payload);
+    }
+
+    onCategoryPointLoading(payload) {
+        this.triggerEvent('categoryPointLoading', payload);
     }
 
     onCategoryPointLoaded(payload) {

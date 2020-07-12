@@ -31,7 +31,7 @@ export default function configureApplication(serverUrl, profileId, config) {
         config.analytics.registerEvents(controller);
 
     const mapcontrol = new MapControl(config);
-    const popup = new Popup(mapcontrol.map);
+    mapcontrol.popup = new Popup(mapcontrol.map);
     const pointData = new PointData(api, mapcontrol.map, profileId, config);
     const pointDataTray = new PointDataTray(api, profileId);
     const pdfprinter = new PDFPrinter();
@@ -43,100 +43,120 @@ export default function configureApplication(serverUrl, profileId, config) {
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
     const profileLayout = new ProfileLayout(serverUrl);
-    const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
-    const contentMapSpinner = new LoadingSpinner('.breadcrumb__loading', {start: true}, true);
     const tutorialBox = new TutorialBox();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     controller.registerWebflowEvents();
-    controller.on('subindicatorClick', payload => {
-        const method = payload.state.subindicator.choropleth_method;
-        mapcontrol.handleChoropleth(payload.state.subindicator, method)
-    })
-    controller.on('subindicatorClick', payload => {
-        const args = {
-            indicators: payload.payload.indicators,
-            subindicatorKey: payload.payload.obj.keys,
-            indicatorTitle: payload.payload.indicatorTitle
-        }
 
-        mapchip.onSubIndicatorChange(args);
+    configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
+    configureSpinnerEvents(controller);
+    configureSearchEvents(controller, search);
+    configureInfoboxEvents(controller, locationInfoBox);
+    configurePointDataEvents(controller, {pointData: pointData, pointDataTray: pointDataTray});
+    configureChoroplethEvents(controller, {mapcontrol: mapcontrol, mapchip: mapchip});
+    configureBreadcrumbsEvents(controller, {profileLoader: profileLoader, locationInfoBox: locationInfoBox});
+    configureDataExplorerEvents(controller);
+    configureProfileEvents(controller, {profileLoader: profileLoader});
+    configureMiscElementEvents(controller, {
+        profileLayout: profileLayout,
+        tutorialBox: tutorialBox,
+        pdfprinter: pdfprinter,
+        printButton: printButton
     });
-    controller.on('choropleth', payload => mapchip.onChoropleth(payload.payload));
-    controller.on('layerMouseOver', payload => {
-        popup.loadPopup(payload.payload, payload.state)
-    });
-    controller.on('layerMouseOut', payload => popup.hidePopup(payload));
-    controller.on('layerMouseMove', payload => {
-        popup.updatePopupPosition(payload)
-    });
-    controller.on('profileLoaded', onProfileLoadedSearch);
-    controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
-    controller.on('printProfile', payload => pdfprinter.printDiv(payload))
 
+   
 
-
-    //controller.on("loadedNewProfile", payload => mapchip.removeMapChip());    //emre:dont trigger removeMapChip on geo selection, we need choropleth persist
-    controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
-    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
-        controller.onSubIndicatorClick(payload)
-    }))
-    controller.on('loadedNewProfile', payload => {
-        profileLoader.loadProfile(payload.payload)
-    })
-    controller.on('loadedNewProfile', payload => {
-        tutorialBox.prepTutorialBox(payload.payload)
-    })
-    controller.on('loadedNewProfile', payload => {
-        //let the choropleth persist
-        controller.handleNewProfileChoropleth();
-    })
     controller.on('loadedNewProfile', payload => {
         // there seems to be a bug where menu items close if this is not set
         $(".sub-category__dropdown_wrapper a").attr("href", "#")
     })
+
+
+
+    preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))
+
+    controller.triggerHashChange()
+}
+
+function configureDataExplorerEvents(controller) {
+    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
+        controller.onSubIndicatorClick(payload)
+    }))
+
+}
+
+function configureSpinnerEvents(controller) {
+    const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
+    const contentMapSpinner = new LoadingSpinner('.breadcrumb__loading', {start: true}, true);
+
+    controller.on("searchBefore", payload => searchLoadSpinner.start());
+    controller.on("searchResults", payload => searchLoadSpinner.stop());
+    controller.on("layerLoaded", payload => contentMapSpinner.stop());
+}
+
+function configureMapEvents(controller, objs = {mapcontrol: null, zoomToggle: null}) {
+    const zoomToggle = objs['zoomToggle'];
+    const mapcontrol = objs['mapcontrol'];
+
+    controller.on('layerMouseOver', payload => mapcontrol.popup.loadPopup(payload.payload, payload.state));
+    controller.on('layerMouseOut', payload => mapcontrol.popup.hidePopup(payload));
+    controller.on('layerMouseMove', payload => mapcontrol.popup.updatePopupPosition(payload));
     controller.on('loadedNewProfile', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
         mapcontrol.overlayBoundaries(geography, geometries)
     });
+    controller.on('zoomToggled', payload => mapcontrol.enableZoom(payload.payload.enabled));
+
+
+    zoomToggle.on('zoomToggled', payload => controller.onZoomToggled(payload));
+    mapcontrol.on('layerClick', payload => controller.onLayerClick(payload));
+    mapcontrol.on('layerMouseOver', payload => controller.onLayerMouseOver(payload))
+    mapcontrol.on('layerMouseOut', payload => controller.onLayerMouseOut(payload))
+    mapcontrol.on("layerMouseMove", payload => controller.onLayerMouseMove(payload))
+    mapcontrol.on('layerLoading', payload => controller.onLayerLoading(payload))
+    mapcontrol.on('layerLoaded', payload => controller.onLayerLoaded(payload))
+    mapcontrol.on('mapZoomed', payload => controller.onMapZoomed(payload))
+}
+
+function configureProfileEvents(controller, objs = {profileLoader: null}) {
+    const profileLoader = objs['profileLoader'];
+
+    controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload.payload))
+}
+
+function configureSearchEvents(controller, search) {
+    controller.on('profileLoaded', onProfileLoadedSearch);
+
+    search.on('beforeSearch', payload => controller.onSearchBefore(payload));
+    search.on('searchResults', payload => controller.onSearchResults(payload));
+    search.on('resultClick', payload => controller.onSearchResultClick(payload));
+    search.on('clearSearch', payload => controller.onSearchClear(payload));
+}
+
+function configureMiscElementEvents(controller, objs = {
+    profileLayout: null,
+    tutorialBox: null,
+    pdfprinter: null,
+    printButton: null,
+}) {
+
+    const profileLayout = objs['profileLayout'];
+    const tutorialBox = objs['tutorialBox'];
+    const pdfprinter = objs['pdfprinter'];
+    const printButton = objs['printButton'];
+
+    printButton.on("click", payload => controller.onPrintProfile(payload));
+
 
     controller.on('loadedNewProfile', payload => profileLayout.displayLogo(payload.payload.logo))
+    controller.on('loadedNewProfile', payload => tutorialBox.prepTutorialBox(payload.payload))
+    controller.on('printProfile', payload => pdfprinter.printDiv(payload))
+}
 
-    controller.on("searchBefore", payload => searchLoadSpinner.start());
-    controller.on("searchResults", payload => searchLoadSpinner.stop());
-    controller.on("layerLoaded", payload => contentMapSpinner.stop());
-
-    controller.on("categorySelected", payload => pointData.showCategoryPoint(payload.payload));
-    controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
-    controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
-
-    controller.on('mapChipRemoved', payload => mapcontrol.choropleth.reset(true));
-    controller.on('choroplethFiltered', payload => {
-        mapcontrol.displayChoropleth(payload.payload.data, payload.payload.subindicatorArr, payload.state.subindicator.choropleth_method);
-    })
-
-    controller.on('newProfileWithChoropleth', payload => {
-        setTimeout(() => {
-            mapcontrol.displayChoropleth(payload.payload.data, payload.payload.subindicatorArr, payload.state.subindicator.choropleth_method);
-
-            if (typeof payload.payload.indicators !== 'undefined') {
-                //indicators changed -- trigger onSubIndicatorChange
-                const args = {
-                    indicators: payload.payload.indicators,
-                    subindicatorKey: payload.state.selectedSubindicator,
-                    indicatorTitle: payload.state.subindicator.indicatorTitle,
-                    filter: payload.state.subindicator.filter
-                }
-
-                mapchip.onSubIndicatorChange(args);
-            }
-        }, 0);
-    })
-
-    controller.on('zoomToggled', payload => {
-        mapcontrol.enableZoom(payload.payload.enabled)
-    });
+function configureInfoboxEvents(controller, locationInfoBox) {
+    controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
+    controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
 
     controller.on('layerClick', payload => {
         if (payload.state.mapLoading == true) {
@@ -150,31 +170,15 @@ export default function configureApplication(serverUrl, profileId, config) {
         }];
         locationInfoBox.updateLocations(locations);
     })
+}
 
-    mapcontrol.on('layerClick', payload => controller.onLayerClick(payload));
-    mapcontrol.on('layerMouseOver', payload => controller.onLayerMouseOver(payload))
-    mapcontrol.on('layerMouseOut', payload => controller.onLayerMouseOut(payload))
-    mapcontrol.on("layerMouseMove", payload => controller.onLayerMouseMove(payload))
-    mapcontrol.on('layerLoading', payload => controller.onLayerLoading(payload))
-    mapcontrol.on('layerLoaded', payload => controller.onLayerLoaded(payload))
-    mapcontrol.on('mapZoomed', payload => controller.onMapZoomed(payload))
-    mapcontrol.on('choropleth', payload => controller.onChoropleth(payload))
+function configurePointDataEvents(controller, objs = {pointDataTray: null, pointData: null}) {
+    const pointDataTray = objs['pointDataTray'];
+    const pointData = objs['pointData'];
 
-    profileLoader.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
-
-    search.on('beforeSearch', payload => controller.onSearchBefore(payload));
-    search.on('searchResults', payload => controller.onSearchResults(payload));
-    search.on('resultClick', payload => controller.onSearchResultClick(payload));
-    search.on('clearSearch', payload => controller.onSearchClear(payload));
-
-
-    printButton.on("click", payload => controller.onPrintProfile(payload));
-    locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
-
-    mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
-    mapchip.on('choroplethFiltered', payload => {
-        controller.onChoroplethFiltered(payload);
-    })
+    controller.on("categorySelected", payload => pointData.showCategoryPoint(payload.payload));
+    controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
+    controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
     pointDataTray.on('themeSelected', payload => controller.onThemeSelected(payload))
     pointDataTray.on('themeUnselected', payload => controller.onThemeUnselected(payload))
@@ -188,10 +192,71 @@ export default function configureApplication(serverUrl, profileId, config) {
     pointData.on('loadedCategoryPoints', payload => controller.onCategoryPointLoaded(payload));
 
     pointDataTray.loadThemes();
+}
 
-    zoomToggle.on('zoomToggled', payload => controller.onZoomToggled(payload));
-    preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))
+function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip: null}) {
+    const mapcontrol = objs['mapcontrol'];
+    const mapchip = objs['mapchip'];
 
-    controller.triggerHashChange()
-    // mapcontrol.overlayBoundaries(null);
+    mapcontrol.on('choropleth', payload => controller.onChoropleth(payload))
+    mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
+    mapchip.on('choroplethFiltered', payload => {
+        controller.onChoroplethFiltered(payload);
+    })
+
+        //let the choropleth persist
+    controller.on('loadedNewProfile', payload => controller.handleNewProfileChoropleth())
+    controller.on('mapChipRemoved', payload => mapcontrol.choropleth.reset(true));
+    controller.on('choroplethFiltered', payload => {
+        const pp = payload.payload;
+        const ps = payload.state;
+        mapcontrol.displayChoropleth(pp.data, pp.subindicatorArr, ps.subindicator.choropleth_method);
+    })
+
+    controller.on('newProfileWithChoropleth', payload => {
+        setTimeout(() => {
+            const pp = payload.payload;
+            const ps = payload.state;
+            mapcontrol.displayChoropleth(pp.data, pp.subindicatorArr, ps.subindicator.choropleth_method);
+
+            if (typeof pp.indicators !== 'undefined') {
+                //indicators changed -- trigger onSubIndicatorChange
+                const args = {
+                    indicators: pp.indicators,
+                    subindicatorKey: ps.selectedSubindicator,
+                    indicatorTitle: ps.subindicator.indicatorTitle,
+                    filter: ps.subindicator.filter
+                }
+
+                mapchip.onSubIndicatorChange(args);
+            }
+        }, 0);
+    })
+
+    controller.on('choropleth', payload => mapchip.onChoropleth(payload.payload));
+    controller.on('subindicatorClick', payload => {
+        const ps = payload.state;
+        const method = ps.subindicator.choropleth_method;
+        mapcontrol.handleChoropleth(ps.subindicator, method)
+    })
+
+    controller.on('subindicatorClick', payload => {
+        const pp = payload.payload;
+        const args = {
+            indicators: pp.indicators,
+            subindicatorKey: pp.obj.keys,
+            indicatorTitle: pp.indicatorTitle
+        }
+
+        mapchip.onSubIndicatorChange(args);
+    });
+
+}
+
+function configureBreadcrumbsEvents(controller, objs = {profileLoader: null, locationInfoBox: null}) {
+    const profileLoader = objs['profileLoader'];
+    const locationInfoBox = objs['locationInfoBox'];
+
+    profileLoader.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
+    locationInfoBox.on('breadcrumbSelected', payload => controller.onBreadcrumbSelected(payload))
 }

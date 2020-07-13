@@ -194,7 +194,7 @@ function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip
     const mapchip = objs['mapchip'];
 
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
-    mapchip.on('choroplethFiltered', payload => {
+    mapchip.on('mapchip.choropleth.filtered', payload => {
         controller.onChoroplethFiltered(payload);
     })
 

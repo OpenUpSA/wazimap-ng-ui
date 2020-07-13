@@ -63,7 +63,7 @@ export class MapChip extends Observable {
                         selectedFilter: selectedFilter
                     }
 
-                    this.triggerEvent("choroplethFiltered", payload)
+                    this.triggerEvent("mapchip.choropleth.filtered", payload)
                 }
             })
         }

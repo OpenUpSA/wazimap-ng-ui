@@ -119,7 +119,7 @@ export default class Controller extends Observable {
 
         this.state.subindicator = subindicator;
 
-        this.triggerEvent("choroplethFiltered", payload);
+        this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
     handleNewProfileChoropleth() {

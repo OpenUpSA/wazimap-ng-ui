@@ -232,6 +232,14 @@ value: ${value}
             const profileName = getProfileName(payload);
             this.logEvent(profileName, 'choropleth', 'reset');
         })
+
+        controller.on('mapchip.choropleth.filtered', payload => {
+            const profileName = getProfileName(payload);
+            const pp = payload.payload;
+            const label = `${pp.selectedGroup} (${pp.selectedFilter})`
+
+            this.logEvent(profileName, 'choropleth', 'filtered', label);
+        })
     }
 
     registerEvents(controller) {

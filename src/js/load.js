@@ -254,7 +254,7 @@ function configureBreadcrumbsEvents(controller, objs = {profileLoader: null, loc
     const locationInfoBox = objs['locationInfoBox'];
 
     controller.bubbleEvent(profileLoader, 'profile.breadcrumbs.selected');
-    controller.bubbleEvent(locationInfoBox, 'elements.breadcrumbs.selected');
+    controller.bubbleEvent(locationInfoBox, 'location_infobox.breadcrumbs.selected');
     profileLoader.on('profile.breadcrumbs.selected', payload => controller.onBreadcrumbSelected(payload))
-    locationInfoBox.on('elements.breadcrumbs.selected', payload => controller.onBreadcrumbSelected(payload))
+    locationInfoBox.on('location_infobox.breadcrumbs.selected', payload => controller.onBreadcrumbSelected(payload))
 }

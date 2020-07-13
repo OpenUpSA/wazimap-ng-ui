@@ -70,7 +70,7 @@ export class PointData extends Observable {
 
             this.triggerEvent('loadingCategoryPoints', category);
 
-            const data = await this.getAddressPoints(category)
+            const data = await this.getAddressPoints(category);
             self.createMarkers(data, layer);
             self.map.addLayer(layer);
             self.showDone(category);
@@ -103,7 +103,8 @@ export class PointData extends Observable {
                 name: prop.name,
                 category: prop.category,
                 theme: prop.category.theme,
-                data: prop.data
+                data: prop.data,
+                icon: category.data.theme.icon
             })
         })
 

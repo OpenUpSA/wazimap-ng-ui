@@ -176,17 +176,17 @@ function configurePointDataEvents(controller, objs = {pointDataTray: null, point
     const pointDataTray = objs['pointDataTray'];
     const pointData = objs['pointData'];
 
-    controller.on("categorySelected", payload => pointData.showCategoryPoint(payload.payload));
-    controller.on("categoryUnselected", payload => pointData.removeCategoryPoints(payload.payload));
+    controller.on("point_tray.category.selected", payload => pointData.showCategoryPoint(payload.payload));
+    controller.on("point_tray.category.unselected", payload => pointData.removeCategoryPoints(payload.payload));
     controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
-    pointDataTray.on('themeSelected', payload => controller.onThemeSelected(payload))
-    pointDataTray.on('themeUnselected', payload => controller.onThemeUnselected(payload))
+    pointDataTray.on('point_tray.theme.selected', payload => controller.onThemeSelected(payload))
+    pointDataTray.on('point_tray.theme.unselected', payload => controller.onThemeUnselected(payload))
     pointDataTray.on('themeLoaded', payload => controller.onThemePointLoaded(payload));
     pointDataTray.on('loadingThemes', payload => controller.onLoadingThemes(payload));
     pointDataTray.on('loadedThemes', payload => controller.onLoadedThemes(payload));
-    pointDataTray.on('categorySelected', payload => controller.onCategorySelected(payload));
-    pointDataTray.on('categoryUnselected', payload => controller.onCategoryUnselected(payload));
+    pointDataTray.on('point_tray.category.selected', payload => controller.onCategorySelected(payload));
+    pointDataTray.on('point_tray.category.unselected', payload => controller.onCategoryUnselected(payload));
 
     pointData.on('loadingCategoryPoints', payload => controller.onCategoryPointLoading(payload));
     pointData.on('loadedCategoryPoints', payload => controller.onCategoryPointLoaded(payload));

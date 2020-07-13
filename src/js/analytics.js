@@ -85,19 +85,19 @@ value: ${value}
    
 
     registerPointEvents(controller) {
-        controller.on('themeSelected', payload => {
+        controller.on('point_tray.theme.selected', payload => {
             const profileName = getProfileName(payload);
             const themeLabel = payload.payload.data.name;
             this.logEvent(profileName, 'points', 'theme_selected', themeLabel);
         })
 
-        controller.on('themeUnselected', payload => {
+        controller.on('point_tray.theme.unselected', payload => {
             const profileName = getProfileName(payload);
             const themeLabel = payload.payload.data.name;
             this.logEvent(profileName, 'points', 'theme_unselected', themeLabel);
         })
 
-        controller.on('categorySelected', payload => {
+        controller.on('point_tray.category.selected', payload => {
             const profileName = getProfileName(payload);
             const categoryLabel = payload.payload.data.name;
             const key = categoryKey(categoryLabel);
@@ -105,7 +105,7 @@ value: ${value}
             this.logEvent(profileName, 'points', 'category_selected', categoryLabel);
         })
 
-        controller.on('categoryUnselected', payload => {
+        controller.on('point_tray.category..unselected', payload => {
             const profileName = getProfileName(payload);
             const categoryLabel = payload.payload.data.name;
             this.logEvent(profileName, 'points', 'category_unselected', categoryLabel);

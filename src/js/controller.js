@@ -261,11 +261,11 @@ export default class Controller extends Observable {
     }
 
     onThemeSelected(payload) {
-        this.triggerEvent('themeSelected', payload);
+        this.triggerEvent('point_tray.theme.selected', payload);
     }
 
     onThemeUnselected(payload) {
-        this.triggerEvent('themeUnselected', payload);
+        this.triggerEvent('point_tray.theme.unselected', payload);
     }
 
     onThemePointLoaded(payload) {
@@ -273,11 +273,11 @@ export default class Controller extends Observable {
     }
 
     onCategorySelected(payload) {
-        this.triggerEvent('categorySelected', payload);
+        this.triggerEvent('point_tray.category.selected', payload);
     }
 
     onCategoryUnselected(payload) {
-        this.triggerEvent('categoryUnselected', payload);
+        this.triggerEvent('point_tray.category.unselected', payload);
     }
 
     onCategoryPointLoading(payload) {

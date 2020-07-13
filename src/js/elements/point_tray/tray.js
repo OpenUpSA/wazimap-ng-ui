@@ -33,10 +33,10 @@ export class PointDataTray extends Observable {
 
     createTheme(datum) {
         const theme = new Theme(datum, this.pointDataItem, this.categoryItem);
-        theme.on("categorySelected", category => this.triggerEvent("categorySelected", category))
-        theme.on("categoryUnselected", category => this.triggerEvent("categoryUnselected", category))
-        theme.on("themeSelected", theme => this.triggerEvent("themeSelected", theme))
-        theme.on("themeUnselected", theme => this.triggerEvent("themeUnselected", theme))
+        theme.on("point_tray.category.selected", category => this.triggerEvent("point_tray.category.selected", category))
+        theme.on("point_tray.category.unselected", category => this.triggerEvent("point_tray.category.unselected", category))
+        theme.on("point_tray.theme.selected", theme => this.triggerEvent("point_tray.theme.selected", theme))
+        theme.on("point_tray.theme.unselected", theme => this.triggerEvent("point_tray.theme.unselected", theme))
 
         return theme;
     }

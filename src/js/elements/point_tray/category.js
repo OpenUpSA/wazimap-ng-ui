@@ -49,7 +49,7 @@ export class Category extends Observable {
         this.highlight(false);
         this.showLoading(false);
         this.showDone(false);
-        this.triggerEvent("categoryUnselected", this);
+        this.triggerEvent("point_tray.category.unselected", this);
     }
 
     toggleOn() {
@@ -57,7 +57,7 @@ export class Category extends Observable {
         this.highlight(true);
         this.showLoading(true);
         this.showDone(false);
-        this.triggerEvent("categorySelected", this)
+        this.triggerEvent("point_tray.category.selected", this)
     }
 
     highlight(flag) {

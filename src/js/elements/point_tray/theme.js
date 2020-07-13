@@ -33,8 +33,8 @@ export class Theme extends Observable {
 
     createCategory(categoryDatum, isLast) {
         const category = new Category(categoryDatum, this.categoryItem, isLast);
-        category.on("categorySelected", category => this.triggerEvent("categorySelected", category))
-        category.on("categoryUnselected", category => this.triggerEvent("categoryUnselected", category))
+        category.on("point_tray.category.selected", category => this.triggerEvent("point_tray.category.selected", category))
+        category.on("point_tray.category.unselected", category => this.triggerEvent("point_tray.category.unselected", category))
 
         return category;
     }
@@ -64,7 +64,7 @@ export class Theme extends Observable {
             category.toggleOff();
         })
         this.highlight(false);
-        this.triggerEvent("themeUnselected", this);
+        this.triggerEvent("point_tray.theme.unselected", this);
     }
 
     toggleOn() {
@@ -74,7 +74,7 @@ export class Theme extends Observable {
         })
 
         this.highlight(true);
-        this.triggerEvent("themeSelected", this)
+        this.triggerEvent("point_tray.theme.selected", this)
     }
 
     highlight(flag) {

@@ -44,7 +44,7 @@ export class PointDataTray extends Observable {
     loadThemes() {
         const self = this;
 
-        self.triggerEvent("loadingThemes", self);
+        self.triggerEvent("point_tray.tray.loading_themes", self);
 
         self.api.loadThemes(this.profileId).then(data => {
             checkIterate(data.results, themeDatum => {
@@ -59,8 +59,8 @@ export class PointDataTray extends Observable {
 
                 $(loadingClsName).addClass('hidden');
                 $(wrapperClsName).append(item);
-                self.triggerEvent("loadedThemes", data);
             })
+            self.triggerEvent("point_tray.tray.themes_loaded", data);
         })
     }
 }

@@ -358,11 +358,11 @@ export default class Controller extends Observable {
     }
 
     onLoadingThemes(payload) {
-        this.triggerEvent("loadingThemes", payload);
+        this.triggerEvent("point_tray.tray.loading_themes", payload);
     }
 
     onLoadedThemes(payload) {
-        this.triggerEvent("loadedThemes", payload);
+        this.triggerEvent("point_tray.tray.themes_loaded", payload);
         Webflow.ready();
     }
 

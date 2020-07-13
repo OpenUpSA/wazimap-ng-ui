@@ -3,7 +3,10 @@ window.dataLayer = window.dataLayer || [];
 const MISSING_TIME = -1;
 
 function getProfileName(payload) {
-    return payload.state.profile.overview.name;
+    if (payload != undefined && payload.state != undefined && payload.state.profile != undefined)
+        return payload.state.profile.overview.name;
+    else
+        return "Unknown"
 }
 
 function getGeographyLabel(geography) {
@@ -125,6 +128,20 @@ value: ${value}
 
             const loadTime = this.timer.stopAndClear(key);
             this.logEvent(profileName, 'points', 'category_load_time', categoryLabel, loadTime);
+        })
+
+        controller.on('point_tray.tray.loading_themes', payload => {
+            const key = "Loading themes";
+
+            this.timer.startTimer(key);
+        })
+
+        controller.on('point_tray.tray.themes_loaded', payload => {
+            const profileName = getProfileName(payload);
+            const key = "Loading themes";
+
+            const loadTime = this.timer.stopAndClear(key);
+            this.logEvent(profileName, 'points', 'loading_themes_time', '', loadTime);
         })
     }
 

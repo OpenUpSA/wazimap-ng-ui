@@ -105,7 +105,7 @@ value: ${value}
             this.logEvent(profileName, 'points', 'category_selected', categoryLabel);
         })
 
-        controller.on('point_tray.category..unselected', payload => {
+        controller.on('point_tray.category.unselected', payload => {
             const profileName = getProfileName(payload);
             const categoryLabel = payload.payload.data.name;
             this.logEvent(profileName, 'points', 'category_unselected', categoryLabel);

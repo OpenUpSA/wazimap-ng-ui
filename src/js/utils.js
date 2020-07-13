@@ -172,6 +172,12 @@ export class Observable {
         })
 
     }
+
+    bubbleEvents(obj, events) {
+        events.forEach(event => {
+            this.bubbleEvent(obj, event);
+        })
+    }
 }
 
 export const numFmt = d3format(",.2d");

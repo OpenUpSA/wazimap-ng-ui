@@ -106,17 +106,16 @@ function configureMapEvents(controller, objs = {mapcontrol: null, zoomToggle: nu
         const geometries = payload.payload.geometries;
         mapcontrol.overlayBoundaries(geography, geometries)
     });
-    controller.on('zoomToggled', payload => mapcontrol.enableZoom(payload.payload.enabled));
 
 
     controller.bubbleEvent(zoomToggle, 'zoomToggled');
-    mapcontrol.on('layerClick', payload => controller.onLayerClick(payload));
-    controller.bubbleEvent(mapcontrol, 'layerMouseOver');
-    controller.bubbleEvent(mapcontrol, 'layerMouseOut');
-    controller.bubbleEvent(mapcontrol, 'layerMouseMove');
-    controller.bubbleEvent(mapcontrol, 'layerLoading');
+    controller.bubbleEvents(mapcontrol, [
+        'layerMouseOver', 'layerMouseOut', 'layerMouseMove',
+        'layerLoading', 'mapZoomed'
+    ])
     mapcontrol.on('layerLoaded', payload => controller.onLayerLoaded(payload))
-    controller.bubbleEvent(mapcontrol, 'mapZoomed');
+    mapcontrol.on('layerClick', payload => controller.onLayerClick(payload));
+    controller.on('zoomToggled', payload => mapcontrol.enableZoom(payload.payload.enabled));
 }
 
 function configureProfileEvents(controller, objs = {profileLoader: null}) {
@@ -129,9 +128,7 @@ function configureSearchEvents(controller, search) {
     controller.on('profileLoaded', onProfileLoadedSearch);
 
     search.on('resultClick', payload => controller.onSearchResultClick(payload));
-    controller.bubbleEvent(search, 'beforeSearch');
-    controller.bubbleEvent(search, 'searchResults');
-    controller.bubbleEvent(search, 'clearSearch');
+    controller.bubbleEvents(search, ['beforeSearch', 'searchResults', 'clearSearch'])
 }
 
 function configureMiscElementEvents(controller, objs = {
@@ -180,15 +177,14 @@ function configurePointDataEvents(controller, objs = {pointDataTray: null, point
     controller.on("point_tray.category.unselected", payload => pointData.removeCategoryPoints(payload.payload));
     controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
-    controller.bubbleEvent(pointDataTray, 'point_tray.theme.selected')
-    controller.bubbleEvent(pointDataTray, 'point_tray.theme.unselected')
-    controller.bubbleEvent(pointDataTray, 'themeLoaded');
-    controller.bubbleEvent(pointDataTray, 'point_tray.tray.loading_themes');
-    controller.bubbleEvent(pointDataTray, 'point_tray.tray.themes_loaded')
-    controller.bubbleEvent(pointDataTray, 'point_tray.category.selected');
-    controller.bubbleEvent(pointDataTray, 'point_tray.category.unselected');
-    controller.bubbleEvent(pointData, 'loadedCategoryPoints');
-    controller.bubbleEvent(pointData, 'loadingCategoryPoints');
+    controller.bubbleEvents(pointDataTray, [
+        'point_tray.theme.selected', 'point_tray.theme.unselected',
+        'point_tray.tray.loading_themes', 'point_tray.tray.themes_loaded',
+        'point_tray.category.selected', 'point_tray.category.unselected',
+        'themeLoaded'
+    ])
+
+    controller.bubbleEvents(pointData, ['loadedCategoryPoints', 'loadingCategoryPoints']);
 
     pointDataTray.loadThemes();
 }
@@ -197,8 +193,6 @@ function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip
     const mapcontrol = objs['mapcontrol'];
     const mapchip = objs['mapchip'];
 
-    controller.bubbleEvent(mapcontrol, 'displayChoropleth');
-    controller.bubbleEvent(mapcontrol, 'resetChoropleth');
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
     mapchip.on('choroplethFiltered', payload => {
         controller.onChoroplethFiltered(payload);
@@ -207,6 +201,7 @@ function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip
         //let the choropleth persist
     controller.on('loadedNewProfile', payload => controller.handleNewProfileChoropleth())
     controller.on('mapChipRemoved', payload => mapcontrol.choropleth.reset(true));
+    controller.bubbleEvents(mapcontrol, ['displayChoropleth', 'resetChoropleth']);
 
     controller.on('choroplethFiltered', payload => {
         const pp = payload.payload;

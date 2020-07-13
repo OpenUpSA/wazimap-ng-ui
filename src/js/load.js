@@ -109,14 +109,14 @@ function configureMapEvents(controller, objs = {mapcontrol: null, zoomToggle: nu
     controller.on('zoomToggled', payload => mapcontrol.enableZoom(payload.payload.enabled));
 
 
-    zoomToggle.on('zoomToggled', payload => controller.onZoomToggled(payload));
+    controller.bubbleEvent(zoomToggle, 'zoomToggled');
     mapcontrol.on('layerClick', payload => controller.onLayerClick(payload));
-    mapcontrol.on('layerMouseOver', payload => controller.onLayerMouseOver(payload))
-    mapcontrol.on('layerMouseOut', payload => controller.onLayerMouseOut(payload))
-    mapcontrol.on("layerMouseMove", payload => controller.onLayerMouseMove(payload))
-    mapcontrol.on('layerLoading', payload => controller.onLayerLoading(payload))
+    controller.bubbleEvent(mapcontrol, 'layerMouseOver');
+    controller.bubbleEvent(mapcontrol, 'layerMouseOut');
+    controller.bubbleEvent(mapcontrol, 'layerMouseMove');
+    controller.bubbleEvent(mapcontrol, 'layerLoading');
     mapcontrol.on('layerLoaded', payload => controller.onLayerLoaded(payload))
-    mapcontrol.on('mapZoomed', payload => controller.onMapZoomed(payload))
+    controller.bubbleEvent(mapcontrol, 'mapZoomed');
 }
 
 function configureProfileEvents(controller, objs = {profileLoader: null}) {
@@ -128,10 +128,10 @@ function configureProfileEvents(controller, objs = {profileLoader: null}) {
 function configureSearchEvents(controller, search) {
     controller.on('profileLoaded', onProfileLoadedSearch);
 
-    search.on('beforeSearch', payload => controller.onSearchBefore(payload));
-    search.on('searchResults', payload => controller.onSearchResults(payload));
     search.on('resultClick', payload => controller.onSearchResultClick(payload));
-    search.on('clearSearch', payload => controller.onSearchClear(payload));
+    controller.bubbleEvent(search, 'beforeSearch');
+    controller.bubbleEvent(search, 'searchResults');
+    controller.bubbleEvent(search, 'clearSearch');
 }
 
 function configureMiscElementEvents(controller, objs = {
@@ -180,16 +180,15 @@ function configurePointDataEvents(controller, objs = {pointDataTray: null, point
     controller.on("point_tray.category.unselected", payload => pointData.removeCategoryPoints(payload.payload));
     controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 
-    pointDataTray.on('point_tray.theme.selected', payload => controller.onThemeSelected(payload))
-    pointDataTray.on('point_tray.theme.unselected', payload => controller.onThemeUnselected(payload))
-    pointDataTray.on('themeLoaded', payload => controller.onThemePointLoaded(payload));
-    pointDataTray.on('point_tray.tray.loading_themes', payload => controller.onLoadingThemes(payload));
-    pointDataTray.on('point_tray.tray.themes_loaded', payload => controller.onLoadedThemes(payload));
-    pointDataTray.on('point_tray.category.selected', payload => controller.onCategorySelected(payload));
-    pointDataTray.on('point_tray.category.unselected', payload => controller.onCategoryUnselected(payload));
-
-    pointData.on('loadingCategoryPoints', payload => controller.onCategoryPointLoading(payload));
-    pointData.on('loadedCategoryPoints', payload => controller.onCategoryPointLoaded(payload));
+    controller.bubbleEvent(pointDataTray, 'point_tray.theme.selected')
+    controller.bubbleEvent(pointDataTray, 'point_tray.theme.unselected')
+    controller.bubbleEvent(pointDataTray, 'themeLoaded');
+    controller.bubbleEvent(pointDataTray, 'point_tray.tray.loading_themes');
+    controller.bubbleEvent(pointDataTray, 'point_tray.tray.themes_loaded')
+    controller.bubbleEvent(pointDataTray, 'point_tray.category.selected');
+    controller.bubbleEvent(pointDataTray, 'point_tray.category.unselected');
+    controller.bubbleEvent(pointData, 'loadedCategoryPoints');
+    controller.bubbleEvent(pointData, 'loadingCategoryPoints');
 
     pointDataTray.loadThemes();
 }
@@ -198,8 +197,8 @@ function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip
     const mapcontrol = objs['mapcontrol'];
     const mapchip = objs['mapchip'];
 
-    mapcontrol.on('displayChoropleth', payload => controller.onChoropleth(payload))
-    mapcontrol.choropleth.on('resetChoropleth', payload => controller.onChoroplethReset())
+    controller.bubbleEvent(mapcontrol, 'displayChoropleth');
+    controller.bubbleEvent(mapcontrol, 'resetChoropleth');
     mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
     mapchip.on('choroplethFiltered', payload => {
         controller.onChoroplethFiltered(payload);
@@ -235,7 +234,7 @@ function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip
         }, 0);
     })
 
-    controller.on('choropleth', payload => mapchip.onChoropleth(payload.payload));
+    controller.on('displayChoropleth', payload => mapchip.onChoropleth(payload.payload));
     controller.on('subindicatorClick', payload => {
         const ps = payload.state;
         const method = ps.subindicator.choropleth_method;
@@ -259,6 +258,8 @@ function configureBreadcrumbsEvents(controller, objs = {profileLoader: null, loc
     const profileLoader = objs['profileLoader'];
     const locationInfoBox = objs['locationInfoBox'];
 
+    controller.bubbleEvent(profileLoader, 'profile.breadcrumbs.selected');
+    controller.bubbleEvent(locationInfoBox, 'elements.breadcrumbs.selected');
     profileLoader.on('profile.breadcrumbs.selected', payload => controller.onBreadcrumbSelected(payload))
     locationInfoBox.on('elements.breadcrumbs.selected', payload => controller.onBreadcrumbSelected(payload))
 }

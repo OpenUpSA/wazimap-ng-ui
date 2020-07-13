@@ -122,10 +122,6 @@ export default class Controller extends Observable {
         this.triggerEvent("choroplethFiltered", payload);
     }
 
-    onChoroplethReset() {
-        this.triggerEvent('resetChoropleth');
-    }
-
     handleNewProfileChoropleth() {
         if (this.state.subindicator === null) {
             return;
@@ -216,26 +212,6 @@ export default class Controller extends Observable {
         this.triggerEvent("layerClick", payload);
     };
 
-    onChoropleth(payload) {
-        this.triggerEvent("choropleth", payload);
-    };
-
-    onLayerMouseOver(payload) {
-        this.triggerEvent("layerMouseOver", payload);
-    };
-
-    onLayerMouseOut(payload) {
-        this.triggerEvent("layerMouseOut", payload);
-    };
-
-    onLayerMouseMove(payload) {
-        this.triggerEvent("layerMouseMove", payload);
-    }
-
-    onLayerLoading(payload) {
-        this.triggerEvent("layerLoading", payload);
-    };
-
     onLayerLoaded(payload) {
         payload.mapControl.maplocker.unlock();
         this.triggerEvent("layerLoaded", payload);
@@ -260,35 +236,6 @@ export default class Controller extends Observable {
         this.triggerEvent('mapChipRemoved', payload);
     }
 
-    onThemeSelected(payload) {
-        this.triggerEvent('point_tray.theme.selected', payload);
-    }
-
-    onThemeUnselected(payload) {
-        this.triggerEvent('point_tray.theme.unselected', payload);
-    }
-
-    onThemePointLoaded(payload) {
-        this.triggerEvent('themeLoaded', payload);
-    }
-
-    onCategorySelected(payload) {
-        this.triggerEvent('point_tray.category.selected', payload);
-    }
-
-    onCategoryUnselected(payload) {
-        this.triggerEvent('point_tray.category.unselected', payload);
-    }
-
-    onCategoryPointLoading(payload) {
-        this.triggerEvent('categoryPointLoading', payload);
-    }
-
-    onCategoryPointLoaded(payload) {
-        this.triggerEvent('categoryPointLoaded', payload);
-    }
-
-
     /** When a breadcrumb is clicked. Payload is a location:
      {
          code: 'WC',
@@ -306,15 +253,6 @@ export default class Controller extends Observable {
         this.changeHash(payload.code)
     }
 
-    /* Search events */
-    onSearchBefore(payload) {
-        this.triggerEvent("searchBefore", payload)
-    }
-
-    onSearchResults(payload) {
-        this.triggerEvent("searchResults", payload)
-    }
-
     /**
      * When a search result is clicked
      * {code: WC011, level: municipality, name: Matzikama}
@@ -323,23 +261,6 @@ export default class Controller extends Observable {
         this.triggerEvent("searchResultClick", payload)
         this.changeHash(payload.code)
     }
-
-    onSearchClear(payload) {
-        this.triggerEvent("searchClear", payload)
-    }
-
-
-    /**
-     * Payload includes profile and geography, e.g.
-     * {
-     *     profile: 1,
-     *     geography: WC
-     * }
-     */
-    onLoadingGeography(payload) {
-        this.triggerEvent("loadingGeography", payload)
-    }
-
 
     /**
      * Payload includes profile and geography, e.g.
@@ -357,21 +278,9 @@ export default class Controller extends Observable {
         this.registerWebflowEvents();
     }
 
-    onLoadingThemes(payload) {
-        this.triggerEvent("point_tray.tray.loading_themes", payload);
-    }
-
     onLoadedThemes(payload) {
         this.triggerEvent("point_tray.tray.themes_loaded", payload);
         Webflow.ready();
-    }
-
-    onZoomToggled(payload) {
-        this.triggerEvent("zoomToggled", payload);
-    }
-
-    onMapZoomed(payload) {
-        this.triggerEvent("mapZoomed", payload);
     }
 
     onPreferredChildChange(childLevel) {

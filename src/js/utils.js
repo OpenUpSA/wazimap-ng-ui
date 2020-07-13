@@ -165,6 +165,13 @@ export class Observable {
             });
         }
     };
+
+    bubbleEvent(obj, event) {
+        obj.on(event, payload => {
+            this.triggerEvent(event, payload);
+        })
+
+    }
 }
 
 export const numFmt = d3format(",.2d");

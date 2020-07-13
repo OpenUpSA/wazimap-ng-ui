@@ -47,7 +47,7 @@ export class Profile_header extends Observable {
             let breadcrumb = breadcrumbTemplate.cloneNode(true);
             $(".truncate", breadcrumb).text(parent.name);
             $(breadcrumb).on('click', () => {
-                self.triggerEvent('breadcrumbSelected', parent);
+                self.triggerEvent('profile.breadcrumbs.selected', parent);
                 $(breadcrumb).off("click")
             })
 

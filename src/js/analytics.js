@@ -219,7 +219,7 @@ value: ${value}
     }
 
     registerBreadcrumbEvents(controller) {
-        controller.on('breadcrumbSelected', payload => {
+        controller.on('controller.breadcrumbs.selected', payload => {
             const profileName = getProfileName(payload);
             const geography = payload.payload;
             const label = getGeographyLabel(geography);

@@ -32,7 +32,7 @@ export default class ProfileLoader extends Observable {
         this.updateGeography(profile);
 
         let profileHeader = new Profile_header(profile.parents, geometries, this.api, this.profileId, geography);
-        profileHeader.on('breadcrumbSelected', parent => this.triggerEvent('breadcrumbSelected', parent));
+        profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
     }
 
     prepareDomElements = () => {

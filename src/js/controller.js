@@ -302,7 +302,7 @@ export default class Controller extends Observable {
      * @return {[type]}         [description]
      */
     onBreadcrumbSelected(payload) {
-        this.triggerEvent('breadcrumbSelected', payload);
+        this.triggerEvent('controller.breadcrumbs.selected', payload);
         this.changeHash(payload.code)
     }
 

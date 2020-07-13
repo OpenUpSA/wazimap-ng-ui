@@ -62,7 +62,7 @@ export class LocationInfoBox extends Observable {
             }
 
             $(locationElement).on('click', el => {
-                self.triggerEvent('breadcrumbSelected', location);
+                self.triggerEvent('elements.breadcrumbs.selected', location);
                 $(locationElement).off("click")
             })
 

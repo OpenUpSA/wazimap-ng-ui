@@ -109,7 +109,7 @@ export class MapChip extends Observable {
     removeMapChip() {
         const element = $(mapOptionsClass)[0];
         this.clearLegend();
-        this.triggerEvent('mapChipRemoved', element);
+        this.triggerEvent('mapchip.removed', element);
     }
 
     onChoropleth(payload) {

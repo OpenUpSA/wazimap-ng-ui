@@ -193,14 +193,14 @@ function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip
     const mapcontrol = objs['mapcontrol'];
     const mapchip = objs['mapchip'];
 
-    mapchip.on('mapChipRemoved', payload => controller.onMapChipRemoved(payload));
+    mapchip.on('mapchip.removed', payload => controller.onMapChipRemoved(payload));
     mapchip.on('mapchip.choropleth.filtered', payload => {
         controller.onChoroplethFiltered(payload);
     })
 
         //let the choropleth persist
     controller.on('loadedNewProfile', payload => controller.handleNewProfileChoropleth())
-    controller.on('mapChipRemoved', payload => mapcontrol.choropleth.reset(true));
+    controller.on('mapchip.removed', payload => mapcontrol.choropleth.reset(true));
     controller.bubbleEvents(mapcontrol, ['displayChoropleth', 'resetChoropleth']);
 
     controller.on('choroplethFiltered', payload => {

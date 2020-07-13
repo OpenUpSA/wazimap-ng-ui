@@ -233,7 +233,7 @@ export default class Controller extends Observable {
     //Payload is the MapChip Element
     onMapChipRemoved(payload) {
         this.state.subindicator = null;
-        this.triggerEvent('mapChipRemoved', payload);
+        this.triggerEvent('mapchip.removed', payload);
     }
 
     /** When a breadcrumb is clicked. Payload is a location:

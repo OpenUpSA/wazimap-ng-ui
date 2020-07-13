@@ -242,6 +242,14 @@ value: ${value}
         })
     }
 
+    registerMapchipEvents(controller) {
+        controller.on('mapchip.removed', payload => {
+            const profileName = getProfileName(payload);
+            this.logEvent(profileName, 'mapchip', 'removed');
+        })
+
+    }
+
     registerEvents(controller) {
         controller.on('subindicatorClick', payload => {
             const profileName = getProfileName(payload);
@@ -265,6 +273,7 @@ value: ${value}
         this.registerGeographyEvents(controller);
         this.registerProfileEvents(controller);
         this.registerChoroplethEvents(controller);
+        this.registerMapchipEvents(controller);
 
 
     // controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));

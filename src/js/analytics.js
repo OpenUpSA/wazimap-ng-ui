@@ -210,6 +210,13 @@ value: ${value}
         });
     }
 
+    registerChoroplethEvents(controller) {
+        controller.on('resetChoropleth', payload => {
+            const profileName = getProfileName(payload);
+            this.logEvent(profileName, 'choropleth', 'reset');
+        })
+    }
+
     registerEvents(controller) {
         controller.on('subindicatorClick', payload => {
             const profileName = getProfileName(payload);
@@ -232,6 +239,8 @@ value: ${value}
         this.registerPointEvents(controller);
         this.registerGeographyEvents(controller);
         this.registerProfileEvents(controller);
+        this.registerChoroplethEvents(controller);
+
 
     // controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
 

@@ -145,7 +145,7 @@ export class MapControl extends Observable {
         this.choropleth.showChoropleth(calculation, false);
         const intervals = this.choropleth.getIntervals(values);
 
-        this.triggerEvent("choropleth", {
+        this.triggerEvent("displayChoropleth", {
             data: calculation,
             colors: this.choropleth.legendColors,
             intervals: intervals

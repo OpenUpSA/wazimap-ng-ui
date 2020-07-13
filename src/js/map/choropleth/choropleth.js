@@ -1,11 +1,14 @@
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 
+import {Observable} from '../../utils';
 import {SubindicatorCalculator} from './subindicator_calculator';
 import {SiblingCalculator} from './sibling_calculator';
 
-export class Choropleth {
+export class Choropleth extends Observable {
     constructor(layers, layerStyler, options, buffer = 0.1) {
+        super();
+
         this.layers = layers;
         this.layerStyler = layerStyler;
         this.legendColors = options.colors;
@@ -53,6 +56,8 @@ export class Choropleth {
         })
 
         this.currentLayers = [];
+
+        this.triggerEvent('resetChoropleth', null);
     }
 
     getBounds(values) {
@@ -76,7 +81,7 @@ export class Choropleth {
             .domain([bounds.lower, bounds.upper])
             .range([this.legendColors[0], this.legendColors[numIntervals - 1]]);
 
-        this.reset(setLayerToSelected);
+        // this.reset(setLayerToSelected);
 
         childGeographyValues.forEach(el => {
             const layer = self.layers[el.code];

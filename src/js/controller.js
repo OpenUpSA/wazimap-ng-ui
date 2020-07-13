@@ -122,6 +122,10 @@ export default class Controller extends Observable {
         this.triggerEvent("choroplethFiltered", payload);
     }
 
+    onChoroplethReset() {
+        this.triggerEvent('resetChoropleth');
+    }
+
     handleNewProfileChoropleth() {
         if (this.state.subindicator === null) {
             return;

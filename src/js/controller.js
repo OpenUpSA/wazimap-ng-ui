@@ -258,7 +258,7 @@ export default class Controller extends Observable {
      * {code: WC011, level: municipality, name: Matzikama}
      */
     onSearchResultClick(payload) {
-        this.triggerEvent("searchResultClick", payload)
+        this.triggerEvent("search.resultClick", payload)
         this.changeHash(payload.code)
     }
 

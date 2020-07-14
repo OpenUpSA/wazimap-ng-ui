@@ -89,8 +89,8 @@ function configureSpinnerEvents(controller) {
     const searchLoadSpinner = new LoadingSpinner($('.location__search_loading'));
     const contentMapSpinner = new LoadingSpinner('.breadcrumb__loading', {start: true}, true);
 
-    controller.on("searchBefore", payload => searchLoadSpinner.start());
-    controller.on("searchResults", payload => searchLoadSpinner.stop());
+    controller.on("search.before", payload => searchLoadSpinner.start());
+    controller.on("search.results", payload => searchLoadSpinner.stop());
     controller.on("layerLoaded", payload => contentMapSpinner.stop());
 }
 
@@ -127,8 +127,8 @@ function configureProfileEvents(controller, objs = {profileLoader: null}) {
 function configureSearchEvents(controller, search) {
     controller.on('profileLoaded', onProfileLoadedSearch);
 
-    search.on('resultClick', payload => controller.onSearchResultClick(payload));
-    controller.bubbleEvents(search, ['beforeSearch', 'searchResults', 'clearSearch'])
+    search.on('search.resultClick', payload => controller.onSearchResultClick(payload));
+    controller.bubbleEvents(search, ['search.before', 'search.results', 'clearSearch'])
 }
 
 function configureMiscElementEvents(controller, objs = {

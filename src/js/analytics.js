@@ -188,7 +188,7 @@ value: ${value}
     }
 
     registerSearchEvents(controller) {
-        controller.on("searchBefore", payload => {
+        controller.on("search.before", payload => {
             const profileName = getProfileName(payload);
             const query = payload.payload.term
             this.logEvent(profileName, 'search', 'search_query', query);
@@ -196,7 +196,7 @@ value: ${value}
 
         })
 
-        controller.on("searchResults", payload => {
+        controller.on("search.results", payload => {
             const profileName = getProfileName(payload);
             const numResults = payload.payload.items.length;
             const loadTime = this.timer.stopAndClear('Search');
@@ -205,7 +205,7 @@ value: ${value}
             this.logEvent(profileName, 'search', 'search_results_load_time', '', loadTime);
         })
 
-        controller.on("searchResultClick", payload => {
+        controller.on("search.resultClick", payload => {
             const profileName = getProfileName(payload);
             const geography = payload.payload;
             const label = getGeographyLabel(geography);

@@ -75,12 +75,12 @@ export class Search extends Observable {
                         } else {
                             activeItemIndex = -1;
                         }
-                        self.triggerEvent('beforeSearch', {term: request.term});
+                        self.triggerEvent('search.before', {term: request.term});
                         self.emptySearchResults();
                         const searchTerm = request.term;
 
                         self.api.search(self.profileId, searchTerm).then(data => {
-                            self.triggerEvent('searchResults', {items: data});
+                            self.triggerEvent('search.results', {items: data});
 
                             count = data.length;
                             $('.search__dropdown_results-value').html(count);  //this needs to be here because if 0 row returns from the API, render function is not fired
@@ -153,7 +153,7 @@ export class Search extends Observable {
         /**
          * the callback function that is triggered when a result item is selected
          */
-        this.triggerEvent('resultClick', item);
+        this.triggerEvent('search.resultClick', item);
 
         const clone = startSearchingClone.cloneNode(true);
 

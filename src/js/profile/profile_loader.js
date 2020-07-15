@@ -45,7 +45,13 @@ export default class ProfileLoader extends Observable {
     }
 
     updateGeography = (profile) => {
+        if  ($('.location__title h1').length <= 0){
+            let h1 = document.createElement('h1');
+            $(h1).addClass('cc-clear');
+            $('.location__title').append(h1);
+        }
         $('.location__title h1').text(profile.geography.name);
+        $('.location__title .loading').addClass('hidden');
         $('.sticky-header__current-location .truncate', profileWrapper).text(profile.geography.name);
     }
 

@@ -33,7 +33,7 @@ export class Theme extends Observable {
 
     createCategory(categoryDatum, isLast) {
         const category = new Category(categoryDatum, this.categoryItem, isLast);
-        this.bubbleEvents(category, ['point_tray.category.selected', 'point_tray.category.selected']);
+        this.bubbleEvents(category, ['point_tray.category.selected', 'point_tray.category.unselected']);
 
         return category;
     }

@@ -66,7 +66,7 @@ export default function configureApplication(serverUrl, profileId, config) {
 
    
 
-    controller.on('loadedNewProfile', payload => {
+    controller.on('profile.loaded', payload => {
         // there seems to be a bug where menu items close if this is not set
         $(".sub-category__dropdown_wrapper a").attr("href", "#")
     })
@@ -79,7 +79,7 @@ export default function configureApplication(serverUrl, profileId, config) {
 }
 
 function configureDataExplorerEvents(controller) {
-    controller.on('loadedNewProfile', payload => loadMenu(payload.payload.profile.profileData, payload => {
+    controller.on('profile.loaded', payload => loadMenu(payload.payload.profile.profileData, payload => {
         controller.onSubIndicatorClick(payload)
     }))
 
@@ -98,10 +98,10 @@ function configureMapEvents(controller, objs = {mapcontrol: null, zoomToggle: nu
     const zoomToggle = objs['zoomToggle'];
     const mapcontrol = objs['mapcontrol'];
 
-    controller.on('layerMouseOver', payload => mapcontrol.popup.loadPopup(payload.payload, payload.state));
-    controller.on('layerMouseOut', payload => mapcontrol.popup.hidePopup(payload));
-    controller.on('layerMouseMove', payload => mapcontrol.popup.updatePopupPosition(payload));
-    controller.on('loadedNewProfile', payload => {
+    controller.on('layer.mouse.over', payload => mapcontrol.popup.loadPopup(payload.payload, payload.state));
+    controller.on('layer.mouse.out', payload => mapcontrol.popup.hidePopup(payload));
+    controller.on('layer.mouse.move', payload => mapcontrol.popup.updatePopupPosition(payload));
+    controller.on('profile.loaded', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
         mapcontrol.overlayBoundaries(geography, geometries)
@@ -110,10 +110,10 @@ function configureMapEvents(controller, objs = {mapcontrol: null, zoomToggle: nu
 
     controller.bubbleEvent(zoomToggle, 'zoomToggled');
     controller.bubbleEvents(mapcontrol, [
-        'layerMouseOver', 'layerMouseOut', 'layerMouseMove',
-        'layerLoading', 'mapZoomed'
+        'layer.mouse.over', 'layer.mouse.out', 'layer.mouse.move',
+        'map.layer.loading', 'map.zoomed'
     ])
-    mapcontrol.on('layerLoaded', payload => controller.onLayerLoaded(payload))
+    mapcontrol.on('map.layer.loaded', payload => controller.onLayerLoaded(payload))
     mapcontrol.on('layerClick', payload => controller.onLayerClick(payload));
     controller.on('zoomToggled', payload => mapcontrol.enableZoom(payload.payload.enabled));
 }
@@ -121,14 +121,14 @@ function configureMapEvents(controller, objs = {mapcontrol: null, zoomToggle: nu
 function configureProfileEvents(controller, objs = {profileLoader: null}) {
     const profileLoader = objs['profileLoader'];
 
-    controller.on('loadedNewProfile', payload => profileLoader.loadProfile(payload.payload))
+    controller.on('profile.loaded', payload => profileLoader.loadProfile(payload.payload))
 }
 
 function configureSearchEvents(controller, search) {
     controller.on('profileLoaded', onProfileLoadedSearch);
 
     search.on('search.resultClick', payload => controller.onSearchResultClick(payload));
-    controller.bubbleEvents(search, ['search.before', 'search.results', 'clearSearch'])
+    controller.bubbleEvents(search, ['search.before', 'search.results', 'search.clear'])
 }
 
 function configureMiscElementEvents(controller, objs = {
@@ -146,14 +146,85 @@ function configureMiscElementEvents(controller, objs = {
     printButton.on("click", payload => controller.onPrintProfile(payload));
 
 
-    controller.on('loadedNewProfile', payload => profileLayout.displayLogo(payload.payload.logo))
-    controller.on('loadedNewProfile', payload => tutorialBox.prepTutorialBox(payload.payload))
+    controller.on('profile.loaded', payload => profileLayout.displayLogo(payload.payload.logo))
+    controller.on('profile.loaded', payload => tutorialBox.prepTutorialBox(payload.payload))
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))
+
+    // Choropleth filter toggle
+    $('.filters__header_toggle').click(() => {
+        controller.triggerEvent('mapchip.toggle');
+    }) 
+
+    // Rich data panel
+    $('.rich-data-toggles .panel-toggle:nth-child(1)').click(() => {
+        controller.triggerEvent('panel.rich_data.closed');
+    }) 
+
+    $('.rich-data-toggles .panel-toggle:nth-child(2)').click(() => {
+        controller.triggerEvent('panel.point_mapper.opened');
+        controller.triggerEvent('panel.rich_data.closed');
+    }) 
+
+    $('.rich-data-toggles .panel-toggle:nth-child(3)').click(() => {
+        controller.triggerEvent('panel.data_mapper.opened');
+        controller.triggerEvent('panel.rich_data.closed');
+    }) 
+
+    // Point data panel
+    $('.point-mapper-toggles .panel-toggle:nth-child(1)').click(() => {
+        controller.triggerEvent('panel.rich_data.opened');
+        controller.triggerEvent('panel.point_mapper.closed');
+    }) 
+
+    $('.point-mapper-toggles .panel-toggle:nth-child(2)').click(() => {
+        controller.triggerEvent('panel.point_mapper.closed');
+    }) 
+
+    $('.point-mapper-toggles .panel-toggle:nth-child(3)').click(() => {
+        controller.triggerEvent('panel.data_mapper.opened');
+        controller.triggerEvent('panel.point_mapper.closed');
+    }) 
+
+
+    $('.data-mapper-toggles .panel-toggle:nth-child(1)').click(() => {
+        controller.triggerEvent('panel.rich_data.opened');
+        controller.triggerEvent('panel.rich_data.closed');
+    }) 
+
+
+    // Data mapper panel 
+    $('.data-mapper-toggles .panel-toggle:nth-child(1)').click(() => {
+        controller.triggerEvent('panel.rich_data.opened');
+        controller.triggerEvent('panel.data_mapper.closed');
+    }) 
+
+    $('.data-mapper-toggles .panel-toggle:nth-child(2)').click(() => {
+        controller.triggerEvent('panel.point_mapper.opened');
+        controller.triggerEvent('panel.data_mapper.closed');
+    }) 
+
+    $('.data-mapper-toggles .panel-toggle:nth-child(3)').click(() => {
+        controller.triggerEvent('panel.data_mapper.closed');
+    }) 
+
+    // All panels
+    $('.panel-toggles .panel-toggle:nth-child(1)').click(() => {
+        controller.triggerEvent('panel.rich_data.opened');
+    }) 
+
+    $('.panel-toggles .panel-toggle:nth-child(2)').click(() => {
+        controller.triggerEvent('panel.point_data.opened');
+    }) 
+
+    $('.panel-toggles .panel-toggle:nth-child(3)').click(() => {
+        controller.triggerEvent('panel.data_mapper.opened');
+    }) 
+
 }
 
 function configureInfoboxEvents(controller, locationInfoBox) {
     controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
-    controller.on('loadedNewProfile', payload => locationInfoBox.update(payload.payload))
+    controller.on('profile.loaded', payload => locationInfoBox.update(payload.payload))
 
     controller.on('layerClick', payload => {
         if (payload.state.mapLoading == true) {
@@ -175,7 +246,7 @@ function configurePointDataEvents(controller, objs = {pointDataTray: null, point
 
     controller.on("point_tray.category.selected", payload => pointData.showCategoryPoint(payload.payload));
     controller.on("point_tray.category.unselected", payload => pointData.removeCategoryPoints(payload.payload));
-    controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
+    controller.on("map.zoomed", payload => pointData.onMapZoomed(payload.payload));
 
     controller.bubbleEvents(pointDataTray, [
         'point_tray.theme.selected', 'point_tray.theme.unselected',
@@ -199,9 +270,9 @@ function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip
     })
 
         //let the choropleth persist
-    controller.on('loadedNewProfile', payload => controller.handleNewProfileChoropleth())
+    controller.on('profile.loaded', payload => controller.handleNewProfileChoropleth())
     controller.on('mapchip.removed', payload => mapcontrol.choropleth.reset(true));
-    controller.bubbleEvents(mapcontrol, ['displayChoropleth', 'resetChoropleth']);
+    controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
 
     controller.on('choroplethFiltered', payload => {
         const pp = payload.payload;
@@ -229,14 +300,14 @@ function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip
         }, 0);
     })
 
-    controller.on('displayChoropleth', payload => mapchip.onChoropleth(payload.payload));
-    controller.on('subindicatorClick', payload => {
+    controller.on('map.choropleth.display', payload => mapchip.onChoropleth(payload.payload));
+    controller.on('map_explorer.subindicator.click', payload => {
         const ps = payload.state;
         const method = ps.subindicator.choropleth_method;
         mapcontrol.handleChoropleth(ps.subindicator, method)
     })
 
-    controller.on('subindicatorClick', payload => {
+    controller.on('map_explorer.subindicator.click', payload => {
         const pp = payload.payload;
         const args = {
             indicators: pp.indicators,

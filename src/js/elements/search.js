@@ -173,6 +173,6 @@ export class Search extends Observable {
      * removing the selected chip
      * */
     selectedChipRemoved = (item, element) => {
-        this.triggerEvent('clearSearch', null);
+        this.triggerEvent('search.clear', null);
     }
 }

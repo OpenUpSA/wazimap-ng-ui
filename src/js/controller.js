@@ -104,7 +104,7 @@ export default class Controller extends Observable {
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.obj._keys;
 
-        this.triggerEvent("subindicatorClick", payload);
+        this.triggerEvent("map_explorer.subindicator.click", payload);
     };
 
     onChoroplethFiltered(payload) {
@@ -174,12 +174,12 @@ export default class Controller extends Observable {
 
     loadProfile(payload, callRegisterFunction) {
         const self = this;
-        this.triggerEvent("loadingNewProfile", payload.areaCode);
+        this.triggerEvent("profile.loading", payload.areaCode);
         this.api.getProfile(this.profileId, payload.areaCode).then(js => {
             const dataBundle = new DataBundle(js);
             self.state.profile = dataBundle;
 
-            self.triggerEvent("loadedNewProfile", dataBundle);
+            self.triggerEvent("profile.loaded", dataBundle);
             // TODO this should be run after all dynamic stuff is run
             // Shouldn't be here
             setTimeout(() => {
@@ -214,7 +214,7 @@ export default class Controller extends Observable {
 
     onLayerLoaded(payload) {
         payload.mapControl.maplocker.unlock();
-        this.triggerEvent("layerLoaded", payload);
+        this.triggerEvent("map.layer.loaded", payload);
     };
 
     onProfileLoaded(payload) {

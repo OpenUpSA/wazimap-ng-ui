@@ -85,33 +85,34 @@ value: ${value}
         })
     }
 
-   
+
+    basicLogEvent(payload, category, action, label = '', value = 0) {
+        const profileName = getProfileName(payload);
+        this.logEvent(profileName, category, action);
+    }
+
 
     registerPointEvents(controller) {
         controller.on('point_tray.theme.selected', payload => {
-            const profileName = getProfileName(payload);
             const themeLabel = payload.payload.data.name;
-            this.logEvent(profileName, 'points', 'theme_selected', themeLabel);
+            this.basicLogEvent(payload, 'points', 'theme_selected', themeLabel);
         })
 
         controller.on('point_tray.theme.unselected', payload => {
-            const profileName = getProfileName(payload);
             const themeLabel = payload.payload.data.name;
-            this.logEvent(profileName, 'points', 'theme_unselected', themeLabel);
+            this.basicLogEvent(payload, 'points', 'theme_unselected', themeLabel);
         })
 
         controller.on('point_tray.category.selected', payload => {
-            const profileName = getProfileName(payload);
             const categoryLabel = payload.payload.data.name;
             const key = categoryKey(categoryLabel);
 
-            this.logEvent(profileName, 'points', 'category_selected', categoryLabel);
+            this.basicLogEvent(payload, 'points', 'category_selected', categoryLabel);
         })
 
         controller.on('point_tray.category.unselected', payload => {
-            const profileName = getProfileName(payload);
             const categoryLabel = payload.payload.data.name;
-            this.logEvent(profileName, 'points', 'category_unselected', categoryLabel);
+            this.basicLogEvent(payload, 'points', 'category_unselected', categoryLabel);
         })
 
         controller.on('categoryPointLoading', payload => {
@@ -122,12 +123,11 @@ value: ${value}
         })
 
         controller.on('categoryPointLoaded', payload => {
-            const profileName = getProfileName(payload);
             const categoryLabel = payload.payload.category.data.name;
             const key = categoryKey(categoryLabel);
 
             const loadTime = this.timer.stopAndClear(key);
-            this.logEvent(profileName, 'points', 'category_load_time', categoryLabel, loadTime);
+            this.basicLogEvent(payload, 'points', 'category_load_time', categoryLabel, loadTime);
         })
 
         controller.on('point_tray.tray.loading_themes', payload => {
@@ -137,136 +137,145 @@ value: ${value}
         })
 
         controller.on('point_tray.tray.themes_loaded', payload => {
-            const profileName = getProfileName(payload);
             const key = "Loading themes";
 
             const loadTime = this.timer.stopAndClear(key);
-            this.logEvent(profileName, 'points', 'loading_themes_time', '', loadTime);
+            this.basicLogEvent(payload, 'points', 'loading_themes_time', '', loadTime);
         })
     }
 
     registerGeographyEvents(controller) {
-        controller.on("layerLoading", payload => {
+        controller.on("map.layer.loading", payload => {
             const geography = payload.payload;
             const key = geographyKey(geography)
 
             this.timer.startTimer(key);
         })
 
-        controller.on('layerLoaded', payload => {
-            const profileName = getProfileName(payload);
+        controller.on('map.layer.loaded', payload => {
             const geography = payload.payload.geography;
             const geographyLabel = getGeographyLabel(geography);
             const key = geographyKey(geography)
 
             const loadTime = this.timer.stopAndClear(key);
-            this.logEvent(profileName, 'map', 'layer_loaded', geographyLabel);
-            this.logEvent(profileName, 'map', 'layer_load_time', geographyLabel, loadTime);
+            this.basicLogEvent(payload, 'map', 'layer_loaded', geographyLabel);
+            this.basicLogEvent(payload, 'map', 'layer_load_time', geographyLabel, loadTime);
         })
     }
 
     registerProfileEvents(controller) {
-        controller.on("loadingNewProfile", payload => {
+        controller.on("profile.loading", payload => {
             const geography = payload.payload;
             const key = `Area Code: ${geography}`
 
             this.timer.startTimer(key);
         })
 
-        controller.on('loadedNewProfile', payload => {
-            console.log(payload)
-            console.log("loadednewprofile")
-            const profileName = getProfileName(payload);
+        controller.on('profile.loaded', payload => {
             const geography = payload.payload.profile.geography;
             const geographyLabel = getGeographyLabel(geography);
             const key = `Area Code: ${geography.code}`
 
             const loadTime = this.timer.stopAndClear(key);
-            this.logEvent(profileName, 'profile', 'profile_loaded', geographyLabel);
-            this.logEvent(profileName, 'profile', 'profile_load_time', geographyLabel, loadTime);
+            this.basicLogEvent(payload, 'profile', 'profile_loaded', geographyLabel);
+            this.basicLogEvent(payload, 'profile', 'profile_load_time', geographyLabel, loadTime);
         })
     }
 
     registerSearchEvents(controller) {
         controller.on("search.before", payload => {
-            const profileName = getProfileName(payload);
             const query = payload.payload.term
-            this.logEvent(profileName, 'search', 'search_query', query);
-            this.timer.startTimer('Search');
+            this.basicLogEvent(payload, 'search', 'search_query', query);
 
+            this.timer.startTimer('Search');
         })
 
         controller.on("search.results", payload => {
-            const profileName = getProfileName(payload);
             const numResults = payload.payload.items.length;
             const loadTime = this.timer.stopAndClear('Search');
 
-            this.logEvent(profileName, 'search', 'search_results', '', numResults);
-            this.logEvent(profileName, 'search', 'search_results_load_time', '', loadTime);
+            this.basicLogEvent(payload, 'search', 'search_results', '', numResults);
+            this.basicLogEvent(payload, 'search', 'search_results_load_time', '', loadTime);
         })
 
         controller.on("search.resultClick", payload => {
-            const profileName = getProfileName(payload);
             const geography = payload.payload;
             const label = getGeographyLabel(geography);
-            this.logEvent(profileName, 'search', 'search_click', label);
+            this.basicLogEvent(payload, 'search', 'search_click', label);
         })
 
-        controller.on("searchClear", payload => {
-            const profileName = getProfileName(payload);
-            console.log(payload)
+        controller.on("search.clear", payload => {
+            this.basicLogEvent(payload, 'search', 'clear');
         })
     }
 
     registerBreadcrumbEvents(controller) {
         controller.on('controller.breadcrumbs.selected', payload => {
-            const profileName = getProfileName(payload);
             const geography = payload.payload;
             const label = getGeographyLabel(geography);
-            this.logEvent(profileName, 'breadcrumbs', 'breadcrumb_selected', label);
+            this.basicLogEvent(payload, 'breadcrumbs', 'breadcrumb_selected', label);
         });
     }
 
     registerChoroplethEvents(controller) {
-        controller.on('resetChoropleth', payload => {
-            const profileName = getProfileName(payload);
-            this.logEvent(profileName, 'choropleth', 'reset');
+        controller.on('map.choropleth.reset', payload => {
+            this.basicLogEvent(payload, 'choropleth', 'reset');
         })
 
         controller.on('mapchip.choropleth.filtered', payload => {
-            const profileName = getProfileName(payload);
             const pp = payload.payload;
             const label = `${pp.selectedGroup} (${pp.selectedFilter})`
-
-            this.logEvent(profileName, 'choropleth', 'filtered', label);
+            this.basicLogEvent(payload, 'choropleth', 'filtered', label);
         })
     }
 
     registerMapchipEvents(controller) {
         controller.on('mapchip.removed', payload => {
-            const profileName = getProfileName(payload);
-            this.logEvent(profileName, 'mapchip', 'removed');
+            this.basicLogEvent(payload, 'mapchip', 'removed');
+        })
+
+        controller.on('mapchip.toggle', payload => {
+            this.basicLogEvent(payload, 'mapchip', 'toggle');
         })
 
     }
 
-    registerEvents(controller) {
-        controller.on('subindicatorClick', payload => {
-            const profileName = getProfileName(payload);
-            this.logEvent(profileName, 'map_explorer', 'subindicator_click', `${payload.payload.indicatorTitle} > ${payload.state.selectedSubindicator}`);
+    registerPanelEvents(controller) {
+        controller.on('panel.rich_data.closed', payload => {
+            this.basicLogEvent(payload, 'rich_data_panel', 'closed');
         })
 
-        // controller.on('choropleth', payload => {
-        //     alert('choropleth')
-        // })
-    // // //controller.on('printProfile', payload => pdfprinter.printDiv(payload))
-    //     controller.on('loadedNewProfile', payload => {
-    //         const profileName = getProfileName(payload);
-    //         const geography = payload.payload.profile.geography;
-    //         const label = getGeographyLabel(geography);
-    //         this.logEvent(profileName, 'profile', 'profile_loaded', label);
+        controller.on('panel.rich_data.opened', payload => {
+            this.basicLogEvent(payload, 'rich_data_panel', 'opened');
+        })
+
+        controller.on('panel.point_mapper.closed', payload => {
+            this.basicLogEvent(payload, 'point_mapper_panel', 'closed');
+        })
+
+        controller.on('panel.point_mapper.opened', payload => {
+            this.basicLogEvent(payload, 'point_mapper_panel', 'opened');
+        })
+
+        controller.on('panel.data_mapper.closed', payload => {
+            this.basicLogEvent(payload, 'data_mapper_panel', 'closed');
+        })
+
+        controller.on('panel.data_mapper.opened', payload => {
+            this.basicLogEvent(payload, 'data_mapper_panel', 'opened');
+        })
+
+        controller.on('map_explorer.subindicator.click', payload => {
+            const label = `${payload.payload.indicatorTitle} > ${payload.state.selectedSubindicator}`;
+            this.basicLogEvent(payload, 'data_mapper', 'subindicator_click', label);
+        })
+
+    }
 
 
+    registerEvents(controller) {
+
+        this.registerPanelEvents(controller);
         this.registerSearchEvents(controller);
         this.registerBreadcrumbEvents(controller);
         this.registerPointEvents(controller);
@@ -276,7 +285,7 @@ value: ${value}
         this.registerMapchipEvents(controller);
 
 
-    // controller.on("mapZoomed", payload => pointData.onMapZoomed(payload.payload));
+    // controller.on("map.zoomed", payload => pointData.onMapZoomed(payload.payload));
 
     // controller.on('mapChipRemoved', payload => mapcontrol.choropleth.reset(true));
     // controller.on('choroplethFiltered', payload => {

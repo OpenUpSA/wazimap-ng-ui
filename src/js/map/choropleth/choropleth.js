@@ -57,7 +57,7 @@ export class Choropleth extends Observable {
 
         this.currentLayers = [];
 
-        this.triggerEvent('resetChoropleth', null);
+        this.triggerEvent('map.choropleth.reset', null);
     }
 
     getBounds(values) {

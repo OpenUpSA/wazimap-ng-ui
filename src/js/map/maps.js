@@ -43,7 +43,7 @@ export class MapControl extends Observable {
 
     registerEvents() {
         this.map.on("zoomend", e => this.onZoomChanged(e));
-        this.map.on("zoomend", e => this.triggerEvent("mapZoomed", this.map))
+        this.map.on("zoomend", e => this.triggerEvent("map.zoomed", this.map))
     }
     enableZoom(enabled) {
         this.zoomEnabled = enabled;
@@ -145,7 +145,7 @@ export class MapControl extends Observable {
         this.choropleth.showChoropleth(calculation, false);
         const intervals = this.choropleth.getIntervals(values);
 
-        this.triggerEvent("displayChoropleth", {
+        this.triggerEvent("map.choropleth.display", {
             data: calculation,
             colors: this.choropleth.legendColors,
             intervals: intervals
@@ -179,8 +179,8 @@ export class MapControl extends Observable {
 
         this.limitGeoViewSelections(level);
 
-        // self.triggerEvent("layerLoading", this);
-        self.triggerEvent("layerLoading", geography);
+        // self.triggerEvent("map.layer.loading", this);
+        self.triggerEvent("map.layer.loading", geography);
         if (Object.values(geometries.children).length == 0) {
             selectedBoundary = geometries.boundary;
         } else {
@@ -240,13 +240,13 @@ export class MapControl extends Observable {
                     }
                 })
                 .on("mouseover", (el) => {
-                    self.triggerEvent("layerMouseOver", layerPayload(el));
+                    self.triggerEvent("layer.mouse.over", layerPayload(el));
                 })
                 .on("mouseout", (el) => {
-                    self.triggerEvent("layerMouseOut", layerPayload(el));
+                    self.triggerEvent("layer.mouse.out", layerPayload(el));
                 })
                 .on("mousemove", (el) => {
-                    self.triggerEvent("layerMouseMove", {layer: layerPayload(el), popup: this.map.map_variables.popup});
+                    self.triggerEvent("layer.mouse.move", {layer: layerPayload(el), popup: this.map.map_variables.popup});
                 })
                 .addTo(self.map);
 
@@ -263,6 +263,6 @@ export class MapControl extends Observable {
             }
         })
 
-        self.triggerEvent("layerLoaded", {geography: geography, mapControl: this});
+        self.triggerEvent("map.layer.loaded", {geography: geography, mapControl: this});
     };
 }

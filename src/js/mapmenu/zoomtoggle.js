@@ -7,7 +7,6 @@ export class ZoomToggle extends Observable {
         super();
         this.enabled = false;
         this.state = 0;
-        console.log("ZoomToggle constructor")
 
         this.prepareDOMElements();
     }

@@ -88,7 +88,7 @@ value: ${value}
 
     basicLogEvent(payload, category, action, label = '', value = 0) {
         const profileName = getProfileName(payload);
-        this.logEvent(profileName, category, action);
+        this.logEvent(profileName, category, action, label, value);
     }
 
 

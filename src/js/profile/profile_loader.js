@@ -73,7 +73,11 @@ export default class ProfileLoader extends Observable {
         let navItem = $(navItemClass)[0].cloneNode(true);
         $(navItem).attr('href', '#' + id);
         $(navItem).attr('title', category);
-        $('.rich-data-nav__item-text .truncate', navItem).text(category);
+        $('.rich-data-nav__item-text .truncate', navItem)
+            .text(category)
+            .click(e => {
+                this.triggerEvent('profile.nav.clicked', category);
+            })
 
         $(navItem).on('click', () => {
             $(navWrapperClass).find(navItemClass).each(function () {

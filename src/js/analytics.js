@@ -215,6 +215,11 @@ value: ${value}
             const label = getGeographyLabel(geography);
             this.basicLogEvent(payload, 'breadcrumbs', 'breadcrumb_selected', label);
         });
+
+        controller.on('profile.nav.clicked', payload => {
+            this.basicLogEvent(payload, 'nav', 'clicked', payload.payload)
+        })
+
     }
 
     registerChoroplethEvents(controller) {

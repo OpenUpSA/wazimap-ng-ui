@@ -224,7 +224,6 @@ value: ${value}
         controller.on('profile.nav.clicked', payload => {
             this.basicLogEvent(payload, 'nav', 'clicked', payload.payload)
         })
-
     }
 
     registerChoroplethEvents(controller) {

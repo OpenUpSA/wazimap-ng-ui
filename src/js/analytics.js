@@ -180,6 +180,11 @@ value: ${value}
             this.basicLogEvent(payload, 'profile', 'profile_loaded', geographyLabel);
             this.basicLogEvent(payload, 'profile', 'profile_load_time', geographyLabel, loadTime);
         })
+
+        controller.on('profile.chart.saveAsPng', payload => {
+            const pp = payload.payload;
+            this.basicLogEvent(payload, 'chart', 'saveAsPng', `${pp.title} (${pp.graphValueType})`);
+        })
     }
 
     registerSearchEvents(controller) {

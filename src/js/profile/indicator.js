@@ -1,4 +1,5 @@
 import {Chart} from "./chart";
+import {Observable} from "../utils";
 
 let indicatorClone = null;
 let isLast = false;
@@ -8,8 +9,9 @@ const indicatorTitleClass = '.profile-indicator__title h4';
 const chartDescClass = '.profile-indicator__chart_description p';
 const sourceClass = '.data-source';
 
-export class Indicator {
+export class Indicator extends Observable {
     constructor(wrapper, title, indicatorData, detail, _isLast) {
+        super();
         this.groups = [];
         this.subindicators = indicatorData.subindicators;
 
@@ -36,6 +38,7 @@ export class Indicator {
         }
 
         let c = new Chart(this.subindicators, this.groups, detail, 'Percentage', indicator, title);
+        this.bubbleEvent(c, 'profile.chart.saveAsPng');
 
         if (!isLast) {
             $(indicator).removeClass('last');

@@ -105,6 +105,7 @@ export class Chart extends Observable {
         $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
             barChart.saveAsPng(this.container);
+            this.triggerEvent('profile.chart.saveAsPng', this);
         })
 
         //show as percentage / value

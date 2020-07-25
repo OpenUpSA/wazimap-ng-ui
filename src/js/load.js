@@ -30,6 +30,7 @@ import {configureSpinnerEvents} from './setup/spinner';
 import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
 
+
 export default function configureApplication(serverUrl, profileId, config) {
     const api = new API(serverUrl);
     const controller = new Controller(api, config, profileId);
@@ -73,6 +74,7 @@ export default function configureApplication(serverUrl, profileId, config) {
     preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))
 
     controller.triggerHashChange()
+
 }
 
 function configureRichDataView(controller) {

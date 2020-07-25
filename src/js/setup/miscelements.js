@@ -1,6 +1,7 @@
 import {TutorialBox} from "../elements/tutorial_box";
 import {ProfileLayout} from "../elements/profile_layout";
 import PDFPrinter from '../print';
+import {SidePanels} from '../elements/side_panels';
 
 export const tutorialBox = new TutorialBox();
 export const profileLayout = new ProfileLayout();
@@ -8,6 +9,7 @@ export const pdfprinter = new PDFPrinter();
 export const printButton = $("#profile-print");
 
 export function configureMiscElementEvents(controller) {
+    const sidePanels = new SidePanels();
 
     controller.on('profile.loaded', payload => tutorialBox.prepTutorialBox(payload.payload))
     controller.on('profile.loaded', payload => profileLayout.displayLogo(payload.payload.logo))
@@ -20,69 +22,9 @@ export function configureMiscElementEvents(controller) {
         controller.triggerEvent('mapchip.toggle');
     }) 
 
-    // Rich data panel
-    $('.rich-data-toggles .panel-toggle:nth-child(1)').click(() => {
-        controller.triggerEvent('panel.rich_data.closed');
-    }) 
-
-    $('.rich-data-toggles .panel-toggle:nth-child(2)').click(() => {
-        controller.triggerEvent('panel.point_mapper.opened');
-        controller.triggerEvent('panel.rich_data.closed');
-    }) 
-
-    $('.rich-data-toggles .panel-toggle:nth-child(3)').click(() => {
-        controller.triggerEvent('panel.data_mapper.opened');
-        controller.triggerEvent('panel.rich_data.closed');
-    }) 
-
-    // Point data panel
-    $('.point-mapper-toggles .panel-toggle:nth-child(1)').click(() => {
-        controller.triggerEvent('panel.rich_data.opened');
-        controller.triggerEvent('panel.point_mapper.closed');
-    }) 
-
-    $('.point-mapper-toggles .panel-toggle:nth-child(2)').click(() => {
-        controller.triggerEvent('panel.point_mapper.closed');
-    }) 
-
-    $('.point-mapper-toggles .panel-toggle:nth-child(3)').click(() => {
-        controller.triggerEvent('panel.data_mapper.opened');
-        controller.triggerEvent('panel.point_mapper.closed');
-    }) 
-
-
-    $('.data-mapper-toggles .panel-toggle:nth-child(1)').click(() => {
-        controller.triggerEvent('panel.rich_data.opened');
-        controller.triggerEvent('panel.rich_data.closed');
-    }) 
-
-
-    // Data mapper panel 
-    $('.data-mapper-toggles .panel-toggle:nth-child(1)').click(() => {
-        controller.triggerEvent('panel.rich_data.opened');
-        controller.triggerEvent('panel.data_mapper.closed');
-    }) 
-
-    $('.data-mapper-toggles .panel-toggle:nth-child(2)').click(() => {
-        controller.triggerEvent('panel.point_mapper.opened');
-        controller.triggerEvent('panel.data_mapper.closed');
-    }) 
-
-    $('.data-mapper-toggles .panel-toggle:nth-child(3)').click(() => {
-        controller.triggerEvent('panel.data_mapper.closed');
-    }) 
-
-    // All panels
-    $('.panel-toggles .panel-toggle:nth-child(1)').click(() => {
-        controller.triggerEvent('panel.rich_data.opened');
-    }) 
-
-    $('.panel-toggles .panel-toggle:nth-child(2)').click(() => {
-        controller.triggerEvent('panel.point_data.opened');
-    }) 
-
-    $('.panel-toggles .panel-toggle:nth-child(3)').click(() => {
-        controller.triggerEvent('panel.data_mapper.opened');
-    }) 
-
+    controller.bubbleEvents(sidePanels, [
+        'panel.rich_data.closed', 'panel.rich_data.opened',
+        'panel.point_mapper.closed', 'panel.point_mapper.opened',
+        'panel.data_mapper.closed', 'panel.data_mapper.opened',
+    ]);
 }

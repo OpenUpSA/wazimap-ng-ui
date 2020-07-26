@@ -24,6 +24,8 @@ export class Config {
     }
 
     get rootGeography() {
+        if (this.config["root_geography"] != undefined)
+            return this.config["root_geography"];
         return "ZA";
     }
 
@@ -71,10 +73,16 @@ export class Config {
     }
 
     get leafletOptions() {
-        return {
+        let config = {}
+        if (this.config["leaflet_options"] != undefined)
+            config = this.config["leaflet_options"];
+
+        const default_options = {
             zoomControl: false,
             preferCanvas: true
         } 
+
+        return {...default_options, ...config}
     }
 
     get defaultCoordinates() {
@@ -82,7 +90,11 @@ export class Config {
     }
 
     get tileLayers() {
-        return  [
+        let config = {}
+        if (this.config["tile_layers"] != undefined)
+            return this.config["tile_layers"];
+
+        const defaultConfig = [
             {
                 url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png',
                 pane: 'tilePane',
@@ -94,14 +106,22 @@ export class Config {
                 zIndex: 650
             }
         ]
+
+        return defaultConfig
     }
 
     get choropleth() {
-        return {
+        let config = {}
+        if (this.config["choropleth"] != undefined)
+            config = this.config["choropleth"];
+
+        const defaultConfig = {
             colors: d3schemeBlues[5],
             opacity: 0.7,
             opacity_over: 0.8
         }
+
+        return {...defaultConfig, ...config}
     }
 
     get mapColors() {

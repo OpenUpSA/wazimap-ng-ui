@@ -112,7 +112,7 @@ async function init() {
     const api = new API(pc.baseUrl);
     const data = await api.getProfileConfiguration()
 
-    pc.config.setConfig(data.configuration)
+    pc.config.setConfig(data.configuration || {})
     pc.config.api = api;
     pc.config.baseUrl = pc.baseUrl;
     // TODO add this to config - check the <script> tag in the HTML which hardcodes this value

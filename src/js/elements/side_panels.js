@@ -1,5 +1,10 @@
 import {Observable} from '../utils';
 
+export const RICH_DATA_PANEL = "rich_data";
+export const POINT_DATA_PANEL = "point_data";
+export const DATA_EXPLORER_PANEL = "data_explorer";
+export const NO_PANELS = "no_panels";
+
 export class SidePanels extends Observable {
     constructor() {
         super();
@@ -112,5 +117,21 @@ export class SidePanels extends Observable {
 
     toggleMapExplorer = () => {
         this.emptyPanel.mapExplorer.click();
+    }
+
+    togglePanel = panel => {
+        switch(panel) {
+            case RICH_DATA_PANEL:
+                this.toggleRichData()
+                break;
+            case POINT_DATA_PANEL:
+                this.togglePointData()
+                break;
+            case DATA_EXPLORER_PANEL:
+                this.toggleMapExplorer()
+                break;
+            default:
+                break;
+        }
     }
 }

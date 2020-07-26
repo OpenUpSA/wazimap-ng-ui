@@ -32,6 +32,11 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
+    getProfileConfiguration() {
+        const url = `${this.baseUrl}/profile_by_url?format=json`;
+        return this.loadUrl(url);
+    }
+
     loadThemes(profileId) {
         const url = `${this.baseUrl}/points/profile/${profileId}/themes/?format=json`;
         return this.loadUrl(url);

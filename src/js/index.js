@@ -5,6 +5,7 @@ import {Config as SAConfig} from './configurations/geography_sa';
 import {Config as GCROConfig} from './configurations/geography_gcro';
 import {Config as WorldConfig} from './configurations/geography_world';
 import Analytics from './analytics';
+import {API} from './api';
 
 const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
 const productionUrl = 'https://production.wazimap-ng.openup.org.za';
@@ -99,13 +100,27 @@ const profiles = {
     }
 }
 
+async function init() {
+    const pc = profiles[hostname]
+    if (pc == undefined) {
+        pc = {
+            profile: defaultProfile,
+            baseUrl: defaultUrl,
+            config: defaultConfig
+        }
+    }
+    const api = new API(pc.baseUrl);
+    const data = await api.getProfileConfiguration()
 
+    pc.config.setConfig(data.configuration)
+    pc.config.api = api;
+    pc.config.baseUrl = pc.baseUrl;
+    // TODO add this to config - check the <script> tag in the HTML which hardcodes this value
+    pc.config.analytics = new Analytics('UA-93649482-25', pc.profile);
 
-const pc = profiles[hostname]
-
-pc.config.analytics = new Analytics('UA-93649482-25', pc.profile);
-if (pc != undefined) {
-    configureApplication(pc.baseUrl, pc.profile, pc.config);
-} else {
-    configureApplication(defaultUrl, defaultProfile, defaultConfig);
+    configureApplication(pc.config);
 }
+
+init();
+
+

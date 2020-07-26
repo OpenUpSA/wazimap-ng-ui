@@ -1,7 +1,7 @@
 import {TutorialBox} from "../elements/tutorial_box";
 import {ProfileLayout} from "../elements/profile_layout";
 import PDFPrinter from '../print';
-import {SidePanels} from '../elements/side_panels';
+import {SidePanels, RICH_DATA_PANEL, POINT_DATA_PANEL, DATA_EXPLORER_PANEL} from '../elements/side_panels';
 
 export const tutorialBox = new TutorialBox();
 export const profileLayout = new ProfileLayout();
@@ -10,6 +10,7 @@ export const printButton = $("#profile-print");
 
 export function configureMiscElementEvents(controller) {
     const sidePanels = new SidePanels();
+    const defaultPanel = controller.config.defaultPanel;
 
     controller.on('profile.loaded', payload => tutorialBox.prepTutorialBox(payload.payload))
     controller.on('profile.loaded', payload => profileLayout.displayLogo(payload.payload.logo))
@@ -27,4 +28,6 @@ export function configureMiscElementEvents(controller) {
         'panel.point_mapper.closed', 'panel.point_mapper.opened',
         'panel.data_mapper.closed', 'panel.data_mapper.opened',
     ]);
+
+    sidePanels.togglePanel(defaultPanel);
 }

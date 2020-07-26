@@ -31,8 +31,11 @@ import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
 
 
-export default function configureApplication(serverUrl, profileId, config) {
-    const api = new API(serverUrl);
+export default function configureApplication(config) {
+    const serverUrl = config.baseUrl;
+    const profileId = config.profileId;
+
+    const api = config.api;
     const controller = new Controller(api, config, profileId);
     if (config.analytics)
         config.analytics.registerEvents(controller);
@@ -68,7 +71,6 @@ export default function configureApplication(serverUrl, profileId, config) {
         // there seems to be a bug where menu items close if this is not set
         $(".sub-category__dropdown_wrapper a").attr("href", "#")
     })
-
 
 
     preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))

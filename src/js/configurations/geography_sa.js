@@ -1,6 +1,28 @@
 import {schemeBlues as d3schemeBlues} from 'd3-scale-chromatic';
+import {RICH_DATA_PANEL, POINT_DATA_PANEL, DATA_EXPLORER_PANEL, NO_PANELS} from '../elements/side_panels';
 
 export class Config {
+
+    constructor() {
+        this.config = {}
+    }
+
+    setConfig(config) {
+        this.config = config;
+    }
+
+    get profileId() {
+        if (this.config.profileId != undefined)
+            return this.config.profileId;
+        return 1;
+    }
+
+    get defaultPanel() {
+        if (this.config["default_panel"] != undefined)
+            return this.config["default_panel"];
+        return NO_PANELS;
+    }
+
     get rootGeography() {
         return "ZA";
     }
@@ -98,7 +120,11 @@ export class Config {
     get layerStyles() {
         const colors = this.mapColors;
 
-        return {
+        let color_config = {}
+        if (this.config["layer_styles"] != undefined)
+            color_config = this.config["layer_styles"];
+
+        const default_color_config = {
             hoverOnly: {
                 over: {
                     fillColor: colors.secondary.hover,
@@ -125,7 +151,8 @@ export class Config {
                     weight: 1,
                 }
             }
-
         }
+
+        return {...default_color_config, ...color_config}
     }
 }

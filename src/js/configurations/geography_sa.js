@@ -30,13 +30,19 @@ export class Config {
     }
 
     get preferredChildren() {
-        return {
+        let config = {}
+        if (this.config["preferred_children"] != undefined)
+            config = this.config["preferred_children"]
+
+        const defaultConfig = {
             country: ['province'],
             province: ['district', 'municipality'],
             district: ['municipality'],
             municipality: ['mainplace', 'planning_region', 'ward'],
             mainplace: ['subplace']          
         }        
+
+        return {...defaultConfig, ...config}
     }
 
     get geoViewTypes() {
@@ -77,16 +83,22 @@ export class Config {
         if (this.config["leaflet_options"] != undefined)
             config = this.config["leaflet_options"];
 
-        const default_options = {
+        const defaultConfig = {
             zoomControl: false,
             preferCanvas: true
         } 
 
-        return {...default_options, ...config}
+        return {...defaultConfig, ...config}
     }
 
     get defaultCoordinates() {
-        return {'lat': -28.995409163308832, 'long': 25.093833387362697, 'zoom': 6}
+        let config = {}
+        if (this.config["default_coordinates"] != undefined)
+            config = this.config["default_coordinates"]
+
+        const defaultConfig = {'lat': -28.995409163308832, 'long': 25.093833387362697, 'zoom': 6}
+
+        return {...defaultConfig, ...config}
     }
 
     get tileLayers() {

@@ -31,9 +31,8 @@ import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
 
 
-export default function configureApplication(config) {
+export default function configureApplication(profileId, config) {
     const serverUrl = config.baseUrl;
-    const profileId = config.profileId;
 
     const api = config.api;
     const controller = new Controller(api, config, profileId);

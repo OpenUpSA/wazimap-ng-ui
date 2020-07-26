@@ -118,7 +118,7 @@ async function init() {
     // TODO add this to config - check the <script> tag in the HTML which hardcodes this value
     pc.config.analytics = new Analytics('UA-93649482-25', pc.profile);
 
-    configureApplication(pc.config);
+    configureApplication(pc.profile, pc.config);
 }
 
 init();

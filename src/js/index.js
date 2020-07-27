@@ -104,7 +104,7 @@ const profiles = {
 }
 
 async function init() {
-    const pc = profiles[hostname]
+    let pc = profiles[hostname]
     if (pc == undefined) {
         pc = {
             profile: defaultProfile,

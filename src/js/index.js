@@ -6,6 +6,9 @@ import {Config as GCROConfig} from './configurations/geography_gcro';
 import {Config as WorldConfig} from './configurations/geography_world';
 import Analytics from './analytics';
 import {API} from './api';
+import * as Sentry from '@sentry/browser';
+
+Sentry.init({ dsn: 'https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787' });
 
 const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
 const productionUrl = 'https://production.wazimap-ng.openup.org.za';

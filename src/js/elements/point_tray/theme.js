@@ -5,6 +5,7 @@ import {Category} from './category';
 const activeClsName = 'active';
 const hideondeployClsName = 'hideondeploy';
 const categoryWrapperClsName = '.point-mapper__h2_wrapper';
+const categorySourceClsName = '.point-mapper__h2_source .truncate';
 
 export class Theme extends Observable {
     constructor(data, pointDataItem, categoryItem) {
@@ -47,8 +48,10 @@ export class Theme extends Observable {
             this.categories.push(category);
 
             $(self.element).find(categoryWrapperClsName).append(category.element);
+            $(categorySourceClsName, self.element).text(category.metadata.source);
         })
     }
+
 
     toggle() {
         if (this.active)

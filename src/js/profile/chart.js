@@ -121,13 +121,14 @@ export class Chart extends Observable {
             $(this).off('click');
             $(this).on('click', () => {
                 const downloadFn = {
-                    0: barChart.exportAsCsv,
-                    1: barChart.exportAsExcel,
-                    2: barChart.exportAsJson,
-                    3: barChart.exportAsKml
+                    0: {type: 'csv', fn: barChart.exportAsCsv},
+                    1: {type: 'excel', fn: barChart.exportAsExcel},
+                    2: {type: 'json', fn: barChart.exportAsJson},
+                    3: {type: 'kml', fn: barChart.exportAsKml},
                 }[index];
+                self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
-                downloadFn(self.title);
+                downloadFn.fn(self.title);
             })
         });
     }

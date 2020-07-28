@@ -38,7 +38,10 @@ export class Indicator extends Observable {
         }
 
         let c = new Chart(this.subindicators, this.groups, detail, 'Percentage', indicator, title);
-        this.bubbleEvents(c, ['profile.chart.saveAsPng', 'profile.chart.valueTypeChanged']);
+        this.bubbleEvents(c, [
+            'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+            'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml'
+        ]);
 
         if (!isLast) {
             $(indicator).removeClass('last');

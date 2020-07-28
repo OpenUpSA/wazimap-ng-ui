@@ -64,7 +64,10 @@ export default class ProfileLoader extends Observable {
             const id = this.getNewId();
             this.createNavItem(id, category);
             let c = new Category(category, detail, profileWrapper, id, removePrevCategories);
-            this.bubbleEvents(c, ['profile.chart.saveAsPng', 'profile.chart.valueTypeChanged']);
+            this.bubbleEvents(c, [
+                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml'
+            ]);
 
             removePrevCategories = false;
         }

@@ -190,6 +190,15 @@ value: ${value}
             const pp = payload.payload;
             this.basicLogEvent(payload, 'chart', 'valueTypeChanged', `${pp.title} (${pp.graphValueType})`);
         })
+
+        const fileTypes = ['csv', 'excel', 'json', 'kml']
+
+        fileTypes.forEach(el => {
+            controller.on(`profile.chart.download_${el}`, payload => {
+                const pp = payload.payload;
+                this.basicLogEvent(payload, 'chart', `download_${el}`, `${pp.title}`);
+            })
+        })
     }
 
     registerSearchEvents(controller) {

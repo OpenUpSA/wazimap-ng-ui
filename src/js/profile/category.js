@@ -66,9 +66,9 @@ export class Category extends Observable{
         let index = 0;
         let lastIndex = Object.entries(detail.subcategories).length - 1;
         for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-            let isFirst = index === 0;
+        let isFirst = index === 0;
             let sc = new Subcategory(wrapper, subcategory, detail, isFirst);
-            this.bubbleEvent(sc, 'profile.chart.saveAsPng');
+            this.bubbleEvents(sc, ['profile.chart.saveAsPng', 'profile.chart.valueTypeChanged']);
             index++;
         }
     }

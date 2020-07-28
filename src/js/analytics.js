@@ -185,6 +185,11 @@ value: ${value}
             const pp = payload.payload;
             this.basicLogEvent(payload, 'chart', 'saveAsPng', `${pp.title} (${pp.graphValueType})`);
         })
+
+        controller.on('profile.chart.valueTypeChanged', payload => {
+            const pp = payload.payload;
+            this.basicLogEvent(payload, 'chart', 'valueTypeChanged', `${pp.title} (${pp.graphValueType})`);
+        })
     }
 
     registerSearchEvents(controller) {

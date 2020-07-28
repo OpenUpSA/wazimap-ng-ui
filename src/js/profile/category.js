@@ -70,7 +70,8 @@ export class Category extends Observable{
             let sc = new Subcategory(wrapper, subcategory, detail, isFirst);
             this.bubbleEvents(sc, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml'
+                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                'point_tray.subindicator_filter.filter'
             ]);
             index++;
         }

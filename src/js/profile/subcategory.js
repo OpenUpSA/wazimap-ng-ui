@@ -52,7 +52,8 @@ export class Subcategory extends Observable {
             let i = new Indicator(wrapper, title, indicatorData, detail, isLast);
             this.bubbleEvents(i, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml'
+                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                'point_tray.subindicator_filter.filter'
             ]);
             index++;
         }

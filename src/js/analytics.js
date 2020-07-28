@@ -191,6 +191,11 @@ value: ${value}
             this.basicLogEvent(payload, 'chart', 'valueTypeChanged', `${pp.title} (${pp.graphValueType})`);
         })
 
+        controller.on('point_tray.subindicator_filter.filter', payload => {
+            const pp = payload.payload;
+            this.basicLogEvent(payload, 'chart', 'subindicator_filter', `${pp.indicator} | ${pp.group} | ${pp.subindicator}`);
+        })
+
         const fileTypes = ['csv', 'excel', 'json', 'kml']
 
         fileTypes.forEach(el => {

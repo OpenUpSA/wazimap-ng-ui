@@ -67,7 +67,8 @@ export default class ProfileLoader extends Observable {
             let c = new Category(category, detail, profileWrapper, id, removePrevCategories);
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml'
+                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                'point_tray.subindicator_filter.filter'
             ]);
 
             removePrevCategories = false;

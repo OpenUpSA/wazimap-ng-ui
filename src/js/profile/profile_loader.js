@@ -53,6 +53,7 @@ export default class ProfileLoader extends Observable {
         $('.location__title h1').text(profile.geography.name);
         $('.location__title .loading').addClass('hidden');
         $('.sticky-header__current-location .truncate', profileWrapper).text(profile.geography.name);
+        $('.sticky-header__current-location .loading__icon', profileWrapper).addClass('hidden');
     }
 
     loadCategories = (profile) => {

@@ -115,6 +115,17 @@ value: ${value}
             this.basicLogEvent(payload, 'points', 'category_unselected', categoryLabel);
         })
 
+        controller.on('point_data.load_popup.hovered', payload => {
+            const label = payload.payload;
+            this.basicLogEvent(payload, 'points_popup', 'hovered', label);
+        })
+
+        controller.on('point_data.load_popup.clicked', payload => {
+            const label = payload.payload;
+            this.basicLogEvent(payload, 'points_popup', 'clicked', label);
+        })
+
+
         controller.on('categoryPointLoading', payload => {
             const categoryLabel = payload.payload.data.name;
             const key = categoryKey(categoryLabel);

@@ -154,16 +154,20 @@ export class PointData extends Observable {
             closeButton: isClicked
         })
 
+        const eventLabel = `${point.theme.name} | ${point.category.name} | ${point.name}`;
+
         if (isClicked) {
             popup
                 .setLatLng({lat: point.y, lng: point.x})
                 .setContent(popupContent)
                 .addTo(this.map);
+            this.triggerEvent('point_data.load_popup.clicked', eventLabel);
         } else {
             popup
                 .setLatLng({lat: point.y, lng: point.x})
                 .setContent(popupContent)
                 .openOn(this.map);
+            this.triggerEvent('point_data.load_popup.hovered', eventLabel);
         }
 
         setPopupStyle('facility-tooltip');

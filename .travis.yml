@@ -1,3 +1,9 @@
-language: node_js
-node_js:
-  - 14
+language: python
+python:
+  - "3.8"
+addons:
+  chrome: stable
+install:
+  - pip install -r tests/requirements.txt
+script:
+  - python tests/main.py test/config.txt

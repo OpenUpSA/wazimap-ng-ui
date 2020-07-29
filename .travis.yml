@@ -1,10 +1,19 @@
 language: python
+
 python:
   - "3.8"
+
 addons:
   chrome: stable
+  apt:
+    packages:
+      - chromium-chromedriver
 install:
   - pip install -r tests/requirements.txt
+
+before_script:
+  - ln -s /usr/lib/chromium-browser/chromedriver "${HOME}/bin/chromedriver"
+
 script:
   - cd tests
   - python main.py

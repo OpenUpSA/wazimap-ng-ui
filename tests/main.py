@@ -9,9 +9,6 @@ from selenium.webdriver.support.ui import Select
 import unittest
 import time
 
-from webdriver_manager.chrome import ChromeDriverManager
-
-
 url = "https://wazimap-ng.africa/"
 with open("config.txt", "r") as file:
     text = file.read().split("\n")

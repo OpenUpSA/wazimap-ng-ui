@@ -12,7 +12,7 @@ install:
   - pip install -r tests/requirements.txt
 
 before_script:
-  - chrome --version
+  - google-chrome --version
   - ln -s /usr/lib/chromium-browser/chromedriver "${HOME}/bin/chromedriver"
 
 script:

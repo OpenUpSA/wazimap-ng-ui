@@ -12,7 +12,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('mapchip.removed', payload => mapcontrol.choropleth.reset(true));
     controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
 
-    controller.on('choroplethFiltered', payload => {
+    controller.on('mapchip.choropleth.filtered', payload => {
         const pp = payload.payload;
         const ps = payload.state;
         mapcontrol.displayChoropleth(pp.data, pp.subindicatorArr, ps.subindicator.choropleth_method);

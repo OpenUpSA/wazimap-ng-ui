@@ -6,4 +6,5 @@ addons:
 install:
   - pip install -r tests/requirements.txt
 script:
-  - python tests/main.py tests/config.txt
+  - cd tests
+  - python main.py

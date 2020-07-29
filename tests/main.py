@@ -8,12 +8,9 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import Select
 import unittest
 import time
-import sys
-
-config_file = sys.argv[1]
 
 url = "https://wazimap-ng.africa/"
-with open(config_file, "r") as file:
+with open("config.txt", "r") as file:
     text = file.read().split("\n")
     elements, visible = text[0].split(",") , text[1].split(",")
 print()

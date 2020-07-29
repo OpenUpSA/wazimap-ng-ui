@@ -9,6 +9,9 @@ from selenium.webdriver.support.ui import Select
 import unittest
 import time
 
+from webdriver_manager.chrome import ChromeDriverManager
+
+
 url = "https://wazimap-ng.africa/"
 with open("config.txt", "r") as file:
     text = file.read().split("\n")
@@ -32,7 +35,8 @@ class Test(unittest.TestCase):
         options.add_argument('--headless')
         options.add_argument("--user-agent=" + userAgent)
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        driver = webdriver.Chrome('chromedriver', options=options)
+        driver = webdriver.Chrome(ChromeDriverManager().install())
+        #driver = webdriver.Chrome('chromedriver', options=options)
         #    driver = webdriver.Chrome(options=options,service_log_path='NUL')
         #    driver = webdriver.Chrome(options=options,service_log_path='/dev/null')
         self.driver = driver

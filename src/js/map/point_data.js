@@ -104,6 +104,8 @@ export class PointData extends Observable {
                 category: prop.category,
                 theme: prop.category.theme,
                 data: prop.data,
+                image: prop.image,
+                url: prop.url,
                 icon: category.data.theme.icon
             })
         })
@@ -183,7 +185,11 @@ export class PointData extends Observable {
 
         $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
 
-        $('.facility-tooltip__header_name div', item).text(point.name);
+        const nameContainer = $('.facility-tooltip__header_name div', item);
+        if (point.url != null)
+            nameContainer.html(`<a href="${point.url}" target="_blank">${point.name}</a>`)
+        else
+            nameContainer.text(point.name);
         ThemeStyle.replaceChildDivWithIcon($(item).find('.facility-tooltip__header_icon'), point.icon)
 
         $('.' + tooltipItemsClsName, item).html('');
@@ -207,6 +213,8 @@ export class PointData extends Observable {
                 $('.' + tooltipItemsClsName, item).append(itemRow);
             }
         })
+        if (point.image != null)
+            $('.' + tooltipItemsClsName, item).append(`<img src="${point.image}"/>`);
 
         return $(item).html();
     }

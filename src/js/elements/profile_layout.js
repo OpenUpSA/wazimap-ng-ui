@@ -3,7 +3,7 @@ import {Observable} from '../utils';
 const logoContainer = $('img.profile-logo');
 
 export class ProfileLayout extends Observable {
-    constructor(baseUrl) {
+    constructor() {
         super();
     }
 

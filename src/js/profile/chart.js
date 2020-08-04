@@ -105,6 +105,7 @@ export class Chart extends Observable {
         $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
             barChart.saveAsPng(this.container);
+            this.triggerEvent('profile.chart.saveAsPng', this);
         })
 
         //show as percentage / value
@@ -120,19 +121,22 @@ export class Chart extends Observable {
             $(this).off('click');
             $(this).on('click', () => {
                 const downloadFn = {
-                    0: barChart.exportAsCsv,
-                    1: barChart.exportAsExcel,
-                    2: barChart.exportAsJson,
-                    3: barChart.exportAsKml
+                    0: {type: 'csv', fn: barChart.exportAsCsv},
+                    1: {type: 'excel', fn: barChart.exportAsExcel},
+                    2: {type: 'json', fn: barChart.exportAsJson},
+                    3: {type: 'kml', fn: barChart.exportAsKml},
                 }[index];
+                self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
-                downloadFn(self.title);
+                downloadFn.fn(self.title);
             })
         });
     }
 
     selectedGraphValueTypeChanged = (containerParent, index) => {
         this.graphValueType = graphValueTypes[index];
+        this.triggerEvent('profile.chart.valueTypeChanged', this);
+
         $(containerParent).find('.hover-menu__content_list a').each(function (itemIndex) {
             $(this).removeClass('active');
 
@@ -159,6 +163,8 @@ export class Chart extends Observable {
 
     handleChartFilter = (detail, groups, title) => {
         let siFilter = new SubindicatorFilter();
+        this.bubbleEvent(siFilter, 'point_tray.subindicator_filter.filter')
+        
         let dropdowns = $(this.subCategoryNode).find('.filter__dropdown_wrap');
         const filterArea = $(this.subCategoryNode).find('.profile-indicator__filters');
 

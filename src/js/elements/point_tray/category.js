@@ -36,6 +36,21 @@ export class Category extends Observable {
         $('.point-data__h2_link', this.element).removeClass('point-data__h2_link').addClass('point-data__h2_link--disabled');
     }
 
+    get metadata() {
+        if (this.data.metadata == undefined) {
+            return {
+                source: '',
+                description: '',
+                licence: {
+                    name: '',
+                    url: null
+                }
+            }
+        } else {
+            return this.data.metadata;
+        }
+    }
+
 
     toggle() {
         if (this.active)

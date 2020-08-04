@@ -1,4 +1,5 @@
 import {Indicator} from "./indicator";
+import {Observable} from "../utils";
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -11,8 +12,10 @@ const keyMetricClass = '.key-metric';
 const descriptionTextClass = '.sub-category-header__description p';
 const descriptionClass = '.sub-category-header__description';
 
-export class Subcategory {
+export class Subcategory extends Observable {
     constructor(wrapper, subcategory, detail, _isFirst) {
+        super();
+
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
         isFirst = _isFirst;
 
@@ -47,6 +50,11 @@ export class Subcategory {
         for (const [title, indicatorData] of Object.entries(detail.indicators)) {
             let isLast = index === lastIndex;
             let i = new Indicator(wrapper, title, indicatorData, detail, isLast);
+            this.bubbleEvents(i, [
+                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                'point_tray.subindicator_filter.filter'
+            ]);
             index++;
         }
     }

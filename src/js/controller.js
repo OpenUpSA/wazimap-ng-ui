@@ -186,7 +186,7 @@ export default class Controller extends Observable {
                 if (callRegisterFunction) {
                     console.log("initialising webflow")
                     Webflow.require('ix2').init()
-                    self.registerWebflowEvents();
+                    // self.registerWebflowEvents();
                 }
             }, 600)
         })
@@ -275,7 +275,7 @@ export default class Controller extends Observable {
         //this.triggerEvent("loadedGeography", payload);
         // TODO remove this once the best home is found for it
         Webflow.require('ix2').init()
-        this.registerWebflowEvents();
+        // this.registerWebflowEvents();
     }
 
     onLoadedThemes(payload) {
@@ -306,27 +306,27 @@ export default class Controller extends Observable {
         this.onHashChange(payload, false);
     }
 
-    registerWebflowEvents() {
-        const events = ["click", "mouseover", "mouseout"];
-        const self = this;
-        events.forEach(function (ev) {
-            let eventElements = $(`*[data-event=${ev}]`);
-            Object.values(eventElements).forEach(el => {
-                if (el.attributes == undefined) return;
-                const functionAttribute = el.attributes["data-function"];
+    // registerWebflowEvents() {
+    //     const events = ["click", "mouseover", "mouseout"];
+    //     const self = this;
+    //     events.forEach(function (ev) {
+    //         let eventElements = $(`*[data-event=${ev}]`);
+    //         Object.values(eventElements).forEach(el => {
+    //             if (el.attributes == undefined) return;
+    //             const functionAttribute = el.attributes["data-function"];
 
-                if (functionAttribute == undefined) return;
-                const functions = functionAttribute.value;
+    //             if (functionAttribute == undefined) return;
+    //             const functions = functionAttribute.value;
 
-                if (functions == undefined) return;
+    //             if (functions == undefined) return;
 
-                functions.split(",").forEach(foo => {
-                    const func = self[`on${foo}`];
-                    if (func != undefined) {
-                        $(el).on(ev, el => func(el))
-                    }
-                })
-            })
-        })
-    }
+    //             functions.split(",").forEach(foo => {
+    //                 const func = self[`on${foo}`];
+    //                 if (func != undefined) {
+    //                     $(el).on(ev, el => func(el))
+    //                 }
+    //             })
+    //         })
+    //     })
+    // }
 }

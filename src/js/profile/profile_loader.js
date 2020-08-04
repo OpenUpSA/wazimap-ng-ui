@@ -45,8 +45,15 @@ export default class ProfileLoader extends Observable {
     }
 
     updateGeography = (profile) => {
+        if  ($('.location__title h1').length <= 0){
+            let h1 = document.createElement('h1');
+            $(h1).addClass('cc-clear');
+            $('.location__title').append(h1);
+        }
         $('.location__title h1').text(profile.geography.name);
+        $('.location__title .loading').addClass('hidden');
         $('.sticky-header__current-location .truncate', profileWrapper).text(profile.geography.name);
+        $('.sticky-header__current-location .loading__icon', profileWrapper).addClass('hidden');
     }
 
     loadCategories = (profile) => {
@@ -58,6 +65,11 @@ export default class ProfileLoader extends Observable {
             const id = this.getNewId();
             this.createNavItem(id, category);
             let c = new Category(category, detail, profileWrapper, id, removePrevCategories);
+            this.bubbleEvents(c, [
+                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                'point_tray.subindicator_filter.filter'
+            ]);
 
             removePrevCategories = false;
         }
@@ -73,7 +85,11 @@ export default class ProfileLoader extends Observable {
         let navItem = $(navItemClass)[0].cloneNode(true);
         $(navItem).attr('href', '#' + id);
         $(navItem).attr('title', category);
-        $('.rich-data-nav__item-text .truncate', navItem).text(category);
+        $('.rich-data-nav__item-text .truncate', navItem)
+            .text(category)
+            .click(e => {
+                this.triggerEvent('profile.nav.clicked', category);
+            })
 
         $(navItem).on('click', () => {
             $(navWrapperClass).find(navItemClass).each(function () {

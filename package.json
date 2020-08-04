@@ -5,6 +5,7 @@
   "author": "Adi Eyal <adi@openup.org.za>",
   "license": "MIT",
   "dependencies": {
+    "@sentry/browser": "^5.20.1",
     "babel-polyfill": "^6.26.0",
     "category": "^0.1.2",
     "controller": "^1.0.0",
@@ -41,6 +42,7 @@
   },
   "scripts": {
     "start": "parcel ./src/index.html",
+    "test": "echo 'hello world'",
     "prebuild-dev": "shx rm -rf dist/*",
     "build-dev": "parcel build ./src/index.html --no-minify --public-url ./",
     "prebuild": "shx rm -rf dist/*",

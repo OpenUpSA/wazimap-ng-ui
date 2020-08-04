@@ -1,0 +1,19 @@
+language: python
+
+python:
+  - "3.8"
+
+addons:
+  chrome: stable
+install:
+  - pip install -r tests/requirements.txt
+
+before_script:
+  - wget http://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip -d /home/travis/virtualenv/python3.8.0/bin/
+  - ln -s /usr/lib/chromium-browser/chromedriver "${HOME}/bin/chromedriver"
+
+script:
+  - google-chrome --version
+  - cd tests
+  - python main.py

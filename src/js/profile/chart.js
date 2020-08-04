@@ -65,6 +65,7 @@ export class Chart extends Observable {
         chart.tooltipFormatter((d) => {
             $('.bar-chart__tooltip_value', tooltip).text(d.data.valueText);
             $('.bar-chart__tooltip_alt-value div', tooltip).text(d.data.label);
+            $('.bar-chart__tooltip_name', tooltip).remove();
 
             return $(tooltip).prop('outerHTML');
         })

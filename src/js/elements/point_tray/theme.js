@@ -8,7 +8,7 @@ const categoryWrapperClsName = '.point-mapper__h2_wrapper';
 const categorySourceClsName = '.point-mapper__h2_source .truncate';
 
 export class Theme extends Observable {
-    constructor(data, pointDataItem, categoryItem) {
+    constructor(themeIndex, data, pointDataItem, categoryItem) {
         super()
 
         this.active = false;
@@ -16,6 +16,7 @@ export class Theme extends Observable {
         this.categories = [];
         this.pointDataItem = pointDataItem;
         this.categoryItem = categoryItem;
+        this.themeIndex = themeIndex;
 
         this.prepareDomElements();
         this.createCategories();
@@ -33,7 +34,7 @@ export class Theme extends Observable {
     }
 
     createCategory(categoryDatum, isLast) {
-        const category = new Category(categoryDatum, this.categoryItem, isLast);
+        const category = new Category(this.themeIndex, categoryDatum, this.categoryItem, isLast);
         this.bubbleEvents(category, ['point_tray.category.selected', 'point_tray.category.unselected']);
 
         return category;
@@ -81,9 +82,9 @@ export class Theme extends Observable {
 
     highlight(flag) {
         if (flag) {
-            $('.point-mapper__h1_trigger', this.element).addClass(activeClsName).addClass('theme-' + this.data.id);
+            $('.point-mapper__h1_trigger', this.element).addClass(activeClsName).addClass('theme-' + this.themeIndex);
         } else {
-            $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName).removeClass('theme-' + this.data.id);
+            $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName).removeClass('theme-' + this.themeIndex);
         }
 
     }

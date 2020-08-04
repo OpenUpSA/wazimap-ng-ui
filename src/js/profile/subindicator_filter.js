@@ -134,6 +134,7 @@ export class SubindicatorFilter {
     }
 
     getFilteredData = (selectedFilter, selectedGroup, title) => {
+        console.log({'selectedFilter': selectedFilter, 'selectedGroup': selectedGroup, 'title': title});
         let chartData = [];
 
         if (selectedFilter !== allValues) {

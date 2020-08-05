@@ -117,7 +117,10 @@ export class MapChip extends Observable {
     }
 
     onSubIndicatorChange(args) {
-        const label = `${args.indicatorTitle} (${args.subindicatorKey})`
+        let label =  `${args.indicatorTitle} (${args.subindicatorKey})`;
+        if (args.indicatorTitle === args.subindicatorKey){
+            label = args.indicatorTitle;
+        }
         this.updateMapChipText(label);
         this.showMapChip(args);
     }

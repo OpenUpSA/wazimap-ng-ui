@@ -125,10 +125,6 @@ export class PointData extends Observable {
         let col = '';
 
         checkIterate(points, point => {
-            //const col = $('.theme-' + point.theme.id).css('color');
-            //const col = $('.point-mapper__h1_trigger.tid-' + point.theme.id).css('color');
-            //col = col === '' ? $($('div[data-id=' + point.category.id + ']')[0].closest('div.point-mapper__h1')).find('.point-mapper__h1_trigger').addClass('theme-' + point.theme.id).css('color') : col;
-
             if (col === '') {
                 //to get the color add "theme-@index" class to the trigger div. this way we can use css('color') function
                 let tempElement = $('div[data-id=' + point.category.id + ']')[0];
@@ -136,11 +132,15 @@ export class PointData extends Observable {
                 tempElement = tempElement.closest('div.point-mapper__h1');
                 tempElement = $(tempElement).find('.point-mapper__h1_trigger');
 
+                //if tempElement already has theme-@index class, dont remove it
+                let removeClass = !$(tempElement).hasClass('theme-' + themeIndex);
+
                 $(tempElement).addClass('theme-' + themeIndex);
                 col = $(tempElement).css('color');
-                $(tempElement).removeClass('theme-' + point.theme.id);
+                if (removeClass) {
+                    $(tempElement).removeClass('theme-' + point.theme.id);
+                }
             }
-
 
             let marker = L.circleMarker([point.y, point.x], {
                 color: col,

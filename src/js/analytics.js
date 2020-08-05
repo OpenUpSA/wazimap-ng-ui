@@ -115,6 +115,17 @@ value: ${value}
             this.basicLogEvent(payload, 'points', 'category_unselected', categoryLabel);
         })
 
+        controller.on('point_data.load_popup.hovered', payload => {
+            const label = payload.payload;
+            this.basicLogEvent(payload, 'points_popup', 'hovered', label);
+        })
+
+        controller.on('point_data.load_popup.clicked', payload => {
+            const label = payload.payload;
+            this.basicLogEvent(payload, 'points_popup', 'clicked', label);
+        })
+
+
         controller.on('categoryPointLoading', payload => {
             const categoryLabel = payload.payload.data.name;
             const key = categoryKey(categoryLabel);
@@ -184,6 +195,25 @@ value: ${value}
         controller.on('profile.chart.saveAsPng', payload => {
             const pp = payload.payload;
             this.basicLogEvent(payload, 'chart', 'saveAsPng', `${pp.title} (${pp.graphValueType})`);
+        })
+
+        controller.on('profile.chart.valueTypeChanged', payload => {
+            const pp = payload.payload;
+            this.basicLogEvent(payload, 'chart', 'valueTypeChanged', `${pp.title} (${pp.graphValueType})`);
+        })
+
+        controller.on('point_tray.subindicator_filter.filter', payload => {
+            const pp = payload.payload;
+            this.basicLogEvent(payload, 'chart', 'subindicator_filter', `${pp.indicator} | ${pp.group} | ${pp.subindicator}`);
+        })
+
+        const fileTypes = ['csv', 'excel', 'json', 'kml']
+
+        fileTypes.forEach(el => {
+            controller.on(`profile.chart.download_${el}`, payload => {
+                const pp = payload.payload;
+                this.basicLogEvent(payload, 'chart', `download_${el}`, `${pp.title}`);
+            })
         })
     }
 

@@ -13,7 +13,10 @@ export function configurePointDataEvents(controller, objs = {pointDataTray: null
         'themeLoaded'
     ])
 
-    controller.bubbleEvents(pointData, ['loadedCategoryPoints', 'loadingCategoryPoints']);
+    controller.bubbleEvents(pointData, [
+        'loadedCategoryPoints', 'loadingCategoryPoints',
+        'point_data.load_popup.hovered', 'point_data.load_popup.clicked'
+    ]);
 
     pointDataTray.loadThemes();
 }

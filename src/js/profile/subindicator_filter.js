@@ -1,9 +1,11 @@
 import {SubIndicator} from "../dataobjects";
+import {Observable} from "../utils";
 
 const allValues = 'All values';
 
-export class SubindicatorFilter {
+export class SubindicatorFilter extends Observable {
     constructor() {
+        super()
         this.indicators = null;
     }
 
@@ -134,7 +136,8 @@ export class SubindicatorFilter {
     }
 
     getFilteredData = (selectedFilter, selectedGroup, title) => {
-        console.log({'selectedFilter': selectedFilter, 'selectedGroup': selectedGroup, 'title': title});
+        this.triggerEvent('point_tray.subindicator_filter.filter', {indicator: title, group: selectedGroup, subindicator: selectedFilter});
+                          
         let chartData = [];
 
         if (selectedFilter !== allValues) {

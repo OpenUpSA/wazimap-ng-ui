@@ -31,8 +31,8 @@ export class PointDataTray extends Observable {
         $(stylesClsName).find(wrapperClsName).remove(); //need to remove the cloned objects, or js keeps styling the wrong element
     }
 
-    createTheme(datum) {
-        const theme = new Theme(datum, this.pointDataItem, this.categoryItem);
+    createTheme(themeIndex, datum) {
+        const theme = new Theme(themeIndex, datum, this.pointDataItem, this.categoryItem);
 
         this.bubbleEvents(theme, [
             'point_tray.category.selected', 'point_tray.category.unselected',
@@ -44,12 +44,14 @@ export class PointDataTray extends Observable {
 
     loadThemes() {
         const self = this;
+        let themeIndex = 0;
 
         self.triggerEvent("point_tray.tray.loading_themes", self);
 
         self.api.loadThemes(this.profileId).then(data => {
             checkIterate(data.results, themeDatum => {
-                let theme = self.createTheme(themeDatum);
+                themeIndex++;
+                let theme = self.createTheme(themeIndex, themeDatum);
                 let item = theme.element;
 
                 //append tree

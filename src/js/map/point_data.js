@@ -122,10 +122,26 @@ export class PointData extends Observable {
      */
     createMarkers = (points, layer) => {
         const self = this;
+        let col = '';
 
         checkIterate(points, point => {
-            //const col = $('.theme-' + point.theme.id).css('color');
-            const col = $('.point-mapper__h1_trigger.theme-' + point.theme.id).css('color');
+            if (col === '') {
+                //to get the color add "theme-@index" class to the trigger div. this way we can use css('color') function
+                let tempElement = $('div[data-id=' + point.category.id + ']')[0];
+                let themeIndex = $(tempElement).attr('data-themeIndex');
+                tempElement = tempElement.closest('div.point-mapper__h1');
+                tempElement = $(tempElement).find('.point-mapper__h1_trigger');
+
+                //if tempElement already has theme-@index class, dont remove it
+                let removeClass = !$(tempElement).hasClass('theme-' + themeIndex);
+
+                $(tempElement).addClass('theme-' + themeIndex);
+                col = $(tempElement).css('color');
+                if (removeClass) {
+                    $(tempElement).removeClass('theme-' + point.theme.id);
+                }
+            }
+
             let marker = L.circleMarker([point.y, point.x], {
                 color: col,
                 radius: self.markerRadius(),

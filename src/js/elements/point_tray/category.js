@@ -1,17 +1,18 @@
 import {Observable} from '../../utils';
 
-const activeClsName = 'active';
+let activeClsName = 'active';
 const categoryItemDoneClsName = '.point-mapper__h2_load-complete';
 const categoryItemLoadingClsName = '.point-mapper__h2_loading';
 
 export class Category extends Observable {
-    constructor(data, categoryItem, isLast) {
+    constructor(themeIndex, data, categoryItem, isLast) {
         super()
 
         this.active = false;
         this.data = data;
         this.categoryItem = categoryItem;
         this.isLast = isLast;
+        this.themeIndex = themeIndex;
         this.prepareDomElements();
     }
 
@@ -28,7 +29,9 @@ export class Category extends Observable {
             $(this.element).addClass('last');
         }
 
-        $(this.element).removeClass('theme-1').addClass('theme-' + this.theme.id);
+        $(this.element).removeClass('theme-1').addClass('theme-' + this.themeIndex);
+        $(this.element).attr('data-id', this.data.id);
+        $(this.element).attr('data-themeIndex', this.themeIndex);
 
         $('.point-mapper__h2_name .truncate', this.element).text(this.name);
         $('.point-data__label_source .truncate', this.element).text(this.data.metadata.source);

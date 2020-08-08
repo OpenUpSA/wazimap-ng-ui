@@ -42,7 +42,7 @@
   },
   "scripts": {
     "start": "parcel ./src/index.html",
-    "test": "echo 'hello world'",
+    "test": "./runTest.sh",
     "prebuild-dev": "shx rm -rf dist/*",
     "build-dev": "parcel build ./src/index.html --no-minify --public-url ./",
     "prebuild": "shx rm -rf dist/*",

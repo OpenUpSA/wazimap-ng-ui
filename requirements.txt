@@ -1,0 +1,4 @@
+allure-behave==2.8.17
+allure-python-commons==2.8.17
+behave @ git+https://github.com/behave/behave@c54493b0531795d946ac6754bfc643248cf3056a
+selenium==3.141.0

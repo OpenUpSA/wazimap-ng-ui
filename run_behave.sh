@@ -1,5 +1,7 @@
 #!/bin/sh
 # Author : ST
 # Script follows here:
-sudo apt install parallel
-parallel ::: yar
+# sleep 30
+# cd tests
+# behave
+

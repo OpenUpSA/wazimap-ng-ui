@@ -11,11 +11,11 @@ cache:
     - node_modules
 install:
   - pip install -r requirements.txt
+services:
+  - docker
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 10 # give xvfb some time to start
-  - yarn start  # start a Web server
-  - sleep 50 # give Web server some time to bind to sockets, etc
+  - docker-compose up -d
 script:
   - ./run_test.sh
+after_script:
+  - docker-compose down

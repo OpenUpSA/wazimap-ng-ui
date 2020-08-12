@@ -6,7 +6,7 @@ from pages.locators import age, youths, data_mapper_svg_icon, youth_population, 
 @given("I am on the Wazimap Homepage")
 def step_impl(context):
     # url = "https://wazimap-ng.africa/"
-    url = "http://localhost:1234"
+    url = "http://localhost:80"
     context.common.get_url(url)
     profile_logo_xpath = context.common.find_element_by_xpath(profile_logo)
     assert profile_logo_xpath.is_displayed()==True, 'Homepage is not loaded properly'

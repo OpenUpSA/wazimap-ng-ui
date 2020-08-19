@@ -4,6 +4,7 @@ import {min as d3min, max as d3max} from 'd3-array';
 import {Observable} from '../../utils';
 import {SubindicatorCalculator} from './subindicator_calculator';
 import {SiblingCalculator} from './sibling_calculator';
+import {AbsoluteValueCalculator} from './absolute_value_calculator';
 
 export class Choropleth extends Observable {
     constructor(layers, layerStyler, options, buffer = 0.1) {
@@ -20,7 +21,8 @@ export class Choropleth extends Observable {
     getCalculator(method) {
         let calculationFunc = {
             subindicator: SubindicatorCalculator,
-            sibling: SiblingCalculator
+            sibling: SiblingCalculator,
+            absolute_value: AbsoluteValueCalculator,
         }[method];
 
 

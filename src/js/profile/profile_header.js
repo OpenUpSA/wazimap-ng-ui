@@ -137,10 +137,13 @@ export class Profile_header extends Observable {
 
                 points.push({
                     Name: prop.name,
-                    Coordinate: '[' + geometry.coordinates[0] + ' , ' + geometry.coordinates[1] + ']',
-                    Category: prop.category.name,
-                    Theme: prop.category.theme.name
+                    Longitude: geometry.coordinates[0],
+                    Latitude: geometry.coordinates[1]
                 })
+
+                for (const [title, value] of Object.entries(prop.data)) {
+                    points[points.length - 1][title] = value;
+                }
             })
 
             return points;

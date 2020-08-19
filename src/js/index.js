@@ -120,8 +120,9 @@ async function init() {
     pc.config.baseUrl = pc.baseUrl;
     // TODO add this to config - check the <script> tag in the HTML which hardcodes this value
     pc.config.analytics = new Analytics('UA-93649482-25', pc.profile);
+    pc.config.profile = data.id;
 
-    configureApplication(pc.profile, pc.config);
+    configureApplication(data.id, pc.config);
 }
 
 init();

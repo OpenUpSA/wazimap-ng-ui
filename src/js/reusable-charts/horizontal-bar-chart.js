@@ -32,6 +32,9 @@ export function horizontalBarChart() {
         },
         xAxisFormatter: (d) => {
             return d;
+        },
+        yAxisFormatter: (d) => {
+            return d;
         }
     };
 
@@ -45,6 +48,7 @@ export function horizontalBarChart() {
     let yAxisPadding = initialConfiguration.yAxisPadding;
     let xLabelPadding = initialConfiguration.xLabelPadding;
     let xAxisFormatter = initialConfiguration.xAxisFormatter;
+    let yAxisFormatter = initialConfiguration.yAxisFormatter;
     let barHeight = initialConfiguration.barHeight;
     let barPadding = initialConfiguration.barPadding;
     let xLabel = initialConfiguration.xLabel;
@@ -77,7 +81,8 @@ export function horizontalBarChart() {
              */
             const yAxis = axisLeft(y)
                 .tickSize(0)
-                .tickPadding(yAxisPadding);
+                .tickPadding(yAxisPadding)
+                .tickFormat(yAxisFormatter);
             const xAxis = axisBottom(x)
                 .tickSize(0)
                 .tickPadding(xAxisPadding)
@@ -401,6 +406,20 @@ export function horizontalBarChart() {
                 xAxisFormatter = initialConfiguration.xAxisFormatter;
             } else {
                 xAxisFormatter = value;
+            }
+
+            return chart;
+        }
+    };
+
+    chart.yAxisFormatter = function (value) {
+        if (!arguments.length) {
+            return yAxisFormatter;
+        } else {
+            if (value === null) {
+                yAxisFormatter = initialConfiguration.yAxisFormatter;
+            } else {
+                yAxisFormatter = value;
             }
 
             return chart;

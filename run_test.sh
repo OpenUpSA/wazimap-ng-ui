@@ -4,3 +4,4 @@
 # nohup bash build_test.sh & nohup bash run_behave.sh &
 cd tests
 behave
+# behave -i tutorial.feature

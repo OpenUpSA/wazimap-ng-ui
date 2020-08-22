@@ -1,7 +1,7 @@
 from behave import *
 from pages.locators import tutorial,tutorial_header,tutorial_back_button,tutorial_close_button,\
     tutorial_data_filtering,tutorial_next_button,tutorial_list
-
+import time
 @when("I click on tutorial")
 def step_impl(context):
     tutorial_xpath = context.common.find_element_by_xpath(tutorial)
@@ -36,6 +36,7 @@ def step_impl(context):
 def step_impl(context):
     tutorial_close_button_xpath = context.common.find_element_by_xpath(tutorial_close_button)
     context.common.click_item(tutorial_close_button_xpath)
+    time.sleep(1)
     assert False == tutorial_close_button_xpath.is_displayed(), "Sandbox doesn't get closed"
 
 

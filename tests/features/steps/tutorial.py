@@ -3,6 +3,7 @@ from pages.locators import tutorial, tutorial_header, tutorial_back_button, tuto
     tutorial_data_filtering, tutorial_next_button, tutorial_introduction, tutorial_location_search,\
     tutorial_location_panel,\
     tutorial_data_mapper, tutorial_learn_more, tutorial_point_mapper, tutorial_rich_data
+import time
 
 
 @when("I click on tutorial")
@@ -83,4 +84,5 @@ def step_impl(context):
 
 @step("Tutorial dialog box and Introduction should not be displayed")
 def step_impl(context):
+    time.sleep(1)
     assert tutorial_close_button_xpath.is_displayed()==False, "Tutorial is still opened."

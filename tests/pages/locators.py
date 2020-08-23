@@ -12,18 +12,25 @@ language = "//div[@class='data-category__h2_trigger']//div[@class='truncate'][co
 youth_population = "//div[@class='truncate'][contains(text(),'Youth population')]"
 youths = "//div[contains(text(),'Youths')]"
 non_youths = "//div[contains(text(),'Non youth')]"
+age_group = "//body[@class='body no-scroll']/div[@class='main']/div[@class='data-mapper']/" \
+                "div[@class='data-mapper-content narrow-scroll']/div[@class='data-mapper-content__list']" \
+                "/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]"
+gender_subitem ="//div[@class='data-category__h3_trigger']//div[@class='truncate'][contains(text(),'Gender')]"
+race_subitem = "//div[@class='data-category__h3_trigger']//div[@class='truncate'][contains(text(),'Race')]"
+region_birth = "//div[@class='data-category__h2_trigger']//div[@class='truncate'][contains(text(),'Region of Birth')]"
+region_birth_subitem = "//div[@class='data-category__h3_trigger']//div[@class='truncate'][contains(text(),'Region of Birth')]"
+citizen_subitem = "//div[@class='data-category__h3_trigger']//div[@class='truncate'][contains(text(),'Citizenship')]"
+language_test_subitem = "//div[contains(text(),'Language test')]"
 # Tutorial Web Elements
 tutorial = "//div[contains(text(),'Tutorial')]"
 tutorial_header = "//span[@class='profile-name']"
-tutorial_list = ["//span[contains(text(),'Introduction:')]",
-                 "//span[contains(text(),'Location Search:')]",
-                 "//span[contains(text(),'Location Panel:')]",
-                 "//span[contains(text(),'Rich Data:')]",
-                 "//span[contains(text(),'Point Mapper:')]",
-                 "//span[contains(text(),'Data Mapper:')]",
-                 "//span[contains(text(),'Data Filtering:')]",
-                 "//span[contains(text(),'Learn more:')]"]
-
+tutorial_introduction = "//span[contains(text(),'Introduction:')]"
+tutorial_location_search = "//span[contains(text(),'Location Search:')]"
+tutorial_location_panel = "//span[contains(text(),'Location Panel:')]"
+tutorial_rich_data = "//span[contains(text(),'Rich Data:')]"
+tutorial_point_mapper = "//span[contains(text(),'Point Mapper:')]"
+tutorial_data_mapper = "//span[contains(text(),'Data Mapper:')]"
+tutorial_learn_more = "//span[contains(text(),'Learn more:')]"
 tutorial_next_button = "//div[@class='text-block']"
 tutorial_back_button = "//div[@class='tutorial__slide_button previous']//div[@class='svg-icon w-embed']"
 tutorial_data_filtering = "//span[contains(text(),'Data Filtering:')]"

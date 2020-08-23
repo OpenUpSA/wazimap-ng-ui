@@ -31,3 +31,23 @@ Feature: Data mapper visibility
     And I click on Age sub-item
     And I click on Youth Population
     Then User must see the Youths and Non Youths
+
+  Scenario: Verify the categories and sub categories of demographic are displayed
+    Given I am on the Wazimap Homepage
+    When I click on Data Mapper icon
+    Then User must see the data mapper panel header
+    And I click on Demographic menu item
+    Then User must see Demographic menu with its all 6 sub items
+    And I click on Age sub-item
+    Then User must see Age Group and Population
+    And I click on Gender sub-item
+    Then User must see Gender under Gender sub-item
+    And I click on Race sub-item
+    Then User must see Race under Race sub-item
+    And I click on Region of Birth sub-item
+    Then User must see Region of Birth under Region of Birth sub-item
+    And I click on Citizenship sub-item
+    Then User must see Citizenship under Citizenship sub-item
+    And I click on Language sub-item
+    Then User must see Language test under Language sub-item
+

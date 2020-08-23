@@ -1,11 +1,10 @@
 from behave import *
 from pages.locators import age, youths, data_mapper_svg_icon, youth_population, citizen, race, rob, language,\
-    non_youths, gender, demographic_menu, data_mapper_header,profile_logo
-
+    non_youths, gender, demographic_menu, data_mapper_header,profile_logo,age_group,gender_subitem,language_test_subitem,race_subitem,region_birth,region_birth_subitem,citizen_subitem
 
 @given("I am on the Wazimap Homepage")
 def step_impl(context):
-    #url = "http://localhost:1234"
+    # url = "http://localhost:1234"
     url = "http://localhost:80"
     context.common.get_url(url)
     profile_logo_xpath = context.common.find_element_by_xpath(profile_logo)
@@ -71,3 +70,71 @@ def step_impl(context):
     assert youths_xpath.is_displayed()==True, 'Youths are not displayed'
     assert non_youths_xpath.is_displayed()==True, 'Non Youths are not displayed'
 
+
+@then("User must see Age Group and Population")
+def step_impl(context):
+    age_group_xpath = context.common.find_element_by_xpath(age_group)
+    youth_population_xpath = context.common.find_element_by_xpath(youth_population)
+    assert True == age_group_xpath.is_displayed(), "Age Group under Age item is not displayed"
+    assert True == youth_population_xpath.is_displayed(),"Youth Population under Age item is not displayed"
+
+
+@step("I click on Gender sub-item")
+def step_impl(context):
+    gender_xpath = context.common.find_element_by_xpath(gender)
+    context.common.click_item(gender_xpath)
+
+
+@then("User must see Gender under Gender sub-item")
+def step_impl(context):
+    gender_subitem_xpath = context.common.find_element_by_xpath(gender_subitem)
+    assert True == gender_subitem_xpath.is_displayed(), "Gender sub-item under Gender is not displayed"
+
+
+@step("I click on Race sub-item")
+def step_impl(context):
+    race_xpath = context.common.find_element_by_xpath(race)
+    context.common.click_item(race_xpath)
+
+
+@then("User must see Race under Race sub-item")
+def step_impl(context):
+    race_subitem_xpath = context.common.find_element_by_xpath(race_subitem)
+    assert True == race_subitem_xpath.is_displayed(),"Race under Race is not displayed"
+
+
+
+@step("I click on Region of Birth sub-item")
+def step_impl(context):
+    region_birth_xpath = context.common.find_element_by_xpath(region_birth)
+    context.common.click_item(region_birth_xpath)
+
+
+@then("User must see Region of Birth under Region of Birth sub-item")
+def step_impl(context):
+    region_birth_subitem_xpath = context.common.find_element_by_xpath(region_birth_subitem)
+    assert True == region_birth_subitem_xpath.is_displayed(),"Region of Birth under Region of Birth is not displayed"
+
+
+@step("I click on Citizenship sub-item")
+def step_impl(context):
+    citizen_xpath = context.common.find_element_by_xpath(citizen)
+    context.common.click_item(citizen_xpath)
+
+
+@then("User must see Citizenship under Citizenship sub-item")
+def step_impl(context):
+    citizen_subitem_xpath= context.common.find_element_by_xpath(citizen_subitem)
+    assert True == citizen_subitem_xpath.is_displayed(), "Citizenship Under Citizenship is not displayed"
+
+
+@step("I click on Language sub-item")
+def step_impl(context):
+    language_xpath = context.common.find_element_by_xpath(language)
+    context.common.click_item(language_xpath)
+
+
+@then("User must see Language test under Language sub-item")
+def step_impl(context):
+    language_test_subitem_xpath = context.common.find_element_by_xpath(language_test_subitem)
+    assert True == language_test_subitem_xpath.is_displayed(),"Language Test under Language is not displayed"

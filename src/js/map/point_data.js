@@ -103,6 +103,7 @@ export class PointData extends Observable {
                 name: prop.name,
                 category: prop.category,
                 theme: prop.category.theme,
+                themeIndex: category.themeIndex,
                 data: prop.data,
                 image: prop.image,
                 url: prop.url,
@@ -127,8 +128,8 @@ export class PointData extends Observable {
         checkIterate(points, point => {
             if (col === '') {
                 //to get the color add "theme-@index" class to the trigger div. this way we can use css('color') function
-                let tempElement = $('div[data-id=' + point.category.id + ']')[0];
-                let themeIndex = $(tempElement).attr('data-themeIndex');
+                let themeIndex = point.themeIndex;
+                let tempElement = $(`.theme-${themeIndex}`)[0];
                 tempElement = tempElement.closest('div.point-mapper__h1');
                 tempElement = $(tempElement).find('.point-mapper__h1_trigger');
 

@@ -20,6 +20,7 @@ export function horizontalBarChart() {
         xLabelPadding: 10,
         barHeight: 30,
         barPadding: 10,
+        xLabel: "LABEL GOES HERE",
         margin: {
             top: 15,
             right: 25,
@@ -50,6 +51,7 @@ export function horizontalBarChart() {
     let yAxisFormatter = initialConfiguration.yAxisFormatter;
     let barHeight = initialConfiguration.barHeight;
     let barPadding = initialConfiguration.barPadding;
+    let xLabel = initialConfiguration.xLabel;
 
     function chart(selection) {
         selection.each(() => {
@@ -201,7 +203,7 @@ export function horizontalBarChart() {
                 .attr("class", "bar-chart__x-label")
                 .style("text-anchor", "middle")
                 .style("fill", "#999")
-                .text("LABEL GOES HERE");
+                .text(xLabel);
         });
     }
 
@@ -374,6 +376,12 @@ export function horizontalBarChart() {
     chart.barPadding = function (value) {
         if (!arguments.length) return barPadding;
         barPadding = value;
+        return chart;
+    };
+
+    chart.xLabel = function (value) {
+        if (!arguments.length) return xLabel;
+        xLabel = value;
         return chart;
     };
 

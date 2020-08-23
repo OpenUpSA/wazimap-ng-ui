@@ -1,10 +1,14 @@
 from behave import *
 from pages.locators import age, youths, data_mapper_svg_icon, youth_population, citizen, race, rob, language,\
-    non_youths, gender, demographic_menu, data_mapper_header,profile_logo,age_group,gender_subitem,language_test_subitem,race_subitem,region_birth,region_birth_subitem,citizen_subitem
+    non_youths, gender, demographic_menu, data_mapper_header,profile_logo,age_group,gender_subitem,language_test_subitem,\
+    race_subitem,region_birth,region_birth_subitem,citizen_subitem, water_services, water_services_average, \
+    water_services_good,water_services_no_access,water_services_not_use,water_services_poor,water_services_unspecified,\
+    population,poverty,population_age_group,households,education,family_living_env
+
 
 @given("I am on the Wazimap Homepage")
 def step_impl(context):
-    # url = "http://localhost:1234"
+    #url = "http://localhost:1234"
     url = "http://localhost:80"
     context.common.get_url(url)
     profile_logo_xpath = context.common.find_element_by_xpath(profile_logo)
@@ -138,3 +142,63 @@ def step_impl(context):
 def step_impl(context):
     language_test_subitem_xpath = context.common.find_element_by_xpath(language_test_subitem)
     assert True == language_test_subitem_xpath.is_displayed(),"Language Test under Language is not displayed"
+
+
+@step("Click on Population category")
+def step_impl(context):
+    population_xpath = context.common.find_element_by_xpath(population)
+    context.common.click_item(population_xpath)
+
+
+@then("User must see the data mapper contents")
+def step_impl(context):
+    demographic_menu_xpath = context.common.find_element_by_xpath(demographic_menu)
+    population_xpath = context.common.find_element_by_xpath(population)
+    education_xpath = context.common.find_element_by_xpath(education)
+    family_living_env_xpath = context.common.find_element_by_xpath(family_living_env)
+    poverty_xpath = context.common.find_element_by_xpath(poverty)
+    assert True == demographic_menu_xpath.is_displayed(),"Demographics item is not displayed"
+    assert True==population_xpath.is_displayed(), "Population item is not displayed"
+    assert True==education_xpath.is_displayed(), "Education item is not displayed"
+    assert True==family_living_env_xpath.is_displayed(), "Family and Living Enviornment is not displayed"
+    assert True==poverty_xpath.is_displayed(), "Poverty item is not displayed"
+
+@then("Households sub category should be displayed")
+def step_impl(context):
+    households_xpath = context.common.find_element_by_xpath(households)
+    assert True == households_xpath.is_displayed(),"Households item is not displayed"
+
+
+@step("Click on Households sub category")
+def step_impl(context):
+    households_xpath = context.common.find_element_by_xpath(households)
+    context.common.click_item(households_xpath)
+
+
+@then("Water services sub-category should be displayed")
+def step_impl(context):
+    water_services_xpath = context.common.find_element_by_xpath(water_services)
+    assert True == water_services_xpath.is_displayed(), "Water Services is not displayed"
+
+
+@step("Click on Water services sub-category")
+def step_impl(context):
+    water_services_xpath = context.common.find_element_by_xpath(water_services)
+    context.common.click_item(water_services_xpath)
+
+
+
+@then("Water services sub-categories should be displayed")
+def step_impl(context):
+    water_services_unspecified_xpath= context.common.find_element_by_xpath(water_services_unspecified)
+    water_services_poor_xpath= context.common.find_element_by_xpath(water_services_poor)
+    water_services_not_use_xpath= context.common.find_element_by_xpath(water_services_not_use)
+    water_services_no_access_xpath= context.common.find_element_by_xpath(water_services_no_access)
+    water_services_good_xpath= context.common.find_element_by_xpath(water_services_good)
+    water_services_average_xpath= context.common.find_element_by_xpath(water_services_average)
+    assert True == water_services_average_xpath.is_displayed(), 'Water Type - Average is not displayed'
+    assert True==water_services_unspecified_xpath.is_displayed(), 'Water Type - unspecified is not displayed'
+    assert True==water_services_poor_xpath.is_displayed(), 'Water Type - poor is not displayed'
+    assert True==water_services_not_use_xpath.is_displayed(), 'Water Type - not use is not displayed'
+    assert True==water_services_no_access_xpath.is_displayed(), 'Water Type - no access is not displayed'
+    assert True == water_services_good_xpath.is_displayed(),'Water Type - good is not displayed'

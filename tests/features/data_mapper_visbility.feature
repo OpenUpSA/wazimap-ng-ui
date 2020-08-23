@@ -51,3 +51,16 @@ Feature: Data mapper visibility
     And I click on Language sub-item
     Then User must see Language test under Language sub-item
 
+  Scenario: Verify the sub categories of water under the category of population are displayed
+    Given I am on the Wazimap Homepage
+    When I click on Data Mapper icon
+    Then User must see the data mapper contents
+    And Click on Population category
+    Then Households sub category should be displayed
+    And Click on Households sub category
+    Then Water services sub-category should be displayed
+    And Click on Water services sub-category
+    Then Water services sub-categories should be displayed
+
+
+

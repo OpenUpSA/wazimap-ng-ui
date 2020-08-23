@@ -30,7 +30,18 @@ export class MapChip extends Observable {
         $(mapOptionsClass).show();  //webflow.js adds display:none when clicked on x
         $(mapOptionsClass).find('.filters__header_close').on('click', () => this.removeMapChip());
 
+        this.setDescription(args);
         this.handleChoroplethFilter(args);
+    }
+
+    setDescription(args) {
+        const indicatorTitle = args.indicatorTitle;
+        const indicators = args.indicators[indicatorTitle];
+        if (typeof indicators !== 'undefined' && indicators !== null) {
+            const description = indicators.description;
+
+            $('.map-options__context .map-option__context_text div').text(description);
+        }
     }
 
     handleChoroplethFilter(args) {
@@ -117,8 +128,8 @@ export class MapChip extends Observable {
     }
 
     onSubIndicatorChange(args) {
-        let label =  `${args.indicatorTitle} (${args.subindicatorKey})`;
-        if (args.indicatorTitle === args.subindicatorKey){
+        let label = `${args.indicatorTitle} (${args.subindicatorKey})`;
+        if (args.indicatorTitle === args.subindicatorKey) {
             label = args.indicatorTitle;
         }
         this.updateMapChipText(label);

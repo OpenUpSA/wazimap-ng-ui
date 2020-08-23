@@ -43,16 +43,21 @@ export class Profile_header extends Observable {
         let self = this;
         $(breadcrumbClass, breadcrumbsContainer).remove();
 
-        parents.forEach(parent => {
-            let breadcrumb = breadcrumbTemplate.cloneNode(true);
-            $(".truncate", breadcrumb).text(parent.name);
-            $(breadcrumb).on('click', () => {
-                self.triggerEvent('profile.breadcrumbs.selected', parent);
-                $(breadcrumb).off("click")
-            })
+        if (parents !== null && parents.length > 0) {
+            parents.forEach(parent => {
+                let breadcrumb = breadcrumbTemplate.cloneNode(true);
+                $(".truncate", breadcrumb).text(parent.name);
+                $(breadcrumb).on('click', () => {
+                    self.triggerEvent('profile.breadcrumbs.selected', parent);
+                    $(breadcrumb).off("click")
+                })
 
-            breadcrumbsContainer.append(breadcrumb);
-        })
+                breadcrumbsContainer.append(breadcrumb);
+            })
+            $(breadcrumbsContainer).removeClass('hidden');
+        } else {
+            $(breadcrumbsContainer).addClass('hidden');
+        }
     }
 
     addFacilities = () => {
@@ -83,7 +88,7 @@ export class Profile_header extends Observable {
             });
         });
 
-        if(themes.length > 0){
+        if (themes.length > 0) {
             themes.forEach((theme) => {
                 let facilityItem = facilityTemplate.cloneNode(true);
                 $('.location-facility__name div', facilityItem).text(theme.name);
@@ -115,8 +120,7 @@ export class Profile_header extends Observable {
 
                 facilityWrapper.append(facilityItem);
             })
-        }
-        else{
+        } else {
             $('.location__facilities').addClass('hidden');
         }
 

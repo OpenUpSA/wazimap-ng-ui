@@ -62,5 +62,20 @@ Feature: Data mapper visibility
     And Click on Water services sub-category
     Then Water services sub-categories should be displayed
 
+Scenario: Verify the Black African category is highlighted on the map
+  Given I am on the Wazimap Homepage
+  When I click on Data Mapper icon
+  Then User must see the data mapper contents
+  And I click on Demographic menu item
+  And I click on Race sub-item
+  Then User must see Race under Race sub-item
+  And I click on Race under Race sub-item
+  Then User must see various races
+  And I click on Black african
+  And I click on Data Mapper icon
+  Then User must see Black African data should be displayed in map option
+  And I select gender from a drop down of Select a Value
+  And I close the dialog box
+  Then User must not see the dialog box
 
 

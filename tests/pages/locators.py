@@ -34,6 +34,14 @@ water_services_average ="//div[contains(text(),'Average')]"
 water_services_no_access ="//div[contains(text(),'No access')]"
 water_services_not_use = "//div[contains(text(),'Do not use')]"
 water_services_unspecified="//div[2]//div[2]//div[1]//div[1]//div[2]//div[1]//div[1]//div[2]//div[1]//a[6]//div[2]"
+race_other = "//div[@class='data-category']//div[3]//div[2]//div[1]//div[1]//div[2]//div[1]//a[1]//div[2]"
+race_white = "//div[contains(text(),'White')]"
+race_coloured = "//div[contains(text(),'Coloured')]"
+race_black_african = "//div[contains(text(),'Black african')]"
+race_indian_asian = "//div[contains(text(),'Indian or asian')]"
+race_black_african_header = "//div[@class='filters__header_name']//div[contains(text(),'Race (Black african)')]"
+
+
 # Tutorial Web Elements
 tutorial = "//div[contains(text(),'Tutorial')]"
 tutorial_header = "//span[@class='profile-name']"

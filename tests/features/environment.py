@@ -23,6 +23,7 @@ def before_scenario(context, scenario):
     context.common = Common(context.driver)
 
 
+
 # Run after each scenarios are tested
 def after_scenario(context, scenario):
     # close browsers

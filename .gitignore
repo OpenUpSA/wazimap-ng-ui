@@ -4,3 +4,4 @@ dist
 .cache
 yarn-error.log
 *.sublime-workspace
+.env

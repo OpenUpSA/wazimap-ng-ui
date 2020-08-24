@@ -1,20 +1,28 @@
-export function SubindicatorCalculator(args) {
-    const result = Object.entries(args.data).map(childGeography => {
-        const code = childGeography[0];
-        const count = childGeography[1];
-        const universe = args.subindicatorArr.reduce((el1, el2) => {
-            if (el2.children != undefined && el2.children[code] != undefined) {
-                let e1 = typeof el1 === 'undefined' ? 0 : el1;
-                let e2 = typeof  el2.children[code] === 'undefined' ? 0 :  el2.children[code];
-                let total = e1 + e2;
+import {percFmt, numFmt} from '../../utils'
 
-                return total;
-            }
-        }, 0);
+export default class SubindicatorCalculator {
+    calculate(args) {
+        const result = Object.entries(args.data).map(childGeography => {
+            const code = childGeography[0];
+            const count = childGeography[1];
+            const universe = args.subindicatorArr.reduce((el1, el2) => {
+                if (el2.children != undefined && el2.children[code] != undefined) {
+                    let e1 = typeof el1 === 'undefined' ? 0 : el1;
+                    let e2 = typeof  el2.children[code] === 'undefined' ? 0 :  el2.children[code];
+                    let total = e1 + e2;
 
-        const val = count / universe;
-        return {code: code, val: val};
-    })
+                    return total;
+                }
+            }, 0);
 
-    return result;
+            const val = count / universe;
+            return {code: code, val: val};
+        })
+
+        return result;
+    }
+
+    format(x) {
+        return percFmt(x);
+    }
 }

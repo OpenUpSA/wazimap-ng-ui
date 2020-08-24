@@ -96,7 +96,7 @@ export class MapChip extends Observable {
         for (let i = 0; i < intervals.length; i++) {
             const interval = intervals[i];
             const item = this.clonedLegendBlock.cloneNode(true);
-            const label = fmt(interval);
+            const label = interval;
 
             if (i >= lightStart) {
                 $(item).addClass('light');

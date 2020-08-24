@@ -52,6 +52,7 @@ const facilityRowClone = facilityWrapper.find('.location-facility__item')[0].clo
 
 const graphValueTypes = ['Percentage', 'Value'];
 const allValues = 'All values';
+const numFmt = d3format(",.2f");
 
 function updateGeography(container, profile) {
     const geography = profile.geography

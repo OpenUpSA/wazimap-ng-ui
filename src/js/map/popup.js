@@ -111,7 +111,11 @@ export class Popup extends Observable {
 
                     $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);
                     $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
-                    $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc} %)`);
+                    if (state.subindicator.choropleth_method != 'absolute_value') {
+                        $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc} %)`);
+                    } else {
+                        $('.map-tooltip__value .tooltip__value_detail div', item).text('');
+                    }
                 }
             }
 

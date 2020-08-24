@@ -1,4 +1,4 @@
-import {numFmt, Observable, setPopupStyle} from '../utils';
+import {numFmt, percFmt, Observable, setPopupStyle} from '../utils';
 
 let tooltipCategoryItem = null;
 
@@ -107,7 +107,7 @@ export class Popup extends Observable {
                 if (geographyCode == areaCode) {
                     isChild = true;
                     const countFmt = numFmt(count);
-                    const perc = (payload.layer.feature.properties.percentage * 100).toFixed(2);
+                    const perc = percFmt(payload.layer.feature.properties.percentage);
 
                     $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);
                     $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);

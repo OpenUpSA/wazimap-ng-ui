@@ -182,6 +182,8 @@ export class Observable {
 
 export const numFmt = d3format(",.2d");
 export const numFmtAlt = d3format("~s");
+// export const percFmt = x => (x * 100).toFixed(2);
+export const percFmt = d3format(".1%")
 
 export function hasElements(arr) {
     if (arr != null && arr != undefined && arr.length > 0)

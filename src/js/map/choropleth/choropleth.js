@@ -2,9 +2,9 @@ import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 
 import {Observable} from '../../utils';
-import {SubindicatorCalculator} from './subindicator_calculator';
-import {SiblingCalculator} from './sibling_calculator';
-import {AbsoluteValueCalculator} from './absolute_value_calculator';
+import SubindicatorCalculator from './subindicator_calculator';
+import SiblingCalculator from './sibling_calculator';
+import AbsoluteValueCalculator from './absolute_value_calculator';
 
 export class Choropleth extends Observable {
     constructor(layers, layerStyler, options, buffer = 0.1) {
@@ -19,17 +19,17 @@ export class Choropleth extends Observable {
     }
 
     getCalculator(method) {
-        let calculationFunc = {
-            subindicator: SubindicatorCalculator,
-            sibling: SiblingCalculator,
-            absolute_value: AbsoluteValueCalculator,
+        let calculator = {
+            subindicator: new SubindicatorCalculator(),
+            sibling: new SiblingCalculator(),
+            absolute_value: new AbsoluteValueCalculator(),
         }[method];
 
 
-        if (calculationFunc == undefined)
-            calculationFunc = SubindicatorCalculator
+        if (calculator == undefined)
+            calculator = SubindicatorCalculator
 
-        return calculationFunc;
+        return calculator;
 
     }
 
@@ -67,8 +67,8 @@ export class Choropleth extends Observable {
         const highest = (1 + this.buffer) * d3max(values) > 1 ? 1 : (1 + this.buffer) * d3max(values);
 
         return {
-            lower: lowest,
-            upper: highest
+            lower: d3min(values),
+            upper: d3max(values)
         }
     }
 

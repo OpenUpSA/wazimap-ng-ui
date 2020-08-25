@@ -32,9 +32,9 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
-    getProfileConfiguration() {
+    getProfileConfiguration(hostname) {
         const url = `${this.baseUrl}/profile_by_url?format=json`;
-        return this.loadUrl(url);
+        return this.loadUrl(url, {WM_HOSTNAME: hostname});
     }
 
     loadThemes(profileId) {
@@ -72,15 +72,15 @@ export class API extends Observable {
         }
     }
 
-    async loadUrl(url) {
+    async loadUrl(url, headers = {}) {
         let response;
         const self = this;
-        response = await this.getTokenJSON(url, self.getToken())
+        response = await this.getTokenJSON(url, headers)
         if (response.status == 401 || response.status == 403) {
             await this.waitToLogIn();
             try {
                 await self.authenticate(url);
-                response = await this.getTokenJSON(url, self.getToken());
+                response = await this.getTokenJSON(url, headers);
             } catch (err) {
                 console.error(err)
 
@@ -145,13 +145,10 @@ export class API extends Observable {
         }
     }
 
-    async getTokenJSON(url) {
-        let headers;
+    async getTokenJSON(url, headers = {}) {
         const token = this.getToken();
         if (token != '' && token != null)
-            headers = {Authorization: `Token ${token}`}
-        else
-            headers = {}
+            headers['Authorization'] = `Token ${token}`;
 
         return getJSON(url, headers)
     }

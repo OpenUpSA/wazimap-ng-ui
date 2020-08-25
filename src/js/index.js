@@ -100,7 +100,7 @@ async function init() {
         }
     }
     const api = new API(pc.baseUrl);
-    const data = await api.getProfileConfiguration()
+    const data = await api.getProfileConfiguration(hostname);
 
     pc.config.setConfig(data.configuration || {})
     pc.config.api = api;

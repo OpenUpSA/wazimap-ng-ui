@@ -29,7 +29,7 @@ export class Profile_header extends Observable {
         breadcrumbsContainer = $('.location__breadcrumbs');
         breadcrumbTemplate = $('.styles').find(breadcrumbClass)[0];
 
-        facilityWrapper = $('.location__facilities');
+        facilityWrapper = $('.location__facilities .location__facilities_content-wrapper');
         facilityTemplate = $('.location-facility')[0].cloneNode(true);
         facilityRowClone = $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
@@ -89,11 +89,13 @@ export class Profile_header extends Observable {
         });
 
         if (themes.length > 0) {
+            let totalCount = 0;
             themes.forEach((theme) => {
                 let facilityItem = facilityTemplate.cloneNode(true);
                 $('.location-facility__name div', facilityItem).text(theme.name);
                 ThemeStyle.replaceChildDivWithIcon($(facilityItem).find('.location-facility__icon'), theme.icon);
                 $('.location-facility__value div', facilityItem).text(theme.count);
+                totalCount += theme.count;
 
                 //.location-facility__item .tooltip__points_label .truncate
                 $('.location-facility__list', facilityItem).html('');
@@ -118,13 +120,18 @@ export class Profile_header extends Observable {
                 }
                 $('.location-facility__description', facilityItem).addClass('hidden')
 
-                facilityWrapper.append(facilityItem);
+                facilityWrapper.prepend(facilityItem);
             })
+
+            $('.location__facilities_header').removeClass('hidden');
+            $('.location__facilities_trigger').removeClass('hidden');
+            $('.location__facilities_categories-value strong').text(categoryArr.length);
+            $('.location__facilities_facilities-value strong').text(totalCount);
         } else {
-            $('.location__facilities').addClass('hidden');
+            $('.location__facilities_no-data').removeClass('hidden');
         }
 
-        $(facilityWrapper).find('.location__facilities_loading').addClass('hidden');
+        $('.location__facilities_loading').addClass('hidden');
     }
 
     downloadPointData = (category) => {

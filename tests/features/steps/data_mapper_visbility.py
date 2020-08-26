@@ -67,10 +67,12 @@ def step_impl(context):
 @then("User must see the Youths and Non Youths")
 def step_impl(context):
     time.sleep(2)
-    youths_xpath = context.common.find_element_by_xpath(youths)
-    non_youths_xpath = context.common.find_element_by_xpath(non_youths)
-    assert youths_xpath.is_displayed()==True, 'Youths are not displayed'
-    assert non_youths_xpath.is_displayed()==True, 'Non Youths are not displayed'
+    youth_population_youths = "body.body.no-scroll:nth-child(2) div.main:nth-child(3) div.data-mapper div.data-mapper-content.narrow-scroll div.data-mapper-content__list div.data-category:nth-child(1) div.data-category__h1_content div.data-category__h1_wrapper div.data-category__h2:nth-child(1) div.data-category__h2_content div.data-category__h2_wrapper div.data-category__h3:nth-child(2) div.data-category__h3_content div.data-category__h3_wrapper a.data-category__h4.w-inline-block:nth-child(2) > div.truncate"
+    youth_population_youths_css = context.common.find_element_by_css(youth_population_youths)
+    youth_population_non_youths = "body.body.no-scroll:nth-child(2) div.main:nth-child(3) div.data-mapper div.data-mapper-content.narrow-scroll div.data-mapper-content__list div.data-category:nth-child(1) div.data-category__h1_content div.data-category__h1_wrapper div.data-category__h2:nth-child(1) div.data-category__h2_content div.data-category__h2_wrapper div.data-category__h3:nth-child(2) div.data-category__h3_content div.data-category__h3_wrapper a.data-category__h4.w-inline-block:nth-child(3) > div.truncate"
+    youth_population_non_youths_css = context.common.find_element_by_xpath(youth_population_non_youths)
+    assert youth_population_youths_css.is_displayed()==True, 'Youths are not displayed'
+    assert youth_population_non_youths_css.is_displayed()==True, 'Non Youths are not displayed'
 
 
 @then("User must see Age Group and Population")

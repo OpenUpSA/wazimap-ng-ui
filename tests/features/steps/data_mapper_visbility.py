@@ -1,18 +1,9 @@
 from behave import *
-from pages.locators import age, youths, data_mapper_svg_icon, youth_population, citizen, race, rob, language,\
-    non_youths, gender, demographic_menu, data_mapper_header, profile_logo, age_group, gender_subitem,\
-    language_test_subitem,\
-    race_subitem, region_birth, region_birth_subitem, citizen_subitem, water_services, water_services_average,\
-    water_services_good, water_services_no_access, water_services_not_use, water_services_poor,\
-    water_services_unspecified,\
-    population, poverty, population_age_group, households, education, family_living_env, race_other, race_white,\
-    race_coloured,\
-    race_black_african, race_indian_asian, race_black_african_header
-
+from pages.data_mapper_locators import *
 
 @given("I am on the Wazimap Homepage")
 def step_impl(context):
-    #url = "http://localhost:1234"
+    # url = "http://localhost:1234"
     url = "http://localhost:80"
     context.common.get_url(url)
     profile_logo_xpath = context.common.find_element_by_xpath(profile_logo)
@@ -235,7 +226,8 @@ def step_impl(context):
 
 @step("I click on Data Mapper icon")
 def step_impl(context):
-    data_mapper_svg_icon_xpath = context.common.find_element_by_xpath(data_mapper_svg_icon)
+    temp = "//div[@class='panel-toggle data-mapper-panel__close cc-active']//div[@class='svg-icon w-embed']"
+    data_mapper_svg_icon_xpath = context.common.find_element_by_xpath(temp)
     context.common.click_item(data_mapper_svg_icon_xpath)
 
 
@@ -250,11 +242,9 @@ def step_impl(context):
     select_all_value = "//div[@class='dropdown-menu__trigger narrow']//div[@class='truncate'][contains(text(),'All values')]"
     select_all_value_xpath = context.common.find_element_by_xpath(select_all_value)
     context.common.click_item(select_all_value_xpath)
-    script = "document.evaluate(\"//div[@class='dropdown-menu__content position-top scroll-element']" \
-             "//div[@class='truncate'][contains(text(),'gender')]\",document,null," \
-             "XPathResult.FIRST_ORDERED_NODE_TYPE,null).singleNodeValue.click()"
-    context.driver.execute_script(script)
-
+    select_gender = "//div[@class='dropdown-menu__content position-top scroll-element']" \
+             "//div[@class='truncate'][contains(text(),'gender')]"
+    context.driver.execute_script(select_gender)
 
 
 race_close_button_xpath = None

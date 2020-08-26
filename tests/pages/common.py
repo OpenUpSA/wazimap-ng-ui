@@ -27,6 +27,13 @@ class Common:
         except NoSuchElementException:
             sys.exit()
 
+    # Click web element through javascript executer
+    def click_element_via_javascript_executor(self, xpath):
+        script = "document.evaluate(\"{}\",document,null,"\
+                 "XPathResult.FIRST_ORDERED_NODE_TYPE,null).singleNodeValue.click()".format(xpath)
+        self.driver.execute_script(script)
+
+
     # Close the web driver
     def browser_close(self):
         self.driver.close()

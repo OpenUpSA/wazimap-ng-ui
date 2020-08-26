@@ -1,8 +1,5 @@
 from behave import *
-from pages.locators import tutorial, tutorial_header, tutorial_back_button, tutorial_close_button,\
-    tutorial_data_filtering, tutorial_next_button, tutorial_introduction, tutorial_location_search,\
-    tutorial_location_panel,\
-    tutorial_data_mapper, tutorial_learn_more, tutorial_point_mapper, tutorial_rich_data
+from pages.tutorial_locators import *
 import time
 
 

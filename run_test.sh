@@ -4,5 +4,5 @@
 # nohup bash build_test.sh & nohup bash run_behave.sh &
 cd tests
 behave
-# behave -n "Verify the Black African category is highlighted on the map"
+# behave -n "Verify the rich data items are displayed"
 # behave -i tutorial.feature

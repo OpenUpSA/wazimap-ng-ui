@@ -37,6 +37,7 @@ class Test(unittest.TestCase):
         #    driver = webdriver.Chrome(options=options,service_log_path='/dev/null')
         self.driver = driver
         self.driver.get(url)
+        self.errors = []
 
     def tearDown(self):
         self.driver.close()
@@ -51,6 +52,7 @@ class Test(unittest.TestCase):
                 WebDriverWait(self.driver, 5).until(
                     EC.element_to_be_clickable((By.XPATH, "(//div[text()='" + i + "'])[last()]"))).click()
             except:
+                self.errors.append(i)
                 print("ERROR Cound not locate click element \t'" + i + "'")
         print()
         print("----------------------------------------------------------------------")
@@ -64,7 +66,9 @@ class Test(unittest.TestCase):
                 else:
                     print("Element\t-\t'" + i + "'\t-\tIs Not Visible")
             except:
+                self.errors.append(i)
                 print("ERROR Cound not locate Visibility element \t'" + i + "'")
+        self.assertEqual(len(self.errors),0)
 
 if __name__ == '__main__':
     unittest.main()

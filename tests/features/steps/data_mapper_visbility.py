@@ -54,8 +54,8 @@ def step_impl(context):
 @then("User must see the Youth population under the Age item")
 def step_impl(context):
     #time.sleep(2)
-    youth_population_css = "body.body.no-scroll:nth-child(2) div.main:nth-child(3) div.data-mapper div.data-mapper-content.narrow-scroll div.data-mapper-content__list div.data-category:nth-child(1) div.data-category__h1_content div.data-category__h1_wrapper div.data-category__h2:nth-child(1) div.data-category__h2_content div.data-category__h2_wrapper div.data-category__h3:nth-child(2) div.data-category__h3_trigger > div.truncate"
-    context.common.find_element_by_css(youth_population_css)
+    youth_population = "body.body.no-scroll:nth-child(2) div.main:nth-child(3) div.data-mapper div.data-mapper-content.narrow-scroll div.data-mapper-content__list div.data-category:nth-child(1) div.data-category__h1_content div.data-category__h1_wrapper div.data-category__h2:nth-child(1) div.data-category__h2_content div.data-category__h2_wrapper div.data-category__h3:nth-child(2) div.data-category__h3_trigger > div.truncate"
+    youth_population_css = context.common.find_element_by_css(youth_population)
     assert youth_population_css.is_displayed()==True, 'Youth Population is not displayed'
 
 

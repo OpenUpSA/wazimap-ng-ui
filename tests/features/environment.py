@@ -20,6 +20,7 @@ def before_all(context):
 # Run before every scenario of the feature
 def before_scenario(context, scenario):
     context.driver = webdriver.Chrome(executable_path = context.chrome_dir, options = context.option)
+    context.driver.maximize_window()
     context.common = Common(context.driver)
 
 

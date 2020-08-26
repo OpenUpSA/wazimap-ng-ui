@@ -48,9 +48,8 @@ def step_impl(context):
 
 @step("I click on Age sub-item")
 def step_impl(context):
-    time.sleep(2)
     age_xpath = context.common.find_element_by_xpath(age)
-    context.common.click_item(age_xpath)
+    context.common.click_element_via_javascript_executor(age_xpath)
 
 
 @then("User must see the Youth population under the Age item")

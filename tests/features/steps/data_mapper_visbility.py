@@ -1,5 +1,5 @@
 from behave import *
-from pages.data_mapper_locators import *
+from tests.pages.data_mapper_locators import *
 import time
 
 @given("I am on the Wazimap Homepage")
@@ -54,15 +54,14 @@ def step_impl(context):
 @then("User must see the Youth population under the Age item")
 def step_impl(context):
     time.sleep(2)
+    youth_population = "/html[1]/body[1]/div[3]/div[5]/div[1]/div[5]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]"
     youth_population_xpath = context.common.find_element_by_xpath(youth_population)
     assert youth_population_xpath.is_displayed()==True, 'Youth Population is not displayed'
 
 
 @step("I click on Youth Population")
 def step_impl(context):
-    time.sleep(2)
-    youth_population_xpath = context.common.find_element_by_xpath(youth_population)
-    context.common.click_item(youth_population_xpath)
+    context.common.click_element_via_javascript_executor(youth_population)
 
 
 @then("User must see the Youths and Non Youths")

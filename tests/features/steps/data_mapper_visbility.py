@@ -1,5 +1,5 @@
 from behave import *
-from tests.pages.data_mapper_locators import *
+from pages.data_mapper_locators import *
 import time
 
 @given("I am on the Wazimap Homepage")

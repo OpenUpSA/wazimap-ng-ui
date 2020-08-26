@@ -53,6 +53,7 @@ def step_impl(context):
 
 @then("User must see the Youth population under the Age item")
 def step_impl(context):
+    time.sleep(2)
     youth_population_xpath = context.common.find_element_by_xpath(youth_population)
     assert youth_population_xpath.is_displayed()==True, 'Youth Population is not displayed'
 

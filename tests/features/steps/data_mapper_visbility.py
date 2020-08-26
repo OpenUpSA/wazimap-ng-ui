@@ -1,11 +1,14 @@
 from behave import *
 from pages.data_mapper_locators import *
 import time
+import platform
 
 @given("I am on the Wazimap Homepage")
 def step_impl(context):
-    # url = "http://localhost:1234"
-    url = "http://localhost:80"
+    if platform.system()=='Darwin':
+        url = "http://localhost:1234"
+    else:
+        url = "http://localhost:80"
     context.common.get_url(url)
     profile_logo_xpath = context.common.find_element_by_xpath(profile_logo)
     assert profile_logo_xpath.is_displayed()==True, 'Homepage is not loaded properly'
@@ -54,9 +57,8 @@ def step_impl(context):
 @then("User must see the Youth population under the Age item")
 def step_impl(context):
     #time.sleep(2)
-    youth_population = "body.body.no-scroll:nth-child(2) div.main:nth-child(3) div.data-mapper div.data-mapper-content.narrow-scroll div.data-mapper-content__list div.data-category:nth-child(1) div.data-category__h1_content div.data-category__h1_wrapper div.data-category__h2:nth-child(1) div.data-category__h2_content div.data-category__h2_wrapper div.data-category__h3:nth-child(2) div.data-category__h3_trigger > div.truncate"
-    youth_population_css = context.common.find_element_by_css(youth_population)
-    assert youth_population_css.is_displayed()==True, 'Youth Population is not displayed'
+    youth_population_xpath = context.common.find_element_by_xpath(youth_population)
+    assert youth_population_xpath.is_displayed()==True, 'Youth Population is not displayed'
 
 
 @step("I click on Youth Population")
@@ -67,12 +69,10 @@ def step_impl(context):
 @then("User must see the Youths and Non Youths")
 def step_impl(context):
     time.sleep(2)
-    youth_population_youths = "body.body.no-scroll:nth-child(2) div.main:nth-child(3) div.data-mapper div.data-mapper-content.narrow-scroll div.data-mapper-content__list div.data-category:nth-child(1) div.data-category__h1_content div.data-category__h1_wrapper div.data-category__h2:nth-child(1) div.data-category__h2_content div.data-category__h2_wrapper div.data-category__h3:nth-child(2) div.data-category__h3_content div.data-category__h3_wrapper a.data-category__h4.w-inline-block:nth-child(2) > div.truncate"
-    youth_population_youths_css = context.common.find_element_by_css(youth_population_youths)
-    youth_population_non_youths = "body.body.no-scroll:nth-child(2) div.main:nth-child(3) div.data-mapper div.data-mapper-content.narrow-scroll div.data-mapper-content__list div.data-category:nth-child(1) div.data-category__h1_content div.data-category__h1_wrapper div.data-category__h2:nth-child(1) div.data-category__h2_content div.data-category__h2_wrapper div.data-category__h3:nth-child(2) div.data-category__h3_content div.data-category__h3_wrapper a.data-category__h4.w-inline-block:nth-child(3) > div.truncate"
-    youth_population_non_youths_css = context.common.find_element_by_xpath(youth_population_non_youths)
-    assert youth_population_youths_css.is_displayed()==True, 'Youths are not displayed'
-    assert youth_population_non_youths_css.is_displayed()==True, 'Non Youths are not displayed'
+    youth_population_youths_xpath = context.common.find_element_by_xpath(youths)
+    youth_population_non_youths_xpath = context.common.find_element_by_xpath(non_youths)
+    assert youth_population_youths_xpath.is_displayed()==True, 'Youths are not displayed'
+    assert youth_population_non_youths_xpath.is_displayed()==True, 'Non Youths are not displayed'
 
 
 @then("User must see Age Group and Population")

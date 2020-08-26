@@ -28,15 +28,7 @@ class Common:
     # Find the web element using xpath
     def find_element_by_xpath(self, xpath):
         try:
-            return WebDriverWait(self.driver, 15).until(expected_conditions.presence_of_element_located((By.XPATH, xpath)))
-        except NoSuchElementException:
-            sys.exit()
-
-    # Find the web element using xpath
-    def find_element_by_css(self, css_path):
-        try:
-            return WebDriverWait(self.driver, 15).until(
-                expected_conditions.presence_of_element_located((By.CSS_SELECTOR, css_path)))
+            return WebDriverWait(self.driver, 15).until(expected_conditions.visibility_of_element_located((By.XPATH, xpath)))
         except NoSuchElementException:
             sys.exit()
 
@@ -46,8 +38,6 @@ class Common:
                  "XPathResult.FIRST_ORDERED_NODE_TYPE,null).singleNodeValue.click()".format(xpath)
         time.sleep(3)
         self.driver.execute_script(script)
-
-
 
     # Close the web driver
     def browser_close(self):

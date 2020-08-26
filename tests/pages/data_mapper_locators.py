@@ -10,9 +10,9 @@ race = "//div[@class='data-category__h2_trigger']//div[@class='truncate'][contai
 rob = "//div[@class='data-category__h2_trigger']//div[@class='truncate'][contains(text(),'Region of Birth')]"
 citizen = "//div[@class='data-category__h2_trigger']//div[@class='truncate'][contains(text(),'Citizenship')]"
 language = "//div[@class='data-category__h2_trigger']//div[@class='truncate'][contains(text(),'Language')]"
-youth_population = "//div[@class='truncate'][contains(text(),'Youth population')]"
-youths = "//div[contains(text(),'Youths')]"
-non_youths = "//div[contains(text(),'Non youth')]"
+youth_population = "//body[@class='body no-scroll']/div[@class='main']/div[@class='data-mapper']/div[@class='data-mapper-content narrow-scroll']/div[@class='data-mapper-content__list']/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]"
+youths = "//div[@class='data-mapper-content narrow-scroll']//div[1]//div[2]//div[1]//div[1]//div[2]//div[1]//div[2]//div[2]//div[1]//a[1]"
+non_youths = "//div[@class='data-mapper-content narrow-scroll']//div[1]//div[2]//div[1]//div[1]//div[2]//div[1]//div[2]//div[2]//div[1]//a[2]"
 age_group = "//body[@class='body no-scroll']/div[@class='main']/div[@class='data-mapper']/" \
                 "div[@class='data-mapper-content narrow-scroll']/div[@class='data-mapper-content__list']" \
                 "/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]"

@@ -1,5 +1,6 @@
 from behave import *
 from pages.data_mapper_locators import *
+import time
 
 @given("I am on the Wazimap Homepage")
 def step_impl(context):
@@ -30,6 +31,7 @@ def step_impl(context):
 
 @then("User must see Demographic menu with its all 6 sub items")
 def step_impl(context):
+    time.sleep(2)
     age_xpath = context.common.find_element_by_xpath(age)
     gender_xpath = context.common.find_element_by_xpath(gender)
     race_xpath = context.common.find_element_by_xpath(race)
@@ -46,6 +48,7 @@ def step_impl(context):
 
 @step("I click on Age sub-item")
 def step_impl(context):
+    time.sleep(2)
     age_xpath = context.common.find_element_by_xpath(age)
     context.common.click_item(age_xpath)
 

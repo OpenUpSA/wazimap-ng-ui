@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 import sys
+import time
 
 # Class for Wazimap with Common Framework
 class Common:
@@ -20,6 +21,10 @@ class Common:
     def click_item(self, element):
         ActionChains(self.driver).move_to_element(element).click(element).perform()
 
+    # Enter the text in the input field
+    def write_text(self, text):
+        ActionChains(self.driver).send_keys(text).perform()
+
     # Find the web element using xpath
     def find_element_by_xpath(self, xpath):
         try:
@@ -31,7 +36,9 @@ class Common:
     def click_element_via_javascript_executor(self, xpath):
         script = "document.evaluate(\"{}\",document,null,"\
                  "XPathResult.FIRST_ORDERED_NODE_TYPE,null).singleNodeValue.click()".format(xpath)
+        time.sleep(3)
         self.driver.execute_script(script)
+
 
 
     # Close the web driver

@@ -60,6 +60,7 @@ def step_impl(context):
 
 @step("I click on Youth Population")
 def step_impl(context):
+    time.sleep(2)
     youth_population_xpath = context.common.find_element_by_xpath(youth_population)
     context.common.click_item(youth_population_xpath)
 

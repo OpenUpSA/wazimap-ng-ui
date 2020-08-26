@@ -32,6 +32,14 @@ class Common:
         except NoSuchElementException:
             sys.exit()
 
+    # Find the web element using xpath
+    def find_element_by_css(self, css_path):
+        try:
+            return WebDriverWait(self.driver, 15).until(
+                expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, css_path)))
+        except NoSuchElementException:
+            sys.exit()
+
     # Click web element through javascript executer
     def click_element_via_javascript_executor(self, xpath):
         script = "document.evaluate(\"{}\",document,null,"\

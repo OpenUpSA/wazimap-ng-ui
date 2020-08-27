@@ -132,23 +132,24 @@ export class MapControl extends Observable {
     };
 
     displayChoropleth(data, subindicatorArr, method) {
-        const calculationFunc = this.choropleth.getCalculator(method);
+        const calculator = this.choropleth.getCalculator(method);
 
         const args = {
             data: data,
             subindicatorArr: subindicatorArr
         }
 
-        const calculation = calculationFunc(args);
+        const calculation = calculator.calculate(args);
         const values = calculation.map(el => el.val);
 
         this.choropleth.showChoropleth(calculation, false);
         const intervals = this.choropleth.getIntervals(values);
+        const formattedIntervals = intervals.map(el => calculator.format(el))
 
         this.triggerEvent("map.choropleth.display", {
             data: calculation,
             colors: this.choropleth.legendColors,
-            intervals: intervals
+            intervals: formattedIntervals
         })
     }
 

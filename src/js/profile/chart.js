@@ -47,28 +47,30 @@ export class Chart extends Observable {
         let tooltip = tooltipClone.cloneNode(true);
         tooltip = $(tooltip).removeAttr('style');
 
-        chart.height(450);
-        chart.width(760);
-        chart.colors(['#39ad84', '#339b77']);
-        chart.xAxisPadding(10); //padding of the xAxis values(numbers)
-        chart.yAxisPadding(10);
-        chart.xLabelPadding(30);    //padding of the label
-        chart.barHeight(24);
-        chart.barPadding(6);
-        chart.margin({
-            top: 15,
-            right: 0,
-            bottom: 15,
-            left: 120,
-        })
+        chart
+            .height(450)
+            .width(760)
+            .colors(['#39ad84', '#339b77'])
+            .xAxisPadding(10) //padding of the xAxis values(numbers)
+            .yAxisPadding(10)
+            .xLabelPadding(30)    //padding of the label
+            .barHeight(24)
+            .barPadding(6)
+            .margin({
+                top: 15,
+                right: 0,
+                bottom: 15,
+                left: 120,
+            })
+            .tooltipFormatter((d) => {
+                $('.bar-chart__tooltip_value', tooltip).text(d.data.valueText);
+                $('.bar-chart__tooltip_alt-value div', tooltip).text(d.data.label);
+                $('.bar-chart__tooltip_name', tooltip).remove();
 
-        chart.tooltipFormatter((d) => {
-            $('.bar-chart__tooltip_value', tooltip).text(d.data.valueText);
-            $('.bar-chart__tooltip_alt-value div', tooltip).text(d.data.label);
-            $('.bar-chart__tooltip_name', tooltip).remove();
+                return $(tooltip).prop('outerHTML');
+            })
+            .xLabel("")
 
-            return $(tooltip).prop('outerHTML');
-        })
         if (this.graphValueType === graphValueTypes[0]) {
             chart.xAxisFormatter((d) => {
                 return d + '%';

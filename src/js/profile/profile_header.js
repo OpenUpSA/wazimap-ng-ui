@@ -43,16 +43,21 @@ export class Profile_header extends Observable {
         let self = this;
         $(breadcrumbClass, breadcrumbsContainer).remove();
 
-        parents.forEach(parent => {
-            let breadcrumb = breadcrumbTemplate.cloneNode(true);
-            $(".truncate", breadcrumb).text(parent.name);
-            $(breadcrumb).on('click', () => {
-                self.triggerEvent('profile.breadcrumbs.selected', parent);
-                $(breadcrumb).off("click")
-            })
+        if (parents !== null && parents.length > 0) {
+            parents.forEach(parent => {
+                let breadcrumb = breadcrumbTemplate.cloneNode(true);
+                $(".truncate", breadcrumb).text(parent.name);
+                $(breadcrumb).on('click', () => {
+                    self.triggerEvent('profile.breadcrumbs.selected', parent);
+                    $(breadcrumb).off("click")
+                })
 
-            breadcrumbsContainer.append(breadcrumb);
-        })
+                breadcrumbsContainer.append(breadcrumb);
+            })
+            $(breadcrumbsContainer).removeClass('hidden');
+        } else {
+            $(breadcrumbsContainer).addClass('hidden');
+        }
     }
 
     addFacilities = () => {
@@ -83,37 +88,41 @@ export class Profile_header extends Observable {
             });
         });
 
-        themes.forEach((theme) => {
-            let facilityItem = facilityTemplate.cloneNode(true);
-            $('.location-facility__name div', facilityItem).text(theme.name);
-            ThemeStyle.replaceChildDivWithIcon($(facilityItem).find('.location-facility__icon'), theme.icon);
-            $('.location-facility__value div', facilityItem).text(theme.count);
+        if (themes.length > 0) {
+            themes.forEach((theme) => {
+                let facilityItem = facilityTemplate.cloneNode(true);
+                $('.location-facility__name div', facilityItem).text(theme.name);
+                ThemeStyle.replaceChildDivWithIcon($(facilityItem).find('.location-facility__icon'), theme.icon);
+                $('.location-facility__value div', facilityItem).text(theme.count);
 
-            //.location-facility__item .tooltip__points_label .truncate
-            $('.location-facility__list', facilityItem).html('');
-            let themeCategories = categoryArr.filter((c) => {
-                return c.theme_id === theme.theme_id
-            });
+                //.location-facility__item .tooltip__points_label .truncate
+                $('.location-facility__list', facilityItem).html('');
+                let themeCategories = categoryArr.filter((c) => {
+                    return c.theme_id === theme.theme_id
+                });
 
-            for (let i = 0; i < themeCategories.length; i++) {
-                let rowItem = facilityRowClone.cloneNode(true);
-                if (i === themeCategories.length - 1) {
-                    $(rowItem).addClass('last');
+                for (let i = 0; i < themeCategories.length; i++) {
+                    let rowItem = facilityRowClone.cloneNode(true);
+                    if (i === themeCategories.length - 1) {
+                        $(rowItem).addClass('last');
+                    }
+
+                    $('.location-facility__item_name .truncate', rowItem).text(themeCategories[i].label);
+                    $('.location-facility__item_value div', rowItem).text(themeCategories[i].count);
+
+                    $('.location-facility__list', facilityItem).append(rowItem);
+
+                    $(rowItem).on('click', () => {
+                        self.downloadPointData(themeCategories[i]);
+                    })
                 }
+                $('.location-facility__description', facilityItem).addClass('hidden')
 
-                $('.location-facility__item_name .truncate', rowItem).text(themeCategories[i].label);
-                $('.location-facility__item_value div', rowItem).text(themeCategories[i].count);
-
-                $('.location-facility__list', facilityItem).append(rowItem);
-
-                $(rowItem).on('click', () => {
-                    self.downloadPointData(themeCategories[i]);
-                })
-            }
-            $('.location-facility__description', facilityItem).addClass('hidden')
-
-            facilityWrapper.append(facilityItem);
-        })
+                facilityWrapper.append(facilityItem);
+            })
+        } else {
+            $('.location__facilities').addClass('hidden');
+        }
 
         $(facilityWrapper).find('.location__facilities_loading').addClass('hidden');
     }
@@ -137,10 +146,13 @@ export class Profile_header extends Observable {
 
                 points.push({
                     Name: prop.name,
-                    Coordinate: '[' + geometry.coordinates[0] + ' , ' + geometry.coordinates[1] + ']',
-                    Category: prop.category.name,
-                    Theme: prop.category.theme.name
+                    Longitude: geometry.coordinates[0],
+                    Latitude: geometry.coordinates[1]
                 })
+
+                for (const [title, value] of Object.entries(prop.data)) {
+                    points[points.length - 1][title] = value;
+                }
             })
 
             return points;
@@ -150,6 +162,7 @@ export class Profile_header extends Observable {
     setPointSource = () => {
         //todo:change this when the API is ready
         $('.location__sources_loading').addClass('hidden');
+        $('.location__sources').addClass('hidden');
         $('.location__sources_no-data').removeClass('hidden');
     }
 

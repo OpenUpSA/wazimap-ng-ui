@@ -28,7 +28,7 @@ export class Theme extends Observable {
         $(this.element).removeClass(hideondeployClsName);
         $(this.element).find('.point-mapper__h1_checkbox input[type=checkbox]').on('click', () => self.toggle());
         $('.point-data__h1_name .truncate', this.element).text(this.name);
-        $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName);
+        $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName).addClass('theme-' + this.themeIndex);
 
         $(categoryWrapperClsName, this.element).html('');
     }
@@ -82,9 +82,9 @@ export class Theme extends Observable {
 
     highlight(flag) {
         if (flag) {
-            $('.point-mapper__h1_trigger', this.element).addClass(activeClsName).addClass('theme-' + this.themeIndex);
+            $('.point-mapper__h1_trigger', this.element).addClass(activeClsName);
         } else {
-            $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName).removeClass('theme-' + this.themeIndex);
+            $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName);
         }
 
     }

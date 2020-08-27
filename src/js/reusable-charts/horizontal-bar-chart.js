@@ -20,6 +20,8 @@ export function horizontalBarChart() {
         xLabelPadding: 10,
         barHeight: 30,
         barPadding: 10,
+        xLabel: "LABEL GOES HERE",
+        barLabelLength: 15,
         margin: {
             top: 15,
             right: 25,
@@ -30,6 +32,11 @@ export function horizontalBarChart() {
             return `${d.data.label}: ${d.data.value}`;
         },
         xAxisFormatter: (d) => {
+            return d;
+        },
+        yAxisFormatter: (d) => {
+            if (d.length > barLabelLength)
+                d = d.substring(0, barLabelLength) + '...'
             return d;
         }
     };
@@ -44,8 +51,11 @@ export function horizontalBarChart() {
     let yAxisPadding = initialConfiguration.yAxisPadding;
     let xLabelPadding = initialConfiguration.xLabelPadding;
     let xAxisFormatter = initialConfiguration.xAxisFormatter;
+    let yAxisFormatter = initialConfiguration.yAxisFormatter;
     let barHeight = initialConfiguration.barHeight;
     let barPadding = initialConfiguration.barPadding;
+    let xLabel = initialConfiguration.xLabel;
+    let barLabelLength = initialConfiguration.barLabelLength;
 
     function chart(selection) {
         selection.each(() => {
@@ -75,7 +85,8 @@ export function horizontalBarChart() {
              */
             const yAxis = axisLeft(y)
                 .tickSize(0)
-                .tickPadding(yAxisPadding);
+                .tickPadding(yAxisPadding)
+                .tickFormat(yAxisFormatter);
             const xAxis = axisBottom(x)
                 .tickSize(0)
                 .tickPadding(xAxisPadding)
@@ -89,6 +100,7 @@ export function horizontalBarChart() {
                 .style('color', '#999')
                 .style('font-size', '11px')
                 .call(yAxis);
+
 
             /**
              * append x axis
@@ -196,7 +208,7 @@ export function horizontalBarChart() {
                 .attr("class", "bar-chart__x-label")
                 .style("text-anchor", "middle")
                 .style("fill", "#999")
-                .text("LABEL GOES HERE");
+                .text(xLabel);
         });
     }
 
@@ -372,6 +384,18 @@ export function horizontalBarChart() {
         return chart;
     };
 
+    chart.xLabel = function (value) {
+        if (!arguments.length) return xLabel;
+        xLabel = value;
+        return chart;
+    };
+
+    chart.barLabelLength = function (value) {
+        if (!arguments.length) return barLabelLength;
+        barLabelLength = value;
+        return chart;
+    };
+
     chart.tooltipFormatter = function (value) {
         if (!arguments.length) {
             return tooltipFormatter
@@ -393,6 +417,20 @@ export function horizontalBarChart() {
                 xAxisFormatter = initialConfiguration.xAxisFormatter;
             } else {
                 xAxisFormatter = value;
+            }
+
+            return chart;
+        }
+    };
+
+    chart.yAxisFormatter = function (value) {
+        if (!arguments.length) {
+            return yAxisFormatter;
+        } else {
+            if (value === null) {
+                yAxisFormatter = initialConfiguration.yAxisFormatter;
+            } else {
+                yAxisFormatter = value;
             }
 
             return chart;

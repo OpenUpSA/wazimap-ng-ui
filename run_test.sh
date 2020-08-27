@@ -4,5 +4,5 @@
 # nohup bash build_test.sh & nohup bash run_behave.sh &
 cd tests
 behave
-# behave -n "Verify the search functionality by searching Cape town municipality"
+# behave -n "Verify the zoom in and zoom out on map view"
 # behave -i tutorial.feature

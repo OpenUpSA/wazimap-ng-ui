@@ -4,3 +4,5 @@ map_search_cape_town = "//div[@class='search__dropdown_list']//div[2]//div[1]//d
 map_search_cape_town_country = "//div[@class='truncate text-center'][contains(text(),'South Africa')]"
 map_search_cape_town_province = "//div[@class='truncate text-center'][contains(text(),'Western Cape')]"
 map_search_cape_town_municipality = "//div[@class='truncate text-center'][contains(text(),'City of Cape Town')]"
+map_zoom_in = "//a[@class='leaflet-control-zoom-in']"
+map_zoom_out = "//a[@class='leaflet-control-zoom-out']"

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8693068e-7df8-47f6-b4c5-f39a65850256" name="Default Changelist" comment="tests updated" />
+    <list default="true" id="8693068e-7df8-47f6-b4c5-f39a65850256" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/features/steps/map.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/features/steps/map.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/pages/rich_data_locators.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/pages/rich_data_locators.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -90,7 +94,7 @@
       <workItem from="1598296511370" duration="1044000" />
       <workItem from="1598297959202" duration="5454000" />
       <workItem from="1598417544283" duration="30924000" />
-      <workItem from="1598508627767" duration="3701000" />
+      <workItem from="1598508627767" duration="4890000" />
     </task>
     <task id="LOCAL-00001" summary="tests updated">
       <created>1596889510508</created>
@@ -302,7 +306,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598514025698</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="tests updated">
+      <created>1598523781356</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1598523781356</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -325,10 +336,10 @@
       <screen x="0" y="22" width="1440" height="813" />
     </state>
     <state x="458" y="182" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.22.1440.813@0.22.1440.813" timestamp="1596900874655" />
-    <state x="437" y="22" key="CommitChangelistDialog2" timestamp="1598514025365">
+    <state x="437" y="22" key="CommitChangelistDialog2" timestamp="1598523781197">
       <screen x="0" y="22" width="1440" height="813" />
     </state>
-    <state x="437" y="22" key="CommitChangelistDialog2/0.22.1440.813@0.22.1440.813" timestamp="1598514025365" />
+    <state x="437" y="22" key="CommitChangelistDialog2/0.22.1440.813@0.22.1440.813" timestamp="1598523781197" />
     <state x="0" y="22" width="1440" height="813" key="DiffContextDialog" timestamp="1598303144706">
       <screen x="0" y="22" width="1440" height="813" />
     </state>

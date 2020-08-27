@@ -59,4 +59,5 @@ def step_impl(context):
 @then("map should be zoomed out")
 def step_impl(context):
     map_zoom_out_view  = base64.b64decode(context.driver.get_screenshot_as_png())
+    time.sleep(2)
     assert list(bytes(map_original_view))==list(bytes(map_zoom_out_view)), "Map wasn't zoomed out"

@@ -1,5 +1,5 @@
 rich_data_icon = "//div[@class='point-mapper-toggles']//div[@class='panel-toggle rich-data-panel__open']//div[@class='svg-icon w-embed']"
-rich_data_navigation_summary = "//div[contains(text(),'Navigate to:')]"
+rich_data_navigation_summary = "//div[contains(text(),'Facilities in this Location')]"
 rich_data_navigation_demographic = "//div[@class='rich-data-nav__item-text']" \
              "//div[@class='truncate'][contains(text(),'Demographics')]"
 rich_data_demographics_header = "//h2[contains(text(),'Demographics')]"

@@ -34,7 +34,7 @@ export class API extends Observable {
 
     getProfileConfiguration(hostname) {
         const url = `${this.baseUrl}/profile_by_url?format=json`;
-        return this.loadUrl(url, {WM_HOSTNAME: hostname});
+        return this.loadUrl(url, {'wm-hostname': hostname});
     }
 
     loadThemes(profileId) {

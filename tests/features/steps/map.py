@@ -53,13 +53,13 @@ def step_impl(context):
 @step("I click on '-'")
 def step_impl(context):
     context.common.click_element_via_javascript_executor(map_zoom_out)
-    time.sleep(5)
+    time.sleep(8)
 
 
 @then("map should be zoomed out")
 def step_impl(context):
     map_zoom_out_view  = base64.b64decode(context.driver.get_screenshot_as_png())
-    time.sleep(8)
+    # time.sleep(8)
     assert list(bytes(map_original_view))==list(bytes(map_zoom_out_view)), "Map wasn't zoomed out"
 
 

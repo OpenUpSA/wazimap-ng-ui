@@ -4,5 +4,5 @@
 # nohup bash build_test.sh & nohup bash run_behave.sh &
 cd tests
 behave
-# behave -n "Verify the visibility of the location information of the map"
+# behave -n "Verify the Grocery stores are displayed on the map view"
 # behave -i tutorial.feature

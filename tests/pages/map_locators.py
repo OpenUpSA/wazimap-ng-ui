@@ -6,3 +6,7 @@ map_search_cape_town_province = "//div[@class='truncate text-center'][contains(t
 map_search_cape_town_municipality = "//div[@class='truncate text-center'][contains(text(),'City of Cape Town')]"
 map_zoom_in = "//a[@class='leaflet-control-zoom-in']"
 map_zoom_out = "//a[@class='leaflet-control-zoom-out']"
+map_search_result_first = "//div[@class='search__dropdown_content']//div[1]//div[1]//div[1]//div[1]"
+map_profile_highlight_age_percentage = "//div[contains(text(),'% 20 - 24 year olds')]"
+map_profile_highlight_female_population = "//div[contains(text(),'female population')]"
+map_profile_highlight_problem_communication = "//div[@class='location-highlight__title'][contains(text(),'Problems communicating')]"

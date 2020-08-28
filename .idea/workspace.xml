@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8693068e-7df8-47f6-b4c5-f39a65850256" name="Default Changelist" comment="tests updated">
+    <list default="true" id="8693068e-7df8-47f6-b4c5-f39a65850256" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_test.sh" beforeDir="false" afterPath="$PROJECT_DIR$/run_test.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/features/map.feature" beforeDir="false" afterPath="$PROJECT_DIR$/tests/features/map.feature" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/features/steps/map.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/features/steps/map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/pages/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/pages/common.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +96,7 @@
       <workItem from="1598297959202" duration="5454000" />
       <workItem from="1598417544283" duration="30924000" />
       <workItem from="1598508627767" duration="8576000" />
-      <workItem from="1598589500066" duration="4205000" />
+      <workItem from="1598589500066" duration="10495000" />
     </task>
     <task id="LOCAL-00001" summary="tests updated">
       <created>1596889510508</created>
@@ -328,7 +329,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598598824071</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="tests updated">
+      <created>1598602259700</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1598602259700</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -351,10 +359,10 @@
       <screen x="0" y="22" width="1440" height="813" />
     </state>
     <state x="458" y="182" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.22.1440.813@0.22.1440.813" timestamp="1596900874655" />
-    <state x="437" y="22" key="CommitChangelistDialog2" timestamp="1598601897145">
+    <state x="437" y="22" key="CommitChangelistDialog2" timestamp="1598602259498">
       <screen x="0" y="22" width="1440" height="813" />
     </state>
-    <state x="437" y="22" key="CommitChangelistDialog2/0.22.1440.813@0.22.1440.813" timestamp="1598601897145" />
+    <state x="437" y="22" key="CommitChangelistDialog2/0.22.1440.813@0.22.1440.813" timestamp="1598602259498" />
     <state x="0" y="22" width="1440" height="813" key="DiffContextDialog" timestamp="1598303144706">
       <screen x="0" y="22" width="1440" height="813" />
     </state>
@@ -439,10 +447,10 @@
       <screen x="0" y="22" width="1440" height="813" />
     </state>
     <state x="468" y="156" key="RollbackChangesDialog/0.22.1440.813@0.22.1440.813" timestamp="1598303149262" />
-    <state x="320" y="168" key="Vcs.Push.Dialog.v2" timestamp="1598598836392">
+    <state x="320" y="168" key="Vcs.Push.Dialog.v2" timestamp="1598602266203">
       <screen x="0" y="22" width="1440" height="813" />
     </state>
-    <state x="320" y="168" key="Vcs.Push.Dialog.v2/0.22.1440.813@0.22.1440.813" timestamp="1598598836392" />
+    <state x="320" y="168" key="Vcs.Push.Dialog.v2/0.22.1440.813@0.22.1440.813" timestamp="1598602266203" />
     <state x="458" y="226" key="git4idea.merge.GitMergeDialog" timestamp="1598302901818">
       <screen x="0" y="22" width="1440" height="813" />
     </state>

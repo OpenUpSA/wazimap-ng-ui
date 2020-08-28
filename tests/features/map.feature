@@ -15,3 +15,22 @@ Feature: Map
     Then map should be zoomed in
     And I click on '-'
     Then map should be zoomed out
+
+  Scenario Outline: Verify the visibility of the location information of the map
+    Given I am on the Wazimap Homepage
+    Then User must see the profile highlights
+    And I click on search bar
+    And I select the <province>
+    Then User must see the profile highlights
+    And I click on search bar
+    And I select the <district>
+    Then User must see the profile highlights
+    And I click on search bar
+    And I select the <municipality>
+    Then User must see the profile highlights
+    And I click on search bar
+    And I select the <main place>
+    Then User must see the profile highlights
+    Examples:
+    |district          |province  |municipality|main place|
+    |Thabo Mofutsanyane|Free state|Dihlabeng   |Dihlabeng NU|

@@ -61,3 +61,25 @@ def step_impl(context):
     map_zoom_out_view  = base64.b64decode(context.driver.get_screenshot_as_png())
     time.sleep(8)
     assert list(bytes(map_original_view))==list(bytes(map_zoom_out_view)), "Map wasn't zoomed out"
+
+
+@then("User must see the profile highlights")
+def step_impl(context):
+    map_profile_highlight_age_percentage = "//div[contains(text(),'% 20 - 24 year olds')]"
+    map_profile_highlight_female_population = "//div[contains(text(),'female population')]"
+    map_profile_highlight_problem_communication = "//div[@class='location-highlight__title'][contains(text(),'Problems communicating')]"
+    map_profile_highlight_age_percentage_xpath = context.common.find_element_by_xpath(map_profile_highlight_age_percentage)
+    map_profile_highlight_female_population_xpath = context.common.find_element_by_xpath(map_profile_highlight_female_population)
+    map_profile_highlight_problem_communication_xpath = context.common.find_element_by_xpath(map_profile_highlight_problem_communication)
+    assert True == map_profile_highlight_age_percentage_xpath.is_displayed(),"Age percentage is not displayed"
+    assert True == map_profile_highlight_female_population_xpath.is_displayed(),"Female Population is not displayed"
+    assert True == map_profile_highlight_problem_communication_xpath.is_displayed(),"Problem Communication is not displayed"
+
+
+@step("I select the {text}")
+def step_impl(context, text):
+    map_search_location_xpath = context.common.find_element_by_xpath(map_search_location)
+    context.common.click_item(map_search_location_xpath)
+    context.common.write_text(text)
+    map_search = "//div[@class='search__dropdown_content']//div[1]//div[1]//div[1]//div[1]"
+    context.common.click_element_via_javascript_executor(map_search)

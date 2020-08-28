@@ -1,6 +1,6 @@
 map_search_location = "//input[@id='Location']"
 map_search_cape_town_text = "cape town"
-map_search_cape_town = "//div[@class='search__dropdown_list']//div[2]//div[1]//div[1]//div[1]"
+map_search_cape_town = "//body[@class='body no-scroll']/div[@class='main']/div[@class='nav']/div[@class='nav__content']/div[@id='w-node-926b3e9c8568-e148319d']/div[@class='nav__search_dropdown']/div[@class='search__dropdown_plate']/div[@class='search__dropdown_scroll narrow-scroll']/div[@class='search__dropdown_content']/div[@class='search__dropdown_list']/div[2]"
 map_search_cape_town_country = "//div[@class='truncate text-center'][contains(text(),'South Africa')]"
 map_search_cape_town_province = "//div[@class='truncate text-center'][contains(text(),'Western Cape')]"
 map_search_cape_town_municipality = "//div[@class='truncate text-center'][contains(text(),'City of Cape Town')]"

@@ -36,7 +36,7 @@ class Common:
     def click_element_via_javascript_executor(self, xpath):
         script = "document.evaluate(\"{}\",document,null,"\
                  "XPathResult.FIRST_ORDERED_NODE_TYPE,null).singleNodeValue.click()".format(xpath)
-        time.sleep(3)
+        time.sleep(5)
         self.driver.execute_script(script)
 
     # Close the web driver

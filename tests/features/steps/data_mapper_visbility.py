@@ -3,6 +3,7 @@ from pages.data_mapper_locators import *
 import time
 import platform
 
+
 @given("I am on the Wazimap Homepage")
 def step_impl(context):
     if platform.system()=='Darwin':
@@ -10,8 +11,9 @@ def step_impl(context):
     else:
         url = "http://localhost:80"
     context.common.get_url(url)
-    profile_logo_xpath = context.common.find_element_by_xpath(profile_logo)
-    assert profile_logo_xpath.is_displayed()==True, 'Homepage is not loaded properly'
+    country = "//div[contains(text(),'country')]"
+    country_location_xpath = context.common.find_element_by_xpath(country)
+    assert country_location_xpath.is_displayed()==True, 'Homepage is not loaded properly'
 
 
 @when("I click on Data Mapper icon")
@@ -34,7 +36,7 @@ def step_impl(context):
 
 @then("User must see Demographic menu with its all 6 sub items")
 def step_impl(context):
-    time.sleep(2)
+    time.sleep(8)
     age_xpath = context.common.find_element_by_xpath(age)
     gender_xpath = context.common.find_element_by_xpath(gender)
     race_xpath = context.common.find_element_by_xpath(race)
@@ -56,7 +58,7 @@ def step_impl(context):
 
 @then("User must see the Youth population under the Age item")
 def step_impl(context):
-    #time.sleep(2)
+    time.sleep(8)
     youth_population_xpath = context.common.find_element_by_xpath(youth_population)
     assert youth_population_xpath.is_displayed()==True, 'Youth Population is not displayed'
 
@@ -68,7 +70,7 @@ def step_impl(context):
 
 @then("User must see the Youths and Non Youths")
 def step_impl(context):
-    time.sleep(2)
+    time.sleep(8)
     youth_population_youths_xpath = context.common.find_element_by_xpath(youths)
     youth_population_non_youths_xpath = context.common.find_element_by_xpath(non_youths)
     assert youth_population_youths_xpath.is_displayed()==True, 'Youths are not displayed'

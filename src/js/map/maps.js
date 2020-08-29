@@ -172,21 +172,22 @@ export class MapControl extends Observable {
         const self = this;
         const level = geography.level;
         const preferredChildren = this.config.preferredChildren[level];
-        let selectedBoundary;
         const parentBoundaries = geometries.parents;
+
+        let selectedBoundary;
 
         this.map.map_variables.currentLevel = level;
         this.map.map_variables.isLoading = false;
 
         this.limitGeoViewSelections(level);
-
-        // self.triggerEvent("map.layer.loading", this);
         self.triggerEvent("map.layer.loading", geography);
-        if (Object.values(geometries.children).length == 0) {
-            selectedBoundary = geometries.boundary;
-        } else {
-            selectedBoundary = getSelectedBoundary(level, geometries, this.config);
-        }
+        
+        selectedBoundary = getSelectedBoundary(level, geometries, this.config);
+        parentBoundary = geometries.boundary;
+
+        const noChildren = selectedBoundary == null;
+        if (noChildren)
+            selectedBoundary = parentBoundary;
 
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
             const leafletLayer = L.geoJson(l);
@@ -201,7 +202,7 @@ export class MapControl extends Observable {
 
         self.boundaryLayers.clearLayers();
 
-        var secondaryLayers = layers.slice(1);
+        const secondaryLayers = layers.slice(1);
         self.mainLayer = layers[0];
 
         secondaryLayers.forEach((layer) => {
@@ -213,9 +214,9 @@ export class MapControl extends Observable {
         self.layerStyler.setLayerToSelected(self.mainLayer);
         self.boundaryLayers.addLayer(self.mainLayer);
 
-        var alreadyZoomed = false;
+        let alreadyZoomed = false;
 
-        var layerPayload = function (layer) {
+        const layerPayload = function (layer) {
             var prop = layer.layer.feature.properties;
             return {
                 areaCode: prop.code,

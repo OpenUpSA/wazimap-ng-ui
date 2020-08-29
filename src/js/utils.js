@@ -80,19 +80,6 @@ export function setPopupStyle(clsName) {
     $('.map-tooltip__geography-chip').css('left', leftOffset);
 }
 
-export function getSelectedBoundary(level, geometries, config) {
-    let selectedBoundary = null;
-
-    const preferredChildren = config.preferredChildren[level];
-    const availableLevels = preferredChildren.filter(level => geometries.children[level] != undefined)
-    if (availableLevels.length > 0) {
-        const preferredLevel = availableLevels[0];
-        return geometries.children[preferredLevel]
-    } else {
-        return null;
-    }
-}
-
 export class ThemeStyle {
     static replaceChildDivWithThemeIcon(themeId, colorElement, iconElement) {
         let iconClass = '.';

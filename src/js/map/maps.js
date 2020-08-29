@@ -1,4 +1,4 @@
-import {Observable, numFmt, getSelectedBoundary} from '../utils';
+import {Observable} from '../utils';
 import {polygon} from 'leaflet/dist/leaflet-src.esm';
 import {LayerStyler} from './layerstyler';
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
@@ -168,6 +168,24 @@ export class MapControl extends Observable {
     }
 
 
+    getSelectedBoundary(level, geometries, config) {
+        let selectedBoundary = null;
+
+        const preferredChildren = config.preferredChildren[level];
+        if (preferredChildren == null)
+            return null;
+        
+        const availableLevels = preferredChildren.filter(level => geometries.children[level] != undefined)
+        if (availableLevels.length > 0) {
+            const preferredLevel = availableLevels[0];
+            return geometries.children[preferredLevel]
+        }
+
+        return null;
+    }
+
+
+
     overlayBoundaries(geography, geometries, zoomNeeded = false) {
         const self = this;
         const level = geography.level;
@@ -183,7 +201,7 @@ export class MapControl extends Observable {
         this.limitGeoViewSelections(level);
         self.triggerEvent("map.layer.loading", geography);
         
-        selectedBoundary = getSelectedBoundary(level, geometries, this.config);
+        selectedBoundary = this.getSelectedBoundary(level, geometries, this.config);
         parentBoundary = geometries.boundary;
 
         const noChildren = selectedBoundary == null;

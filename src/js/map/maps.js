@@ -175,6 +175,7 @@ export class MapControl extends Observable {
         const parentBoundaries = geometries.parents;
 
         let selectedBoundary;
+        let parentBoundary;
 
         this.map.map_variables.currentLevel = level;
         this.map.map_variables.isLoading = false;

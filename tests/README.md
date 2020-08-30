@@ -1,24 +1,29 @@
 ### Website Under Test is [Wazimap](https://wazimap-ng.africa/)
 > Implemented BDD framework.<br>
-> Implemented POM patter.<br>
+> Implemented POM pattern.<br>
 > Implemented test hooks. <br>
-#### Below test steps have followed:
+#### Below Features that are tested:
 
->1. When the page loads, the data mapper panel should be opened by clicking on the bottom tab 
-on the left side of the screen
->2. It should make sure that the Demographics menu item is there
->3. It should then click on the Demographics menu item and check if the Age item is there
->4. It should click on Age and check that Youth population is displayed
->5. Finally, it should click on Youth population and check that both Youths and Non youth are visible.
-
-#### How to run
->1. Open terminal / command line
->2. Go to the directory : .../project-qa-wazimap-bdd/tests
->3. type behave
+>1. Map
+>2. Rich Data
+>3. Data Mapper
+>4. Point Mapper
+>5. Tutorial
 
 #### Requirement
 >1. Python
 >2. Behave
+>3. Google Chrome
+
+#### How to run
+>1. Open terminal / command line
+>2. Go to the directory : .../wazimap-ng-ui
+>3. Type "Yarn start" on terminal
+>4. After step 3 is successful, Open another terminal
+>5. Type "./run_test.sh" on terminal
+#### In case of Web Hook Error or compatability error with chrome driver
+>1. Download Correct version of [chromedriver](https://chromedriver.chromium.org/downloads)
+>2. copy and replace it in the path /wazimap-ng-ui/webdriver/
 
 #### How to generate Allure reports
 > Type in the command: <br>

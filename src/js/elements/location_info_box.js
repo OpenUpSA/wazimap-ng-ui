@@ -1,5 +1,6 @@
-import {Observable, numFmt} from '../utils';
+import {Observable, numFmt, formatNumericalValue} from '../utils';
 import {Profile} from '../profile';
+import {format as d3format} from "d3-format/src/defaultLocale";
 
 const container = $('.map-location');
 const breadcrumbsContainer = $('.map-location__tags', container);
@@ -11,8 +12,10 @@ const metricTemplate = $('.location-highlight')[0].cloneNode(true);
 const infoContainer = $('.map__location-info', container);
 
 export class LocationInfoBox extends Observable {
-    constructor() {
+    constructor(_config) {
         super();
+
+        this.config = _config;
     }
 
     update(dataBundle) {
@@ -24,11 +27,14 @@ export class LocationInfoBox extends Observable {
     }
 
     updateHighlights(highlights) {
+        const self = this;
         const metricContainers = $('.location-highlight').remove();
         let metric = null;
         highlights.forEach(function (highlight) {
+            console.log({'hi': highlight, 'config': self.config})
+
             metric = metricTemplate.cloneNode(true);
-            $('.location-highlight__value', metric).text(highlight.value);
+            $('.location-highlight__value', metric).text(formatNumericalValue(highlight.value, self.config.config.formatting, highlight.method));
             $('.location-highlight__title', metric).text(highlight.label);
             metricContainer.append(metric);
 

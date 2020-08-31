@@ -1,5 +1,6 @@
 import {Indicator} from "./indicator";
-import {Observable} from "../utils";
+import {Observable, formatNumericalValue} from "../utils";
+import {format as d3format} from "d3-format/src/defaultLocale";
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -13,11 +14,12 @@ const descriptionTextClass = '.sub-category-header__description p';
 const descriptionClass = '.sub-category-header__description';
 
 export class Subcategory extends Observable {
-    constructor(wrapper, subcategory, detail, _isFirst) {
+    constructor(_config, wrapper, subcategory, detail, _isFirst) {
         super();
 
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
         isFirst = _isFirst;
+        this.config = _config;
 
         this.addKeyMetrics($(scHeaderClone), detail);
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
@@ -44,12 +46,13 @@ export class Subcategory extends Observable {
     }
 
     addIndicators = (wrapper, detail) => {
+        const self = this;
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
 
         for (const [title, indicatorData] of Object.entries(detail.indicators)) {
             let isLast = index === lastIndex;
-            let i = new Indicator(wrapper, title, indicatorData, detail, isLast);
+            let i = new Indicator(self.config, wrapper, title, indicatorData, detail, isLast);
             this.bubbleEvents(i, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
@@ -77,7 +80,7 @@ export class Subcategory extends Observable {
 
         key_metrics.forEach((km) => {
             let item = metricTemplate.cloneNode(true);
-            $('.key-metric__value div', item).text(km.value);
+            $('.key-metric__value div', item).text(formatNumericalValue(km.value, this.config.config.formatting, km.method));
             $('.key-metric__title', item).text(km.label);
             $('.key-metric__description', item).addClass('hidden');
             metricWrapper.append(item);

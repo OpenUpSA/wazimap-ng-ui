@@ -40,13 +40,13 @@ export default function configureApplication(profileId, config) {
         config.analytics.registerEvents(controller);
 
     const mapcontrol = new MapControl(config);
-    mapcontrol.popup = new Popup(mapcontrol.map);
+    mapcontrol.popup = new Popup(config, mapcontrol.map);
     const pointData = new PointData(api, mapcontrol.map, profileId, config);
     const pointDataTray = new PointDataTray(api, profileId);
     const mapchip = new MapChip(config.choropleth);
     const search = new Search(api, profileId, 2);
     const profileLoader = new ProfileLoader(config, api, profileId);
-    const locationInfoBox = new LocationInfoBox();
+    const locationInfoBox = new LocationInfoBox(config);
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
 

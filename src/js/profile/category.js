@@ -13,8 +13,8 @@ const descriptionClass = '.category-header__description';
 
 //category > subcategory > indicator > chart
 
-export class Category extends Observable{
-    constructor(category, detail, _profileWrapper, _id, _removePrevCategories) {
+export class Category extends Observable {
+    constructor(_config, category, detail, _profileWrapper, _id, _removePrevCategories) {
         super();
 
         categoryTemplate = $(categoryClass)[0].cloneNode(true);
@@ -22,6 +22,7 @@ export class Category extends Observable{
         removePrevCategories = _removePrevCategories;
 
         this.id = _id;
+        this.config = _config;
 
         this.prepareDomElements();
         this.addCategory(category, detail);
@@ -66,8 +67,8 @@ export class Category extends Observable{
         let index = 0;
         let lastIndex = Object.entries(detail.subcategories).length - 1;
         for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-        let isFirst = index === 0;
-            let sc = new Subcategory(wrapper, subcategory, detail, isFirst);
+            let isFirst = index === 0;
+            let sc = new Subcategory(this.config, wrapper, subcategory, detail, isFirst);
             this.bubbleEvents(sc, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

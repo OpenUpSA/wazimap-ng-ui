@@ -70,49 +70,14 @@ export function setPopupStyle(clsName) {
     $('.map__tooltip_value').css('white-space', 'nowrap');
 
     let popupWidth = 0;
-    let chipWidth = 0;
-    $('.leaflet-popup-content-wrapper').each(function () {
-        //when user hovers over a geo and then another geo, for a moment there are 2 .leaflet-popup-content-wrapper elements
-        //get the one with no style tag
-        //find a better solution
-        if (typeof $(this).find('.map-tooltip__geography-chip').attr('style') === 'undefined') {
-            popupWidth = this.clientWidth;
-            if (typeof $(this).find('.map-tooltip__geography-chip')[0] !== 'undefined') {
-                chipWidth = $(this).find('.map-tooltip__geography-chip')[0].clientWidth;
-            }
+    $('.leaflet-popup-content').each(function () {
+        if ($(this).width() < popupWidth || popupWidth <= 0) {
+            popupWidth = $(this).width();
         }
     });
 
-    let leftOffset = (popupWidth - chipWidth) / 2;
+    let leftOffset = (popupWidth - $('.map-tooltip__geography-chip').width()) / 2;
     $('.map-tooltip__geography-chip').css('left', leftOffset);
-}
-
-export function getSelectedBoundary(level, geometries, config) {
-    let selectedBoundary = null;
-
-    const preferredChildren = config.preferredChildren[level];
-
-    preferredChildren.forEach((preferredChild, i) => {
-        if (geometries.children[preferredChild] == undefined)
-            return;
-
-        if (selectedBoundary == null) {
-            selectedBoundary = geometries.children[preferredChild];
-        } else {
-            let secondarySelectedBoundary = geometries.children[preferredChild];
-            let loaded_codes = selectedBoundary.features.map((feature) => {
-                return feature.properties.code;
-            })
-
-            let new_features = secondarySelectedBoundary.features.filter((feature) => {
-                return !loaded_codes.includes(feature.properties.code);
-            })
-
-            selectedBoundary.features = selectedBoundary.features.concat(new_features);
-        }
-    })
-
-    return selectedBoundary;
 }
 
 export class ThemeStyle {
@@ -206,13 +171,3 @@ export function checkIterate(arr, func) {
     })
 }
 
-export function formatNumericalValue(number, formatting, method) {
-    let fn = null;
-    if (method === 'absolute_value') {
-        fn = d3format(formatting.integer);
-    } else {
-        fn = d3format(formatting.percentage);
-    }
-
-    return fn(number);
-}

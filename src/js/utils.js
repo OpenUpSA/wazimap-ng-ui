@@ -70,13 +70,18 @@ export function setPopupStyle(clsName) {
     $('.map__tooltip_value').css('white-space', 'nowrap');
 
     let popupWidth = 0;
-    $('.leaflet-popup-content').each(function () {
-        if ($(this).width() < popupWidth || popupWidth <= 0) {
-            popupWidth = $(this).width();
+    let chipWidth = 0;
+    $('.leaflet-popup-content-wrapper').each(function () {
+        //when user hovers over a geo and then another geo, for a moment there are 2 .leaflet-popup-content-wrapper elements
+        //get the one with no style tag
+        //find a better solution
+        if (typeof $(this).find('.map-tooltip__geography-chip').attr('style') === 'undefined') {
+            popupWidth = this.clientWidth;
+            chipWidth = $(this).find('.map-tooltip__geography-chip')[0].clientWidth;
         }
     });
 
-    let leftOffset = (popupWidth - $('.map-tooltip__geography-chip').width()) / 2;
+    let leftOffset = (popupWidth - chipWidth) / 2;
     $('.map-tooltip__geography-chip').css('left', leftOffset);
 }
 

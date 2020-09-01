@@ -985,6 +985,7 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  width: 100%;
   margin-top: 16px;
   margin-right: 6px;
   margin-left: 6px;
@@ -999,10 +1000,6 @@ label {
   -webkit-align-self: stretch;
   -ms-flex-item-align: stretch;
   align-self: stretch;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
   border-bottom: 1px dashed #e6e6e6;
   border-radius: 2px;
 }
@@ -4082,7 +4079,7 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 33.3333%;
+  min-width: 33.333%;
   padding: 32px 24px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -4105,6 +4102,10 @@ label {
 
 .styles__area_block.horizontal.wide {
   position: relative;
+}
+
+.styles__area_block.test {
+  min-width: auto;
 }
 
 .styles__section {
@@ -4447,8 +4448,8 @@ label {
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
-  border-right: 1.5px solid #ccc;
-  border-bottom: 1.5px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   background-color: #fff;
   box-shadow: 3px 3px 8px -4px rgba(0, 0, 0, 0.5);
   -webkit-transform: rotate(45deg);
@@ -4461,7 +4462,12 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  margin-right: 16px;
+  margin-bottom: 0.2em;
+  padding-right: 8px;
+  padding-left: 4px;
+  -webkit-align-self: stretch;
+  -ms-flex-item-align: stretch;
+  align-self: stretch;
 }
 
 .map-tooltip__value {
@@ -4469,20 +4475,28 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  min-width: 180px;
   margin-top: 6px;
   padding-top: 6px;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-  -ms-flex-pack: justify;
-  justify-content: space-between;
-  -webkit-box-align: start;
-  -webkit-align-items: flex-start;
-  -ms-flex-align: start;
-  align-items: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-align-self: stretch;
+  -ms-flex-item-align: stretch;
+  align-self: stretch;
   border-top: 1px solid #e6e6e6;
   font-size: 0.85em;
-  line-height: 150%;
-  font-weight: 500;
+  line-height: 1.4;
+}
+
+.map-tooltip__value.hidden {
+  display: none;
 }
 
 .map-tooltip__name {
@@ -4504,14 +4518,7 @@ label {
 }
 
 .tooltip__value_amount {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
+  color: #39ad84;
 }
 
 .map-tooltip {
@@ -4521,9 +4528,9 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  max-width: 350px;
+  max-width: 260px;
   min-height: 32px;
-  min-width: 110px;
+  min-width: 120px;
   padding: 12px 10px 8px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -4574,15 +4581,7 @@ label {
 }
 
 .tooltip__value_detail {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
   margin-left: 3px;
-  -webkit-box-pack: end;
-  -webkit-justify-content: flex-end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
   color: #999;
 }
 
@@ -6184,6 +6183,16 @@ label {
   right: 0%;
   bottom: 0%;
   height: 0px;
+}
+
+.tooltip__value_wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 @media screen and (max-width: 991px) {

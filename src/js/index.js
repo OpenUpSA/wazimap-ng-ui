@@ -21,7 +21,7 @@ const defaultConfig = new SAConfig();
 
 const isLocalhost = (hostname.indexOf("localhost") >= 0)
 if (!isLocalhost)
-    Sentry.init({ dsn: 'https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787' });
+    Sentry.init({dsn: 'https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787'});
 
 const profiles = {
     'wazi.webflow.io': {

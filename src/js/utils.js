@@ -77,7 +77,9 @@ export function setPopupStyle(clsName) {
         //find a better solution
         if (typeof $(this).find('.map-tooltip__geography-chip').attr('style') === 'undefined') {
             popupWidth = this.clientWidth;
-            chipWidth = $(this).find('.map-tooltip__geography-chip')[0].clientWidth;
+            if (typeof $(this).find('.map-tooltip__geography-chip')[0] !== 'undefined') {
+                chipWidth = $(this).find('.map-tooltip__geography-chip')[0].clientWidth;
+            }
         }
     });
 

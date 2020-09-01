@@ -8,3 +8,4 @@ yarn-error.log
 .idea
 __pycache__
 .DS_Store
+.idea/

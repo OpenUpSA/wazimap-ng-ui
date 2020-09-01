@@ -5,3 +5,5 @@ dist
 yarn-error.log
 *.sublime-workspace
 .env
+__pycache__
+.DS_Store

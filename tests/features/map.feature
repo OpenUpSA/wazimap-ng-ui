@@ -33,4 +33,19 @@ Feature: Map
     Then User must see the profile highlights
     Examples:
     |district          |province  |municipality|main place|
-    |Thabo Mofutsanyane|Free state|Dihlabeng   |Dihlabeng NU|
+    |Thabo Mofutsanyane|Free state|Dihlabeng|Dihlabeng NU|
+
+  Scenario Outline: Verify country, province, district, municipality and main place visibility on the map
+    Given I am on the Wazimap Homepage
+    And I click on search bar
+    And I select the <province>
+    Then User must be able to see the map of province
+    And I select the <district>
+    Then User must be able to see the map of district
+    And I select the <municipality>
+    Then User must be able to see the map of municipality
+    And I select the <main place>
+    Then User must be able to see the map of main place
+    Examples:
+      |province     |district|municipality  |main place|
+      |Northern Cape|Namakwa|Karoo Hoogland|Sutherland|

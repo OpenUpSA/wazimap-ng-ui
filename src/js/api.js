@@ -38,7 +38,7 @@ export class API extends Observable {
     }
 
     loadThemes(profileId) {
-        const url = `${this.baseUrl}/points/profile/${profileId}/themes/?format=json`;
+        const url = `${this.baseUrl}/profile/${profileId}/points/themes/?format=json`;
         return this.loadUrl(url);
     }
 
@@ -50,9 +50,9 @@ export class API extends Observable {
     loadPoints(profileId, categoryId, areaCode) {
         let url = '';
         if (areaCode == undefined)
-            url = `${this.baseUrl}/points/profile/${profileId}/category/${categoryId}/points/?format=json`;
+            url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/points/?format=json`;
         else
-            url = `${this.baseUrl}/points/profile/${profileId}/category/${categoryId}/geography/${areaCode}/points/?format=json`;
+            url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/geography/${areaCode}/points/?format=json`;
         return this.loadUrl(url);
     }
 

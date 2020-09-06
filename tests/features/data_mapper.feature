@@ -1,9 +1,9 @@
 # Created by siddharththakur at 31/07/20
 
 # Enter feature name here
-Feature: Data mapper visibility
+Feature: Data mapper
   # Enter feature description here
-  Data Mapper Contents are checked for their visibility.
+  Explore data categories available for this location. Click or tap a sub-indicator to show it on the map.
   # Enter scenario name here
   Scenario: Check for visibility of data mapper panel.
     # Enter steps here

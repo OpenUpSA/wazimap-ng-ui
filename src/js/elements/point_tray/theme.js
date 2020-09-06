@@ -49,7 +49,7 @@ export class Theme extends Observable {
             this.categories.push(category);
 
             $(self.element).find(categoryWrapperClsName).append(category.element);
-            $(categorySourceClsName, self.element).text(category.metadata.source);
+            $(categorySourceClsName, category.element).text(category.metadata.source);
         })
     }
 

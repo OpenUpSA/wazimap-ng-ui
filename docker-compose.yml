@@ -1,0 +1,6 @@
+version: "3"
+services:
+  webserver:
+    build: .
+    ports:
+      - "80:1234"

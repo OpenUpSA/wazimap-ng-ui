@@ -3,7 +3,6 @@ import 'babel-polyfill';
 import configureApplication from './load';
 import {Config as SAConfig} from './configurations/geography_sa';
 import {Config as GCROConfig} from './configurations/geography_gcro';
-import {Config as WorldConfig} from './configurations/geography_world';
 import Analytics from './analytics';
 import {API} from './api';
 import * as Sentry from '@sentry/browser';
@@ -11,7 +10,7 @@ import * as Sentry from '@sentry/browser';
 
 const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
 const productionUrl = 'https://production.wazimap-ng.openup.org.za';
-const config = new SAConfig();
+let config = new SAConfig();
 
 const hostname = window.location.hostname;
 const defaultProfile = 8;
@@ -20,7 +19,7 @@ const defaultConfig = new SAConfig();
 
 const isLocalhost = (hostname.indexOf("localhost") >= 0)
 if (!isLocalhost)
-    Sentry.init({ dsn: 'https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787' });
+    Sentry.init({dsn: 'https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787'});
 
 const profiles = {
     'wazi.webflow.io': {
@@ -29,7 +28,6 @@ const profiles = {
     },
     'localhost': {
         baseUrl: mainUrl,
-        //baseUrl: productionUrl,
         config: config
     },
     'localhost-dev': {
@@ -78,7 +76,7 @@ const profiles = {
     },
     'covid-ccij.openup.org.za': {
         baseUrl: mainUrl,
-        config: new WorldConfig()
+        config: config
     },
     'cfafrica.wazimap-ng.africa': {
         baseUrl: 'https://api.cfafrica.wazimap-ng.africa',
@@ -86,7 +84,7 @@ const profiles = {
     },
     'ccij-water.openup.org.za': {
         baseUrl: productionUrl,
-        config: new WorldConfig()
+        config: config
     }
 }
 

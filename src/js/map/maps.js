@@ -1,4 +1,4 @@
-import {Observable, numFmt, getSelectedBoundary} from '../utils';
+import {Observable} from '../utils';
 import {polygon} from 'leaflet/dist/leaflet-src.esm';
 import {LayerStyler} from './layerstyler';
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
@@ -168,25 +168,45 @@ export class MapControl extends Observable {
     }
 
 
+    getSelectedBoundary(level, geometries, config) {
+        let selectedBoundary = null;
+
+        const preferredChildren = config.preferredChildren[level];
+        if (preferredChildren == null)
+            return null;
+        
+        const availableLevels = preferredChildren.filter(level => geometries.children[level] != undefined)
+        if (availableLevels.length > 0) {
+            const preferredLevel = availableLevels[0];
+            return geometries.children[preferredLevel]
+        }
+
+        return null;
+    }
+
+
+
     overlayBoundaries(geography, geometries, zoomNeeded = false) {
         const self = this;
         const level = geography.level;
         const preferredChildren = this.config.preferredChildren[level];
-        let selectedBoundary;
         const parentBoundaries = geometries.parents;
+
+        let selectedBoundary;
+        let parentBoundary;
 
         this.map.map_variables.currentLevel = level;
         this.map.map_variables.isLoading = false;
 
         this.limitGeoViewSelections(level);
-
-        // self.triggerEvent("map.layer.loading", this);
         self.triggerEvent("map.layer.loading", geography);
-        if (Object.values(geometries.children).length == 0) {
-            selectedBoundary = geometries.boundary;
-        } else {
-            selectedBoundary = getSelectedBoundary(level, geometries, this.config);
-        }
+        
+        selectedBoundary = this.getSelectedBoundary(level, geometries, this.config);
+        parentBoundary = geometries.boundary;
+
+        const noChildren = selectedBoundary == null;
+        if (noChildren)
+            selectedBoundary = parentBoundary;
 
         const layers = [selectedBoundary, ...parentBoundaries].map(l => {
             const leafletLayer = L.geoJson(l);
@@ -201,7 +221,7 @@ export class MapControl extends Observable {
 
         self.boundaryLayers.clearLayers();
 
-        var secondaryLayers = layers.slice(1);
+        const secondaryLayers = layers.slice(1);
         self.mainLayer = layers[0];
 
         secondaryLayers.forEach((layer) => {
@@ -213,9 +233,9 @@ export class MapControl extends Observable {
         self.layerStyler.setLayerToSelected(self.mainLayer);
         self.boundaryLayers.addLayer(self.mainLayer);
 
-        var alreadyZoomed = false;
+        let alreadyZoomed = false;
 
-        var layerPayload = function (layer) {
+        const layerPayload = function (layer) {
             var prop = layer.layer.feature.properties;
             return {
                 areaCode: prop.code,

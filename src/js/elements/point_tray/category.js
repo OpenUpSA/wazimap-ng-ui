@@ -9,11 +9,24 @@ export class Category extends Observable {
         super()
 
         this.active = false;
-        this.data = data;
+        this.data = this.fixData(data);
         this.categoryItem = categoryItem;
         this.isLast = isLast;
         this.themeIndex = themeIndex;
         this.prepareDomElements();
+    }
+
+    fixData(data) {
+        data = {...data}
+
+        if (data.metadata == undefined)
+            data.metadata = {}
+
+        if (data.metadata.source == undefined)
+            data.metadata.source = ""
+
+        return data
+
     }
 
     prepareDomElements() {

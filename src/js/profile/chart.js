@@ -84,7 +84,6 @@ export class Chart extends Observable {
     }
 
     getValuesFromSubindicators = () => {
-        const fmt = d3format(",.2f");
         let arr = [];
         for (const [label, subindicator] of Object.entries(this.subindicators)) {
             let count = subindicator.count;

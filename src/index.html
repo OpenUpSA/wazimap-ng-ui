@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Tue Aug 25 2020 09:00:34 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Fri Sep 04 2020 06:59:16 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="5ecb7ed6bb713f67e148319d" data-wf-site="5ecb7ed6bb713f2f4b48319b">
 <head>
   <meta charset="utf-8">
@@ -31,6 +31,7 @@
         });
         window.gtag = gtag;
     </script>
+  <script src="https://kit.fontawesome.com/95e41092af.js" crossorigin="anonymous"></script>
 </head>
 <body class="body no-scroll">
   <div class="login-modal hidden">
@@ -186,6 +187,30 @@
           </div>
         </div>
         <div class="slide-nav w-slider-nav w-slider-nav-invert w-round"></div>
+      </div>
+    </div>
+  </div>
+  <div class="warning-modal">
+    <div class="warning">
+      <div class="warning__header">
+        <div class="warning-title">
+          <h1 class="clear">Map boundary change</h1>
+        </div>
+      </div>
+      <div class="warning__content">
+        <div class="w-richtext">
+          <p>Changing your boundary type might deselect your current geography or adjust your view of the map.</p>
+          <p><strong>Are you sure you would like to proceed?</strong></p>
+        </div>
+      </div>
+      <div id="w-node-0df91218fa5c-e148319d" class="warning__actions">
+        <div id="w-node-0df91218fa5d-e148319d" class="dismiss__no-show">
+          <div class="html-embed w-embed">
+            <p><input type="checkbox" class="custom-checkbox" name="dismiss__no-show" id="no-show"></p>
+          </div>
+          <div class="checkbox-label">Don&#x27;t show again</div>
+        </div>
+        <div id="w-node-0df91218fa61-e148319d" class="button-wrapper"><a data-w-id="d59f773f-aa49-25bd-47c6-0df91218fa62" href="#" class="button button--margin-right button--grey w-button">Cancel</a><a data-w-id="d59f773f-aa49-25bd-47c6-0df91218fa64" href="#" class="button button--margin-right w-button">Proceed</a></div>
       </div>
     </div>
   </div>
@@ -406,6 +431,33 @@
             <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
 </svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="map-geo-select hidden">
+        <div class="mag-geo__dropdown_wrap">
+          <div class="dropdown-menu__label">
+            <div>BOUNDARY type select:</div>
+          </div>
+          <div class="dropdown-menu">
+            <div class="dropdown-menu__trigger">
+              <div class="dropdown-menu__selected-item">
+                <div class="truncate">Loading...</div>
+              </div>
+              <div class="dropdown-menu__icon">
+                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+</svg></div>
+              </div>
+            </div>
+            <div class="dropdown-menu__content dropdown-menu__content--top scroll-element">
+              <div class="dropdown__list_item selected">
+                <div class="truncate">Loading...</div>
+              </div>
+              <div class="dropdown__list_item">
+                <div class="truncate">Loading...</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2115,7 +2167,7 @@
                 <div class="key-metric">
                   <div class="key-metric__card">
                     <div class="key-metric__value">
-                      <div>00</div>
+                      <div class="truncate">00</div>
                     </div>
                     <div class="key-metric__title">
                       <div>Metric title</div>
@@ -2128,7 +2180,7 @@
                 <div class="key-metric">
                   <div class="key-metric__card">
                     <div class="key-metric__value">
-                      <div>00</div>
+                      <div class="truncate">00</div>
                     </div>
                     <div class="key-metric__title">
                       <div>Metric title</div>
@@ -2141,7 +2193,7 @@
                 <div class="key-metric">
                   <div class="key-metric__card">
                     <div class="key-metric__value">
-                      <div>00</div>
+                      <div class="truncate">00</div>
                     </div>
                     <div class="key-metric__title">
                       <div>Metric title</div>
@@ -2154,7 +2206,7 @@
                 <div class="key-metric">
                   <div class="key-metric__card">
                     <div class="key-metric__value">
-                      <div>00</div>
+                      <div class="truncate">00</div>
                     </div>
                     <div class="key-metric__title">
                       <div>Metric title</div>

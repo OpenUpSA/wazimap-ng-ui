@@ -12,7 +12,7 @@ const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
 const productionUrl = 'https://production.wazimap-ng.openup.org.za';
 let config = new SAConfig();
 
-let hostname = window.location.hostname;
+let hostname = process.env.HOSTNAME || window.location.hostname;
 const defaultProfile = 8;
 const defaultUrl = productionUrl;
 const defaultConfig = new SAConfig();

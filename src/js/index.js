@@ -12,14 +12,23 @@ const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
 const productionUrl = 'https://production.wazimap-ng.openup.org.za';
 let config = new SAConfig();
 
-const hostname = window.location.hostname;
+let hostname = window.location.hostname;
 const defaultProfile = 8;
 const defaultUrl = productionUrl;
 const defaultConfig = new SAConfig();
 
 const isLocalhost = (hostname.indexOf("localhost") >= 0)
+const isNetlifyStaging = (hostname.indexOf('wazimap-staging.netlify.app') >= 0)
+const isNetlifyProduction = (hostname.indexOf('wazimap-production.netlify.app') >= 0)
+
 if (!isLocalhost)
     Sentry.init({dsn: 'https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787'});
+
+if (isNetlifyStaging)
+    hostname = "wazimap-ng.africa"
+else if (isNetlifyProduction)
+    hostname = "beta.youthexplorer.org.za"
+
 
 const profiles = {
     'wazi.webflow.io': {

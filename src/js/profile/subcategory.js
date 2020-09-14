@@ -1,6 +1,5 @@
 import {Indicator} from "./indicator";
 import {Observable, formatNumericalValue} from "../utils";
-import {format as d3format} from "d3-format/src/defaultLocale";
 
 let isFirst = false;
 let scHeaderClone = null;

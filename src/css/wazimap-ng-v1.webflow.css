@@ -6379,6 +6379,7 @@ label {
   border-radius: 4px;
   background-color: #fff;
   box-shadow: 0 0 0 -1px rgba(0, 0, 0, 0.2), 0 1px 6px -2px rgba(0, 0, 0, 0.3);
+  z-index: 999;
 }
 
 .mag-geo__dropdown_wrap {

@@ -1,15 +1,15 @@
-import {numFmt, percFmt, Observable, setPopupStyle, formatNumericalValue} from '../utils';
+import {Observable, setPopupStyle, formatNumericalValue} from '../utils';
 
 
 /**
  * this class creates & manipulates the popup over the map
  */
 export class Popup extends Observable {
-    constructor(_config, _map) {
+    constructor(config, map) {
         super();
 
-        this.map = _map;
-        this.config = _config;
+        this.map = map;
+        this.config = config;
         this.prepareDomElements();
     }
 

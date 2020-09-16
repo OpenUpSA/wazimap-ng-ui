@@ -12,7 +12,7 @@ const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
 const productionUrl = 'https://production.wazimap-ng.openup.org.za';
 let config = new SAConfig();
 
-const hostname = window.location.hostname;
+const hostname = 'beta.youthexplorer.org.za';    // window.location.hostname;
 const defaultProfile = 8;
 const defaultUrl = productionUrl;
 const defaultConfig = new SAConfig();

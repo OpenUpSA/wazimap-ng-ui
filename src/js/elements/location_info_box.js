@@ -11,10 +11,10 @@ const metricTemplate = $('.location-highlight')[0].cloneNode(true);
 const infoContainer = $('.map__location-info', container);
 
 export class LocationInfoBox extends Observable {
-    constructor(config) {
+    constructor(formattingConfig) {
         super();
 
-        this.config = config;
+        this.formattingConfig = formattingConfig;
     }
 
     update(dataBundle) {
@@ -31,7 +31,7 @@ export class LocationInfoBox extends Observable {
         let metric = null;
         highlights.forEach(function (highlight) {
             metric = metricTemplate.cloneNode(true);
-            $('.location-highlight__value', metric).text(formatNumericalValue(highlight.value, self.config.config.formatting, highlight.method));
+            $('.location-highlight__value', metric).text(formatNumericalValue(highlight.value, self.formattingConfig, highlight.method));
             $('.location-highlight__title', metric).text(highlight.label);
             metricContainer.append(metric);
 

@@ -5,11 +5,11 @@ import {Observable, setPopupStyle, formatNumericalValue} from '../utils';
  * this class creates & manipulates the popup over the map
  */
 export class Popup extends Observable {
-    constructor(config, map) {
+    constructor(formattingConfig, map) {
         super();
 
         this.map = map;
-        this.config = config;
+        this.formattingConfig = formattingConfig;
         this.prepareDomElements();
     }
 
@@ -79,8 +79,8 @@ export class Popup extends Observable {
             for (const [geographyCode, count] of Object.entries(state.subindicator.children)) {
                 if (geographyCode == areaCode) {
                     isChild = true;
-                    const countFmt = formatNumericalValue(count, self.config.config.formatting, 'absolute_value');
-                    const perc = formatNumericalValue(payload.layer.feature.properties.percentage, self.config.config.formatting, 'percentage');
+                    const countFmt = formatNumericalValue(count, self.formattingConfig, 'absolute_value');
+                    const perc = formatNumericalValue(payload.layer.feature.properties.percentage, self.formattingConfig, 'percentage');
 
                     $('.map-tooltip__value', item).removeClass('hidden');
                     $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);

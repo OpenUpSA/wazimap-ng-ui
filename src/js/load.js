@@ -29,6 +29,7 @@ import {configureMapEvents} from './setup/map';
 import {configureSpinnerEvents} from './setup/spinner';
 import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
+import {BoundryTypeBox} from "./map/boundry_type_box";
 
 
 export default function configureApplication(profileId, config) {
@@ -39,16 +40,25 @@ export default function configureApplication(profileId, config) {
     if (config.analytics)
         config.analytics.registerEvents(controller);
 
+    let defaultFormattingConfig = {
+        decimal: ",.1f",
+        integer: ",.2d",
+        percentage: ".1%"
+    }
+    let serverFormattingConfig = config.config.formatting;
+    let formattingConfig = {...defaultFormattingConfig, ...serverFormattingConfig};
+
     const mapcontrol = new MapControl(config);
-    mapcontrol.popup = new Popup(config, mapcontrol.map);
+    mapcontrol.popup = new Popup(formattingConfig, mapcontrol.map);
     const pointData = new PointData(api, mapcontrol.map, profileId, config);
     const pointDataTray = new PointDataTray(api, profileId);
     const mapchip = new MapChip(config.choropleth);
     const search = new Search(api, profileId, 2);
     const profileLoader = new ProfileLoader(config, api, profileId);
-    const locationInfoBox = new LocationInfoBox(config);
+    const locationInfoBox = new LocationInfoBox(formattingConfig);
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
+    //const boundryTypeBox = new BoundryTypeBox();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();

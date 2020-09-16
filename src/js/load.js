@@ -1,7 +1,6 @@
 import {select as d3select} from 'd3-selection';
 import Controller from './controller';
-//import ProfileLoader from './page_profile';   //emre - older
-import ProfileLoader from "./profile/profile_loader";   //emre - newer
+import ProfileLoader from "./profile/profile_loader";
 import {MapControl} from './map/maps';
 import {numFmt} from './utils';
 import {Profile} from './profile';
@@ -29,7 +28,6 @@ import {configureMapEvents} from './setup/map';
 import {configureSpinnerEvents} from './setup/spinner';
 import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
-//import {BoundryTypeBox} from "./map/boundry_type_box";
 
 
 export default function configureApplication(profileId, config) {
@@ -58,7 +56,6 @@ export default function configureApplication(profileId, config) {
     const locationInfoBox = new LocationInfoBox(formattingConfig);
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
-    //const boundryTypeBox = new BoundryTypeBox();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();

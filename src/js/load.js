@@ -52,7 +52,7 @@ export default function configureApplication(profileId, config) {
     const pointDataTray = new PointDataTray(api, profileId);
     const mapchip = new MapChip(config.choropleth);
     const search = new Search(api, profileId, 2);
-    const profileLoader = new ProfileLoader(config, api, profileId);
+    const profileLoader = new ProfileLoader(formattingConfig, api, profileId);
     const locationInfoBox = new LocationInfoBox(formattingConfig);
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();

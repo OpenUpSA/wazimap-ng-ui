@@ -29,7 +29,7 @@ import {configureMapEvents} from './setup/map';
 import {configureSpinnerEvents} from './setup/spinner';
 import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
-import {BoundryTypeBox} from "./map/boundry_type_box";
+//import {BoundryTypeBox} from "./map/boundry_type_box";
 
 
 export default function configureApplication(profileId, config) {

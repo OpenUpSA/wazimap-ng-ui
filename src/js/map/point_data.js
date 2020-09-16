@@ -19,13 +19,12 @@ let activePoints = [];  //the visible points on the map
  * this class creates the point data dialog
  */
 export class PointData extends Observable {
-    constructor(api, _map, profileId, config) {
+    constructor(api, _map, profileId) {
         super();
 
         this.api = api;
         this.map = _map;
         this.profileId = profileId;
-        this.config = config;
 
         this.markerLayer = this.genLayer();
         this.categoryLayers = {};

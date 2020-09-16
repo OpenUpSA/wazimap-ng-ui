@@ -11,7 +11,7 @@ const tooltipClass = '.bar-chart__row_tooltip';
 let tooltipClone = null;
 
 export class Chart extends Observable {
-    constructor(_config, subindicators, groups, detail, graphValueType, _subCategoryNode, title) {
+    constructor(formattingConfig, subindicators, groups, detail, graphValueType, _subCategoryNode, title) {
         //we need the detail parameter to be able to filter
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
@@ -19,7 +19,7 @@ export class Chart extends Observable {
         this.subindicators = subindicators;
         this.graphValueType = graphValueType;
         this.title = title;
-        this.config = _config;
+        this.formattingConfig = formattingConfig;
 
         tooltipClone = $(tooltipClass)[0].cloneNode(true);
         this.subCategoryNode = _subCategoryNode;
@@ -92,8 +92,8 @@ export class Chart extends Observable {
                 label: subindicator.keys,
                 value: val,
                 valueText: this.graphValueType === graphValueTypes[0] ?
-                    formatNumericalValue(val / 100, this.config.config.formatting, 'percentage') :
-                    formatNumericalValue(val, this.config.config.formatting, 'absolute_value')
+                    formatNumericalValue(val / 100, this.formattingConfig, 'percentage') :
+                    formatNumericalValue(val, this.formattingConfig, 'absolute_value')
             })
         }
 

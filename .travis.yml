@@ -16,6 +16,6 @@ services:
 before_script:
   - docker-compose up -d
 script:
-  - ./run_test.sh
+  - CYPRESS_BASE_URL=https://wazimap-staging.netlify.app npm run cypress
 after_script:
   - docker-compose down

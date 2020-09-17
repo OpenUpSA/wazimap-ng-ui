@@ -45,13 +45,13 @@ export class Subcategory extends Observable {
     }
 
     addIndicators = (wrapper, detail) => {
-        const self = this;
+        let formattingConfig = this.formattingConfig;
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
 
         for (const [title, indicatorData] of Object.entries(detail.indicators)) {
             let isLast = index === lastIndex;
-            let i = new Indicator(self.formattingConfig, wrapper, title, indicatorData, detail, isLast);
+            let i = new Indicator(formattingConfig, wrapper, title, indicatorData, detail, isLast);
             this.bubbleEvents(i, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

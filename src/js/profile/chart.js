@@ -1,4 +1,4 @@
-import {numFmtAlt, Observable} from "../utils";
+import {numFmtAlt, Observable, formatNumericalValue} from "../utils";
 import {format as d3format} from "d3-format/src/defaultLocale";
 import {horizontalBarChart} from "../reusable-charts/horizontal-bar-chart";
 import {select as d3select} from "d3-selection";
@@ -11,7 +11,7 @@ const tooltipClass = '.bar-chart__row_tooltip';
 let tooltipClone = null;
 
 export class Chart extends Observable {
-    constructor(subindicators, groups, detail, graphValueType, _subCategoryNode, title) {
+    constructor(formattingConfig, subindicators, groups, detail, graphValueType, _subCategoryNode, title) {
         //we need the detail parameter to be able to filter
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
@@ -19,6 +19,7 @@ export class Chart extends Observable {
         this.subindicators = subindicators;
         this.graphValueType = graphValueType;
         this.title = title;
+        this.formattingConfig = formattingConfig;
 
         tooltipClone = $(tooltipClass)[0].cloneNode(true);
         this.subCategoryNode = _subCategoryNode;
@@ -83,7 +84,6 @@ export class Chart extends Observable {
     }
 
     getValuesFromSubindicators = () => {
-        const fmt = d3format(",.2f");
         let arr = [];
         for (const [label, subindicator] of Object.entries(this.subindicators)) {
             let count = subindicator.count;
@@ -91,7 +91,9 @@ export class Chart extends Observable {
             arr.push({
                 label: subindicator.keys,
                 value: val,
-                valueText: this.graphValueType === graphValueTypes[0] ? fmt(val) + '%' : fmt(val)
+                valueText: this.graphValueType === graphValueTypes[0] ?
+                    formatNumericalValue(val / 100, this.formattingConfig, 'percentage') :
+                    formatNumericalValue(val, this.formattingConfig, 'absolute_value')
             })
         }
 
@@ -167,7 +169,7 @@ export class Chart extends Observable {
     handleChartFilter = (detail, groups, title) => {
         let siFilter = new SubindicatorFilter();
         this.bubbleEvent(siFilter, 'point_tray.subindicator_filter.filter')
-        
+
         let dropdowns = $(this.subCategoryNode).find('.filter__dropdown_wrap');
         const filterArea = $(this.subCategoryNode).find('.profile-indicator__filters');
 

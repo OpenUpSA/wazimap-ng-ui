@@ -1,7 +1,6 @@
 import {select as d3select} from 'd3-selection';
 import Controller from './controller';
-//import ProfileLoader from './page_profile';   //emre - older
-import ProfileLoader from "./profile/profile_loader";   //emre - newer
+import ProfileLoader from "./profile/profile_loader";
 import {MapControl} from './map/maps';
 import {numFmt} from './utils';
 import {Profile} from './profile';
@@ -39,14 +38,22 @@ export default function configureApplication(profileId, config) {
     if (config.analytics)
         config.analytics.registerEvents(controller);
 
+    let defaultFormattingConfig = {
+        decimal: ",.1f",
+        integer: ",.2d",
+        percentage: ".1%"
+    }
+    let serverFormattingConfig = config.config.formatting;
+    let formattingConfig = {...defaultFormattingConfig, ...serverFormattingConfig};
+
     const mapcontrol = new MapControl(config);
-    mapcontrol.popup = new Popup(mapcontrol.map);
+    mapcontrol.popup = new Popup(formattingConfig, mapcontrol.map);
     const pointData = new PointData(api, mapcontrol.map, profileId, config);
     const pointDataTray = new PointDataTray(api, profileId);
     const mapchip = new MapChip(config.choropleth);
     const search = new Search(api, profileId, 2);
-    const profileLoader = new ProfileLoader(config, api, profileId);
-    const locationInfoBox = new LocationInfoBox();
+    const profileLoader = new ProfileLoader(formattingConfig, api, profileId);
+    const locationInfoBox = new LocationInfoBox(formattingConfig);
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
 

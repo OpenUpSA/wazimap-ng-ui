@@ -5,21 +5,21 @@ Feature: Tutorial (?)
   Scenario: Verify the sandbox information is displayed
     # Enter steps here
     Given I am on the Wazimap Homepage
-    When I click on tutorial
-    Then Tutorial dialog box and Introduction should be displayed
-    And I click on next
-    Then Location Search details should be displayed
-    And I click on next
-    Then Location Panel details should be displayed
-    And I click on next
-    Then Rich data details should be displayed
-    And I click on next
-    Then Point mapper details should be displayed
-    And I click on next
+    When I click on Tutorial
+		Then "Introduction:" should be displayed
+    And I click on Next
+		Then "Location Search:" should be displayed
+    And I click on Next
+		Then "Location Panel:" should be displayed
+    And I click on Next
+		Then "Rich data:" should be displayed
+    And I click on Next
+		Then "Point mapper:" should be displayed
+    And I click on Next
     Then Data mapper details should be displayed
-    And I click on next
+    And I click on Next
     Then Data Filtering should be displayed
-    And I click on next
+    And I click on Next
     Then Learn More should be displayed
     And I click on back arrow
     Then Data Filtering should be displayed

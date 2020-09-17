@@ -63,6 +63,7 @@ export class Subcategory extends Observable {
 
     addKeyMetrics = (wrapper, detail) => {
         let key_metrics = detail.key_metrics;
+        let formattingConfig = this.formattingConfig;
 
         let metricWrapper = $(wrapper).find(keyMetricWrapperClass);
         $(metricWrapper).find(keyMetricClass).remove();
@@ -79,7 +80,7 @@ export class Subcategory extends Observable {
 
         key_metrics.forEach((km) => {
             let item = metricTemplate.cloneNode(true);
-            $('.key-metric__value div', item).text(formatNumericalValue(km.value, this.formattingConfig, km.method));
+            $('.key-metric__value div', item).text(formatNumericalValue(km.value, formattingConfig, km.method));
             $('.key-metric__title', item).text(km.label);
             $('.key-metric__description', item).addClass('hidden');
             metricWrapper.append(item);

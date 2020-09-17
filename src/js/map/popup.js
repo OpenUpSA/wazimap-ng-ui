@@ -1,14 +1,15 @@
-import {numFmt, percFmt, Observable, setPopupStyle} from '../utils';
+import {Observable, setPopupStyle, formatNumericalValue} from '../utils';
 
 
 /**
  * this class creates & manipulates the popup over the map
  */
 export class Popup extends Observable {
-    constructor(_map) {
+    constructor(formattingConfig, map) {
         super();
 
-        this.map = _map;
+        this.map = map;
+        this.formattingConfig = formattingConfig;
         this.prepareDomElements();
     }
 
@@ -71,20 +72,21 @@ export class Popup extends Observable {
     }
 
     setTooltipSubindicators = (payload, state, item, areaCode) => {
+        let formattingConfig = this.formattingConfig;
         if (state.subindicator != null) {
             //if any subindicator selected
             let isChild = false;
             for (const [geographyCode, count] of Object.entries(state.subindicator.children)) {
                 if (geographyCode == areaCode) {
                     isChild = true;
-                    const countFmt = numFmt(count);
-                    const perc = percFmt(payload.layer.feature.properties.percentage);
+                    const countFmt = formatNumericalValue(count, formattingConfig, 'absolute_value');
+                    const perc = formatNumericalValue(payload.layer.feature.properties.percentage, formattingConfig, 'percentage');
 
                     $('.map-tooltip__value', item).removeClass('hidden');
                     $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);
                     $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
                     if (state.subindicator.choropleth_method != 'absolute_value') {
-                        $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc} %)`);
+                        $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc})`);
                     } else {
                         $('.map-tooltip__value .tooltip__value_detail div', item).text('');
                     }

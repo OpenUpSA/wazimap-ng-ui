@@ -1,4 +1,4 @@
-import {Observable, numFmt} from '../utils';
+import {Observable, numFmt, formatNumericalValue} from '../utils';
 import {Profile} from '../profile';
 
 const container = $('.map-location');
@@ -11,8 +11,10 @@ const metricTemplate = $('.location-highlight')[0].cloneNode(true);
 const infoContainer = $('.map__location-info', container);
 
 export class LocationInfoBox extends Observable {
-    constructor() {
+    constructor(formattingConfig) {
         super();
+
+        this.formattingConfig = formattingConfig;
     }
 
     update(dataBundle) {
@@ -24,11 +26,12 @@ export class LocationInfoBox extends Observable {
     }
 
     updateHighlights(highlights) {
+        let formattingConfig = this.formattingConfig;
         const metricContainers = $('.location-highlight').remove();
         let metric = null;
         highlights.forEach(function (highlight) {
             metric = metricTemplate.cloneNode(true);
-            $('.location-highlight__value', metric).text(highlight.value);
+            $('.location-highlight__value', metric).text(formatNumericalValue(highlight.value, formattingConfig, highlight.method));
             $('.location-highlight__title', metric).text(highlight.label);
             metricContainer.append(metric);
 

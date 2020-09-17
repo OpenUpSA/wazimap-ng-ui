@@ -10,10 +10,11 @@ const chartDescClass = '.profile-indicator__chart_description p';
 const sourceClass = '.data-source';
 
 export class Indicator extends Observable {
-    constructor(wrapper, title, indicatorData, detail, _isLast) {
+    constructor(formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
         super();
         this.groups = [];
         this.subindicators = indicatorData.subindicators;
+        this.formattingConfig = formattingConfig;
 
         indicatorClone = $(indicatorClass)[0].cloneNode(true);
 
@@ -37,7 +38,7 @@ export class Indicator extends Observable {
             }
         }
 
-        let c = new Chart(this.subindicators, this.groups, detail, 'Percentage', indicator, title);
+        let c = new Chart(this.formattingConfig, this.subindicators, this.groups, detail, 'Percentage', indicator, title);
         this.bubbleEvents(c, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

@@ -26,12 +26,12 @@ export class LocationInfoBox extends Observable {
     }
 
     updateHighlights(highlights) {
-        const self = this;
+        let formattingConfig = this.formattingConfig;
         const metricContainers = $('.location-highlight').remove();
         let metric = null;
         highlights.forEach(function (highlight) {
             metric = metricTemplate.cloneNode(true);
-            $('.location-highlight__value', metric).text(formatNumericalValue(highlight.value, self.formattingConfig, highlight.method));
+            $('.location-highlight__value', metric).text(formatNumericalValue(highlight.value, formattingConfig, highlight.method));
             $('.location-highlight__title', metric).text(highlight.label);
             metricContainer.append(metric);
 

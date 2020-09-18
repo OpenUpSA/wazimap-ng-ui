@@ -59,9 +59,9 @@
     "clean-files": "cp dist/js*.js dist/wazimap-ng.js; cp dist/js*.js.map dist/wazimap-ng.js.map; cp dist/js*.css dist/wazimap-ng.css"
   },
   "browserslist": "> 0.25%, not dead",
-	"cypress-cucumber-preprocessor": {
-		"nonGlobalStepDefinitions": true,
-		"stepDefinitions": "__tests__/integration",
-		"commonPath": "__tests__/integration/common"
-	}
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "stepDefinitions": "__tests__/integration",
+    "commonPath": "__tests__/integration/common"
+  }
 }

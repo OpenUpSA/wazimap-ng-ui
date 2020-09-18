@@ -12,16 +12,16 @@ Feature: Tutorial (?)
     And I click on Next
 		Then "Location Panel:" should be displayed
     And I click on Next
-		Then "Rich data:" should be displayed
+		Then "Rich Data:" should be displayed
     And I click on Next
-		Then "Point mapper:" should be displayed
+		Then "Point Mapper:" should be displayed
     And I click on Next
-    Then Data mapper details should be displayed
+		Then "Data Mapper:" should be displayed
     And I click on Next
-    Then Data Filtering should be displayed
+		Then "Data Filtering:" should be displayed
     And I click on Next
-    Then Learn More should be displayed
-    And I click on back arrow
-    Then Data Filtering should be displayed
-    And I click on close arrow
-    But Tutorial dialog box and Introduction should not be displayed
+		Then "Learn more:" should be displayed
+    And I click back link
+		Then "Data Filtering:" should be displayed
+    And I click on close
+    Then Tutorial dialog box and Introduction should not be displayed

@@ -8,6 +8,7 @@ cache:
   - yarn: true
   - directories:
     - node_modules
+    - .cache/Cypress
 install:
   - npm install
 script:

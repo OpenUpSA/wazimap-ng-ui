@@ -14,6 +14,12 @@ export function configureMapEvents(controller, objs = {mapcontrol: null}) {
         mapcontrol.overlayBoundaries(geography, geometries)
     });
 
+    controller.on('redraw', payload => {
+        const geography = payload.payload.profile.geography;
+        const geometries = payload.payload.geometries;
+        mapcontrol.overlayBoundaries(geography, geometries)
+    });
+
 
     controller.bubbleEvent(zoomToggle, 'zoomToggled');
     controller.bubbleEvents(mapcontrol, [

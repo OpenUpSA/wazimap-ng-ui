@@ -14,11 +14,12 @@ let profileWrapper = null;
 
 
 export default class ProfileLoader extends Observable {
-    constructor(_config, _api, _profileId) {
+    constructor(formattingConfig, _api, _profileId) {
         super();
 
         this.api = _api;
         this.profileId = _profileId;
+        this.formattingConfig = formattingConfig;
     }
 
     loadProfile = (dataBundle) => {
@@ -45,7 +46,7 @@ export default class ProfileLoader extends Observable {
     }
 
     updateGeography = (profile) => {
-        if  ($('.location__title h1').length <= 0){
+        if ($('.location__title h1').length <= 0) {
             let h1 = document.createElement('h1');
             $(h1).addClass('cc-clear');
             $('.location__title').append(h1);
@@ -64,7 +65,7 @@ export default class ProfileLoader extends Observable {
         for (const [category, detail] of Object.entries(categories)) {
             const id = this.getNewId();
             this.createNavItem(id, category);
-            let c = new Category(category, detail, profileWrapper, id, removePrevCategories);
+            let c = new Category(this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories);
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

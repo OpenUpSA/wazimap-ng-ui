@@ -178,3 +178,13 @@ export function checkIterate(arr, func) {
     })
 }
 
+export function formatNumericalValue(number, formatting, method) {
+    let fn = d3format(formatting.percentage);
+    if (method === 'absolute_value') {
+        fn = d3format(formatting.integer);
+    } else if (method === 'decimal') {
+        fn = d3format(formatting.decimal);
+    }
+
+    return fn(number);
+}

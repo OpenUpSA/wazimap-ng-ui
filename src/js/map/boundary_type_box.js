@@ -83,7 +83,7 @@ export class BoundaryTypeBox extends Observable {
         let payload = {
             confirmed: false
         } 
-        
+
         if (alreadyConfirmed) {
             return new Promise(function (resolve) {
                 payload.confirmed = true;
@@ -129,7 +129,6 @@ export class BoundaryTypeBox extends Observable {
     rememberChoice = () => {
         let remember = $('input[id="no-show"]').is(':checked');
         if (remember) {
-            console.log('here')
             this.createCookie(cookieName, true, 365);
         }
     }

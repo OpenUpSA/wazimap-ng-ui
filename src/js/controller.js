@@ -309,7 +309,13 @@ export default class Controller extends Observable {
         this.reDrawChildren();
     }
 
-    reDrawChildren = () => {
+    reDrawChildren() {
+        let currentLevel = this.state.profile.profile.geography.level;
+
+        if (currentLevel !== 'municipality') {
+            return;
+        }
+
         const payload = {
             profile: this.state.profile.profile,
             geometries: this.state.profile.geometries
@@ -317,28 +323,4 @@ export default class Controller extends Observable {
 
         this.triggerEvent('redraw', payload);
     }
-
-    // registerWebflowEvents() {
-    //     const events = ["click", "mouseover", "mouseout"];
-    //     const self = this;
-    //     events.forEach(function (ev) {
-    //         let eventElements = $(`*[data-event=${ev}]`);
-    //         Object.values(eventElements).forEach(el => {
-    //             if (el.attributes == undefined) return;
-    //             const functionAttribute = el.attributes["data-function"];
-
-    //             if (functionAttribute == undefined) return;
-    //             const functions = functionAttribute.value;
-
-    //             if (functions == undefined) return;
-
-    //             functions.split(",").forEach(foo => {
-    //                 const func = self[`on${foo}`];
-    //                 if (func != undefined) {
-    //                     $(el).on(ev, el => func(el))
-    //                 }
-    //             })
-    //         })
-    //     })
-    // }
 }

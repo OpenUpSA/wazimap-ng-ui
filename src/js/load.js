@@ -47,7 +47,6 @@ export default function configureApplication(profileId, config) {
     }
     let serverFormattingConfig = config.config.formatting;
     let formattingConfig = {...defaultFormattingConfig, ...serverFormattingConfig};
-    let preferred_children = config.config.preferred_children;
 
     const mapcontrol = new MapControl(config);
     mapcontrol.popup = new Popup(formattingConfig, mapcontrol.map);
@@ -59,7 +58,7 @@ export default function configureApplication(profileId, config) {
     const locationInfoBox = new LocationInfoBox(formattingConfig);
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
-    const boundaryTypeBox = new BoundaryTypeBox(preferred_children);
+    const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();

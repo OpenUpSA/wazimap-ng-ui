@@ -6372,6 +6372,7 @@ label {
   top: auto;
   right: 0%;
   bottom: 0%;
+  z-index: 999;
   min-height: 44px;
   margin-right: 50px;
   margin-bottom: 10px;
@@ -6404,7 +6405,10 @@ label {
   right: 0%;
   bottom: 0%;
   z-index: 3;
-  display: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   width: 100vw;
   height: 100vh;
   -webkit-box-pack: center;
@@ -6416,6 +6420,10 @@ label {
   -ms-flex-align: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.warning-modal.hidden {
+  display: none;
 }
 
 .warning {

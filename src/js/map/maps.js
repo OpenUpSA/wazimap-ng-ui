@@ -45,6 +45,7 @@ export class MapControl extends Observable {
         this.map.on("zoomend", e => this.onZoomChanged(e));
         this.map.on("zoomend", e => this.triggerEvent("map.zoomed", this.map))
     }
+
     enableZoom(enabled) {
         this.zoomEnabled = enabled;
     }
@@ -174,8 +175,9 @@ export class MapControl extends Observable {
         const preferredChildren = config.preferredChildren[level];
         if (preferredChildren == null)
             return null;
-        
+
         const availableLevels = preferredChildren.filter(level => geometries.children[level] != undefined)
+
         if (availableLevels.length > 0) {
             const preferredLevel = availableLevels[0];
             return geometries.children[preferredLevel]
@@ -183,7 +185,6 @@ export class MapControl extends Observable {
 
         return null;
     }
-
 
 
     overlayBoundaries(geography, geometries, zoomNeeded = false) {
@@ -200,7 +201,7 @@ export class MapControl extends Observable {
 
         this.limitGeoViewSelections(level);
         self.triggerEvent("map.layer.loading", geography);
-        
+
         selectedBoundary = this.getSelectedBoundary(level, geometries, this.config);
         parentBoundary = geometries.boundary;
 
@@ -267,7 +268,10 @@ export class MapControl extends Observable {
                     self.triggerEvent("layer.mouse.out", layerPayload(el));
                 })
                 .on("mousemove", (el) => {
-                    self.triggerEvent("layer.mouse.move", {layer: layerPayload(el), popup: this.map.map_variables.popup});
+                    self.triggerEvent("layer.mouse.move", {
+                        layer: layerPayload(el),
+                        popup: this.map.map_variables.popup
+                    });
                 })
                 .addTo(self.map);
 

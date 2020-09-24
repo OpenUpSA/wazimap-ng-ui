@@ -283,6 +283,23 @@ export default class Controller extends Observable {
         Webflow.ready();
     }
 
+    onBoundaryTypeChange = (payload) => {
+        let currentLevel = payload['current_level'];
+        let selectedType = payload['selected_type'];
+
+        this.state.preferredChild = selectedType;
+        this.triggerEvent("preferredChildChange", selectedType);
+        // TODO remove SA specfic stuff
+
+        let arr = this.config.config['preferred_children'][currentLevel];
+        let index = arr.indexOf(selectedType);
+        [arr[0], arr[index]] = [arr[index], arr[0]];
+
+        this.config.config['preferred_children'][currentLevel] = arr;
+
+        this.reDrawChildren();
+    }
+
     onPreferredChildChange(childLevel) {
         this.state.preferredChild = childLevel;
         this.triggerEvent("preferredChildChange", childLevel);
@@ -292,18 +309,13 @@ export default class Controller extends Observable {
         this.reDrawChildren();
     }
 
-    reDrawChildren() {
-        let currentLevel = this.state.profile.profile.geography.level;
-
-        if (currentLevel !== 'municipality') {
-            return;
-        }
-
+    reDrawChildren = () => {
         const payload = {
             profile: this.state.profile.profile,
+            geometries: this.state.profile.geometries
         }
 
-        this.onHashChange(payload, false);
+        this.triggerEvent('redraw', payload);
     }
 
     // registerWebflowEvents() {

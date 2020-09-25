@@ -2,6 +2,10 @@ import {percFmt, numFmt} from '../../utils'
 
 export default class SiblingCalculator {
     calculate(args) {
+        if (typeof args.data === 'undefined'){
+            return null;
+        }
+
         const universe = Object.entries(args.data).reduce((total, c) => {
             return total + c[1];
         }, 0)

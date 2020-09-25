@@ -140,6 +140,7 @@ export class MapControl extends Observable {
         }
 
         const calculation = calculator.calculate(args);
+
         const values = calculation.map(el => el.val);
 
         this.choropleth.showChoropleth(calculation, false);

@@ -7,7 +7,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         controller.onChoroplethFiltered(payload);
     })
 
-        //let the choropleth persist
+    //let the choropleth persist
     controller.on('profile.loaded', payload => controller.handleNewProfileChoropleth())
     controller.on('mapchip.removed', payload => mapcontrol.choropleth.reset(true));
     controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
@@ -22,6 +22,12 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         setTimeout(() => {
             const pp = payload.payload;
             const ps = payload.state;
+
+            if (typeof pp.data === 'undefined') {
+                //no data -- todo : reset choropleth
+                mapchip.removeMapChip();
+                return;
+            }
             mapcontrol.displayChoropleth(pp.data, pp.subindicatorArr, ps.subindicator.choropleth_method);
 
             if (typeof pp.indicators !== 'undefined') {

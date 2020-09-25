@@ -310,11 +310,6 @@ export default class Controller extends Observable {
     }
 
     reDrawChildren() {
-        let currentLevel = this.state.profile.profile.geography.level;
-
-        if (currentLevel !== 'municipality') {
-            return;
-        }
 
         const payload = {
             profile: this.state.profile.profile,

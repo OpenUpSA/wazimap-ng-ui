@@ -4,13 +4,13 @@ let selectElement = $('.map-geo-select')[0];
 let selectedOption = null;
 let optionWrapper = null;
 let optionItem = null;
-let cookieName = 'boundary_selection';
+let BOUNDARY_MODAL_COOKIE_NAME = 'boundary_selection';
 
 export class BoundaryTypeBox extends Observable {
-    constructor(preferred_children) {
+    constructor(preferredChildren) {
         super();
 
-        this.preferred_children = preferred_children;
+        this.preferredChildren = preferredChildren;
 
         this.prepareDomElements();
     }
@@ -30,20 +30,19 @@ export class BoundaryTypeBox extends Observable {
     }
 
     populateBoundaryOptions = (children, currentLevel) => {
-        if (typeof this.preferred_children === 'undefined') {
+        if (typeof this.preferredChildren === 'undefined') {
             return;
         }
 
-        let boundaryTypes = [];
-        for (const [boundaryType] of Object.entries(children)) {
-            boundaryTypes.push(boundaryType);
+        let boundaryTypes = Object.keys(children);
+
+        if (typeof this.preferredChildren[currentLevel] !== 'undefined') {
+            const availableLevels = this.preferredChildren[currentLevel].filter(level => children[level] != undefined)
+
+            this.setElements();
+            this.setSelectedOption(availableLevels[0]);
+            this.populateOptions(boundaryTypes, currentLevel);
         }
-
-        const availableLevels = this.preferred_children[currentLevel].filter(level => children[level] != undefined)
-
-        this.setElements();
-        this.setSelectedOption(availableLevels[0]);
-        this.populateOptions(boundaryTypes, currentLevel);
     }
 
     setElements = () => {
@@ -82,7 +81,7 @@ export class BoundaryTypeBox extends Observable {
         let alreadyConfirmed = this.checkIfAlreadyConfirmed();
         let payload = {
             confirmed: false
-        } 
+        }
 
         if (alreadyConfirmed) {
             return new Promise(function (resolve) {
@@ -117,28 +116,23 @@ export class BoundaryTypeBox extends Observable {
     }
 
     checkIfAlreadyConfirmed = () => {
-        let result = false;
-        let cookie = this.readCookie(cookieName);
-        if (cookie !== null) {
-            result = cookie;
-        }
-
-        return result;
+        return this.readCookie(BOUNDARY_MODAL_COOKIE_NAME) || false;
     }
 
     rememberChoice = () => {
         let remember = $('input[id="no-show"]').is(':checked');
         if (remember) {
-            this.createCookie(cookieName, true, 365);
+            this.createCookie(BOUNDARY_MODAL_COOKIE_NAME, true, 365);
         }
     }
 
     createCookie = (name, value, days) => {
         let expires;
+        let dayToMs = 24 * 60 * 60 * 1000;
 
         if (days) {
             let date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            date.setTime(date.getTime() + (days * dayToMs));
             expires = "; expires=" + date.toGMTString();
         } else {
             expires = "";

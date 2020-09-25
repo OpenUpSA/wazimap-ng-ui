@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Fri Aug 21 2020 10:32:06 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Tue Sep 22 2020 11:38:29 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="5ecb7ed6bb713f5a354831a0" data-wf-site="5ecb7ed6bb713f2f4b48319b">
 <head>
   <meta charset="utf-8">
@@ -31,6 +31,7 @@
         });
         window.gtag = gtag;
     </script>
+  <script src="https://kit.fontawesome.com/95e41092af.js" crossorigin="anonymous"></script>
   <style>
 /*------------------------------------- Height without nav */  
 .full-height {
@@ -286,6 +287,30 @@ input:checked + .slider:before {
         </div><a id="w-node-bb8bfd26e161-354831a0" data-w-id="06c23278-3d9b-9621-8196-bb8bfd26e161" href="#" class="button text w-button">Dismiss</a></div>
     </div>
   </div>
+  <div class="warning-modal">
+    <div class="warning">
+      <div class="warning__header">
+        <div class="warning-title">
+          <h1 class="clear">Map boundary change</h1>
+        </div>
+      </div>
+      <div class="warning__content">
+        <div class="w-richtext">
+          <p>Changing your boundary type might deselect your current geography or adjust your view of the map.</p>
+          <p><strong>Are you sure you would like to proceed?</strong></p>
+        </div>
+      </div>
+      <div id="w-node-7db7866059c8-354831a0" class="warning__actions">
+        <div id="w-node-7db7866059c9-354831a0" class="dismiss__no-show">
+          <div class="html-embed w-embed">
+            <p><input type="checkbox" class="custom-checkbox" name="dismiss__no-show" id="no-show"></p>
+          </div>
+          <div class="checkbox-label">Don&#x27;t show again</div>
+        </div>
+        <div id="w-node-0af1c3f9c0e1-354831a0" class="button-wrapper"><a data-w-id="11c0ede1-986e-565d-0980-7db7866059cd" href="#" class="button button--margin-right button--grey w-button">Cancel</a><a data-w-id="89e4ff4e-33ef-1ec8-02f7-8bfae73751be" href="#" class="button button--margin-right w-button">Proceed</a></div>
+      </div>
+    </div>
+  </div>
   <div class="main">
     <div class="nav">
       <div data-w-id="1d8da317-9475-57a2-fddb-5ba024366da6" style="opacity:1;display:none" class="nav__search-deselect"></div>
@@ -437,7 +462,7 @@ input:checked + .slider:before {
           </div>
         </div>
       </div>
-      <div class="map-options">
+      <div class="map-options hidden">
         <div class="map-options__filters">
           <div class="map-options__filters_header">
             <div class="filter__header_sub-indicator">
@@ -447,7 +472,7 @@ input:checked + .slider:before {
 </svg></div>
               </div>
               <div class="filters__header_name">
-                <div>indicator name</div>
+                <div class="truncate">indicator name</div>
               </div>
             </div>
             <div data-w-id="a6ccbf43-e78e-12b0-5de1-e0251bbf20b3" class="filters__header_toggle">
@@ -548,6 +573,33 @@ input:checked + .slider:before {
         </div>
       </div>
       <div id="main-map" class="map-area"></div>
+      <div class="map-geo-select">
+        <div class="mag-geo__dropdown_wrap">
+          <div class="dropdown-menu__label">
+            <div>BOUNDARY type select:</div>
+          </div>
+          <div class="dropdown-menu">
+            <div class="dropdown-menu__trigger">
+              <div class="dropdown-menu__selected-item">
+                <div class="truncate">Loading...</div>
+              </div>
+              <div class="dropdown-menu__icon">
+                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+</svg></div>
+              </div>
+            </div>
+            <div class="dropdown-menu__content dropdown-menu__content--top scroll-element">
+              <div class="dropdown__list_item selected">
+                <div class="truncate">Loading...</div>
+              </div>
+              <div class="dropdown__list_item">
+                <div class="truncate">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="map-about">
         <div class="map-about__icon">
           <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -616,65 +668,13 @@ input:checked + .slider:before {
         </div>
         <section class="section header">
           <div id="top" class="section-link"></div>
-          <div class="location__header">
-            <div class="location__breadcrumbs">
-              <div class="label">
-                <div>Navigate to:</div>
-              </div>
-              <div class="breadcrumb">
-                <div class="truncate">Parent geography</div>
-              </div>
-            </div>
-            <div class="location__tutorial hidden">
-              <div class="location__tutorial_icon">
-                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"></path>
-</svg></div>
-              </div>
-              <div class="location__tutorial_text">
-                <div>Quick tutorial</div>
-              </div>
-            </div>
-          </div>
           <div data-w-id="a462ef20-a798-735c-f166-106a34080855" class="location__title">
             <h1 class="cc-clear">Location name</h1>
           </div>
           <div class="location__description">
             <div>A <span class="location-type">Location type</span> in <span class="parent-geography">parent geography</span></div>
           </div>
-          <div class="location__facilities_sources">
-            <div class="label">
-              <div>Sources used:</div>
-            </div>
-            <div class="location__sources_loading hidden">
-              <div class="loading">
-                <div class="loading__icon"><img src="images/loading.gif" alt=""></div>
-                <div class="loading__text">
-                  <div>Loading... </div>
-                </div>
-              </div>
-            </div>
-            <div class="location__sources_no-data hidden">
-              <div class="no-data">
-                <div class="no-data__text">
-                  <div>No source data available</div>
-                </div>
-              </div>
-            </div>
-            <div class="data-source">
-              <div>Data source name</div>
-            </div>
-            <div class="data-source">
-              <div>Data source name</div>
-            </div>
-            <div class="data-source">
-              <div>Data source name</div>
-            </div>
-          </div>
           <div class="location__facilities">
-            <div class="location__facilities_title">
-              <div>Facilities in this Location</div>
-            </div>
             <div class="location__facilities_loading hidden">
               <div class="loading">
                 <div class="loading__icon"><img src="images/loading.gif" alt=""></div>
@@ -695,203 +695,275 @@ input:checked + .slider:before {
                 </div>
               </div>
             </div>
-            <div class="location-facility">
-              <div class="location-facility__card">
-                <div class="location-facility__category">
-                  <div class="location-facility__header">
-                    <div class="location-facility__icon">
-                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
+            <div class="location__facilities_header">
+              <div class="location__facilities_icon">
+                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path>
+<path fill="currentColor" d="M8.92,11.22a2.56,2.56,0,1,1,2.55-2.55,2.55,2.55,0,0,1-2.55,2.55m0-9.72A7.16,7.16,0,0,0,1.76,8.67C1.76,14,8.92,22,8.92,22S16.08,14,16.08,8.67A7.17,7.17,0,0,0,8.92,1.5Z"></path>
+<path fill="currentColor" d="M18.77,16.26V12.54h-2v3.72H14.39c-.42.69-.85,1.36-1.28,2h3.67V22h2V18.24h3.72v-2Z"></path>
 </svg></div>
-                    </div>
-                    <div class="location-facility__name">
-                      <div>Point data category</div>
-                    </div>
-                  </div>
-                  <div class="location-facility__value">
-                    <div>0000</div>
-                  </div>
-                </div>
-                <div class="location-facility__list">
-                  <a href="#" class="location-facility__list_item w-inline-block">
-                    <div class="location-facility__item_name">
-                      <div class="truncate">Point data item</div>
-                    </div>
-                    <div class="location-facility__item_value">
-                      <div>0000</div>
-                    </div>
-                    <div id="w-node-2a17871ce54b-354831a0" class="location-facility__item_download">
-                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
-</svg></div>
-                    </div>
-                  </a>
-                  <a href="#" class="location-facility__list_item last w-inline-block">
-                    <div class="location-facility__item_name">
-                      <div class="truncate">Point data item</div>
-                    </div>
-                    <div class="location-facility__item_value">
-                      <div>0000</div>
-                    </div>
-                    <div id="w-node-2a17871ce554-354831a0" class="location-facility__item_download">
-                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
-</svg></div>
-                    </div>
-                  </a>
-                </div>
-                <div class="location-facility__description">
-                  <div>Description text that describes this point data category in relation to surrounding locations</div>
-                </div>
+              </div>
+              <div class="location__facilities_title">
+                <div>This <span class="location__facilities_geo-type">location</span> has <span class="location__facilities_facilities-value"><strong>0000</strong></span><strong> facilities</strong> in <span class="location__facilities_categories-value"><strong>0000</strong></span><strong> categories</strong>.</div>
               </div>
             </div>
-            <div class="location-facility">
-              <div class="location-facility__card">
-                <div class="location-facility__category">
-                  <div class="location-facility__header">
-                    <div class="location-facility__icon">
-                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
-</svg></div>
-                    </div>
-                    <div class="location-facility__name">
-                      <div>Point data category</div>
-                    </div>
-                  </div>
-                  <div class="location-facility__value">
-                    <div>0000</div>
-                  </div>
-                </div>
-                <div class="location-facility__list">
-                  <a href="#" class="location-facility__list_item w-inline-block">
-                    <div class="location-facility__item_name">
-                      <div class="truncate">Point data item</div>
-                    </div>
-                    <div class="location-facility__item_value">
-                      <div>0000</div>
-                    </div>
-                    <div id="w-node-b99d3b14dbcb-354831a0" class="location-facility__item_download">
-                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
-</svg></div>
-                    </div>
-                  </a>
-                  <a href="#" class="location-facility__list_item last w-inline-block">
-                    <div class="location-facility__item_name">
-                      <div class="truncate">Point data item</div>
-                    </div>
-                    <div class="location-facility__item_value">
-                      <div>0000</div>
-                    </div>
-                    <div id="w-node-b99d3b14dbd4-354831a0" class="location-facility__item_download">
-                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
-</svg></div>
-                    </div>
-                  </a>
-                </div>
-                <div class="location-facility__description">
-                  <div>Description text that describes this point data category in relation to surrounding locations</div>
-                </div>
+            <div class="location__facilities_trigger">
+              <div data-w-id="65616f0c-c302-4345-a9da-e6b0a2c31832" style="display:flex" class="location__facilities_expand">
+                <div>Show facilities</div>
+              </div>
+              <div data-w-id="28d12adf-e1dc-5f33-e26b-9a5cd84e9013" style="display:none" class="location__facilities_contract">
+                <div>Hide facilities</div>
               </div>
             </div>
-            <div class="location-facility">
-              <div class="location-facility__card">
-                <div class="location-facility__category">
-                  <div class="location-facility__header">
-                    <div class="location-facility__icon">
-                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+            <div style="height:0PX" class="location__facilities_content">
+              <div class="location__facilities_content-wrapper">
+                <div class="location-facility">
+                  <div class="location-facility__card">
+                    <div class="location-facility__category">
+                      <div class="location-facility__header">
+                        <div class="location-facility__icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
+                        </div>
+                        <div class="location-facility__name">
+                          <div>Point data category</div>
+                        </div>
+                      </div>
+                      <div class="location-facility__value">
+                        <div>0000</div>
+                      </div>
                     </div>
-                    <div class="location-facility__name">
-                      <div>Point data category</div>
-                    </div>
-                  </div>
-                  <div class="location-facility__value">
-                    <div>0000</div>
-                  </div>
-                </div>
-                <div class="location-facility__list">
-                  <a href="#" class="location-facility__list_item w-inline-block">
-                    <div class="location-facility__item_name">
-                      <div class="truncate">Point data item</div>
-                    </div>
-                    <div class="location-facility__item_value">
-                      <div>0000</div>
-                    </div>
-                    <div id="w-node-b67d989cf0c9-354831a0" class="location-facility__item_download">
-                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                    <div class="location-facility__list">
+                      <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-39f7faa0bd55-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
 </svg></div>
-                    </div>
-                  </a>
-                  <a href="#" class="location-facility__list_item last w-inline-block">
-                    <div class="location-facility__item_name">
-                      <div class="truncate">Point data item</div>
-                    </div>
-                    <div class="location-facility__item_value">
-                      <div>0000</div>
-                    </div>
-                    <div id="w-node-b67d989cf0d2-354831a0" class="location-facility__item_download">
-                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                        </div>
+                      </a>
+                      <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-6a6c8ed74fde-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
 </svg></div>
+                        </div>
+                      </a>
+                      <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-ed3493a48329-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+</svg></div>
+                        </div>
+                      </a>
+                      <a href="#" class="location-facility__list_item last w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-2a17871ce554-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+</svg></div>
+                        </div>
+                      </a>
                     </div>
-                  </a>
+                    <div class="location-facility__description hidden">
+                      <div>Description text that describes this point data category in relation to surrounding locations</div>
+                    </div>
+                  </div>
                 </div>
-                <div class="location-facility__description">
-                  <div>Description text that describes this point data category in relation to surrounding locations</div>
-                </div>
-              </div>
-            </div>
-            <div class="location-facility">
-              <div class="location-facility__card">
-                <div class="location-facility__category">
-                  <div class="location-facility__header">
-                    <div class="location-facility__icon">
-                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+                <div class="location-facility">
+                  <div class="location-facility__card">
+                    <div class="location-facility__category">
+                      <div class="location-facility__header">
+                        <div class="location-facility__icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
 </svg></div>
+                        </div>
+                        <div class="location-facility__name">
+                          <div>Point data category</div>
+                        </div>
+                      </div>
+                      <div class="location-facility__value">
+                        <div>0000</div>
+                      </div>
                     </div>
-                    <div class="location-facility__name">
-                      <div>Point data category</div>
-                    </div>
-                  </div>
-                  <div class="location-facility__value">
-                    <div>0000</div>
-                  </div>
-                </div>
-                <div class="location-facility__list">
-                  <a href="#" class="location-facility__list_item w-inline-block">
-                    <div class="location-facility__item_name">
-                      <div class="truncate">Point data item</div>
-                    </div>
-                    <div class="location-facility__item_value">
-                      <div>0000</div>
-                    </div>
-                    <div id="w-node-92ed5642abf2-354831a0" class="location-facility__item_download">
-                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                    <div class="location-facility__list">
+                      <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-3142f5a23449-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
 </svg></div>
-                    </div>
-                  </a>
-                  <a href="#" class="location-facility__list_item last w-inline-block">
-                    <div class="location-facility__item_name">
-                      <div class="truncate">Point data item</div>
-                    </div>
-                    <div class="location-facility__item_value">
-                      <div>0000</div>
-                    </div>
-                    <div id="w-node-92ed5642abfb-354831a0" class="location-facility__item_download">
-                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                        </div>
+                      </a>
+                      <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-3142f5a23452-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
 <path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
 </svg></div>
+                        </div>
+                      </a>
+                      <a href="#" class="location-facility__list_item last w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-3142f5a2345b-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+</svg></div>
+                        </div>
+                      </a>
                     </div>
-                  </a>
+                    <div class="location-facility__description hidden">
+                      <div>Description text that describes this point data category in relation to surrounding locations</div>
+                    </div>
+                  </div>
                 </div>
-                <div class="location-facility__description">
-                  <div>Description text that describes this point data category in relation to surrounding locations</div>
+                <div class="location-facility">
+                  <div class="location-facility__card">
+                    <div class="location-facility__category">
+                      <div class="location-facility__header">
+                        <div class="location-facility__icon">
+                          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>
+</svg></div>
+                        </div>
+                        <div class="location-facility__name">
+                          <div>Point data category</div>
+                        </div>
+                      </div>
+                      <div class="location-facility__value">
+                        <div>0000</div>
+                      </div>
+                    </div>
+                    <div class="location-facility__list">
+                      <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-af002fdb8de6-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+</svg></div>
+                        </div>
+                      </a>
+                      <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-af002fdb8def-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+</svg></div>
+                        </div>
+                      </a>
+                      <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-af002fdb8df8-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+</svg></div>
+                        </div>
+                      </a>
+                      <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-af002fdb8e01-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+</svg></div>
+                        </div>
+                      </a>
+                      <a href="#" class="location-facility__list_item last w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Point data item</div>
+                        </div>
+                        <div class="location-facility__item_value">
+                          <div>0000</div>
+                        </div>
+                        <div id="w-node-af002fdb8e0a-354831a0" class="location-facility__item_download">
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+<path d="M0 0h24v24H0z" fill="none"></path><path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+</svg></div>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="location-facility__description hidden">
+                      <div>Description text that describes this point data category in relation to surrounding locations</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="location__facilities_sources">
+                  <div class="label">
+                    <div>Sources:</div>
+                  </div>
+                  <div class="location__sources_loading">
+                    <div class="loading">
+                      <div class="loading__icon"><img src="images/loading.gif" alt=""></div>
+                      <div class="loading__text">
+                        <div>Loading... </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="location__sources_no-data hidden">
+                    <div class="no-data">
+                      <div class="no-data__text">
+                        <div>No source data available</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2499,6 +2571,7 @@ input:checked + .slider:before {
         </div>
       </div>
     </div>
+    <div class="data-mapper"></div>
     <div class="panel-toggles">
       <div data-w-id="b8845a6b-d018-3723-9163-c2bb32f2a4ea" class="panel-toggle">
         <div class="panel-toggle__tooltip">

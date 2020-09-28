@@ -154,8 +154,11 @@ export class PointData extends Observable {
                 this.showMarkerPopup(e, point, true);
                 stopPropagation(e); //prevent map click event
             }).on('mouseover', (e) => {
+                e.target.setRadius(self.markerRadius() * 2);
+                e.target.bringToFront();
                 this.showMarkerPopup(e, point);
-            }).on('mouseout', () => {
+            }).on('mouseout', (e) => {
+                e.target.setRadius(self.markerRadius());
                 this.hideMarkerPopup();
             });
             layer.addLayer(marker);

@@ -13,6 +13,7 @@ import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
 import {PointDataTray} from './elements/point_tray/tray';
 import {API} from './api';
 import Analytics from './analytics';
+import {BoundaryTypeBox} from "./map/boundary_type_box";
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -28,6 +29,7 @@ import {configureMapEvents} from './setup/map';
 import {configureSpinnerEvents} from './setup/spinner';
 import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
+import {configureBoundaryEvents} from "./setup/boundaryevents";
 
 
 export default function configureApplication(profileId, config) {
@@ -56,6 +58,7 @@ export default function configureApplication(profileId, config) {
     const locationInfoBox = new LocationInfoBox(formattingConfig);
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
+    const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();
@@ -71,7 +74,7 @@ export default function configureApplication(profileId, config) {
     configureProfileEvents(controller, {profileLoader: profileLoader});
     configureMiscElementEvents(controller);
     configureRichDataView(controller);
-
+    configureBoundaryEvents(controller, boundaryTypeBox);
 
     controller.on('profile.loaded', payload => {
         // there seems to be a bug where menu items close if this is not set

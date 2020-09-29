@@ -20,6 +20,7 @@ export class Chart extends Observable {
         this.graphValueType = graphValueType;
         this.title = title;
         this.formattingConfig = formattingConfig;
+        this.chartConfiguration = this.getChartConfiguration(detail, title);
 
         tooltipClone = $(tooltipClass)[0].cloneNode(true);
         this.subCategoryNode = _subCategoryNode;
@@ -29,6 +30,16 @@ export class Chart extends Observable {
 
         this.handleChartFilter(detail, groups, title);
         this.addChart();
+    }
+
+    getChartConfiguration = (detail, title) => {
+        let chartConfiguration = [{"label": "Value", "formatting": ",.3d"}];
+
+        if (typeof detail.indicators[title].chart_configuration !== 'undefined') {
+            chartConfiguration = detail.indicators[title].chart_configuration;
+        }
+
+        return chartConfiguration;
     }
 
     addChart = () => {
@@ -78,7 +89,7 @@ export class Chart extends Observable {
             })
         } else {
             chart.xAxisFormatter((d) => {
-                return numFmtAlt(d);
+                return d3format(this.chartConfiguration[0].formatting)(d);
             })
         }
     }
@@ -92,8 +103,7 @@ export class Chart extends Observable {
                 label: subindicator.keys,
                 value: val,
                 valueText: this.graphValueType === graphValueTypes[0] ?
-                    formatNumericalValue(val / 100, this.formattingConfig, 'percentage') :
-                    formatNumericalValue(val, this.formattingConfig, 'absolute_value')
+                    formatNumericalValue(val / 100, this.formattingConfig, 'percentage') : d3format(this.chartConfiguration[0].formatting)(val)
             })
         }
 

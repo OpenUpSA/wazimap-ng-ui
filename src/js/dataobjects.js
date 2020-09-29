@@ -1,4 +1,4 @@
-// import {geography_config} from './geography_providers/geography_sa';
+import {defaults, defaultValues as dv} from './defaults';
 
 export class Geography {
     constructor(js) {
@@ -36,6 +36,8 @@ export class Profile {
                 subcategory = self._fixSubcategory(subcategory)
                 Object.values(subcategory.indicators).forEach(indicator => {
                     self._fixMetadata(indicator)
+                    indicator.chartConfiguration = defaults.checkAny(indicator.chartConfiguration, dv.chartConfiguration)
+
                     indicator.subindicators = Object
                         .entries(indicator.subindicators)
                         .map(s => new SubIndicator(s, indicator.choropleth_method))

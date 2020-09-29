@@ -33,13 +33,7 @@ export class Chart extends Observable {
     }
 
     getChartConfiguration = (detail, title) => {
-        let chartConfiguration = [{"label": "Value", "formatting": ",.3d"}];
-
-        if (typeof detail.indicators[title].chart_configuration !== 'undefined') {
-            chartConfiguration = detail.indicators[title].chart_configuration;
-        }
-
-        return chartConfiguration;
+        return detail.indicators[title].chartConfiguration;
     }
 
     addChart = () => {

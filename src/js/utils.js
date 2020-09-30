@@ -194,7 +194,7 @@ function isNull(x) {
 }
 
 function isUndefined(x) {
-    return typeof(x) == 'undefined';
+    return x === undefined
 }
 
 function isEmptyString(x) {

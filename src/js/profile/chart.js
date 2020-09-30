@@ -16,7 +16,7 @@ export class Chart extends Observable {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
 
-        this.subindicators = subindicators;
+        this.subindicators = subindicators.reverse();
         this.graphValueType = graphValueType;
         this.title = title;
         this.formattingConfig = formattingConfig;

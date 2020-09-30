@@ -1,36 +1,47 @@
-import {validation as v} from '../src/js/utils';
+import {validation, defaultIfMissing} from '../src/js/utils';
 
-const testValues = [null, 5, undefined, {}, '', NaN];
-describe('Testing validation', () => {
+describe('Testing validation functions', () => {
 
-  test('isNull works correcty', () => {
-    const res = testValues.filter(val => v.isNull(val));
-    expect(res.length).toBe(1);
-    expect(res[0]).toBe(null);
+
+  test.each([
+    [null, true], [undefined, false], [{}, false],
+    ['', false], [NaN, false]])('.isNull(%s)', (value, expected) => {
+      expect(validation.isNull(value)).toBe(expected);
   });
 
-  test('isUndefined works correcty', () => {
-    const res = testValues.filter(val => v.isUndefined(val));
-    expect(res.length).toBe(1);
-    expect(res[0]).toBe(undefined);
+  test.each([
+    [null, false], [undefined, true], [{}, false],
+    ['', false], [NaN, false]])('.isUndefined(%s)', (value, expected) => {
+      expect(validation.isUndefined(value)).toBe(expected);
   });
 
-  test('isEmptyString works correcty', () => {
-    const res = testValues.filter(val => v.isEmptyString(val));
-    expect(res.length).toBe(1);
-    expect(res[0]).toBe('');
+  test.each([
+    [null, false], [undefined, false], [{}, false],
+    ['', true], [NaN, false]])('.isEmptyString(%s)', (value, expected) => {
+      expect(validation.isEmptyString(value)).toBe(expected);
   });
 
-  test('isEmptyObject works correcty', () => {
-    const res = testValues.filter(val => v.isEmptyObject(val));
-    expect(res.length).toBe(1);
-    expect(res[0]).toBe(testValues[3]);
+  test.each([
+    [null, false], [undefined, false], [{}, true],
+    ['', false], [NaN, false]])('.isEmptyObject(%s)', (value, expected) => {
+      expect(validation.isEmptyObject(value)).toBe(expected);
   });
 
-  test('isMissingData works correcty', () => {
-    const res = testValues.filter(val => v.isMissingData(val));
-    expect(res.length).toBe(4);
-    expect(res.indexOf(5)).toBe(-1);
+  test.each([
+    [null, true], [undefined, true], [{}, true],
+    ['', true], [5, false]])('.isMissingData(%s)', (value, expected) => {
+      expect(validation.isMissingData(value)).toBe(expected);
   });
 });
+
+describe('Testing defaults', () => {
+  test('checkAny function works correctly', () => {
+    expect(defaultIfMissing(5, 5)).toBe(5);
+    expect(defaultIfMissing('XXX', 5)).toBe('XXX');
+    expect(defaultIfMissing(undefined, 5)).toBe(5);
+    expect(defaultIfMissing(null, 5)).toBe(5);
+    expect(defaultIfMissing({}, 5)).toBe(5);
+    expect(defaultIfMissing('', 5)).toBe(5);
+  }) 
+})
 

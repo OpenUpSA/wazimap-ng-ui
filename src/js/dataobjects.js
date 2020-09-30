@@ -1,4 +1,5 @@
-import {defaults, defaultValues as dv} from './defaults';
+import {defaultValues} from './defaultValues';
+import {defaultIfMissing} from './utils';
 
 export class Geography {
     constructor(js) {
@@ -36,7 +37,7 @@ export class Profile {
                 subcategory = self._fixSubcategory(subcategory)
                 Object.values(subcategory.indicators).forEach(indicator => {
                     self._fixMetadata(indicator)
-                    indicator.chartConfiguration = defaults.checkAny(indicator.chartConfiguration, dv.chartConfiguration)
+                    indicator.chartConfiguration = defaultIfMissing(indicator.chartConfiguration, defaultValues.chartConfiguration)
 
                     indicator.subindicators = Object
                         .entries(indicator.subindicators)

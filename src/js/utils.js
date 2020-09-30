@@ -194,7 +194,7 @@ function isNull(x) {
 }
 
 function isUndefined(x) {
-    return x === undefined
+    return typeof(x) == 'undefined';
 }
 
 function isEmptyString(x) {
@@ -217,6 +217,12 @@ function isMissingData(x) {
     const res = funcs.filter(f => f(x))
 
     return res.length > 0;
+}
+
+export function defaultIfMissing(x, defaultVal) {
+    if (isMissingData(x))
+        return defaultVal;
+    return x;
 }
 
 export const validation = {

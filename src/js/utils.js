@@ -188,3 +188,44 @@ export function formatNumericalValue(number, formatting, method) {
 
     return fn(number);
 }
+
+function isNull(x) {
+    return x === null;
+}
+
+function isUndefined(x) {
+    return x === undefined
+}
+
+function isEmptyString(x) {
+    return x == '';
+}
+
+function isEmptyObject(x) {
+    try {
+        if (typeof x === 'object' && x !== null)
+            return Object.keys(x).length == 0
+        else
+            return false;
+    } catch (TypeError) {
+        return false;
+    }
+}
+
+function isMissingData(x) {
+    const funcs = [isNull, isUndefined, isEmptyString, isEmptyObject]
+    const res = funcs.filter(f => f(x))
+
+    return res.length > 0;
+}
+
+export function defaultIfMissing(x, defaultVal) {
+    if (isMissingData(x))
+        return defaultVal;
+    return x;
+}
+
+export const validation = {
+   isNull, isUndefined, isEmptyString, isEmptyObject, isMissingData
+}
+

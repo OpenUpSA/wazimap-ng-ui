@@ -37,7 +37,7 @@ export class Profile {
                 subcategory = self._fixSubcategory(subcategory)
                 Object.values(subcategory.indicators).forEach(indicator => {
                     self._fixMetadata(indicator)
-                    indicator.chartConfiguration = defaultIfMissing(indicator.chartConfiguration, defaultValues.chartConfiguration)
+                    indicator.chartConfiguration = defaultIfMissing(indicator.chart_configuration, defaultValues.chartConfiguration)
 
                     indicator.subindicators = Object
                         .entries(indicator.subindicators)

@@ -1,4 +1,4 @@
-let chartConfiguration = [{"label": "Value", "formatting": ",.3d"}];
+let chartConfiguration = [{"label": "Value", "formatting": "~s"}];
 
 export const defaultValues = {
     chartConfiguration

@@ -91,7 +91,7 @@ export class Chart extends Observable {
     getValuesFromSubindicators = () => {
         let arr = [];
         for (const [label, subindicator] of Object.entries(this.subindicators)) {
-            let count = isNaN(subindicator.count) ? 0 : subindicator.count;
+            let count = subindicator.count;
             let val = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(count, this.subindicators) : count;
             arr.push({
                 label: subindicator.keys,
@@ -162,7 +162,7 @@ export class Chart extends Observable {
         let total = 0;
 
         for (const [label, value] of Object.entries(subindicators)) {
-            total += isNaN(value.count) ? 0 : value.count;
+            total += value.count;
         }
 
         percentage = currentValue / total * 100;

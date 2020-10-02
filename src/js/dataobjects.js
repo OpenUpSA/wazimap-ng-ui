@@ -131,7 +131,7 @@ export class DataBundle {
         return this._logo;
     }
 
-    get overview(){
+    get overview() {
         return this._overview;
     }
 
@@ -166,7 +166,7 @@ export class SubIndicator {
         else if (js["count"] != undefined)
             this._count = js["count"];
         else
-            this._count = MISSING_VALUE;
+            this._count = 0;
 
         this._children = js.children;
     }

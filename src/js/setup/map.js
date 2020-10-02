@@ -11,13 +11,17 @@ export function configureMapEvents(controller, objs = {mapcontrol: null}) {
     controller.on('profile.loaded', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
-        mapcontrol.overlayBoundaries(geography, geometries);
+        setTimeout(() => {
+            mapcontrol.overlayBoundaries(geography, geometries);
+        }, 0)
     });
 
     controller.on('redraw', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
-        mapcontrol.overlayBoundaries(geography, geometries)
+        setTimeout(() => {
+            mapcontrol.overlayBoundaries(geography, geometries);
+        }, 0)
     });
 
 

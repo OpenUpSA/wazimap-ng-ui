@@ -1078,7 +1078,6 @@ label {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  text-transform: capitalize;
 }
 
 .category-header__icon {
@@ -1145,7 +1144,6 @@ label {
 
 .indicator__title_wrapper {
   position: relative;
-  text-transform: capitalize;
 }
 
 .sub-category-header__title {
@@ -1677,7 +1675,6 @@ label {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  text-transform: capitalize;
 }
 
 .profile-indicator__chart_body {

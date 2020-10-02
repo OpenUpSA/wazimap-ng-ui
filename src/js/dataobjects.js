@@ -131,7 +131,7 @@ export class DataBundle {
         return this._logo;
     }
 
-    get overview(){
+    get overview() {
         return this._overview;
     }
 
@@ -151,7 +151,7 @@ export class DataBundle {
     // }
 }
 
-export const MISSING_VALUE = "N/A";
+export const MISSING_VALUE = 0;
 
 export class SubIndicator {
     constructor(entry, choropleth_method) {

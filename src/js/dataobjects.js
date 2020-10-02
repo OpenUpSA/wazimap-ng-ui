@@ -151,7 +151,7 @@ export class DataBundle {
     // }
 }
 
-export const MISSING_VALUE = "N/A";
+export const MISSING_VALUE = 0;
 
 export class SubIndicator {
     constructor(entry, choropleth_method) {
@@ -166,7 +166,7 @@ export class SubIndicator {
         else if (js["count"] != undefined)
             this._count = js["count"];
         else
-            this._count = 0;
+            this._count = MISSING_VALUE;
 
         this._children = js.children;
     }

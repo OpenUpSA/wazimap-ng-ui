@@ -6870,6 +6870,10 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
+svelte-dev-tools@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/svelte-dev-tools/-/svelte-dev-tools-0.0.1.tgz#91ad146b8001de9748aec592be8e644a28214b04"
+
 svgo@^1.0.0, svgo@^1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/svgo/-/svgo-1.3.2.tgz#b6dc511c063346c9e415b81e43401145b96d4167"

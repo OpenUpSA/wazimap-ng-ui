@@ -231,7 +231,7 @@ export const validation = {
 
 
 export function getHostname() {
-  let hostname = window.location.hostname;
+  let hostname = process.env.HOSTNAME || window.location.hostname;
   const isNetlifyStaging = (hostname.indexOf('wazimap-staging.netlify.app') >= 0)
   const isNetlifyProduction = (hostname.indexOf('wazimap-production.netlify.app') >= 0)
 

@@ -2,7 +2,6 @@ import 'babel-polyfill';
 
 import configureApplication from './load';
 import {Config as SAConfig} from './configurations/geography_sa';
-import {Config as GCROConfig} from './configurations/geography_gcro';
 import Analytics from './analytics';
 import {API} from './api';
 import * as Sentry from '@sentry/browser';
@@ -49,7 +48,7 @@ const profiles = {
     },
     'gcro.openup.org.za': {
         baseUrl: 'https://api.gcro.openup.org.za',
-        config: new GCROConfig()
+        config: config
     },
     'beta.youthexplorer.org.za': {
         baseUrl: productionUrl,

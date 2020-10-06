@@ -30,8 +30,8 @@ export class Profile_header extends Observable {
         breadcrumbTemplate = $('.styles').find(breadcrumbClass)[0];
 
         facilityWrapper = $('.location__facilities .location__facilities_content-wrapper');
-        facilityTemplate = $('.location-facility')[0].cloneNode(true);
-        facilityRowClone = $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
+        facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
+        facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
         this.setPointSource();
         this.addBreadCrumbs();

@@ -1807,3 +1807,6 @@ textarea.w-select {
 .w-condition-invisible {
   display: none !important;
 }
+#dev-tools {
+	z-index:200;
+}

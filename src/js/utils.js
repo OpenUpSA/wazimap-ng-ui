@@ -240,10 +240,7 @@ export function getHostname() {
   else if (isNetlifyProduction)
       hostname = "beta.youthexplorer.org.za"
 
-  if(window.location.search.includes('hostname')) {
-    const urlParams = new URLSearchParams(window.location.search);
-    hostname = urlParams.get('hostname');
-  }
+  hostname = sessionStorage.getItem("wazi-hostname") || hostname;
   return hostname;
 }
 

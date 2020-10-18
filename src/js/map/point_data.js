@@ -148,7 +148,7 @@ export class PointData extends Observable {
                 fill: true,
                 fillColor: col,
                 fillOpacity: 1,
-                pane: 'markerPane'
+                pane: 'customMarkersPane'
             })
             marker.on('click', (e) => {
                 this.showMarkerPopup(e, point, true);

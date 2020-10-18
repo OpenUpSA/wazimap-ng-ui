@@ -97,12 +97,26 @@ export class MapControl extends Observable {
             L.tileLayer(layer.url, {pane: pane}).addTo(map).addTo(map);
         })
 
+        this.createCustomMarkersPane(map);
+
         L.control.zoom({position: this.zoomPosition}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
         this.configureForwarder(map);
 
         return map;
     };
+
+    createCustomMarkersPane(map) {
+        /**
+         * z-index for markerPane is 600
+         * z-index for tooltipPane is 650
+         * z-index for popupPane is 700
+         * z-index for custom pane must be between tooltipPane and popupPane
+         * */
+
+        map.createPane('customMarkersPane');
+        map.getPane('customMarkersPane').style.zIndex = 680;
+    }
 
     configureForwarder(map) {
         this.myEventForwarder = new L.eventForwarder({

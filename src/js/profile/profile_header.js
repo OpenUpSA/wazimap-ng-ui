@@ -62,6 +62,7 @@ export class Profile_header extends Observable {
 
     addFacilities = () => {
         $('.location-facility', facilityWrapper).remove();
+        $('.location__facilities_sources', facilityWrapper).remove();
         let self = this;
 
         let categoryArr = [];

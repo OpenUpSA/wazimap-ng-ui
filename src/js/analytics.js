@@ -68,14 +68,6 @@ export default class Analytics {
     }
 
     logEvent(profile, category, action, label = '', value = 0) {
-        console.log(`
-profile: ${profile}
-category: ${category}
-action: ${action}
-label: ${label}
-value: ${value}
-        `)
-
         this.gtag('event', action, {
             'event_category': category,
             'event_action': action,

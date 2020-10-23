@@ -6870,9 +6870,10 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
-svelte-dev-tools@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/svelte-dev-tools/-/svelte-dev-tools-0.0.1.tgz#91ad146b8001de9748aec592be8e644a28214b04"
+svelte-dev-tools@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/svelte-dev-tools/-/svelte-dev-tools-0.0.2.tgz#794b0c5cad5a9d94774150713892f8d6765f2be5"
+  integrity sha512-z/hevP/jQ7r+zvDGYGJiI+CpmiOMdWGYGUziTefcMoqHvzjZKfGkvaty7unrYpl+BS/Bijg960K5YHmLPaoHpw==
 
 svgo@^1.0.0, svgo@^1.3.2:
   version "1.3.2"

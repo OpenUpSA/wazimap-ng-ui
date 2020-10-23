@@ -64,7 +64,7 @@ export class Chart extends Observable {
             .barPadding(6)
             .margin({
                 top: 15,
-                right: 0,
+                right: 5,
                 bottom: 15,
                 left: 120,
             })

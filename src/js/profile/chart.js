@@ -105,9 +105,15 @@ export class Chart extends Observable {
     }
 
     setChartMenu = (barChart) => {
-        const self = this;
         const containerParent = $(this.container).closest('.profile-indicator');
 
+        this.setSaveImageButton(containerParent, barChart);
+        this.setEmbedButton(containerParent);
+        this.setDisplayTypeButtons(containerParent);
+        this.setExportButtons(containerParent, barChart);
+    }
+
+    setSaveImageButton = (containerParent, barChart) => {
         //save as image button
         const saveImgButton = $(containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');
 
@@ -116,16 +122,29 @@ export class Chart extends Observable {
             barChart.saveAsPng(this.container);
             this.triggerEvent('profile.chart.saveAsPng', this);
         })
+    }
 
+    setEmbedButton = (containerParent) => {
+        //remove embed option
+        const embedButton = $(containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(2)');
+        $(embedButton).remove();
+    }
+
+    setDisplayTypeButtons = (containerParent) => {
         //show as percentage / value
         //todo:don't use index, specific class names should be used here when the classes are ready
+        let self = this;
+
         $(containerParent).find('.hover-menu__content_list a').each(function (index) {
             $(this).off('click');
             $(this).on('click', () => {
                 self.selectedGraphValueTypeChanged(containerParent, index);
             })
         });
+    }
 
+    setExportButtons = (containerParent, barChart) => {
+        let self = this;
         $(containerParent).find('.hover-menu__content_list--last a').each(function (index) {
             $(this).off('click');
             $(this).on('click', () => {

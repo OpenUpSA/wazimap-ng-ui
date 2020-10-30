@@ -184,7 +184,6 @@ export default class Controller extends Observable {
             // Shouldn't be here
             setTimeout(() => {
                 if (callRegisterFunction) {
-                    console.log("initialising webflow")
                     Webflow.require('ix2').init()
                     // self.registerWebflowEvents();
                 }

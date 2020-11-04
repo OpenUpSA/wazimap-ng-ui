@@ -6589,6 +6589,38 @@ label {
   align-items: center;
 }
 
+.map-download {
+  position: absolute;
+  left: auto;
+  top: auto;
+  right: 0%;
+  bottom: 0%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 34px;
+  height: 34px;
+  margin-right: 10px;
+  margin-bottom: 74px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 2px;
+  background-color: #fff;
+  box-shadow: 0 0 0 -1px rgba(0, 0, 0, 0.2), 1px 1px 6px -2px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.map-download:hover {
+  color: #39ad84;
+}
+
 @media screen and (max-width: 991px) {
   .rich-data-content {
     padding-top: 44px;

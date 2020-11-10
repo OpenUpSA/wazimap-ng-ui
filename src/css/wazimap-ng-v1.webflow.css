@@ -6595,13 +6595,6 @@ label {
   top: auto;
   right: 0%;
   bottom: 0%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  width: 34px;
-  height: 34px;
-  margin-right: 10px;
   margin-bottom: 74px;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
@@ -6627,58 +6620,75 @@ label {
     padding-right: 44px;
     padding-left: 44px;
   }
+
   .body {
     font-size: 14px;
   }
+
   .rich-data-nav {
     width: 44px;
   }
+
   .rich-data-nav__list {
     padding-top: 72px;
   }
+
   .location__facilities {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
   }
+
   .location-facility {
     width: 50%;
   }
+
   .rich-data-bumper {
     width: 44px;
   }
+
   .rich-data-nav__toggle {
     display: none;
   }
+
   .key-metric {
     width: 50%;
   }
+
   .bar-chart__labels {
     padding-left: 90px;
   }
+
   .bar-chart__underline {
     margin-left: 90px;
   }
+
   .bar-chart {
     font-size: 0.9em;
   }
+
   .profile-indicator__chart_body {
     padding-right: 12px;
   }
+
   .bar-chart__x-label {
     padding-left: 90px;
   }
+
   .bar-chart__row_label {
     width: 90px;
   }
+
   .page-header {
     -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   }
+
   .content-block {
     padding-bottom: 40px;
   }
+
   .content-block.bg-green.first {
     margin-bottom: 40px;
     padding-top: 40px;
@@ -6689,22 +6699,27 @@ label {
   h2 {
     font-size: 1.6em;
   }
+
   h3 {
     font-size: 1.4em;
   }
+
   .rich-data-content {
     padding-top: 32px;
     padding-right: 32px;
     padding-left: 32px;
   }
+
   .nav.narrow {
     padding-right: 32px;
     padding-left: 32px;
   }
+
   .category-header {
     margin-bottom: 24px;
     padding-bottom: 6px;
   }
+
   .profile-indicator__chart_description {
     max-width: none;
     margin-bottom: 0px;
@@ -6712,40 +6727,51 @@ label {
     padding-right: 0px;
     padding-left: 0px;
   }
+
   .profile-indicator {
     padding-bottom: 20px;
   }
+
   .profile-indicator__chart_source {
     padding-left: 0px;
   }
+
   .bar-chart__labels {
     padding-left: 0px;
   }
+
   .filter__dropdown_wrap {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1;
   }
+
   .bar-chart__underline {
     margin-left: 0px;
   }
+
   .profile-indicator__filters {
     margin-bottom: 0px;
   }
+
   .bar-chart__rows {
     padding-bottom: 0px;
   }
+
   .profile-indicator__chart_body {
     padding-right: 0px;
   }
+
   .bar-chart__x-label {
     margin-top: 12px;
     padding-left: 0px;
   }
+
   .bar-chart__row_tooltip {
     display: none;
   }
+
   .bar-chart__row {
     height: 36px;
     margin-bottom: 8px;
@@ -6755,6 +6781,7 @@ label {
     -ms-flex-direction: column;
     flex-direction: column;
   }
+
   .bar-chart__row_label {
     width: 100%;
     max-width: none;
@@ -6764,41 +6791,51 @@ label {
     -ms-flex-pack: start;
     justify-content: flex-start;
   }
+
   .bar-chart__label_value {
     display: none;
   }
+
   .nav__search_button {
     width: 44px;
   }
+
   .nav__content_title {
     width: 100%;
     min-width: 100px;
   }
+
   .nav__menu-trigger {
     margin-left: 6px;
   }
+
   .mapping-options__filter {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1;
   }
+
   .nav__link_text {
     display: none;
   }
+
   .page-header {
     -ms-grid-columns: 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
+
   .content-block {
     padding-right: 32px;
     padding-bottom: 32px;
     padding-left: 32px;
   }
+
   .content-block.bg-green.first {
     margin-bottom: 32px;
     padding-top: 32px;
   }
+
   .mag-geo__dropdown_wrap {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
@@ -6811,46 +6848,58 @@ label {
   h1 {
     font-size: 2em;
   }
+
   .rich-data-content {
     padding-top: 24px;
     padding-right: 16px;
     padding-left: 16px;
   }
+
   .section {
     margin-bottom: 48px;
   }
+
   .body {
     font-size: 13px;
   }
+
   .nav {
     padding-right: 10px;
     padding-left: 10px;
   }
+
   .nav.narrow {
     padding-right: 20px;
     padding-left: 20px;
   }
+
   .section-link {
     margin-top: -124px;
   }
+
   .panel-toggle {
     width: 44px;
     height: 44px;
   }
+
   .svg-icon {
     -webkit-transform: rotate(0deg);
     -ms-transform: rotate(0deg);
     transform: rotate(0deg);
   }
+
   .breadcrumb {
     font-size: 0.7em;
   }
+
   .location-facility {
     width: 100%;
   }
+
   .location__title {
     margin-bottom: 16px;
   }
+
   .rich-data-nav__toggle {
     left: 12px;
     top: auto;
@@ -6863,66 +6912,84 @@ label {
     display: flex;
     background-color: #333;
   }
+
   .location__facilities_sources {
     margin-left: -8px;
   }
+
   .sticky-header {
     top: 52px;
     margin-left: -8px;
   }
+
   .sub-category-header__key-metrics_title {
     font-size: 0.8em;
   }
+
   .key-metric {
     width: 100%;
   }
+
   .dropdown-menu {
     z-index: 1;
   }
+
   .sticky-header__current-location {
     height: 32px;
     padding-right: 12px;
     padding-left: 12px;
   }
+
   .nav__content.narrow {
     -ms-grid-columns: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
   }
+
   .nav__content_search {
     display: none;
   }
+
   .point-mapper {
     display: none;
   }
+
   .data-mapper {
     display: none;
   }
+
   .mapping-options__filter_menu {
     z-index: 1;
   }
+
   .login {
     width: 90%;
     padding: 12px 16px;
   }
+
   .login__close {
     margin-right: -8px;
   }
+
   .login-form__actions {
     -ms-grid-rows: auto auto auto;
     grid-template-rows: auto auto auto;
   }
+
   .tutorial {
     width: 90%;
     padding: 4px 16px;
     grid-row-gap: 4px;
   }
+
   .tutorial__close {
     margin-right: -6px;
   }
+
   .tutorial__slider {
     margin-right: -16px;
     margin-left: -16px;
   }
+
   .tutorial__slide-info {
     left: 16px;
     right: 16px;
@@ -6931,47 +6998,58 @@ label {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
   }
+
   .tutorial__slide_button.next {
     margin-right: 16px;
     margin-left: 8px;
   }
+
   .tutorial__slide_button.previous {
     margin-right: 8px;
     margin-left: 16px;
   }
+
   .location__tutorial {
     width: 24px;
     height: 24px;
   }
+
   .location__tutorial_text {
     display: none;
   }
+
   .page-header {
     -ms-grid-columns: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
   }
+
   .content-block {
     padding-right: 20px;
     padding-left: 20px;
   }
+
   .content-block.bg-green.first {
     margin-bottom: 16px;
   }
+
   .page-header__overline {
     font-size: 0.85em;
   }
+
   .page-header__title {
     -webkit-box-align: stretch;
     -webkit-align-items: stretch;
     -ms-flex-align: stretch;
     align-items: stretch;
   }
+
   .page-header__website-link {
     -webkit-box-pack: justify;
     -webkit-justify-content: space-between;
     -ms-flex-pack: justify;
     justify-content: space-between;
   }
+
   .warning {
     width: 90%;
     padding: 4px 16px;
@@ -7682,12 +7760,14 @@ label {
     -ms-grid-column-span: 2;
     grid-column-end: 4;
   }
+
   #w-node-5ba024366dac-354831a0 {
     -ms-grid-column: 2;
     grid-column-start: 2;
     -ms-grid-column-span: 2;
     grid-column-end: 4;
   }
+
   #w-node-7590f031f5c3-e29e9d23 {
     -ms-grid-column: 2;
     grid-column-start: 2;
@@ -7701,6 +7781,7 @@ label {
     -ms-grid-column-span: 3;
     grid-column-end: 3;
   }
+
   #w-node-25fe1e234621-e148319d {
     -ms-grid-row: 3;
     grid-row-start: 3;
@@ -7709,10 +7790,12 @@ label {
     -ms-grid-column: 1;
     grid-column-start: 1;
   }
+
   #w-node-d7658f879841-354831a0 {
     -ms-grid-column-span: 3;
     grid-column-end: 3;
   }
+
   #w-node-d7658f879842-354831a0 {
     -ms-grid-row: 3;
     grid-row-start: 3;
@@ -7721,12 +7804,14 @@ label {
     -ms-grid-column: 1;
     grid-column-start: 1;
   }
+
   #w-node-7590f031f5e4-e29e9d23 {
     -ms-grid-column: 3;
     grid-column-start: 3;
     -ms-grid-column-span: 1;
     grid-column-end: 4;
   }
+
   #w-node-3e7554d9fdf7-e29e9d23 {
     -ms-grid-row: span 1;
     grid-row-start: span 1;
@@ -7737,6 +7822,7 @@ label {
     -ms-grid-column-span: 3;
     grid-column-end: span 3;
   }
+
   #w-node-bcacce32cf46-e29e9d23 {
     -ms-grid-row: span 1;
     grid-row-start: span 1;

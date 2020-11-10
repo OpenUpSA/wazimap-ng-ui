@@ -1807,7 +1807,3 @@ textarea.w-select {
 .w-condition-invisible {
   display: none !important;
 }
-
-.map-download{
-  z-index: 999;
-}

@@ -6595,7 +6595,15 @@ label {
   top: auto;
   right: 0%;
   bottom: 0%;
-  margin-bottom: 74px;
+  z-index: 999;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 34px;
+  height: 34px;
+  margin-right: 10px;
+  margin-bottom: 84px;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;

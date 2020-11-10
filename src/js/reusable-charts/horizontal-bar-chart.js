@@ -1,13 +1,11 @@
 import {scaleBand, scaleLinear, scaleOrdinal} from 'd3-scale';
 import {max} from 'd3-array';
 import 'd3-transition';
-import {easeLinear} from 'd3-ease';
 import d3Tip from 'd3-tip';
-import {selectAll, select} from 'd3-selection';
 import {axisBottom, axisLeft} from 'd3-axis';
-import {saveSvgAsPng} from 'save-svg-as-png';
 import html2canvas from 'html2canvas';
 import xlsExport from "xlsexport";
+import {saveAs} from "../utils";
 
 export function horizontalBarChart() {
     const initialConfiguration = {
@@ -234,27 +232,6 @@ export function horizontalBarChart() {
             $(element).find('.profile-indicator__options').removeAttr('data-html2canvas-ignore');
             $(element).find('.profile-indicator__filters').removeAttr('data-html2canvas-ignore');
         });
-    }
-
-    function saveAs(uri, filename) {
-        let link = document.createElement('a');
-        if (typeof link.download === 'string') {
-
-            link.href = uri;
-            link.download = filename;
-
-            //Firefox requires the link to be in the body
-            document.body.appendChild(link);
-
-            //simulate click
-            link.click();
-
-            //remove the link when done
-            document.body.removeChild(link);
-
-        } else {
-            window.open(uri);
-        }
     }
 
     chart.exportAsCsv = function (title) {

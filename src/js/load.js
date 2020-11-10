@@ -14,6 +14,7 @@ import {PointDataTray} from './elements/point_tray/tray';
 import {API} from './api';
 import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
+import {MapDownload} from "./map/map_download";
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -59,6 +60,7 @@ export default function configureApplication(profileId, config) {
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
     const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
+    const mapDownload = new MapDownload();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();

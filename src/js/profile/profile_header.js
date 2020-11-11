@@ -128,7 +128,7 @@ export class Profile_header extends Observable {
             $('.location__facilities_categories-value strong').text(categoryArr.length);
             $('.location__facilities_facilities-value strong').text(totalCount);
         } else {
-            $('.location__facilities_no-data').removeClass('hidden');
+            $('.location__facilities').addClass('hidden');
         }
 
         $('.location__facilities_loading').addClass('hidden');

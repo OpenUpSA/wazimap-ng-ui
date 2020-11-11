@@ -136,8 +136,12 @@ export class SubindicatorFilter extends Observable {
     }
 
     getFilteredData = (selectedFilter, selectedGroup, title) => {
-        this.triggerEvent('point_tray.subindicator_filter.filter', {indicator: title, group: selectedGroup, subindicator: selectedFilter});
-                          
+        this.triggerEvent('point_tray.subindicator_filter.filter', {
+            indicator: title,
+            group: selectedGroup,
+            subindicator: selectedFilter
+        });
+
         let chartData = [];
 
         if (selectedFilter !== allValues) {
@@ -155,7 +159,9 @@ export class SubindicatorFilter extends Observable {
             }
         } else {
             for (const [indicatorTitle, subindicator] of Object.entries(this.indicators)) {
-                chartData = subindicator.subindicators;
+                if (indicatorTitle === title) {
+                    chartData = subindicator.subindicators;
+                }
             }
         }
 

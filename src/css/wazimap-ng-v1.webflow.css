@@ -5952,7 +5952,8 @@ label {
 }
 
 .profile-logo {
-  height: 100%;
+	margin: auto;
+	max-height: 100%;
 }
 
 .content {
@@ -7844,4 +7845,6 @@ label {
     align-self: end;
   }
 }
-
+#dev-tools {
+	z-index:200;
+}

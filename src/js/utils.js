@@ -226,6 +226,65 @@ export function defaultIfMissing(x, defaultVal) {
 }
 
 export const validation = {
-   isNull, isUndefined, isEmptyString, isEmptyObject, isMissingData
+    isNull, isUndefined, isEmptyString, isEmptyObject, isMissingData
 }
 
+
+export function getHostname() {
+    let hostname = process.env.HOSTNAME || window.location.hostname;
+    const isNetlifyStaging = (hostname.indexOf('wazimap-staging.netlify.app') >= 0)
+    const isNetlifyProduction = (hostname.indexOf('wazimap-production.netlify.app') >= 0)
+
+    if (isNetlifyStaging)
+        hostname = "wazimap-ng.africa"
+    else if (isNetlifyProduction)
+        hostname = "beta.youthexplorer.org.za"
+
+    hostname = sessionStorage.getItem("wazi-hostname") || hostname;
+    return hostname;
+}
+
+export function loadDevTools(callback) {
+    const explicitlyDisabled =
+        window.location.search.includes('dev-tools=false') ||
+        window.localStorage.getItem('dev-tools') === 'false'
+
+    const explicitlyEnabled =
+        window.location.search.includes('dev-tools=true') ||
+        window.localStorage.getItem('dev-tools') === 'true'
+
+    if (
+        !explicitlyDisabled &&
+        (process.env.NODE_ENV === 'development' || explicitlyEnabled)
+    ) {
+        // use a dynamic import so the dev-tools code isn't bundled with the regular
+        // app code so we don't worry about bundle size.
+        import('./dev-tools')
+            .then(devTools => devTools.install())
+            .finally(callback)
+    } else {
+        // if we don't need the DevTools, call the callback immediately.
+        callback()
+    }
+}
+
+export function saveAs(uri, filename) {
+    let link = document.createElement('a');
+    if (typeof link.download === 'string') {
+
+        link.href = uri;
+        link.download = filename;
+
+        //Firefox requires the link to be in the body
+        document.body.appendChild(link);
+
+        //simulate click
+        link.click();
+
+        //remove the link when done
+        document.body.removeChild(link);
+
+    } else {
+        window.open(uri);
+    }
+}

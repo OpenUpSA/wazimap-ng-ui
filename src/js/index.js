@@ -2,32 +2,24 @@ import 'babel-polyfill';
 
 import configureApplication from './load';
 import {Config as SAConfig} from './configurations/geography_sa';
-import {Config as GCROConfig} from './configurations/geography_gcro';
 import Analytics from './analytics';
 import {API} from './api';
 import * as Sentry from '@sentry/browser';
-
+import { getHostname, loadDevTools }from './utils';
 
 const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
 const productionUrl = 'https://production.wazimap-ng.openup.org.za';
 let config = new SAConfig();
 
-let hostname = window.location.hostname;
+let hostname = getHostname();
 const defaultProfile = 8;
 const defaultUrl = productionUrl;
 const defaultConfig = new SAConfig();
 
 const isLocalhost = (hostname.indexOf("localhost") >= 0)
-const isNetlifyStaging = (hostname.indexOf('wazimap-staging.netlify.app') >= 0)
-const isNetlifyProduction = (hostname.indexOf('wazimap-production.netlify.app') >= 0)
 
 if (!isLocalhost)
     Sentry.init({dsn: 'https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787'});
-
-if (isNetlifyStaging)
-    hostname = "wazimap-ng.africa"
-else if (isNetlifyProduction)
-    hostname = "beta.youthexplorer.org.za"
 
 
 const profiles = {
@@ -49,7 +41,7 @@ const profiles = {
     },
     'gcro.openup.org.za': {
         baseUrl: 'https://api.gcro.openup.org.za',
-        config: new GCROConfig()
+        config: config
     },
     'beta.youthexplorer.org.za': {
         baseUrl: productionUrl,
@@ -120,6 +112,8 @@ async function init() {
     configureApplication(data.id, pc.config);
 }
 
-init();
-
+window.init = init;
+loadDevTools(() => {
+  init();
+})
 

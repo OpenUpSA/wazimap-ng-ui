@@ -30,8 +30,8 @@ export class Profile_header extends Observable {
         breadcrumbTemplate = $('.styles').find(breadcrumbClass)[0];
 
         facilityWrapper = $('.location__facilities .location__facilities_content-wrapper');
-        facilityTemplate = $('.location-facility')[0].cloneNode(true);
-        facilityRowClone = $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
+        facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
+        facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
         this.setPointSource();
         this.addBreadCrumbs();
@@ -128,7 +128,7 @@ export class Profile_header extends Observable {
             $('.location__facilities_categories-value strong').text(categoryArr.length);
             $('.location__facilities_facilities-value strong').text(totalCount);
         } else {
-            $('.location__facilities_no-data').removeClass('hidden');
+            $('.location__facilities').addClass('hidden');
         }
 
         $('.location__facilities_loading').addClass('hidden');

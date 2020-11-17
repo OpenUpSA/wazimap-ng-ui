@@ -16,7 +16,7 @@ export class Chart extends Observable {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
 
-        this.subindicators = subindicators.reverse();
+        this.subindicators = subindicators;
         this.graphValueType = graphValueType;
         this.title = title;
         this.formattingConfig = formattingConfig;
@@ -46,7 +46,7 @@ export class Chart extends Observable {
         this.setChartOptions(barChart);
 
         this.setChartMenu(barChart);
-        d3select(this.container).call(barChart.data(data));
+        d3select(this.container).call(barChart.data(data).reverse(true));
     }
 
     setChartOptions = (chart) => {

@@ -4,23 +4,23 @@ import {horizontalBarChart} from "../reusable-charts/horizontal-bar-chart";
 import {select as d3select} from "d3-selection";
 import {SubindicatorFilter} from "./subindicator_filter";
 
-const graphValueTypes = ['Percentage', 'Value'];
+const PERCENTAGE_TYPE = 'Percentage';
+const VALUE_TYPE = 'Value'
+const graphValueTypes = [PERCENTAGE_TYPE, VALUE_TYPE];
 const chartContainerClass = '.indicator__chart';
 const tooltipClass = '.bar-chart__row_tooltip';
 
 let tooltipClone = null;
 
 export class Chart extends Observable {
-    constructor(formattingConfig, subindicators, groups, detail, graphValueType, _subCategoryNode, title) {
-        //we need the detail parameter to be able to filter
+    constructor(config, subindicators, groups, indicators, graphValueType, _subCategoryNode, title) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
 
         this.subindicators = subindicators;
         this.graphValueType = graphValueType;
         this.title = title;
-        this.formattingConfig = formattingConfig;
-        this.chartConfiguration = this.getChartConfiguration(detail, title);
+        this.config = config;
 
         tooltipClone = $(tooltipClass)[0].cloneNode(true);
         this.subCategoryNode = _subCategoryNode;
@@ -28,12 +28,8 @@ export class Chart extends Observable {
         const chartContainer = $(chartContainerClass, this.subCategoryNode);
         this.container = chartContainer[0];
 
-        this.handleChartFilter(detail, groups, title);
+        this.handleChartFilter(indicators, groups, title);
         this.addChart();
-    }
-
-    getChartConfiguration = (detail, title) => {
-        return detail.indicators[title].chartConfiguration;
     }
 
     addChart = () => {
@@ -77,13 +73,13 @@ export class Chart extends Observable {
             })
             .xLabel("")
 
-        if (this.graphValueType === graphValueTypes[0]) {
+        if (this.graphValueType === PERCENTAGE_TYPE) {
             chart.xAxisFormatter((d) => {
                 return d + '%';
             })
         } else {
             chart.xAxisFormatter((d) => {
-                return d3format(this.chartConfiguration[0].formatting)(d);
+                return d3format(this.config.chart[0].formatting)(d);
             })
         }
     }
@@ -92,12 +88,12 @@ export class Chart extends Observable {
         let arr = [];
         for (const [label, subindicator] of Object.entries(this.subindicators)) {
             let count = subindicator.count;
-            let val = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(count, this.subindicators) : count;
+            let val = this.graphValueType === PERCENTAGE_TYPE ? this.getPercentageValue(count, this.subindicators) : count;
             arr.push({
                 label: subindicator.keys,
                 value: val,
-                valueText: this.graphValueType === graphValueTypes[0] ?
-                    formatNumericalValue(val / 100, this.formattingConfig, 'percentage') : d3format(this.chartConfiguration[0].formatting)(val)
+                valueText: this.graphValueType === PERCENTAGE_TYPE ?
+                    formatNumericalValue(val / 100, this.config.formatting, 'percentage') : d3format(this.config.chart[0].formatting)(val)
             })
         }
 
@@ -170,14 +166,14 @@ export class Chart extends Observable {
         return percentage;
     }
 
-    handleChartFilter = (detail, groups, title) => {
+    handleChartFilter = (indicators, groups, title) => {
         let siFilter = new SubindicatorFilter();
         this.bubbleEvent(siFilter, 'point_tray.subindicator_filter.filter')
 
         let dropdowns = $(this.subCategoryNode).find('.filter__dropdown_wrap');
         const filterArea = $(this.subCategoryNode).find('.profile-indicator__filters');
 
-        siFilter.handleFilter(detail.indicators, filterArea, groups, title, this, dropdowns);
+        siFilter.handleFilter(indicators, filterArea, groups, title, this, dropdowns);
     }
 
     applyFilter = (chartData) => {

@@ -166,7 +166,7 @@ export class SubindicatorFilter extends Observable {
         const indicator = indicatorEntries.find(el => el[0] == title)
 
         if (indicator == undefined)
-            return chartData
+            return []
 
         const subindicatorData = indicator[1]
 

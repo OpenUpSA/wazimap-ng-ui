@@ -289,6 +289,18 @@ export function saveAs(uri, filename) {
     }
 }
 
-export function fillMissingKeys(obj, defaultObj) {
-    return {...defaultObj, ...obj}
+export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
+    let filledObject = {...defaultObj, ...obj}
+
+    Object.entries(filledObject).forEach(entry => {
+        const key = entry[0]
+        const val = entry[1]
+        const defaultObj2 = defaultObj[key]
+
+         if (typeof val === 'object' && defaultObj2 != undefined && deep_copy)
+            filledObject[key] = fillMissingKeys(val, defaultObj2, deep_copy)
+    })
+
+    return filledObject;
+
 }

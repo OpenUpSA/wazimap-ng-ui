@@ -123,7 +123,7 @@ export function horizontalBarChart() {
              */
             barChartSvg.append("g")
                 .attr("class", "grid")
-                .attr("stroke-opacity", 0.2) // fix chart thick lines for downloaded image
+                .attr("stroke-opacity", 0.2)
                 .attr("transform", "translate(0," + height + ")")
                 .call(make_x_gridlines()
                     .tickSize(-height)
@@ -220,7 +220,7 @@ export function horizontalBarChart() {
             x: $(element).offset().left - 30,
             y: $(element).offset().top - 5,
 
-            // 20px should be enough to capture full chart with title and source
+            // add 20px "padding" to make sure chart description, title and source are fully visible
             scrollX: -20,
             width: $(element).width() + 20,
 

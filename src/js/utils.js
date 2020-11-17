@@ -288,3 +288,7 @@ export function saveAs(uri, filename) {
         window.open(uri);
     }
 }
+
+export function fillMissingKeys(obj, defaultObj) {
+    return {...defaultObj, ...obj}
+}

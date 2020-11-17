@@ -1,8 +1,11 @@
-import {numFmtAlt, Observable, formatNumericalValue} from "../utils";
-import {format as d3format} from "d3-format/src/defaultLocale";
-import {horizontalBarChart} from "../reusable-charts/horizontal-bar-chart";
-import {select as d3select} from "d3-selection";
-import {SubindicatorFilter} from "./subindicator_filter";
+import {format as d3format} from 'd3-format/src/defaultLocale';
+import {select as d3select} from 'd3-selection';
+
+import {Observable} from '../utils';
+import {defaultValues} from '../defaultValues';
+
+import {horizontalBarChart} from '../reusable-charts/horizontal-bar-chart';
+import {SubindicatorFilter} from './subindicator_filter';
 
 const PERCENTAGE_TYPE = 'Percentage';
 const VALUE_TYPE = 'Value'
@@ -73,27 +76,33 @@ export class Chart extends Observable {
             })
             .xLabel("")
 
-        if (this.graphValueType === PERCENTAGE_TYPE) {
-            chart.xAxisFormatter((d) => {
-                return d + '%';
-            })
-        } else {
-            chart.xAxisFormatter((d) => {
-                return d3format(this.config.chart[0].formatting)(d);
-            })
-        }
+        this.chartConfig = this.config.chart.types[this.graphValueType]
+        this.setChartDomain(chart, this.config.chart, this.graphValueType)
+
+        chart.xAxisFormatter(d => {
+            return d3format(this.chartConfig.formatting)(d)
+        })
+    }
+
+    setChartDomain(chart, config, chartType) {
+        const chartConfig = config.types[chartType]
+        if (chartConfig.minX != defaultValues.DEFAULT_CONFIG)
+            chart.minX(chartConfig.minX)
+        if (chartConfig.maxX != defaultValues.DEFAULT_CONFIG)
+            chart.maxX(chartConfig.maxX)
     }
 
     getValuesFromSubindicators = () => {
         let arr = [];
+        const chartConfig = this.config.chart.types[this.graphValueType]
+
         for (const [label, subindicator] of Object.entries(this.subindicators)) {
             let count = subindicator.count;
             let val = this.graphValueType === PERCENTAGE_TYPE ? this.getPercentageValue(count, this.subindicators) : count;
             arr.push({
                 label: subindicator.keys,
                 value: val,
-                valueText: this.graphValueType === PERCENTAGE_TYPE ?
-                    formatNumericalValue(val / 100, this.config.formatting, 'percentage') : d3format(this.config.chart[0].formatting)(val)
+                valueText: d3format(chartConfig.formatting)(val)
             })
         }
 
@@ -104,7 +113,6 @@ export class Chart extends Observable {
         const self = this;
         const containerParent = $(this.container).closest('.profile-indicator');
 
-        //save as image button
         const saveImgButton = $(containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');
 
         $(saveImgButton).off('click');
@@ -113,7 +121,6 @@ export class Chart extends Observable {
             this.triggerEvent('profile.chart.saveAsPng', this);
         })
 
-        //show as percentage / value
         //todo:don't use index, specific class names should be used here when the classes are ready
         $(containerParent).find('.hover-menu__content_list a').each(function (index) {
             $(this).off('click');
@@ -161,7 +168,7 @@ export class Chart extends Observable {
             total += value.count;
         }
 
-        percentage = currentValue / total * 100;
+        percentage = currentValue / total;
 
         return percentage;
     }

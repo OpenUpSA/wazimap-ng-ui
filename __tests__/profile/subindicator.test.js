@@ -41,9 +41,6 @@ describe('Testing Subindicator Filter', () => {
             {label: 'subindicator1', value: expected.subindicator1.count},
             {label: 'subindicator2', value: expected.subindicator2.count},
         ])
-
-        expect(chartData[0].value).toBe(expected.subindicator1.count);
-        expect(chartData[1].value).toBe(expected.subindicator2.count);
     })
 
     test('Handles missing group correctly', () => {

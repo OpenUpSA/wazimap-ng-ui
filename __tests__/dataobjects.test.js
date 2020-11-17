@@ -4,7 +4,7 @@ import {defaultValues} from '../src/js/defaultValues';
 describe('Test IndicatorHelper static methods', () => {
     test('missing data is correctly fixed', () => {
         let indicator = {}
-        indicator = IndicatorHelper.fixMetadata(indicator)
+        indicator.metadata = IndicatorHelper.getMetadata(indicator)
 
         expect(indicator.metadata.source).toBe('')
         expect(indicator.metadata.description).toBe('')
@@ -18,7 +18,7 @@ describe('Test IndicatorHelper static methods', () => {
 
         let indicator = {test1: 3}
 
-        indicator = IndicatorHelper.addDefaultConfiguration(indicator)
+        indicator.chartConfiguration = IndicatorHelper.getChartConfiguration(indicator)
         expect(indicator.chartConfiguration).toBeDefined()
         expect(indicator.chartConfiguration.test1).toBe(1)
         expect(indicator.chartConfiguration.test2).toBe(2)

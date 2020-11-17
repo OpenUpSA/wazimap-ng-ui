@@ -161,7 +161,6 @@ export class SubindicatorFilter extends Observable {
             subindicator: selectedFilter
         });
 
-        let chartData = [];
         const indicatorEntries = Object.entries(this.indicators)
         const indicator = indicatorEntries.find(el => el[0] == title)
 
@@ -174,8 +173,6 @@ export class SubindicatorFilter extends Observable {
             return this.getFilteredGroups(subindicatorData.groups, selectedGroup, selectedFilter)
         else 
             return this.getFilteredSubindicators(subindicatorData.subindicators)
-
-        return chartData;
     }
 
     resetDropdowns = (dropdowns) => {

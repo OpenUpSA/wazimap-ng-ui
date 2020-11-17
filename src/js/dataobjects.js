@@ -1,5 +1,5 @@
 import {defaultValues} from './defaultValues';
-import {defaultIfMissing} from './utils';
+import {fillMissingKeys} from './utils';
 
 export class Geography {
     constructor(js) {
@@ -21,6 +21,37 @@ export class Geography {
     }
 }
 
+export class IndicatorHelper {
+    static fixMetadata(indicator) {
+        if (indicator.metadata == undefined)
+            indicator.metadata = {
+                source: "",
+                description: "",
+                licence: {
+                    name: "",
+                    url: ""
+                }
+
+            }
+
+        return indicator
+    }
+
+    static addDefaultConfiguration(indicator) {
+        if (indicator.chartConfiguration == undefined)
+            indicator.chartConfiguration = {}
+
+        indicator.chartConfiguration = fillMissingKeys(defaultValues.chartConfiguration, indicator.chartConfiguration)
+        return indicator
+    }
+
+    static fixIndicator(indicator) {
+        indicator = this.fixMetadata(indicator)
+        indicator = this.addDefaultConfiguration(indicator)
+        return indicator
+    }
+}
+
 export class Profile {
 
     constructor(js) {
@@ -36,8 +67,7 @@ export class Profile {
             Object.values(category.subcategories).forEach(subcategory => {
                 subcategory = self._fixSubcategory(subcategory)
                 Object.values(subcategory.indicators).forEach(indicator => {
-                    self._fixMetadata(indicator)
-                    indicator.chartConfiguration = defaultIfMissing(indicator.chart_configuration, defaultValues.chartConfiguration)
+                    indicator = IndicatorHelper.fixIndicator(indicator)
 
                     indicator.subindicators = Object
                         .entries(indicator.subindicators)
@@ -47,18 +77,6 @@ export class Profile {
         })
     }
 
-    _fixMetadata(indicator) {
-        if (indicator.metadata == undefined)
-            indicator.metadata = {
-                source: "",
-                description: "",
-                licence: {
-                    name: "",
-                    url: ""
-                }
-
-            }
-    }
 
     _fixProfile(profile) {
         if (profile.highlights == undefined)

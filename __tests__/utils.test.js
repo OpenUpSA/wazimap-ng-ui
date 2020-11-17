@@ -82,5 +82,39 @@ describe('Test missing keys', () => {
     expect(myObject.first).toBe(undefined)
     expect(myObject.second).toBe(undefined)
   })
+
+  test('check that fillMissingKeys supports nested objects', () => {
+    let myObject = {}
+    let defaultObject = {first: 1, second: {second_1: 2, second_2: 3}}
+    let filledObject = fillMissingKeys(myObject, defaultObject)
+    const deep_copy = true
+
+    expect(filledObject.first).toBe(1)
+    expect(filledObject.second.second_1).toBe(2)
+    expect(filledObject.second.second_2).toBe(3)
+
+    myObject = {second: {second_1: 4}}
+    defaultObject = {first: 1, second: {second_1: 2, second_2: 3}}
+    filledObject = fillMissingKeys(myObject, defaultObject, deep_copy)
+
+    expect(filledObject.first).toBe(1)
+    expect(filledObject.second.second_1).toBe(4)
+    expect(filledObject.second.second_2).toBe(3)
+
+    myObject = {
+      second: {
+        second_1: 4,
+        second_2: {
+          second_2_1: 5
+        }
+      }
+    }
+    defaultObject = {first: 1, second: {second_1: 2, second_2: 3}}
+    filledObject = fillMissingKeys(myObject, defaultObject, deep_copy)
+
+    expect(filledObject.first).toBe(1)
+    expect(filledObject.second.second_1).toBe(4)
+    expect(filledObject.second.second_2.second_2_1).toBe(5)
+  })
 })
 

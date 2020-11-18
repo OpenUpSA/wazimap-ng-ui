@@ -1,4 +1,5 @@
 import {SubindicatorFilter} from "../../src/js/profile/subindicator_filter";
+import { screen, fireEvent, getByText } from '@testing-library/dom'
 
 const indicators = {
     'Age by race': {
@@ -18,7 +19,7 @@ const indicators = {
         ]
     },
     'Another indicator': {}
-} 
+}
 
 function testChartData(chartData, expectedData) {
     expect(chartData[0].value).toBe(expectedData[0].value);
@@ -28,9 +29,74 @@ function testChartData(chartData, expectedData) {
 }
 
 describe('Testing Subindicator Filter', () => {
-    const si = new SubindicatorFilter();
-    const title = 'Age by race';
-    si.indicators = indicators; 
+  let si;
+  const title = 'Age by race';
+  let applyFilter;
+  beforeEach(() => {
+    // probably better to read the index.html file and include it here
+    document.body.innerHTML = `
+      <div class="mapping-options__filter">
+        <div class="mapping-options__filter_label">
+          <div>Select a value:</div>
+        </div>
+        <div data-testid="group-by" data-w-id="c3edb6cb-8fc8-3508-f112-94613483dd79" class="mapping-options__filter_menu">
+          <div class="dropdown-menu__trigger narrow">
+            <div class="dropdown-menu__selected-item">
+              <div class="truncate">All values</div>
+            </div>
+            <div class="dropdown-menu__icon">
+              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none"></path>
+                  <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg></div>
+            </div>
+          </div>
+          <div class="dropdown-menu__content position-top scroll-element">
+            <div class="dropdown__list_item selected">
+              <div class="truncate">All values</div>
+            </div>
+            <div class="dropdown__list_item">
+              <div class="truncate">Value</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mapping-options__filter disabled">
+        <div class="mapping-options__filter_label">
+          <div>FILTER BY:</div>
+        </div>
+        <div data-w-id="fd26a4e0-f0f7-aaf0-9eee-32c6e9fb2e19" class="mapping-options__filter_menu">
+          <div class="dropdown-menu__trigger narrow">
+            <div class="dropdown-menu__selected-item">
+              <div class="truncate">All filters</div>
+            </div>
+            <div class="dropdown-menu__icon">
+              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none"></path>
+                  <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                </svg></div>
+            </div>
+          </div>
+          <div class="dropdown-menu__content position-top scroll-element">
+            <div class="dropdown__list_item selected">
+              <div class="truncate">All Filters</div>
+            </div>
+            <div class="dropdown__list_item">
+              <div class="truncate">Filter</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    `;
+    let dropdowns = $(document).find('.mapping-options__filter');
+    const filterArea = $(document).find('.map-options__filters_content');
+    let groups = ['race', 'gender']
+    applyFilter = jest.fn();
+    let parent = { applyFilter };
+    si = new SubindicatorFilter(indicators, filterArea, groups, title, parent, dropdowns, []);
+  })
+
 
     test.each([
         [{group: 'race', subindicator: 'Race2'}, indicators[title].groups.race.Race2],
@@ -75,4 +141,20 @@ describe('Testing Subindicator Filter', () => {
         ])
 
     })
+  test('select subcategory', () => {
+    fireEvent.click(screen.getByText('race').parentNode)
+    expect(screen.getByText('Race1')).toBeVisible()
+  })
+  test('returning to all values should reset the filter dropdown', () => {
+    let groupDropdowns = screen.getByTestId('group-by')
+    fireEvent.click(screen.getByText('race').parentNode)
+    fireEvent.click(getByText(groupDropdowns, 'All values').parentNode)
+    expect(screen.queryByText('Race1')).not.toBeInTheDocument()
+  })
+  test('returning to all values should call parent filter', () => {
+    let groupDropdowns = screen.getByTestId('group-by')
+    fireEvent.click(screen.getByText('race').parentNode)
+    fireEvent.click(getByText(groupDropdowns, 'All values').parentNode)
+    expect(applyFilter).toHaveBeenCalled();
+  })
 })

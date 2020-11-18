@@ -22,32 +22,25 @@ export class Geography {
 }
 
 export class IndicatorHelper {
-    static fixMetadata(indicator) {
-        if (indicator.metadata == undefined)
-            indicator.metadata = {
-                source: "",
-                description: "",
-                licence: {
-                    name: "",
-                    url: ""
-                }
-
+    static getMetadata(indicator) {
+        return indicator.metadata || {
+            source: '',
+            description: '',
+            url: '',
+            licence: {
+                name: '',
+                url: ''
             }
-
-        return indicator
+        }
     }
 
-    static addDefaultConfiguration(indicator) {
-        if (indicator.chartConfiguration == undefined)
-            indicator.chartConfiguration = {}
-
-        indicator.chartConfiguration = fillMissingKeys(defaultValues.chartConfiguration, indicator.chartConfiguration)
-        return indicator
+    static getChartConfiguration(indicator) {
+        return fillMissingKeys(defaultValues.chartConfiguration, indicator.chartConfiguration || {})
     }
 
     static fixIndicator(indicator) {
-        indicator = this.fixMetadata(indicator)
-        indicator = this.addDefaultConfiguration(indicator)
+        indicator.metadata = this.getMetadata(indicator)
+        indicator.chartConfiguration = this.getChartConfiguration(indicator)
         return indicator
     }
 }

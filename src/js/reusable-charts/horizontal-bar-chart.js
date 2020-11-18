@@ -26,6 +26,7 @@ export function horizontalBarChart() {
             bottom: 15,
             left: 100,
         },
+        reverse: false,
         tooltipFormatter: (d) => {
             return `${d.data.label}: ${d.data.value}`;
         },
@@ -54,6 +55,7 @@ export function horizontalBarChart() {
     let barPadding = initialConfiguration.barPadding;
     let xLabel = initialConfiguration.xLabel;
     let barLabelLength = initialConfiguration.barLabelLength;
+    let reverse = initialConfiguration.reverse;
 
     function chart(selection) {
         selection.each(() => {
@@ -415,6 +417,15 @@ export function horizontalBarChart() {
 
             return chart;
         }
+    };
+
+    chart.reverse = function (value) {
+        if (!arguments.length) return reverse;
+
+        reverse = value;
+        if (value)
+            data = data.reverse()
+        return chart;
     };
 
     chart.data = function (value) {

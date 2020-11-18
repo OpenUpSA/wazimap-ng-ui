@@ -29,7 +29,15 @@ export class Indicator extends Observable {
         $(chartDescClass, indicator).text(indicatorData.description);
 
         if (typeof indicatorData.metadata !== 'undefined') {
-            $(sourceClass, indicator).text(indicatorData.metadata.source);
+            if (typeof indicatorData.metadata.url !== 'undefined' && indicatorData.metadata.url !== null && indicatorData.metadata.url !== '') {
+                //link
+                let ele = $('<a></a>');
+                $(ele).text(indicatorData.metadata.source);
+                $(ele).attr('href', indicatorData.metadata.url);
+                $(sourceClass, indicator).html(ele);
+            } else {
+                $(sourceClass, indicator).text(indicatorData.metadata.source);
+            }
         }
 
         if (indicatorData.groups !== null && typeof indicatorData.groups !== 'undefined') {

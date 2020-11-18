@@ -24,11 +24,12 @@ export class Geography {
 export class IndicatorHelper {
     static getMetadata(indicator) {
         return indicator.metadata || {
-            source: "",
-            description: "",
+            source: '',
+            description: '',
+            url: '',
             licence: {
-                name: "",
-                url: ""
+                name: '',
+                url: ''
             }
         }
     }

@@ -8,6 +8,7 @@ describe('Test IndicatorHelper static methods', () => {
 
         expect(indicator.metadata.source).toBe('')
         expect(indicator.metadata.description).toBe('')
+        expect(indicator.metadata.url).toBe('')
         expect(indicator.metadata.licence.name).toBe('')
         expect(indicator.metadata.licence.url).toBe('')
     })
@@ -43,4 +44,5 @@ describe('Test IndicatorHelper static methods', () => {
 
         defaultValues.chartConfiguration = original;
     })
+
 })

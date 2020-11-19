@@ -129,21 +129,11 @@ export class SubindicatorFilter extends Observable {
 
     groupSelected = (selectedGroup, subindicatorDd, title) => {
         let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, selectedGroup, title), selectedGroup, selectedFilter);
+        this.resetDropdown(subindicatorDd);
+        callback(ALLVALUES);
         if (selectedGroup !== ALLVALUES) {
-          let subindicators = [];
-          for (const [obj, subindicator] of Object.entries(this.indicators)) {
-              if (obj === title) {
-                  //there can be more than 1 chart for every category, that's why we need this if
-                  for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
-                      subindicators.push(key)
-                  }
-              }
-          }
-
+          let subindicators = Object.keys(this.indicators[title].groups[selectedGroup]);
           this.populateDropdown(subindicatorDd, subindicators, callback);
-        } else {
-          this.resetDropdown(subindicatorDd)
-          callback(ALLVALUES);
         }
     }
 

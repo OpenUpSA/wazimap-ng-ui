@@ -142,19 +142,29 @@ describe('Testing Subindicator Filter', () => {
 
     })
   test('select subcategory', () => {
-    fireEvent.click(screen.getByText('race').parentNode)
-    expect(screen.getByText('Race1')).toBeVisible()
-  })
-  test('returning to all values should reset the filter dropdown', () => {
-    let groupDropdowns = screen.getByTestId('group-by')
-    fireEvent.click(screen.getByText('race').parentNode)
-    fireEvent.click(getByText(groupDropdowns, 'All values').parentNode)
-    expect(screen.queryByText('Race1')).not.toBeInTheDocument()
-  })
-  test('returning to all values should call parent filter', () => {
-    let groupDropdowns = screen.getByTestId('group-by')
-    fireEvent.click(screen.getByText('race').parentNode)
-    fireEvent.click(getByText(groupDropdowns, 'All values').parentNode)
+    fireEvent.click(screen.getByText('race').parentNode);
+
+    expect(screen.getByText('Race1')).toBeVisible();
     expect(applyFilter).toHaveBeenCalled();
+  });
+
+  describe('returning to all values', () => {
+    beforeEach(() => {
+      // set the group values first to be "race"
+      fireEvent.click(screen.getByText('race').parentNode);
+    })
+    test('should reset the filter dropdown', () => {
+      let groupDropdowns = screen.getByTestId('group-by');
+      fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
+
+      expect(screen.queryByText('Race1')).not.toBeInTheDocument();
+    });
+
+    test('should call parent filter twice', () => {
+      let groupDropdowns = screen.getByTestId('group-by');
+      fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
+
+      expect(applyFilter).toHaveBeenCalled();
+    });
   })
 })

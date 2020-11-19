@@ -1,7 +1,7 @@
 import {SubindicatorFilter} from "../../src/js/profile/subindicator_filter";
 import { screen, fireEvent, getByText } from '@testing-library/dom'
 
-const indicators = {
+const INDICATORS = {
     'Age by race': {
         'groups': {
             'gender': {
@@ -21,14 +21,7 @@ const indicators = {
     'Another indicator': {}
 }
 
-function testChartData(chartData, expectedData) {
-    expect(chartData[0].value).toBe(expectedData[0].value);
-    expect(chartData[0].label).toBe(expectedData[0].label);
-    expect(chartData[1].value).toBe(expectedData[1].value);
-    expect(chartData[1].label).toBe(expectedData[1].label);
-}
-
-describe('Testing Subindicator Filter', () => {
+describe('SubindicatorFilter', () => {
   let si;
   const title = 'Age by race';
   let applyFilter;
@@ -94,77 +87,91 @@ describe('Testing Subindicator Filter', () => {
     let groups = ['race', 'gender']
     applyFilter = jest.fn();
     let parent = { applyFilter };
-    si = new SubindicatorFilter(indicators, filterArea, groups, title, parent, dropdowns, []);
+    si = new SubindicatorFilter(INDICATORS, filterArea, groups, title, parent, dropdowns, []);
   })
 
 
     test.each([
-        [{group: 'race', subindicator: 'Race2'}, indicators[title].groups.race.Race2],
-        [{group: 'gender', subindicator: 'Female'}, indicators[title].groups.gender.Female],
+        [{group: 'race', subindicator: 'Race2'}, INDICATORS[title].groups.race.Race2],
+        [{group: 'gender', subindicator: 'Female'}, INDICATORS[title].groups.gender.Female],
     ])('Extract groups correctly', (value, expected) => {
-        const chartData = si.getFilteredGroups(indicators[title].groups, value.group, value.subindicator)
-        testChartData(chartData, [
-            {label: 'subindicator1', value: expected.subindicator1.count},
-            {label: 'subindicator2', value: expected.subindicator2.count},
-        ])
+        const chartData = si.getFilteredGroups(INDICATORS[title].groups, value.group, value.subindicator)
+        expect(chartData[0].value).toBe(expected.subindicator1.count);
+        expect(chartData[0].label).toBe('subindicator1');
+        expect(chartData[1].value).toBe(expected.subindicator2.count);
+        expect(chartData[1].label).toBe('subindicator2');
     })
 
     test('Handles missing group correctly', () => {
-        const chartData = si.getFilteredGroups(indicators[title].groups, 'Missing group', 'XXXXXX')
+        const chartData = si.getFilteredGroups(INDICATORS[title].groups, 'Missing group', 'XXXXXX')
         expect(chartData.length).toBe(0)
     })
 
     test('Handles missing subindicator correctly', () => {
-        const chartData = si.getFilteredGroups(indicators[title].groups, 'Gender', 'Missing subindicator')
+        const chartData = si.getFilteredGroups(INDICATORS[title].groups, 'Gender', 'Missing subindicator')
         expect(chartData.length).toBe(0)
     })
 
     test('Extracts subindicators correctly', () => {
-        const subindicators = si.getFilteredSubindicators(indicators[title].subindicators)
-        testChartData(subindicators, [
-            {label: 'subindicator1', value: 90},
-            {label: 'subindicator2', value: 100}
-        ])
+        const subindicators = si.getFilteredSubindicators(INDICATORS[title].subindicators)
+        expect(subindicators[0].value).toBe(INDICATORS[title].subindicators[0].count);
+        expect(subindicators[0].label).toBe(INDICATORS[title].subindicators[0].label);
+        expect(subindicators[1].value).toBe(INDICATORS[title].subindicators[1].count);
+        expect(subindicators[1].label).toBe(INDICATORS[title].subindicators[1].label);
     })
 
-    test('Filters correctly', () => {
+    describe('#getFilteredData', () => {
+      test('all values returns the defaults', () => {
         let chartData = si.getFilteredData('All values', '', title)
-        testChartData(chartData, [
-            {label: 'subindicator1', value: 90},
-            {label: 'subindicator2', value: 100}
-        ])
 
-        chartData = si.getFilteredData('Female', 'gender', title)
-        testChartData(chartData, [
-            {label: 'subindicator1', value: 10},
-            {label: 'subindicator2', value: 20}
-        ])
+        expect(chartData[0].value).toBe(INDICATORS[title].subindicators[0].count);
+        expect(chartData[0].label).toBe(INDICATORS[title].subindicators[0].label);
+        expect(chartData[1].value).toBe(INDICATORS[title].subindicators[1].count);
+        expect(chartData[1].label).toBe(INDICATORS[title].subindicators[1].label);
+      });
+
+      test('group filter returns the subindcator values', () => {
+        let group = 'gender';
+        let subindicator = 'Female'
+        let subindicator1Name = INDICATORS[title].subindicators[0].label;
+        let subindicator2Name = INDICATORS[title].subindicators[1].label;
+
+        let chartData = si.getFilteredData(subindicator, group, title)
+
+        expect(chartData[0].value).toBe(INDICATORS[title].groups[group][subindicator][subindicator1Name].count);
+        expect(chartData[0].label).toBe(subindicator1Name);
+
+        expect(chartData[1].value).toBe(INDICATORS[title].groups[group][subindicator][subindicator2Name].count);
+        expect(chartData[1].label).toBe(subindicator2Name);
 
     })
-  test('select subcategory', () => {
-    fireEvent.click(screen.getByText('race').parentNode);
-
-    expect(screen.getByText('Race1')).toBeVisible();
-    expect(applyFilter).toHaveBeenCalled();
-  });
-
-  describe('returning to all values', () => {
-    beforeEach(() => {
-      // set the group values first to be "race"
+  })
+  describe('UI interactions', () => {
+    test('select subcategory', () => {
       fireEvent.click(screen.getByText('race').parentNode);
-    })
-    test('should reset the filter dropdown', () => {
-      let groupDropdowns = screen.getByTestId('group-by');
-      fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
 
-      expect(screen.queryByText('Race1')).not.toBeInTheDocument();
-    });
-
-    test('should call parent filter twice', () => {
-      let groupDropdowns = screen.getByTestId('group-by');
-      fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
-
+      expect(screen.getByText('Race1')).toBeVisible();
       expect(applyFilter).toHaveBeenCalled();
     });
+
+    describe('returning to all values', () => {
+      beforeEach(() => {
+        // set the group values first to be "race"
+        fireEvent.click(screen.getByText('race').parentNode);
+      })
+      test('should reset the filter dropdown', () => {
+        let groupDropdowns = screen.getByTestId('group-by');
+        fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
+
+        expect(screen.queryByText('Race1')).not.toBeInTheDocument();
+      });
+
+      test('should call parent filter twice', () => {
+        let groupDropdowns = screen.getByTestId('group-by');
+        fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
+
+        expect(applyFilter).toHaveBeenCalled();
+      });
+    })
   })
 })

@@ -34,6 +34,8 @@
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/preset-env": "^7.11.5",
+    "@testing-library/dom": "^7.27.0",
+    "@testing-library/jest-dom": "^5.11.6",
     "babel-core": "^6.26.3",
     "babel-jest": "^26.3.0",
     "babel-loader": "^8.0.6",
@@ -60,6 +62,9 @@
   "jest": {
     "setupFiles": [
       "./setup-jest.js"
-    ]
+    ],
+		"setupFilesAfterEnv": [
+			"./jest-custom-matchers.js"
+		]
   }
 }

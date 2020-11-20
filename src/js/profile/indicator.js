@@ -33,6 +33,7 @@ export class Indicator extends Observable {
             let ele = $('<a></a>');
             $(ele).text(indicatorData.metadata.source);
             $(ele).attr('href', indicatorData.metadata.url);
+            $(ele).attr('target', '_blank');
             $(sourceClass, indicator).html(ele);
         } else {
             $(sourceClass, indicator).text(indicatorData.metadata.source);

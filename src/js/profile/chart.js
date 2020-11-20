@@ -76,8 +76,8 @@ export class Chart extends Observable {
             })
             .xLabel("")
 
-        this.chartConfig = this.config.chart.types[this.graphValueType]
-        this.setChartDomain(chart, this.config.chart, this.graphValueType)
+        this.chartConfig = this.config.types[this.graphValueType]
+        this.setChartDomain(chart, this.config, this.graphValueType)
 
         chart.xAxisFormatter(d => {
             return d3format(this.chartConfig.formatting)(d)
@@ -94,7 +94,7 @@ export class Chart extends Observable {
 
     getValuesFromSubindicators = () => {
         let arr = [];
-        const chartConfig = this.config.chart.types[this.graphValueType]
+        const chartConfig = this.config.types[this.graphValueType]
 
         for (const [label, subindicator] of Object.entries(this.subindicators)) {
             let count = subindicator.count;

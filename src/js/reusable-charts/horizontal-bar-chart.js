@@ -76,9 +76,6 @@ export function horizontalBarChart() {
                 .append('g')
                 .attr('transform', `translate(${margin.left},${margin.top})`);
 
-            if (maxX == null)
-                maxX = max(data, d => d.value);
-
             const x = scaleLinear()
                 .range([0, width]) //**
                 .domain([minX, _maxX()])
@@ -321,9 +318,7 @@ export function horizontalBarChart() {
     }
 
     function _maxX() {
-        if (maxX == null)
-            return max(data, d => d.value);
-        return maxX;
+        return maxX || max(data, d => d.value);
     }
 
     chart.width = function (value) {

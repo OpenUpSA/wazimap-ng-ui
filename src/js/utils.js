@@ -197,11 +197,11 @@ function isUndefined(x) {
     return x === undefined
 }
 
-function isEmptyString(x) {
+export function isEmptyString(x) {
     return x == '';
 }
 
-function isEmptyObject(x) {
+export function isEmptyObject(x) {
     try {
         if (typeof x === 'object' && x !== null)
             return Object.keys(x).length == 0
@@ -212,7 +212,7 @@ function isEmptyObject(x) {
     }
 }
 
-function isMissingData(x) {
+export function isMissingData(x) {
     const funcs = [isNull, isUndefined, isEmptyString, isEmptyObject]
     const res = funcs.filter(f => f(x))
 

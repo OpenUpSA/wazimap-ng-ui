@@ -1,5 +1,5 @@
-import {Chart} from "./chart";
-import {Observable} from "../utils";
+import {Chart} from './chart';
+import {Observable, isNull, isEmptyString} from '../utils';
 
 let indicatorClone = null;
 let isLast = false;
@@ -27,17 +27,15 @@ export class Indicator extends Observable {
         let indicator = indicatorClone.cloneNode(true);
         $(indicatorTitleClass, indicator).text(title);
         $(chartDescClass, indicator).text(indicatorData.description);
+        const isLink = !isNull(indicatorData.metadata.url) && !isEmptyString(indicatorData.metadata.url);
 
-        if (typeof indicatorData.metadata !== 'undefined') {
-            if (typeof indicatorData.metadata.url !== 'undefined' && indicatorData.metadata.url !== null && indicatorData.metadata.url !== '') {
-                //link
-                let ele = $('<a></a>');
-                $(ele).text(indicatorData.metadata.source);
-                $(ele).attr('href', indicatorData.metadata.url);
-                $(sourceClass, indicator).html(ele);
-            } else {
-                $(sourceClass, indicator).text(indicatorData.metadata.source);
-            }
+        if (isLink) {
+            let ele = $('<a></a>');
+            $(ele).text(indicatorData.metadata.source);
+            $(ele).attr('href', indicatorData.metadata.url);
+            $(sourceClass, indicator).html(ele);
+        } else {
+            $(sourceClass, indicator).text(indicatorData.metadata.source);
         }
 
         if (indicatorData.groups !== null && typeof indicatorData.groups !== 'undefined') {

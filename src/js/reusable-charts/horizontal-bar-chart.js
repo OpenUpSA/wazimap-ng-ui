@@ -27,6 +27,9 @@ export function horizontalBarChart() {
             left: 100,
         },
         reverse: false,
+        minX: 0,
+        maxX: null,
+      
         tooltipFormatter: (d) => {
             return `${d.data.label}: ${d.data.value}`;
         },
@@ -56,6 +59,8 @@ export function horizontalBarChart() {
     let xLabel = initialConfiguration.xLabel;
     let barLabelLength = initialConfiguration.barLabelLength;
     let reverse = initialConfiguration.reverse;
+    let minX = initialConfiguration.minX;
+    let maxX = initialConfiguration.maxX;
 
     function chart(selection) {
         selection.each(() => {
@@ -73,7 +78,7 @@ export function horizontalBarChart() {
 
             const x = scaleLinear()
                 .range([0, width]) //**
-                .domain([0, max(data, (d) => d.value)]);
+                .domain([minX, _maxX()])
 
             const y = scaleBand()
                 .rangeRound([height, 0])
@@ -312,6 +317,10 @@ export function horizontalBarChart() {
         return exportData;
     }
 
+    function _maxX() {
+        return maxX || max(data, d => d.value);
+    }
+
     chart.width = function (value) {
         if (!arguments.length) return width;
         width = value;
@@ -405,6 +414,24 @@ export function horizontalBarChart() {
         }
     };
 
+    chart.minX = function(value) {
+        if (!arguments.length) {
+            return minX
+        }
+        minX = value;
+
+        return chart;
+    }
+
+    chart.maxX = function(value) {
+        if (!arguments.length) {
+            return _maxX()
+        }
+        maxX = value;
+
+        return chart;
+    }
+
     chart.yAxisFormatter = function (value) {
         if (!arguments.length) {
             return yAxisFormatter;
@@ -436,6 +463,7 @@ export function horizontalBarChart() {
 
         return chart;
     };
+
 
     return chart;
 }

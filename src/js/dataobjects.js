@@ -34,13 +34,13 @@ export class IndicatorHelper {
         }
     }
 
-    static getChartConfiguration(indicator) {
-        return fillMissingKeys(defaultValues.chartConfiguration, indicator.chartConfiguration || {})
+    static getChartConfiguration(chart_configuration) {
+        return fillMissingKeys(chart_configuration, defaultValues.chartConfiguration || {})
     }
 
     static fixIndicator(indicator) {
         indicator.metadata = this.getMetadata(indicator)
-        indicator.chartConfiguration = this.getChartConfiguration(indicator)
+        indicator.chartConfiguration = this.getChartConfiguration(indicator.chart_configuration)
         return indicator
     }
 }

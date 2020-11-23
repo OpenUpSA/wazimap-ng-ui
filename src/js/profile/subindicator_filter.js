@@ -156,6 +156,25 @@ export class SubindicatorFilter extends Observable {
         })
     }
 
+    getFilteredGroups(groups, selectedGroup, selectedFilter) {
+        const group = groups[selectedGroup]
+        if (group == undefined)
+            return []
+
+        const groupValue = Object.entries(group).find(g => g[0] == selectedFilter)
+        if (groupValue == undefined)
+            return []
+
+        const subindicators = Object.entries(groupValue[1])
+        return subindicators.map(cd => new SubIndicator(cd))
+    }
+
+    getFilteredSubindicators(subindicators) {
+        return subindicators.map(el => {
+            return new SubIndicator([el.label, el])
+        })
+    }
+
     getFilteredData = (selectedFilter, selectedGroup, title) => {
         this.triggerEvent('point_tray.subindicator_filter.filter', {
             indicator: title,

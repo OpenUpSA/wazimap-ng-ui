@@ -190,11 +190,11 @@ export function formatNumericalValue(number, formatting, method) {
     return fn(number);
 }
 
-function isNull(x) {
+export function isNull(x) {
     return x === null;
 }
 
-function isUndefined(x) {
+export function isUndefined(x) {
     return x === undefined
 }
 

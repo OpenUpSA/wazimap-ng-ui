@@ -174,13 +174,12 @@ export class Chart extends Observable {
     }
 
     handleChartFilter = (indicators, groups, title) => {
-        let siFilter = new SubindicatorFilter();
-        this.bubbleEvent(siFilter, 'point_tray.subindicator_filter.filter')
-
         let dropdowns = $(this.subCategoryNode).find('.filter__dropdown_wrap');
         const filterArea = $(this.subCategoryNode).find('.profile-indicator__filters');
 
-        siFilter.handleFilter(indicators, filterArea, groups, title, this, dropdowns);
+        let siFilter = new SubindicatorFilter(indicators, filterArea, groups, title, this, dropdowns);
+        this.bubbleEvent(siFilter, 'point_tray.subindicator_filter.filter')
+
     }
 
     applyFilter = (chartData) => {

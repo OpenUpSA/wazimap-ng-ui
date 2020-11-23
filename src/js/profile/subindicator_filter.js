@@ -1,21 +1,16 @@
 import {SubIndicator} from "../dataobjects";
 import {Observable} from "../utils";
 
-const allValues = 'All values';
+const ALLVALUES = 'All values';
 
 export class SubindicatorFilter extends Observable {
-    constructor() {
+    constructor(indicators, filterArea, groups, title, _parent, _dropdowns, _defaultFilter) {
         super()
-        this.indicators = null;
-    }
-
-    handleFilter = (_indicators, filterArea, groups, title, _parent, _dropdowns, _defaultFilter) => {
+        this.indicators = indicators;
         this.parent = _parent;
         let dropdowns = _dropdowns;
         let indicatorDd = $(dropdowns[0]);
         let subindicatorDd = $(dropdowns[1]);
-
-        this.indicators = _indicators;
 
         const filtersAvailable = this.checkGroups(groups);
         if (filtersAvailable) {
@@ -71,6 +66,19 @@ export class SubindicatorFilter extends Observable {
         }
     }
 
+    resetDropdown = (dropdown) => {
+        $(dropdown).addClass('disabled')
+
+        $(dropdown).find('.dropdown-menu__selected-item .truncate').text(ALLVALUES);
+        let ddWrapper = $(dropdown).find('.dropdown-menu__content');
+        let listItem = $(dropdown).find('.dropdown__list_item')[0].cloneNode(true);
+        $(ddWrapper).html('');
+        let li = listItem.cloneNode(true);
+        $(li).removeClass('selected')
+        $('.truncate', li).text(ALLVALUES);
+        $(li).off('click');
+        $(ddWrapper).append(li);
+    }
     populateDropdown = (dropdown, itemList, callback) => {
         if ($(dropdown).hasClass('disabled')) {
             $(dropdown).removeClass('disabled')
@@ -81,7 +89,7 @@ export class SubindicatorFilter extends Observable {
 
         $(ddWrapper).html('');
 
-        itemList = [allValues].concat(itemList);
+        itemList = [ALLVALUES].concat(itemList);
 
         itemList.forEach((item, i) => {
             let li = listItem.cloneNode(true);
@@ -120,19 +128,32 @@ export class SubindicatorFilter extends Observable {
     }
 
     groupSelected = (selectedGroup, subindicatorDd, title) => {
-        let subindicators = [];
-        for (const [obj, subindicator] of Object.entries(this.indicators)) {
-            if (obj === title) {
-                //there can be more than 1 chart for every category, that's why we need this if
-                for (const [key, value] of Object.entries(subindicator.groups[selectedGroup])) {
-                    subindicators.push(key)
-                }
-            }
-        }
-
         let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, selectedGroup, title), selectedGroup, selectedFilter);
+        this.resetDropdown(subindicatorDd);
+        callback(ALLVALUES);
+        if (selectedGroup !== ALLVALUES) {
+          let subindicators = Object.keys(this.indicators[title].groups[selectedGroup]);
+          this.populateDropdown(subindicatorDd, subindicators, callback);
+        }
+    }
 
-        this.populateDropdown(subindicatorDd, subindicators, callback);
+    getFilteredGroups(groups, selectedGroup, selectedFilter) {
+        const group = groups[selectedGroup]
+        if (group == undefined)
+            return []
+
+        const groupValue = Object.entries(group).find(g => g[0] == selectedFilter)
+        if (groupValue == undefined)
+            return []
+
+        const subindicators = Object.entries(groupValue[1])
+        return subindicators.map(cd => new SubIndicator(cd))
+    }
+
+    getFilteredSubindicators(subindicators) {
+        return subindicators.map(el => {
+            return new SubIndicator([el.label, el])
+        })
     }
 
     getFilteredGroups(groups, selectedGroup, selectedFilter) {
@@ -161,28 +182,22 @@ export class SubindicatorFilter extends Observable {
             subindicator: selectedFilter
         });
 
-        let chartData = [];
-        const indicatorEntries = Object.entries(this.indicators)
-        const indicator = indicatorEntries.find(el => el[0] == title)
+        const subindicatorData = this.indicators[title]
 
-        if (indicator == undefined)
-            return chartData
+        if (subindicatorData == undefined)
+            return []
 
-        const subindicatorData = indicator[1]
-
-        if (selectedFilter !== allValues)
+        if (selectedFilter !== ALLVALUES)
             return this.getFilteredGroups(subindicatorData.groups, selectedGroup, selectedFilter)
-        else 
+        else
             return this.getFilteredSubindicators(subindicatorData.subindicators)
-
-        return chartData;
     }
 
     resetDropdowns = (dropdowns) => {
         let self = this;
         for (let i = 0; i < dropdowns.length; i++) {
             const dropdown = dropdowns[i];
-            self.setOptionSelected(dropdown, allValues, null);
+            self.setOptionSelected(dropdown, ALLVALUES, null);
         }
     }
 

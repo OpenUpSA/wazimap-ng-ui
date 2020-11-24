@@ -1,7 +1,6 @@
 import {select as d3select} from 'd3-selection';
 import Controller from './controller';
-//import ProfileLoader from './page_profile';   //emre - older
-import ProfileLoader from "./profile/profile_loader";   //emre - newer
+import ProfileLoader from "./profile/profile_loader";
 import {MapControl} from './map/maps';
 import {numFmt} from './utils';
 import {Profile} from './profile';
@@ -14,6 +13,8 @@ import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
 import {PointDataTray} from './elements/point_tray/tray';
 import {API} from './api';
 import Analytics from './analytics';
+import {BoundaryTypeBox} from "./map/boundary_type_box";
+import {MapDownload} from "./map/map_download";
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -29,6 +30,7 @@ import {configureMapEvents} from './setup/map';
 import {configureSpinnerEvents} from './setup/spinner';
 import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
+import {configureBoundaryEvents} from "./setup/boundaryevents";
 
 
 export default function configureApplication(profileId, config) {
@@ -39,16 +41,26 @@ export default function configureApplication(profileId, config) {
     if (config.analytics)
         config.analytics.registerEvents(controller);
 
+    let defaultFormattingConfig = {
+        decimal: ",.1f",
+        integer: ",.2d",
+        percentage: ".1%"
+    }
+    let serverFormattingConfig = config.config.formatting;
+    let formattingConfig = {...defaultFormattingConfig, ...serverFormattingConfig};
+
     const mapcontrol = new MapControl(config);
-    mapcontrol.popup = new Popup(mapcontrol.map);
+    mapcontrol.popup = new Popup(formattingConfig, mapcontrol.map);
     const pointData = new PointData(api, mapcontrol.map, profileId, config);
     const pointDataTray = new PointDataTray(api, profileId);
     const mapchip = new MapChip(config.choropleth);
     const search = new Search(api, profileId, 2);
-    const profileLoader = new ProfileLoader(config, api, profileId);
-    const locationInfoBox = new LocationInfoBox();
+    const profileLoader = new ProfileLoader(formattingConfig, api, profileId);
+    const locationInfoBox = new LocationInfoBox(formattingConfig);
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
+    const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
+    const mapDownload = new MapDownload();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();
@@ -64,7 +76,7 @@ export default function configureApplication(profileId, config) {
     configureProfileEvents(controller, {profileLoader: profileLoader});
     configureMiscElementEvents(controller);
     configureRichDataView(controller);
-
+    configureBoundaryEvents(controller, boundaryTypeBox);
 
     controller.on('profile.loaded', payload => {
         // there seems to be a bug where menu items close if this is not set

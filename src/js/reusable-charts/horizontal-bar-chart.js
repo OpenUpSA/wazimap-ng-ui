@@ -1,13 +1,11 @@
 import {scaleBand, scaleLinear, scaleOrdinal} from 'd3-scale';
 import {max} from 'd3-array';
 import 'd3-transition';
-import {easeLinear} from 'd3-ease';
 import d3Tip from 'd3-tip';
-import {selectAll, select} from 'd3-selection';
 import {axisBottom, axisLeft} from 'd3-axis';
-import {saveSvgAsPng} from 'save-svg-as-png';
 import html2canvas from 'html2canvas';
 import xlsExport from "xlsexport";
+import {saveAs} from "../utils";
 
 export function horizontalBarChart() {
     const initialConfiguration = {
@@ -28,6 +26,10 @@ export function horizontalBarChart() {
             bottom: 15,
             left: 100,
         },
+        reverse: false,
+        minX: 0,
+        maxX: null,
+      
         tooltipFormatter: (d) => {
             return `${d.data.label}: ${d.data.value}`;
         },
@@ -56,6 +58,9 @@ export function horizontalBarChart() {
     let barPadding = initialConfiguration.barPadding;
     let xLabel = initialConfiguration.xLabel;
     let barLabelLength = initialConfiguration.barLabelLength;
+    let reverse = initialConfiguration.reverse;
+    let minX = initialConfiguration.minX;
+    let maxX = initialConfiguration.maxX;
 
     function chart(selection) {
         selection.each(() => {
@@ -73,7 +78,7 @@ export function horizontalBarChart() {
 
             const x = scaleLinear()
                 .range([0, width]) //**
-                .domain([0, max(data, (d) => d.value)]);
+                .domain([minX, _maxX()])
 
             const y = scaleBand()
                 .rangeRound([height, 0])
@@ -213,19 +218,22 @@ export function horizontalBarChart() {
     }
 
     chart.saveAsPng = function (container) {
+
         let element = $(container).closest('.profile-indicator')[0];
+
         $(element).find('.profile-indicator__options').attr('data-html2canvas-ignore', true);
         $(element).find('.profile-indicator__filters').attr('data-html2canvas-ignore', true);
+        const rightMargin = 60;
 
         let options = {
             x: $(element).offset().left - 30,
             y: $(element).offset().top - 5,
-            width: $(element).width() + 60,
-            height: $(element).height(),
+            width: element.getBoundingClientRect().width + rightMargin,
+            height: element.getBoundingClientRect().height,
             //fix the size of the chart so it doesn't get affected by the client's resolution
             windowWidth: 1920,
             windowHeight: 1080,
-            scale: 0.9
+            scale: 0.9  
         }
 
         html2canvas(element, options).then(function (canvas) {
@@ -234,27 +242,6 @@ export function horizontalBarChart() {
             $(element).find('.profile-indicator__options').removeAttr('data-html2canvas-ignore');
             $(element).find('.profile-indicator__filters').removeAttr('data-html2canvas-ignore');
         });
-    }
-
-    function saveAs(uri, filename) {
-        let link = document.createElement('a');
-        if (typeof link.download === 'string') {
-
-            link.href = uri;
-            link.download = filename;
-
-            //Firefox requires the link to be in the body
-            document.body.appendChild(link);
-
-            //simulate click
-            link.click();
-
-            //remove the link when done
-            document.body.removeChild(link);
-
-        } else {
-            window.open(uri);
-        }
     }
 
     chart.exportAsCsv = function (title) {
@@ -328,6 +315,10 @@ export function horizontalBarChart() {
         })
 
         return exportData;
+    }
+
+    function _maxX() {
+        return maxX || max(data, d => d.value);
     }
 
     chart.width = function (value) {
@@ -423,6 +414,24 @@ export function horizontalBarChart() {
         }
     };
 
+    chart.minX = function(value) {
+        if (!arguments.length) {
+            return minX
+        }
+        minX = value;
+
+        return chart;
+    }
+
+    chart.maxX = function(value) {
+        if (!arguments.length) {
+            return _maxX()
+        }
+        maxX = value;
+
+        return chart;
+    }
+
     chart.yAxisFormatter = function (value) {
         if (!arguments.length) {
             return yAxisFormatter;
@@ -437,6 +446,15 @@ export function horizontalBarChart() {
         }
     };
 
+    chart.reverse = function (value) {
+        if (!arguments.length) return reverse;
+
+        reverse = value;
+        if (value)
+            data = data.reverse()
+        return chart;
+    };
+
     chart.data = function (value) {
         if (!arguments.length) {
             return data;
@@ -445,6 +463,7 @@ export function horizontalBarChart() {
 
         return chart;
     };
+
 
     return chart;
 }

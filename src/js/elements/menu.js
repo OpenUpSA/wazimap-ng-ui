@@ -7,7 +7,7 @@ const categoryTemplate = $(".data-category")[0].cloneNode(true);
 const subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
 const indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
 const indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
-const noDataWrapperClsName = 'data-menu__no-data';
+const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 
 function subindicatorsInCategory(category) {
@@ -121,6 +121,7 @@ export function loadMenu(data, subindicatorCallback) {
         $(newCategory).removeClass(hideondeployClsName);
         $(".data-category__h1_title div", newCategory).text(category);
         $('.' + loadingClsName).addClass('hidden');
+        $('.' + noDataWrapperClsName).addClass('hidden');
         parentContainer.append(newCategory);
         var h2Wrapper = $(".data-category__h1_wrapper", newCategory);
         $(".data-category__h2", h2Wrapper).remove();
@@ -165,4 +166,10 @@ export function loadMenu(data, subindicatorCallback) {
             $('.' + noDataWrapperClsName).removeClass(hideondeployClsName);
         }
     }
+}
+
+export function showNoData(){
+    $(parentContainer).empty();
+    $('.' + loadingClsName).addClass('hidden');
+    $('.' + noDataWrapperClsName).removeClass('hidden');
 }

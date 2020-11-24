@@ -1,9 +1,7 @@
-import {TutorialBox} from "../elements/tutorial_box";
 import {ProfileLayout} from "../elements/profile_layout";
 import PDFPrinter from '../print';
 import {SidePanels, RICH_DATA_PANEL, POINT_DATA_PANEL, DATA_EXPLORER_PANEL} from '../elements/side_panels';
 
-export const tutorialBox = new TutorialBox();
 export const profileLayout = new ProfileLayout();
 export const pdfprinter = new PDFPrinter();
 export const printButton = $("#profile-print");
@@ -12,7 +10,6 @@ export function configureMiscElementEvents(controller) {
     const sidePanels = new SidePanels();
     const defaultPanel = controller.config.defaultPanel;
 
-    controller.on('profile.loaded', payload => tutorialBox.prepTutorialBox(payload.payload))
     controller.on('profile.loaded', payload => profileLayout.displayLogo(payload.payload.logo))
     controller.on('printProfile', payload => pdfprinter.printDiv(payload))
 

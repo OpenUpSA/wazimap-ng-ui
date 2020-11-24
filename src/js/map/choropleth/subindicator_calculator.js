@@ -2,6 +2,10 @@ import {percFmt, numFmt} from '../../utils'
 
 export default class SubindicatorCalculator {
     calculate(args) {
+        if (typeof args.data === 'undefined'){
+            return null;
+        }
+
         const result = Object.entries(args.data).map(childGeography => {
             const code = childGeography[0];
             const count = childGeography[1];

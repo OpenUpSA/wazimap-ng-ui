@@ -184,7 +184,6 @@ export default class Controller extends Observable {
             // Shouldn't be here
             setTimeout(() => {
                 if (callRegisterFunction) {
-                    console.log("initialising webflow")
                     Webflow.require('ix2').init()
                     // self.registerWebflowEvents();
                 }
@@ -283,6 +282,23 @@ export default class Controller extends Observable {
         Webflow.ready();
     }
 
+    onBoundaryTypeChange = (payload) => {
+        let currentLevel = payload['current_level'];
+        let selectedType = payload['selected_type'];
+
+        this.state.preferredChild = selectedType;
+        this.triggerEvent("preferredChildChange", selectedType);
+        // TODO remove SA specfic stuff
+
+        let arr = this.config.config['preferred_children'][currentLevel];
+        let index = arr.indexOf(selectedType);
+        [arr[0], arr[index]] = [arr[index], arr[0]];
+
+        this.config.config['preferred_children'][currentLevel] = arr;
+
+        this.reDrawChildren();
+    }
+
     onPreferredChildChange(childLevel) {
         this.state.preferredChild = childLevel;
         this.triggerEvent("preferredChildChange", childLevel);
@@ -292,41 +308,13 @@ export default class Controller extends Observable {
         this.reDrawChildren();
     }
 
-    reDrawChildren = () => {
-        let currentLevel = this.state.profile.profile.geography.level;
-
-        if (currentLevel !== 'municipality') {
-            return;
-        }
+    reDrawChildren() {
 
         const payload = {
             profile: this.state.profile.profile,
+            geometries: this.state.profile.geometries
         }
 
-        this.onHashChange(payload, false);
+        this.triggerEvent('redraw', payload);
     }
-
-    // registerWebflowEvents() {
-    //     const events = ["click", "mouseover", "mouseout"];
-    //     const self = this;
-    //     events.forEach(function (ev) {
-    //         let eventElements = $(`*[data-event=${ev}]`);
-    //         Object.values(eventElements).forEach(el => {
-    //             if (el.attributes == undefined) return;
-    //             const functionAttribute = el.attributes["data-function"];
-
-    //             if (functionAttribute == undefined) return;
-    //             const functions = functionAttribute.value;
-
-    //             if (functions == undefined) return;
-
-    //             functions.split(",").forEach(foo => {
-    //                 const func = self[`on${foo}`];
-    //                 if (func != undefined) {
-    //                     $(el).on(ev, el => func(el))
-    //                 }
-    //             })
-    //         })
-    //     })
-    // }
 }

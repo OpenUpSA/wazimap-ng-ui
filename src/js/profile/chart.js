@@ -1,24 +1,29 @@
-import {numFmtAlt, Observable} from "../utils";
-import {format as d3format} from "d3-format/src/defaultLocale";
-import {horizontalBarChart} from "../reusable-charts/horizontal-bar-chart";
-import {select as d3select} from "d3-selection";
-import {SubindicatorFilter} from "./subindicator_filter";
+import {format as d3format} from 'd3-format/src/defaultLocale';
+import {select as d3select} from 'd3-selection';
 
-const graphValueTypes = ['Percentage', 'Value'];
+import {Observable} from '../utils';
+import {defaultValues} from '../defaultValues';
+
+import {horizontalBarChart} from '../reusable-charts/horizontal-bar-chart';
+import {SubindicatorFilter} from './subindicator_filter';
+
+const PERCENTAGE_TYPE = 'Percentage';
+const VALUE_TYPE = 'Value'
+const graphValueTypes = [PERCENTAGE_TYPE, VALUE_TYPE];
 const chartContainerClass = '.indicator__chart';
 const tooltipClass = '.bar-chart__row_tooltip';
 
 let tooltipClone = null;
 
 export class Chart extends Observable {
-    constructor(subindicators, groups, detail, graphValueType, _subCategoryNode, title) {
-        //we need the detail parameter to be able to filter
+    constructor(config, subindicators, groups, indicators, graphValueType, _subCategoryNode, title) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
 
         this.subindicators = subindicators;
         this.graphValueType = graphValueType;
         this.title = title;
+        this.config = config;
 
         tooltipClone = $(tooltipClass)[0].cloneNode(true);
         this.subCategoryNode = _subCategoryNode;
@@ -26,7 +31,7 @@ export class Chart extends Observable {
         const chartContainer = $(chartContainerClass, this.subCategoryNode);
         this.container = chartContainer[0];
 
-        this.handleChartFilter(detail, groups, title);
+        this.handleChartFilter(indicators, groups, title);
         this.addChart();
     }
 
@@ -40,7 +45,7 @@ export class Chart extends Observable {
         this.setChartOptions(barChart);
 
         this.setChartMenu(barChart);
-        d3select(this.container).call(barChart.data(data));
+        d3select(this.container).call(barChart.data(data).reverse(true));
     }
 
     setChartOptions = (chart) => {
@@ -58,7 +63,7 @@ export class Chart extends Observable {
             .barPadding(6)
             .margin({
                 top: 15,
-                right: 0,
+                right: 15,
                 bottom: 15,
                 left: 120,
             })
@@ -71,27 +76,33 @@ export class Chart extends Observable {
             })
             .xLabel("")
 
-        if (this.graphValueType === graphValueTypes[0]) {
-            chart.xAxisFormatter((d) => {
-                return d + '%';
-            })
-        } else {
-            chart.xAxisFormatter((d) => {
-                return numFmtAlt(d);
-            })
-        }
+        this.chartConfig = this.config.types[this.graphValueType]
+        this.setChartDomain(chart, this.config, this.graphValueType)
+
+        chart.xAxisFormatter(d => {
+            return d3format(this.chartConfig.formatting)(d)
+        })
+    }
+
+    setChartDomain(chart, config, chartType) {
+        const chartConfig = config.types[chartType]
+        if (chartConfig.minX != defaultValues.DEFAULT_CONFIG)
+            chart.minX(chartConfig.minX)
+        if (chartConfig.maxX != defaultValues.DEFAULT_CONFIG)
+            chart.maxX(chartConfig.maxX)
     }
 
     getValuesFromSubindicators = () => {
-        const fmt = d3format(",.2f");
         let arr = [];
+        const chartConfig = this.config.types[this.graphValueType]
+
         for (const [label, subindicator] of Object.entries(this.subindicators)) {
             let count = subindicator.count;
-            let val = this.graphValueType === graphValueTypes[0] ? this.getPercentageValue(count, this.subindicators) : count;
+            let val = this.graphValueType === PERCENTAGE_TYPE ? this.getPercentageValue(count, this.subindicators) : count;
             arr.push({
                 label: subindicator.keys,
                 value: val,
-                valueText: this.graphValueType === graphValueTypes[0] ? fmt(val) + '%' : fmt(val)
+                valueText: d3format(chartConfig.formatting)(val)
             })
         }
 
@@ -102,7 +113,6 @@ export class Chart extends Observable {
         const self = this;
         const containerParent = $(this.container).closest('.profile-indicator');
 
-        //save as image button
         const saveImgButton = $(containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');
 
         $(saveImgButton).off('click');
@@ -111,7 +121,6 @@ export class Chart extends Observable {
             this.triggerEvent('profile.chart.saveAsPng', this);
         })
 
-        //show as percentage / value
         //todo:don't use index, specific class names should be used here when the classes are ready
         $(containerParent).find('.hover-menu__content_list a').each(function (index) {
             $(this).off('click');
@@ -159,19 +168,18 @@ export class Chart extends Observable {
             total += value.count;
         }
 
-        percentage = currentValue / total * 100;
+        percentage = currentValue / total;
 
         return percentage;
     }
 
-    handleChartFilter = (detail, groups, title) => {
-        let siFilter = new SubindicatorFilter();
-        this.bubbleEvent(siFilter, 'point_tray.subindicator_filter.filter')
-        
+    handleChartFilter = (indicators, groups, title) => {
         let dropdowns = $(this.subCategoryNode).find('.filter__dropdown_wrap');
         const filterArea = $(this.subCategoryNode).find('.profile-indicator__filters');
 
-        siFilter.handleFilter(detail.indicators, filterArea, groups, title, this, dropdowns);
+        let siFilter = new SubindicatorFilter(indicators, filterArea, groups, title, this, dropdowns);
+        this.bubbleEvent(siFilter, 'point_tray.subindicator_filter.filter')
+
     }
 
     applyFilter = (chartData) => {

@@ -1,4 +1,5 @@
-// import {geography_config} from './geography_providers/geography_sa';
+import {defaultValues} from './defaultValues';
+import {fillMissingKeys} from './utils';
 
 export class Geography {
     constructor(js) {
@@ -20,6 +21,30 @@ export class Geography {
     }
 }
 
+export class IndicatorHelper {
+    static getMetadata(indicator) {
+        return indicator.metadata || {
+            source: '',
+            description: '',
+            url: '',
+            licence: {
+                name: '',
+                url: ''
+            }
+        }
+    }
+
+    static getChartConfiguration(chart_configuration) {
+        return fillMissingKeys(chart_configuration, defaultValues.chartConfiguration || {})
+    }
+
+    static fixIndicator(indicator) {
+        indicator.metadata = this.getMetadata(indicator)
+        indicator.chartConfiguration = this.getChartConfiguration(indicator.chart_configuration)
+        return indicator
+    }
+}
+
 export class Profile {
 
     constructor(js) {
@@ -35,7 +60,8 @@ export class Profile {
             Object.values(category.subcategories).forEach(subcategory => {
                 subcategory = self._fixSubcategory(subcategory)
                 Object.values(subcategory.indicators).forEach(indicator => {
-                    self._fixMetadata(indicator)
+                    indicator = IndicatorHelper.fixIndicator(indicator)
+
                     indicator.subindicators = Object
                         .entries(indicator.subindicators)
                         .map(s => new SubIndicator(s, indicator.choropleth_method))
@@ -44,18 +70,6 @@ export class Profile {
         })
     }
 
-    _fixMetadata(indicator) {
-        if (indicator.metadata == undefined)
-            indicator.metadata = {
-                source: "",
-                description: "",
-                licence: {
-                    name: "",
-                    url: ""
-                }
-
-            }
-    }
 
     _fixProfile(profile) {
         if (profile.highlights == undefined)
@@ -128,7 +142,7 @@ export class DataBundle {
         return this._logo;
     }
 
-    get overview(){
+    get overview() {
         return this._overview;
     }
 
@@ -148,7 +162,7 @@ export class DataBundle {
     // }
 }
 
-export const MISSING_VALUE = "N/A";
+export const MISSING_VALUE = 0;
 
 export class SubIndicator {
     constructor(entry, choropleth_method) {

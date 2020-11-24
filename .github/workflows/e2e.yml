@@ -1,0 +1,17 @@
+name: End-to-end tests
+on: push
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          # Install NPM dependencies, cache them correctly
+          # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v2.6.1
+        env:
+          CYPRESS_BASE_URL: https://wazimap-staging.netlify.app

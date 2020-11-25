@@ -1,3 +1,4 @@
+import {merge} from 'lodash';
 import {format as d3format} from 'd3-format';
 
 const queryCache = {};
@@ -189,11 +190,11 @@ export function formatNumericalValue(number, formatting, method) {
     return fn(number);
 }
 
-function isNull(x) {
+export function isNull(x) {
     return x === null;
 }
 
-function isUndefined(x) {
+export function isUndefined(x) {
     return x === undefined
 }
 
@@ -287,4 +288,8 @@ export function saveAs(uri, filename) {
     } else {
         window.open(uri);
     }
+}
+
+export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
+    return merge({}, defaultObj, obj)
 }

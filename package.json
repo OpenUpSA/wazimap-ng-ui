@@ -75,6 +75,10 @@
     ],
     "setupFilesAfterEnv": [
       "./jest-custom-matchers.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/__tests__/integration/",
+      "/node_modules/"
     ]
   }
 }

@@ -263,7 +263,7 @@ export function horizontalBarChart() {
             rows.push(row);
         });
 
-        const fileName = title + '.csv';
+        const fileName = `${title}.csv`;
 
         let csvContent = "data:text/csv;charset=utf-8,"
             + rows.map(e => e.join(",")).join("\n");
@@ -419,7 +419,7 @@ export function horizontalBarChart() {
         }
     };
 
-    chart.minX = function(value) {
+    chart.minX = function (value) {
         if (!arguments.length) {
             return minX
         }
@@ -428,7 +428,7 @@ export function horizontalBarChart() {
         return chart;
     }
 
-    chart.maxX = function(value) {
+    chart.maxX = function (value) {
         if (!arguments.length) {
             return _maxX()
         }

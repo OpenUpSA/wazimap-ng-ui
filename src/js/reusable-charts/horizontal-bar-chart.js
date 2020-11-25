@@ -130,6 +130,9 @@ export function horizontalBarChart() {
                     .tickSize(-height)
                     .tickFormat("")
                 )
+                .call(g => g.selectAll(".tick line")
+                    .attr("stroke", "#999")
+                )
 
             /**
              * bars

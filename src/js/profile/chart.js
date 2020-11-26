@@ -25,6 +25,7 @@ export class Chart extends Observable {
         this.title = title;
         this.config = config;
         this.selectedFilter = null;
+        this.selectedGroup = null;
 
         tooltipClone = $(tooltipClass)[0].cloneNode(true);
         this.subCategoryNode = _subCategoryNode;
@@ -141,7 +142,7 @@ export class Chart extends Observable {
                 }[index];
                 self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
-                let fileName = self.selectedFilter === null ? `${self.title}` : `${self.title} - ${self.selectedFilter}`;
+                let fileName = self.selectedFilter === null || self.selectedGroup === null ? `${self.title}` : `${self.title} - by ${self.selectedGroup} - ${self.selectedFilter}`;
                 downloadFn.fn(fileName);
             })
         });
@@ -186,6 +187,7 @@ export class Chart extends Observable {
 
     applyFilter = (chartData, selectedGroup, selectedFilter) => {
         this.selectedFilter = selectedFilter;
+        this.selectedGroup = selectedGroup;
         if (chartData !== null) {
             this.subindicators = chartData;
             this.addChart();

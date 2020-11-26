@@ -1,7 +1,7 @@
-name: CI
+name: Unit tests
 on: push
 jobs:
-  tests:
+  unit_tests:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

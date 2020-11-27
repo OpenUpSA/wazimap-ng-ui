@@ -130,10 +130,15 @@ export function horizontalBarChart() {
              */
             barChartSvg.append("g")
                 .attr("class", "grid")
+                .attr("stroke-opacity", 0.2)
+                .attr("stroke", '#999')
                 .attr("transform", "translate(0," + height + ")")
                 .call(make_x_gridlines()
                     .tickSize(-height)
                     .tickFormat("")
+                )
+                .call(g => g.selectAll(".tick line")
+                    .attr("stroke", "#999")
                 )
 
             /**

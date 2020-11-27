@@ -43,7 +43,6 @@ export class Category extends Observable {
         $(newCategorySection).append(this.getSectionLink());
         $(newCategorySection).append(sectionHeader);
         $(newCategorySection).append(indicatorHeader);
-        $('.category-header__link', newCategorySection).addClass('hidden');
 
         $(categoryTitleClass, newCategorySection).text(category);
         $(descriptionTextClass, newCategorySection).text(detail.description);

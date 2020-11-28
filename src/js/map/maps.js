@@ -8,10 +8,11 @@ import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 
 export class MapControl extends Observable {
-    constructor(config) {
+    constructor(config, zoomToPosition = () => true) {
         super();
 
         this.config = config;
+        this.zoomToPosition = zoomToPosition;
 
         const coords = config.map.defaultCoordinates;
 
@@ -276,7 +277,7 @@ export class MapControl extends Observable {
                 })
                 .addTo(self.map);
 
-            if (!alreadyZoomed) {
+            if (self.zoomToPosition() && !alreadyZoomed) {
                 try {
                     self.map.flyToBounds(layer.getBounds(), {
                         animate: true,

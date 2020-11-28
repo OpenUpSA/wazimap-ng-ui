@@ -52,34 +52,8 @@ export class MapControl extends Observable {
     }
 
     onZoomChanged(e) {
-        if (!this.zoomEnabled)
-            return;
-
-        if (e.sourceTarget._popup === null || typeof e.sourceTarget._popup === 'undefined') {
-            return;
-        }
-
-        let area = e.sourceTarget._popup._content;
-        let zoomLvl = e.sourceTarget._zoom;
-        let areaCode = this.map.map_variables.hoverAreaCode;
-        let level = this.map.map_variables.hoverAreaLevel;
-
-        const hash = decodeURI(window.location.hash);
-        let parts = hash.split(":")
-
-        if (zoomLvl < 7) {
-            window.location.hash = "";
-        } else if (zoomLvl >= 11 && level === this.config.geographyLevels.subplace) {
-            window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 10 && level === this.config.geographyLevels.mainplace) {
-            window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 9 && level === this.config.geographyLevels.municipality) {
-            window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 8 && level === this.config.geographyLevels.district) {
-            window.location.hash = "#geo:" + areaCode;
-        } else if (zoomLvl >= 7 && level === this.config.geographyLevels.province) {
-            window.location.hash = "#geo:" + areaCode;
-        }
+        // Zoom changed not currently implemented
+        return
     }
 
     // Leaflet

@@ -188,6 +188,19 @@ export class MapControl extends Observable {
         return null;
     }
 
+    zoomToLayer(layer) {
+        if (this.zoomToPosition()) {
+            try {
+                this.map.flyToBounds(layer.getBounds(), {
+                    animate: true,
+                    duration: 0.5 // in seconds
+                });
+            } catch (err) {
+                console.log("Error zooming: " + err);
+            }
+        }
+    }
+
 
     overlayBoundaries(geography, geometries, zoomNeeded = false) {
         const self = this;
@@ -245,7 +258,8 @@ export class MapControl extends Observable {
                 layer: layer.layer,
                 element: layer,
                 properties: prop,
-                maplocker: self.maplocker
+                maplocker: self.maplocker,
+                mapControl: self
             }
         }
 
@@ -278,15 +292,8 @@ export class MapControl extends Observable {
                 .addTo(self.map);
 
             if (self.zoomToPosition() && !alreadyZoomed) {
-                try {
-                    self.map.flyToBounds(layer.getBounds(), {
-                        animate: true,
-                        duration: 0.5 // in seconds
-                    });
-                    alreadyZoomed = true;
-                } catch (err) {
-                    console.log("Error zooming: " + err);
-                }
+                self.zoomToLayer(layer)
+                alreadyZoomed = true;
             }
         })
 

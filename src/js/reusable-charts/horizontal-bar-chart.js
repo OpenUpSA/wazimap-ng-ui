@@ -29,7 +29,7 @@ export function horizontalBarChart() {
         reverse: false,
         minX: 0,
         maxX: null,
-      
+
         tooltipFormatter: (d) => {
             return `${d.data.label}: ${d.data.value}`;
         },
@@ -130,10 +130,15 @@ export function horizontalBarChart() {
              */
             barChartSvg.append("g")
                 .attr("class", "grid")
+                .attr("stroke-opacity", 0.2)
+                .attr("stroke", '#999')
                 .attr("transform", "translate(0," + height + ")")
                 .call(make_x_gridlines()
                     .tickSize(-height)
                     .tickFormat("")
+                )
+                .call(g => g.selectAll(".tick line")
+                    .attr("stroke", "#999")
                 )
 
             /**
@@ -233,7 +238,7 @@ export function horizontalBarChart() {
             //fix the size of the chart so it doesn't get affected by the client's resolution
             windowWidth: 1920,
             windowHeight: 1080,
-            scale: 0.9  
+            scale: 0.9
         }
 
         html2canvas(element, options).then(function (canvas) {
@@ -258,7 +263,7 @@ export function horizontalBarChart() {
             rows.push(row);
         });
 
-        const fileName = title + '.csv';
+        const fileName = `${title}.csv`;
 
         let csvContent = "data:text/csv;charset=utf-8,"
             + rows.map(e => e.join(",")).join("\n");
@@ -414,7 +419,7 @@ export function horizontalBarChart() {
         }
     };
 
-    chart.minX = function(value) {
+    chart.minX = function (value) {
         if (!arguments.length) {
             return minX
         }
@@ -423,7 +428,7 @@ export function horizontalBarChart() {
         return chart;
     }
 
-    chart.maxX = function(value) {
+    chart.maxX = function (value) {
         if (!arguments.length) {
             return _maxX()
         }

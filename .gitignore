@@ -9,3 +9,4 @@ yarn-error.log
 __pycache__
 .DS_Store
 .idea/
+*.override.yml

@@ -100,7 +100,9 @@ export class MapControl extends Observable {
 
         L.control.zoom({position: this.zoomPosition}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
-        this.configureForwarder(map);
+
+        if (mapOptions.leafletOptions.preferCanvas)
+            this.configureForwarder(map);
 
         return map;
     };

@@ -62,21 +62,30 @@ export default function configureApplication(profileId, config) {
     const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
     const mapDownload = new MapDownload();
 
-    // TODO not certain if it is need to register both here and in the controller in loadedGeography
-    // controller.registerWebflowEvents();
+    const components = {
+        mapcontrol: mapcontrol,
+        zoomToggle: zoomToggle,
+        pointData: pointData,
+        pointDataTray, pointDataTray,
+        mapchip: mapchip,
+        profileLoader: profileLoader,
+        locationInfoBox: locationInfoBox,
+        search: search,
+        boundaryTypeBox: boundaryTypeBox
+    }
 
-    configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
+    configureMapEvents(controller, components);
     configureSpinnerEvents(controller);
-    configureSearchEvents(controller, search);
-    configureInfoboxEvents(controller, locationInfoBox);
-    configurePointDataEvents(controller, {pointData: pointData, pointDataTray: pointDataTray});
-    configureChoroplethEvents(controller, {mapcontrol: mapcontrol, mapchip: mapchip});
-    configureBreadcrumbsEvents(controller, {profileLoader: profileLoader, locationInfoBox: locationInfoBox});
+    configureSearchEvents(controller, components);
+    configureInfoboxEvents(controller, components);
+    configurePointDataEvents(controller, components);
+    configureChoroplethEvents(controller, components);
+    configureBreadcrumbsEvents(controller, components); 
     configureDataExplorerEvents(controller);
-    configureProfileEvents(controller, {profileLoader: profileLoader});
+    configureProfileEvents(controller, components);
     configureMiscElementEvents(controller);
     configureRichDataView(controller);
-    configureBoundaryEvents(controller, boundaryTypeBox);
+    configureBoundaryEvents(controller, components);
 
     controller.on('profile.loaded', payload => {
         // there seems to be a bug where menu items close if this is not set

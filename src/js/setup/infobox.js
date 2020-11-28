@@ -1,6 +1,6 @@
-export function configureInfoboxEvents(controller, locationInfoBox) {
-    controller.on('profileLoaded', payload => locationInfoBox.update(payload.state.profile))
-    controller.on('profile.loaded', payload => locationInfoBox.update(payload.payload))
+export function configureInfoboxEvents(controller, components) {
+    controller.on('profileLoaded', payload => components.locationInfoBox.update(payload.state.profile))
+    controller.on('profile.loaded', payload => components.locationInfoBox.update(payload.payload))
 
     controller.on('layerClick', payload => {
         if (payload.state.mapLoading == true) {
@@ -12,6 +12,6 @@ export function configureInfoboxEvents(controller, locationInfoBox) {
             name: properties.name,
             level: properties.level
         }];
-        locationInfoBox.updateLocations(locations);
+        components.locationInfoBox.updateLocations(locations);
     })
 }

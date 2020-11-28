@@ -1,8 +1,8 @@
 import {onProfileLoaded as onProfileLoadedSearch} from '../elements/search';
 
-export function configureSearchEvents(controller, search) {
+export function configureSearchEvents(controller, components) {
     controller.on('profileLoaded', onProfileLoadedSearch);
 
-    search.on('search.resultClick', payload => controller.onSearchResultClick(payload));
-    controller.bubbleEvents(search, ['search.before', 'search.results', 'search.clear'])
+    components.search.on('search.resultClick', payload => controller.onSearchResultClick(payload));
+    controller.bubbleEvents(components.search, ['search.before', 'search.results', 'search.clear'])
 }

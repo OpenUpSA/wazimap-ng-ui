@@ -63,7 +63,7 @@ export class Chart extends Observable {
             .barPadding(6)
             .margin({
                 top: 15,
-                right: 15,
+                right: 50,
                 bottom: 15,
                 left: 120,
             })
@@ -75,6 +75,10 @@ export class Chart extends Observable {
                 return $(tooltip).prop('outerHTML');
             })
             .xLabel("")
+            .barTextPadding({
+                top:15,
+                left:5
+            })
 
         this.chartConfig = this.config.types[this.graphValueType]
         this.setChartDomain(chart, this.config, this.graphValueType)

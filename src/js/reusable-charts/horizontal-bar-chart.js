@@ -4,7 +4,7 @@ import 'd3-transition';
 import d3Tip from 'd3-tip';
 import {axisBottom, axisLeft} from 'd3-axis';
 import html2canvas from 'html2canvas';
-import xlsExport from "xlsexport";
+import XLSX from 'xlsx';
 import {saveAs} from "../utils";
 
 export function horizontalBarChart() {
@@ -270,11 +270,14 @@ export function horizontalBarChart() {
 
     chart.exportAsExcel = function (title) {
         const exportData = getExportData();
-        const fileName = title + '.xls';
-        const sheetName = 'Chart Data';
-        const xls = new xlsExport(exportData, sheetName);
-
-        xls.exportToXLS(fileName);
+        // export json (only array possible) to Worksheet of Excel
+        var data = XLSX.utils.json_to_sheet(exportData);
+        // A workbook is the name given to an Excel file
+        var wb = XLSX.utils.book_new(); // make Workbook of Excel
+        // add Worksheet to Workbook
+        XLSX.utils.book_append_sheet(wb, data, 'Chart data');
+        // export Excel file
+        XLSX.writeFile(wb, title + '.xlsx'); // name of the file is 'chart_data.xlsx'
     }
 
     chart.exportAsJson = function (title) {

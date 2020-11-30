@@ -25,9 +25,10 @@
     "main": "^1000.0.1",
     "main.js": "0.0.1",
     "save-svg-as-png": "^1.4.17",
+    "sheetjs": "^2.0.0",
     "shx": "^0.3.2",
     "svelte-dev-tools": "^0.0.2",
-    "xlsexport": "^1.5.2"
+    "xlsx": "^0.16.9"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
@@ -63,8 +64,8 @@
     "setupFiles": [
       "./setup-jest.js"
     ],
-		"setupFilesAfterEnv": [
-			"./jest-custom-matchers.js"
-		]
+    "setupFilesAfterEnv": [
+      "./jest-custom-matchers.js"
+    ]
   }
 }

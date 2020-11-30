@@ -1,3 +1,4 @@
+import {merge} from 'lodash';
 import {format as d3format} from 'd3-format';
 
 const queryCache = {};
@@ -189,19 +190,19 @@ export function formatNumericalValue(number, formatting, method) {
     return fn(number);
 }
 
-function isNull(x) {
+export function isNull(x) {
     return x === null;
 }
 
-function isUndefined(x) {
+export function isUndefined(x) {
     return x === undefined
 }
 
-function isEmptyString(x) {
+export function isEmptyString(x) {
     return x == '';
 }
 
-function isEmptyObject(x) {
+export function isEmptyObject(x) {
     try {
         if (typeof x === 'object' && x !== null)
             return Object.keys(x).length == 0
@@ -212,7 +213,7 @@ function isEmptyObject(x) {
     }
 }
 
-function isMissingData(x) {
+export function isMissingData(x) {
     const funcs = [isNull, isUndefined, isEmptyString, isEmptyObject]
     const res = funcs.filter(f => f(x))
 
@@ -290,17 +291,5 @@ export function saveAs(uri, filename) {
 }
 
 export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
-    let filledObject = {...defaultObj, ...obj}
-
-    Object.entries(filledObject).forEach(entry => {
-        const key = entry[0]
-        const val = entry[1]
-        const defaultObj2 = defaultObj[key]
-
-         if (typeof val === 'object' && defaultObj2 != undefined && deep_copy)
-            filledObject[key] = fillMissingKeys(val, defaultObj2, deep_copy)
-    })
-
-    return filledObject;
-
+    return merge({}, defaultObj, obj)
 }

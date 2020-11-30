@@ -104,11 +104,13 @@ describe('SubindicatorFilter', () => {
 
     test('Handles missing group correctly', () => {
         const chartData = si.getFilteredGroups(INDICATORS[title].groups, 'Missing group', 'XXXXXX')
+        
         expect(chartData.length).toBe(0)
     })
 
     test('Handles missing subindicator correctly', () => {
         const chartData = si.getFilteredGroups(INDICATORS[title].groups, 'Gender', 'Missing subindicator')
+        
         expect(chartData.length).toBe(0)
     })
 

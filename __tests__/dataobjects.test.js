@@ -17,19 +17,19 @@ describe('Test IndicatorHelper static methods', () => {
         const original = defaultValues.chartConfiguration
         defaultValues.chartConfiguration = {test1: 1, test2: 2}
 
-        let indicator = {test1: 3}
+        let chartConfiguration = {test1: 3}
+        let chartConfiguration2 = IndicatorHelper.getChartConfiguration(chartConfiguration)
 
-        indicator.chartConfiguration = IndicatorHelper.getChartConfiguration(indicator)
-        expect(indicator.chartConfiguration).toBeDefined()
-        expect(indicator.chartConfiguration.test1).toBe(1)
-        expect(indicator.chartConfiguration.test2).toBe(2)
+        expect(chartConfiguration2).toBeDefined()
+        expect(chartConfiguration2.test1).toBe(3)
+        expect(chartConfiguration2.test2).toBe(2)
 
         defaultValues.chartConfiguration = original;
     })
 
     test('fix indicator applies all manipulations to indicator', () => {
         const original = defaultValues.chartConfiguration
-        defaultValues.chartConfiguration = {test1: 1, test2: 2}
+        defaultValues.chartConfiguration = {test1: 1, test2: 2, test3: {test4: 4}}
         
         let indicator = {}
         indicator = IndicatorHelper.fixIndicator(indicator)
@@ -41,8 +41,8 @@ describe('Test IndicatorHelper static methods', () => {
         expect(indicator.chartConfiguration).toBeDefined()
         expect(indicator.chartConfiguration.test1).toBe(1)
         expect(indicator.chartConfiguration.test2).toBe(2)
+        expect(indicator.chartConfiguration.test3.test4).toBe(4)
 
         defaultValues.chartConfiguration = original;
     })
-
 })

@@ -281,13 +281,13 @@ export function horizontalBarChart() {
     chart.exportAsExcel = function (title) {
         const exportData = getExportData();
         // export json (only array possible) to Worksheet of Excel
-        var data = XLSX.utils.json_to_sheet(exportData);
+        const data = XLSX.utils.json_to_sheet(exportData);
         // A workbook is the name given to an Excel file
-        var wb = XLSX.utils.book_new(); // make Workbook of Excel
+        const wb = XLSX.utils.book_new(); // make Workbook of Excel
         // add Worksheet to Workbook
         XLSX.utils.book_append_sheet(wb, data, 'Chart data');
         // export Excel file
-        XLSX.writeFile(wb, title + '.xlsx'); // name of the file is 'chart_data.xlsx'
+        XLSX.writeFile(wb, title + '.xlsx');
     }
 
     chart.exportAsJson = function (title) {

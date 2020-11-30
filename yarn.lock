@@ -2925,6 +2925,14 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
+codepage@~1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/codepage/-/codepage-1.14.0.tgz#8cbe25481323559d7d307571b0fff91e7a1d2f99"
+  integrity sha1-jL4lSBMjVZ19MHVxsP/5HnodL5k=
+  dependencies:
+    commander "~2.14.1"
+    exit-on-epipe "~1.0.1"
+
 coffeeify@3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/coffeeify/-/coffeeify-3.0.1.tgz#5e2753000c50bd24c693115f33864248dd11136c"
@@ -2935,14 +2943,6 @@ coffeeify@3.0.1:
 coffeescript@1.12.7:
   version "1.12.7"
   resolved "https://registry.yarnpkg.com/coffeescript/-/coffeescript-1.12.7.tgz#e57ee4c4867cf7f606bfc4a0f2d550c0981ddd27"
-
-codepage@~1.14.0:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/codepage/-/codepage-1.14.0.tgz#8cbe25481323559d7d307571b0fff91e7a1d2f99"
-  integrity sha1-jL4lSBMjVZ19MHVxsP/5HnodL5k=
-  dependencies:
-    commander "~2.14.1"
-    exit-on-epipe "~1.0.1"
 
 collect-v8-coverage@^1.0.0:
   version "1.0.1"
@@ -3038,10 +3038,6 @@ commander@~1.1.1:
   dependencies:
     keypress "0.1.x"
 
-common-tags@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
-
 commander@~2.14.1:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.14.1.tgz#2235123e37af8ca3c65df45b026dbd357b01b9aa"
@@ -3051,6 +3047,10 @@ commander@~2.17.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
   integrity sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
+
+common-tags@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
 
 commondir@^1.0.1:
   version "1.0.1"
@@ -4315,6 +4315,11 @@ fd-slicer@~1.1.0:
   dependencies:
     pend "~1.2.0"
 
+fflate@^0.3.8:
+  version "0.3.10"
+  resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.3.10.tgz#0e581839a53203d2eeac7e61ce3652d855e24dcd"
+  integrity sha512-s5j69APkUPPbzdI20Ix4pPtQP+1Qi58YcFRpE7aO/P1kEywUYjbl2RjZRVEMdnySO9pr4MB0BHPbxkiahrtD/Q==
+
 figures@2.0.0, figures@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-2.0.0.tgz#3ab1a2d2a62c8bfb431a0c94cb797a2fce27c962"
@@ -4327,11 +4332,6 @@ figures@^1.7.0:
   dependencies:
     escape-string-regexp "^1.0.5"
     object-assign "^4.1.0"
-
-fflate@^0.3.8:
-  version "0.3.10"
-  resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.3.10.tgz#0e581839a53203d2eeac7e61ce3652d855e24dcd"
-  integrity sha512-s5j69APkUPPbzdI20Ix4pPtQP+1Qi58YcFRpE7aO/P1kEywUYjbl2RjZRVEMdnySO9pr4MB0BHPbxkiahrtD/Q==
 
 file-uri-to-path@1.0.0:
   version "1.0.0"
@@ -7787,18 +7787,19 @@ shebang-regex@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
 
-shell-quote@^1.4.2, shell-quote@^1.6.1:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/shell-quote/-/shell-quote-1.7.2.tgz#67a7d02c76c9da24f99d20808fcaded0e0e04be2"
-
 sheetjs@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/sheetjs/-/sheetjs-2.0.0.tgz#c091130923f0a36f96d758572fcfe92a87bb6b70"
   integrity sha512-/zxauUZFsJaClP16zlYHWuD/K9VDOHsZlbunZFVUwz9tqBZeUNhSKw7ubC1s6LdiCJYG+7IFY8IEJ+9hLQwDmw==
 
-shelljs@^0.8.1:
+shell-quote@^1.4.2, shell-quote@^1.6.1:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/shell-quote/-/shell-quote-1.7.2.tgz#67a7d02c76c9da24f99d20808fcaded0e0e04be2"
+
+shelljs@^0.8.4:
   version "0.8.4"
   resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.8.4.tgz#de7684feeb767f8716b326078a8a00875890e3c2"
+  integrity sha512-7gk3UZ9kOfPLIAbslLzyWeGiEqx9e3rxwZM0KE6EL8GlGwjym9Mrlx5/p33bWTu9YG6vcS4MBxYZDHYr5lr8BQ==
   dependencies:
     glob "^7.0.0"
     interpret "^1.0.0"
@@ -8887,10 +8888,6 @@ ws@^6.1.2:
 ws@^7.2.3:
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.0.tgz#a5dd76a24197940d4a8bb9e0e152bb4503764da7"
-
-xlsexport@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/xlsexport/-/xlsexport-1.5.2.tgz#1799cbbc27f366e60add9361c8f41e3a4fc11b08"
 
 xlsx@^0.16.9:
   version "0.16.9"

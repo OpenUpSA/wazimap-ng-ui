@@ -256,7 +256,8 @@ export class MapControl extends Observable {
                 layer: layer.layer,
                 element: layer,
                 properties: prop,
-                maplocker: self.maplocker
+                maplocker: self.maplocker,
+                mapControl: self
             }
         }
 

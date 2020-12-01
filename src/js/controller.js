@@ -212,6 +212,7 @@ export default class Controller extends Observable {
         }
 
         payload.maplocker.lock();
+        payload.mapControl.zoomToLayer(payload.layer)
 
         const areaCode = payload.areaCode;
         this.changeHash(areaCode)

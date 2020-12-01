@@ -276,7 +276,7 @@ export function horizontalBarChart() {
             rows.push(row);
         });
 
-        const fileName = title + '.csv';
+        const fileName = `${title}.csv`;
 
         let csvContent = "data:text/csv;charset=utf-8,"
             + rows.map(e => e.join(",")).join("\n");

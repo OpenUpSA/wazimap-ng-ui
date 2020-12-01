@@ -100,7 +100,9 @@ export class MapControl extends Observable {
 
         L.control.zoom({position: this.zoomPosition}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
-        this.configureForwarder(map);
+
+        if (mapOptions.leafletOptions.preferCanvas)
+            this.configureForwarder(map);
 
         return map;
     };
@@ -190,14 +192,10 @@ export class MapControl extends Observable {
 
     zoomToLayer(layer) {
         if (this.zoomToPosition()) {
-            try {
-                this.map.flyToBounds(layer.getBounds(), {
-                    animate: true,
-                    duration: 0.5 // in seconds
-                });
-            } catch (err) {
-                console.log("Error zooming: " + err);
-            }
+            this.map.flyToBounds(layer.getBounds(), {
+                animate: true,
+                duration: 0.5 // in seconds
+            });
         }
     }
 
@@ -291,9 +289,13 @@ export class MapControl extends Observable {
                 })
                 .addTo(self.map);
 
-            if (self.zoomToPosition() && !alreadyZoomed) {
-                self.zoomToLayer(layer)
-                alreadyZoomed = true;
+            if (!alreadyZoomed) {
+                try {
+                    self.zoomToLayer(layer)
+                    alreadyZoomed = true;
+                } catch (err) {
+                    console.log("Error zooming: " + err);
+                }
             }
         })
 

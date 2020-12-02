@@ -6630,6 +6630,22 @@ label {
   color: white;
 }
 
+#map-download-legend {
+  position: absolute;
+  bottom: 50px;
+  z-index: 998;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#map-download-legend .map-options__legend_wrap {
+  background: white;
+  padding: 5px;
+  height: 29px;
+  max-width: 397px;
+}
+
 .map-download:hover {
   color: #39ad84;
 }

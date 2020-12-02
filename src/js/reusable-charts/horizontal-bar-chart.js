@@ -29,6 +29,10 @@ export function horizontalBarChart() {
         reverse: false,
         minX: 0,
         maxX: null,
+        barTextPadding: {
+            top: 15,
+            left: 10
+        },
 
         tooltipFormatter: (d) => {
             return `${d.data.label}: ${d.data.value}`;
@@ -61,6 +65,7 @@ export function horizontalBarChart() {
     let reverse = initialConfiguration.reverse;
     let minX = initialConfiguration.minX;
     let maxX = initialConfiguration.maxX;
+    let barTextPadding = initialConfiguration.barTextPadding;
 
     function chart(selection) {
         selection.each(() => {
@@ -209,6 +214,14 @@ export function horizontalBarChart() {
                     $(this).attr("fill", 'transparent');
                     $(bar).attr("fill", colors[0]);
                 });
+
+            // text on the bars
+            bars.append('text')
+                .attr('y', (d) => y(d.label) + barTextPadding.top)
+                .attr('x', (d) => x(d.value) + barTextPadding.left)
+                .attr("class", "bar-chart__x-label")
+                .style('fill', '#999')
+                .text((d) => d.valueText);
 
             // text label for the x axis
             barChartSvg.append("text")
@@ -466,6 +479,12 @@ export function horizontalBarChart() {
         }
         data = value;
 
+        return chart;
+    };
+
+    chart.barTextPadding = function (value) {
+        if (!arguments.length) return barTextPadding;
+        barTextPadding = value;
         return chart;
     };
 

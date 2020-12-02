@@ -31,6 +31,7 @@ import {configureSpinnerEvents} from './setup/spinner';
 import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
 import {configureBoundaryEvents} from "./setup/boundaryevents";
+import {configureMapDownloadEvents} from "./setup/mapdownload";
 
 
 export default function configureApplication(profileId, config) {
@@ -77,6 +78,7 @@ export default function configureApplication(profileId, config) {
     configureMiscElementEvents(controller);
     configureRichDataView(controller);
     configureBoundaryEvents(controller, boundaryTypeBox);
+    configureMapDownloadEvents(mapDownload);
 
     controller.on('profile.loaded', payload => {
         // there seems to be a bug where menu items close if this is not set

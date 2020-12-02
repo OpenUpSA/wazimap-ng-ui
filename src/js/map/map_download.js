@@ -10,12 +10,15 @@ export class MapDownload extends Observable {
     }
 
     prepareDomElements = () => {
-        $('.map-download').click(() => {
+        $('.map-download').on('click', () => {
+            this.triggerEvent('mapdownload.started');
             this.downloadMap();
         });
     }
 
     downloadMap = () => {
+        let self = this;
+
         const options = {
             useCORS: true
         };
@@ -26,6 +29,7 @@ export class MapDownload extends Observable {
         html2canvas(element, options).then(function (canvas) {
             $(title).remove();
             saveAs(canvas.toDataURL(), 'map.png');
+            self.triggerEvent('mapdownload.completed');
         });
     }
 }

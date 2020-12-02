@@ -1,13 +1,12 @@
 import html2canvas from 'html2canvas';
 
 import {Observable, saveAs} from "../utils";
-import { MapChip } from "../elements/mapchip";
+import {MapChip} from "../elements/mapchip";
 
 export class MapDownload extends Observable {
     constructor() {
         super();
         this.mapChip = new MapChip();
-
         this.prepareDomElements();
     }
 

@@ -1,5 +1,6 @@
-import {Observable, saveAs} from "../utils";
 import html2canvas from 'html2canvas';
+
+import {Observable, saveAs} from "../utils";
 import { MapChip } from "../elements/mapchip";
 
 export class MapDownload extends Observable {

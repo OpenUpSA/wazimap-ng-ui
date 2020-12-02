@@ -1,9 +1,11 @@
 import {Observable, saveAs} from "../utils";
 import html2canvas from 'html2canvas';
+import { MapChip } from "../elements/mapchip";
 
 export class MapDownload extends Observable {
     constructor() {
         super();
+        this.mapChip = new MapChip();
 
         this.prepareDomElements();
     }
@@ -15,15 +17,16 @@ export class MapDownload extends Observable {
     }
 
     downloadMap = () => {
-        let options = {
+        const options = {
             useCORS: true
         };
-        let element = document.getElementById("main-map");
+        const title = $(`<div id="map-download-title">${this.mapChip.title}</div>`);
+        const element = document.getElementById("main-map");
+        $(element).append(title);
 
         html2canvas(element, options).then(function (canvas) {
+            $(title).remove();
             saveAs(canvas.toDataURL(), 'map.png');
         });
     }
-
-
 }

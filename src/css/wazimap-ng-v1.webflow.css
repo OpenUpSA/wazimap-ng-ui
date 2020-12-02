@@ -6619,6 +6619,17 @@ label {
   cursor: pointer;
 }
 
+#map-download-title {
+  position: fixed;
+  top: 80px;
+  z-index: 998;
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+}
+
 .map-download:hover {
   color: #39ad84;
 }

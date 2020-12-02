@@ -6,6 +6,7 @@ const wrapperClsName = 'content__map_current-display';
 const mapOptionsClass = '.map-options';
 const lightStart = 3;
 
+let title = '';
 let subindicatorKey = '';
 
 /**
@@ -131,7 +132,14 @@ export class MapChip extends Observable {
         if (args.indicatorTitle === args.subindicatorKey) {
             label = args.indicatorTitle;
         }
+
+        title = `${args.parents.category} by ${label}`;
+
         this.updateMapChipText(label);
         this.showMapChip(args);
+    }
+
+    get title() {
+        return title;
     }
 }

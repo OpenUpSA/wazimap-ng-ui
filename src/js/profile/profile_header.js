@@ -29,7 +29,7 @@ export class Profile_header extends Observable {
         breadcrumbsContainer = $('.location__breadcrumbs');
         breadcrumbTemplate = $('.styles').find(breadcrumbClass)[0];
 
-        facilityWrapper = $('.location__facilities .location__facilities_content');
+        facilityWrapper = $('.location__facilities .location__facilities_content-wrapper');
         facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
         facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
@@ -123,6 +123,7 @@ export class Profile_header extends Observable {
                 facilityWrapper.prepend(facilityItem);
             })
 
+            $('.location__facilities .location__facilities_content').append(facilityWrapper);
             $('.location__facilities_header').removeClass('hidden');
             $('.location__facilities_trigger').removeClass('hidden');
             $('.location__facilities_categories-value strong').text(categoryArr.length);

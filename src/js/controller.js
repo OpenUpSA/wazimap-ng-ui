@@ -107,7 +107,8 @@ export default class Controller extends Observable {
             selectedSubindicator: payload.obj.keys,
             choropleth_method: payload.obj.choropleth_method,
             subindicatorArr: payload.subindicators,
-            parents: payload.parents
+            parents: payload.parents,
+            chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration
         }
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.obj._keys;

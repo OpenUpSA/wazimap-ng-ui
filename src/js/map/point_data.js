@@ -210,19 +210,12 @@ export class PointData extends Observable {
 
         $('.' + tooltipItemsClsName, item).html('');
 
-        let arr = [];
-        for (let key in point.data) {
-            if (point.data.hasOwnProperty(key)) {
-                arr.push({key: key, value: point.data[key]});
-            }
-        }
-
-        arr.forEach((a, i) => {
+        point.data.forEach((a, i) => {
             if (Object.prototype.toString.call(a.value) == '[object String]') {
                 let itemRow = tooltipRowItem.cloneNode(true);
                 $('.tooltip__facility-item_label div', itemRow).text(a.key);
                 $('.tooltip__facility-item_value div', itemRow).text(a.value);
-                if (i === arr.length - 1) {
+                if (i === point.data.length - 1) {
                     $(itemRow).addClass('last')
                 }
 

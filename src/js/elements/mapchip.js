@@ -16,6 +16,7 @@ export class MapChip extends Observable {
         super();
         this.legendColors = legendColors;
         this.prepareDomElements();
+        this.title = '';
     }
 
     prepareDomElements() {
@@ -135,6 +136,9 @@ export class MapChip extends Observable {
         if (args.indicatorTitle === args.subindicatorKey) {
             label = args.indicatorTitle;
         }
+
+        this.title = `${args.category} by ${label}`;
+
         this.updateMapChipText(label);
         this.showMapChip(args);
     }

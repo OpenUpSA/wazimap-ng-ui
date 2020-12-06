@@ -58,7 +58,8 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             indicators: pp.indicators,
             subindicatorKey: pp.obj.keys,
             indicatorTitle: pp.indicatorTitle,
-            children: payload.state.subindicator.children
+            children: payload.state.subindicator.children,
+            category: pp.parents.category
         }
 
         mapchip.onSubIndicatorChange(args);

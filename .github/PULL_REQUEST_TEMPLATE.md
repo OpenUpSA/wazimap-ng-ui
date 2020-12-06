@@ -24,6 +24,7 @@ A meaningful description of proposed change in your own words.
 
 - [ ]  🚀 is the code ready to be merged and go live?
 - [ ]  🛠 does it work (build) locally
+- [ ] 👩‍🎨 does the design matches the [Demo](https://wazimap-ng-v1.webflow.io/demo)
 
 ### Pull Request
 
@@ -31,19 +32,13 @@ A meaningful description of proposed change in your own words.
 - [ ]  📝good description
 - [ ]  🔖 issue linked
 - [ ]  📖 changelog filled out
-
-### Commits
-
-- [ ]  commits are clean
-- [ ]  commit messages are clean
+- [ ] commit messages are meaningful
 
 ### Code Quality
 
 - [ ]  🚧 no commented out code
 - [ ]  🖨 no unnecessary logging
 - [ ]  🎱 no magic numbers
-- [ ]  ⚙️ ran jslint
-- [ ]  🧰 ran codeclimate locally
 
 ### Testing
 

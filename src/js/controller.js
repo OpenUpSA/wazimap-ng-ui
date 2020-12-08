@@ -7,6 +7,7 @@ export default class Controller extends Observable {
         this.config = config
         this.profileId = profileId;
         this.api = api;
+        this._shouldMapZoom = false;
 
         this.state = {
             profileId: profileId,
@@ -27,11 +28,14 @@ export default class Controller extends Observable {
 
             if (parts[0] == '#geo') {
                 payload = self.changeGeography(parts[1])
+                self._shouldMapZoom = true;
+
             } else if (parts[0] == '#logout') {
                 self.onLogout();
             } else {
                 //if a category nav is clicked, the hash becomes something like #divId, in that case it should behave same as if hash == ''
                 const areaCode = this.config.rootGeography;
+                self._shouldMapZoom = false;
                 payload = self.changeGeography(areaCode)
             }
 
@@ -39,6 +43,10 @@ export default class Controller extends Observable {
             self.onHashChange(payload);
         });
     };
+
+    get shouldMapZoom() {
+        return this._shouldMapZoom;
+    }
 
     changeGeography(areaCode) {
         const payload = {
@@ -99,7 +107,8 @@ export default class Controller extends Observable {
             selectedSubindicator: payload.obj.keys,
             choropleth_method: payload.obj.choropleth_method,
             subindicatorArr: payload.subindicators,
-            parents: payload.parents
+            parents: payload.parents,
+            chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration
         }
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.obj._keys;
@@ -204,6 +213,7 @@ export default class Controller extends Observable {
         }
 
         payload.maplocker.lock();
+        payload.mapControl.zoomToLayer(payload.layer)
 
         const areaCode = payload.areaCode;
         this.changeHash(areaCode)

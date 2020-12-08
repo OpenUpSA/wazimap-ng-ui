@@ -60,7 +60,7 @@ export default function configureApplication(profileId, config) {
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
     const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
-    const mapDownload = new MapDownload();
+    const mapDownload = new MapDownload(mapchip);
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();

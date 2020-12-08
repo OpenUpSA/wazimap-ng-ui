@@ -123,6 +123,7 @@ export class Profile_header extends Observable {
                 facilityWrapper.prepend(facilityItem);
             })
 
+            $('.location__facilities .location__facilities_content').append(facilityWrapper);
             $('.location__facilities_header').removeClass('hidden');
             $('.location__facilities_trigger').removeClass('hidden');
             $('.location__facilities_categories-value strong').text(categoryArr.length);

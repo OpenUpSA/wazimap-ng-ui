@@ -76,7 +76,7 @@ export class Popup extends Observable {
 
     setTooltipSubindicators = (payload, state, item, areaCode) => {
         let formattingConfig = this.formattingConfig;
-        if (state.subindicator != null) {
+        if (state.subindicator !== null && typeof state.subindicator.children !== 'undefined' && state.subindicator.children !== null) {
             //if any subindicator selected
             let isChild = false;
             for (const [geographyCode, count] of Object.entries(state.subindicator.children)) {

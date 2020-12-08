@@ -8,10 +8,11 @@ import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 
 export class MapControl extends Observable {
-    constructor(config) {
+    constructor(config, zoomToPosition = () => true) {
         super();
 
         this.config = config;
+        this.zoomToPosition = zoomToPosition;
 
         const coords = config.map.defaultCoordinates;
 
@@ -73,7 +74,9 @@ export class MapControl extends Observable {
 
         L.control.zoom({position: this.zoomPosition}).addTo(map);
         this.boundaryLayers = L.layerGroup().addTo(map);
-        this.configureForwarder(map);
+
+        if (mapOptions.leafletOptions.preferCanvas)
+            this.configureForwarder(map);
 
         return map;
     };
@@ -161,6 +164,15 @@ export class MapControl extends Observable {
         return null;
     }
 
+    zoomToLayer(layer) {
+        if (this.zoomToPosition()) {
+            this.map.flyToBounds(layer.getBounds(), {
+                animate: true,
+                duration: 0.5 // in seconds
+            });
+        }
+    }
+
 
     overlayBoundaries(geography, geometries, zoomNeeded = false) {
         const self = this;
@@ -218,7 +230,8 @@ export class MapControl extends Observable {
                 layer: layer.layer,
                 element: layer,
                 properties: prop,
-                maplocker: self.maplocker
+                maplocker: self.maplocker,
+                mapControl: self
             }
         }
 
@@ -252,10 +265,7 @@ export class MapControl extends Observable {
 
             if (!alreadyZoomed) {
                 try {
-                    self.map.flyToBounds(layer.getBounds(), {
-                        animate: true,
-                        duration: 0.5 // in seconds
-                    });
+                    self.zoomToLayer(layer)
                     alreadyZoomed = true;
                 } catch (err) {
                     console.log("Error zooming: " + err);

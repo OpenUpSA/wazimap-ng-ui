@@ -235,7 +235,7 @@ export function horizontalBarChart() {
         });
     }
 
-    chart.saveAsPng = function (container) {
+    chart.saveAsPng = function (container, fileName) {
 
         let element = $(container).closest('.profile-indicator')[0];
 
@@ -255,7 +255,7 @@ export function horizontalBarChart() {
         }
 
         html2canvas(element, options).then(function (canvas) {
-            saveAs(canvas.toDataURL(), 'chart.png');
+            saveAs(canvas.toDataURL(), fileName);
 
             $(element).find('.profile-indicator__options').removeAttr('data-html2canvas-ignore');
             $(element).find('.profile-indicator__filters').removeAttr('data-html2canvas-ignore');

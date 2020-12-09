@@ -78,8 +78,8 @@ export class Chart extends Observable {
             })
             .xLabel("")
             .barTextPadding({
-                top:15,
-                left:5
+                top: 15,
+                left: 5
             })
 
         this.chartConfig = this.config.types[this.graphValueType]
@@ -100,7 +100,7 @@ export class Chart extends Observable {
 
     getValuesFromSubindicators = () => {
         let arr = [];
-        const chartConfig = this.config.types[this.graphValueType]
+        const chartConfig = this.config.types[this.graphValueType];
 
         for (const [label, subindicator] of Object.entries(this.subindicators)) {
             let count = subindicator.count;

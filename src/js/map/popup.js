@@ -1,5 +1,8 @@
 import {Observable, setPopupStyle, formatNumericalValue} from '../utils';
+import {format as d3format} from "d3-format/src/defaultLocale";
 
+const PERCENTAGE_TYPE = 'Percentage';
+const VALUE_TYPE = 'Value'
 
 /**
  * this class creates & manipulates the popup over the map
@@ -73,14 +76,18 @@ export class Popup extends Observable {
 
     setTooltipSubindicators = (payload, state, item, areaCode) => {
         let formattingConfig = this.formattingConfig;
-        if (state.subindicator != null) {
+        if (state.subindicator !== null && typeof state.subindicator.children !== 'undefined' && state.subindicator.children !== null) {
             //if any subindicator selected
             let isChild = false;
             for (const [geographyCode, count] of Object.entries(state.subindicator.children)) {
                 if (geographyCode == areaCode) {
                     isChild = true;
-                    const countFmt = formatNumericalValue(count, formattingConfig, 'absolute_value');
-                    const perc = formatNumericalValue(payload.layer.feature.properties.percentage, formattingConfig, 'percentage');
+                    let chartConfig = state.subindicator.chartConfiguration;
+                    let percentageFormatting = chartConfig.types[PERCENTAGE_TYPE].formatting;
+                    let absoluteFormatting = chartConfig.types[VALUE_TYPE].formatting;
+
+                    const countFmt = d3format(absoluteFormatting)(count);
+                    const perc = d3format(percentageFormatting)(payload.layer.feature.properties.percentage);
 
                     $('.map-tooltip__value', item).removeClass('hidden');
                     $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);

@@ -26,10 +26,12 @@ export class MapDownload extends Observable {
         const element = document.getElementById("main-map");
         $(element).append(title);
 
-        html2canvas(element, options).then(function (canvas) {
-            $(title).remove();
-            saveAs(canvas.toDataURL(), 'map.png');
-            self.triggerEvent('mapdownload.completed');
-        });
+        setTimeout(() => {
+            html2canvas(element, options).then(function (canvas) {
+                $(title).remove();
+                saveAs(canvas.toDataURL(), 'map.png');
+                self.triggerEvent('mapdownload.completed');
+            });
+        }, 10)
     }
 }

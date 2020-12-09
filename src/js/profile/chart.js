@@ -123,7 +123,8 @@ export class Chart extends Observable {
 
         $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
-            barChart.saveAsPng(this.container);
+            let fileName = self.selectedGroup === null ? `${self.title}` : `${self.title} by ${self.selectedGroup} : ${self.selectedFilter}`;
+            barChart.saveAsPng(this.container, `${fileName}.png`);
             this.triggerEvent('profile.chart.saveAsPng', this);
         })
 

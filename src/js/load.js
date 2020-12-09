@@ -50,7 +50,7 @@ export default function configureApplication(profileId, config) {
     let serverFormattingConfig = config.config.formatting;
     let formattingConfig = {...defaultFormattingConfig, ...serverFormattingConfig};
 
-    const mapcontrol = new MapControl(config);
+    const mapcontrol = new MapControl(config, () => controller.shouldMapZoom);
     mapcontrol.popup = new Popup(formattingConfig, mapcontrol.map);
     const pointData = new PointData(api, mapcontrol.map, profileId, config);
     const pointDataTray = new PointDataTray(api, profileId);

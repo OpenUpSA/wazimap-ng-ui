@@ -235,12 +235,11 @@ export function horizontalBarChart() {
         });
     }
 
-    chart.saveAsPng = function (container, fileName) {
-
+    chart.saveAsPng = function (container, fileName, chartTitle) {
         let element = $(container).closest('.profile-indicator')[0];
 
-        $(element).find('.profile-indicator__options').attr('data-html2canvas-ignore', true);
-        $(element).find('.profile-indicator__filters').attr('data-html2canvas-ignore', true);
+        $('.profile-indicator__options', element).attr('data-html2canvas-ignore', true);
+        $('.profile-indicator__filters', element).attr('data-html2canvas-ignore', true);
         const rightMargin = 60;
 
         let options = {
@@ -251,7 +250,10 @@ export function horizontalBarChart() {
             //fix the size of the chart so it doesn't get affected by the client's resolution
             windowWidth: 1920,
             windowHeight: 1080,
-            scale: 0.9
+            scale: 0.9,
+            onclone: (clonedElement) => {
+                $('.profile-indicator__title h4', clonedElement).text(chartTitle);
+            }
         }
 
         html2canvas(element, options).then(function (canvas) {

@@ -325,7 +325,7 @@ export function horizontalBarChart() {
     }
 
     function getExportData() {
-        const exportData = data.map((d) => {
+        const exportData = data.reverse().map((d) => {
             return {
                 'Sub-indicator': d.label.toString(),
                 'Value': d.valueText.toString()

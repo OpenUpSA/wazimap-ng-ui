@@ -1,17 +1,17 @@
-let wrapperClass = '.w-slider-mask';
-let slideClass = '.w-slide';
-
 export class Tutorial {
-    createSlides = (tutorialArr) => {
-        if (tutorialArr === null || tutorialArr.length <= 0) {
-            return;
-        }
+    constructor() {
+        this.wrapperClass = '.w-slider-mask';
+        this.slideClass = '.w-slide';
+    }
 
-        tutorialArr.forEach((t, i) => {
-            let item = $(wrapperClass).find(slideClass)[i];
-            $('.slide-info__title', item).text(t.title);
-            $('.slide-info__introduction', item).text(t.body);
-            $('.tutorial__slide-image', item).css('background-image', `url(${t.image})`)
+    createSlides = (tutorialArr) => {
+        let tutorials = tutorialArr || [];
+
+        tutorials.forEach((slide, i) => {
+            let item = $(this.wrapperClass).find(this.slideClass)[i];
+            $('.slide-info__title', item).text(slide.title);
+            $('.slide-info__introduction', item).text(slide.body);
+            $('.tutorial__slide-image', item).css('background-image', `url(${slide.image})`);
         });
     }
 }

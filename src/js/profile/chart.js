@@ -65,7 +65,7 @@ export class Chart extends Observable {
             .barPadding(6)
             .margin({
                 top: 15,
-                right: 50,
+                right: 65,
                 bottom: 15,
                 left: 120,
             })
@@ -123,7 +123,9 @@ export class Chart extends Observable {
 
         $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
-            barChart.saveAsPng(this.container);
+            let chartTitle = self.getChartTitle(':');
+            let fileName = 'chart.png';
+            barChart.saveAsPng(this.container, fileName, chartTitle);
             this.triggerEvent('profile.chart.saveAsPng', this);
         })
 
@@ -146,10 +148,14 @@ export class Chart extends Observable {
                 }[index];
                 self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
-                let fileName = self.selectedGroup === null ? `${self.title}` : `${self.title} - by ${self.selectedGroup} - ${self.selectedFilter}`;
+                let fileName = self.getChartTitle('-');
                 downloadFn.fn(fileName);
             })
         });
+    }
+
+    getChartTitle = (separator) => {
+        return this.selectedGroup === null ? `${this.title}` : `${this.title} by ${this.selectedGroup} ${separator} ${this.selectedFilter}`;
     }
 
     selectedGraphValueTypeChanged = (containerParent, index) => {

@@ -163,8 +163,8 @@ export class Profile_header extends Observable {
                     Latitude: geometry.coordinates[1]
                 })
 
-                for (const [title, value] of Object.entries(prop.data)) {
-                    points[points.length - 1][title] = value;
+                for (const [index, obj] of Object.entries(prop.data)) {
+                    points[points.length - 1][obj.key] = obj.value;
                 }
             })
 

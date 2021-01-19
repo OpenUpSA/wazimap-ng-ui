@@ -15,6 +15,7 @@ import {API} from './api';
 import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
 import {MapDownload} from "./map/map_download";
+import {Tutorial} from "./elements/tutorial";
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -31,6 +32,8 @@ import {configureSpinnerEvents} from './setup/spinner';
 import {configureDataExplorerEvents} from './setup/dataexplorer';
 import {configureProfileEvents} from './setup/profile';
 import {configureBoundaryEvents} from "./setup/boundaryevents";
+import {configureMapDownloadEvents} from "./setup/mapdownload";
+import {configureTutorialEvents} from "./setup/tutorial";
 
 
 export default function configureApplication(profileId, config) {
@@ -49,7 +52,7 @@ export default function configureApplication(profileId, config) {
     let serverFormattingConfig = config.config.formatting;
     let formattingConfig = {...defaultFormattingConfig, ...serverFormattingConfig};
 
-    const mapcontrol = new MapControl(config);
+    const mapcontrol = new MapControl(config, () => controller.shouldMapZoom);
     mapcontrol.popup = new Popup(formattingConfig, mapcontrol.map);
     const pointData = new PointData(api, mapcontrol.map, profileId, config);
     const pointDataTray = new PointDataTray(api, profileId);
@@ -60,7 +63,8 @@ export default function configureApplication(profileId, config) {
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
     const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
-    const mapDownload = new MapDownload();
+    const mapDownload = new MapDownload(mapchip);
+    const tutorial = new Tutorial();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();
@@ -77,6 +81,8 @@ export default function configureApplication(profileId, config) {
     configureMiscElementEvents(controller);
     configureRichDataView(controller);
     configureBoundaryEvents(controller, boundaryTypeBox);
+    configureMapDownloadEvents(mapDownload);
+    configureTutorialEvents(controller, tutorial, config.config.tutorial);
 
     controller.on('profile.loaded', payload => {
         // there seems to be a bug where menu items close if this is not set

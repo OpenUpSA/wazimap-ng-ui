@@ -65,7 +65,7 @@ export class Chart extends Observable {
             .barPadding(6)
             .margin({
                 top: 15,
-                right: 15,
+                right: 65,
                 bottom: 15,
                 left: 120,
             })
@@ -77,6 +77,10 @@ export class Chart extends Observable {
                 return $(tooltip).prop('outerHTML');
             })
             .xLabel("")
+            .barTextPadding({
+                top: 15,
+                left: 5
+            })
 
         this.chartConfig = this.config.types[this.graphValueType]
         this.setChartDomain(chart, this.config, this.graphValueType)
@@ -96,7 +100,7 @@ export class Chart extends Observable {
 
     getValuesFromSubindicators = () => {
         let arr = [];
-        const chartConfig = this.config.types[this.graphValueType]
+        const chartConfig = this.config.types[this.graphValueType];
 
         for (const [label, subindicator] of Object.entries(this.subindicators)) {
             let count = subindicator.count;
@@ -119,7 +123,9 @@ export class Chart extends Observable {
 
         $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
-            barChart.saveAsPng(this.container);
+            let chartTitle = self.getChartTitle(':');
+            let fileName = 'chart.png';
+            barChart.saveAsPng(this.container, fileName, chartTitle);
             this.triggerEvent('profile.chart.saveAsPng', this);
         })
 
@@ -142,10 +148,14 @@ export class Chart extends Observable {
                 }[index];
                 self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
-                let fileName = self.selectedGroup === null ? `${self.title}` : `${self.title} - by ${self.selectedGroup} - ${self.selectedFilter}`;
+                let fileName = self.getChartTitle('-');
                 downloadFn.fn(fileName);
             })
         });
+    }
+
+    getChartTitle = (separator) => {
+        return this.selectedGroup === null ? `${this.title}` : `${this.title} by ${this.selectedGroup} ${separator} ${this.selectedFilter}`;
     }
 
     selectedGraphValueTypeChanged = (containerParent, index) => {

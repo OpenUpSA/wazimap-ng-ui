@@ -1,5 +1,5 @@
 import {checkIterate, Observable, ThemeStyle} from "../utils";
-import xlsExport from 'xlsexport/xls-export.js';
+import XLSX from "xlsx";
 
 let breadcrumbsContainer = null;
 let breadcrumbTemplate = null;
@@ -136,11 +136,17 @@ export class Profile_header extends Observable {
 
     downloadPointData = (category) => {
         const sheetName = category.label;
-        const fileName = 'Export-' + category.label + '.xls';
+        const fileName = 'Export-' + category.label + '.xlsx';
         this.getAddressPoints(category)
             .then((points) => {
-                const xls = new xlsExport(points, sheetName);
-                xls.exportToXLS(fileName);
+                // export json (only array possible) to Worksheet of Excel
+                const data = XLSX.utils.json_to_sheet(points);
+                // A workbook is the name given to an Excel file
+                const wb = XLSX.utils.book_new(); // make Workbook of Excel
+                // add Worksheet to Workbook
+                XLSX.utils.book_append_sheet(wb, data, sheetName);
+                // export Excel file
+                XLSX.writeFile(wb, fileName);
             });
     }
 

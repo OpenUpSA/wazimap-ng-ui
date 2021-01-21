@@ -25,7 +25,7 @@ export class Popup extends Observable {
 
         this.map.map_variables.popup = L.popup({
             autoPan: false,
-            offset: [-10, 0],
+            offset: [20, 0],
             closeButton: false
         })
 
@@ -67,7 +67,7 @@ export class Popup extends Observable {
 
         $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
 
-        return $(item).html();
+        return item;
     }
 
     setTooltipThemes = (item, areaCode) => {

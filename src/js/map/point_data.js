@@ -23,6 +23,8 @@ let facilityRowItem = null;
 let activeMarkers = [];
 let activePoints = [];  //the visible points on the map
 
+const POPUP_OFFSET= [20, 0];
+
 /**
  * this class creates the point data dialog
  */
@@ -179,7 +181,7 @@ export class PointData extends Observable {
         let popup = L.popup({
             autoPan: false,
             autoClose: !isClicked,
-            offset: [20, 0],
+            offset: POPUP_OFFSET,
             closeButton: isClicked
         })
 
@@ -221,7 +223,6 @@ export class PointData extends Observable {
 
         $('.' + tooltipItemsClsName, item).html('');
 
-        this.appendPointData(point, item, tooltipRowItem, tooltipItemsClsName, 'tooltip__facility-item_label', 'tooltip__facility-item_value');
         if (point.image != null)
             $('.' + tooltipItemsClsName, item).append(`<img src="${point.image}"/>`);
 

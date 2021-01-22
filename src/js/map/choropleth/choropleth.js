@@ -52,7 +52,7 @@ export class Choropleth extends Observable {
             //setLayerToSelected -> removemapchip
             //setLayerToHoverOnly -> display
             const layer = self.layers[code];
-            if (setLayerToSelected) {
+            if (setLayerToSelected && layer !== null && typeof layer !== 'undefined') {
                 self.layerStyler.setLayerToSelected(layer);
             }
         })

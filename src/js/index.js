@@ -5,13 +5,13 @@ import {Config as SAConfig} from './configurations/geography_sa';
 import Analytics from './analytics';
 import {API} from './api';
 import * as Sentry from '@sentry/browser';
-import {getHostname, loadDevTools} from './utils';
+import { getHostname, loadDevTools }from './utils';
 
 const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
 const productionUrl = 'https://production.wazimap-ng.openup.org.za';
 let config = new SAConfig();
 
-let hostname = 'beta.youthexplorer.org.za'; //getHostname();
+let hostname = getHostname();
 const defaultProfile = 8;
 const defaultUrl = productionUrl;
 const defaultConfig = new SAConfig();
@@ -114,6 +114,6 @@ async function init() {
 
 window.init = init;
 loadDevTools(() => {
-    init();
+  init();
 })
 

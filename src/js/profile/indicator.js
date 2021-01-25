@@ -49,7 +49,7 @@ export class Indicator extends Observable {
         const configuration = detail.indicators[title].chartConfiguration;
         const indicators = detail.indicators;
 
-        let hasValues = this.checkSubindicatorValues(title);
+        let hasValues = this.subindicators.some(function(e) { return e.count > 0 });
 
         if (hasValues) {
             let c = new Chart(configuration, this.subindicators, this.groups, indicators, 'Percentage', indicator, title);
@@ -65,17 +65,5 @@ export class Indicator extends Observable {
 
             wrapper.append(indicator);
         }
-    }
-
-    checkSubindicatorValues(title) {
-        let hasValues = false;
-        for (const [label, subindicator] of Object.entries(this.subindicators)) {
-            if (subindicator.count > 0) {
-                hasValues = true;
-                break;
-            }
-        }
-
-        return hasValues;
     }
 }

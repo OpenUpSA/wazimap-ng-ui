@@ -23,7 +23,7 @@ let facilityRowItem = null;
 let activeMarkers = [];
 let activePoints = [];  //the visible points on the map
 
-const POPUP_OFFSET= [20, 0];
+const POPUP_OFFSET = [20, 0];
 
 /**
  * this class creates the point data dialog
@@ -47,7 +47,7 @@ export class PointData extends Observable {
         tooltipRowItem = $('.' + tooltipRowClsName)[0].cloneNode(true);
         facilityRowItem = $('.' + facilityRowClsName)[0].cloneNode(true);
         facilityItem = $('.' + facilityClsName);
-        $('.facility-info__close').on('click', () => this.hideFacilityModal());
+        $('.facility-info__close').on('click', () => this.hideInfoWindows());
     }
 
     genLayer() {
@@ -191,7 +191,10 @@ export class PointData extends Observable {
             popup
                 .setLatLng({lat: point.y, lng: point.x})
                 .setContent(popupContent)
-                .addTo(this.map);
+                .addTo(this.map)
+                .on('remove', () => {
+                    this.hideInfoWindows();
+                });
             this.triggerEvent('point_data.load_popup.clicked', eventLabel);
         } else {
             popup
@@ -202,6 +205,11 @@ export class PointData extends Observable {
         }
 
         setPopupStyle('facility-tooltip');
+    }
+
+    hideInfoWindows = () => {
+        this.hideFacilityModal();
+        $('a.leaflet-popup-close-button')[0].click()
     }
 
     hideMarkerPopup = () => {

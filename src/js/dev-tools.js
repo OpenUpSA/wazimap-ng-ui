@@ -4,33 +4,54 @@ function changeHost(value) {
   sessionStorage.setItem('wazi-hostname', value);
   window.location.reload(false);
 }
-let tools = [
-  { type: 'select',
-    title: 'Hostname',
-    callback: changeHost,
-    values: [
-      {title: 'Youthexplorer', value: 'beta.youthexplorer.org.za'},
-      {title: 'GCRO', value: 'gcro.openup.org.za'},
-      {title: 'Sifar', value: 'sifar-wazi.openup.org.za'},
-      {title: 'Vulekamali', value: 'geo.vulekamali.gov.za'},
-      {title: 'Public - 2011 SA Boundaries', value: 'wazimap-ng.africa'},
-      {title: 'GIZ', value: 'giz-projects.openup.org.za'},
-      {title: 'Cape Town Against Covid-19', value: 'capetownagainstcovid19.openup.org.za'},
-      {title: 'Covid-Wazi', value: 'covid-wazi.openup.org.za'},
-      {title: 'mapyourcity', value: 'mapyourcity.org.za'}
-    ]
-  },
-  { type: 'input',
-    title: 'Hostname',
-    callback: changeHost,
-    values: 'Hostname'
+
+function tools(profiles) {
+  let hostnames = profiles.map((profile) => {
+    if(profile.configuration && profile.configuration.urls) {
+      return profile.configuration.urls.map((url) => {
+        return { title: `${profile.name} - ${url}`, value: url }
+      })
+    }
+  }).flat(1).filter(v => v)
+  let tools = [
+    { type: 'select',
+      title: 'Hostname',
+      callback: changeHost,
+      values: hostnames
+    },
+    { type: 'input',
+      title: 'Hostname',
+      callback: changeHost,
+      values: 'Hostname'
+    }
+  ]
+  return tools;
+}
+
+async function getProfileData(profileUrl) {
+  let next = true;
+  let data = []
+  while(next) {
+    const response = await fetch(profileUrl)
+    const profileJson = await response.json();
+    if(profileJson["next"]) {
+      profileUrl = profileJson["next"];
+    } else { next = false; }
+    data = data.concat(profileJson["results"])
   }
-]
-export function install() {
+  return data;
+}
+
+export async function install() {
+  let data = []
+  let profileUrl = 'https://production.wazimap-ng.openup.org.za/api/v1/profiles';
+  let stagingProfileUrl = 'https://staging.wazimap-ng.openup.org.za/api/v1/profiles';
+  data = data.concat(await getProfileData(profileUrl))
+  data = data.concat(await getProfileData(stagingProfileUrl))
   const devtools = new DevTools({
     target: document.body,
     props: {
-      tools: tools,
+      tools: tools(data),
       env: process.env.NODE_ENV
     }
   });

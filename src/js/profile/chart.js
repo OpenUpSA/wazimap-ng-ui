@@ -55,6 +55,9 @@ export class Chart extends Observable {
 
     let width = $('.rich-data').first().width() - 500;
 
+    const chartConfig = this.config.types["Value"];
+    const percentageChartConfig = this.config.types["Percentage"];
+
     const barChart = {
       $schema: "https://vega.github.io/schema/vega/v5.json",
       description: "A",
@@ -79,16 +82,12 @@ export class Chart extends Observable {
           value: "percentage"
         },
         {
-          name: "format",
-          value: { percentage: "%", value: ".1s" },
+          name: "numberFormat",
+          value: { percentage: percentageChartConfig.formatting, value: chartConfig.formatting },
         },
         {
           name: "datatype",
           value: { percentage: "percentageValue", value: "value" },
-        },
-        {
-          name: "textformat",
-          value: { percentage: "percentageValueText", value: "valueText" },
         },
       ],
 
@@ -125,7 +124,7 @@ export class Chart extends Observable {
           bandPosition: 0,
           domainOpacity: 0.5,
           tickSize: 0,
-          format: { signal: "format[Units]" },
+          format: { signal: "numberFormat[Units]" },
           grid: true,
           gridOpacity: 0.5,
           labelOpacity: 0.5,
@@ -163,7 +162,7 @@ export class Chart extends Observable {
               fill: { value: "grey" },
               fontSize: { value: 10 },
               text: {
-                signal: "datum[textformat[Units]]",
+                signal: "datum[Units]",
               },
               x: {
                 scale: "xscale",
@@ -193,24 +192,14 @@ export class Chart extends Observable {
 
   getValuesFromSubindicators = () => {
     let arr = [];
-    const chartConfig = this.config.types[this.graphValueType];
 
     for (const [label, subindicator] of Object.entries(this.subindicators)) {
       let count = subindicator.count;
-      let val =
-        this.graphValueType === VALUE_TYPE
-          ? this.getPercentageValue(count, this.subindicators)
-          : count;
-      let percentage_val =
-        this.graphValueType === PERCENTAGE_TYPE
-          ? this.getPercentageValue(count, this.subindicators)
-          : count;
+      let percentage_val = this.getPercentageValue(count, this.subindicators)
       arr.push({
         label: subindicator.keys,
-        value: val,
+        value: count,
         percentageValue: percentage_val,
-        valueText: d3format(".4s")(val),
-        percentageValueText: d3format(chartConfig.formatting)(percentage_val),
       });
     }
 
@@ -294,7 +283,6 @@ export class Chart extends Observable {
         }
       });
 
-    this.addChart();
   };
 
   getPercentageValue = (currentValue, subindicators) => {

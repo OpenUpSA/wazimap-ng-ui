@@ -185,9 +185,8 @@ export class Chart extends Observable {
 
     embed(this.container, barChart, { actions: false})
       .then(async (result) => {
-        const pngDownloadUrl = await result.view.toImageURL('png', 1);
         this.vegaView = result.view;
-        this.setChartMenu(pngDownloadUrl);
+        this.setChartMenu();
       })
       .catch(console.error);
   };
@@ -218,6 +217,16 @@ export class Chart extends Observable {
     return arr;
   };
 
+  setDownloadUrl = async () => {
+    const containerParent = $(this.container).closest(".profile-indicator");
+    const pngDownloadUrl = await this.vegaView.toImageURL('png', 1);
+    const saveImgButton = $(containerParent).find(
+      ".hover-menu__content a.hover-menu__content_item:nth-child(1)"
+    );
+    saveImgButton.attr('href', pngDownloadUrl);
+    saveImgButton.attr('download', 'chart.png');
+  }
+
   setChartMenu = (barChart) => {
     const self = this;
     const containerParent = $(this.container).closest(".profile-indicator");
@@ -226,10 +235,10 @@ export class Chart extends Observable {
       ".hover-menu__content a.hover-menu__content_item:nth-child(1)"
     );
     saveImgButton.attr('download', 'chart.png');
-    saveImgButton.attr('href', barChart);
+    self.setDownloadUrl();
 
     $(saveImgButton).off("click");
-    $(saveImgButton).on("click", () => {
+    $(saveImgButton).on("click", async () => {
       this.triggerEvent("profile.chart.saveAsPng", this);
     });
 
@@ -242,6 +251,7 @@ export class Chart extends Observable {
         $(this).on("click", () => {
           self.selectedGraphValueTypeChanged(containerParent, index);
           self.vegaView.signal("Units", unitValues[index]).run()
+          self.setDownloadUrl();
         });
       });
 
@@ -323,6 +333,7 @@ export class Chart extends Observable {
     if (chartData !== null) {
       this.subindicators = chartData;
       this.addChart();
+      this.setDownloadUrl();
     }
   };
 }

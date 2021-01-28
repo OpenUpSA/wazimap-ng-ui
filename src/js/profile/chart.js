@@ -62,7 +62,7 @@ export class Chart extends Observable {
       $schema: "https://vega.github.io/schema/vega/v5.json",
       description: "A",
       height: { signal: data.length * 35 },
-      width: width,
+      width: 400,
       padding: 5,
 
       data: [
@@ -70,8 +70,23 @@ export class Chart extends Observable {
           name: "table",
           values: data,
         },
+        {
+          name: "data_formatted",
+          source: "table",
+          transform: [
+            {
+              type: "formula",
+              as: "current",
+              expr: "datum[datatype[Units]]"
+            },
+            {
+              type: "formula",
+              as: "current_text",
+              expr: "format(datum[datatype[Units]],numberFormat[Units])"
+            }
+          ]
+        }
       ],
-
       signals: [
         {
           name: "barvalue",
@@ -95,14 +110,14 @@ export class Chart extends Observable {
         {
           name: "yscale",
           type: "band",
-          domain: { data: "table", field: "label" },
+          domain: { data: "data_formatted", field: "label" },
           range: "height",
           padding: 0.1,
         },
         {
           name: "xscale",
           type: "linear",
-          domain: { data: "table", field: { signal: "datatype[Units]" } },
+          domain: { data: "data_formatted", field: { signal: "datatype[Units]" } },
           range: "width",
           nice: true,
         },
@@ -135,7 +150,7 @@ export class Chart extends Observable {
       marks: [
         {
           name: "bars",
-          from: { data: "table" },
+          from: { data: "data_formatted" },
           type: "rect",
           encode: {
             enter: {
@@ -160,22 +175,22 @@ export class Chart extends Observable {
               align: { value: "left" },
               baseline: { value: "middle" },
               fill: { value: "grey" },
-              fontSize: { value: 10 },
+              fontSize: { value: 10 }
+            },
+            update: {
               text: {
-                signal: "datum[Units]",
+                field: "datum.current_text",
               },
               x: {
                 scale: "xscale",
-                signal: "datum[datatype[Units]]",
-                offset: 2,
+                field: "datum.current",
+                offset: 10,
               },
               y: {
                 scale: "yscale",
-                signal: "datum.label",
+                field: "datum.label",
                 band: 0.5,
               },
-            },
-            update: {
             },
           },
         },

@@ -53,13 +53,14 @@ export class Chart extends Observable {
 
     let data = this.getValuesFromSubindicators();
 
+    let width = $('.rich-data').first().width() - 500;
+
     const barChart = {
       $schema: "https://vega.github.io/schema/vega/v5.json",
       description: "A",
-      width: 700,
       height: { signal: data.length * 35 },
+      width: width,
       padding: 5,
-      autosize: "pad",
 
       data: [
         {
@@ -71,20 +72,11 @@ export class Chart extends Observable {
       signals: [
         {
           name: "barvalue",
-          value: {},
-          on: [
-            { events: "rect:mouseover", update: "datum" },
-            { events: "rect:mouseout", update: "{}" },
-          ],
+          value: "datum",
         },
         {
           name: "Units",
-          value: "percentage",
-          bind: {
-            input: "select",
-            labels: ["Percentage", "Value"],
-            options: ["percentage", "value"],
-          },
+          value: "percentage"
         },
         {
           name: "format",
@@ -169,83 +161,36 @@ export class Chart extends Observable {
               align: { value: "left" },
               baseline: { value: "middle" },
               fill: { value: "grey" },
-              fontSize: { value: 12 },
-            },
-            update: {
-              y: {
-                scale: "yscale",
-                signal: "barvalue.label",
-                band: 0.5,
+              fontSize: { value: 10 },
+              text: {
+                signal: "datum[textformat[Units]]",
               },
               x: {
                 scale: "xscale",
-                signal: "barvalue[datatype[Units]]",
+                signal: "datum[datatype[Units]]",
                 offset: 2,
               },
-              text: {
-                signal: "barvalue[textformat[Units]]",
+              y: {
+                scale: "yscale",
+                signal: "datum.label",
+                band: 0.5,
               },
+            },
+            update: {
             },
           },
         },
       ],
     };
 
-    //this.setChartOptions(barChart);
-    //this.setChartMenu(barChart);
-
-    embed(this.container, barChart)
-      .then(function (result) {})
+    embed(this.container, barChart, { actions: false})
+      .then(async (result) => {
+        const pngDownloadUrl = await result.view.toImageURL('png', 1);
+        this.vegaView = result.view;
+        this.setChartMenu(pngDownloadUrl);
+      })
       .catch(console.error);
   };
-
-  /*  setChartOptions = (chart) => {
-    let tooltip = tooltipClone.cloneNode(true);
-    tooltip = $(tooltip).removeAttr("style");
-
-    chart
-      .height(450)
-      .width(760)
-      .colors(["#39ad84", "#339b77"])
-      .xAxisPadding(10) //padding of the xAxis values(numbers)
-      .yAxisPadding(10)
-      .xLabelPadding(30) //padding of the label
-      .barHeight(24)
-      .barPadding(6)
-      .margin({
-        top: 15,
-        right: 50,
-        bottom: 15,
-        left: 120,
-      })
-      .tooltipFormatter((d) => {
-        $(".bar-chart__tooltip_value", tooltip).text(d.data.valueText);
-        $(".bar-chart__tooltip_alt-value div", tooltip).text(d.data.label);
-        $(".bar-chart__tooltip_name", tooltip).remove();
-
-        return $(tooltip).prop("outerHTML");
-      })
-      .xLabel("")
-      .barTextPadding({
-        top: 15,
-        left: 5,
-      });
-
-    this.chartConfig = this.config.types[this.graphValueType];
-    this.setChartDomain(chart, this.config, this.graphValueType);
-
-    chart.xAxisFormatter((d) => {
-      return d3format(this.chartConfig.formatting)(d);
-    });
-  }; */
-
-  /* setChartDomain(chart, config, chartType) {
-    const chartConfig = config.types[chartType];
-    if (chartConfig.minX != defaultValues.DEFAULT_CONFIG)
-      chart.minX(chartConfig.minX);
-    if (chartConfig.maxX != defaultValues.DEFAULT_CONFIG)
-      chart.maxX(chartConfig.maxX);
-  } */
 
   getValuesFromSubindicators = () => {
     let arr = [];
@@ -273,29 +218,30 @@ export class Chart extends Observable {
     return arr;
   };
 
-  /* setChartMenu = (barChart) => {
+  setChartMenu = (barChart) => {
     const self = this;
     const containerParent = $(this.container).closest(".profile-indicator");
 
     const saveImgButton = $(containerParent).find(
       ".hover-menu__content a.hover-menu__content_item:nth-child(1)"
     );
+    saveImgButton.attr('download', 'chart.png');
+    saveImgButton.attr('href', barChart);
 
-    /* $(saveImgButton).off("click");
+    $(saveImgButton).off("click");
     $(saveImgButton).on("click", () => {
-      console.log("Save");
-      barChart.saveAsPng(this.container);
       this.triggerEvent("profile.chart.saveAsPng", this);
-    }); */
+    });
 
   //todo:don't use index, specific class names should be used here when the classes are ready
-  /*$(containerParent)
+  var unitValues = ["percentage", "value"]
+  $(containerParent)
       .find(".hover-menu__content_list a")
       .each(function (index) {
         $(this).off("click");
         $(this).on("click", () => {
-          //barChart.axes[1].format = "s";
           self.selectedGraphValueTypeChanged(containerParent, index);
+          self.vegaView.signal("Units", unitValues[index]).run()
         });
       });
 
@@ -322,7 +268,7 @@ export class Chart extends Observable {
           downloadFn.fn(fileName);
         });
       });
-  }; */
+  };
 
   selectedGraphValueTypeChanged = (containerParent, index) => {
     this.graphValueType = graphValueTypes[index];

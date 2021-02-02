@@ -10,10 +10,20 @@ const tooltipClsName = 'facility-tooltip';
 const tooltipRowClsName = 'facility-tooltip__item';
 const tooltipItemsClsName = 'facility-tooltip__items';
 
+const facilityClsName = 'facility-info';
+const facilityRowClsName = 'facility-info__item';
+const facilityItemsClsName = 'facility-info__items';
+
 let tooltipItem = null;
 let tooltipRowItem = null;
+
+let facilityItem = null;
+let facilityRowItem = null;
+
 let activeMarkers = [];
 let activePoints = [];  //the visible points on the map
+
+const POPUP_OFFSET = [20, 0];
 
 /**
  * this class creates the point data dialog
@@ -35,6 +45,9 @@ export class PointData extends Observable {
     prepareDomElements = () => {
         tooltipItem = $('.' + tooltipClsName)[0].cloneNode(true);
         tooltipRowItem = $('.' + tooltipRowClsName)[0].cloneNode(true);
+        facilityRowItem = $('.' + facilityRowClsName)[0].cloneNode(true);
+        facilityItem = $('.' + facilityClsName);
+        $('.facility-info__close').on('click', () => this.hideInfoWindows());
     }
 
     genLayer() {
@@ -168,7 +181,7 @@ export class PointData extends Observable {
         let popup = L.popup({
             autoPan: false,
             autoClose: !isClicked,
-            offset: [9, 0],
+            offset: POPUP_OFFSET,
             closeButton: isClicked
         })
 
@@ -178,7 +191,10 @@ export class PointData extends Observable {
             popup
                 .setLatLng({lat: point.y, lng: point.x})
                 .setContent(popupContent)
-                .addTo(this.map);
+                .addTo(this.map)
+                .on('remove', () => {
+                    this.hideInfoWindows();
+                });
             this.triggerEvent('point_data.load_popup.clicked', eventLabel);
         } else {
             popup
@@ -191,6 +207,11 @@ export class PointData extends Observable {
         setPopupStyle('facility-tooltip');
     }
 
+    hideInfoWindows = () => {
+        this.hideFacilityModal();
+        $('a.leaflet-popup-close-button')[0].click()
+    }
+
     hideMarkerPopup = () => {
         this.map.closePopup();
         this.map.map_variables.popup = null;
@@ -201,7 +222,7 @@ export class PointData extends Observable {
 
         $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
 
-        const nameContainer = $('.facility-tooltip__header_name div', item);
+        const nameContainer = $('.facility-tooltip__header_name', item);
         if (point.url != null)
             nameContainer.html(`<a href="${point.url}" target="_blank">${point.name}</a>`)
         else
@@ -210,22 +231,43 @@ export class PointData extends Observable {
 
         $('.' + tooltipItemsClsName, item).html('');
 
+        if (point.image != null)
+            $('.' + tooltipItemsClsName, item).append(`<img src="${point.image}"/>`);
+
+
+        $('.facility-tooltip__open-modal', item).on('click', () => {
+            this.showFacilityModal(point);
+        })
+
+        return item;
+    }
+
+    showFacilityModal = (point) => {
+        $('.facility-info__title').text(point.name);
+        this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');
+
+        $('.facility-info').css('display', 'flex');
+    }
+
+    appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName) => {
+        $('.' + itemsClsName, item).empty();
         point.data.forEach((a, i) => {
             if (Object.prototype.toString.call(a.value) == '[object String]') {
-                let itemRow = tooltipRowItem.cloneNode(true);
-                $('.tooltip__facility-item_label div', itemRow).text(a.key);
-                $('.tooltip__facility-item_value div', itemRow).text(a.value);
+                let itemRow = rowItem.cloneNode(true);
+                $(itemRow).removeClass('last');
+                $('.' + labelClsName, itemRow).text(a.key);
+                $('.' + valueClsName, itemRow).text(a.value);
                 if (i === point.data.length - 1) {
                     $(itemRow).addClass('last')
                 }
 
-                $('.' + tooltipItemsClsName, item).append(itemRow);
+                $('.' + itemsClsName, item).append(itemRow);
             }
         })
-        if (point.image != null)
-            $('.' + tooltipItemsClsName, item).append(`<img src="${point.image}"/>`);
+    }
 
-        return $(item).html();
+    hideFacilityModal = () => {
+        $('.facility-info').hide();
     }
 
     onMapZoomed(map) {

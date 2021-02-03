@@ -6,20 +6,15 @@ export default class SubindicatorCalculator {
             return null;
         }
 
-        const result = Object.entries(args.data).map(childGeography => {
-            const code = childGeography[0];
-            const count = childGeography[1];
-            const universe = args.subindicatorArr.reduce((el1, el2) => {
-                let e1 = typeof el1 === 'undefined' ? 0 : el1;
-                let e2 = typeof el2.children[code] === 'undefined' ? 0 : el2.children[code];
-                let total = e1 + e2;
-
-                return total;
+        const result = Object.entries(args.data).map(([code, codeValue]) => {
+            const sumSubindicatorsValueForCode = args.subindicatorArr.reduce((sum, subindicator) => {
+                let childrenValue = subindicator.children[code] || 0;
+                return sum + childrenValue;
             }, 0);
 
-            const val = count / universe;
+            const percentage = codeValue / sumSubindicatorsValueForCode;
 
-            return {code: code, val: val};
+            return {code: code, val: percentage};
         })
 
         return result;

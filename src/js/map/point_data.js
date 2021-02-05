@@ -252,7 +252,7 @@ export class PointData extends Observable {
     appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName) => {
         $('.' + itemsClsName, item).empty();
         point.data.forEach((a, i) => {
-            if (Object.prototype.toString.call(a.value) == '[object String]') {
+            if (Object.prototype.toString.call(a.value) !== '[object Object]') {
                 let itemRow = rowItem.cloneNode(true);
                 $(itemRow).removeClass('last');
                 $('.' + labelClsName, itemRow).text(a.key);

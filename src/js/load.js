@@ -34,6 +34,8 @@ import {configureProfileEvents} from './setup/profile';
 import {configureBoundaryEvents} from "./setup/boundaryevents";
 import {configureMapDownloadEvents} from "./setup/mapdownload";
 import {configureTutorialEvents} from "./setup/tutorial";
+import {StyleConfig} from "./elements/style_config";
+import {configureStyleConfigEvents} from "./setup/styleconfig";
 
 
 export default function configureApplication(profileId, config) {
@@ -65,6 +67,7 @@ export default function configureApplication(profileId, config) {
     const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
     const mapDownload = new MapDownload(mapchip);
     const tutorial = new Tutorial();
+    const styleConfig = new StyleConfig(config.config.style);
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();
@@ -83,6 +86,7 @@ export default function configureApplication(profileId, config) {
     configureBoundaryEvents(controller, boundaryTypeBox);
     configureMapDownloadEvents(mapDownload);
     configureTutorialEvents(controller, tutorial, config.config.tutorial);
+    configureStyleConfigEvents(controller, styleConfig);
 
     controller.on('profile.loaded', payload => {
         // there seems to be a bug where menu items close if this is not set

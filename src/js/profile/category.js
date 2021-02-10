@@ -51,6 +51,8 @@ export class Category extends Observable {
             $(descriptionClass, newCategorySection).addClass('hidden');
         }
 
+        $(newCategorySection).addClass('page-break-before');
+
         this.loadSubcategories(newCategorySection, detail);
 
         profileWrapper.append(newCategorySection);

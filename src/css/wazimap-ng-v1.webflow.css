@@ -7038,10 +7038,7 @@ label {
   top: 16px;
   right: auto;
   bottom: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   margin-right: 24px;
   margin-left: 24px;
   padding: 12px;
@@ -7050,6 +7047,9 @@ label {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
   font-size: 1.2em;
   font-weight: 700;
+  z-index:999;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .map-title.webflow {

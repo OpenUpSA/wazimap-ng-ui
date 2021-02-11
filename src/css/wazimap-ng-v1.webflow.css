@@ -8286,5 +8286,10 @@ label {
     .page-break-before {
         break-before: page;
     }
+
+    body, .main, .rich-data, .rich-data-content, .rich-data-content .section, .profile-indicator{
+        float: none !important;
+        display: block !important;
+    }
 }
 

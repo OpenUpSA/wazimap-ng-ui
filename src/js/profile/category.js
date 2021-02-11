@@ -14,7 +14,7 @@ const descriptionClass = '.category-header__description';
 //category > subcategory > indicator > chart
 
 export class Category extends Observable {
-    constructor(formattingConfig, category, detail, _profileWrapper, _id, _removePrevCategories) {
+    constructor(formattingConfig, category, detail, _profileWrapper, _id, _removePrevCategories, isFirst) {
         super();
 
         categoryTemplate = $(categoryClass)[0].cloneNode(true);
@@ -25,7 +25,7 @@ export class Category extends Observable {
         this.formattingConfig = formattingConfig;
 
         this.prepareDomElements();
-        this.addCategory(category, detail);
+        this.addCategory(category, detail, isFirst);
     }
 
     prepareDomElements = () => {
@@ -34,7 +34,7 @@ export class Category extends Observable {
         }
     }
 
-    addCategory = (category, detail) => {
+    addCategory = (category, detail, isFirst) => {
         const newCategorySection = categoryTemplate.cloneNode(true);
         const sectionHeader = $('.category-header')[0].cloneNode(true);
         const indicatorHeader = $('.sub-category-header')[0].cloneNode(true);
@@ -51,7 +51,9 @@ export class Category extends Observable {
             $(descriptionClass, newCategorySection).addClass('hidden');
         }
 
-        $(newCategorySection).addClass('page-break-before');
+        if (!isFirst){
+            $(newCategorySection).addClass('page-break-before');
+        }
 
         this.loadSubcategories(newCategorySection, detail);
 

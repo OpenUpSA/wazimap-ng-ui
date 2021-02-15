@@ -8,6 +8,7 @@ const subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNo
 const indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
 const indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
 const noDataWrapperClsName = 'data-mapper-content__no-data';
+const noChoroplethDataWrapperClsName = 'no-choropleth-data';
 const loadingClsName = 'data-mapper-content__loading';
 
 function subindicatorsInCategory(category) {
@@ -55,6 +56,8 @@ function indicatorHasChildren(indicator) {
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
+    let hasDataForChoropleth = false;
+
     function addSubIndicators(wrapper, category, subcategory, indicator, subindicators, indicators) {
 
         if (subindicators == undefined || !Array.isArray(subindicators)) {
@@ -68,6 +71,10 @@ export function loadMenu(data, subindicatorCallback) {
                     const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
                     $(".truncate", newSubIndicatorElement).text(subIndicator.label);
                     $(newSubIndicatorElement).attr('title', subIndicator.label);
+
+                    hasDataForChoropleth = hasDataForChoropleth || subindicators.some(function (e) {
+                        return (e.children !== null && typeof e.children !== 'undefined')
+                    });
 
                     wrapper.append(newSubIndicatorElement);
 
@@ -147,7 +154,6 @@ export function loadMenu(data, subindicatorCallback) {
     let hasNoItems = true;
     $(parentContainer).find('.data-category').remove();
 
-
     for (const [category, detail] of Object.entries(data)) {
         let count = subindicatorsInCategory(detail);
 
@@ -166,10 +172,19 @@ export function loadMenu(data, subindicatorCallback) {
             $('.' + noDataWrapperClsName).removeClass(hideondeployClsName);
         }
     }
+
+    if (hasDataForChoropleth) {
+        $(parentContainer).removeClass('hidden');
+        $('.' + noChoroplethDataWrapperClsName).addClass('hidden');
+    } else {
+        $(parentContainer).addClass('hidden');
+        $('.' + noChoroplethDataWrapperClsName).removeClass('hidden');
+    }
 }
 
-export function showNoData(){
+export function showNoData() {
     $(parentContainer).empty();
     $('.' + loadingClsName).addClass('hidden');
     $('.' + noDataWrapperClsName).removeClass('hidden');
+    $('.' + noChoroplethDataWrapperClsName).addClass('hidden');
 }

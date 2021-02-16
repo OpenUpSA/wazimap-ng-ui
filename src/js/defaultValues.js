@@ -4,7 +4,7 @@ let chartConfiguration = {
         Value: {formatting: '~s', minX: DEFAULT_CONFIG, maxX: DEFAULT_CONFIG, disabled: false},
         Percentage: {formatting: '.0%', minX: DEFAULT_CONFIG, maxX: DEFAULT_CONFIG, disabled: false}
     },
-    defaultType: 'Value' // [Value|Percentage]
+    defaultType: 'Percentage' // [Value|Percentage]
 };
 export const defaultValues = {
     chartConfiguration,

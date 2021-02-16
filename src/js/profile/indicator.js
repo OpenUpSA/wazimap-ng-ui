@@ -52,7 +52,7 @@ export class Indicator extends Observable {
         let hasValues = this.subindicators.some(function(e) { return e.count > 0 });
 
         if (hasValues) {
-            let c = new Chart(configuration, this.subindicators, this.groups, indicators, 'Percentage', indicator, title);
+            let c = new Chart(configuration, this.subindicators, this.groups, indicators, indicator, title);
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

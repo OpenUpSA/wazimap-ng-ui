@@ -14,6 +14,11 @@ const chartContainerClass = '.indicator__chart';
 const tooltipClass = '.bar-chart__row_tooltip';
 
 let tooltipClone = null;
+const typeIndex = {
+    'Percentage': 0,
+    'Value': 1
+}
+
 
 export class Chart extends Observable {
     constructor(config, subindicators, groups, indicators, _subCategoryNode, title) {
@@ -34,8 +39,9 @@ export class Chart extends Observable {
         this.container = chartContainer[0];
         this.containerParent = $(this.container).closest('.profile-indicator');
 
+
         this.handleChartFilter(indicators, groups, title);
-        this.addChart();
+        this.selectedGraphValueTypeChanged(this.containerParent, typeIndex[this.graphValueType]);
     }
 
     addChart = () => {
@@ -170,7 +176,6 @@ export class Chart extends Observable {
     }
 
     selectedGraphValueTypeChanged = (containerParent, index) => {
-        this.graphValueType = graphValueTypes[index];
         this.triggerEvent('profile.chart.valueTypeChanged', this);
 
         $(containerParent).find('.hover-menu__content_list a').each(function (itemIndex) {

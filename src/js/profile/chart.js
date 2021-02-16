@@ -122,12 +122,11 @@ export class Chart extends Observable {
         return arr;
     }
     
-    enableChartTypeToggle(enable) {
-        if (!enable) {
+    disableChartTypeToggle = (disable) => {
+        if (disable) {
             $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
             $(this.containerParent).find('.hover-menu__content_list').hide()
         }
-
     }
 
     setChartMenu = (barChart) => {
@@ -150,8 +149,7 @@ export class Chart extends Observable {
             })
         });
 
-        const hasDisabledType = this.config.types.Value.disabled || this.config.types.Percentage.disabled
-        this.enableChartTypeToggle(!hasDisabledType);
+        this.disableChartTypeToggle(this.config.disableToggle);
         
 
         $(this.containerParent).find('.hover-menu__content_list--last a').each(function (index) {

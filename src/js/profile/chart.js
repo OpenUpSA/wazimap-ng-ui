@@ -174,6 +174,7 @@ export class Chart extends Observable {
     }
 
     selectedGraphValueTypeChanged = (containerParent, index) => {
+        this.graphValueType = graphValueTypes[index];
         this.triggerEvent('profile.chart.valueTypeChanged', this);
 
         $(containerParent).find('.hover-menu__content_list a').each(function (itemIndex) {

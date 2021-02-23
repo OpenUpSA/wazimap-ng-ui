@@ -68,6 +68,7 @@ export class Chart extends Observable {
             .xAxisPadding(10) //padding of the xAxis values(numbers)
             .yAxisPadding(10)
             .xLabelPadding(30)    //padding of the label
+            .xTicks(this.config.xTicks)
             .barHeight(24)
             .barPadding(6)
             .margin({

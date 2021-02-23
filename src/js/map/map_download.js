@@ -36,11 +36,11 @@ export class MapDownload extends Observable {
         const options = {
             useCORS: true,
             onclone: (clonedElement) => {
-                if (this.mapChip.title !== '')
-                {
+                if (this.mapChip.title !== '') {
                     $(clonedElement).find(self.titleClass).show();
+                } else {
+                    $(clonedElement).find(self.legendClass).remove();
                 }
-                $(clonedElement).find(self.legendClass).remove();
             }
         };
 

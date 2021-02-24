@@ -20,6 +20,7 @@ import {Tutorial} from "./elements/tutorial";
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
 import {Popup} from "./map/popup";
+import {TabNotice} from "./elements/tab_notice";
 
 import {configureBreadcrumbsEvents} from './setup/breadcrumbs';
 import {configureChoroplethEvents} from './setup/choropleth';
@@ -34,6 +35,7 @@ import {configureProfileEvents} from './setup/profile';
 import {configureBoundaryEvents} from "./setup/boundaryevents";
 import {configureMapDownloadEvents} from "./setup/mapdownload";
 import {configureTutorialEvents} from "./setup/tutorial";
+import {configureTabNoticeEvents} from "./setup/tabnotice";
 
 
 export default function configureApplication(profileId, config) {
@@ -65,6 +67,7 @@ export default function configureApplication(profileId, config) {
     const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
     const mapDownload = new MapDownload(mapchip);
     const tutorial = new Tutorial();
+    const tabNotice = new TabNotice();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();
@@ -83,6 +86,7 @@ export default function configureApplication(profileId, config) {
     configureBoundaryEvents(controller, boundaryTypeBox);
     configureMapDownloadEvents(mapDownload);
     configureTutorialEvents(controller, tutorial, config.config.tutorial);
+    configureTabNoticeEvents(controller, tabNotice);
 
     controller.on('profile.loaded', payload => {
         // there seems to be a bug where menu items close if this is not set

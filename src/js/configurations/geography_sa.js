@@ -24,8 +24,8 @@ export class Config {
     }
 
     panelEnabled(panel) {
-        if (this.config.panels != undefined && this.config.panels[panel] != undefined)
-            return this.config.panels[panel]
+        if (this.config.panels != undefined && this.config.panels[panel] != undefined && this.config.panels[panel]['visible'] != undefined)
+            return this.config.panels[panel]['visible']
 
         return true;
     }

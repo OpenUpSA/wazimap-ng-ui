@@ -7,7 +7,13 @@ export const pdfprinter = new PDFPrinter();
 export const printButton = $("#profile-print");
 
 export function configureMiscElementEvents(controller) {
-    const sidePanels = new SidePanels();
+    let showPanels = {}
+
+    showPanels[RICH_DATA_PANEL] = controller.config.panelEnabled(RICH_DATA_PANEL)
+    showPanels[POINT_DATA_PANEL] = controller.config.panelEnabled(POINT_DATA_PANEL)
+    showPanels[DATA_EXPLORER_PANEL] = controller.config.panelEnabled(DATA_EXPLORER_PANEL)
+
+    const sidePanels = new SidePanels(showPanels);
     const defaultPanel = controller.config.defaultPanel;
 
     controller.on('profile.loaded', payload => profileLayout.displayLogo(payload.payload.logo))
@@ -27,4 +33,5 @@ export function configureMiscElementEvents(controller) {
     ]);
 
     sidePanels.togglePanel(defaultPanel);
+
 }

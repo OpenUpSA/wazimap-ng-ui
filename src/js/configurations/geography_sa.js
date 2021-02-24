@@ -74,7 +74,8 @@ export class Config {
             limitGeoViewSelections: true, // TODO temporary until specific geographies are factored out of the code
             choropleth: this.choropleth,
             leafletOptions: this.leafletOptions,
-            layerStyles: this.layerStyles
+            layerStyles: this.layerStyles,
+            almostOver: true,
         }
     }
 

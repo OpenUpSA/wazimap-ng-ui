@@ -90,6 +90,16 @@ export class PointData extends Observable {
             self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
 
         }
+      self.map.on("almost:over", function(e) {
+        self.showMarkerPopup(e, e.layer.options.point);
+      })
+      self.map.on("almost:click", function(e) {
+        self.showMarkerPopup(e, e.layer.options.point, true);
+        stopPropagation(e); //prevent map click event, ToDo does not work with almost:click
+      })
+      self.map.on("almost:out", function(e) {
+        self.hideMarkerPopup();
+      })
     }
 
     removeCategoryPoints = (category) => {
@@ -161,17 +171,15 @@ export class PointData extends Observable {
                 fill: true,
                 fillColor: col,
                 fillOpacity: 1,
-                pane: 'markerPane'
+                pane: 'markerPane',
+                point: point,
             })
             marker.on('click', (e) => {
                 this.showMarkerPopup(e, point, true);
                 stopPropagation(e); //prevent map click event
-            }).on('mouseover', (e) => {
-                this.showMarkerPopup(e, point);
-            }).on('mouseout', () => {
-                this.hideMarkerPopup();
             });
             layer.addLayer(marker);
+            this.map.almostOver.addLayer(marker);
         })
     }
 

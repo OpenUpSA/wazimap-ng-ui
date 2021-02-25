@@ -67,7 +67,7 @@ export default function configureApplication(profileId, config) {
     const boundaryTypeBox = new BoundaryTypeBox(config.config.preferred_children);
     const mapDownload = new MapDownload(mapchip);
     const tutorial = new Tutorial();
-    const tabNotice = new TabNotice();
+    const tabNotice = new TabNotice(config.config.feedback);
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();

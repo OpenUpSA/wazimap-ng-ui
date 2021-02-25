@@ -1,20 +1,21 @@
 export class TabNotice {
-    constructor() {
+    constructor(feedback) {
         this.tab = $('.tab-notice');
+        this.feedback = feedback;
     }
 
-    modifyTabNotice = (profile) => {
-        if (typeof profile.feedback === 'undefined' || profile.feedback === null) {
+    modifyTabNotice = () => {
+        if (typeof this.feedback === 'undefined' || this.feedback === null) {
             return;
         }
 
-        if (profile.feedback.visible) {
+        if (this.feedback.visible) {
             this.tab.removeClass('hidden');
         } else {
             this.tab.addClass('hidden');
         }
 
-        this.tab.find('a.tab-notice__content').attr('href', profile.feedback.url);
-        this.tab.find('a.tab-notice__content .tab-notice__text').text(profile.feedback.text);
+        this.tab.find('a.tab-notice__content').attr('href', this.feedback.url);
+        this.tab.find('a.tab-notice__content .tab-notice__text').text(this.feedback.text);
     }
 }

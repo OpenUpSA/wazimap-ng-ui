@@ -54,7 +54,6 @@ export class Profile {
         this._parents = js.geography.parents.map(el => new Geography(el));
         this._highlights = js.highlights;
         this._profileData = js.profile_data;
-        this._feedback = js.feedback;
 
         Object.values(this._profileData).forEach(category => {
             category = self._fixCategory(category)
@@ -114,10 +113,6 @@ export class Profile {
 
     get keyMetrics() {
         return this._keyMetrics;
-    }
-
-    get feedback() {
-        return this._feedback;
     }
 }
 

@@ -3781,14 +3781,9 @@ label {
 }
 
 .map-options {
-  position: absolute;
-  left: 0%;
-  top: auto;
-  right: 0%;
-  bottom: 10px;
   z-index: 999;
   display: block;
-  width: 400px;
+  width: 100%;
   margin-right: auto;
   margin-left: auto;
   border-radius: 4px;
@@ -7056,6 +7051,130 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+}
+
+.map-point-legend {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: -6px;
+  margin-bottom: 10px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  z-index: 999;
+}
+
+.map-point-legend.hidden {
+  display: none;
+}
+
+.map-bottom-items {
+  position: absolute;
+  left: auto;
+  top: auto;
+  right: auto;
+  bottom: 20px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 95%;
+  max-width: 650px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.map-bottom-items.hidden {
+  display: none;
+}
+
+.point-legend {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: 6px;
+  margin-bottom: 6px;
+  padding: 6px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 0 0 -1px rgba(0, 0, 0, 0.2), 0 1px 6px -2px rgba(0, 0, 0, 0.3);
+  font-size: 13px;
+}
+
+.point-legend__color {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  border-radius: 100px;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.point-legend__color.demo {
+  background-color: #39ad84;
+}
+
+.point-legend__text {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+}
+
+.point-legend__remove {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 24px;
+  height: 24px;
+  margin-left: 6px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  border-radius: 100px;
+  background-color: rgba(0, 0, 0, 0.06);
+  color: #707070;
+  cursor: pointer;
+}
+
+.point-legend__remove:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.point-legend__remove.hidden {
+  display: none;
 }
 
 @media screen and (max-width: 991px) {

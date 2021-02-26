@@ -7093,6 +7093,21 @@ label {
   flex-direction: column;
 }
 
+.map-bottom-items.export-clone{
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+}
+
+.map-bottom-items.export-clone .map-options__filters,.map-bottom-items.export-clone .map-options__legend, .map-bottom-items.export-clone .map-options__context{
+  background-color: #fff;
+}
+
+.map-bottom-items.export-clone .point-legend{
+  background-color: #fff;
+  box-shadow: none;
+}
+
 .map-bottom-items.hidden {
   display: none;
 }

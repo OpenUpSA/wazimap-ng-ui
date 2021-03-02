@@ -7194,7 +7194,7 @@ label {
   display: none;
 }
 
-rich-data__print {
+.rich-data__print {
    position: absolute;
    left: auto;
    top: 82px;

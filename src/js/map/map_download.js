@@ -13,7 +13,7 @@ export class MapDownload extends Observable {
         $('.map-download').on('click', () => {
             this.triggerEvent('mapdownload.started');
             this.titleClass = '.map-title';
-            this.legendClass = '.map-options__legend';
+            this.legendClass = '.map-bottom-items';
             this.downloadMap();
         });
     }
@@ -27,8 +27,7 @@ export class MapDownload extends Observable {
 
         const legend = document.querySelector(self.legendClass);
         let clonedLegend = legend.cloneNode(true);
-        $(clonedLegend).find('.map-options__legend_label').remove();
-        clonedLegend.id = 'map-download-legend';
+        $(clonedLegend).addClass('hidden').addClass('export-clone');
 
         $(element).append(clonedLegend);
         $(element).prepend(title);
@@ -38,9 +37,9 @@ export class MapDownload extends Observable {
             onclone: (clonedElement) => {
                 if (this.mapChip.title !== '') {
                     $(clonedElement).find(self.titleClass).show();
-                } else {
-                    $(clonedElement).find(self.legendClass).remove();
                 }
+
+                $(clonedElement).find(self.legendClass).removeClass('hidden');
             }
         };
 

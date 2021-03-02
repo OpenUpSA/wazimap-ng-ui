@@ -224,6 +224,14 @@
     </div>
   </div>
   <div class="main">
+    <div class="tab-notice hidden">
+      <div class="tab-notice__inner">
+        <a href="#" class="tab-notice__content w-inline-block">
+          <div class="tab-notice__text">Loading...</div>
+        </a>
+        <div class="plate bg-primary"></div>
+      </div>
+    </div>
     <div class="nav">
       <div data-w-id="66ee4f1f-99f3-8310-c69c-b5d00bdac74c" style="opacity:1;display:none" class="nav__search-deselect"></div>
       <div class="nav__shadow"></div>
@@ -341,123 +349,137 @@
         </div>
         <div class="map-location__info"></div>
       </div>
-      <div class="map-options hidden">
-        <div class="map-options__filters">
-          <div class="map-options__filters_header">
-            <div class="filter__header_sub-indicator">
-              <div class="filters__header_icon">
-                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
-                    <path d="M0 0h24v24H0z" fill="none"></path>
-                    <path fill="currentColor" d="M1.13,13.11,3.42,18a1.23,1.23,0,0,1-.28,1.52L3,19.66a.72.72,0,0,0-.08.85l.28.44.28.45a3.23,3.23,0,0,0,3.55,1.51l5.17-1.29a11.68,11.68,0,0,0,5.84-3.55l3.06-3.4a7.41,7.41,0,0,0,1.74-3.52l0-.16A1,1,0,0,0,22,9.81h-.27A.68.68,0,0,1,21,9.07l.06-.76a.67.67,0,0,1,.37-.58h0a1.46,1.46,0,0,0,.73-1.59l-.53-2.55a2.53,2.53,0,0,0-2.57-2.07h0a3,3,0,0,0-2.28,1.3l-2.6,4.6A1.56,1.56,0,0,1,12.29,8l-.46-.19c-.75-.31-1.6,1.56-2.09,2.23l-.42.58c-.33.46-.88.24-1.15-.25S7.27,7,7,6.39a.74.74,0,0,0-.63-.52H6a.67.67,0,0,0-.65.64l.12,4.12A1.67,1.67,0,0,1,3,12.05l-.39-.24a.62.62,0,0,0-.75.07l-.51.45A.73.73,0,0,0,1.13,13.11Z"></path>
-                  </svg></div>
-              </div>
-              <div class="filters__header_name">
-                <div class="truncate">indicator name</div>
-              </div>
-            </div>
-            <div data-w-id="a0a0a80b-723d-9f06-08f8-22ecf4a4bddb" class="filters__header_toggle">
-              <div style="-webkit-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="toggle-icon-v--first w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                  <path d="M0 0h24v24H0z" fill="none"></path>
-                  <path fill="currentColor" d="M7 10l5 5 5-5z"></path>
-                </svg></div>
-              <div style="-webkit-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="toggle-icon-v--last w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                  <path d="M0 0h24v24H0z" fill="none"></path>
-                  <path fill="currentColor" d="M17,14l-5-5l-5,5H17z"></path>
-                </svg></div>
-            </div>
-            <div data-w-id="f7f05345-5dc5-101e-109a-a0291cc7b897" class="filters__header_close">
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                  <path d="M0 0h24v24H0z" fill="none"></path>
-                  <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-                </svg></div>
-            </div>
-          </div>
-          <div style="display:flex" class="map-options__filters_content">
-            <div class="mapping-options__filter">
-              <div class="mapping-options__filter_label">
-                <div>Select a value:</div>
-              </div>
-              <div data-w-id="c3edb6cb-8fc8-3508-f112-94613483dd79" class="mapping-options__filter_menu">
-                <div class="dropdown-menu__trigger narrow">
-                  <div class="dropdown-menu__selected-item">
-                    <div class="truncate">All values</div>
-                  </div>
-                  <div class="dropdown-menu__icon">
-                    <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                        <path d="M0 0h24v24H0z" fill="none"></path>
-                        <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-                      </svg></div>
-                  </div>
-                </div>
-                <div class="dropdown-menu__content position-top scroll-element">
-                  <div class="dropdown__list_item selected">
-                    <div class="truncate">All values</div>
-                  </div>
-                  <div class="dropdown__list_item">
-                    <div class="truncate">Value</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="mapping-options__filter disabled">
-              <div class="mapping-options__filter_label">
-                <div>FILTER BY:</div>
-              </div>
-              <div data-w-id="fd26a4e0-f0f7-aaf0-9eee-32c6e9fb2e19" class="mapping-options__filter_menu">
-                <div class="dropdown-menu__trigger narrow">
-                  <div class="dropdown-menu__selected-item">
-                    <div class="truncate">All filters</div>
-                  </div>
-                  <div class="dropdown-menu__icon">
-                    <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                        <path d="M0 0h24v24H0z" fill="none"></path>
-                        <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-                      </svg></div>
-                  </div>
-                </div>
-                <div class="dropdown-menu__content position-top scroll-element">
-                  <div class="dropdown__list_item selected">
-                    <div class="truncate">All Filters</div>
-                  </div>
-                  <div class="dropdown__list_item">
-                    <div class="truncate">Filter</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="map-options__legend">
-          <div class="map-options__legend_label">
-            <div>LEGEND:</div>
-          </div>
-          <div class="map-options__legend_wrap">
-            <div class="map-options__legend_loading">
-              <div class="truncate">Loading...</div>
-              <div class="legend-block__loading-icon"><img src="images/loading.gif" alt=""></div>
-            </div>
-          </div>
-        </div>
-        <div style="display:flex" class="map-options__context">
-          <div class="map-option__context_text">
-            <div>Indicator context</div>
-          </div>
-          <div data-w-id="dfcf026d-123b-ec2d-3d1f-5646d4025e7b" class="map-options__context_tooltip">
-            <div style="display:none" class="tooltip">
-              <div class="tooltip-card dark">
-                <div class="tooltip-text">
-                  <div>Tooltip text</div>
-                </div>
-                <div class="tooltip-notch dark"></div>
-              </div>
-            </div>
-            <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
-                <path d="M0 0h24v24H0z" fill="none"></path>
-                <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
-              </svg></div>
-          </div>
-        </div>
-      </div>
+	  <div class="map-bottom-items">
+		  <div class="map-point-legend hidden">
+			  <div class="point-legend">
+				<div class="point-legend__color"></div>
+				<div class="point-legend__text">Loading...</div>
+				<div title="Remove from map" class="point-legend__remove">
+				  <div class="svg-icon icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+					  <path d="M0 0h24v24H0z" fill="none"></path>
+					  <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+					</svg></div>
+				</div>
+			  </div>
+			</div>
+		  <div class="map-options hidden">
+			<div class="map-options__filters">
+			  <div class="map-options__filters_header">
+				<div class="filter__header_sub-indicator">
+				  <div class="filters__header_icon">
+					<div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
+						<path d="M0 0h24v24H0z" fill="none"></path>
+						<path fill="currentColor" d="M1.13,13.11,3.42,18a1.23,1.23,0,0,1-.28,1.52L3,19.66a.72.72,0,0,0-.08.85l.28.44.28.45a3.23,3.23,0,0,0,3.55,1.51l5.17-1.29a11.68,11.68,0,0,0,5.84-3.55l3.06-3.4a7.41,7.41,0,0,0,1.74-3.52l0-.16A1,1,0,0,0,22,9.81h-.27A.68.68,0,0,1,21,9.07l.06-.76a.67.67,0,0,1,.37-.58h0a1.46,1.46,0,0,0,.73-1.59l-.53-2.55a2.53,2.53,0,0,0-2.57-2.07h0a3,3,0,0,0-2.28,1.3l-2.6,4.6A1.56,1.56,0,0,1,12.29,8l-.46-.19c-.75-.31-1.6,1.56-2.09,2.23l-.42.58c-.33.46-.88.24-1.15-.25S7.27,7,7,6.39a.74.74,0,0,0-.63-.52H6a.67.67,0,0,0-.65.64l.12,4.12A1.67,1.67,0,0,1,3,12.05l-.39-.24a.62.62,0,0,0-.75.07l-.51.45A.73.73,0,0,0,1.13,13.11Z"></path>
+					  </svg></div>
+				  </div>
+				  <div class="filters__header_name">
+					<div class="truncate">indicator name</div>
+				  </div>
+				</div>
+				<div data-w-id="a0a0a80b-723d-9f06-08f8-22ecf4a4bddb" class="filters__header_toggle">
+				  <div style="-webkit-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="toggle-icon-v--first w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+					  <path d="M0 0h24v24H0z" fill="none"></path>
+					  <path fill="currentColor" d="M7 10l5 5 5-5z"></path>
+					</svg></div>
+				  <div style="-webkit-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="toggle-icon-v--last w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+					  <path d="M0 0h24v24H0z" fill="none"></path>
+					  <path fill="currentColor" d="M17,14l-5-5l-5,5H17z"></path>
+					</svg></div>
+				</div>
+				<div data-w-id="f7f05345-5dc5-101e-109a-a0291cc7b897" class="filters__header_close">
+				  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+					  <path d="M0 0h24v24H0z" fill="none"></path>
+					  <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+					</svg></div>
+				</div>
+			  </div>
+			  <div style="display:flex" class="map-options__filters_content">
+				<div class="mapping-options__filter">
+				  <div class="mapping-options__filter_label">
+					<div>Select a value:</div>
+				  </div>
+				  <div data-w-id="c3edb6cb-8fc8-3508-f112-94613483dd79" class="mapping-options__filter_menu">
+					<div class="dropdown-menu__trigger narrow">
+					  <div class="dropdown-menu__selected-item">
+						<div class="truncate">All values</div>
+					  </div>
+					  <div class="dropdown-menu__icon">
+						<div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+							<path d="M0 0h24v24H0z" fill="none"></path>
+							<path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+						  </svg></div>
+					  </div>
+					</div>
+					<div class="dropdown-menu__content position-top scroll-element">
+					  <div class="dropdown__list_item selected">
+						<div class="truncate">All values</div>
+					  </div>
+					  <div class="dropdown__list_item">
+						<div class="truncate">Value</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+				<div class="mapping-options__filter disabled">
+				  <div class="mapping-options__filter_label">
+					<div>FILTER BY:</div>
+				  </div>
+				  <div data-w-id="fd26a4e0-f0f7-aaf0-9eee-32c6e9fb2e19" class="mapping-options__filter_menu">
+					<div class="dropdown-menu__trigger narrow">
+					  <div class="dropdown-menu__selected-item">
+						<div class="truncate">All filters</div>
+					  </div>
+					  <div class="dropdown-menu__icon">
+						<div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+							<path d="M0 0h24v24H0z" fill="none"></path>
+							<path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+						  </svg></div>
+					  </div>
+					</div>
+					<div class="dropdown-menu__content position-top scroll-element">
+					  <div class="dropdown__list_item selected">
+						<div class="truncate">All Filters</div>
+					  </div>
+					  <div class="dropdown__list_item">
+						<div class="truncate">Filter</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			</div>
+			<div class="map-options__legend">
+			  <div class="map-options__legend_label">
+				<div>LEGEND:</div>
+			  </div>
+			  <div class="map-options__legend_wrap">
+				<div class="map-options__legend_loading">
+				  <div class="truncate">Loading...</div>
+				  <div class="legend-block__loading-icon"><img src="images/loading.gif" alt=""></div>
+				</div>
+			  </div>
+			</div>
+			<div style="display:flex" class="map-options__context">
+			  <div class="map-option__context_text">
+				<div>Indicator context</div>
+			  </div>
+			  <div data-w-id="dfcf026d-123b-ec2d-3d1f-5646d4025e7b" class="map-options__context_tooltip">
+				<div style="display:none" class="tooltip">
+				  <div class="tooltip-card dark">
+					<div class="tooltip-text">
+					  <div>Tooltip text</div>
+					</div>
+					<div class="tooltip-notch dark"></div>
+				  </div>
+				</div>
+				<div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
+					<path d="M0 0h24v24H0z" fill="none"></path>
+					<path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+				  </svg></div>
+			  </div>
+			</div>
+		  </div>
+	  </div>
       <div class="map-geo-select hidden">
         <div class="mag-geo__dropdown_wrap">
           <div class="dropdown-menu__label">

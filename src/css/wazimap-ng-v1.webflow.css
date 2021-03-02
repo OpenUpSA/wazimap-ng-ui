@@ -8319,5 +8319,9 @@ label {
         float: none !important;
         display: block !important;
     }
+
+    .rich-data__print, .tab-notice{
+      display: none;
+    }
 }
 

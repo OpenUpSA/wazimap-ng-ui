@@ -14,14 +14,19 @@ const chartContainerClass = '.indicator__chart';
 const tooltipClass = '.bar-chart__row_tooltip';
 
 let tooltipClone = null;
+const typeIndex = {
+    'Percentage': 0,
+    'Value': 1
+}
+
 
 export class Chart extends Observable {
-    constructor(config, subindicators, groups, indicators, graphValueType, _subCategoryNode, title) {
+    constructor(config, subindicators, groups, indicators, _subCategoryNode, title) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super();
 
         this.subindicators = subindicators;
-        this.graphValueType = graphValueType;
+        this.graphValueType = config.defaultType
         this.title = title;
         this.config = config;
         this.selectedFilter = null;
@@ -32,9 +37,11 @@ export class Chart extends Observable {
 
         const chartContainer = $(chartContainerClass, this.subCategoryNode);
         this.container = chartContainer[0];
+        this.containerParent = $(this.container).closest('.profile-indicator');
+
 
         this.handleChartFilter(indicators, groups, title);
-        this.addChart();
+        this.selectedGraphValueTypeChanged(this.containerParent, typeIndex[this.graphValueType]);
     }
 
     addChart = () => {
@@ -61,11 +68,12 @@ export class Chart extends Observable {
             .xAxisPadding(10) //padding of the xAxis values(numbers)
             .yAxisPadding(10)
             .xLabelPadding(30)    //padding of the label
+            .xTicks(this.config.xTicks)
             .barHeight(24)
             .barPadding(6)
             .margin({
                 top: 15,
-                right: 50,
+                right: 65,
                 bottom: 15,
                 left: 120,
             })
@@ -114,28 +122,38 @@ export class Chart extends Observable {
 
         return arr;
     }
+    
+    disableChartTypeToggle = (disable) => {
+        if (disable) {
+            $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
+            $(this.containerParent).find('.hover-menu__content_list').hide()
+        }
+    }
 
     setChartMenu = (barChart) => {
         const self = this;
-        const containerParent = $(this.container).closest('.profile-indicator');
-
-        const saveImgButton = $(containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');
+        const saveImgButton = $(this.containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');
 
         $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
-            barChart.saveAsPng(this.container);
+            let chartTitle = self.getChartTitle(':');
+            let fileName = 'chart.png';
+            barChart.saveAsPng(this.container, fileName, chartTitle);
             this.triggerEvent('profile.chart.saveAsPng', this);
         })
 
         //todo:don't use index, specific class names should be used here when the classes are ready
-        $(containerParent).find('.hover-menu__content_list a').each(function (index) {
+        $(this.containerParent).find('.hover-menu__content_list a').each(function (index) {
             $(this).off('click');
             $(this).on('click', () => {
-                self.selectedGraphValueTypeChanged(containerParent, index);
+                self.selectedGraphValueTypeChanged(self.containerParent, index);
             })
         });
 
-        $(containerParent).find('.hover-menu__content_list--last a').each(function (index) {
+        this.disableChartTypeToggle(this.config.disableToggle);
+        
+
+        $(this.containerParent).find('.hover-menu__content_list--last a').each(function (index) {
             $(this).off('click');
             $(this).on('click', () => {
                 const downloadFn = {
@@ -146,10 +164,14 @@ export class Chart extends Observable {
                 }[index];
                 self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
-                let fileName = self.selectedGroup === null ? `${self.title}` : `${self.title} - by ${self.selectedGroup} - ${self.selectedFilter}`;
+                let fileName = self.getChartTitle('-');
                 downloadFn.fn(fileName);
             })
         });
+    }
+
+    getChartTitle = (separator) => {
+        return this.selectedGroup === null ? `${this.title}` : `${this.title} by ${this.selectedGroup} ${separator} ${this.selectedFilter}`;
     }
 
     selectedGraphValueTypeChanged = (containerParent, index) => {

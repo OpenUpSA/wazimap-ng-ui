@@ -49,17 +49,21 @@ export class Indicator extends Observable {
         const configuration = detail.indicators[title].chartConfiguration;
         const indicators = detail.indicators;
 
-        let c = new Chart(configuration, this.subindicators, this.groups, indicators, 'Percentage', indicator, title);
-        this.bubbleEvents(c, [
-            'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-            'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-            'point_tray.subindicator_filter.filter'
-        ]);
+        let hasValues = this.subindicators.some(function(e) { return e.count > 0 });
 
-        if (!isLast) {
-            $(indicator).removeClass('last');
+        if (hasValues) {
+            let c = new Chart(configuration, this.subindicators, this.groups, indicators, indicator, title);
+            this.bubbleEvents(c, [
+                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                'point_tray.subindicator_filter.filter'
+            ]);
+
+            if (!isLast) {
+                $(indicator).removeClass('last');
+            }
+
+            wrapper.append(indicator);
         }
-
-        wrapper.append(indicator);
     }
 }

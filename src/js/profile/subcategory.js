@@ -32,6 +32,7 @@ export class Subcategory extends Observable {
             $(wrapper).find(subcategoryHeaderClass).remove();
         } else {
             $(scHeader).removeClass('first');
+            $(scHeader).addClass('page-break-before');
         }
 
         $(subcategoryTitleClass, scHeader).text(subcategory);

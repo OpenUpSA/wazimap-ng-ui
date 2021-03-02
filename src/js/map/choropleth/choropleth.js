@@ -87,8 +87,8 @@ export class Choropleth extends Observable {
 
         childGeographyValues.forEach(el => {
             const layer = self.layers[el.code];
-            self.currentLayers.push(el.code);
             if (layer != undefined) {
+                self.currentLayers.push(el.code);
                 const color = scale(el.val);
                 self.layerStyler.setLayerStyle(layer, {
                     over: {fillColor: color, fillOpacity: self.options.opacity_over},

@@ -4,7 +4,7 @@ import 'd3-transition';
 import d3Tip from 'd3-tip';
 import {axisBottom, axisLeft} from 'd3-axis';
 import html2canvas from 'html2canvas';
-import xlsExport from "xlsexport";
+import XLSX from 'xlsx';
 import {saveAs} from "../utils";
 
 export function horizontalBarChart() {
@@ -29,6 +29,7 @@ export function horizontalBarChart() {
         reverse: false,
         minX: 0,
         maxX: null,
+        xTicks: null,
         barTextPadding: {
             top: 15,
             left: 10
@@ -45,6 +46,7 @@ export function horizontalBarChart() {
                 d = d.substring(0, barLabelLength) + '...'
             return d;
         }
+
     };
 
     let data = initialConfiguration.data;
@@ -65,6 +67,7 @@ export function horizontalBarChart() {
     let reverse = initialConfiguration.reverse;
     let minX = initialConfiguration.minX;
     let maxX = initialConfiguration.maxX;
+    let xTicks = initialConfiguration.xTicks;
     let barTextPadding = initialConfiguration.barTextPadding;
 
     function chart(selection) {
@@ -97,10 +100,14 @@ export function horizontalBarChart() {
                 .tickSize(0)
                 .tickPadding(yAxisPadding)
                 .tickFormat(yAxisFormatter);
+
             const xAxis = axisBottom(x)
                 .tickSize(0)
                 .tickPadding(xAxisPadding)
                 .tickFormat(xAxisFormatter);
+
+            if (xTicks)
+                xAxis.ticks(xTicks)
 
             /**
              * append y axis
@@ -235,12 +242,11 @@ export function horizontalBarChart() {
         });
     }
 
-    chart.saveAsPng = function (container) {
-
+    chart.saveAsPng = function (container, fileName, chartTitle) {
         let element = $(container).closest('.profile-indicator')[0];
 
-        $(element).find('.profile-indicator__options').attr('data-html2canvas-ignore', true);
-        $(element).find('.profile-indicator__filters').attr('data-html2canvas-ignore', true);
+        $('.profile-indicator__options', element).attr('data-html2canvas-ignore', true);
+        $('.profile-indicator__filters', element).attr('data-html2canvas-ignore', true);
         const rightMargin = 60;
 
         let options = {
@@ -251,11 +257,14 @@ export function horizontalBarChart() {
             //fix the size of the chart so it doesn't get affected by the client's resolution
             windowWidth: 1920,
             windowHeight: 1080,
-            scale: 0.9
+            scale: 0.9,
+            onclone: (clonedElement) => {
+                $('.profile-indicator__title h4', clonedElement).text(chartTitle);
+            }
         }
 
         html2canvas(element, options).then(function (canvas) {
-            saveAs(canvas.toDataURL(), 'chart.png');
+            saveAs(canvas.toDataURL(), fileName);
 
             $(element).find('.profile-indicator__options').removeAttr('data-html2canvas-ignore');
             $(element).find('.profile-indicator__filters').removeAttr('data-html2canvas-ignore');
@@ -293,11 +302,14 @@ export function horizontalBarChart() {
 
     chart.exportAsExcel = function (title) {
         const exportData = getExportData();
-        const fileName = title + '.xls';
-        const sheetName = 'Chart Data';
-        const xls = new xlsExport(exportData, sheetName);
-
-        xls.exportToXLS(fileName);
+        // export json (only array possible) to Worksheet of Excel
+        const data = XLSX.utils.json_to_sheet(exportData);
+        // A workbook is the name given to an Excel file
+        const wb = XLSX.utils.book_new(); // make Workbook of Excel
+        // add Worksheet to Workbook
+        XLSX.utils.book_append_sheet(wb, data, 'Chart data');
+        // export Excel file
+        XLSX.writeFile(wb, title + '.xlsx');
     }
 
     chart.exportAsJson = function (title) {
@@ -325,7 +337,9 @@ export function horizontalBarChart() {
     }
 
     function getExportData() {
-        const exportData = data.map((d) => {
+        let exportArr = [...data];
+
+        const exportData = exportArr.reverse().map((d) => {
             return {
                 'Sub-indicator': d.label.toString(),
                 'Value': d.valueText.toString()
@@ -380,6 +394,13 @@ export function horizontalBarChart() {
         xLabelPadding = value;
         return chart;
     };
+
+
+    chart.xTicks = function (value) {
+        if (!arguments.length) return xTicks;
+        xTicks = value;
+        return chart;
+    }
 
     chart.barHeight = function (value) {
         if (!arguments.length) return barHeight;

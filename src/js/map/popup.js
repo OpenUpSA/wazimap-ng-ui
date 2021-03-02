@@ -3,6 +3,7 @@ import {format as d3format} from "d3-format/src/defaultLocale";
 
 const PERCENTAGE_TYPE = 'Percentage';
 const VALUE_TYPE = 'Value'
+const POPUP_OFFSET= [20, 0];
 
 /**
  * this class creates & manipulates the popup over the map
@@ -25,7 +26,7 @@ export class Popup extends Observable {
 
         this.map.map_variables.popup = L.popup({
             autoPan: false,
-            offset: [-10, 0],
+            offset: POPUP_OFFSET,
             closeButton: false
         })
 
@@ -67,7 +68,7 @@ export class Popup extends Observable {
 
         $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
 
-        return $(item).html();
+        return item;
     }
 
     setTooltipThemes = (item, areaCode) => {

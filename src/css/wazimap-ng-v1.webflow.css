@@ -7223,6 +7223,47 @@ label {
    background-color: rgba(0, 0, 0, 0.1);
  }
 
+.location__facilities_google-link {
+  white-space: nowrap;
+}
+
+.facility-info__google-map-text {
+  width: 100%;
+}
+
+.facility-info__view-google-map {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 20px;
+  padding: 6px 10px 6px 6px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-self: flex-start;
+  -ms-flex-item-align: start;
+  align-self: flex-start;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.06);
+  color: #333;
+  text-decoration: none;
+}
+
+.facility-info__view-google-map:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+
+.facility-info__view-google-map.hidden {
+  display: none;
+}
+
+.facility-info__google-map-icon {
+  margin-right: 4px;
+}
+
 @media screen and (max-width: 991px) {
   .rich-data-content {
     padding-top: 44px;

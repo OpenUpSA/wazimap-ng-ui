@@ -14,6 +14,12 @@ const facilityClsName = 'facility-info';
 const facilityRowClsName = 'facility-info__item';
 const facilityItemsClsName = 'facility-info__items';
 
+const pointLegendWrapperClsName = 'map-point-legend';
+const pointLegendItemClsName = 'point-legend';
+
+let pointLegend = null;
+let pointLegendItem = null;
+
 let tooltipItem = null;
 let tooltipRowItem = null;
 
@@ -23,7 +29,7 @@ let facilityRowItem = null;
 let activeMarkers = [];
 let activePoints = [];  //the visible points on the map
 
-const POPUP_OFFSET= [20, 0];
+const POPUP_OFFSET = [20, 0];
 
 /**
  * this class creates the point data dialog
@@ -47,7 +53,11 @@ export class PointData extends Observable {
         tooltipRowItem = $('.' + tooltipRowClsName)[0].cloneNode(true);
         facilityRowItem = $('.' + facilityRowClsName)[0].cloneNode(true);
         facilityItem = $('.' + facilityClsName);
-        $('.facility-info__close').on('click', () => this.hideFacilityModal());
+        pointLegend = $('.' + pointLegendWrapperClsName);
+        pointLegendItem = $('.' + pointLegendItemClsName)[0].cloneNode(true);
+
+        $(pointLegend).empty();
+        $('.facility-info__close').on('click', () => this.hideInfoWindows());
     }
 
     genLayer() {
@@ -75,6 +85,7 @@ export class PointData extends Observable {
 
         if (layer != undefined) {
             this.map.addLayer(layer);
+            self.showPointLegend(category);
             this.showDone(category)
         } else {
             layer = this.genLayer()
@@ -83,6 +94,7 @@ export class PointData extends Observable {
             this.triggerEvent('loadingCategoryPoints', category);
 
             const data = await this.getAddressPoints(category);
+            self.showPointLegend(category);
             self.createMarkers(data, layer);
             self.map.addLayer(layer);
             self.showDone(category);
@@ -97,6 +109,7 @@ export class PointData extends Observable {
 
         if (layer != undefined) {
             this.map.removeLayer(layer);
+            pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
         }
     }
 
@@ -128,6 +141,20 @@ export class PointData extends Observable {
 
     markerRadius() {
         return this.map.getZoom() / 2;
+    }
+
+    showPointLegend = (category) => {
+        pointLegend.removeClass('hidden');
+        let color = $(`.theme-${category.themeIndex}`).css('color');
+        let item = pointLegendItem.cloneNode(true);
+        $('.point-legend__text', item).text(category.data.name);
+        $('.point-legend__color', item).css('background-color', color);
+        $(item).attr('data-id', category.data.id);
+        $('.point-legend__remove', item).on('click', () => {
+            $(`.point-mapper__h2[data-id=${category.data.id}]`).trigger('click');
+        })
+
+        pointLegend.append(item);
     }
 
     /**
@@ -191,7 +218,10 @@ export class PointData extends Observable {
             popup
                 .setLatLng({lat: point.y, lng: point.x})
                 .setContent(popupContent)
-                .addTo(this.map);
+                .addTo(this.map)
+                .on('remove', () => {
+                    this.hideInfoWindows();
+                });
             this.triggerEvent('point_data.load_popup.clicked', eventLabel);
         } else {
             popup
@@ -202,6 +232,11 @@ export class PointData extends Observable {
         }
 
         setPopupStyle('facility-tooltip');
+    }
+
+    hideInfoWindows = () => {
+        this.hideFacilityModal();
+        $('a.leaflet-popup-close-button')[0].click()
     }
 
     hideMarkerPopup = () => {
@@ -244,7 +279,7 @@ export class PointData extends Observable {
     appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName) => {
         $('.' + itemsClsName, item).empty();
         point.data.forEach((a, i) => {
-            if (Object.prototype.toString.call(a.value) == '[object String]') {
+            if (Object.prototype.toString.call(a.value) !== '[object Object]') {
                 let itemRow = rowItem.cloneNode(true);
                 $(itemRow).removeClass('last');
                 $('.' + labelClsName, itemRow).text(a.key);

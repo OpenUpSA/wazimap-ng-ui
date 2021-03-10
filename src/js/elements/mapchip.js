@@ -137,7 +137,7 @@ export class MapChip extends Observable {
             label = args.indicatorTitle;
         }
 
-        this.title = `${args.category} by ${label}`;
+        this.title = `${label}`;
 
         this.updateMapChipText(label);
         this.showMapChip(args);

@@ -29,6 +29,7 @@ export function horizontalBarChart() {
         reverse: false,
         minX: 0,
         maxX: null,
+        xTicks: null,
         barTextPadding: {
             top: 15,
             left: 10
@@ -45,6 +46,7 @@ export function horizontalBarChart() {
                 d = d.substring(0, barLabelLength) + '...'
             return d;
         }
+
     };
 
     let data = initialConfiguration.data;
@@ -65,6 +67,7 @@ export function horizontalBarChart() {
     let reverse = initialConfiguration.reverse;
     let minX = initialConfiguration.minX;
     let maxX = initialConfiguration.maxX;
+    let xTicks = initialConfiguration.xTicks;
     let barTextPadding = initialConfiguration.barTextPadding;
 
     function chart(selection) {
@@ -97,10 +100,14 @@ export function horizontalBarChart() {
                 .tickSize(0)
                 .tickPadding(yAxisPadding)
                 .tickFormat(yAxisFormatter);
+
             const xAxis = axisBottom(x)
                 .tickSize(0)
                 .tickPadding(xAxisPadding)
                 .tickFormat(xAxisFormatter);
+
+            if (xTicks)
+                xAxis.ticks(xTicks)
 
             /**
              * append y axis
@@ -387,6 +394,13 @@ export function horizontalBarChart() {
         xLabelPadding = value;
         return chart;
     };
+
+
+    chart.xTicks = function (value) {
+        if (!arguments.length) return xTicks;
+        xTicks = value;
+        return chart;
+    }
 
     chart.barHeight = function (value) {
         if (!arguments.length) return barHeight;

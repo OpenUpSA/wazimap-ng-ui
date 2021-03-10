@@ -60,12 +60,14 @@ export default class ProfileLoader extends Observable {
     loadCategories = (profile) => {
         let removePrevCategories = true;
         const categories = profile.profileData;
+        let isFirst = true;
 
         this.createNavItem('top', 'Summary');
         for (const [category, detail] of Object.entries(categories)) {
             const id = this.getNewId();
             this.createNavItem(id, category);
-            let c = new Category(this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories);
+            let c = new Category(this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories, isFirst)
+            isFirst = false;
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

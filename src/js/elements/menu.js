@@ -1,4 +1,5 @@
 import {SubIndicator} from '../dataobjects'
+import {checkIfSubCategoryHasChildren} from "../utils";
 
 
 const hideondeployClsName = 'hideondeploy';
@@ -127,9 +128,13 @@ export function loadMenu(data, subindicatorCallback) {
         $(".data-category__h2", h2Wrapper).remove();
 
         for (const [subcategory, detail] of Object.entries(subcategories)) {
-            let count = subindicatorsInSubCategory(detail);
-            if (count > 0) {
-                addIndicators(h2Wrapper, category, subcategory, detail.indicators);
+            let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
+
+            if (hasChildren) {
+                let count = subindicatorsInSubCategory(detail);
+                if (count > 0) {
+                    addIndicators(h2Wrapper, category, subcategory, detail.indicators);
+                }
             }
         }
     }
@@ -168,7 +173,7 @@ export function loadMenu(data, subindicatorCallback) {
     }
 }
 
-export function showNoData(){
+export function showNoData() {
     $(parentContainer).empty();
     $('.' + loadingClsName).addClass('hidden');
     $('.' + noDataWrapperClsName).removeClass('hidden');

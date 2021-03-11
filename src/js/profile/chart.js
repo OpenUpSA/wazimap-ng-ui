@@ -55,6 +55,39 @@ export class Chart extends Observable {
 
         this.setChartMenu(barChart);
         d3select(this.container).call(barChart.data(data).reverse(true));
+        this.showChartDataTable();
+    }
+
+    showChartDataTable = () => {
+        let data = this.getValuesFromSubindicators();
+
+        this.containerParent.find('.chart-table').remove();
+
+        let table = document.createElement('table');
+        $(table).addClass('chart-table');
+        let thead = document.createElement('thead');
+        let headRow = document.createElement('tr');
+        let headCol1 = document.createElement('th');
+        $(headCol1).text('Key');
+        $(headRow).append(headCol1);
+        let headCol2 = document.createElement('th');
+        $(headCol2).text('Value');
+        $(headRow).append(headCol2);
+
+        $(thead).append(headRow);
+        $(table).append(thead);
+
+        for (let i = 0; i < data.length; i++) {
+            let row = document.createElement('tr');
+            let col1 = document.createElement('td');
+            $(col1).text(data[i].label);
+            let col2 = document.createElement('td');
+            $(col2).text(data[i].valueText);
+            $(row).append(col1);
+            $(row).append(col2);
+            $(table).append(row);
+        }
+        this.containerParent.append(table);
     }
 
     setChartOptions = (chart) => {
@@ -122,7 +155,7 @@ export class Chart extends Observable {
 
         return arr;
     }
-    
+
     disableChartTypeToggle = (disable) => {
         if (disable) {
             $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
@@ -151,7 +184,7 @@ export class Chart extends Observable {
         });
 
         this.disableChartTypeToggle(this.config.disableToggle);
-        
+
 
         $(this.containerParent).find('.hover-menu__content_list--last a').each(function (index) {
             $(this).off('click');

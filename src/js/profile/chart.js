@@ -68,25 +68,34 @@ export class Chart extends Observable {
         let thead = document.createElement('thead');
         let headRow = document.createElement('tr');
         let headCol1 = document.createElement('th');
-        $(headCol1).text('Key');
+        $(headCol1).text('Indicator');
         $(headRow).append(headCol1);
         let headCol2 = document.createElement('th');
-        $(headCol2).text('Value');
+        $(headCol2).text('Absolute');
         $(headRow).append(headCol2);
+        let headCol3 = document.createElement('th');
+        $(headCol3).text('Percentage');
+        $(headRow).append(headCol3);
 
         $(thead).append(headRow);
         $(table).append(thead);
 
-        for (let i = 0; i < data.length; i++) {
+        for (const [label, subindicator] of Object.entries(this.subindicators)) {
+            let absolute_val = subindicator.count;
+            let percentage_val = this.getPercentageValue(absolute_val, this.subindicators);
             let row = document.createElement('tr');
             let col1 = document.createElement('td');
-            $(col1).text(data[i].label);
+            $(col1).text(subindicator.keys);
             let col2 = document.createElement('td');
-            $(col2).text(data[i].valueText);
+            $(col2).text(d3format(this.config.types[VALUE_TYPE].formatting)(absolute_val));
+            let col3 = document.createElement('td');
+            $(col3).text(d3format(this.config.types[PERCENTAGE_TYPE].formatting)(percentage_val));
             $(row).append(col1);
             $(row).append(col2);
+            $(row).append(col3);
             $(table).append(row);
         }
+
         this.containerParent.append(table);
     }
 

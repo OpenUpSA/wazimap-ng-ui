@@ -68,7 +68,7 @@ export class Chart extends Observable {
         let thead = document.createElement('thead');
         let headRow = document.createElement('tr');
         let headCol1 = document.createElement('th');
-        $(headCol1).text('Indicator');
+        $(headCol1).text(this.title);
         $(headRow).append(headCol1);
         let headCol2 = document.createElement('th');
         $(headCol2).text('Absolute');

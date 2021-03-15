@@ -8500,5 +8500,29 @@ label {
     .rich-data__print, .tab-notice{
       display: none;
     }
+
+    .rich-data[style*="display: none;"]{
+        display: none !important;
+    }
+
+    .facility-info{
+      display: inline-table !important;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: #fff;
+      max-height: 100%;
+      max-width: 100%;
+    }
+
+    .facility-info__view-google-map{
+      display: none;
+    }
+
+    .facility-info[style*="display: none;"]{
+      display: none !important;
+    }
 }
 

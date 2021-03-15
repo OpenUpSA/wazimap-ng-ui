@@ -15,6 +15,8 @@ let geography = null;
 const breadcrumbClass = '.breadcrumb';
 const locationDescriptionClass = '.location__description';
 
+const downloadAllFacilities = '.download_all_facilities';
+
 const SHEETNAME_CHAR_LIMIT = 31;
 
 export class Profile_header extends Observable {
@@ -34,6 +36,8 @@ export class Profile_header extends Observable {
         facilityWrapper = $('.location__facilities .location__facilities_content-wrapper');
         facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
         facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
+
+        $(downloadAllFacilities).on('click', downloadAllFacilities);
 
         this.setPointSource();
         this.addBreadCrumbs();
@@ -136,9 +140,22 @@ export class Profile_header extends Observable {
         $('.location__facilities_loading').addClass('hidden');
     }
 
+    downloadAllFacilities = () => {
+        this.api.loadAllPoints(this.profileId, geography.code)
+            .then((facilities) => {
+                const wb = XLSX.utils.book_new();
+                const fileName = 'Facilities-' + geography.code + '.xlsx';
+                for (let i = 0; i < facilities.length; i++) {
+                    const sheetName = this.getSheetName(facilities.categories[i].name);
+                    const data = XLSX.utils.json_to_sheet(facilities.categories[i].points);
+                    XLSX.utils.book_append_sheet(wb, data, sheetName);
+                }
+                XLSX.writeFile(wb, fileName);
+            });
+    }
+
     downloadPointData = (category) => {
-        const suffix = '...';
-        const sheetName = category.label.length > SHEETNAME_CHAR_LIMIT ? category.label.substring(0, SHEETNAME_CHAR_LIMIT - suffix.length) + suffix : category.label;
+        const sheetName = this.getSheetName(category.label);
         const fileName = 'Export-' + category.label + '.xlsx';
         this.getAddressPoints(category)
             .then((points) => {
@@ -151,6 +168,13 @@ export class Profile_header extends Observable {
                 // export Excel file
                 XLSX.writeFile(wb, fileName);
             });
+    }
+
+    getSheetName = (name) => {
+        const suffix = '...';
+        const sheetName = name.length > SHEETNAME_CHAR_LIMIT ? name.substring(0, SHEETNAME_CHAR_LIMIT - suffix.length) + suffix : name;
+
+        return sheetName;
     }
 
     getAddressPoints = (category) => {

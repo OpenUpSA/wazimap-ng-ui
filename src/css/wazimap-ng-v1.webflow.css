@@ -6995,9 +6995,12 @@ label {
   grid-template-rows: auto;
 }
 
-.facility-info__download {
+.facility-info__print {
   z-index: 1;
-  display: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   width: 36px;
   height: 36px;
   padding: 2px;
@@ -7020,11 +7023,11 @@ label {
   cursor: pointer;
 }
 
-.facility-info__download:hover {
+.facility-info__print:hover {
   color: #000;
 }
 
-.facility-info__download.hidden {
+.facility-info__print.hidden {
   display: none;
 }
 
@@ -8517,7 +8520,7 @@ label {
       max-width: 100%;
     }
 
-    .facility-info__view-google-map{
+    .facility-info__view-google-map, .facility-info__print, .facility-info__close{
       display: none;
     }
 

@@ -55,6 +55,48 @@ export class Chart extends Observable {
 
         this.setChartMenu(barChart);
         d3select(this.container).call(barChart.data(data).reverse(true));
+        this.showChartDataTable();
+    }
+
+    showChartDataTable = () => {
+        let data = this.getValuesFromSubindicators();
+
+        this.containerParent.find('.chart-table').remove();
+
+        let table = document.createElement('table');
+        $(table).addClass('chart-table');
+        let thead = document.createElement('thead');
+        let headRow = document.createElement('tr');
+        let headCol1 = document.createElement('th');
+        $(headCol1).text(this.title);
+        $(headRow).append(headCol1);
+        let headCol2 = document.createElement('th');
+        $(headCol2).text('Absolute');
+        $(headRow).append(headCol2);
+        let headCol3 = document.createElement('th');
+        $(headCol3).text('Percentage');
+        $(headRow).append(headCol3);
+
+        $(thead).append(headRow);
+        $(table).append(thead);
+
+        for (const [label, subindicator] of Object.entries(this.subindicators)) {
+            let absolute_val = subindicator.count;
+            let percentage_val = this.getPercentageValue(absolute_val, this.subindicators);
+            let row = document.createElement('tr');
+            let col1 = document.createElement('td');
+            $(col1).text(subindicator.keys);
+            let col2 = document.createElement('td');
+            $(col2).text(d3format(this.config.types[VALUE_TYPE].formatting)(absolute_val));
+            let col3 = document.createElement('td');
+            $(col3).text(d3format(this.config.types[PERCENTAGE_TYPE].formatting)(percentage_val));
+            $(row).append(col1);
+            $(row).append(col2);
+            $(row).append(col3);
+            $(table).append(row);
+        }
+
+        this.containerParent.append(table);
     }
 
     setChartOptions = (chart) => {
@@ -122,7 +164,7 @@ export class Chart extends Observable {
 
         return arr;
     }
-    
+
     disableChartTypeToggle = (disable) => {
         if (disable) {
             $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
@@ -151,7 +193,7 @@ export class Chart extends Observable {
         });
 
         this.disableChartTypeToggle(this.config.disableToggle);
-        
+
 
         $(this.containerParent).find('.hover-menu__content_list--last a').each(function (index) {
             $(this).off('click');

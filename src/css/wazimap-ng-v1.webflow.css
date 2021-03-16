@@ -6733,7 +6733,7 @@ label {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display: flex; 
+  display: flex;
   height: 44px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
@@ -7266,6 +7266,12 @@ label {
 .facility-info__google-map-icon {
   margin-right: 4px;
 }
+
+.chart-table, .chart-table tr, .chart-table th, .chart-table td {
+     border: 1px solid #000;
+     border-collapse: collapse;
+     text-align: center;
+ }
 
 @media screen and (max-width: 991px) {
   .rich-data-content {

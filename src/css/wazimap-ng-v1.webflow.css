@@ -6733,7 +6733,7 @@ label {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display: flex; 
+  display: flex;
   height: 44px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
@@ -6995,9 +6995,12 @@ label {
   grid-template-rows: auto;
 }
 
-.facility-info__download {
+.facility-info__print {
   z-index: 1;
-  display: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   width: 36px;
   height: 36px;
   padding: 2px;
@@ -7020,11 +7023,11 @@ label {
   cursor: pointer;
 }
 
-.facility-info__download:hover {
+.facility-info__print:hover {
   color: #000;
 }
 
-.facility-info__download.hidden {
+.facility-info__print.hidden {
   display: none;
 }
 
@@ -7221,6 +7224,53 @@ label {
 
  .rich-data__print:hover {
    background-color: rgba(0, 0, 0, 0.1);
+ }
+
+.location__facilities_google-link {
+  white-space: nowrap;
+}
+
+.facility-info__google-map-text {
+  width: 100%;
+}
+
+.facility-info__view-google-map {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 20px;
+  padding: 6px 10px 6px 6px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-align-self: flex-start;
+  -ms-flex-item-align: start;
+  align-self: flex-start;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.06);
+  color: #333;
+  text-decoration: none;
+}
+
+.facility-info__view-google-map:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+
+.facility-info__view-google-map.hidden {
+  display: none;
+}
+
+.facility-info__google-map-icon {
+  margin-right: 4px;
+}
+
+.chart-table, .chart-table tr, .chart-table th, .chart-table td {
+     border: 1px solid #000;
+     border-collapse: collapse;
+     text-align: center;
  }
 
 @media screen and (max-width: 991px) {
@@ -8458,6 +8508,30 @@ label {
 
     .rich-data__print, .tab-notice{
       display: none;
+    }
+
+    .rich-data[style*="display: none;"]{
+        display: none !important;
+    }
+
+    .facility-info{
+      display: inline-table !important;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: #fff;
+      max-height: 100%;
+      max-width: 100%;
+    }
+
+    .facility-info__view-google-map, .facility-info__print, .facility-info__close{
+      display: none;
+    }
+
+    .facility-info[style*="display: none;"]{
+      display: none !important;
     }
 }
 

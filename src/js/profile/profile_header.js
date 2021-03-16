@@ -37,7 +37,7 @@ export class Profile_header extends Observable {
         facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
         facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
-        $(downloadAllFacilities).on('click', downloadAllFacilities);
+        $(downloadAllFacilities).on('click', () => this.downloadAllFacilities);
 
         this.setPointSource();
         this.addBreadCrumbs();
@@ -142,12 +142,12 @@ export class Profile_header extends Observable {
 
     downloadAllFacilities = () => {
         this.api.loadAllPoints(this.profileId, geography.code)
-            .then((facilities) => {
+            .then((data) => {
                 const wb = XLSX.utils.book_new();
                 const fileName = 'Facilities-' + geography.code + '.xlsx';
-                for (let i = 0; i < facilities.length; i++) {
-                    const sheetName = this.getSheetName(facilities.categories[i].name);
-                    const data = XLSX.utils.json_to_sheet(facilities.categories[i].points);
+                for (let i = 0; i < data.results.length; i++) {
+                    const sheetName = this.getSheetName(data.results[i].category);
+                    const data = XLSX.utils.json_to_sheet(data.results[i].features);
                     XLSX.utils.book_append_sheet(wb, data, sheetName);
                 }
                 XLSX.writeFile(wb, fileName);

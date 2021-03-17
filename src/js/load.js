@@ -84,7 +84,7 @@ export default function configureApplication(profileId, config) {
     configureMiscElementEvents(controller);
     configureRichDataView(controller);
     configureBoundaryEvents(controller, boundaryTypeBox);
-    configureMapDownloadEvents(mapDownload);
+    configureMapDownloadEvents(controller, mapDownload);
     configureTutorialEvents(controller, tutorial, config.config.tutorial);
     configureTabNoticeEvents(controller, tabNotice);
 

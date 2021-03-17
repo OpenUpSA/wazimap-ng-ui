@@ -55,20 +55,20 @@ export class SidePanels extends Observable {
         })
 
         this.richDataPanel.pointData.click(() => {
-            this.triggerEvent('panel.point_mapper.opened');
             this.triggerEvent('panel.rich_data.closed');
+            this.triggerEvent('panel.point_mapper.opened');
         })
 
         this.richDataPanel.mapExplorer.click(() => {
-            this.triggerEvent('panel.data_mapper.opened');
             this.triggerEvent('panel.rich_data.closed');
+            this.triggerEvent('panel.data_mapper.opened');
         })
     }
 
     initialisePointDataTriggers = () => {
         this.pointDataPanel.richData.click(() => {
-            this.triggerEvent('panel.rich_data.opened');
             this.triggerEvent('panel.point_mapper.closed');
+            this.triggerEvent('panel.rich_data.opened');
         })
 
         this.pointDataPanel.pointData.click(() => {
@@ -76,20 +76,20 @@ export class SidePanels extends Observable {
         })
 
         this.pointDataPanel.mapExplorer.click(() => {
-            this.triggerEvent('panel.data_mapper.opened');
             this.triggerEvent('panel.point_mapper.closed');
+            this.triggerEvent('panel.data_mapper.opened');
         })
     }
 
     initialiseMapeExplorerTriggers = () => {
         this.mapExplorerPanel.richData.click(() => {
-            this.triggerEvent('panel.rich_data.opened');
             this.triggerEvent('panel.data_mapper.closed');
+            this.triggerEvent('panel.rich_data.opened');
         })
 
         this.mapExplorerPanel.pointData.click(() => {
-            this.triggerEvent('panel.point_mapper.opened');
             this.triggerEvent('panel.data_mapper.closed');
+            this.triggerEvent('panel.point_mapper.opened');
         })
 
         this.mapExplorerPanel.mapExplorer.click(() => {

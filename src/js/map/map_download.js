@@ -18,6 +18,14 @@ export class MapDownload extends Observable {
         });
     }
 
+    hideButton = () => {
+        $('.map-download').hide();
+    }
+
+    showButton = () => {
+        $('.map-download').show();
+    }
+
     downloadMap = () => {
         let self = this;
 

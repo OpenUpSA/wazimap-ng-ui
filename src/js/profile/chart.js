@@ -44,16 +44,12 @@ export class Chart extends Observable {
     this.container = chartContainer[0];
 
     this.handleChartFilter(indicators, groups, title);
-    this.addChart();
+    this.addChart(indicators[title]);
   }
 
-  addChart = () => {
+  addChart = (data) => {
     $(".bar-chart", this.container).remove();
     $("svg", this.container).remove();
-
-    let data = this.getValuesFromSubindicators();
-
-    let width = $('.rich-data').first().width() - 500;
 
     const chartConfig = this.config.types["Value"];
     const percentageChartConfig = this.config.types["Percentage"];
@@ -61,19 +57,26 @@ export class Chart extends Observable {
     const barChart = {
       $schema: "https://vega.github.io/schema/vega/v5.json",
       description: "A",
-      height: { signal: data.length * 35 },
       width: 400,
+      height: data.data.length * 35,
       padding: 5,
 
       data: [
         {
           name: "table",
-          values: data,
+          values: data.data,
         },
         {
           name: "data_formatted",
           source: "table",
           transform: [
+            {
+              type: "aggregate",
+              ops: ["sum"],
+              as: ["count"],
+              fields: ["count"],
+              groupby: { signal: "groups" }
+            },
             {
               type: "formula",
               as: "current",
@@ -83,11 +86,20 @@ export class Chart extends Observable {
               type: "formula",
               as: "current_text",
               expr: "format(datum[datatype[Units]],numberFormat[Units])"
+            },
+            {
+              "type": "formula", // added to format the text to the correct position
+              "as": "main_group",
+              "expr": "datum[mainGroup]"
             }
           ]
         }
       ],
       signals: [
+        {
+          name: "groups",
+          value: [data.metadata.primary_group],
+        },
         {
           name: "barvalue",
           value: "datum",
@@ -97,12 +109,16 @@ export class Chart extends Observable {
           value: "percentage"
         },
         {
+          name: "mainGroup",
+          value: data.metadata.primary_group,
+        },
+        {
           name: "numberFormat",
           value: { percentage: percentageChartConfig.formatting, value: chartConfig.formatting },
         },
         {
           name: "datatype",
-          value: { percentage: "percentageValue", value: "value" },
+          value: { percentage: "percentage", value: "count" },
         },
       ],
 
@@ -110,7 +126,7 @@ export class Chart extends Observable {
         {
           name: "yscale",
           type: "band",
-          domain: { data: "data_formatted", field: "label" },
+          domain: { data: "data_formatted", field: {signal: "mainGroup"} },
           range: "height",
           padding: 0.1,
         },
@@ -154,7 +170,7 @@ export class Chart extends Observable {
           type: "rect",
           encode: {
             enter: {
-              y: { scale: "yscale", field: "label" },
+              y: { scale: "yscale", field: {signal: "mainGroup"} },
               height: { scale: "yscale", band: 1 },
               x: { scale: "xscale", field: { signal: "datatype[Units]" } },
               x2: { scale: "xscale", value: 0 },
@@ -188,7 +204,7 @@ export class Chart extends Observable {
               },
               y: {
                 scale: "yscale",
-                field: "datum.label",
+                field: "datum.main_group",
                 band: 0.5,
               },
             },

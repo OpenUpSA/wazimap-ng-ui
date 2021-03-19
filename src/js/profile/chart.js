@@ -65,6 +65,12 @@ export class Chart extends Observable {
         {
           name: "table",
           values: data.data,
+          transform: [
+            {
+              type: "filter",
+              expr: "applyFilter ? datum[filterIndicator] === filterValue : datum"
+            }
+          ]
         },
         {
           name: "data_formatted",
@@ -76,6 +82,17 @@ export class Chart extends Observable {
               as: ["count"],
               fields: ["count"],
               groupby: { signal: "groups" }
+            },
+            {
+              type: "joinaggregate",
+              as: ["TotalCount"],
+              ops: ["sum"],
+              fields: ["count"]
+            },
+            {
+              type: "formula",
+              expr: "datum.count/datum.TotalCount",
+              as: "percentage"
             },
             {
               type: "formula",
@@ -107,6 +124,16 @@ export class Chart extends Observable {
         {
           name: "Units",
           value: "percentage"
+        },
+        {
+          name: "applyFilter",
+          value: false,
+        },
+        {
+          name: "filterIndicator",
+        },
+        {
+          name: "filterValue",
         },
         {
           name: "mainGroup",
@@ -350,9 +377,14 @@ export class Chart extends Observable {
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
     if (chartData !== null) {
-      this.subindicators = chartData;
-      this.addChart();
       this.setDownloadUrl();
+      this.vegaView.signal('filterIndicator', selectedGroup)
+      this.vegaView.signal('filterValue', selectedFilter)
+      if(selectedGroup && selectedFilter !== "All values") {
+        this.vegaView.signal('applyFilter', true).run()
+      } else {
+        this.vegaView.signal('applyFilter', false).run()
+      }
     }
   };
 }

@@ -197,7 +197,6 @@ export default class Controller extends Observable {
                     // self.registerWebflowEvents();
                 }
             }, 600)
-            document.title = dataBundle.overview.name;
         })
     }
 

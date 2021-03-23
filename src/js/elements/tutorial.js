@@ -40,7 +40,9 @@ export class Tutorial extends Observable {
         this.tutorials = tutorialArr || [];
         if (this.tutorials.length > 0) {
             this._preloadImages()
-            this.prepareDomElements();
+            this.prepareDomElements(); 
+            this.updateSlideNumber()
+ 
         }
     }
     

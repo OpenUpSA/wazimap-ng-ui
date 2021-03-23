@@ -1,3 +1,5 @@
+import { EVENTS as TAB_EVENTS } from './elements/tab_notice';
+
 window.dataLayer = window.dataLayer || [];
 
 const MISSING_TIME = -1;
@@ -303,6 +305,11 @@ export default class Analytics {
 
     }
 
+    registerTabNoticeEvents(controller) {
+        controller.on(TAB_EVENTS.clicked, payload => {
+            this.basicLogEvent(payload, 'tab_notice', 'clicked');
+        })
+    }
 
     registerEvents(controller) {
 
@@ -314,6 +321,7 @@ export default class Analytics {
         this.registerProfileEvents(controller);
         this.registerChoroplethEvents(controller);
         this.registerMapchipEvents(controller);
+        this.registerTabNoticeEvents(controller);
 
 
     // controller.on("map.zoomed", payload => pointData.onMapZoomed(payload.payload));

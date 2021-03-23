@@ -263,6 +263,10 @@ export default class Controller extends Observable {
         this.changeHash(payload.code)
     }
 
+    onTabClicked(event) {
+        this.triggerEvent(event)
+    }
+
     /**
      * When a search result is clicked
      * {code: WC011, level: municipality, name: Matzikama}

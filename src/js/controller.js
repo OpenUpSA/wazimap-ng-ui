@@ -261,6 +261,10 @@ export default class Controller extends Observable {
         this.triggerEvent('controller.breadcrumbs.selected', payload);
         this.changeHash(payload.code)
     }
+    
+    onTutorial(event, payload) {
+        this.triggerEvent(event)
+    }
 
     /**
      * When a search result is clicked

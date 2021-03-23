@@ -1,3 +1,5 @@
+import {EVENTS as TUTORIAL_EVENTS} from './elements/tutorial';
+
 window.dataLayer = window.dataLayer || [];
 
 const MISSING_TIME = -1;
@@ -302,6 +304,16 @@ export default class Analytics {
         })
 
     }
+    
+    registerTutorialEvents(controller) {
+        controller.on(TUTORIAL_EVENTS.next, payload => {
+            this.basicLogEvent(payload, 'tutorial', 'next');
+        })
+
+        controller.on(TUTORIAL_EVENTS.prev, payload => {
+            this.basicLogEvent(payload, 'tutorial', 'previous');
+        })
+    }
 
 
     registerEvents(controller) {
@@ -314,6 +326,7 @@ export default class Analytics {
         this.registerProfileEvents(controller);
         this.registerChoroplethEvents(controller);
         this.registerMapchipEvents(controller);
+        this.registerTutorialEvents(controller);
 
 
     // controller.on("map.zoomed", payload => pointData.onMapZoomed(payload.payload));

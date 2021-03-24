@@ -10,22 +10,46 @@ export class MapDownload extends Observable {
     }
 
     prepareDomElements = () => {
-        $('.map-download').click(() => {
+        $('.map-download').on('click', () => {
+            this.triggerEvent('mapdownload.started');
+            this.titleClass = '.map-title';
+            this.legendClass = '.map-bottom-items';
             this.downloadMap();
         });
     }
 
     downloadMap = () => {
-        const options = {
-            useCORS: true
-        };
-        const title = $(`<div id="map-download-title">${this.mapChip.title}</div>`);
-        const element = document.getElementById("main-map");
-        $(element).append(title);
+        let self = this;
 
-        html2canvas(element, options).then(function (canvas) {
-            $(title).remove();
-            saveAs(canvas.toDataURL(), 'map.png');
-        });
+        const element = document.getElementById("main-map");
+        const title = $(self.titleClass)[0].cloneNode(true);
+        $(title).text(this.mapChip.title);
+
+        const legend = document.querySelector(self.legendClass);
+        let clonedLegend = legend.cloneNode(true);
+        $(clonedLegend).addClass('hidden').addClass('export-clone');
+
+        $(element).append(clonedLegend);
+        $(element).prepend(title);
+
+        const options = {
+            useCORS: true,
+            onclone: (clonedElement) => {
+                if (this.mapChip.title !== '') {
+                    $(clonedElement).find(self.titleClass).show();
+                }
+
+                $(clonedElement).find(self.legendClass).removeClass('hidden');
+            }
+        };
+
+        setTimeout(() => {
+            html2canvas(element, options).then(function (canvas) {
+                $(element).find(title).remove();
+                $(clonedLegend).remove();
+                saveAs(canvas.toDataURL(), 'map.png');
+                self.triggerEvent('mapdownload.completed');
+            });
+        }, 10)
     }
 }

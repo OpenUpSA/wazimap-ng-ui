@@ -36,7 +36,8 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
                     indicators: pp.indicators,
                     subindicatorKey: ps.selectedSubindicator,
                     indicatorTitle: ps.subindicator.indicatorTitle,
-                    filter: ps.subindicator.filter
+                    filter: ps.subindicator.filter,
+                    children: ps.subindicator.children
                 }
 
                 mapchip.onSubIndicatorChange(args);
@@ -57,10 +58,14 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             indicators: pp.indicators,
             subindicatorKey: pp.obj.keys,
             indicatorTitle: pp.indicatorTitle,
+            children: payload.state.subindicator.children,
             category: pp.parents.category
         }
 
         mapchip.onSubIndicatorChange(args);
     });
 
+    controller.on('redraw', payload => {
+        controller.handleNewProfileChoropleth()
+    })
 }

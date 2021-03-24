@@ -1,5 +1,5 @@
 import {Subcategory} from "./subcategory";
-import {Observable} from "../utils";
+import {checkIfSubCategoryHasChildren, Observable} from "../utils";
 
 
 let categoryTemplate = null;
@@ -14,7 +14,7 @@ const descriptionClass = '.category-header__description';
 //category > subcategory > indicator > chart
 
 export class Category extends Observable {
-    constructor(formattingConfig, category, detail, _profileWrapper, _id, _removePrevCategories) {
+    constructor(formattingConfig, category, detail, _profileWrapper, _id, _removePrevCategories, isFirst) {
         super();
 
         categoryTemplate = $(categoryClass)[0].cloneNode(true);
@@ -25,7 +25,7 @@ export class Category extends Observable {
         this.formattingConfig = formattingConfig;
 
         this.prepareDomElements();
-        this.addCategory(category, detail);
+        this.addCategory(category, detail, isFirst);
     }
 
     prepareDomElements = () => {
@@ -34,7 +34,7 @@ export class Category extends Observable {
         }
     }
 
-    addCategory = (category, detail) => {
+    addCategory = (category, detail, isFirst) => {
         const newCategorySection = categoryTemplate.cloneNode(true);
         const sectionHeader = $('.category-header')[0].cloneNode(true);
         const indicatorHeader = $('.sub-category-header')[0].cloneNode(true);
@@ -49,6 +49,10 @@ export class Category extends Observable {
 
         if (detail.description === '') {
             $(descriptionClass, newCategorySection).addClass('hidden');
+        }
+
+        if (!isFirst) {
+            $(newCategorySection).addClass('page-break-before');
         }
 
         this.loadSubcategories(newCategorySection, detail);
@@ -67,13 +71,16 @@ export class Category extends Observable {
         let index = 0;
         let lastIndex = Object.entries(detail.subcategories).length - 1;
         for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-            let isFirst = index === 0;
-            let sc = new Subcategory(this.formattingConfig, wrapper, subcategory, detail, isFirst);
-            this.bubbleEvents(sc, [
-                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter'
-            ]);
+            let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
+            if (hasChildren) {
+                let isFirst = index === 0;
+                let sc = new Subcategory(this.formattingConfig, wrapper, subcategory, detail, isFirst);
+                this.bubbleEvents(sc, [
+                    'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+                    'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                    'point_tray.subindicator_filter.filter'
+                ]);
+            }
             index++;
         }
     }

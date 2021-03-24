@@ -16,6 +16,11 @@ const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
 
 let tooltipClone = null;
+const typeIndex = {
+  'Percentage': 0,
+  'Value': 1
+}
+
 
 export class Chart extends Observable {
   constructor(
@@ -260,9 +265,56 @@ export class Chart extends Observable {
         percentageValue: percentage_val,
       });
     }
-
     return arr;
   };
+  showChartDataTable = () => {
+    let data = this.getValuesFromSubindicators();
+
+    this.containerParent.find('.chart-table').remove();
+
+    let table = document.createElement('table');
+    $(table).addClass('chart-table');
+    let thead = document.createElement('thead');
+    let headRow = document.createElement('tr');
+    let headCol1 = document.createElement('th');
+    $(headCol1).text(this.title);
+    $(headRow).append(headCol1);
+    let headCol2 = document.createElement('th');
+    $(headCol2).text('Absolute');
+    $(headRow).append(headCol2);
+    let headCol3 = document.createElement('th');
+    $(headCol3).text('Percentage');
+    $(headRow).append(headCol3);
+
+    $(thead).append(headRow);
+    $(table).append(thead);
+
+    for (const [label, subindicator] of Object.entries(this.subindicators)) {
+      let absolute_val = subindicator.count;
+      let percentage_val = this.getPercentageValue(absolute_val, this.subindicators);
+      let row = document.createElement('tr');
+      let col1 = document.createElement('td');
+      $(col1).text(subindicator.keys);
+      let col2 = document.createElement('td');
+      $(col2).text(d3format(this.config.types[VALUE_TYPE].formatting)(absolute_val));
+      let col3 = document.createElement('td');
+      $(col3).text(d3format(this.config.types[PERCENTAGE_TYPE].formatting)(percentage_val));
+      $(row).append(col1);
+      $(row).append(col2);
+      $(row).append(col3);
+      $(table).append(row);
+    }
+
+    this.containerParent.append(table);
+  }
+
+  setChartDomain(chart, config, chartType) {
+    const chartConfig = config.types[chartType]
+    if (chartConfig.minX != defaultValues.DEFAULT_CONFIG)
+      chart.minX(chartConfig.minX)
+    if (chartConfig.maxX != defaultValues.DEFAULT_CONFIG)
+      chart.maxX(chartConfig.maxX)
+  }
 
   setDownloadUrl = async () => {
     const containerParent = $(this.container).closest(".profile-indicator");
@@ -274,63 +326,58 @@ export class Chart extends Observable {
     saveImgButton.attr('download', 'chart.png');
   }
 
+  disableChartTypeToggle = (disable) => {
+    if (disable) {
+      $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
+      $(this.containerParent).find('.hover-menu__content_list').hide()
+    }
+  }
+
   setChartMenu = (barChart) => {
     const self = this;
-    const containerParent = $(this.container).closest(".profile-indicator");
+    const saveImgButton = $(this.containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');
 
-    const saveImgButton = $(containerParent).find(
-      ".hover-menu__content a.hover-menu__content_item:nth-child(1)"
-    );
-    saveImgButton.attr('download', 'chart.png');
-    self.setDownloadUrl();
-
-    $(saveImgButton).off("click");
-    $(saveImgButton).on("click", async () => {
-      this.triggerEvent("profile.chart.saveAsPng", this);
-    });
+    $(saveImgButton).off('click');
+    $(saveImgButton).on('click', () => {
+      let chartTitle = self.getChartTitle(':');
+      let fileName = 'chart.png';
+      barChart.saveAsPng(this.container, fileName, chartTitle);
+      this.triggerEvent('profile.chart.saveAsPng', this);
+    })
 
     //todo:don't use index, specific class names should be used here when the classes are ready
-    var unitValues = ["percentage", "value"]
-    $(containerParent)
-      .find(".hover-menu__content_list a")
-      .each(function (index) {
-        $(this).off("click");
-        $(this).on("click", () => {
-          self.selectedGraphValueTypeChanged(containerParent, index);
-          self.vegaView.signal("Units", unitValues[index]).run()
-          self.setDownloadUrl();
-        });
-      });
+    $(this.containerParent).find('.hover-menu__content_list a').each(function (index) {
+      $(this).off('click');
+      $(this).on('click', () => {
+        self.selectedGraphValueTypeChanged(self.containerParent, index);
+        self.vegaView.signal("Units", unitValues[index]).run()
+        self.setDownloadUrl();
+      })
+    });
 
-    $(containerParent)
-      .find(".hover-menu__content_list--last a")
-      .each(function (index) {
-        $(this).off("click");
-        $(this).on("click", () => {
-          const downloadFn = {
-            0: { type: "csv", fn: barChart.exportAsCsv },
-            1: { type: "excel", fn: barChart.exportAsExcel },
-            2: { type: "json", fn: barChart.exportAsJson },
-            3: { type: "kml", fn: barChart.exportAsKml },
-          }[index];
-          self.triggerEvent(
-            `profile.chart.download_${downloadFn["type"]}`,
-            self
-          );
+    this.disableChartTypeToggle(this.config.disableToggle);
 
-          let fileName =
-            self.selectedGroup === null
-            ? `${self.title}`
-            : `${self.title} - by ${self.selectedGroup} - ${self.selectedFilter}`;
-          downloadFn.fn(fileName);
-        });
-      });
+
+    $(this.containerParent).find('.hover-menu__content_list--last a').each(function (index) {
+      $(this).off('click');
+      $(this).on('click', () => {
+        const downloadFn = {
+          0: {type: 'csv', fn: barChart.exportAsCsv},
+          1: {type: 'excel', fn: barChart.exportAsExcel},
+          2: {type: 'json', fn: barChart.exportAsJson},
+          3: {type: 'kml', fn: barChart.exportAsKml},
+        }[index];
+        self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
+
+        let fileName = self.getChartTitle('-');
+        downloadFn.fn(fileName);
+      })
+    });
   };
 
   selectedGraphValueTypeChanged = (containerParent, index) => {
     this.graphValueType = graphValueTypes[index];
     this.triggerEvent("profile.chart.valueTypeChanged", this);
-
     $(containerParent)
       .find(".hover-menu__content_list a")
       .each(function (itemIndex) {
@@ -342,6 +389,11 @@ export class Chart extends Observable {
       });
 
   };
+  getChartTitle = (separator) => {
+    return this.selectedGroup === null ? `${this.title}` : `${this.title} by ${this.selectedGroup} ${separator} ${this.selectedFilter}`;
+  }
+
+
 
   getPercentageValue = (currentValue, subindicators) => {
     let percentage = 0;

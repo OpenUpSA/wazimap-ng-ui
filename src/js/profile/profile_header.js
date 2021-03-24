@@ -1,5 +1,5 @@
 import {checkIterate, Observable, ThemeStyle} from "../utils";
-import xlsExport from 'xlsexport/xls-export.js';
+import XLSX from "xlsx";
 
 let breadcrumbsContainer = null;
 let breadcrumbTemplate = null;
@@ -15,6 +15,8 @@ let geography = null;
 const breadcrumbClass = '.breadcrumb';
 const locationDescriptionClass = '.location__description';
 
+const SHEETNAME_CHAR_LIMIT = 31;
+
 export class Profile_header extends Observable {
     constructor(_parents, _geometries, _api, _profileId, _geography) {
         super();
@@ -29,7 +31,7 @@ export class Profile_header extends Observable {
         breadcrumbsContainer = $('.location__breadcrumbs');
         breadcrumbTemplate = $('.styles').find(breadcrumbClass)[0];
 
-        facilityWrapper = $('.location__facilities .location__facilities_content');
+        facilityWrapper = $('.location__facilities .location__facilities_content-wrapper');
         facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
         facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
@@ -135,12 +137,19 @@ export class Profile_header extends Observable {
     }
 
     downloadPointData = (category) => {
-        const sheetName = category.label;
-        const fileName = 'Export-' + category.label + '.xls';
+        const suffix = '...';
+        const sheetName = category.label.length > SHEETNAME_CHAR_LIMIT ? category.label.substring(0, SHEETNAME_CHAR_LIMIT - suffix.length) + suffix : category.label;
+        const fileName = 'Export-' + category.label + '.xlsx';
         this.getAddressPoints(category)
             .then((points) => {
-                const xls = new xlsExport(points, sheetName);
-                xls.exportToXLS(fileName);
+                // export json (only array possible) to Worksheet of Excel
+                const data = XLSX.utils.json_to_sheet(points);
+                // A workbook is the name given to an Excel file
+                const wb = XLSX.utils.book_new(); // make Workbook of Excel
+                // add Worksheet to Workbook
+                XLSX.utils.book_append_sheet(wb, data, sheetName);
+                // export Excel file
+                XLSX.writeFile(wb, fileName);
             });
     }
 
@@ -157,8 +166,8 @@ export class Profile_header extends Observable {
                     Latitude: geometry.coordinates[1]
                 })
 
-                for (const [title, value] of Object.entries(prop.data)) {
-                    points[points.length - 1][title] = value;
+                for (const [index, obj] of Object.entries(prop.data)) {
+                    points[points.length - 1][obj.key] = obj.value;
                 }
             })
 

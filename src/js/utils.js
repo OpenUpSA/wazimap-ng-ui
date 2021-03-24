@@ -62,13 +62,10 @@ export function setPopupStyle(clsName) {
     $('.leaflet-popup-close-button').html($('.facility-tooltip__close').html());
     $('.leaflet-popup-close-button').css('padding', 0);
     $('.facility-tooltip__close').css('display', 'none');
-    $('.leaflet-popup-content-wrapper').css('border-radius', $('.' + clsName).css('border-radius'));
-    $('.leaflet-popup-content-wrapper').css('font-family', $('.' + clsName).css('font-family'));
-    $('.leaflet-popup-content-wrapper').css('font-size', $('.' + clsName).css('font-size'));
-    $('.leaflet-popup-content').css('margin', $('.' + clsName).css('padding'));
-    $('.leaflet-popup-content').css('min-width', $('.' + clsName).css('min-width'));
-    $('.leaflet-popup-content').css('display', 'inline-table');
     $('.map__tooltip_value').css('white-space', 'nowrap');
+    $('.leaflet-popup-content-wrapper').css('padding', 0);
+    $('.leaflet-popup-content').css('margin', 'unset');
+    $('.leaflet-container').css('font', 'unset');
 
     let popupWidth = 0;
     let chipWidth = 0;
@@ -292,4 +289,15 @@ export function saveAs(uri, filename) {
 
 export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
     return merge({}, defaultObj, obj)
+}
+
+export function checkIfSubCategoryHasChildren (subcategory, detail)  {
+    let hasChildren = false;
+    for (const [title, data] of Object.entries(detail.indicators)) {
+        hasChildren = hasChildren || data.subindicators.some(function (e) {
+            return e.count > 0
+        });
+    }
+
+    return hasChildren;
 }

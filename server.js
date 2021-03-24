@@ -51,6 +51,88 @@ export function makeServer({environment = "development"} = {}) {
                                     "province of birth": "Free state",
                                     "summation options": "Person Weight"
                                 }
+                            ],
+                            "FS": [{
+                                "sex": "Male",
+                                "count": 12.0752646,
+                                "age group": "00-04",
+                                "population group": "Black african",
+                                "province of birth": "Western cape",
+                                "summation options": "Person Weight"
+                            },
+                                {
+                                    "sex": "Male",
+                                    "count": 112.4119609,
+                                    "age group": "00-04",
+                                    "population group": "Black african",
+                                    "province of birth": "Eastern cape",
+                                    "summation options": "Person Weight"
+                                },
+                                {
+                                    "sex": "Male",
+                                    "count": 20.5116377,
+                                    "age group": "10-14",
+                                    "population group": "Black african",
+                                    "province of birth": "Northern cape",
+                                    "summation options": "Person Weight"
+                                },
+                                {
+                                    "sex": "Male",
+                                    "count": 48.0746688,
+                                    "age group": "00-04",
+                                    "population group": "Black african",
+                                    "province of birth": "Free state",
+                                    "summation options": "Person Weight"
+                                },
+                                {
+                                    "sex": "Male",
+                                    "count": 5000.0746688,
+                                    "age group": "10-14",
+                                    "population group": "Black african",
+                                    "province of birth": "Free state",
+                                    "summation options": "Person Weight"
+                                }
+                            ],
+                            "NW": [{
+                                "sex": "Male",
+                                "count": 172.0752646,
+                                "age group": "00-04",
+                                "population group": "Black african",
+                                "province of birth": "Western cape",
+                                "summation options": "Person Weight"
+                            },
+                                {
+                                    "sex": "Male",
+                                    "count": 32.4119609,
+                                    "age group": "00-04",
+                                    "population group": "Black african",
+                                    "province of birth": "Eastern cape",
+                                    "summation options": "Person Weight"
+                                },
+                                {
+                                    "sex": "Male",
+                                    "count": 20.5116377,
+                                    "age group": "10-14",
+                                    "population group": "Black african",
+                                    "province of birth": "Northern cape",
+                                    "summation options": "Person Weight"
+                                },
+                                {
+                                    "sex": "Male",
+                                    "count": 87.0746688,
+                                    "age group": "00-04",
+                                    "population group": "Black african",
+                                    "province of birth": "Free state",
+                                    "summation options": "Person Weight"
+                                },
+                                {
+                                    "sex": "Male",
+                                    "count": 5000.0746688,
+                                    "age group": "10-14",
+                                    "population group": "Black african",
+                                    "province of birth": "Free state",
+                                    "summation options": "Person Weight"
+                                }
                             ]
                         }
                     }

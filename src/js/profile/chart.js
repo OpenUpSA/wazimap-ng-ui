@@ -289,9 +289,9 @@ export class Chart extends Observable {
       this.triggerEvent("profile.chart.saveAsPng", this);
     });
 
-  //todo:don't use index, specific class names should be used here when the classes are ready
-  var unitValues = ["percentage", "value"]
-  $(containerParent)
+    //todo:don't use index, specific class names should be used here when the classes are ready
+    var unitValues = ["percentage", "value"]
+    $(containerParent)
       .find(".hover-menu__content_list a")
       .each(function (index) {
         $(this).off("click");
@@ -320,8 +320,8 @@ export class Chart extends Observable {
 
           let fileName =
             self.selectedGroup === null
-              ? `${self.title}`
-              : `${self.title} - by ${self.selectedGroup} - ${self.selectedFilter}`;
+            ? `${self.title}`
+            : `${self.title} - by ${self.selectedGroup} - ${self.selectedFilter}`;
           downloadFn.fn(fileName);
         });
       });

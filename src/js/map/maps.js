@@ -22,6 +22,7 @@ export class MapControl extends Observable {
         this.boundaryLayers = null;
         this.mainLayer = null;
         this.layerCache = {};
+        this.choroplethData = [];
 
         this.layerStyler = new LayerStyler(this.config.layerStyles);
         this.maplocker = new MapLocker();
@@ -99,26 +100,41 @@ export class MapControl extends Observable {
         this.myEventForwarder.enable();
     }
 
-    loadSubindicatorData() {
+    async loadSubindicatorData(geo) {
         this.triggerEvent("map.choropleth.loading");
 
-        return this.api.loadChoroplethData(1, 'NC', 1);
+        let response;
+        let savedObj = this.choroplethData.filter((x) => {
+            return x.geography === geo
+        })[0];
+
+        if (savedObj !== null && typeof savedObj !== 'undefined') {
+            response = savedObj.data;
+        } else {
+            response = await this.api.loadChoroplethData(this.config.profile, geo, 1);
+            this.choroplethData.push({
+                'geography': geo,
+                'data': response
+            });
+        }
+
+        return response;
     }
 
     /**
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    handleChoropleth(childData, method) {
+    handleChoropleth(childData, method, indicatorTitle, selectedSubindicator) {
         this.triggerEvent("map.choropleth.loaded");
 
-        this.displayChoropleth(childData, method);
+        this.displayChoropleth(childData, method, indicatorTitle, selectedSubindicator);
     };
 
-    displayChoropleth(childData, method){
+    displayChoropleth(childData, method, indicatorTitle, selectedSubindicator) {
         const calculator = this.choropleth.getCalculator(method);
 
-        const calculation = calculator.calculate(childData);
+        const calculation = calculator.calculate(childData, indicatorTitle, selectedSubindicator);
 
         const values = calculation.map(el => el.val);
 

@@ -13,9 +13,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
 
     controller.on('mapchip.choropleth.filtered', payload => {
-        const pp = payload.payload;
-        const ps = payload.state;
-        mapcontrol.displayChoropleth(pp.data, pp.subindicatorArr, ps.subindicator.choropleth_method);
+        loadAndDisplayChoropleth(payload, mapcontrol)
     })
 
     controller.on('newProfileWithChoropleth', payload => {
@@ -28,7 +26,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
                 mapchip.removeMapChip();
                 return;
             }
-            mapcontrol.displayChoropleth(pp.data, pp.subindicatorArr, ps.subindicator.choropleth_method);
+            loadAndDisplayChoropleth(payload, mapcontrol);
 
             if (typeof pp.indicators !== 'undefined') {
                 //indicators changed -- trigger onSubIndicatorChange
@@ -47,12 +45,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 
     controller.on('map.choropleth.display', payload => mapchip.onChoropleth(payload.payload));
     controller.on('map_explorer.subindicator.click', payload => {
-        const ps = payload.state;
-        const method = ps.subindicator.choropleth_method;
-        mapcontrol.loadSubindicatorData()
-            .then((data) => {
-                mapcontrol.handleChoropleth(data.child_data, method);
-            });
+        loadAndDisplayChoropleth(payload, mapcontrol);
     })
 
     controller.on('map_explorer.subindicator.click', payload => {
@@ -71,4 +64,14 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('redraw', payload => {
         controller.handleNewProfileChoropleth()
     })
+}
+
+function loadAndDisplayChoropleth(payload, mapcontrol){
+    const geo = payload.state.profile.geometries.boundary.properties.code;
+    const ps = payload.state;
+    const method = ps.subindicator.choropleth_method;
+    mapcontrol.loadSubindicatorData(geo)
+        .then((data) => {
+            mapcontrol.handleChoropleth(data.child_data, method, payload.payload.indicatorTitle, payload.state.selectedSubindicator);
+        });
 }

@@ -1,10 +1,10 @@
 import {percFmt, numFmt} from '../../utils'
 
 export default class SubindicatorCalculator {
-    calculate(childData) {
+    calculate(childData, indicatorTitle, selectedSubindicator) {
 
-        const key = 'age group';
-        const val = '00-04';
+        const key = indicatorTitle;
+        const val = selectedSubindicator;
 
         const result = Object.entries(childData).map(([code, data]) => {
             let filteredArr = data.filter((a) => {

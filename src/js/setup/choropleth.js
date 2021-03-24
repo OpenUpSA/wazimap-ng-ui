@@ -49,7 +49,10 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('map_explorer.subindicator.click', payload => {
         const ps = payload.state;
         const method = ps.subindicator.choropleth_method;
-        mapcontrol.handleChoropleth(ps.subindicator, method)
+        mapcontrol.loadSubindicatorData()
+            .then((data) => {
+                mapcontrol.handleChoropleth(data.child_data, method);
+            });
     })
 
     controller.on('map_explorer.subindicator.click', payload => {

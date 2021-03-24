@@ -12,6 +12,7 @@ export class MapControl extends Observable {
         super();
 
         this.config = config;
+        this.api = config.api;
         this.zoomToPosition = zoomToPosition;
 
         const coords = config.map.defaultCoordinates;
@@ -98,26 +99,26 @@ export class MapControl extends Observable {
         this.myEventForwarder.enable();
     }
 
+    loadSubindicatorData() {
+        this.triggerEvent("map.choropleth.loading");
+
+        return this.api.loadChoroplethData(1, 'NC', 1);
+    }
+
     /**
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    handleChoropleth(subindicator, method) {
-        if (subindicator.children == undefined)
-            return;
+    handleChoropleth(childData, method) {
+        this.triggerEvent("map.choropleth.loaded");
 
-        this.displayChoropleth(subindicator.children, subindicator.subindicatorArr, method);
+        this.displayChoropleth(childData, method);
     };
 
-    displayChoropleth(data, subindicatorArr, method) {
+    displayChoropleth(childData, method){
         const calculator = this.choropleth.getCalculator(method);
 
-        const args = {
-            data: data,
-            subindicatorArr: subindicatorArr
-        }
-
-        const calculation = calculator.calculate(args);
+        const calculation = calculator.calculate(childData);
 
         const values = calculation.map(el => el.val);
 

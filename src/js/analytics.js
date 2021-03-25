@@ -1,3 +1,4 @@
+import { EVENTS as TAB_EVENTS } from './elements/tab_notice';
 import {EVENTS as TUTORIAL_EVENTS} from './elements/tutorial';
 
 window.dataLayer = window.dataLayer || [];
@@ -315,6 +316,11 @@ export default class Analytics {
         })
     }
 
+    registerTabNoticeEvents(controller) {
+        controller.on(TAB_EVENTS.clicked, payload => {
+            this.basicLogEvent(payload, 'tab_notice', 'clicked');
+        })
+    }
 
     registerEvents(controller) {
 
@@ -326,6 +332,7 @@ export default class Analytics {
         this.registerProfileEvents(controller);
         this.registerChoroplethEvents(controller);
         this.registerMapchipEvents(controller);
+        this.registerTabNoticeEvents(controller);
         this.registerTutorialEvents(controller);
 
 

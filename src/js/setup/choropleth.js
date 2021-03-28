@@ -58,20 +58,26 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             category: pp.parents.category
         }
 
+        console.log({args})
+
         mapchip.onSubIndicatorChange(args);
     });
+
+    mapcontrol.on('map.choropleth.loaded', payload => {
+        console.log('map.choropleth.loaded')
+    })
 
     controller.on('redraw', payload => {
         controller.handleNewProfileChoropleth()
     })
 }
 
-function loadAndDisplayChoropleth(payload, mapcontrol){
+function loadAndDisplayChoropleth(payload, mapcontrol) {
     const geo = payload.state.profile.geometries.boundary.properties.code;
     const ps = payload.state;
     const method = ps.subindicator.choropleth_method;
     mapcontrol.loadSubindicatorData(geo)
         .then((data) => {
-            mapcontrol.handleChoropleth(data.child_data, method, payload.payload.indicatorTitle, payload.state.selectedSubindicator);
+            mapcontrol.handleChoropleth(data.child_data, data.metadata.primary_group, method, payload.state.selectedSubindicator);
         });
 }

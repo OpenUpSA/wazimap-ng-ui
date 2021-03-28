@@ -57,6 +57,8 @@ export class MapChip extends Observable {
             }
         }
 
+        console.log({groups})
+
         let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
         const filterArea = $(mapOptionsClass).find('.map-options__filters_content');
         let indicators = args.indicators;

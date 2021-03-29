@@ -66,6 +66,56 @@ export function makeServer({ environment = "development"  } = {}) {
           data: data.data,
         }
       });
+      this.get("/all_details/profile/:profile/geography/:geo", (schema, request) => {
+        let data = schema.db.indicators[0];
+        return {
+        "themes": [],
+        "boundary": {
+          "type": "Feature",
+          "geometry": { "type": "Point", "coordinates": [1,2] },
+          "properties": {
+            "level": "country"
+          }
+        },
+        "children": [],
+        "parent_layers": [],
+        "profile": {
+          "logo": { "image": "", "url": "/" },
+          "highlights": [ ],
+          "overview": {
+            "name": "Youth Explorer",
+            "description": ""
+          },
+          "geography": { "name": "South Africa", "code": "ZA", "level": "country", "version": "2011 Boundaries", "parents": [] },
+          "profile_data": {
+            "Demographics": {
+              "description": "Age, race, language, citizenship, & migration",
+              "subcategories": {
+                "Population": { "description": "Age and race details of the youth population",
+                  "indicators": {
+                    "Population by age group": {
+                      "description": "",
+                      "choropleth_method": "subindicator",
+                      "data": data.data,
+                      "metadata": {
+                        "source": "StatsSA Census 2011", 
+                        "description": "", "url": null,
+                        "licence": { "name": null, "url": null },
+                        "primary_group": "age",
+                        "groups": ""
+                      },
+                      "chart_configuration": { "defaultType": "Value", "types": { "Value": { "formatting": ",.0f" }, "Percentage": { "maxX": 1, "minX": 0 } } },
+                      "child_data":[]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      });
+
 
       this.passthrough()
     }

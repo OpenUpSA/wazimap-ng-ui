@@ -9,8 +9,8 @@ import { SubindicatorFilter } from "./subindicator_filter";
 
 import embed from "vega-embed";
 
-const PERCENTAGE_TYPE = "Percentage";
-const VALUE_TYPE = "Value";
+const PERCENTAGE_TYPE = "percentage";
+const VALUE_TYPE = "value";
 const graphValueTypes = [PERCENTAGE_TYPE, VALUE_TYPE];
 const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
@@ -25,18 +25,15 @@ const typeIndex = {
 export class Chart extends Observable {
   constructor(
     config,
-    subindicators,
+    data,
     groups,
-    indicators,
-    graphValueType,
     _subCategoryNode,
     title
   ) {
     //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
     super();
 
-    this.subindicators = subindicators;
-    this.graphValueType = graphValueType;
+    this.data = data;
     this.title = title;
     this.config = config;
     this.selectedFilter = null;
@@ -47,9 +44,10 @@ export class Chart extends Observable {
 
     const chartContainer = $(chartContainerClass, this.subCategoryNode);
     this.container = chartContainer[0];
+    this.containerParent = $(this.container).closest('.profile-indicator');
 
-    this.handleChartFilter(indicators, groups, title);
-    this.addChart(indicators[title]);
+    //this.handleChartFilter(indicators, groups, title);
+    this.addChart(data);
   }
 
   addChart = (data) => {
@@ -64,8 +62,7 @@ export class Chart extends Observable {
       description: "A",
       width: 400,
       height: data.data.length * 35,
-      padding: 5,
-
+      padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
       data: [
         {
           name: "table",
@@ -128,7 +125,7 @@ export class Chart extends Observable {
         },
         {
           name: "Units",
-          value: "percentage"
+          value: graphValueTypes[typeIndex[this.config.defaultType]]
         },
         {
           name: "applyFilter",
@@ -209,6 +206,8 @@ export class Chart extends Observable {
             },
             update: {
               fill: { value: "rgb(57, 173, 132)" },
+              x: { scale: "xscale", field: { signal: "datatype[Units]" } },
+              x2: { scale: "xscale", value: 0 },
             },
             hover: {
               fill: { value: "rgb(57, 173, 132, 0.7)" },
@@ -253,23 +252,7 @@ export class Chart extends Observable {
       .catch(console.error);
   };
 
-  getValuesFromSubindicators = () => {
-    let arr = [];
-
-    for (const [label, subindicator] of Object.entries(this.subindicators)) {
-      let count = subindicator.count;
-      let percentage_val = this.getPercentageValue(count, this.subindicators)
-      arr.push({
-        label: subindicator.keys,
-        value: count,
-        percentageValue: percentage_val,
-      });
-    }
-    return arr;
-  };
   showChartDataTable = () => {
-    let data = this.getValuesFromSubindicators();
-
     this.containerParent.find('.chart-table').remove();
 
     let table = document.createElement('table');
@@ -289,6 +272,7 @@ export class Chart extends Observable {
     $(thead).append(headRow);
     $(table).append(thead);
 
+    /*
     for (const [label, subindicator] of Object.entries(this.subindicators)) {
       let absolute_val = subindicator.count;
       let percentage_val = this.getPercentageValue(absolute_val, this.subindicators);
@@ -304,6 +288,7 @@ export class Chart extends Observable {
       $(row).append(col3);
       $(table).append(row);
     }
+    */
 
     this.containerParent.append(table);
   }
@@ -350,7 +335,7 @@ export class Chart extends Observable {
       $(this).off('click');
       $(this).on('click', () => {
         self.selectedGraphValueTypeChanged(self.containerParent, index);
-        self.vegaView.signal("Units", unitValues[index]).run()
+        self.vegaView.signal("Units", graphValueTypes[index]).run()
         self.setDownloadUrl();
       })
     });
@@ -414,6 +399,7 @@ export class Chart extends Observable {
       ".profile-indicator__filters"
     );
 
+    /*
     let siFilter = new SubindicatorFilter(
       indicators,
       filterArea,
@@ -423,6 +409,7 @@ export class Chart extends Observable {
       dropdowns
     );
     this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
+    */
   };
 
   applyFilter = (chartData, selectedGroup, selectedFilter) => {

@@ -21,7 +21,7 @@ export default class SubindicatorCalculator {
 
             const percentage = sum / total;
 
-            return {code: code, val: percentage};
+            return {code: code, val: percentage, total : sum};
         })
 
         return result;

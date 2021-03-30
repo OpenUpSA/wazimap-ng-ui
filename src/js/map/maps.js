@@ -125,10 +125,17 @@ export class MapControl extends Observable {
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    handleChoropleth(childData, primaryGroup, method, selectedSubindicator) {
-        this.triggerEvent("map.choropleth.loaded");
+    handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip) {
+        const args = {
+            data: data,
+            selectedSubindicator: selectedSubindicator,
+            indicatorTitle: indicatorTitle,
+            showMapchip: showMapchip
+        }
 
-        this.displayChoropleth(childData, primaryGroup, method, selectedSubindicator);
+        this.triggerEvent("map.choropleth.loaded", args);
+
+        this.displayChoropleth(data.child_data, data.metadata.primary_group, method, selectedSubindicator);
     };
 
     displayChoropleth(childData, primaryGroup, method, selectedSubindicator) {

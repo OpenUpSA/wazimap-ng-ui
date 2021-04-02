@@ -72,8 +72,12 @@ function loadAndDisplayChoropleth(payload, mapcontrol, childData = null, showMap
     const method = ps.subindicator.choropleth_method;
     const indicatorTitle = payload.payload.indicatorTitle;
     const selectedSubindicator = ps.selectedSubindicator;
-
-    const indicatorId = 1;
+    let indicatorId = payload.indicatorId;
+    //delete this when BE ready
+    if (typeof indicatorId === 'undefined'){
+        indicatorId = 1;
+    }
+    //delete this when BE ready
 
     mapcontrol.loadSubindicatorData(geo, indicatorId)
         .then((data) => {

@@ -100,21 +100,22 @@ export class MapControl extends Observable {
         this.myEventForwarder.enable();
     }
 
-    async loadSubindicatorData(geo) {
+    async loadSubindicatorData(geo, indicatorId) {
         this.triggerEvent("map.choropleth.loading");
 
         let response;
         let savedObj = this.choroplethData.filter((x) => {
-            return x.geography === geo
+            return x.geography === geo && x.indicatorId == indicatorId
         })[0];
 
         if (savedObj !== null && typeof savedObj !== 'undefined') {
             response = savedObj.data;
         } else {
-            response = await this.api.loadChoroplethData(this.config.profile, geo, 1);
+            response = await this.api.loadChoroplethData(this.config.profile, geo, indicatorId);
             this.choroplethData.push({
                 'geography': geo,
-                'data': response
+                'data': response,
+                'indicatorId': indicatorId
             });
         }
 
@@ -130,7 +131,8 @@ export class MapControl extends Observable {
             data: data,
             selectedSubindicator: selectedSubindicator,
             indicatorTitle: indicatorTitle,
-            showMapchip: showMapchip
+            showMapchip: showMapchip,
+            description: data.metadata.description
         }
 
         this.triggerEvent("map.choropleth.loaded", args);

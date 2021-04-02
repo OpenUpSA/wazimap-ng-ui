@@ -73,7 +73,9 @@ function loadAndDisplayChoropleth(payload, mapcontrol, childData = null, showMap
     const indicatorTitle = payload.payload.indicatorTitle;
     const selectedSubindicator = ps.selectedSubindicator;
 
-    mapcontrol.loadSubindicatorData(geo)
+    const indicatorId = 1;
+
+    mapcontrol.loadSubindicatorData(geo, indicatorId)
         .then((data) => {
             if (childData !== null) {
                 data.child_data = childData;

@@ -28,17 +28,11 @@ export class MapChip extends Observable {
 
     showMapChip(args) {
         $(mapOptionsClass).removeClass('hidden');
-        $(mapOptionsClass).show();
+        $(mapOptionsClass).show();  //webflow.js adds display:none when clicked on x
         $(mapOptionsClass).find('.filters__header_close').on('click', () => this.removeMapChip());
 
-        this.setDescription(args);
+        $('.map-options__context .map-option__context_text div').text(args.description);
         this.handleChoroplethFilter(args);
-    }
-
-    setDescription(args) {
-        const description = args.data.metadata.description;
-
-        $('.map-options__context .map-option__context_text div').text(description);
     }
 
     handleChoroplethFilter(args) {

@@ -2,13 +2,9 @@ import {percFmt, numFmt} from '../../utils'
 
 export default class SubindicatorCalculator {
     calculate(childData, primaryGroup, selectedSubindicator) {
-
-        const key = primaryGroup;
-        const val = selectedSubindicator;
-
         const result = Object.entries(childData).map(([code, data]) => {
             let filteredArr = data.filter((a) => {
-                return a[key] === val;
+                return a[primaryGroup] === selectedSubindicator;
             });
 
             const sum = filteredArr.reduce(function (s, a) {

@@ -98,20 +98,16 @@ export default class Controller extends Observable {
      * @return {[type]}         [description]
      */
     onSubIndicatorClick(payload) {
-        const children = payload.subindicators.filter((s) => {
-            return s.keys === payload.obj.keys;
-        })[0].children;
         const subindicator = {
             indicatorTitle: payload.indicatorTitle,
-            children: children,
-            selectedSubindicator: payload.obj.keys,
-            choropleth_method: payload.obj.choropleth_method,
+            selectedSubindicator: payload.obj,
+            choropleth_method: payload.choropleth_method,
             subindicatorArr: payload.subindicators,
             parents: payload.parents,
             chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration
         }
         this.state.subindicator = subindicator;
-        this.state.selectedSubindicator = payload.obj._keys;
+        this.state.selectedSubindicator = payload.obj;
 
         this.triggerEvent("map_explorer.subindicator.click", payload);
     };

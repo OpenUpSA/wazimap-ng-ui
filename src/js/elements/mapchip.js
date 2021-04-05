@@ -51,7 +51,7 @@ export class MapChip extends Observable {
         new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this, dropdowns, args.filter, args.data.child_data);
     }
 
-    applyFilter = (subindicatorArr, selectedGroup, selectedFilter) => {
+    applyFilter = (subindicatorArr) => {
         if (subindicatorArr !== null) {
             const payload = {
                 data: subindicatorArr

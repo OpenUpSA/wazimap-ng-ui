@@ -134,7 +134,7 @@ export class SubindicatorFilter extends Observable {
     groupSelected = (selectedGroup, subindicatorDd, title) => {
         let callback = (selectedFilter) => this.parent.applyFilter(this.getFilteredData(selectedFilter, selectedGroup, title), selectedGroup, selectedFilter);
         this.resetDropdown(subindicatorDd);
-        //callback(ALLVALUES);
+        callback(ALLVALUES);
         if (selectedGroup !== ALLVALUES) {
             let subindicators = selectedGroup.subindicators;
             this.populateDropdown(subindicatorDd, subindicators, callback);
@@ -151,7 +151,7 @@ export class SubindicatorFilter extends Observable {
         if (selectedFilter !== ALLVALUES)
             return this.getFilteredGroups(selectedGroup, selectedFilter)
         else
-            return this.getFilteredSubindicators(subindicatorData.subindicators)
+            return this.childData;
     }
 
     getFilteredGroups(selectedGroup, selectedFilter) {

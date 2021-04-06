@@ -37,7 +37,7 @@ function subindicatorsInSubCategory(subcategory) {
 }
 
 function subindicatorsInIndicator(indicator) {
-    return Object.values(indicator.subindicators).length;
+  return indicator.metadata.groups.length;
 }
 
 function indicatorHasChildren(indicator) {
@@ -57,13 +57,6 @@ function indicatorHasChildren(indicator) {
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
     function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, choropleth_method, indicatorId) {
-        //delete this when BE ready
-        groups = {
-            "subindicators": ["15-24 (Intl)", "15-35 (ZA)", "15-19", "20-24", "25-29", "30-35"],
-            "dataset": 241,
-            "name": "age"
-        }
-        //delete this when BE ready
 
         $(".data-category__h3", wrapper).remove();
         $(".data-category__h4", wrapper).remove();
@@ -117,7 +110,8 @@ export function loadMenu(data, subindicatorCallback) {
             $(h3Wrapper).append(newIndicator);
             const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
 
-            addSubIndicators(childWrapper, category, subcategory, indicator, detail.metadata.groups, indicators, detail.choropleth_method, detail.id);
+            let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0]
+            addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail.choropleth_method, detail.id);
         }
     }
 

@@ -36,7 +36,7 @@ export class MapChip extends Observable {
     }
 
     handleChoroplethFilter(args) {
-        let groups = JSON.parse(args.data.metadata.groups);
+        let groups = args.data.metadata.groups;
         groups = groups.reduce(function (memo, e1) {
             let matches = memo.filter(function (e2) {
                 return e1.name === e2.name

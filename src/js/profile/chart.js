@@ -61,7 +61,11 @@ export class Chart extends Observable {
       $schema: "https://vega.github.io/schema/vega/v5.json",
       description: "A",
       width: 400,
-      height: data.data.length * 35,
+      height: 400,
+      autosize: {
+            "type": "fit-x",
+          
+    },
       padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
       data: [
         {

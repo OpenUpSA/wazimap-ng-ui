@@ -46,7 +46,7 @@ export class Chart extends Observable {
     this.container = chartContainer[0];
     this.containerParent = $(this.container).closest('.profile-indicator');
 
-    //this.handleChartFilter(indicators, groups, title);
+    this.handleChartFilter(data, data.metadata.groups, title);
     this.addChart(data);
   }
 
@@ -390,24 +390,14 @@ export class Chart extends Observable {
       ".profile-indicator__filters"
     );
 
-    /*
-    let siFilter = new SubindicatorFilter(
-      indicators,
-      filterArea,
-      groups,
-      title,
-      this,
-      dropdowns
-    );
+    let siFilter = new SubindicatorFilter(filterArea, groups, title, this.applyFilter, dropdowns);
     this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
-    */
   };
 
-  applyFilter = (chartData, selectedGroup, selectedFilter) => {
+  applyFilter = (selectedGroup, selectedFilter) => {
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
-    if (chartData !== null) {
-      this.setDownloadUrl();
+      this.setDownloadUrl(); //ToDo: use vega for getting data?
       this.vegaView.signal('filterIndicator', selectedGroup)
       this.vegaView.signal('filterValue', selectedFilter)
       if(selectedGroup && selectedFilter !== "All values") {
@@ -415,6 +405,5 @@ export class Chart extends Observable {
       } else {
         this.vegaView.signal('applyFilter', false).run()
       }
-    }
   };
 }

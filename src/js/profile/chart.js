@@ -94,21 +94,6 @@ export class Chart extends Observable {
               type: "formula",
               expr: "datum.count/datum.TotalCount",
               as: "percentage"
-            },
-            {
-              type: "formula",
-              as: "current",
-              expr: "datum[datatype[Units]]"
-            },
-            {
-              type: "formula",
-              as: "current_text",
-              expr: "format(datum[datatype[Units]],numberFormat[Units])"
-            },
-            {
-              "type": "formula", // added to format the text to the correct position
-              "as": "main_group",
-              "expr": "datum[mainGroup]"
             }
           ]
         }
@@ -222,26 +207,26 @@ export class Chart extends Observable {
         },
         {
           type: "text",
-          from: { data: "bars" },
+          from: { data: "data_formatted" },
           encode: {
             enter: {
               align: { value: "left" },
               baseline: { value: "middle" },
               fill: { value: "grey" },
-              fontSize: { value: 10 }
+              fontSize: { value: 10 },
             },
             update: {
               text: {
-                field: "datum.current_text",
+                signal: "format(datum[datatype[Units]],numberFormat[Units])"
               },
               x: {
                 scale: "xscale",
-                field: "datum.current",
-                offset: 10,
+                field: { signal: "datatype[Units]" },
+                offset: 5,
               },
               y: {
                 scale: "yscale",
-                field: "datum.main_group",
+                field: { signal: "mainGroup" },
                 band: 0.5,
               },
             },

@@ -51,10 +51,13 @@ export class MapChip extends Observable {
         new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this, dropdowns, args.filter, args.data.child_data);
     }
 
-    applyFilter = (subindicatorArr) => {
-        if (subindicatorArr !== null) {
+    applyFilter = (filterResult, selectedGroup, selectedFilter) => {
+        console.log({selectedGroup, selectedFilter})
+        if (filterResult !== null) {
             const payload = {
-                data: subindicatorArr
+                data: filterResult,
+                selectedGroup: selectedGroup.name,
+                selectedFilter: selectedFilter
             }
 
             this.triggerEvent("mapchip.choropleth.filtered", payload)

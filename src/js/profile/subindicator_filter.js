@@ -92,21 +92,23 @@ export class SubindicatorFilter extends Observable {
         itemList = [ALLVALUES].concat(itemList);
 
         itemList.forEach((item, i) => {
-            let li = listItem.cloneNode(true);
-            if (i !== 0 && $(li).hasClass('selected')) {
-                //leave the first item selected in default
-                $(li).removeClass('selected')
+            if (item !== null) {
+                let li = listItem.cloneNode(true);
+                if (i !== 0 && $(li).hasClass('selected')) {
+                    //leave the first item selected in default
+                    $(li).removeClass('selected')
+                }
+                if (typeof item.name === 'undefined') {
+                    $('.truncate', li).text(item);
+                } else {
+                    $('.truncate', li).text(item.name);
+                }
+                $(li).off('click');
+                $(li).on('click', () => {
+                    this.dropdownOptionSelected(dropdown, li, item, callback);
+                })
+                $(ddWrapper).append(li);
             }
-            if (typeof item.name === 'undefined') {
-                $('.truncate', li).text(item);
-            } else {
-                $('.truncate', li).text(item.name);
-            }
-            $(li).off('click');
-            $(li).on('click', () => {
-                this.dropdownOptionSelected(dropdown, li, item, callback);
-            })
-            $(ddWrapper).append(li);
         })
     }
 

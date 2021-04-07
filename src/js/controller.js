@@ -106,7 +106,7 @@ export default class Controller extends Observable {
             parents: payload.parents,
             data: payload.indicators[payload.indicatorTitle],
             chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,
-            indicatorId:payload.indicatorId
+            indicatorId: payload.indicatorId
         }
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.obj;
@@ -134,28 +134,8 @@ export default class Controller extends Observable {
             return;
         }
 
-        //this means we need to show choropleth for the new children. update payload.state.subindicator.children and payload.state.subindicator.subindicatorArr
-        let indicators = this.state.profile.profile
-            .profileData[this.state.subindicator.parents.category]
-            .subcategories[this.state.subindicator.parents.subcategory]
-            .indicators;
-
-        let subindicatorArr = indicators[this.state.subindicator.parents.indicator].subindicators;
-
-        let selectedSubindicator = subindicatorArr.filter((s) => {
-            return s.keys === this.state.subindicator.selectedSubindicator
-        })[0];
-        let children = selectedSubindicator.children;
-        let choropleth_method = selectedSubindicator.choropleth_method;
-
-        this.state.subindicator.selectedSubindicator = selectedSubindicator.keys;
-        this.state.subindicator.children = children;
-        this.state.subindicator.choropleth_method = choropleth_method;
-
-        const args = {
-            data: children,
-            subindicatorArr: subindicatorArr,
-            indicators: indicators
+        let args = {
+            indicatorTitle: this.state.subindicator.indicatorTitle
         }
 
         this.triggerEvent("newProfileWithChoropleth", args);

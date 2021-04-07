@@ -40,20 +40,6 @@ function subindicatorsInIndicator(indicator) {
   return indicator.metadata.groups.length;
 }
 
-function indicatorHasChildren(indicator) {
-    const subindicators = indicator.subindicators;
-
-    if (subindicators == undefined || subindicators.length == 0)
-        return false
-
-    const hasChildren = Object.entries(subindicators).every(item => {
-        const subindicator = item[1];
-        return subindicator.children != undefined && Object.values(subindicator.children).length > 0
-    })
-
-    return hasChildren
-}
-
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
     function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, choropleth_method, indicatorId) {

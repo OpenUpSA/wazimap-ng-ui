@@ -49,7 +49,7 @@ export class Indicator extends Observable {
         const configuration = detail.indicators[title].chartConfiguration;
         const indicators = detail.indicators;
 
-        let hasValues = this.subindicators.some(function(e) { return e.count > 0 });
+        let hasValues = false;  //todo:this line will be updated by the vega branch
 
         if (hasValues) {
             let c = new Chart(configuration, this.subindicators, this.groups, indicators, indicator, title);

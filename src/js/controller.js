@@ -134,6 +134,17 @@ export default class Controller extends Observable {
             return;
         }
 
+        let indicators = this.state.profile.profile
+            .profileData[this.state.subindicator.parents.category]
+            .subcategories[this.state.subindicator.parents.subcategory]
+            .indicators;
+
+        let childData = indicators[this.state.subindicator.parents.indicator].child_data;
+        let data = indicators[this.state.subindicator.parents.indicator].data;
+
+        this.state.subindicator.data.data = data;
+        this.state.subindicator.data.child_data = childData;
+
         let args = {
             indicatorTitle: this.state.subindicator.indicatorTitle
         }

@@ -60,12 +60,7 @@ export class Chart extends Observable {
     const barChart = {
       $schema: "https://vega.github.io/schema/vega/v5.json",
       description: "A",
-      width: 400,
-      height: 400,
-      autosize: {
-            "type": "fit-x",
-          
-    },
+      width: 800,
       padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
       data: [
         {
@@ -153,14 +148,21 @@ export class Chart extends Observable {
           name: "datatype",
           value: { percentage: "percentage", value: "count" },
         },
+        {
+          name: "y_step",
+          value: 30
+        },
+        {
+          name: "height",
+          update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
+        }
       ],
-
       scales: [
         {
           name: "yscale",
           type: "band",
           domain: { data: "data_formatted", field: {signal: "mainGroup"} },
-          range: "height",
+          range: {step: {signal: "y_step"}},
           padding: 0.1,
         },
         {

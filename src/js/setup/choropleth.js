@@ -19,10 +19,8 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     })
 
     controller.on('newProfileWithChoropleth', args => {
-        console.log({'newProfileWithChoropleth': args})
-
         setTimeout(() => {
-            loadAndDisplayChoropleth(args, mapcontrol);
+            loadAndDisplayChoropleth(args, mapcontrol, null, true);
         }, 0);
     })
 
@@ -53,7 +51,8 @@ function loadAndDisplayChoropleth(payload, mapcontrol, childData = null, showMap
     const method = ps.subindicator.choropleth_method;
     const indicatorTitle = payload.payload.indicatorTitle;
     const selectedSubindicator = ps.selectedSubindicator;
+    const filter = ps.subindicator.filter;
     let data = ps.subindicator.data
     if (childData) data.child_data = childData;
-    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip);
+    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter);
 }

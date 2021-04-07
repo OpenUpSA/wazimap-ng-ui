@@ -18,21 +18,24 @@ export class SubindicatorFilter extends Observable {
         } else {
             this.hideFilterArea(filterArea);
         }
+
         this.resetDropdowns(dropdowns);
         let callback = (selected) => this.groupSelected(selected, subindicatorDd, title);
         this.populateDropdown(indicatorDd, groups, callback);
-        this.handleDefaultFilter(_defaultFilter, indicatorDd, subindicatorDd, title);
+        this.handleDefaultFilter(_defaultFilter, indicatorDd, subindicatorDd, title, groups);
     }
 
     /**
      * this function enables choropleth filters to be remained when user clicks on a child geo
      */
-    handleDefaultFilter = (defaultFilter, indicatorDd, subindicatorDd, title) => {
+    handleDefaultFilter = (defaultFilter, indicatorDd, subindicatorDd, title, groups) => {
         if (typeof defaultFilter === 'undefined') {
             return;
         }
 
-        const selectedGroup = defaultFilter.group;
+        const selectedGroup = groups.filter((g) => {
+            return g.name === defaultFilter.group
+        })[0];
         const selectedFilter = defaultFilter.value;
 
         let groupCallback = (selected) => this.groupSelected(selected, subindicatorDd, title);
@@ -90,6 +93,8 @@ export class SubindicatorFilter extends Observable {
         $(ddWrapper).html('');
 
         itemList = [ALLVALUES].concat(itemList);
+
+        console.log({itemList})
 
         itemList.forEach((item, i) => {
             if (item !== null) {
@@ -187,8 +192,8 @@ export class SubindicatorFilter extends Observable {
 
         $(dropdown).find('.dropdown__list_item').each(function () {
             const li = $(this);
-            if (li.text().trim() === value) {
-                self.dropdownOptionSelected(dropdown, li, null, callback);
+            if ((typeof value.name !== 'undefined' && li.text().trim() === value.name) || li.text().trim() === value) {
+                self.dropdownOptionSelected(dropdown, li, value, callback);
             }
         })
     }

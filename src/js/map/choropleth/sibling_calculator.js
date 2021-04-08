@@ -1,17 +1,8 @@
-import {percFmt, numFmt} from '../../utils'
+import {percFmt, filterAndSumGeoCounts} from '../../utils'
 
 export default class SiblingCalculator {
     calculate(childData, primaryGroup, selectedSubindicator) {
-        let sumData = {};
-        Object.entries(childData).map(([code, data]) => {
-            let filteredArr = data.filter((a) => {
-                return a[primaryGroup] === selectedSubindicator;
-            });
-
-            sumData[code] = filteredArr.reduce(function (s, a) {
-                return s + parseFloat(a.count);
-            }, 0);
-        })
+        let sumData = filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator);
 
         const universe = Object.entries(sumData).reduce((total, c) => {
             return total + c[1];

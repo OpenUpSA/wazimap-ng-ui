@@ -301,3 +301,18 @@ export function checkIfSubCategoryHasChildren (subcategory, detail)  {
 
     return hasChildren;
 }
+
+export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator){
+    let sumData = {};
+    Object.entries(childData).map(([code, data]) => {
+        let filteredArr = data.filter((a) => {
+            return a[primaryGroup] === selectedSubindicator;
+        });
+
+        sumData[code] = filteredArr.reduce(function (s, a) {
+            return s + parseFloat(a.count);
+        }, 0);
+    })
+
+    return sumData;
+}

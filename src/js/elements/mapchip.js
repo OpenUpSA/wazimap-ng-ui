@@ -1,4 +1,4 @@
-import {checkIterate, Observable} from '../utils';
+import {checkIterate, getFilterGroups, Observable} from '../utils';
 import {format as d3format} from 'd3-format';
 import {SubindicatorFilter} from "../profile/subindicator_filter";
 
@@ -38,18 +38,7 @@ export class MapChip extends Observable {
     handleChoroplethFilter(args) {
         let primaryGroup = args.data.metadata.primary_group;
         let groups = args.data.metadata.groups;
-        groups = groups.reduce(function (memo, e1) {
-            let matches = memo.filter(function (e2) {
-                return e1.name === e2.name
-            })
-            if (matches.length == 0)
-                memo.push(e1)
-            return memo;
-        }, [])
-
-        groups = groups.filter((g) => {
-            return g.name !== primaryGroup
-        });
+        groups = getFilterGroups(groups, primaryGroup);
 
         let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
         const filterArea = $(mapOptionsClass).find('.map-options__filters_content');

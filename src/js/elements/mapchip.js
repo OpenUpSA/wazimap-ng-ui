@@ -36,6 +36,7 @@ export class MapChip extends Observable {
     }
 
     handleChoroplethFilter(args) {
+        let primaryGroup = args.data.metadata.primary_group;
         let groups = args.data.metadata.groups;
         groups = groups.reduce(function (memo, e1) {
             let matches = memo.filter(function (e2) {
@@ -46,6 +47,10 @@ export class MapChip extends Observable {
             return memo;
         }, [])
 
+        groups = groups.filter((g) => {
+            return g.name !== primaryGroup
+        });
+
         let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
         const filterArea = $(mapOptionsClass).find('.map-options__filters_content');
 
@@ -53,7 +58,6 @@ export class MapChip extends Observable {
     }
 
     applyFilter = (filterResult, selectedGroup, selectedFilter) => {
-        console.log('here')
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,

@@ -37,7 +37,7 @@ function subindicatorsInSubCategory(subcategory) {
 }
 
 function subindicatorsInIndicator(indicator) {
-  return indicator.metadata.groups.length;
+    return indicator.metadata.groups.length;
 }
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
@@ -96,7 +96,7 @@ export function loadMenu(data, subindicatorCallback) {
             $(h3Wrapper).append(newIndicator);
             const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
 
-            let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0]
+            let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
             addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail.choropleth_method, detail.id);
         }
     }

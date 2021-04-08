@@ -94,8 +94,6 @@ export class SubindicatorFilter extends Observable {
 
         itemList = [ALLVALUES].concat(itemList);
 
-        console.log({itemList})
-
         itemList.forEach((item, i) => {
             if (item !== null) {
                 let li = listItem.cloneNode(true);

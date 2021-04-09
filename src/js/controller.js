@@ -102,7 +102,6 @@ export default class Controller extends Observable {
             indicatorTitle: payload.indicatorTitle,
             selectedSubindicator: payload.selectedSubindicator,
             choropleth_method: payload.choropleth_method,
-            subindicatorArr: payload.subindicators,
             parents: payload.parents,
             data: payload.indicators[payload.indicatorTitle],
             chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,

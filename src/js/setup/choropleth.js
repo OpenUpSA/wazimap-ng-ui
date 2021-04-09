@@ -15,21 +15,21 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('mapchip.choropleth.filtered', payload => {
         payload.payload.indicatorTitle = payload.state.subindicator.indicatorTitle;
 
-        loadAndDisplayChoropleth(payload, mapcontrol, payload.payload.data);
+        loadAndDisplayChoropleth(payload, mapcontrol, false, payload.payload.data);
     })
 
     controller.on('newProfileWithChoropleth', args => {
         setTimeout(() => {
-            loadAndDisplayChoropleth(args, mapcontrol, null, true);
+            loadAndDisplayChoropleth(args, mapcontrol, true, null);
         }, 0);
     })
 
     controller.on('map.choropleth.display', payload => {
         payload.state.choroplethData = payload.payload.data;
-        mapchip.onChoropleth(payload.payload)
+        mapchip.onChoropleth(payload.payload);
     });
     controller.on('map_explorer.subindicator.click', payload => {
-        loadAndDisplayChoropleth(payload, mapcontrol, null, true);
+        loadAndDisplayChoropleth(payload, mapcontrol, true, null);
     })
 
     mapcontrol.on('map.choropleth.loaded', args => {
@@ -38,14 +38,14 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         }
 
         mapchip.onSubIndicatorChange(args);
-    })
+    });
 
     controller.on('redraw', payload => {
         controller.handleNewProfileChoropleth()
     })
 }
 
-function loadAndDisplayChoropleth(payload, mapcontrol, childData = null, showMapchip = false) {
+function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, childData = null) {
     const geo = payload.state.profile.geometries.boundary.properties.code;
     const ps = payload.state;
     const method = ps.subindicator.choropleth_method;

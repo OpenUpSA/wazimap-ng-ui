@@ -68,7 +68,7 @@ export function loadMenu(data, subindicatorCallback) {
                             el: el,
                             data: data,
                             indicatorTitle: indicator,
-                            obj: subindicator,
+                            selectedSubindicator: subindicator,
                             indicators: indicators,
                             parents: parents,
                             choropleth_method: choropleth_method,

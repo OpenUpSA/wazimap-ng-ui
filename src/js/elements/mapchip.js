@@ -37,8 +37,7 @@ export class MapChip extends Observable {
 
     handleChoroplethFilter(args) {
         let primaryGroup = args.data.metadata.primary_group;
-        let groups = args.data.metadata.groups;
-        groups = getFilterGroups(groups, primaryGroup);
+        let groups = getFilterGroups(args.data.metadata.groups, primaryGroup);
 
         let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
         const filterArea = $(mapOptionsClass).find('.map-options__filters_content');

@@ -100,7 +100,7 @@ export default class Controller extends Observable {
     onSubIndicatorClick(payload) {
         const subindicator = {
             indicatorTitle: payload.indicatorTitle,
-            selectedSubindicator: payload.obj,
+            selectedSubindicator: payload.selectedSubindicator,
             choropleth_method: payload.choropleth_method,
             subindicatorArr: payload.subindicators,
             parents: payload.parents,
@@ -109,7 +109,7 @@ export default class Controller extends Observable {
             indicatorId: payload.indicatorId
         }
         this.state.subindicator = subindicator;
-        this.state.selectedSubindicator = payload.obj;
+        this.state.selectedSubindicator = payload.selectedSubindicator;
 
         this.triggerEvent("map_explorer.subindicator.click", payload);
     };

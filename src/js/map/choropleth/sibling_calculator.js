@@ -12,7 +12,7 @@ export default class SiblingCalculator {
             const code = childGeography[0];
             const count = childGeography[1];
             const val = count / universe;
-            return {code: code, val: val};
+            return {code: code, val: val, total: count};
         })
 
         return result

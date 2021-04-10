@@ -15,6 +15,8 @@ let geography = null;
 const breadcrumbClass = '.breadcrumb';
 const locationDescriptionClass = '.location__description';
 
+const SHEETNAME_CHAR_LIMIT = 31;
+
 export class Profile_header extends Observable {
     constructor(_parents, _geometries, _api, _profileId, _geography) {
         super();
@@ -135,7 +137,8 @@ export class Profile_header extends Observable {
     }
 
     downloadPointData = (category) => {
-        const sheetName = category.label;
+        const suffix = '...';
+        const sheetName = category.label.length > SHEETNAME_CHAR_LIMIT ? category.label.substring(0, SHEETNAME_CHAR_LIMIT - suffix.length) + suffix : category.label;
         const fileName = 'Export-' + category.label + '.xlsx';
         this.getAddressPoints(category)
             .then((points) => {

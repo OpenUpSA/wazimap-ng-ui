@@ -6,10 +6,14 @@ export const DATA_EXPLORER_PANEL = "data_explorer";
 export const NO_PANELS = "no_panels";
 
 export class SidePanels extends Observable {
-    constructor() {
+    constructor(showPanels) {
         super();
         this.prepareDomElements();
         this.initialiseTriggers();
+
+        if (!showPanels[RICH_DATA_PANEL]) this.hidePanel("richData")
+        if (!showPanels[POINT_DATA_PANEL]) this.hidePanel("pointData")
+        if (!showPanels[DATA_EXPLORER_PANEL]) this.hidePanel("mapExplorer")
     }
 
     prepareDomElements = () => {
@@ -117,6 +121,14 @@ export class SidePanels extends Observable {
 
     toggleMapExplorer = () => {
         this.emptyPanel.mapExplorer.click();
+    }
+
+
+    hidePanel = (panel) => {
+        this.emptyPanel[panel].hide();
+        this.mapExplorerPanel[panel].hide();
+        this.richDataPanel[panel].hide();
+        this.pointDataPanel[panel].hide();
     }
 
     togglePanel = panel => {

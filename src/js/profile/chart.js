@@ -19,6 +19,7 @@ const typeIndex = {
     'Value': 1
 }
 
+const MAX_RICH_TABLE_ROWS = 7
 
 export class Chart extends Observable {
     constructor(config, subindicators, groups, indicators, _subCategoryNode, title) {
@@ -108,12 +109,17 @@ export class Chart extends Observable {
         }
         $(table).append(tbody);
         this.containerParent.append(table);
-        // Append button
-        if (data.length > 7) { // TODO: make this row count a constant
+        if (data.length > MAX_RICH_TABLE_ROWS) {
+          let showExtraRows = false;
           let btnDiv = document.createElement('div');
           $(btnDiv).addClass('profile-indicator__table_show-more profile-indicator__table_showing profile-indicator__table_load-more');
           let btn = document.createElement('button');
           $(btn).text('Load more rows');
+          $(btn).on("click", () => {
+            showExtraRows = !showExtraRows;
+            showExtraRows ? $(btn).text('Show less rows') : $(btn).text('Load more rows');
+            showExtraRows ? $(table).removeClass("profile-indicator__table_content") : $(table).addClass("profile-indicator__table_content");
+          })
           btnDiv.append(btn);
           this.containerParent.append(btnDiv);
         }

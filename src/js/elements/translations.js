@@ -9,19 +9,6 @@ export class Translations extends Observable {
     }
 
     translate() {
-        //todo:remove this when the BE is ready
-        if (typeof this.translations === 'undefined') {
-            this.translations = {
-                en: {
-                    translation: {
-                        'Point Mapper': 'Service Mapper',
-                        'lorem ipsum': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a lacinia diam. Aliquam sollicitudin lectus ipsum,'
-                    }
-                }
-            }
-        }
-        //remove this when the BE is ready
-
         if (typeof this.translations === 'undefined') {
             return;
         }

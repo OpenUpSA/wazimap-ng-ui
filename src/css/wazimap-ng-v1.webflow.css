@@ -6733,7 +6733,7 @@ label {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display: flex;
+  display: flex; 
   height: 44px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
@@ -6995,12 +6995,9 @@ label {
   grid-template-rows: auto;
 }
 
-.facility-info__print {
+.facility-info__download {
   z-index: 1;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   width: 36px;
   height: 36px;
   padding: 2px;
@@ -7023,11 +7020,11 @@ label {
   cursor: pointer;
 }
 
-.facility-info__print:hover {
+.facility-info__download:hover {
   color: #000;
 }
 
-.facility-info__print.hidden {
+.facility-info__download.hidden {
   display: none;
 }
 
@@ -7225,142 +7222,6 @@ label {
  .rich-data__print:hover {
    background-color: rgba(0, 0, 0, 0.1);
  }
-
-.location__facilities_google-link {
-  white-space: nowrap;
-}
-
-.facility-info__google-map-text {
-  width: 100%;
-}
-
-.facility-info__view-google-map {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  margin-bottom: 20px;
-  padding: 6px 10px 6px 6px;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-align-self: flex-start;
-  -ms-flex-item-align: start;
-  align-self: flex-start;
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.06);
-  color: #333;
-  text-decoration: none;
-}
-
-.facility-info__view-google-map:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  color: #000;
-}
-
-.facility-info__view-google-map.hidden {
-  display: none;
-}
-
-.facility-info__google-map-icon {
-  margin-right: 4px;
-}
-
- .profile-indicator__table {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-}
-
-.profile-indicator__table_row {
-  display: -ms-grid;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 33.333333333%;
-  -ms-grid-columns: 33.333333333%;
-  grid-template-columns: 33.333333333%;
-  -ms-grid-rows: auto;
-  grid-template-rows: auto;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  font-size: 13px;
-}
-
-.profile-indicator__table_row:hover {
-  background-color: rgba(0, 0, 0, 0.06);
-}
-
-.profile-indicator__table_row.profile-indicator__table_row--header {
-  grid-auto-columns: 33.333333333%;
-  border-bottom: 1px solid #707070;
-  background-color: hsla(0, 0%, 100%, 0.06);
-  box-shadow: 0 10px 10px -9px rgba(0, 0, 0, 0.1);
-  font-weight: 700;
-}
-
-.profile-indicator__table_row.profile-indicator__table_row--alt {
-  background-color: hsla(0, 0%, 100%, 0.06);
-}
-
-.profile-indicator__table_row.profile-indicator__table_row--2-col {
-  grid-auto-columns: minmax(120px, 50%);
-  -ms-grid-columns: minmax(120px, 50%);
-  grid-template-columns: minmax(120px, 50%);
-}
-
-.profile-indicator__table_cell {
-  padding: 8px;
-  border-left: 1px solid rgba(0, 0, 0, 0.06);
-  white-space: nowrap;
-}
-
-.profile-indicator__table_cell.profile-indicator__table_cell--first {
-  border-left-style: none;
-}
-
-.profile-indicator__table_content {
-  max-height: 300px;
-  overflow: hidden;
-}
-
-.profile-indicator__table_show-more {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  margin-top: 2em;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-}
-
-.profile-indicator__table_show-more.hidden {
-  display: none;
-}
-
-.profile-indicator__table_showing {
-  margin-top: 1em;
-  font-size: 13px;
-}
-
-.profile-indicator__table_load-more {
-  width: 100%;
-  background-color: #f0f0f0;
-  color: #333;
-  text-align: center;
-}
-
-.profile-indicator__table_inner {
-  max-height: 400px;
-}
 
 @media screen and (max-width: 991px) {
   .rich-data-content {
@@ -8597,30 +8458,6 @@ label {
 
     .rich-data__print, .tab-notice{
       display: none;
-    }
-
-    .rich-data[style*="display: none;"]{
-        display: none !important;
-    }
-
-    .facility-info{
-      display: inline-table !important;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-color: #fff;
-      max-height: 100%;
-      max-width: 100%;
-    }
-
-    .facility-info__view-google-map, .facility-info__print, .facility-info__close{
-      display: none;
-    }
-
-    .facility-info[style*="display: none;"]{
-      display: none !important;
     }
 }
 

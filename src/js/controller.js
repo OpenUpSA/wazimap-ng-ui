@@ -197,6 +197,7 @@ export default class Controller extends Observable {
                     // self.registerWebflowEvents();
                 }
             }, 600)
+            document.title = dataBundle.overview.name;
         })
     }
 
@@ -260,14 +261,6 @@ export default class Controller extends Observable {
     onBreadcrumbSelected(payload) {
         this.triggerEvent('controller.breadcrumbs.selected', payload);
         this.changeHash(payload.code)
-    }
-    
-    onTutorial(event, payload) {
-        this.triggerEvent(event)
-    }
-
-    onTabClicked(event) {
-        this.triggerEvent(event)
     }
 
     /**

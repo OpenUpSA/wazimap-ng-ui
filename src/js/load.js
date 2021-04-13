@@ -1,6 +1,9 @@
+import {select as d3select} from 'd3-selection';
 import Controller from './controller';
 import ProfileLoader from "./profile/profile_loader";
 import {MapControl} from './map/maps';
+import {numFmt} from './utils';
+import {Profile} from './profile';
 import {onProfileLoaded as onProfileLoadedSearch, Search} from './elements/search';
 import {MapChip} from './elements/mapchip';
 import {LocationInfoBox} from './elements/location_info_box';
@@ -8,6 +11,8 @@ import {PointData} from "./map/point_data";
 import {ZoomToggle} from "./mapmenu/zoomtoggle";
 import {PreferredChildToggle} from "./mapmenu/preferred_child_toggle";
 import {PointDataTray} from './elements/point_tray/tray';
+import {API} from './api';
+import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
 import {MapDownload} from "./map/map_download";
 import {Tutorial} from "./elements/tutorial";
@@ -31,7 +36,6 @@ import {configureBoundaryEvents} from "./setup/boundaryevents";
 import {configureMapDownloadEvents} from "./setup/mapdownload";
 import {configureTutorialEvents} from "./setup/tutorial";
 import {configureTabNoticeEvents} from "./setup/tabnotice";
-import {configurePage} from "./setup/general";
 
 
 export default function configureApplication(profileId, config) {
@@ -39,6 +43,8 @@ export default function configureApplication(profileId, config) {
 
     const api = config.api;
     const controller = new Controller(api, config, profileId);
+    if (config.analytics)
+        config.analytics.registerEvents(controller);
 
     let defaultFormattingConfig = {
         decimal: ",.1f",
@@ -81,7 +87,6 @@ export default function configureApplication(profileId, config) {
     configureMapDownloadEvents(mapDownload);
     configureTutorialEvents(controller, tutorial, config.config.tutorial);
     configureTabNoticeEvents(controller, tabNotice);
-    configurePage(controller, config);
 
     controller.on('profile.loaded', payload => {
         // there seems to be a bug where menu items close if this is not set

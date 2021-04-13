@@ -51,8 +51,6 @@ yarn build # compile the relevant bundles for production
 yarn push-gh-pages # pushes to github for hosting
 ```
 
-## Known Issues
-There is an issue with the parcel bundler that sometimes comes up. The easiest way to solve this is to delete the `.cache` folder. 
 
 # Documentation
 These are works in progress:

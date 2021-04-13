@@ -65,7 +65,4 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         mapchip.onSubIndicatorChange(args);
     });
 
-    controller.on('redraw', payload => {
-        controller.handleNewProfileChoropleth()
-    })
 }

@@ -19,7 +19,6 @@ const typeIndex = {
     'Value': 1
 }
 
-const MAX_RICH_TABLE_ROWS = 7
 
 export class Chart extends Observable {
     constructor(config, subindicators, groups, indicators, _subCategoryNode, title) {
@@ -56,73 +55,6 @@ export class Chart extends Observable {
 
         this.setChartMenu(barChart);
         d3select(this.container).call(barChart.data(data).reverse(true));
-        this.showChartDataTable();
-    }
-
-    showChartDataTable = () => {
-        let data = this.getValuesFromSubindicators();
-
-        this.containerParent.find('.profile-indicator__table').remove();
-
-        let table = document.createElement('table');
-        $(table).addClass('profile-indicator__table profile-indicator__table_content');
-        let thead = document.createElement('thead');
-        $(thead).addClass('profile-indicator__table_row--header');
-        let headRow = document.createElement('tr');
-        $(headRow).addClass('profile-indicator__table_row');
-        let headCol1 = document.createElement('th');
-        $(headCol1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
-        $(headCol1).text(this.title);
-        $(headRow).append(headCol1);
-        let headCol2 = document.createElement('th');
-        $(headCol2).addClass('profile-indicator__table_cell');
-        $(headCol2).text('Absolute');
-        $(headRow).append(headCol2);
-        let headCol3 = document.createElement('th');
-        $(headCol3).addClass('profile-indicator__table_cell');
-        $(headCol3).text('Percentage');
-        $(headRow).append(headCol3);
-
-        $(thead).append(headRow);
-        $(table).append(thead);
-        let tbody = document.createElement('tbody');
-
-
-        for (const [label, subindicator] of Object.entries(this.subindicators)) {
-            let absolute_val = subindicator.count;
-            let percentage_val = this.getPercentageValue(absolute_val, this.subindicators);
-            let row = document.createElement('tr');
-            $(row).addClass('profile-indicator__table_row');
-            let col1 = document.createElement('td');
-            $(col1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
-            $(col1).text(subindicator.keys);
-            let col2 = document.createElement('td');
-            $(col2).addClass('profile-indicator__table_cell');
-            $(col2).text(d3format(this.config.types[VALUE_TYPE].formatting)(absolute_val));
-            let col3 = document.createElement('td');
-            $(col3).addClass('profile-indicator__table_cell');
-            $(col3).text(d3format(this.config.types[PERCENTAGE_TYPE].formatting)(percentage_val));
-            $(row).append(col1);
-            $(row).append(col2);
-            $(row).append(col3);
-            $(tbody).append(row);
-        }
-        $(table).append(tbody);
-        this.containerParent.append(table);
-        if (data.length > MAX_RICH_TABLE_ROWS) {
-          let showExtraRows = false;
-          let btnDiv = document.createElement('div');
-          $(btnDiv).addClass('profile-indicator__table_show-more profile-indicator__table_showing profile-indicator__table_load-more');
-          let btn = document.createElement('button');
-          $(btn).text('Load more rows');
-          $(btn).on("click", () => {
-            showExtraRows = !showExtraRows;
-            showExtraRows ? $(btn).text('Show less rows') : $(btn).text('Load more rows');
-            showExtraRows ? $(table).removeClass("profile-indicator__table_content") : $(table).addClass("profile-indicator__table_content");
-          })
-          btnDiv.append(btn);
-          this.containerParent.append(btnDiv);
-        }
     }
 
     setChartOptions = (chart) => {
@@ -190,7 +122,7 @@ export class Chart extends Observable {
 
         return arr;
     }
-
+    
     disableChartTypeToggle = (disable) => {
         if (disable) {
             $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
@@ -219,7 +151,7 @@ export class Chart extends Observable {
         });
 
         this.disableChartTypeToggle(this.config.disableToggle);
-
+        
 
         $(this.containerParent).find('.hover-menu__content_list--last a').each(function (index) {
             $(this).off('click');

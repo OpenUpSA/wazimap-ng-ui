@@ -210,14 +210,6 @@ export class SubindicatorFilter extends Observable {
 
   }
 
-  getFilteredSubindicators(subindicators) {
-    return subindicators.map(el => {
-      return new SubIndicator([el.label, el])
-
-    })
-
-  }
-
   resetDropdowns = (dropdowns) => {
     let self = this;
     for (let i = 0; i < dropdowns.length; i++) {

@@ -8533,5 +8533,9 @@ label {
     .facility-info[style*="display: none;"]{
       display: none !important;
     }
+
+    .facility-info[style*="display: flex;"] ~ .point-mapper, .facility-info[style*="display: flex;"] ~ .rich-data, .facility-info[style*="display: flex;"] ~ .data-mapper {
+      display: none !important;
+    }
 }
 

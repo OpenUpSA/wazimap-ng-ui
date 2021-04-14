@@ -6753,7 +6753,19 @@ label {
 }
 
 .point-mapper-content__error {
+  display: none;
+  align-items: center;
   margin-bottom: 16px;
+  background-color: #f0f0f0;
+  padding: 5px;
+}
+
+.point-mapper-content__error .material-icons{
+  padding: 0px 5px;
+}
+
+.point-mapper-error__text{
+  flex-grow: 1;
 }
 
 .error {

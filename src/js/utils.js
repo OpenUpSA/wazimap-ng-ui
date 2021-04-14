@@ -85,6 +85,10 @@ export function setPopupStyle(clsName) {
     $('.map-tooltip__geography-chip').css('left', leftOffset);
 }
 
+export function showPointError(){
+    $('.point-mapper-content__error').css('display', 'flex');
+}
+
 export class ThemeStyle {
     static replaceChildDivWithThemeIcon(themeId, colorElement, iconElement) {
         let iconClass = '.';

@@ -261,6 +261,10 @@ export class PointData extends Observable {
 
         $('.' + tooltipItemsClsName, item).html('');
 
+        if (typeof visibleAttributes === 'undefined'){
+            visibleAttributes = [];
+        }
+
         this.appendPointData(point, item, tooltipRowItem, tooltipItemsClsName, 'tooltip__facility-item_label', 'tooltip__facility-item_value', visibleAttributes);
 
         if (point.image != null)
@@ -285,10 +289,10 @@ export class PointData extends Observable {
         $('.facility-info').css('display', 'flex');
     }
 
-    appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName, visibleAttributes = []) => {
+    appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName, visibleAttributes = null) => {
         $('.' + itemsClsName, item).empty();
         point.data.forEach((a, i) => {
-            if (Object.prototype.toString.call(a.value) !== '[object Object]' && (visibleAttributes.length <= 0 || visibleAttributes.indexOf(a.key) >= 0)) {
+            if (Object.prototype.toString.call(a.value) !== '[object Object]' && (visibleAttributes === null || visibleAttributes.indexOf(a.key) >= 0)) {
                 let itemRow = rowItem.cloneNode(true);
                 $(itemRow).removeClass('last');
                 $('.' + labelClsName, itemRow).text(a.key);

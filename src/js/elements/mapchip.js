@@ -42,7 +42,7 @@ export class MapChip extends Observable {
         let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
         const filterArea = $(mapOptionsClass).find('.map-options__filters_content');
 
-        new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this, dropdowns, args.filter, args.data.child_data);
+        new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, args.filter, args.data.child_data);
     }
 
     applyFilter = (filterResult, selectedGroup, selectedFilter) => {

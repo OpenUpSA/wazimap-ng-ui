@@ -89,6 +89,10 @@ export function showPointError(){
     $('.point-mapper-content__error').css('display', 'flex');
 }
 
+export function disablePointError(){
+    $('.point-mapper-content__error').css('display', 'none');
+}
+
 export class ThemeStyle {
     static replaceChildDivWithThemeIcon(themeId, colorElement, iconElement) {
         let iconClass = '.';

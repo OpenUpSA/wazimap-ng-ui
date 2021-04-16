@@ -7,7 +7,6 @@ export class SubindicatorFilter extends Observable {
   constructor(filterArea, groups, title, filterCallback, _dropdowns, _defaultFilter, childData) {
     super()
     this.childData = childData;
-    this.applyFilter = false;
     this.filterCallback = filterCallback;
     this.title = title;
     let dropdowns = _dropdowns;
@@ -30,20 +29,16 @@ export class SubindicatorFilter extends Observable {
   }
 
   handleFilter = (filter) => {
-    if (this.applyFilter) {
-      this.filterCallback(this.getFilteredData(filter), this.selectedGroup, filter);
-    }else {
-      this.filterCallback(this.selectedGroup, filter);
-    }
-
+    this.filterCallback(this.getFilteredData(filter), this.selectedGroup, filter);
   }
 
   /**
-   *      * this function enables choropleth filters to be remained when user clicks on a child geo
-   *           */
+   *    *      * this function enables choropleth filters to be remained when user clicks on a child geo
+   *       *           */
   handleDefaultFilter = (defaultFilter, indicatorDd, subindicatorDd, title) => {
     if (typeof defaultFilter === 'undefined') {
       return;
+
 
     }
 
@@ -164,19 +159,23 @@ export class SubindicatorFilter extends Observable {
     if (callback !== null && item !== null) {
       callback(item);
 
+
     }
+
 
   }
 
   groupSelected = (selectedGroup, subindicatorDd, title) => {
-    this.selectedGroup = selectedGroup.name;
+    this.selectedGroup = selectedGroup;
     this.resetDropdown(subindicatorDd);
     this.handleFilter(ALLVALUES);
     if (selectedGroup !== ALLVALUES) {
       let subindicators = selectedGroup.subindicators;
       this.populateDropdown(subindicatorDd, subindicators, this.handleFilter);
 
+
     }
+
 
   }
 
@@ -186,27 +185,32 @@ export class SubindicatorFilter extends Observable {
       group: this.selectedGroup,
       subindicator: selectedFilter
 
+
     });
 
     if (selectedFilter !== ALLVALUES)
-      return this.getFilteredGroups(this.selectedGroup, selectedFilter)
+      return this.getFilteredGroups(selectedFilter)
     else
       return this.childData;
 
+
   }
 
-  getFilteredGroups(selectedGroup, selectedFilter) {
+  getFilteredGroups(selectedFilter) {
     let filteredData = {};
 
     Object.entries(this.childData).map(([code, data]) => {
       filteredData[code] = data.filter((cd) => {
-        return cd[selectedGroup.name] === selectedFilter
+        return cd[this.selectedGroup.name] === selectedFilter
+
 
       })
+
 
     })
 
     return filteredData;
+
 
   }
 

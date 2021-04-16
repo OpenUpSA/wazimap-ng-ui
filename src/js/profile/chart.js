@@ -394,7 +394,8 @@ export class Chart extends Observable {
     this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
   };
 
-  applyFilter = (selectedGroup, selectedFilter) => {
+  applyFilter = (filteredData, selectedGroup, selectedFilter) => {
+    this.filteredData = filteredData;
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
       this.setDownloadUrl(); //ToDo: use vega for getting data?

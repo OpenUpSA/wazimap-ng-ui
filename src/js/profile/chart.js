@@ -6,6 +6,7 @@ import { defaultValues } from "../defaultValues";
 
 import { horizontalBarChart } from "../reusable-charts/horizontal-bar-chart";
 import { SubindicatorFilter } from "./subindicator_filter";
+import XLSX from 'xlsx';
 
 import embed from "vega-embed";
 
@@ -338,10 +339,10 @@ export class Chart extends Observable {
       $(this).off('click');
       $(this).on('click', () => {
         const downloadFn = {
-          0: {type: 'csv', fn: barChart.exportAsCsv},
-          1: {type: 'excel', fn: barChart.exportAsExcel},
-          2: {type: 'json', fn: barChart.exportAsJson},
-          3: {type: 'kml', fn: barChart.exportAsKml},
+          0: {type: 'csv', fn: self.exportAsCsv},
+          1: {type: 'excel', fn: self.exportAsExcel},
+          2: {type: 'json', fn: self.exportAsJson},
+          3: {type: 'kml', fn: self.exportAsKml},
         }[index];
         self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
@@ -365,11 +366,10 @@ export class Chart extends Observable {
       });
 
   };
+
   getChartTitle = (separator) => {
     return this.selectedGroup === null ? `${this.title}` : `${this.title} by ${this.selectedGroup} ${separator} ${this.selectedFilter}`;
   }
-
-
 
   getPercentageValue = (currentValue, subindicators) => {
     let percentage = 0;
@@ -407,4 +407,87 @@ export class Chart extends Observable {
         this.vegaView.signal('applyFilter', false).run()
       }
   };
+
+  getExportData = (isArray = false) => {
+    const data = this.vegaView.data('data_formatted');
+    const primaryGroup = this.vegaView._signals['mainGroup'].value;
+    const unit = this.vegaView._signals['Units'].value;
+    const formatting = this.vegaView._signals['numberFormat'].value[unit];
+    const datatype  = this.vegaView._signals['datatype'].value[unit];
+    let rows = [];
+
+    if (isArray){
+        rows.push([primaryGroup, datatype]);
+    }
+
+    data.forEach(function (rowArray) {
+      let row = isArray ? [] : {};
+      if (isArray){
+          row.push(rowArray[primaryGroup]);
+          row.push(d3format(formatting)(rowArray[datatype]));
+      }
+      else{
+          row[primaryGroup] = rowArray[primaryGroup];
+          row[datatype] = d3format(formatting)(rowArray[datatype]);
+      }
+      rows.push(row);
+    });
+
+    return rows;
+  }
+
+  exportAsCsv = () => {
+    const exportData = this.getExportData(true);
+
+    const fileName = `${this.title}.csv`;
+
+    let csvContent = "data:text/csv;charset=utf-8,"
+        + exportData.map(e => e.join(",")).join("\n");
+
+    let encodedUri = encodeURI(csvContent);
+    let link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link); // Required for FF
+
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  exportAsExcel = () => {
+    const exportData = this.getExportData();
+    console.log({exportData})
+    // export json (only array possible) to Worksheet of Excel
+    const data = XLSX.utils.json_to_sheet(exportData);
+    // A workbook is the name given to an Excel file
+    const wb = XLSX.utils.book_new(); // make Workbook of Excel
+    // add Worksheet to Workbook
+    XLSX.utils.book_append_sheet(wb, data, 'Chart data');
+    // export Excel file
+    XLSX.writeFile(wb, this.title + '.xlsx');
+  }
+
+  exportAsJson = () => {
+      const exportData = this.getExportData();
+
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData));
+      var downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", this.title + ".json");
+      document.body.appendChild(downloadAnchorNode); // required for firefox
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+  }
+
+  exportAsKml = () => {
+      const exportData = getExportData();
+
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData));
+      var downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", this.title + ".kml");
+      document.body.appendChild(downloadAnchorNode); // required for firefox
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+  }
 }

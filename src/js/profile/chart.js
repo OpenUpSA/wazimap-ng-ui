@@ -266,8 +266,8 @@ export class Chart extends Observable {
     $(table).append(thead);
 
     const dataArr = this.vegaView.data('data_formatted');
-    const primaryGroup = this.vegaView._signals['mainGroup'].value;
-    const formatting = this.vegaView._signals['numberFormat'];
+    const primaryGroup = this.vegaView.signal('mainGroup');
+    const formatting = this.vegaView.signal('numberFormat');
 
     dataArr.forEach((d) => {
       let absoluteVal = d.count;
@@ -276,9 +276,9 @@ export class Chart extends Observable {
       let col1 = document.createElement('td');
       $(col1).text(d[primaryGroup]);
       let col2 = document.createElement('td');
-      $(col2).text(d3format(formatting.value[VALUE_TYPE])(absoluteVal));
+      $(col2).text(d3format(formatting[VALUE_TYPE])(absoluteVal));
       let col3 = document.createElement('td');
-      $(col3).text(d3format(formatting.value[PERCENTAGE_TYPE])(percentageVal));
+      $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
       $(row).append(col1);
       $(row).append(col2);
       $(row).append(col3);
@@ -413,25 +413,26 @@ export class Chart extends Observable {
 
   getExportData = (isArray = false) => {
     const data = this.vegaView.data('data_formatted');
-    const primaryGroup = this.vegaView._signals['mainGroup'].value;
-    const unit = this.vegaView._signals['Units'].value;
-    const formatting = this.vegaView._signals['numberFormat'].value[unit];
-    const datatype  = this.vegaView._signals['datatype'].value[unit];
+    const primaryGroup = this.vegaView.signal('mainGroup');
+    const formatting = this.vegaView.signal('numberFormat');
+    const datatypes  = this.vegaView.signal('datatype');
     let rows = [];
 
     if (isArray){
-        rows.push([primaryGroup, datatype]);
+        rows.push([primaryGroup, datatypes[VALUE_TYPE], datatypes[PERCENTAGE_TYPE]]);
     }
 
     data.forEach(function (rowArray) {
       let row = isArray ? [] : {};
       if (isArray){
           row.push(rowArray[primaryGroup]);
-          row.push(d3format(formatting)(rowArray[datatype]));
+          row.push(d3format(formatting[VALUE_TYPE])(rowArray[datatypes[VALUE_TYPE]]));
+          row.push(d3format(formatting[PERCENTAGE_TYPE])(rowArray[datatypes[PERCENTAGE_TYPE]]));
       }
       else{
           row[primaryGroup] = rowArray[primaryGroup];
-          row[datatype] = d3format(formatting)(rowArray[datatype]);
+          row[datatypes[VALUE_TYPE]] = d3format(formatting[VALUE_TYPE])(rowArray[datatypes[VALUE_TYPE]]);
+          row[datatypes[PERCENTAGE_TYPE]] = d3format(formatting[PERCENTAGE_TYPE])(rowArray[datatypes[PERCENTAGE_TYPE]]);
       }
       rows.push(row);
     });
@@ -477,18 +478,6 @@ export class Chart extends Observable {
       var downloadAnchorNode = document.createElement('a');
       downloadAnchorNode.setAttribute("href", dataStr);
       downloadAnchorNode.setAttribute("download", this.title + ".json");
-      document.body.appendChild(downloadAnchorNode); // required for firefox
-      downloadAnchorNode.click();
-      downloadAnchorNode.remove();
-  }
-
-  exportAsKml = () => {
-      const exportData = getExportData();
-
-      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData));
-      var downloadAnchorNode = document.createElement('a');
-      downloadAnchorNode.setAttribute("href", dataStr);
-      downloadAnchorNode.setAttribute("download", this.title + ".kml");
       document.body.appendChild(downloadAnchorNode); // required for firefox
       downloadAnchorNode.click();
       downloadAnchorNode.remove();

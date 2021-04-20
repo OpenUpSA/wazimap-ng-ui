@@ -240,6 +240,7 @@ export class Chart extends Observable {
       .then(async (result) => {
         this.vegaView = result.view;
         this.setChartMenu();
+        this.showChartDataTable();
       })
       .catch(console.error);
   };
@@ -264,23 +265,25 @@ export class Chart extends Observable {
     $(thead).append(headRow);
     $(table).append(thead);
 
-    /*
-    for (const [label, subindicator] of Object.entries(this.subindicators)) {
-      let absolute_val = subindicator.count;
-      let percentage_val = this.getPercentageValue(absolute_val, this.subindicators);
+    const dataArr = this.vegaView.data('data_formatted');
+    const primaryGroup = this.vegaView._signals['mainGroup'].value;
+    const formatting = this.vegaView._signals['numberFormat'];
+
+    dataArr.forEach((d) => {
+      let absoluteVal = d.count;
+      let percentageVal = d.percentage;
       let row = document.createElement('tr');
       let col1 = document.createElement('td');
-      $(col1).text(subindicator.keys);
+      $(col1).text(d[primaryGroup]);
       let col2 = document.createElement('td');
-      $(col2).text(d3format(this.config.types[VALUE_TYPE].formatting)(absolute_val));
+      $(col2).text(d3format(formatting.value[VALUE_TYPE])(absoluteVal));
       let col3 = document.createElement('td');
-      $(col3).text(d3format(this.config.types[PERCENTAGE_TYPE].formatting)(percentage_val));
+      $(col3).text(d3format(formatting.value[PERCENTAGE_TYPE])(percentageVal));
       $(row).append(col1);
       $(row).append(col2);
       $(row).append(col3);
       $(table).append(row);
-    }
-    */
+    })
 
     this.containerParent.append(table);
   }

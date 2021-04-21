@@ -7,6 +7,7 @@ import { defaultValues } from "../defaultValues";
 import { horizontalBarChart } from "../reusable-charts/horizontal-bar-chart";
 import { SubindicatorFilter } from "./subindicator_filter";
 import XLSX from 'xlsx';
+import Papa from 'papaparse';
 
 import embed from "vega-embed";
 
@@ -446,7 +447,7 @@ export class Chart extends Observable {
     const fileName = `${this.title}.csv`;
 
     let csvContent = "data:text/csv;charset=utf-8,"
-        + exportData.map(e => e.join(",")).join("\n");
+        + Papa.unparse(exportData);
 
     let encodedUri = encodeURI(csvContent);
     let link = document.createElement("a");

@@ -13,16 +13,14 @@ import embed from "vega-embed";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
-const graphValueTypes = [PERCENTAGE_TYPE, VALUE_TYPE];
+const graphValueTypes = {
+  'Percentage': PERCENTAGE_TYPE,
+  'Value': VALUE_TYPE
+};
 const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
 
 let tooltipClone = null;
-const typeIndex = {
-  'Percentage': 0,
-  'Value': 1
-}
-
 
 export class Chart extends Observable {
   constructor(
@@ -111,7 +109,7 @@ export class Chart extends Observable {
         },
         {
           name: "Units",
-          value: graphValueTypes[typeIndex[this.config.defaultType]]
+          value: graphValueTypes[this.config.defaultType]
         },
         {
           name: "applyFilter",
@@ -326,12 +324,12 @@ export class Chart extends Observable {
       this.triggerEvent('profile.chart.saveAsPng', this);
     })
 
-    //todo:don't use index, specific class names should be used here when the classes are ready
-    $(this.containerParent).find('.hover-menu__content_list a').each(function (index) {
+    $(this.containerParent).find('.hover-menu__content_list a').each(function () {
       $(this).off('click');
       $(this).on('click', () => {
-        self.selectedGraphValueTypeChanged(self.containerParent, index);
-        self.vegaView.signal("Units", graphValueTypes[index]).run()
+        let displayType = $(this).data('id');
+        self.selectedGraphValueTypeChanged(self.containerParent, displayType);
+        self.vegaView.signal("Units", graphValueTypes[displayType]).run();
         self.setDownloadUrl();
       })
     });
@@ -339,32 +337,33 @@ export class Chart extends Observable {
     this.disableChartTypeToggle(this.config.disableToggle);
 
 
-    $(this.containerParent).find('.hover-menu__content_list--last a').each(function (index) {
+    $(this.containerParent).find('.hover-menu__content_list--last a').each(function () {
       $(this).off('click');
       $(this).on('click', () => {
+        let exportType = $(this).data('id');
         const downloadFn = {
-          0: {type: 'csv', fn: self.exportAsCsv},
-          1: {type: 'excel', fn: self.exportAsExcel},
-          2: {type: 'json', fn: self.exportAsJson},
-          3: {type: 'kml', fn: self.exportAsKml},
-        }[index];
+          'csv': self.exportAsCsv,
+          'excel': self.exportAsExcel,
+          'json': self.exportAsJson
+        }[exportType];
         self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
         let fileName = self.getChartTitle('-');
-        downloadFn.fn(fileName);
+        downloadFn(fileName);
       })
     });
   };
 
-  selectedGraphValueTypeChanged = (containerParent, index) => {
-    this.graphValueType = graphValueTypes[index];
+  selectedGraphValueTypeChanged = (containerParent, selectedDisplayType) => {
+    this.graphValueType = selectedDisplayType;
     this.triggerEvent("profile.chart.valueTypeChanged", this);
     $(containerParent)
       .find(".hover-menu__content_list a")
-      .each(function (itemIndex) {
+      .each(function () {
+        let itemDisplayType = $(this).data('id');
         $(this).removeClass("active");
 
-        if (index === itemIndex) {
+        if (itemDisplayType === selectedDisplayType) {
           $(this).addClass("active");
         }
       });
@@ -461,7 +460,6 @@ export class Chart extends Observable {
 
   exportAsExcel = () => {
     const exportData = this.getExportData();
-    console.log({exportData})
     // export json (only array possible) to Worksheet of Excel
     const data = XLSX.utils.json_to_sheet(exportData);
     // A workbook is the name given to an Excel file

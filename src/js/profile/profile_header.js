@@ -15,7 +15,7 @@ let geography = null;
 const breadcrumbClass = '.breadcrumb';
 const locationDescriptionClass = '.location__description';
 
-const downloadAllFacilities = '.download_all_facilities';
+const downloadAllFacilities = '.location__facilities_download-all';
 
 const SHEETNAME_CHAR_LIMIT = 31;
 

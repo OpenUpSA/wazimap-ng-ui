@@ -145,7 +145,7 @@ export class Profile_header extends Observable {
             .then((data) => {
                 const wb = XLSX.utils.book_new();
                 const fileName = 'Facilities-' + geography.code + '.xlsx';
-                data.results.forEach((r, i) => {
+                data.results.forEach((r) => {
                     const sheetName = this.getSheetName(r.category);
                     let rows = [];
                     r.features.forEach((f) => {

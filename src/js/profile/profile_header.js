@@ -141,7 +141,6 @@ export class Profile_header extends Observable {
     }
 
     downloadAllFacilities = () => {
-        console.log('here')
         this.api.loadAllPoints(this.profileId, geography.code)
             .then((data) => {
                 const wb = XLSX.utils.book_new();

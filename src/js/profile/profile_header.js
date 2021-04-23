@@ -156,9 +156,11 @@ export class Profile_header extends Observable {
                         })
                         rows.push(row);
                     })
-                    const rowData = XLSX.utils.json_to_sheet(rows);
+                    if (rows.length > 0) {
+                        const rowData = XLSX.utils.json_to_sheet(rows);
 
-                    XLSX.utils.book_append_sheet(wb, rowData, sheetName);
+                        XLSX.utils.book_append_sheet(wb, rowData, sheetName);
+                    }
                 })
                 XLSX.writeFile(wb, fileName);
             });

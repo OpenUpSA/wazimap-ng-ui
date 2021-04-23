@@ -145,11 +145,21 @@ export class Profile_header extends Observable {
             .then((data) => {
                 const wb = XLSX.utils.book_new();
                 const fileName = 'Facilities-' + geography.code + '.xlsx';
-                for (let i = 0; i < data.results.length; i++) {
-                    const sheetName = this.getSheetName(data.results[i].category);
-                    const data = XLSX.utils.json_to_sheet(data.results[i].features);
-                    XLSX.utils.book_append_sheet(wb, data, sheetName);
-                }
+                data.results.forEach((r, i) => {
+                    const sheetName = this.getSheetName(r.category);
+                    let rows = [];
+                    r.features.forEach((f) => {
+                        let row = {};
+                        row.name = f.properties.name;
+                        f.properties.data.forEach((d) => {
+                            row[d.key] = d.value
+                        })
+                        rows.push(row);
+                    })
+                    const rowData = XLSX.utils.json_to_sheet(rows);
+
+                    XLSX.utils.book_append_sheet(wb, rowData, sheetName);
+                })
                 XLSX.writeFile(wb, fileName);
             });
     }

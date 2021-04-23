@@ -37,7 +37,7 @@ export class Profile_header extends Observable {
         facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
         facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
-        $(downloadAllFacilities).on('click', () => this.downloadAllFacilities);
+        $(downloadAllFacilities).on('click', () => this.downloadAllFacilities());
 
         this.setPointSource();
         this.addBreadCrumbs();
@@ -141,6 +141,7 @@ export class Profile_header extends Observable {
     }
 
     downloadAllFacilities = () => {
+        console.log('here')
         this.api.loadAllPoints(this.profileId, geography.code)
             .then((data) => {
                 const wb = XLSX.utils.book_new();

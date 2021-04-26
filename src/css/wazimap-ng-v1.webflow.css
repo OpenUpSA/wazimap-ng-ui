@@ -7267,11 +7267,100 @@ label {
   margin-right: 4px;
 }
 
-.chart-table, .chart-table tr, .chart-table th, .chart-table td {
-     border: 1px solid #000;
-     border-collapse: collapse;
-     text-align: center;
- }
+ .profile-indicator__table {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.profile-indicator__table_row {
+  display: -ms-grid;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 33.333333333%;
+  -ms-grid-columns: 33.333333333%;
+  grid-template-columns: 33.333333333%;
+  -ms-grid-rows: auto;
+  grid-template-rows: auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 13px;
+}
+
+.profile-indicator__table_row:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.profile-indicator__table_row.profile-indicator__table_row--header {
+  grid-auto-columns: 33.333333333%;
+  border-bottom: 1px solid #707070;
+  background-color: hsla(0, 0%, 100%, 0.06);
+  box-shadow: 0 10px 10px -9px rgba(0, 0, 0, 0.1);
+  font-weight: 700;
+}
+
+.profile-indicator__table_row.profile-indicator__table_row--alt {
+  background-color: hsla(0, 0%, 100%, 0.06);
+}
+
+.profile-indicator__table_row.profile-indicator__table_row--2-col {
+  grid-auto-columns: minmax(120px, 50%);
+  -ms-grid-columns: minmax(120px, 50%);
+  grid-template-columns: minmax(120px, 50%);
+}
+
+.profile-indicator__table_cell {
+  padding: 8px;
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+}
+
+.profile-indicator__table_cell.profile-indicator__table_cell--first {
+  border-left-style: none;
+}
+
+.profile-indicator__table_content {
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.profile-indicator__table_show-more {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 2em;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.profile-indicator__table_show-more.hidden {
+  display: none;
+}
+
+.profile-indicator__table_showing {
+  margin-top: 1em;
+  font-size: 13px;
+}
+
+.profile-indicator__table_load-more {
+  width: 100%;
+  background-color: #f0f0f0;
+  color: #333;
+  text-align: center;
+}
+
+.profile-indicator__table_inner {
+  max-height: 400px;
+}
 
 @media screen and (max-width: 991px) {
   .rich-data-content {

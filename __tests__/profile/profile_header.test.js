@@ -1,4 +1,5 @@
 import {Profile_header} from "../../src/js/profile/profile_header";
+import {extractSheetsData} from "../../src/js/utils";
 
 const FACILITIES = {
     count: 2,
@@ -17,6 +18,12 @@ const FACILITIES = {
                     "key": "quintile",
                     "value": "4"
                 }]
+            },
+            geometry: {
+                coordinates: [
+                    28.969743,
+                    -27.836569
+                ]
             }
         }, {
             properties: {
@@ -31,6 +38,12 @@ const FACILITIES = {
                     "key": "quintile",
                     "value": "4"
                 }]
+            },
+            geometry: {
+                coordinates: [
+                    28.969743,
+                    -27.836569
+                ]
             }
         }, {
             properties: {
@@ -45,6 +58,12 @@ const FACILITIES = {
                     "key": "quintile",
                     "value": "2"
                 }]
+            },
+            geometry: {
+                coordinates: [
+                    28.969743,
+                    -27.836569
+                ]
             }
         }]
     }, {
@@ -59,6 +78,12 @@ const FACILITIES = {
                     "key": "address",
                     "value": "Stand 707, Zamani, Free State, 2970"
                 }]
+            },
+            geometry: {
+                coordinates: [
+                    28.969743,
+                    -27.836569
+                ]
             }
         }, {
             properties: {
@@ -70,23 +95,21 @@ const FACILITIES = {
                     "key": "address",
                     "value": "Ezenzeleni Extension 2, Ezenzeleni, Warden, Free State, 9890"
                 }]
+            },
+            geometry: {
+                coordinates: [
+                    28.969743,
+                    -27.836569
+                ]
             }
         }]
     }]
 }
 
 describe('profile header', () => {
-    const parents = [];
-    const geometries = {themes: []}
+    test('Creates sheets correctly', () => {
+        const result = extractSheetsData(FACILITIES);
 
-    test('initialize successully', () => {
-        const header = new Profile_header(parents, geometries);
-    })
-
-    const header = new Profile_header(parents, geometries);
-    const result = header.createExcelData(FACILITIES);
-
-    test('Creates sheets correctly',() => {
         expect(result.length).toBe(2);
         expect(result[1].sheetName).toBe('Municipal Traffic Departments');
         expect(result[0].sheetData[2].phase).toBe('Secondary school (Gr 8 - 12)');

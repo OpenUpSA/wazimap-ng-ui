@@ -1,4 +1,4 @@
-import {checkIterate, Observable, ThemeStyle} from "../utils";
+import {checkIterate, extractSheetData, extractSheetsData, Observable, ThemeStyle} from "../utils";
 import XLSX from "xlsx";
 
 let breadcrumbsContainer = null;
@@ -16,8 +16,6 @@ const breadcrumbClass = '.breadcrumb';
 const locationDescriptionClass = '.location__description';
 
 const downloadAllFacilities = '.location__facilities_download-all';
-
-const SHEETNAME_CHAR_LIMIT = 31;
 
 export class Profile_header extends Observable {
     constructor(_parents, _geometries, _api, _profileId, _geography) {
@@ -145,7 +143,7 @@ export class Profile_header extends Observable {
             .then((data) => {
                 const wb = XLSX.utils.book_new();
                 const fileName = 'Facilities-' + geography.code + '.xlsx';
-                let sheets = this.createExcelData(data);
+                let sheets = extractSheetsData(data);
                 sheets.forEach((s) => {
                     const sheetData = XLSX.utils.json_to_sheet(s.sheetData);
                     const sheetName = s.sheetName;
@@ -157,73 +155,26 @@ export class Profile_header extends Observable {
             });
     }
 
-    createExcelData = (data) => {
-        let sheets = [];
-
-        data.results.forEach((r) => {
-            const sheetName = this.getSheetName(r.category);
-            let rows = [];
-            r.features.forEach((f) => {
-                let row = {};
-                row.name = f.properties.name;
-                f.properties.data.forEach((d) => {
-                    row[d.key] = d.value
-                })
-                rows.push(row);
-            })
-            if (rows.length > 0) {
-                sheets.push({
-                    sheetName: sheetName,
-                    sheetData: rows
-                })
-            }
-        })
-
-        return sheets;
-    }
-
     downloadPointData = (category) => {
-        const sheetName = this.getSheetName(category.label);
         const fileName = 'Export-' + category.label + '.xlsx';
         this.getAddressPoints(category)
-            .then((points) => {
+            .then((sheet) => {
                 // export json (only array possible) to Worksheet of Excel
-                const data = XLSX.utils.json_to_sheet(points);
+                const data = XLSX.utils.json_to_sheet(sheet.sheetData);
                 // A workbook is the name given to an Excel file
                 const wb = XLSX.utils.book_new(); // make Workbook of Excel
                 // add Worksheet to Workbook
-                XLSX.utils.book_append_sheet(wb, data, sheetName);
+                XLSX.utils.book_append_sheet(wb, data, sheet.sheetName);
                 // export Excel file
                 XLSX.writeFile(wb, fileName);
             });
     }
 
-    getSheetName = (name) => {
-        const suffix = '...';
-        const sheetName = name.length > SHEETNAME_CHAR_LIMIT ? name.substring(0, SHEETNAME_CHAR_LIMIT - suffix.length) + suffix : name;
-
-        return sheetName;
-    }
-
     getAddressPoints = (category) => {
-        const points = [];
         return this.api.loadPoints(this.profileId, category.category_id, geography.code).then(data => {
-            checkIterate(data.features, feature => {
-                const prop = feature.properties;
-                const geometry = feature.geometry;
+            let sheet = extractSheetData(data, category.label);
 
-                points.push({
-                    Name: prop.name,
-                    Longitude: geometry.coordinates[0],
-                    Latitude: geometry.coordinates[1]
-                })
-
-                for (const [index, obj] of Object.entries(prop.data)) {
-                    points[points.length - 1][obj.key] = obj.value;
-                }
-            })
-
-            return points;
+            return sheet;
         })
     }
 

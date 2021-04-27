@@ -145,25 +145,41 @@ export class Profile_header extends Observable {
             .then((data) => {
                 const wb = XLSX.utils.book_new();
                 const fileName = 'Facilities-' + geography.code + '.xlsx';
-                data.results.forEach((r) => {
-                    const sheetName = this.getSheetName(r.category);
-                    let rows = [];
-                    r.features.forEach((f) => {
-                        let row = {};
-                        row.name = f.properties.name;
-                        f.properties.data.forEach((d) => {
-                            row[d.key] = d.value
-                        })
-                        rows.push(row);
-                    })
-                    if (rows.length > 0) {
-                        const rowData = XLSX.utils.json_to_sheet(rows);
+                let sheets = this.createExcelData(data);
+                sheets.forEach((s) => {
+                    const sheetData = XLSX.utils.json_to_sheet(s.sheetData);
+                    const sheetName = s.sheetName;
 
-                        XLSX.utils.book_append_sheet(wb, rowData, sheetName);
-                    }
+                    XLSX.utils.book_append_sheet(wb, sheetData, sheetName);
                 })
+
                 XLSX.writeFile(wb, fileName);
             });
+    }
+
+    createExcelData = (data) => {
+        let sheets = [];
+
+        data.results.forEach((r) => {
+            const sheetName = this.getSheetName(r.category);
+            let rows = [];
+            r.features.forEach((f) => {
+                let row = {};
+                row.name = f.properties.name;
+                f.properties.data.forEach((d) => {
+                    row[d.key] = d.value
+                })
+                rows.push(row);
+            })
+            if (rows.length > 0) {
+                sheets.push({
+                    sheetName: sheetName,
+                    sheetData: rows
+                })
+            }
+        })
+
+        return sheets;
     }
 
     downloadPointData = (category) => {

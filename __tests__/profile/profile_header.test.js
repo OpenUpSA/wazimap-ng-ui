@@ -1,7 +1,5 @@
 import {Profile_header} from "../../src/js/profile/profile_header";
 import {extractSheetsData} from "../../src/js/utils";
-import {fireEvent, screen} from "@testing-library/dom";
-import {API} from "../../src/js/api";
 
 const FACILITIES = {
     count: 2,
@@ -119,21 +117,10 @@ describe('profile header', () => {
 
     const parents = [];
     const geometries = {themes: []};
-    const api = new API('https://staging.wazimap-ng.openup.org.za');
-    const geography = {code: 'ZA'}
+    const api = null;
+    const geography = {code: 'ZA'};
 
     test('initialize successully', () => {
         const header = new Profile_header(parents, geometries, api, null, geography);
-    })
-
-    test('download all facilities clicked', () => {
-        document.body.innerHTML =
-            `<div class="location__facilities_download-all" data-testid="download-all-facilities"></div>`;
-
-        const header = new Profile_header(parents, geometries, api, null, geography);
-        let fn = jest.spyOn(header, 'downloadAllFacilities');
-
-        fireEvent.click(screen.getByTestId('download-all-facilities'));
-        expect(fn).toHaveBeenCalled();
     })
 })

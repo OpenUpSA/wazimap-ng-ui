@@ -308,17 +308,10 @@ export function extractSheetsData(data) {
 
 export function extractSheetData(rawData, categoryName) {
     const sheetName = getSheetName(categoryName);
-    let rows = [];
-    rawData.features.forEach((f) => {
-        let row = {};
-        row.name = f.properties.name;
-        row.longitude = f.geometry.coordinates[0];
-        row.latitude = f.geometry.coordinates[1];
-        row.name = f.properties.name;
-        f.properties.data.forEach((d) => {
-            row[d.key] = d.value
-        })
-        rows.push(row);
+    let rows = rawData.features.map((f) => {
+        let { properties: { name, data } } =  f;
+        let mapped = data.map(item => ({ [item.key]: item.value }) );
+        return Object.assign({name}, ...mapped );
     })
 
     return {

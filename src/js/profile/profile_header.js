@@ -1,5 +1,6 @@
 import {checkIterate, extractSheetData, extractSheetsData, Observable, ThemeStyle} from "../utils";
 import XLSX from "xlsx";
+import regeneratorRuntime from 'regenerator-runtime/runtime';
 
 let breadcrumbsContainer = null;
 let breadcrumbTemplate = null;

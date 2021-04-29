@@ -1,4 +1,5 @@
 import {SubIndicator} from '../dataobjects'
+import {checkIfSubCategoryHasChildren} from "../utils";
 
 
 const hideondeployClsName = 'hideondeploy';
@@ -168,7 +169,7 @@ export function loadMenu(data, subindicatorCallback) {
     }
 }
 
-export function showNoData(){
+export function showNoData() {
     $(parentContainer).empty();
     $('.' + loadingClsName).addClass('hidden');
     $('.' + noDataWrapperClsName).removeClass('hidden');

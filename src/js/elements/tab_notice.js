@@ -1,5 +1,12 @@
-export class TabNotice {
+import {Observable} from '../utils';
+
+export const EVENTS = {
+    clicked: 'tab_notice.clicked'
+}
+
+export class TabNotice extends Observable {
     constructor(feedback) {
+        super()
         this.tab = $('.tab-notice');
         this.feedback = feedback;
     }
@@ -17,5 +24,6 @@ export class TabNotice {
 
         this.tab.find('a.tab-notice__content').attr('href', this.feedback.url);
         this.tab.find('a.tab-notice__content .tab-notice__text').text(this.feedback.text);
+        this.tab.on('click', () => this.triggerEvent(EVENTS.clicked))
     }
 }

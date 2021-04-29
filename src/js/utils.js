@@ -293,6 +293,17 @@ export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
     return merge({}, defaultObj, obj)
 }
 
+export function checkIfSubCategoryHasChildren (subcategory, detail)  {
+    let hasChildren = false;
+    for (const [title, data] of Object.entries(detail.indicators)) {
+        hasChildren = hasChildren || data.subindicators.some(function (e) {
+            return e.count > 0
+        });
+    }
+
+    return hasChildren;
+}
+
 export function extractSheetsData(data) {
     let sheets = [];
 

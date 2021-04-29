@@ -699,12 +699,12 @@
     <div class="facility-info">
       <div class="facility-info__header">
         <h3 class="facility-info__title">Loading...</h3>
-        <div title="Download information (.pdf)" class="facility-info__download">
-          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+        <a href="#" onclick="window.print()" title="Download information (.pdf)" class="facility-info__print">
+          <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewbox="0 0 24 24" width="24">
               <path d="M0 0h24v24H0z" fill="none"></path>
-              <path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+              <path fill="CurrentColor" d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"></path>
             </svg></div>
-        </div>
+        </a>
         <div title="Close" class="facility-info__close">
           <div class="svg-icon svg-icon--no-size w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
               <path d="M0 0h24v24H0z" fill="none"></path>
@@ -2545,41 +2545,45 @@
                           <div>Save as image</div>
                         </div>
                       </a>
-                      <div class="hover-menu__content_item--no-link">
-                        <div class="icon--small">
-                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                              <path d="M0 0h24v24H0z" fill="none"></path>
-                              <path fill="currentColor" d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z"></path>
-                            </svg></div>
+                      <div data-element="chart-value-select" class="hover-menu__chart-value">
+                        <div class="hover-menu__content_item--no-link">
+                          <div class="icon--small">
+                            <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                                <path d="M0 0h24v24H0z" fill="none"></path>
+                                <path fill="currentColor" d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z"></path>
+                              </svg></div>
+                          </div>
+                          <div class="content__item_title">
+                            <div>Chart values as:</div>
+                          </div>
                         </div>
-                        <div class="content__item_title">
-                          <div>Chart values as:</div>
-                        </div>
-                      </div>
-                      <div class="hover-menu__content_list">
-                        <a href="#" class="hover-menu__content_list-item active w-inline-block">
-                          <div>Percentage</div>
-                        </a>
-                        <a href="#" class="hover-menu__content_list-item--last w-inline-block">
-                          <div>Value</div>
-                        </a>
-                      </div>
-                      <div class="hover-menu__content_item--no-link">
-                        <div class="icon--small"><img src="https://uploads-ssl.webflow.com/5ea151b3c7c39749f3e09ee7/5ea151b3c7c3974bdbe09f2e_download-24px.svg" alt=""></div>
-                        <div class="content__item_title">
-                          <div>Click to download data:</div>
+                        <div class="hover-menu__content_list">
+                          <a data-id="Percentage" href="#" class="hover-menu__content_list-item active w-inline-block">
+                            <div>Percentage</div>
+                          </a>
+                          <a data-id="Value" href="#" class="hover-menu__content_list-item last w-inline-block">
+                            <div>Value</div>
+                          </a>
                         </div>
                       </div>
-                      <div class="hover-menu__content_list--last">
-                        <a href="#" class="hover-menu__content_list-item w-inline-block">
-                          <div>CSV</div>
-                        </a>
-                        <a href="#" class="hover-menu__content_list-item w-inline-block">
-                          <div>Excel</div>
-                        </a>
-                        <a href="#" class="hover-menu__content_list-item w-inline-block">
-                          <div>JSON</div>
-                        </a>
+                      <div data-element="chart-download-data" class="hover-menu__download-data">
+                        <div class="hover-menu__content_item--no-link">
+                          <div class="icon--small"><img src="https://uploads-ssl.webflow.com/5ea151b3c7c39749f3e09ee7/5ea151b3c7c3974bdbe09f2e_download-24px.svg" alt=""></div>
+                          <div class="content__item_title">
+                            <div>Click to download data:</div>
+                          </div>
+                        </div>
+                        <div class="hover-menu__content_list--last">
+                          <a data-id="csv" href="#" class="hover-menu__content_list-item w-inline-block">
+                            <div>CSV</div>
+                          </a>
+                          <a data-id="excel" href="#" class="hover-menu__content_list-item w-inline-block">
+                            <div>Excel</div>
+                          </a>
+                          <a data-id="json" href="#" class="hover-menu__content_list-item w-inline-block">
+                            <div>JSON</div>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>

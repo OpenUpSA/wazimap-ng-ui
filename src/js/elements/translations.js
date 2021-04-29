@@ -13,6 +13,10 @@ export class Translations extends Observable {
             return;
         }
 
+        Object.keys(this.translations).forEach((key) => {
+            this.translations[key] = {translation: this.translations[key]}
+        })
+
         i18next
             .init({
                 lng: 'en',

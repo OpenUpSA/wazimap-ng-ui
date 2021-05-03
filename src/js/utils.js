@@ -304,6 +304,38 @@ export function checkIfSubCategoryHasChildren (subcategory, detail)  {
     return hasChildren;
 }
 
+export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator){
+    let sumData = {};
+    Object.entries(childData).map(([code, data]) => {
+        let filteredArr = data.filter((a) => {
+            return a[primaryGroup] === selectedSubindicator;
+        });
+
+        sumData[code] = filteredArr.reduce(function (s, a) {
+            return s + parseFloat(a.count);
+        }, 0);
+    })
+
+    return sumData;
+}
+
+export function getFilterGroups(groups, primaryGroup){
+    groups = groups.reduce(function (memo, e1) {
+        let matches = memo.filter(function (e2) {
+            return e1.name === e2.name
+        })
+        if (matches.length == 0)
+            memo.push(e1)
+        return memo;
+    }, [])
+
+    groups = groups.filter((g) => {
+        return g.name !== primaryGroup
+    });
+
+    return groups;
+}
+
 export function extractSheetsData(data) {
     let sheets = [];
 

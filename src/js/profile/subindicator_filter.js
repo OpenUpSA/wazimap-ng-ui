@@ -16,10 +16,8 @@ export class SubindicatorFilter extends Observable {
     const filtersAvailable = this.checkGroups(groups);
     if (filtersAvailable) {
       this.showFilterArea(filterArea);
-
     } else {
       this.hideFilterArea(filterArea);
-
     }
     this.resetDropdowns(dropdowns);
     let callback = (selected) => this.groupSelected(selected, subindicatorDd, title);
@@ -53,8 +51,8 @@ export class SubindicatorFilter extends Observable {
   }
 
   /**
-   *      * check if the selected subindicator has groups to filter
-   *           */
+   *    *      * check if the selected subindicator has groups to filter
+   *       *           */
   checkGroups = (groups) => {
     let hasGroups = true;
     if (groups === null || typeof groups === 'undefined' || groups.length <= 0) {
@@ -159,7 +157,6 @@ export class SubindicatorFilter extends Observable {
     if (callback !== null && item !== null) {
       callback(item);
 
-
     }
 
 
@@ -231,9 +228,7 @@ export class SubindicatorFilter extends Observable {
       const li = $(this);
       if (li.text().trim() === value) {
         self.dropdownOptionSelected(dropdown, li, null, callback);
-
       }
-
     })
 
   }

@@ -94,7 +94,9 @@ export class Choropleth extends Observable {
                     over: {fillColor: color, fillOpacity: self.options.opacity_over},
                     out: {fillColor: color, fillOpacity: self.options.opacity},
                 })
-                layer.feature.properties.percentage = el.val;
+                if (typeof layer.feature !== 'undefined') {
+                    layer.feature.properties.percentage = el.val;
+                }
             }
         })
     }

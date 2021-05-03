@@ -12,6 +12,7 @@ export class MapControl extends Observable {
         super();
 
         this.config = config;
+        this.api = config.api;
         this.zoomToPosition = zoomToPosition;
 
         const coords = config.map.defaultCoordinates;
@@ -21,6 +22,7 @@ export class MapControl extends Observable {
         this.boundaryLayers = null;
         this.mainLayer = null;
         this.layerCache = {};
+        this.choroplethData = [];
 
         this.layerStyler = new LayerStyler(this.config.layerStyles);
         this.maplocker = new MapLocker();
@@ -98,26 +100,51 @@ export class MapControl extends Observable {
         this.myEventForwarder.enable();
     }
 
+    async loadSubindicatorData(geo, indicatorId) {
+        this.triggerEvent("map.choropleth.loading");
+
+        let response;
+        let savedObj = this.choroplethData.filter((x) => {
+            return x.geography === geo && x.indicatorId == indicatorId
+        })[0];
+
+        if (savedObj !== null && typeof savedObj !== 'undefined') {
+            response = savedObj.data;
+        } else {
+            response = await this.api.loadChoroplethData(this.config.profile, geo, indicatorId);
+            this.choroplethData.push({
+                'geography': geo,
+                'data': response,
+                'indicatorId': indicatorId
+            });
+        }
+
+        return response;
+    }
+
     /**
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    handleChoropleth(subindicator, method) {
-        if (subindicator.children == undefined)
-            return;
-
-        this.displayChoropleth(subindicator.children, subindicator.subindicatorArr, method);
-    };
-
-    displayChoropleth(data, subindicatorArr, method) {
-        const calculator = this.choropleth.getCalculator(method);
-
+    handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter) {
         const args = {
             data: data,
-            subindicatorArr: subindicatorArr
+            selectedSubindicator: selectedSubindicator,
+            indicatorTitle: indicatorTitle,
+            showMapchip: showMapchip,
+            description: data.metadata.description,
+            filter: filter
         }
 
-        const calculation = calculator.calculate(args);
+        this.triggerEvent("map.choropleth.loaded", args);
+
+        this.displayChoropleth(data.child_data, data.metadata.primary_group, method, selectedSubindicator);
+    };
+
+    displayChoropleth(childData, primaryGroup, method, selectedSubindicator) {
+        const calculator = this.choropleth.getCalculator(method);
+
+        const calculation = calculator.calculate(childData, primaryGroup, selectedSubindicator);
 
         const values = calculation.map(el => el.val);
 

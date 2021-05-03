@@ -61,6 +61,11 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
+    loadAllPoints(profileId, areaCode){
+        let url =`${this.baseUrl}/api/v1/profile/${profileId}/points/geography/${areaCode}/points/?format=json`
+        return this.loadUrl(url);
+    }
+
     async waitToLogIn() {
         let count = 0;
         while (true) {

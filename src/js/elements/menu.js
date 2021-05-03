@@ -37,7 +37,7 @@ function subindicatorsInSubCategory(subcategory) {
 }
 
 function subindicatorsInIndicator(indicator) {
-    return indicator.metadata.groups.length;
+  return indicator.metadata.groups.length;
 }
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
@@ -112,13 +112,9 @@ export function loadMenu(data, subindicatorCallback) {
         $(".data-category__h2", h2Wrapper).remove();
 
         for (const [subcategory, detail] of Object.entries(subcategories)) {
-            let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
-
-            if (hasChildren) {
-                let count = subindicatorsInSubCategory(detail);
-                if (count > 0) {
-                    addIndicators(h2Wrapper, category, subcategory, detail.indicators);
-                }
+            let count = subindicatorsInSubCategory(detail);
+            if (count > 0) {
+                addIndicators(h2Wrapper, category, subcategory, detail.indicators);
             }
         }
     }

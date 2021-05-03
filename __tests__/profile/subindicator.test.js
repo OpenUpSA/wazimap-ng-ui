@@ -97,35 +97,36 @@ describe('SubindicatorFilter', () => {
     ])('Extract groups correctly', (value, expected) => {
       si.selectedGroup = value.filterGroup;
       const chartData = si.getFilteredGroups(value.filter)
+
       expect(chartData["Geography1"].length).toBe(expected);
     })
 
     test('Handles missing group correctly', () => {
       si.selectedGroup = GROUPS[0];
-      const chartData = si.getFilteredGroups('XXXXXX');
+      const chartData = si.getFilteredGroups('XXXXXX')
 
-      expect(chartData["Geography1"].length).toBe(0);
+      expect(chartData["Geography1"].length).toBe(0)
     })
 
     test('Handles missing subindicator correctly', () => {
       si.selectedGroup = GROUPS[0];
-      const chartData = si.getFilteredGroups('Missing subindicator');
+      const chartData = si.getFilteredGroups('Missing subindicator')
 
-      expect(chartData["Geography1"].length).toBe(0);
+      expect(chartData["Geography1"].length).toBe(0)
     })
 
     describe('#getFilteredData', () => {
       test('all values returns the defaults', () => {
         si.selectedGroup = GROUPS[0];
-        let chartData = si.getFilteredData('All values');
+        let chartData = si.getFilteredData('All values')
 
         expect(chartData).toBe(CHILD_DATA);
       });
 
       test('group filter returns the subindcator values', () => {
 
-        si.selectedGroup = GROUPS[0];
-        let chartData = si.getFilteredData('Female');
+        si.selectedGroup = GROUPS[0]
+        let chartData = si.getFilteredData('Female')
 
         expect(chartData["Geography1"].length).toBe(1);
         expect(chartData["Geography1"][0]["gender"]).toBe("Female");

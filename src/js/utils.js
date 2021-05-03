@@ -3,6 +3,8 @@ import {format as d3format} from 'd3-format';
 
 const queryCache = {};
 
+const SHEETNAME_CHAR_LIMIT = 31;
+
 export class Cache {
     constructor() {
         this.memoryCache = {}
@@ -332,4 +334,38 @@ export function getFilterGroups(groups, primaryGroup){
     });
 
     return groups;
+}
+
+export function extractSheetsData(data) {
+    let sheets = [];
+
+    data.results.forEach((r) => {
+        let sheet = extractSheetData(r, r.category);
+        if (sheet.sheetData.length > 0) {
+            sheets.push(sheet);
+        }
+    })
+
+    return sheets;
+}
+
+export function extractSheetData(rawData, categoryName) {
+    const sheetName = getSheetName(categoryName);
+    let rows = rawData.features.map((f) => {
+        let { properties: { name, data } } =  f;
+        let mapped = data.map(item => ({ [item.key]: item.value }) );
+        return Object.assign({name}, ...mapped );
+    })
+
+    return {
+        sheetName: sheetName,
+        sheetData: rows
+    }
+}
+
+export function getSheetName(name) {
+    const suffix = '...';
+    const sheetName = name.length > SHEETNAME_CHAR_LIMIT ? name.substring(0, SHEETNAME_CHAR_LIMIT - suffix.length) + suffix : name;
+
+    return sheetName;
 }

@@ -29,6 +29,9 @@
     "sheetjs": "^2.0.0",
     "shx": "^0.3.2",
     "svelte-dev-tools": "^0.0.2",
+    "vega": "^5.17.0",
+    "vega-embed": "^6.13.0",
+    "vega-lite": "^4.17.0",
     "xlsx": "^0.16.9"
   },
   "devDependencies": {

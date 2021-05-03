@@ -1,6 +1,27 @@
 import {SubindicatorFilter} from "../../src/js/profile/subindicator_filter";
 import { screen, fireEvent, getByText } from '@testing-library/dom'
 
+const DATA = [
+  {"race":"Race1","count":35,"gender":"Female"},
+  {"race":"Race1","count":30,"gender":"Male"},
+  {"race":"Race2","count":60,"gender":"Male"},
+]
+const CHILD_DATA = {
+  "Geography1": [
+    {"race":"Race1","count":15,"gender":"Female"},
+    {"race":"Race1","count":20,"gender":"Male"},
+    {"race":"Race2","count":30,"gender":"Male"},
+  ],
+  "Geography2": [
+    {"race":"Race1","count":20,"gender":"Female"},
+    {"race":"Race1","count":10,"gender":"Male"},
+    {"race":"Race2","count":30,"gender":"Male"},
+  ]
+}
+const GROUPS = [
+  { subindicators: ["Male", "Female"], name: "gender", },
+  { subindicators: ["Race1", "Race2"], name: "race", }
+];
 const INDICATORS = {
     'Age by race': {
         'groups': {
@@ -84,68 +105,53 @@ describe('SubindicatorFilter', () => {
     `;
     let dropdowns = $(document).find('.mapping-options__filter');
     const filterArea = $(document).find('.map-options__filters_content');
-    let groups = ['race', 'gender']
     applyFilter = jest.fn();
-    let parent = { applyFilter };
-    si = new SubindicatorFilter(INDICATORS, filterArea, groups, title, parent, dropdowns, []);
+    si = new SubindicatorFilter(filterArea, GROUPS, title, applyFilter, dropdowns, [], CHILD_DATA);
   })
 
 
     test.each([
-        [{group: 'race', subindicator: 'Race2'}, INDICATORS[title].groups.race.Race2],
-        [{group: 'gender', subindicator: 'Female'}, INDICATORS[title].groups.gender.Female],
+        [{ filterGroup: GROUPS[0], filter: "Male" }, 2],
+        [{ filterGroup: GROUPS[1], filter: "Race2" }, 1],
     ])('Extract groups correctly', (value, expected) => {
-        const chartData = si.getFilteredGroups(INDICATORS[title].groups, value.group, value.subindicator)
-        expect(chartData[0].value).toBe(expected.subindicator1.count);
-        expect(chartData[0].label).toBe('subindicator1');
-        expect(chartData[1].value).toBe(expected.subindicator2.count);
-        expect(chartData[1].label).toBe('subindicator2');
+      si.selectedGroup = value.filterGroup;
+      const chartData = si.getFilteredGroups(value.filter)
+
+      expect(chartData["Geography1"].length).toBe(expected);
     })
 
     test('Handles missing group correctly', () => {
-        const chartData = si.getFilteredGroups(INDICATORS[title].groups, 'Missing group', 'XXXXXX')
-        
-        expect(chartData.length).toBe(0)
+      si.selectedGroup = GROUPS[0];
+      const chartData = si.getFilteredGroups('XXXXXX')
+
+      expect(chartData["Geography1"].length).toBe(0)
     })
 
     test('Handles missing subindicator correctly', () => {
-        const chartData = si.getFilteredGroups(INDICATORS[title].groups, 'Gender', 'Missing subindicator')
-        
-        expect(chartData.length).toBe(0)
-    })
+      si.selectedGroup = GROUPS[0];
+      const chartData = si.getFilteredGroups('Missing subindicator')
 
-    test('Extracts subindicators correctly', () => {
-        const subindicators = si.getFilteredSubindicators(INDICATORS[title].subindicators)
-        expect(subindicators[0].value).toBe(INDICATORS[title].subindicators[0].count);
-        expect(subindicators[0].label).toBe(INDICATORS[title].subindicators[0].label);
-        expect(subindicators[1].value).toBe(INDICATORS[title].subindicators[1].count);
-        expect(subindicators[1].label).toBe(INDICATORS[title].subindicators[1].label);
+      expect(chartData["Geography1"].length).toBe(0)
     })
 
     describe('#getFilteredData', () => {
       test('all values returns the defaults', () => {
-        let chartData = si.getFilteredData('All values', '', title)
+        si.selectedGroup = GROUPS[0];
+        let chartData = si.getFilteredData('All values')
 
-        expect(chartData[0].value).toBe(INDICATORS[title].subindicators[0].count);
-        expect(chartData[0].label).toBe(INDICATORS[title].subindicators[0].label);
-        expect(chartData[1].value).toBe(INDICATORS[title].subindicators[1].count);
-        expect(chartData[1].label).toBe(INDICATORS[title].subindicators[1].label);
+        expect(chartData).toBe(CHILD_DATA);
       });
 
       test('group filter returns the subindcator values', () => {
-        let group = 'gender';
-        let subindicator = 'Female'
-        let subindicator1Name = INDICATORS[title].subindicators[0].label;
-        let subindicator2Name = INDICATORS[title].subindicators[1].label;
 
-        let chartData = si.getFilteredData(subindicator, group, title)
+        si.selectedGroup = GROUPS[0]
+        let chartData = si.getFilteredData('Female')
 
-        expect(chartData[0].value).toBe(INDICATORS[title].groups[group][subindicator][subindicator1Name].count);
-        expect(chartData[0].label).toBe(subindicator1Name);
+        expect(chartData["Geography1"].length).toBe(1);
+        expect(chartData["Geography1"][0]["gender"]).toBe("Female");
 
-        expect(chartData[1].value).toBe(INDICATORS[title].groups[group][subindicator][subindicator2Name].count);
-        expect(chartData[1].label).toBe(subindicator2Name);
-
+        expect(chartData["Geography2"].length).toBe(1);
+        expect(chartData["Geography2"][0]["gender"]).toBe("Female");
     })
   })
   describe('UI interactions', () => {

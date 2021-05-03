@@ -13,7 +13,7 @@ export class Indicator extends Observable {
     constructor(formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
         super();
         this.groups = [];
-        this.subindicators = indicatorData.subindicators;
+        this.indicatorData = indicatorData;
         this.formattingConfig = formattingConfig;
 
         indicatorClone = $(indicatorClass)[0].cloneNode(true);
@@ -24,9 +24,9 @@ export class Indicator extends Observable {
     }
 
     addIndicatorChart(wrapper, title, indicatorData, detail) {
-        let indicator = indicatorClone.cloneNode(true);
-        $(indicatorTitleClass, indicator).text(title);
-        $(chartDescClass, indicator).text(indicatorData.description);
+        let indicatorNode = indicatorClone.cloneNode(true);
+        $(indicatorTitleClass, indicatorNode).text(title);
+        $(chartDescClass, indicatorNode).text(indicatorData.description);
         const isLink = !isNull(indicatorData.metadata.url) && !isEmptyString(indicatorData.metadata.url);
 
         if (isLink) {
@@ -34,9 +34,9 @@ export class Indicator extends Observable {
             $(ele).text(indicatorData.metadata.source);
             $(ele).attr('href', indicatorData.metadata.url);
             $(ele).attr('target', '_blank');
-            $(sourceClass, indicator).html(ele);
+            $(sourceClass, indicatorNode).html(ele);
         } else {
-            $(sourceClass, indicator).text(indicatorData.metadata.source);
+            $(sourceClass, indicatorNode).text(indicatorData.metadata.source);
         }
 
         if (indicatorData.groups !== null && typeof indicatorData.groups !== 'undefined') {
@@ -49,10 +49,10 @@ export class Indicator extends Observable {
         const configuration = detail.indicators[title].chartConfiguration;
         const indicators = detail.indicators;
 
-        let hasValues = this.subindicators.some(function(e) { return e.count > 0 });
+        let hasValues = this.indicatorData.data.some(function(e) { return e.count > 0 });
 
         if (hasValues) {
-            let c = new Chart(configuration, this.subindicators, this.groups, indicators, indicator, title);
+            let c = new Chart(configuration, indicatorData, this.groups, indicatorNode, title);
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
@@ -60,10 +60,10 @@ export class Indicator extends Observable {
             ]);
 
             if (!isLast) {
-                $(indicator).removeClass('last');
+                $(indicatorNode).removeClass('last');
             }
 
-            wrapper.append(indicator);
+            wrapper.append(indicatorNode);
         }
     }
 }

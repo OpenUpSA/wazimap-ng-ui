@@ -37,7 +37,7 @@ function subindicatorsInSubCategory(subcategory) {
 }
 
 function subindicatorsInIndicator(indicator) {
-    return Object.values(indicator.subindicators).length;
+  return indicator.metadata.groups.length;
 }
 
 function indicatorHasChildren(indicator) {

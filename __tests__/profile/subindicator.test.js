@@ -22,25 +22,6 @@ const GROUPS = [
   { subindicators: ["Male", "Female"], name: "gender", },
   { subindicators: ["Race1", "Race2"], name: "race", }
 ];
-const INDICATORS = {
-    'Age by race': {
-        'groups': {
-            'gender': {
-                'Female': {'subindicator1': {'count': 10}, 'subindicator2': {'count': 20}},
-                'Male': {'subindicator1': {'count': 30}, 'subindicator2': {'count': 40}},
-            },
-            'race': {
-                'Race1': {'subindicator1': {'count': 50}, 'subindicator2': {'count': 60}},
-                'Race2': {'subindicator1': {'count': 70}, 'subindicator2': {'count': 80}},
-            },
-        },
-        'subindicators': [
-            {label: 'subindicator1', "count": 90},
-            {label: 'subindicator2', "count": 100},
-        ]
-    },
-    'Another indicator': {}
-}
 
 describe('SubindicatorFilter', () => {
   let si;
@@ -106,7 +87,7 @@ describe('SubindicatorFilter', () => {
     let dropdowns = $(document).find('.mapping-options__filter');
     const filterArea = $(document).find('.map-options__filters_content');
     applyFilter = jest.fn();
-    si = new SubindicatorFilter(filterArea, GROUPS, title, applyFilter, dropdowns, [], CHILD_DATA);
+    si = new SubindicatorFilter(filterArea, GROUPS, title, applyFilter, dropdowns, [], CHILD_DATA, true);
   })
 
 

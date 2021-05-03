@@ -13,53 +13,28 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
 
     controller.on('mapchip.choropleth.filtered', payload => {
-        const pp = payload.payload;
-        const ps = payload.state;
-        mapcontrol.displayChoropleth(pp.data, pp.subindicatorArr, ps.subindicator.choropleth_method);
+        payload.payload.indicatorTitle = payload.state.subindicator.indicatorTitle;
+
+        loadAndDisplayChoropleth(payload, mapcontrol, false, payload.payload.data);
     })
 
-    controller.on('newProfileWithChoropleth', payload => {
+    controller.on('newProfileWithChoropleth', args => {
         setTimeout(() => {
-            const pp = payload.payload;
-            const ps = payload.state;
-
-            if (typeof pp.data === 'undefined') {
-                //no data -- todo : reset choropleth
-                mapchip.removeMapChip();
-                return;
-            }
-            mapcontrol.displayChoropleth(pp.data, pp.subindicatorArr, ps.subindicator.choropleth_method);
-
-            if (typeof pp.indicators !== 'undefined') {
-                //indicators changed -- trigger onSubIndicatorChange
-                const args = {
-                    indicators: pp.indicators,
-                    subindicatorKey: ps.selectedSubindicator,
-                    indicatorTitle: ps.subindicator.indicatorTitle,
-                    filter: ps.subindicator.filter,
-                    children: ps.subindicator.children
-                }
-
-                mapchip.onSubIndicatorChange(args);
-            }
+            loadAndDisplayChoropleth(args, mapcontrol, true, null);
         }, 0);
     })
 
-    controller.on('map.choropleth.display', payload => mapchip.onChoropleth(payload.payload));
+    controller.on('map.choropleth.display', payload => {
+        payload.state.choroplethData = payload.payload.data;
+        mapchip.onChoropleth(payload.payload);
+    });
     controller.on('map_explorer.subindicator.click', payload => {
-        const ps = payload.state;
-        const method = ps.subindicator.choropleth_method;
-        mapcontrol.handleChoropleth(ps.subindicator, method)
+        loadAndDisplayChoropleth(payload, mapcontrol, true, null);
     })
 
-    controller.on('map_explorer.subindicator.click', payload => {
-        const pp = payload.payload;
-        const args = {
-            indicators: pp.indicators,
-            subindicatorKey: pp.obj.keys,
-            indicatorTitle: pp.indicatorTitle,
-            children: payload.state.subindicator.children,
-            category: pp.parents.category
+    mapcontrol.on('map.choropleth.loaded', args => {
+        if (!args.showMapchip) {
+            return;
         }
 
         mapchip.onSubIndicatorChange(args);
@@ -68,4 +43,16 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('redraw', payload => {
         controller.handleNewProfileChoropleth()
     })
+}
+
+function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, childData = null) {
+    const geo = payload.state.profile.geometries.boundary.properties.code;
+    const ps = payload.state;
+    const method = ps.subindicator.choropleth_method;
+    const indicatorTitle = payload.payload.indicatorTitle;
+    const selectedSubindicator = ps.selectedSubindicator;
+    const filter = ps.subindicator.filter;
+    let data = ps.subindicator.data
+    if (childData) data.child_data = childData;
+    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter);
 }

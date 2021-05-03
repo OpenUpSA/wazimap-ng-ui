@@ -394,7 +394,6 @@ export class Chart extends Observable {
   }
 
 
-
   getPercentageValue = (currentValue, subindicators) => {
     let percentage = 0;
     let total = 0;

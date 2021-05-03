@@ -40,59 +40,42 @@ function subindicatorsInIndicator(indicator) {
   return indicator.metadata.groups.length;
 }
 
-function indicatorHasChildren(indicator) {
-    const subindicators = indicator.subindicators;
-
-    if (subindicators == undefined || subindicators.length == 0)
-        return false
-
-    const hasChildren = Object.entries(subindicators).every(item => {
-        const subindicator = item[1];
-        return subindicator.children != undefined && Object.values(subindicator.children).length > 0
-    })
-
-    return hasChildren
-}
-
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
-    function addSubIndicators(wrapper, category, subcategory, indicator, subindicators, indicators) {
+    function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, choropleth_method, indicatorId) {
 
-        if (subindicators == undefined || !Array.isArray(subindicators)) {
-            console.log("Missing subindicators")
-        } else {
-            $(".data-category__h3", wrapper).remove();
-            $(".data-category__h4", wrapper).remove();
+        $(".data-category__h3", wrapper).remove();
+        $(".data-category__h4", wrapper).remove();
 
-            subindicators.forEach(subIndicator => {
-                if (subIndicator.label !== '') {
-                    const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
-                    $(".truncate", newSubIndicatorElement).text(subIndicator.label);
-                    $(newSubIndicatorElement).attr('title', subIndicator.label);
+        if (groups !== null && typeof groups.subindicators !== 'undefined') {
+            groups.subindicators.forEach((subindicator) => {
+                const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
+                $(".truncate", newSubIndicatorElement).text(subindicator);
+                $(newSubIndicatorElement).attr('title', subindicator);
 
-                    wrapper.append(newSubIndicatorElement);
+                wrapper.append(newSubIndicatorElement);
 
-                    const parents = {
-                        category: category,
-                        subcategory: subcategory,
-                        indicator: indicator
-                    }
-
-                    $(newSubIndicatorElement).on("click", (el) => {
-                        setActive(el);
-                        if (subindicatorCallback != undefined)
-                            subindicatorCallback({
-                                el: el,
-                                data: data,
-                                indicatorTitle: indicator,
-                                subindicators: subindicators,
-                                obj: subIndicator,
-                                indicators: indicators,
-                                parents: parents
-                            })
-                    });
+                const parents = {
+                    category: category,
+                    subcategory: subcategory,
+                    indicator: indicator
                 }
-            })
+
+                $(newSubIndicatorElement).on("click", (el) => {
+                    setActive(el);
+                    if (subindicatorCallback != undefined)
+                        subindicatorCallback({
+                            el: el,
+                            data: data,
+                            indicatorTitle: indicator,
+                            selectedSubindicator: subindicator,
+                            indicators: indicators,
+                            parents: parents,
+                            choropleth_method: choropleth_method,
+                            indicatorId: indicatorId
+                        })
+                });
+            });
         }
     }
 
@@ -113,7 +96,8 @@ export function loadMenu(data, subindicatorCallback) {
             $(h3Wrapper).append(newIndicator);
             const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
 
-            addSubIndicators(childWrapper, category, subcategory, indicator, detail.subindicators, indicators);
+            let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
+            addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail.choropleth_method, detail.id);
         }
     }
 

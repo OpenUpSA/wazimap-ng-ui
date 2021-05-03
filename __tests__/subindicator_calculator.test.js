@@ -1,35 +1,56 @@
 import SubindicatorCalculator from '../src/js/map/choropleth/subindicator_calculator';
 
+const CHILD_DATA = {
+    EC: [{
+        age: "15-19",
+        race: "Black african",
+        count: "3599.3753699998",
+        gender: "Female",
+        language: "Afrikaans"
+    },
+        {
+            age: "15-19",
+            race: "Black african",
+            count: "8665.81757999899",
+            gender: "Female",
+            language: "English"
+        }],
+    FS: [{
+        age: "15-19",
+        race: "Black african",
+        count: "3379.2461000001",
+        gender: "Female",
+        language: "Afrikaans"
+    },
+        {
+            age: "15-19",
+            race: "Black african",
+            count: "2877.36439000009",
+            gender: "Female",
+            language: "English"
+        }]
+};
+let PRIMARY_GROUP = "age";
+let SELECTED_SUBINDICATOR = "15-19";
+
 describe('SubindicatorCalculator', () => {
 
-  describe('#calculate', () => {
-    describe('all geography codes in both', () => {
-      it('calculates percentage', () => {
-        let expectedResult = [{ code: "code", val: 0.2 }];
-        let data = { code: 1 }
-        let subindicatorArr = [ { children: { code: 1 }}, { children: { code: 4 } }]
-        let bt = new SubindicatorCalculator();
+    describe('#calculate', () => {
+        describe('all geography codes in both', () => {
+            it('calculates percentage', () => {
+                let expectedResult = [{code: "EC", val: 1, total: 12265.19294999879}, {
+                    code: "FS",
+                    val: 1,
+                    total: 6256.61049000019
+                }];
+                let bt = new SubindicatorCalculator();
 
-        let result = bt.calculate({ data, subindicatorArr })
+                let result = bt.calculate(CHILD_DATA, PRIMARY_GROUP, SELECTED_SUBINDICATOR);
 
-        expect(result).toEqual(expectedResult)
+                expect(result).toEqual(expectedResult)
 
-      });
+            });
+        });
     });
-    describe('geography code not in children', () => {
-      it('calculates percentage', () => {
-        let expectedPercentage = 0.2
-        let expectedResult = [{ code: "code", val: expectedPercentage }];
-        let data = { code: 1 }
-        let subindicatorArr = [ { children: { code2: 1 }}, { children: { code: 5 } }]
-        let bt = new SubindicatorCalculator();
-
-        let result = bt.calculate({ data, subindicatorArr })
-
-        expect(result).toEqual(expectedResult)
-
-      });
-    });
-  });
 });
 

@@ -416,7 +416,8 @@ export class Chart extends Observable {
       ".profile-indicator__filters"
     );
 
-    let siFilter = new SubindicatorFilter(filterArea, groups, title, this.applyFilter, dropdowns);
+    let g = groups.filter((g) => { return g.name !== indicators.metadata.primary_group })
+    let siFilter = new SubindicatorFilter(filterArea, g, title, this.applyFilter, dropdowns, undefined, indicators.child_data);
     this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
   };
 
@@ -424,8 +425,8 @@ export class Chart extends Observable {
     this.filteredData = filteredData;
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
-      this.setDownloadUrl(); //ToDo: use vega for getting data?
-      this.vegaView.signal('filterIndicator', selectedGroup)
+      this.setDownloadUrl();
+      this.vegaView.signal('filterIndicator', selectedGroup.name)
       this.vegaView.signal('filterValue', selectedFilter)
       if(selectedGroup && selectedFilter !== "All values") {
         this.vegaView.signal('applyFilter', true).run()

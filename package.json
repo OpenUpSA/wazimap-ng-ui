@@ -17,6 +17,7 @@
     "d3-selection": "^1.4.1",
     "data-visualisations": "https://github.com/vulekamali/data-visualisations.git#reusable",
     "html2canvas": "^1.0.0-rc.5",
+    "i18next": "^20.2.1",
     "jquery": "^3.5.1",
     "js": "^0.1.0",
     "leaflet": "~1.3.1",

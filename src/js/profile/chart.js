@@ -4,7 +4,6 @@ import { select as d3select } from "d3-selection";
 import { Observable } from "../utils";
 import { defaultValues } from "../defaultValues";
 
-import { horizontalBarChart } from "../reusable-charts/horizontal-bar-chart";
 import { SubindicatorFilter } from "./subindicator_filter";
 
 import embed from "vega-embed";
@@ -343,7 +342,6 @@ export class Chart extends Observable {
     $(saveImgButton).on('click', () => {
       let chartTitle = self.getChartTitle(':');
       let fileName = 'chart.png';
-      barChart.saveAsPng(this.container, fileName, chartTitle);
       this.triggerEvent('profile.chart.saveAsPng', this);
     })
 

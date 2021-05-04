@@ -12,15 +12,14 @@ import embed from "vega-embed";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
-const graphValueTypes = [PERCENTAGE_TYPE, VALUE_TYPE];
+const graphValueTypes = {
+  'Percentage': PERCENTAGE_TYPE,
+  'Value': VALUE_TYPE
+};
 const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
 
 let tooltipClone = null;
-const typeIndex = {
-  'Percentage': 0,
-  'Value': 1
-}
 
 const MAX_RICH_TABLE_ROWS = 7
 
@@ -111,7 +110,7 @@ export class Chart extends Observable {
         },
         {
           name: "Units",
-          value: graphValueTypes[typeIndex[this.config.defaultType]]
+          value: graphValueTypes[this.config.defaultType]
         },
         {
           name: "applyFilter",
@@ -247,24 +246,31 @@ export class Chart extends Observable {
   };
 
   showChartDataTable = () => {
-    this.containerParent.find('.chart-table').remove();
+    this.containerParent.find('.profile-indicator__table').remove();
 
     let table = document.createElement('table');
-    $(table).addClass('chart-table');
+    $(table).addClass('profile-indicator__table profile-indicator__table_content');
     let thead = document.createElement('thead');
+    $(thead).addClass('profile-indicator__table_row--header');
     let headRow = document.createElement('tr');
+    $(headRow).addClass('profile-indicator__table_row');
     let headCol1 = document.createElement('th');
+    $(headCol1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
     $(headCol1).text(this.title);
     $(headRow).append(headCol1);
     let headCol2 = document.createElement('th');
+    $(headCol2).addClass('profile-indicator__table_cell');
     $(headCol2).text('Absolute');
     $(headRow).append(headCol2);
     let headCol3 = document.createElement('th');
+    $(headCol3).addClass('profile-indicator__table_cell');
     $(headCol3).text('Percentage');
     $(headRow).append(headCol3);
 
     $(thead).append(headRow);
     $(table).append(thead);
+
+    let tbody = document.createElement('tbody');
 
     const dataArr = this.vegaView.data('data_formatted');
     const primaryGroup = this.vegaView.signal('mainGroup');
@@ -274,17 +280,23 @@ export class Chart extends Observable {
       let absoluteVal = d.count;
       let percentageVal = d.percentage;
       let row = document.createElement('tr');
+      $(row).addClass('profile-indicator__table_row');
       let col1 = document.createElement('td');
+      $(col1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
       $(col1).text(d[primaryGroup]);
       let col2 = document.createElement('td');
       $(col2).text(d3format(formatting[VALUE_TYPE])(absoluteVal));
+      $(col2).addClass('profile-indicator__table_cell');
       let col3 = document.createElement('td');
+      $(col3).addClass('profile-indicator__table_cell');
       $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
       $(row).append(col1);
       $(row).append(col2);
       $(row).append(col3);
-      $(table).append(row);
+      $(tbody).append(row);
     })
+
+    $(table).append(tbody);
 
     this.containerParent.append(table);
     if (dataArr.length > MAX_RICH_TABLE_ROWS) {
@@ -339,12 +351,12 @@ export class Chart extends Observable {
       this.triggerEvent('profile.chart.saveAsPng', this);
     })
 
-    //todo:don't use index, specific class names should be used here when the classes are ready
-    $(this.containerParent).find('.hover-menu__content_list a').each(function (index) {
+    $(this.containerParent).find('.hover-menu__content_list a').each(function () {
       $(this).off('click');
       $(this).on('click', () => {
-        self.selectedGraphValueTypeChanged(self.containerParent, index);
-        self.vegaView.signal("Units", graphValueTypes[index]).run()
+        let displayType = $(this).data('id');
+        self.selectedGraphValueTypeChanged(self.containerParent, displayType);
+        self.vegaView.signal("Units", graphValueTypes[displayType]).run();
         self.setDownloadUrl();
       })
     });
@@ -352,9 +364,10 @@ export class Chart extends Observable {
     this.disableChartTypeToggle(this.config.disableToggle);
 
 
-    $(this.containerParent).find('.hover-menu__content_list--last a').each(function (index) {
+    $(this.containerParent).find('.hover-menu__content_list--last a').each(function () {
       $(this).off('click');
       $(this).on('click', () => {
+        let exportType = $(this).data('id');
         const downloadFn = {
           0: {type: 'csv', fn: self.exportAsCsv},
           1: {type: 'excel', fn: self.exportAsExcel},
@@ -369,15 +382,16 @@ export class Chart extends Observable {
     });
   };
 
-  selectedGraphValueTypeChanged = (containerParent, index) => {
-    this.graphValueType = graphValueTypes[index];
+  selectedGraphValueTypeChanged = (containerParent, selectedDisplayType) => {
+    this.graphValueType = selectedDisplayType;
     this.triggerEvent("profile.chart.valueTypeChanged", this);
     $(containerParent)
       .find(".hover-menu__content_list a")
-      .each(function (itemIndex) {
+      .each(function () {
+        let itemDisplayType = $(this).data('id');
         $(this).removeClass("active");
 
-        if (index === itemIndex) {
+        if (itemDisplayType === selectedDisplayType) {
           $(this).addClass("active");
         }
       });

@@ -98,20 +98,17 @@ export default class Controller extends Observable {
      * @return {[type]}         [description]
      */
     onSubIndicatorClick(payload) {
-        const children = payload.subindicators.filter((s) => {
-            return s.keys === payload.obj.keys;
-        })[0].children;
         const subindicator = {
             indicatorTitle: payload.indicatorTitle,
-            children: children,
-            selectedSubindicator: payload.obj.keys,
-            choropleth_method: payload.obj.choropleth_method,
-            subindicatorArr: payload.subindicators,
+            selectedSubindicator: payload.selectedSubindicator,
+            choropleth_method: payload.choropleth_method,
             parents: payload.parents,
-            chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration
+            data: payload.indicators[payload.indicatorTitle],
+            chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,
+            indicatorId: payload.indicatorId
         }
         this.state.subindicator = subindicator;
-        this.state.selectedSubindicator = payload.obj._keys;
+        this.state.selectedSubindicator = payload.selectedSubindicator;
 
         this.triggerEvent("map_explorer.subindicator.click", payload);
     };
@@ -136,28 +133,19 @@ export default class Controller extends Observable {
             return;
         }
 
-        //this means we need to show choropleth for the new children. update payload.state.subindicator.children and payload.state.subindicator.subindicatorArr
         let indicators = this.state.profile.profile
             .profileData[this.state.subindicator.parents.category]
             .subcategories[this.state.subindicator.parents.subcategory]
             .indicators;
 
-        let subindicatorArr = indicators[this.state.subindicator.parents.indicator].subindicators;
+        let childData = indicators[this.state.subindicator.parents.indicator].child_data;
+        let data = indicators[this.state.subindicator.parents.indicator].data;
 
-        let selectedSubindicator = subindicatorArr.filter((s) => {
-            return s.keys === this.state.subindicator.selectedSubindicator
-        })[0];
-        let children = selectedSubindicator.children;
-        let choropleth_method = selectedSubindicator.choropleth_method;
+        this.state.subindicator.data.data = data;
+        this.state.subindicator.data.child_data = childData;
 
-        this.state.subindicator.selectedSubindicator = selectedSubindicator.keys;
-        this.state.subindicator.children = children;
-        this.state.subindicator.choropleth_method = choropleth_method;
-
-        const args = {
-            data: children,
-            subindicatorArr: subindicatorArr,
-            indicators: indicators
+        let args = {
+            indicatorTitle: this.state.subindicator.indicatorTitle
         }
 
         this.triggerEvent("newProfileWithChoropleth", args);
@@ -197,7 +185,6 @@ export default class Controller extends Observable {
                     // self.registerWebflowEvents();
                 }
             }, 600)
-            document.title = dataBundle.overview.name;
         })
     }
 
@@ -261,6 +248,14 @@ export default class Controller extends Observable {
     onBreadcrumbSelected(payload) {
         this.triggerEvent('controller.breadcrumbs.selected', payload);
         this.changeHash(payload.code)
+    }
+    
+    onTutorial(event, payload) {
+        this.triggerEvent(event)
+    }
+
+    onTabClicked(event) {
+        this.triggerEvent(event)
     }
 
     /**

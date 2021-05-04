@@ -37,6 +37,11 @@ export class API extends Observable {
         return this.loadUrl(url, {'wm-hostname': hostname});
     }
 
+    loadChoroplethData(profileId, areaCode, indicatorId){
+        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/`;
+        return this.loadUrl(url);
+    }
+
     loadThemes(profileId) {
         const url = `${this.baseUrl}/profile/${profileId}/points/themes/?format=json`;
         return this.loadUrl(url);
@@ -53,6 +58,11 @@ export class API extends Observable {
             url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/points/?format=json`;
         else
             url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/geography/${areaCode}/points/?format=json`;
+        return this.loadUrl(url);
+    }
+
+    loadAllPoints(profileId, areaCode){
+        let url =`${this.baseUrl}/api/v1/profile/${profileId}/points/geography/${areaCode}/points/?format=json`
         return this.loadUrl(url);
     }
 

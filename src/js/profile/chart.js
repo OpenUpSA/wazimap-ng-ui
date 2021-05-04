@@ -4,7 +4,6 @@ import { select as d3select } from "d3-selection";
 import { Observable } from "../utils";
 import { defaultValues } from "../defaultValues";
 
-import { horizontalBarChart } from "../reusable-charts/horizontal-bar-chart";
 import { SubindicatorFilter } from "./subindicator_filter";
 import XLSX from 'xlsx';
 import Papa from 'papaparse';
@@ -21,6 +20,8 @@ const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
 
 let tooltipClone = null;
+
+const MAX_RICH_TABLE_ROWS = 7
 
 export class Chart extends Observable {
   constructor(
@@ -245,24 +246,30 @@ export class Chart extends Observable {
   };
 
   showChartDataTable = () => {
-    this.containerParent.find('.chart-table').remove();
+    this.containerParent.find('.profile-indicator__table').remove();
 
     let table = document.createElement('table');
-    $(table).addClass('chart-table');
+    $(table).addClass('profile-indicator__table profile-indicator__table_content');
     let thead = document.createElement('thead');
+    $(thead).addClass('profile-indicator__table_row--header');
     let headRow = document.createElement('tr');
+    $(headRow).addClass('profile-indicator__table_row');
     let headCol1 = document.createElement('th');
+    $(headCol1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
     $(headCol1).text(this.title);
     $(headRow).append(headCol1);
     let headCol2 = document.createElement('th');
+    $(headCol2).addClass('profile-indicator__table_cell');
     $(headCol2).text('Absolute');
     $(headRow).append(headCol2);
     let headCol3 = document.createElement('th');
+    $(headCol3).addClass('profile-indicator__table_cell');
     $(headCol3).text('Percentage');
     $(headRow).append(headCol3);
 
     $(thead).append(headRow);
     $(table).append(thead);
+    let tbody = document.createElement('tbody');
 
     const dataArr = this.vegaView.data('data_formatted');
     const primaryGroup = this.vegaView.signal('mainGroup');
@@ -272,19 +279,39 @@ export class Chart extends Observable {
       let absoluteVal = d.count;
       let percentageVal = d.percentage;
       let row = document.createElement('tr');
+      $(row).addClass('profile-indicator__table_row');
       let col1 = document.createElement('td');
+      $(col1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
       $(col1).text(d[primaryGroup]);
       let col2 = document.createElement('td');
       $(col2).text(d3format(formatting[VALUE_TYPE])(absoluteVal));
+      $(col2).addClass('profile-indicator__table_cell');
       let col3 = document.createElement('td');
+      $(col3).addClass('profile-indicator__table_cell');
       $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
       $(row).append(col1);
       $(row).append(col2);
       $(row).append(col3);
-      $(table).append(row);
+      $(tbody).append(row);
     })
 
+    $(table).append(tbody);
+
     this.containerParent.append(table);
+    if (dataArr.length > MAX_RICH_TABLE_ROWS) {
+      let showExtraRows = false;
+      let btnDiv = document.createElement('div');
+      $(btnDiv).addClass('profile-indicator__table_show-more profile-indicator__table_showing profile-indicator__table_load-more');
+      let btn = document.createElement('button');
+      $(btn).text('Load more rows');
+      $(btn).on("click", () => {
+        showExtraRows = !showExtraRows;
+        showExtraRows ? $(btn).text('Show less rows') : $(btn).text('Load more rows');
+        showExtraRows ? $(table).removeClass("profile-indicator__table_content") : $(table).addClass("profile-indicator__table_content");
+      })
+      btnDiv.append(btn);
+      this.containerParent.append(btnDiv);
+    }
   }
 
   setChartDomain(chart, config, chartType) {
@@ -320,7 +347,6 @@ export class Chart extends Observable {
     $(saveImgButton).on('click', () => {
       let chartTitle = self.getChartTitle(':');
       let fileName = 'chart.png';
-      barChart.saveAsPng(this.container, fileName, chartTitle);
       this.triggerEvent('profile.chart.saveAsPng', this);
     })
 
@@ -393,7 +419,8 @@ export class Chart extends Observable {
       ".profile-indicator__filters"
     );
 
-    let siFilter = new SubindicatorFilter(filterArea, groups, title, this.applyFilter, dropdowns);
+    let g = groups.filter((g) => { return g.name !== indicators.metadata.primary_group })
+    let siFilter = new SubindicatorFilter(filterArea, g, title, this.applyFilter, dropdowns, undefined, indicators.child_data);
     this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
   };
 
@@ -401,8 +428,8 @@ export class Chart extends Observable {
     this.filteredData = filteredData;
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
-      this.setDownloadUrl(); //ToDo: use vega for getting data?
-      this.vegaView.signal('filterIndicator', selectedGroup)
+      this.setDownloadUrl();
+      this.vegaView.signal('filterIndicator', selectedGroup.name)
       this.vegaView.signal('filterValue', selectedFilter)
       if(selectedGroup && selectedFilter !== "All values") {
         this.vegaView.signal('applyFilter', true).run()

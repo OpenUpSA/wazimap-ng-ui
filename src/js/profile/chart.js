@@ -438,6 +438,7 @@ export class Chart extends Observable {
       } else {
         this.vegaView.signal('applyFilter', false).run()
       }
+    this.showChartDataTable();
   };
 
   exportAsCsv = () => {

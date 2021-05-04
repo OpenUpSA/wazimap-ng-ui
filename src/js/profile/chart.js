@@ -5,6 +5,8 @@ import { Observable } from "../utils";
 import { defaultValues } from "../defaultValues";
 
 import { SubindicatorFilter } from "./subindicator_filter";
+import XLSX from 'xlsx';
+import Papa from 'papaparse';
 
 import embed from "vega-embed";
 
@@ -239,74 +241,66 @@ export class Chart extends Observable {
       .then(async (result) => {
         this.vegaView = result.view;
         this.setChartMenu();
+        this.showChartDataTable();
       })
       .catch(console.error);
   };
 
   showChartDataTable = () => {
-    let data = this.getValuesFromSubindicators();
+    this.containerParent.find('.chart-table').remove();
 
-        this.containerParent.find('.profile-indicator__table').remove();
+    let table = document.createElement('table');
+    $(table).addClass('chart-table');
+    let thead = document.createElement('thead');
+    let headRow = document.createElement('tr');
+    let headCol1 = document.createElement('th');
+    $(headCol1).text(this.title);
+    $(headRow).append(headCol1);
+    let headCol2 = document.createElement('th');
+    $(headCol2).text('Absolute');
+    $(headRow).append(headCol2);
+    let headCol3 = document.createElement('th');
+    $(headCol3).text('Percentage');
+    $(headRow).append(headCol3);
 
-        let table = document.createElement('table');
-        $(table).addClass('profile-indicator__table profile-indicator__table_content');
-        let thead = document.createElement('thead');
-        $(thead).addClass('profile-indicator__table_row--header');
-        let headRow = document.createElement('tr');
-        $(headRow).addClass('profile-indicator__table_row');
-        let headCol1 = document.createElement('th');
-        $(headCol1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
-        $(headCol1).text(this.title);
-        $(headRow).append(headCol1);
-        let headCol2 = document.createElement('th');
-        $(headCol2).addClass('profile-indicator__table_cell');
-        $(headCol2).text('Absolute');
-        $(headRow).append(headCol2);
-        let headCol3 = document.createElement('th');
-        $(headCol3).addClass('profile-indicator__table_cell');
-        $(headCol3).text('Percentage');
-        $(headRow).append(headCol3);
+    $(thead).append(headRow);
+    $(table).append(thead);
 
-        $(thead).append(headRow);
-        $(table).append(thead);
-        let tbody = document.createElement('tbody');
-    
-    
-        for (const [label, subindicator] of Object.entries(this.subindicators)) {
-            let absolute_val = subindicator.count;
-            let percentage_val = this.getPercentageValue(absolute_val, this.subindicators);
-            let row = document.createElement('tr');
-            $(row).addClass('profile-indicator__table_row');
-            let col1 = document.createElement('td');
-            $(col1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
-            $(col1).text(subindicator.keys);
-            let col2 = document.createElement('td');
-            $(col2).addClass('profile-indicator__table_cell');
-            $(col2).text(d3format(this.config.types[VALUE_TYPE].formatting)(absolute_val));
-            let col3 = document.createElement('td');
-            $(col3).addClass('profile-indicator__table_cell');
-            $(col3).text(d3format(this.config.types[PERCENTAGE_TYPE].formatting)(percentage_val));
-            $(row).append(col1);
-            $(row).append(col2);
-            $(row).append(col3);
-            $(tbody).append(row);
-        }
-        $(table).append(tbody);
-        this.containerParent.append(table);
-        if (data.length > MAX_RICH_TABLE_ROWS) {
-          let showExtraRows = false;
-          let btnDiv = document.createElement('div');
-          $(btnDiv).addClass('profile-indicator__table_show-more profile-indicator__table_showing profile-indicator__table_load-more');
-          let btn = document.createElement('button');
-          $(btn).text('Load more rows');
-          $(btn).on("click", () => {
-            showExtraRows = !showExtraRows;
-            showExtraRows ? $(btn).text('Show less rows') : $(btn).text('Load more rows');
-            showExtraRows ? $(table).removeClass("profile-indicator__table_content") : $(table).addClass("profile-indicator__table_content");
-          })
-          btnDiv.append(btn);
-          this.containerParent.append(btnDiv);
-        }
+    const dataArr = this.vegaView.data('data_formatted');
+    const primaryGroup = this.vegaView.signal('mainGroup');
+    const formatting = this.vegaView.signal('numberFormat');
+
+    dataArr.forEach((d) => {
+      let absoluteVal = d.count;
+      let percentageVal = d.percentage;
+      let row = document.createElement('tr');
+      let col1 = document.createElement('td');
+      $(col1).text(d[primaryGroup]);
+      let col2 = document.createElement('td');
+      $(col2).text(d3format(formatting[VALUE_TYPE])(absoluteVal));
+      let col3 = document.createElement('td');
+      $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
+      $(row).append(col1);
+      $(row).append(col2);
+      $(row).append(col3);
+      $(table).append(row);
+    })
+
+    this.containerParent.append(table);
+    if (dataArr.length > MAX_RICH_TABLE_ROWS) {
+      let showExtraRows = false;
+      let btnDiv = document.createElement('div');
+      $(btnDiv).addClass('profile-indicator__table_show-more profile-indicator__table_showing profile-indicator__table_load-more');
+      let btn = document.createElement('button');
+      $(btn).text('Load more rows');
+      $(btn).on("click", () => {
+        showExtraRows = !showExtraRows;
+        showExtraRows ? $(btn).text('Show less rows') : $(btn).text('Load more rows');
+        showExtraRows ? $(table).removeClass("profile-indicator__table_content") : $(table).addClass("profile-indicator__table_content");
+      })
+      btnDiv.append(btn);
+      this.containerParent.append(btnDiv);
+    }
   }
 
   setChartDomain(chart, config, chartType) {
@@ -362,10 +356,10 @@ export class Chart extends Observable {
       $(this).off('click');
       $(this).on('click', () => {
         const downloadFn = {
-          0: {type: 'csv', fn: barChart.exportAsCsv},
-          1: {type: 'excel', fn: barChart.exportAsExcel},
-          2: {type: 'json', fn: barChart.exportAsJson},
-          3: {type: 'kml', fn: barChart.exportAsKml},
+          0: {type: 'csv', fn: self.exportAsCsv},
+          1: {type: 'excel', fn: self.exportAsExcel},
+          2: {type: 'json', fn: self.exportAsJson},
+          3: {type: 'kml', fn: self.exportAsKml},
         }[index];
         self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
@@ -389,10 +383,10 @@ export class Chart extends Observable {
       });
 
   };
+
   getChartTitle = (separator) => {
     return this.selectedGroup === null ? `${this.title}` : `${this.title} by ${this.selectedGroup} ${separator} ${this.selectedFilter}`;
   }
-
 
   getPercentageValue = (currentValue, subindicators) => {
     let percentage = 0;
@@ -431,4 +425,46 @@ export class Chart extends Observable {
         this.vegaView.signal('applyFilter', false).run()
       }
   };
+
+  exportAsCsv = () => {
+    const data = this.vegaView.data('table');
+
+    const fileName = `${this.title}.csv`;
+
+    let csvContent = "data:text/csv;charset=utf-8,"
+        + Papa.unparse(data);
+
+    let encodedUri = encodeURI(csvContent);
+    let link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link); // Required for FF
+
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  exportAsExcel = () => {
+    const table = this.vegaView.data('table');
+    // export json (only array possible) to Worksheet of Excel
+    const data = XLSX.utils.json_to_sheet(table);
+    // A workbook is the name given to an Excel file
+    const wb = XLSX.utils.book_new(); // make Workbook of Excel
+    // add Worksheet to Workbook
+    XLSX.utils.book_append_sheet(wb, data, this.title);
+    // export Excel file
+    XLSX.writeFile(wb, this.title + '.xlsx');
+  }
+
+  exportAsJson = () => {
+      const data = this.vegaView.data('table');
+
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+      var downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", this.title + ".json");
+      document.body.appendChild(downloadAnchorNode); // required for firefox
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+  }
 }

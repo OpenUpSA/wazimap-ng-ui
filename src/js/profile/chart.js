@@ -269,6 +269,7 @@ export class Chart extends Observable {
 
     $(thead).append(headRow);
     $(table).append(thead);
+
     let tbody = document.createElement('tbody');
 
     const dataArr = this.vegaView.data('data_formatted');
@@ -368,14 +369,15 @@ export class Chart extends Observable {
       $(this).on('click', () => {
         let exportType = $(this).data('id');
         const downloadFn = {
-          'csv': self.exportAsCsv,
-          'excel': self.exportAsExcel,
-          'json': self.exportAsJson
-        }[exportType];
+          0: {type: 'csv', fn: self.exportAsCsv},
+          1: {type: 'excel', fn: self.exportAsExcel},
+          2: {type: 'json', fn: self.exportAsJson},
+          3: {type: 'kml', fn: self.exportAsKml},
+        }[index];
         self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
 
         let fileName = self.getChartTitle('-');
-        downloadFn(fileName);
+        downloadFn.fn(fileName);
       })
     });
   };
@@ -438,42 +440,13 @@ export class Chart extends Observable {
       }
   };
 
-  getExportData = (isArray = false) => {
-    const data = this.vegaView.data('data_formatted');
-    const primaryGroup = this.vegaView.signal('mainGroup');
-    const formatting = this.vegaView.signal('numberFormat');
-    const datatypes  = this.vegaView.signal('datatype');
-    let rows = [];
-
-    if (isArray){
-        rows.push([primaryGroup, datatypes[VALUE_TYPE], datatypes[PERCENTAGE_TYPE]]);
-    }
-
-    data.forEach(function (rowArray) {
-      let row = isArray ? [] : {};
-      if (isArray){
-          row.push(rowArray[primaryGroup]);
-          row.push(d3format(formatting[VALUE_TYPE])(rowArray[datatypes[VALUE_TYPE]]));
-          row.push(d3format(formatting[PERCENTAGE_TYPE])(rowArray[datatypes[PERCENTAGE_TYPE]]));
-      }
-      else{
-          row[primaryGroup] = rowArray[primaryGroup];
-          row[datatypes[VALUE_TYPE]] = d3format(formatting[VALUE_TYPE])(rowArray[datatypes[VALUE_TYPE]]);
-          row[datatypes[PERCENTAGE_TYPE]] = d3format(formatting[PERCENTAGE_TYPE])(rowArray[datatypes[PERCENTAGE_TYPE]]);
-      }
-      rows.push(row);
-    });
-
-    return rows;
-  }
-
   exportAsCsv = () => {
-    const exportData = this.getExportData(true);
+    const data = this.vegaView.data('table');
 
     const fileName = `${this.title}.csv`;
 
     let csvContent = "data:text/csv;charset=utf-8,"
-        + Papa.unparse(exportData);
+        + Papa.unparse(data);
 
     let encodedUri = encodeURI(csvContent);
     let link = document.createElement("a");
@@ -486,21 +459,21 @@ export class Chart extends Observable {
   }
 
   exportAsExcel = () => {
-    const exportData = this.getExportData();
+    const table = this.vegaView.data('table');
     // export json (only array possible) to Worksheet of Excel
-    const data = XLSX.utils.json_to_sheet(exportData);
+    const data = XLSX.utils.json_to_sheet(table);
     // A workbook is the name given to an Excel file
     const wb = XLSX.utils.book_new(); // make Workbook of Excel
     // add Worksheet to Workbook
-    XLSX.utils.book_append_sheet(wb, data, 'Chart data');
+    XLSX.utils.book_append_sheet(wb, data, this.title);
     // export Excel file
     XLSX.writeFile(wb, this.title + '.xlsx');
   }
 
   exportAsJson = () => {
-      const exportData = this.getExportData();
+      const data = this.vegaView.data('table');
 
-      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData));
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
       var downloadAnchorNode = document.createElement('a');
       downloadAnchorNode.setAttribute("href", dataStr);
       downloadAnchorNode.setAttribute("download", this.title + ".json");

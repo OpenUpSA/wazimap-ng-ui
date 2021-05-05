@@ -119,8 +119,9 @@ describe('profile header', () => {
     const geometries = {themes: []};
     const api = null;
     const geography = {code: 'ZA'};
+    const config = {};
 
     test('initialize successully', () => {
-        const header = new Profile_header(parents, geometries, api, null, geography);
+        const header = new Profile_header(parents, geometries, api, null, geography, config);
     })
 })

@@ -337,9 +337,7 @@ export class Chart extends Observable {
             data: this.data,
             selectedSubindicator: selectedSubindicator,
             indicatorTitle: this.title,
-            showMapchip: true,
-            parents: this.parents,
-            description: this.data.metadata.description
+            parents: this.parents
         }
 
         this.triggerEvent('profile.chart.choroplethClicked', args);

@@ -124,7 +124,6 @@ export default class Controller extends Observable {
         }
 
         this.state.subindicator = subindicator;
-        console.log({subindicator})
 
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }

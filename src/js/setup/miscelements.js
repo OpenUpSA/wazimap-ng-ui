@@ -34,4 +34,7 @@ export function configureMiscElementEvents(controller) {
 
     sidePanels.togglePanel(defaultPanel);
 
+    controller.on('profile.chart.choroplethClicked', payload => {
+        sidePanels.richDataPanel.richData.click()
+    })
 }

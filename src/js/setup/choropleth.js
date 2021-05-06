@@ -40,6 +40,22 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         mapchip.onSubIndicatorChange(args);
     });
 
+    controller.on('profile.chart.choroplethClicked', (payload) => {
+        console.log({payload})
+        const subindicator = {
+            indicatorTitle: payload.payload.indicatorTitle,
+            selectedSubindicator: payload.payload.selectedSubindicator,
+            choropleth_method: payload.payload.data.choropleth_method,
+            parents: payload.payload.parents,
+            data: payload.payload.data,
+            chartConfiguration: payload.payload.data.chartConfiguration,
+            indicatorId: payload.indicatorId
+        }
+        payload.state.subindicator = subindicator;
+        mapcontrol.displayChoropleth(payload.payload.data.child_data, payload.payload.data.metadata.primary_group, payload.payload.data.choropleth_method, payload.payload.selectedSubindicator)
+        mapchip.onSubIndicatorChange(payload.payload);
+    })
+
     controller.on('redraw', payload => {
         controller.handleNewProfileChoropleth()
     })

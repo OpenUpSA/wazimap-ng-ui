@@ -99,7 +99,6 @@ export class SidePanels extends Observable {
 
     initialiseBlankTriggers = () => {
         this.emptyPanel.richData.click(() => {
-            console.log('initialiseBlankTriggers');
             this.triggerEvent('panel.rich_data.opened');
         })
 
@@ -113,7 +112,6 @@ export class SidePanels extends Observable {
     }
 
     toggleRichData = () => {
-        console.log('toggleRichData')
         this.emptyPanel.richData.click();
     }
 

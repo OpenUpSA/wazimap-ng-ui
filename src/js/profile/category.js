@@ -23,6 +23,7 @@ export class Category extends Observable {
 
         this.id = _id;
         this.formattingConfig = formattingConfig;
+        this.category = category;
 
         this.prepareDomElements();
         this.addCategory(category, detail, isFirst);
@@ -74,11 +75,11 @@ export class Category extends Observable {
             let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
             if (hasChildren) {
                 let isFirst = index === 0;
-                let sc = new Subcategory(this.formattingConfig, wrapper, subcategory, detail, isFirst);
+                let sc = new Subcategory(this.formattingConfig, wrapper, subcategory, detail, isFirst, {category : this.category});
                 this.bubbleEvents(sc, [
                     'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                     'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                    'point_tray.subindicator_filter.filter'
+                    'point_tray.subindicator_filter.filter', 'profile.chart.choroplethClicked'
                 ]);
             }
             index++;

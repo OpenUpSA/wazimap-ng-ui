@@ -10,11 +10,12 @@ const chartDescClass = '.profile-indicator__chart_description p';
 const sourceClass = '.data-source';
 
 export class Indicator extends Observable {
-    constructor(formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
+    constructor(formattingConfig, wrapper, title, indicatorData, detail, _isLast, _parents) {
         super();
         this.groups = [];
         this.indicatorData = indicatorData;
         this.formattingConfig = formattingConfig;
+        this.parents = _parents;
 
         indicatorClone = $(indicatorClass)[0].cloneNode(true);
 
@@ -52,11 +53,11 @@ export class Indicator extends Observable {
         let hasValues = this.indicatorData.data.some(function(e) { return e.count > 0 });
 
         if (hasValues) {
-            let c = new Chart(configuration, indicatorData, this.groups, indicatorNode, title);
+            let c = new Chart(configuration, indicatorData, this.groups, indicatorNode, title, this.parents);
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter'
+                'point_tray.subindicator_filter.filter','profile.chart.choroplethClicked'
             ]);
 
             if (!isLast) {

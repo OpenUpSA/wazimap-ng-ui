@@ -13,12 +13,14 @@ const descriptionTextClass = '.sub-category-header__description p';
 const descriptionClass = '.sub-category-header__description';
 
 export class Subcategory extends Observable {
-    constructor(formattingConfig, wrapper, subcategory, detail, _isFirst) {
+    constructor(formattingConfig, wrapper, subcategory, detail, _isFirst, _parents) {
         super();
 
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
         isFirst = _isFirst;
         this.formattingConfig = formattingConfig;
+        this.parents = _parents;
+        this.subcategory  = subcategory;
 
         this.addKeyMetrics($(scHeaderClone), detail);
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
@@ -49,14 +51,15 @@ export class Subcategory extends Observable {
         let formattingConfig = this.formattingConfig;
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
+        this.parents['subcategory'] = this.subcategory;
 
         for (const [title, indicatorData] of Object.entries(detail.indicators)) {
             let isLast = index === lastIndex;
-            let i = new Indicator(formattingConfig, wrapper, title, indicatorData, detail, isLast);
+            let i = new Indicator(formattingConfig, wrapper, title, indicatorData, detail, isLast, this.parents);
             this.bubbleEvents(i, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter'
+                'point_tray.subindicator_filter.filter','profile.chart.choroplethClicked'
             ]);
             index++;
         }

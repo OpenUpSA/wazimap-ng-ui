@@ -145,24 +145,34 @@ describe('downloading facilities', () => {
     const geography = {code: 'ZA'};
     let config = {};
 
-    document.body.innerHTML = `
-<div class="location-facility">
-    <a href="#" class="location-facility__list_item w-inline-block">
-        <div class="location-facility__item_name">
-          <div class="truncate">Thusong centres (unverified)</div>
-        </div>
-        <div class="location-facility__item_value">
-          <div>140</div>
-        </div>
-        <div id="w-node-a4312e607bde-e148319d" class="location-facility__item_download" data-testid='download-btn'>
-          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <path d="M0 0h24v24H0z" fill="none"></path>
-              <path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
-            </svg>
+    beforeEach(() => {
+        document.body.innerHTML = `
+<div class="location__facilities">
+    <div class="location__facilities_content">
+        <div class="location__facilities_content-wrapper">
+            <div class="location-facility">
+                <div class="location-facility__list">
+                    <a href="#" class="location-facility__list_item w-inline-block">
+                    <div class="location-facility__item_name">
+                      <div class="truncate">Thusong centres (unverified)</div>
+                    </div>
+                    <div class="location-facility__item_value">
+                      <div>140</div>
+                    </div>
+                    <div id="w-node-a4312e607bde-e148319d" class="location-facility__item_download" data-testid='download-btn'>
+                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <path d="M0 0h24v24H0z" fill="none"></path>
+                          <path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+                        </svg>
+                        </div>
+                    </div>
+                </a>
+                </div>
             </div>
         </div>
-    </a>
+    </div>
 </div>`;
+    })
 
     test('download is enabled', () => {
         const header = new Profile_header(parents, geometries, api, null, geography, config);

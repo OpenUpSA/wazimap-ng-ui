@@ -39,6 +39,7 @@ export class Chart extends Observable {
     this.config = config;
     this.selectedFilter = null;
     this.selectedGroup = null;
+    this.table = null;
 
     tooltipClone = $(tooltipClass)[0].cloneNode(true);
     this.subCategoryNode = _subCategoryNode;
@@ -246,10 +247,15 @@ export class Chart extends Observable {
   };
 
   showChartDataTable = () => {
+      this.createDataTable();
+      this.appendDataToTable();
+  }
+
+  createDataTable = () => {
     this.containerParent.find('.profile-indicator__table').remove();
 
-    let table = document.createElement('table');
-    $(table).addClass('profile-indicator__table profile-indicator__table_content');
+    this.table = document.createElement('table');
+    $(this.table).addClass('profile-indicator__table profile-indicator__table_content');
     let thead = document.createElement('thead');
     $(thead).addClass('profile-indicator__table_row--header');
     let headRow = document.createElement('tr');
@@ -268,7 +274,13 @@ export class Chart extends Observable {
     $(headRow).append(headCol3);
 
     $(thead).append(headRow);
-    $(table).append(thead);
+    $(this.table).append(thead);
+
+    this.containerParent.append(this.table);
+  }
+
+  appendDataToTable = () => {
+    $(this.table).find('tbody').remove();
 
     let tbody = document.createElement('tbody');
 
@@ -296,9 +308,8 @@ export class Chart extends Observable {
       $(tbody).append(row);
     })
 
-    $(table).append(tbody);
+    $(this.table).append(tbody);
 
-    this.containerParent.append(table);
     if (dataArr.length > MAX_RICH_TABLE_ROWS) {
       let showExtraRows = false;
       let btnDiv = document.createElement('div');
@@ -308,7 +319,7 @@ export class Chart extends Observable {
       $(btn).on("click", () => {
         showExtraRows = !showExtraRows;
         showExtraRows ? $(btn).text('Show less rows') : $(btn).text('Load more rows');
-        showExtraRows ? $(table).removeClass("profile-indicator__table_content") : $(table).addClass("profile-indicator__table_content");
+        showExtraRows ? $(table).removeClass("profile-indicator__table_content") : $(this.table).addClass("profile-indicator__table_content");
       })
       btnDiv.append(btn);
       this.containerParent.append(btnDiv);
@@ -438,7 +449,7 @@ export class Chart extends Observable {
       } else {
         this.vegaView.signal('applyFilter', false).run()
       }
-    this.showChartDataTable();
+    this.appendDataToTable();
   };
 
   exportAsCsv = () => {

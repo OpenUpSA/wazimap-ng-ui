@@ -26,7 +26,7 @@ export class Profile_header extends Observable {
         this.api = _api;
         this.profileId = _profileId;
         this.config = _config;
-        this.facilityDownloadEnabled = true;
+        this.isDownloadsDisabled = false;
 
         parents = _parents;
         geometries = _geometries;
@@ -41,19 +41,16 @@ export class Profile_header extends Observable {
 
         $(downloadAllFacilities).on('click', () => this.downloadAllFacilities());
 
-        this.checkIfDownloadsEnabled();
+        this.checkIfDownloadsDisabled();
         this.setPointSource();
         this.addBreadCrumbs();
         this.addFacilities();
         this.setLocationDescription();
     }
 
-    checkIfDownloadsEnabled = () => {
-        if (typeof this.config['richdata'] === 'undefined' || typeof this.config['richdata']['hide'] === 'undefined') {
-            return;
-        }
-        if (this.config['richdata']['hide'].indexOf(FACILITY_DOWNLOADS) >= 0) {
-            this.facilityDownloadEnabled = false;
+    checkIfDownloadsDisabled = () => {
+        if ('richdata' in this.config && 'hide' in this.config['richdata']) {
+            this.isDownloadsDisabled = this.config['richdata']['hide'].includes(FACILITY_DOWNLOADS);
         }
     }
 
@@ -132,7 +129,7 @@ export class Profile_header extends Observable {
 
                     $('.location-facility__list', facilityItem).append(rowItem);
 
-                    if (this.facilityDownloadEnabled) {
+                    if (!this.isDownloadsDisabled) {
                         $(rowItem).on('click', () => {
                             self.downloadPointData(themeCategories[i]);
                         })

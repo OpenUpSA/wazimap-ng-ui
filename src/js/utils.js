@@ -293,18 +293,20 @@ export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
     return merge({}, defaultObj, obj)
 }
 
-export function checkIfSubCategoryHasChildren (subcategory, detail)  {
+export function checkIfSubCategoryHasChildren(subcategory, detail) {
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
-        hasChildren = hasChildren || data.data.some(function (e) {
-            return e.count > 0
-        });
+        if (!hasChildren && typeof data.child_data !== 'undefined') {
+            for (const [geo, arr] of Object.entries(data.child_data)) {
+                hasChildren = hasChildren || arr.length > 0;
+            }
+        }
     }
 
     return hasChildren;
 }
 
-export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator){
+export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator) {
     let sumData = {};
     Object.entries(childData).map(([code, data]) => {
         let filteredArr = data.filter((a) => {
@@ -319,7 +321,7 @@ export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindica
     return sumData;
 }
 
-export function getFilterGroups(groups, primaryGroup){
+export function getFilterGroups(groups, primaryGroup) {
     groups = groups.reduce(function (memo, e1) {
         let matches = memo.filter(function (e2) {
             return e1.name === e2.name
@@ -352,9 +354,9 @@ export function extractSheetsData(data) {
 export function extractSheetData(rawData, categoryName) {
     const sheetName = getSheetName(categoryName);
     let rows = rawData.features.map((f) => {
-        let { properties: { name, data } } =  f;
-        let mapped = data.map(item => ({ [item.key]: item.value }) );
-        return Object.assign({name}, ...mapped );
+        let {properties: {name, data}} = f;
+        let mapped = data.map(item => ({[item.key]: item.value}));
+        return Object.assign({name}, ...mapped);
     })
 
     return {

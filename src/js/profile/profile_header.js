@@ -12,17 +12,21 @@ let parents = null;
 let geometries = null;
 let geography = null;
 
+const FACILITY_DOWNLOADS = 'facility-downloads';
+
 const breadcrumbClass = '.breadcrumb';
 const locationDescriptionClass = '.location__description';
 
 const downloadAllFacilities = '.location__facilities_download-all';
 
 export class Profile_header extends Observable {
-    constructor(_parents, _geometries, _api, _profileId, _geography) {
+    constructor(_parents, _geometries, _api, _profileId, _geography, _config) {
         super();
 
         this.api = _api;
         this.profileId = _profileId;
+        this.config = _config;
+        this.isDownloadsDisabled = false;
 
         parents = _parents;
         geometries = _geometries;
@@ -37,10 +41,17 @@ export class Profile_header extends Observable {
 
         $(downloadAllFacilities).on('click', () => this.downloadAllFacilities());
 
+        this.checkIfDownloadsDisabled();
         this.setPointSource();
         this.addBreadCrumbs();
         this.addFacilities();
         this.setLocationDescription();
+    }
+
+    checkIfDownloadsDisabled = () => {
+        if ('richdata' in this.config && 'hide' in this.config['richdata']) {
+            this.isDownloadsDisabled = this.config['richdata']['hide'].includes(FACILITY_DOWNLOADS);
+        }
     }
 
     addBreadCrumbs = () => {
@@ -118,9 +129,13 @@ export class Profile_header extends Observable {
 
                     $('.location-facility__list', facilityItem).append(rowItem);
 
-                    $(rowItem).on('click', () => {
-                        self.downloadPointData(themeCategories[i]);
-                    })
+                    if (!this.isDownloadsDisabled) {
+                        $(rowItem).on('click', () => {
+                            self.downloadPointData(themeCategories[i]);
+                        })
+                    } else {
+                        $('.location-facility__item_download', rowItem).addClass('hidden');
+                    }
                 }
                 $('.location-facility__description', facilityItem).addClass('hidden')
 

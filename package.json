@@ -49,6 +49,7 @@
     "cypress": "^5.2.0",
     "cypress-cucumber-preprocessor": "^2.5.5",
     "jest": "^26.4.2",
+    "babel-plugin-preval": "^5.0.0",
     "miragejs": "^0.1.41",
     "parcel": "1.12.4",
     "parcel-bundler": "1.12.5"

@@ -2,15 +2,6 @@ import {SubIndicator} from '../dataobjects'
 import {checkIfSubCategoryHasChildren} from "../utils";
 
 
-const hideondeployClsName = 'hideondeploy';
-const parentContainer = $(".data-mapper-content__list");
-const categoryTemplate = $(".data-category")[0].cloneNode(true);
-const subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
-const indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
-const indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
-const noDataWrapperClsName = 'data-mapper-content__no-data';
-const loadingClsName = 'data-mapper-content__loading';
-
 function subindicatorsInCategory(category) {
     let count = 0;
     let subcategories = Object.values(category.subcategories);
@@ -37,11 +28,23 @@ function subindicatorsInSubCategory(subcategory) {
 }
 
 function subindicatorsInIndicator(indicator) {
-  return indicator.metadata.groups.length;
+    return indicator.metadata.groups.length;
 }
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(data, subindicatorCallback) {
+
+    const hideondeployClsName = 'hideondeploy';
+    const parentContainer = $(".data-mapper-content__list");
+    const categoryTemplate = $(".data-category")[0].cloneNode(true);
+    const subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
+    const indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
+    const indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
+    const noDataWrapperClsName = 'data-mapper-content__no-data';
+    const noChoroplethDataWrapperClsName = 'no-choropleth-data';
+    const loadingClsName = 'data-mapper-content__loading';
+    let hasDataForChoropleth = false;
+
     function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, choropleth_method, indicatorId) {
 
         $(".data-category__h3", wrapper).remove();
@@ -95,6 +98,8 @@ export function loadMenu(data, subindicatorCallback) {
             $('.truncate', newIndicator).text(indicator);
             $(h3Wrapper).append(newIndicator);
             const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
+
+            hasDataForChoropleth = hasDataForChoropleth || typeof detail.child_data !== 'undefined';
 
             let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
             addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail.choropleth_method, detail.id);
@@ -150,6 +155,14 @@ export function loadMenu(data, subindicatorCallback) {
         if ($('.' + noDataWrapperClsName).hasClass(hideondeployClsName)) {
             $('.' + noDataWrapperClsName).removeClass(hideondeployClsName);
         }
+    }
+
+    if (hasDataForChoropleth) {
+        $(parentContainer).removeClass('hidden');
+        $('.' + noChoroplethDataWrapperClsName).addClass('hidden');
+    } else {
+        $(parentContainer).addClass('hidden');
+        $('.' + noChoroplethDataWrapperClsName).removeClass('hidden');
     }
 }
 

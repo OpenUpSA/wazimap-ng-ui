@@ -8514,16 +8514,17 @@ label {
         display: none !important;
     }
 
-    .facility-info{
-      display: inline-table !important;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-color: #fff;
-      max-height: 100%;
-      max-width: 100%;
+    .facility-info {
+      position: fixed;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none;
+      max-height: none;
+      left: 0%;
+      right: 0%;
+      top: 0%;
+      Bottom: 0%;
+      z-index: 100000;
     }
 
     .facility-info__view-google-map, .facility-info__print, .facility-info__close{
@@ -8534,7 +8535,7 @@ label {
       display: none !important;
     }
 
-    .facility-info[style*="display: flex;"] ~ .point-mapper, .facility-info[style*="display: flex;"] ~ .rich-data, .facility-info[style*="display: flex;"] ~ .data-mapper {
+    .nav,.map,.rich-data,.panel-toggles,.data-mapper,.point-mapper,.tab-notice,.facility-info__close,.facility-info__print,.facility-info__view-google-map {
       display: none !important;
     }
 }

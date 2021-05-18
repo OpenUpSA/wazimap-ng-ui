@@ -108,7 +108,7 @@ async function init() {
     // TODO add this to config - check the <script> tag in the HTML which hardcodes this value
     pc.config.analytics = new Analytics('UA-93649482-25', pc.profile);
     pc.config.profile = data.id;
-    pc.config.map.defaultCoordinates = data.configuration.default_coordinates;
+    pc.config.map.defaultCoordinates = data.configuration.default_coordinates || pc.config.map.defaultCoordinates;
 
     configureApplication(data.id, pc.config);
 }

@@ -237,6 +237,9 @@ export class Chart extends Observable {
       ],
     };
 
+    if(this.config.xTicks) {
+      barChart.axes[1].tickCount = this.config.xTicks;
+    }
     embed(this.container, barChart, { actions: false})
       .then(async (result) => {
         this.vegaView = result.view;

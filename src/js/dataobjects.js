@@ -61,10 +61,6 @@ export class Profile {
                 subcategory = self._fixSubcategory(subcategory)
                 Object.values(subcategory.indicators).forEach(indicator => {
                     indicator = IndicatorHelper.fixIndicator(indicator)
-
-                    indicator.subindicators = Object
-                        .entries(indicator.subindicators)
-                        .map(s => new SubIndicator(s, indicator.choropleth_method))
                 })
             })
         })

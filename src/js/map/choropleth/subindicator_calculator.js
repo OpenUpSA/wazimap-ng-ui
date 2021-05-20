@@ -1,20 +1,23 @@
 import {percFmt, numFmt} from '../../utils'
 
 export default class SubindicatorCalculator {
-    calculate(args) {
-        if (typeof args.data === 'undefined') {
-            return null;
-        }
+    calculate(childData, primaryGroup, selectedSubindicator) {
+        const result = Object.entries(childData).map(([code, data]) => {
+            let filteredArr = data.filter((a) => {
+                return a[primaryGroup] === selectedSubindicator;
+            });
 
-        const result = Object.entries(args.data).map(([code, codeValue]) => {
-            const sumSubindicatorsValueForCode = args.subindicatorArr.reduce((sum, subindicator) => {
-                let childrenValue = subindicator.children[code] || 0;
-                return sum + childrenValue;
+            const sum = filteredArr.reduce(function (s, a) {
+                return s + parseFloat(a.count);
             }, 0);
 
-            const percentage = codeValue / sumSubindicatorsValueForCode;
+            const total = data.reduce(function (s, a) {
+                return s + parseFloat(a.count);
+            }, 0);
 
-            return {code: code, val: percentage};
+            const percentage = sum / total;
+
+            return {code: code, val: percentage, total: sum};
         })
 
         return result;

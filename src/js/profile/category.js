@@ -1,5 +1,5 @@
 import {Subcategory} from "./subcategory";
-import {checkIfSubCategoryHasChildren, Observable} from "../utils";
+import {Observable} from "../utils";
 
 
 let categoryTemplate = null;
@@ -51,7 +51,7 @@ export class Category extends Observable {
             $(descriptionClass, newCategorySection).addClass('hidden');
         }
 
-        if (!isFirst) {
+        if (!isFirst){
             $(newCategorySection).addClass('page-break-before');
         }
 
@@ -71,16 +71,13 @@ export class Category extends Observable {
         let index = 0;
         let lastIndex = Object.entries(detail.subcategories).length - 1;
         for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-            let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
-            if (hasChildren) {
-                let isFirst = index === 0;
-                let sc = new Subcategory(this.formattingConfig, wrapper, subcategory, detail, isFirst);
-                this.bubbleEvents(sc, [
-                    'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                    'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                    'point_tray.subindicator_filter.filter'
-                ]);
-            }
+            let isFirst = index === 0;
+            let sc = new Subcategory(this.formattingConfig, wrapper, subcategory, detail, isFirst);
+            this.bubbleEvents(sc, [
+                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                'point_tray.subindicator_filter.filter'
+            ]);
             index++;
         }
     }

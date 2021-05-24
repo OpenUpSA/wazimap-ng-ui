@@ -26,9 +26,6 @@ let tooltipRowItem = null;
 let facilityItem = null;
 let facilityRowItem = null;
 
-let googleMapsButton = null;
-let googleMapsButtonClsName = 'facility-info__view-google-map';
-
 let activeMarkers = [];
 let activePoints = [];  //the visible points on the map
 
@@ -58,7 +55,6 @@ export class PointData extends Observable {
         facilityItem = $('.' + facilityClsName);
         pointLegend = $('.' + pointLegendWrapperClsName);
         pointLegendItem = $('.' + pointLegendItemClsName)[0].cloneNode(true);
-        googleMapsButton = $('.' + googleMapsButtonClsName);
 
         $(pointLegend).empty();
         $('.facility-info__close').on('click', () => this.hideInfoWindows());
@@ -276,10 +272,6 @@ export class PointData extends Observable {
     showFacilityModal = (point) => {
         $('.facility-info__title').text(point.name);
         this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');
-
-        let gMapsUrl = `https://www.google.com/maps/search/?api=1&query=${point.y},${point.x}`;
-        googleMapsButton.removeClass('hidden');
-        googleMapsButton.attr('href', gMapsUrl);
 
         $('.facility-info').css('display', 'flex');
     }

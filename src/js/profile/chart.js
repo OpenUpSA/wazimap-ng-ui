@@ -196,6 +196,9 @@ export class Chart extends Observable {
               height: { scale: "yscale", band: 1 },
               x: { scale: "xscale", field: { signal: "datatype[Units]" } },
               x2: { scale: "xscale", value: 0 },
+              tooltip: {
+                signal: `{'Description': '${this.title}'}`
+              }
             },
             update: {
               fill: { value: "rgb(57, 173, 132)" },
@@ -237,7 +240,13 @@ export class Chart extends Observable {
       ],
     };
 
-    embed(this.container, barChart, { actions: false})
+    function tooltipInfo(html) {
+      return vegaTooltip.escapeHTML(html);
+    }
+    var handler = new vegaTooltip.Handler({
+      sanitize: tooltipInfo
+    });
+    embed(this.container, barChart, { actions: false, tooltip: handler.call})
       .then(async (result) => {
         this.vegaView = result.view;
         this.setChartMenu();

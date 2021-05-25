@@ -4,6 +4,8 @@ import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 const wrapperClsName = 'content__map_current-display';
 const mapOptionsClass = '.map-options';
+const filterRowClass = '.map-options__filter-row';
+const filterContentClass = '.map-options__filters_content';
 const lightStart = 3;
 
 let subindicatorKey = '';
@@ -24,6 +26,8 @@ export class MapChip extends Observable {
         this.clonedLegendBlock = legendBlock.cloneNode(true);	//a legend block
         this.clonedLegend = $('.map-options__legend')[0].cloneNode(true);	//the legend itself
         this.clearLegend();
+
+        $('a.mapping-options__add-filter').on('click', this.addFilter);
     }
 
     showMapChip(args) {
@@ -39,8 +43,8 @@ export class MapChip extends Observable {
         let primaryGroup = args.data.metadata.primary_group;
         let groups = getFilterGroups(args.data.metadata.groups, primaryGroup);
 
-        let dropdowns = $(mapOptionsClass).find('.map-options__filter-row .mapping-options__filter');
-        const filterArea = $(mapOptionsClass).find('.map-options__filters_content');
+        let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
+        const filterArea = $(mapOptionsClass).find(filterContentClass);
 
         new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, args.filter, args.data.child_data);
     }
@@ -118,5 +122,10 @@ export class MapChip extends Observable {
 
         this.updateMapChipText(label);
         this.showMapChip(args);
+    }
+
+    addFilter() {
+        let filterRow = $(filterRowClass)[0].cloneNode(true);
+        $(filterRow).insertBefore($('a.mapping-options__add-filter'));
     }
 }

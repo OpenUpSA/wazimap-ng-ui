@@ -9,9 +9,11 @@ export class SubindicatorFilter extends Observable {
         this.childData = childData;
         this.filterCallback = filterCallback;
         this.title = title;
+        this.selectedFilters = [];
         let dropdowns = _dropdowns;
         let indicatorDd = $(dropdowns[0]);
         let subindicatorDd = $(dropdowns[1]);
+        this.allDropdowns = dropdowns;
 
         const filtersAvailable = this.checkGroups(groups);
         if (filtersAvailable) {
@@ -36,8 +38,6 @@ export class SubindicatorFilter extends Observable {
     handleDefaultFilter = (defaultFilter, indicatorDd, subindicatorDd, title) => {
         if (typeof defaultFilter === 'undefined') {
             return;
-
-
         }
 
         this.selectedGroup = defaultFilter.group;
@@ -140,14 +140,11 @@ export class SubindicatorFilter extends Observable {
         $(dropdown).find('.dropdown__list_item').each(function () {
             if ($(this).hasClass(selectedClsName)) {
                 $(this).removeClass(selectedClsName);
-
             }
 
             if ($(this).text() === $(li).text()) {
                 $(this).addClass(selectedClsName);
-
             }
-
         })
 
         $(dropdown).find('.dropdown-menu__selected-item .truncate').text(selected);
@@ -155,10 +152,7 @@ export class SubindicatorFilter extends Observable {
 
         if (callback !== null && item !== null) {
             callback(item);
-
         }
-
-
     }
 
     groupSelected = (selectedGroup, subindicatorDd, title) => {
@@ -168,11 +162,7 @@ export class SubindicatorFilter extends Observable {
         if (selectedGroup !== ALLVALUES) {
             let subindicators = selectedGroup.subindicators;
             this.populateDropdown(subindicatorDd, subindicators, this.handleFilter);
-
-
         }
-
-
     }
 
     getFilteredData = (selectedFilter) => {
@@ -180,34 +170,44 @@ export class SubindicatorFilter extends Observable {
             indicator: this.title,
             group: this.selectedGroup,
             subindicator: selectedFilter
-
-
         });
 
-        if (selectedFilter !== ALLVALUES)
-            return this.getFilteredGroups(selectedFilter)
-        else
-            return this.childData;
-
-
+        return this.getFilteredGroups()
     }
 
-    getFilteredGroups(selectedFilter) {
+    getFilteredGroups() {
         let filteredData = {};
+        this.selectedFilters = [];
+
+        let filterCount = this.allDropdowns.length / 2;
+        for (let i = 0; i < filterCount; i++) {
+            let filter = {};
+            let key = $(this.allDropdowns[i * 2]).find('.dropdown-menu__selected-item .truncate').text();
+            let value = $(this.allDropdowns[(i * 2) + 1]).find('.dropdown-menu__selected-item .truncate').text();
+            filter[key] = value;
+            if (value !== ALLVALUES){
+                this.selectedFilters.push(filter)
+            }
+        }
 
         Object.entries(this.childData).map(([code, data]) => {
             filteredData[code] = data.filter((cd) => {
-                return cd[this.selectedGroup.name] === selectedFilter
+                let isFiltered = true;
+                this.selectedFilters.forEach((f) => {
+                    for (let key in f) {
+                        if (cd[key] !== f[key]) {
+                            isFiltered = false;
+                        }
+                    }
+                })
 
-
+                return isFiltered;
             })
-
-
         })
 
+        console.log({'selectedFilters': this.selectedFilters, filteredData})
+
         return filteredData;
-
-
     }
 
     resetDropdowns = (dropdowns) => {
@@ -215,9 +215,7 @@ export class SubindicatorFilter extends Observable {
         for (let i = 0; i < dropdowns.length; i++) {
             const dropdown = dropdowns[i];
             self.setOptionSelected(dropdown, ALLVALUES, null);
-
         }
-
     }
 
     setOptionSelected = (dropdown, value, callback) => {
@@ -229,7 +227,5 @@ export class SubindicatorFilter extends Observable {
                 self.dropdownOptionSelected(dropdown, li, null, callback);
             }
         })
-
     }
-
 }

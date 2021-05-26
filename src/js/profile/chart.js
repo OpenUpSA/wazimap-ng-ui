@@ -9,7 +9,7 @@ import XLSX from 'xlsx';
 import Papa from 'papaparse';
 
 import embed from "vega-embed";
-import { Handler, escapeHTML } from "vega-tooltip";
+import { calculatePosition, DEFAULT_OPTIONS, formatValue } from "vega-tooltip";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -242,13 +242,43 @@ export class Chart extends Observable {
       ],
     };
 
-    function tooltipInfo(html) {
-      return escapeHTML(html);
+
+    var handler = (h, event, item, value) => {
+      this.el = document.getElementById(DEFAULT_OPTIONS.id);
+      if (!this.el) {
+        this.el = document.createElement('div');
+        this.el.setAttribute('id', DEFAULT_OPTIONS.id);
+        this.el.classList.add('vg-tooltip');
+
+        document.body.appendChild(this.el);
+      }
+
+      const tooltipContainer = document.fullscreenElement != null ? document.fullscreenElement : document.body;
+      tooltipContainer.appendChild(this.el);
+
+      // hide tooltip for null, undefined, or empty string values
+      if (value == null || value === '') {
+        this.el.classList.remove('visible', `${DEFAULT_OPTIONS.theme}-theme`);
+        return;
+      }
+
+      // set the tooltip content
+      this.el.innerHTML = formatValue(value, DEFAULT_OPTIONS.sanitize, DEFAULT_OPTIONS.maxDepth);
+
+      // make the tooltip visible
+      this.el.classList.add('visible', `${DEFAULT_OPTIONS.theme}-theme`);
+
+      const {x, y} = calculatePosition(
+        event,
+        this.el.getBoundingClientRect(),
+        DEFAULT_OPTIONS.offsetX,
+        DEFAULT_OPTIONS.offsetY
+      );
+
+      this.el.setAttribute('style', `top: ${y}px; left: ${x}px`);
     }
-    var handler = new Handler({
-      sanitize: tooltipInfo
-    });
-    embed(this.container, barChart, { actions: false, tooltip: handler.call})
+
+    embed(this.container, barChart, { actions: false, tooltip: handler.bind(this)})
       .then(async (result) => {
         this.vegaView = result.view;
         this.setChartMenu();

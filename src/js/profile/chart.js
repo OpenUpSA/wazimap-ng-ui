@@ -9,6 +9,7 @@ import XLSX from 'xlsx';
 import Papa from 'papaparse';
 
 import embed from "vega-embed";
+import { Handler, escapeHTML } from "vega-tooltip";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -196,9 +197,10 @@ export class Chart extends Observable {
               height: { scale: "yscale", band: 1 },
               x: { scale: "xscale", field: { signal: "datatype[Units]" } },
               x2: { scale: "xscale", value: 0 },
-              tooltip: {
-                signal: `{'Description': '${this.title}'}`
-              }
+              tooltip: [{
+                field: `${data.metadata.primary_group}`,
+                type: "quantitative"
+              }]
             },
             update: {
               fill: { value: "rgb(57, 173, 132)" },
@@ -241,9 +243,9 @@ export class Chart extends Observable {
     };
 
     function tooltipInfo(html) {
-      return vegaTooltip.escapeHTML(html);
+      return escapeHTML(html);
     }
-    var handler = new vegaTooltip.Handler({
+    var handler = new Handler({
       sanitize: tooltipInfo
     });
     embed(this.container, barChart, { actions: false, tooltip: handler.call})

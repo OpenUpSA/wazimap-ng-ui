@@ -10,9 +10,15 @@ export class SubindicatorFilter extends Observable {
         this.filterCallback = filterCallback;
         this.title = title;
         this.selectedFilters = [];
+        this.groups = groups;
         let dropdowns = _dropdowns;
-        let indicatorDd = $(dropdowns[0]);
-        let subindicatorDd = $(dropdowns[1]);
+        let dds = [];
+        for (let i = 0; i < dropdowns.length / 2; i++) {
+            let item = {};
+            item['indicatorDd'] = $(dropdowns[i * 2]);
+            item['subindicatorDd'] = $(dropdowns[(i * 2) + 1]);
+            dds.push(item);
+        }
         this.allDropdowns = dropdowns;
 
         const filtersAvailable = this.checkGroups(groups);
@@ -22,10 +28,17 @@ export class SubindicatorFilter extends Observable {
             this.hideFilterArea(filterArea);
         }
         this.resetDropdowns(dropdowns);
-        let callback = (selected) => this.groupSelected(selected, subindicatorDd, title);
-        this.populateDropdown(indicatorDd, groups, callback);
-        this.handleDefaultFilter(_defaultFilter, indicatorDd, subindicatorDd, title);
+        dds.forEach((dd) => {
+            let subindicatorDd = dd['subindicatorDd'];
+            let indicatorDd = dd['indicatorDd'];
+            this.setDropdownEvents(indicatorDd, subindicatorDd);
+        })
+        //this.handleDefaultFilter(_defaultFilter, indicatorDd, subindicatorDd, title);
+    }
 
+    setDropdownEvents = (indicatorDd, subindicatorDd) => {
+        let callback = (selected) => this.groupSelected(selected, subindicatorDd, this.title);
+        this.populateDropdown(indicatorDd, this.groups, callback);
     }
 
     handleFilter = (filter) => {
@@ -185,7 +198,7 @@ export class SubindicatorFilter extends Observable {
             let key = $(this.allDropdowns[i * 2]).find('.dropdown-menu__selected-item .truncate').text();
             let value = $(this.allDropdowns[(i * 2) + 1]).find('.dropdown-menu__selected-item .truncate').text();
             filter[key] = value;
-            if (value !== ALLVALUES){
+            if (value !== ALLVALUES) {
                 this.selectedFilters.push(filter)
             }
         }
@@ -204,8 +217,6 @@ export class SubindicatorFilter extends Observable {
                 return isFiltered;
             })
         })
-
-        console.log({'selectedFilters': this.selectedFilters, filteredData})
 
         return filteredData;
     }

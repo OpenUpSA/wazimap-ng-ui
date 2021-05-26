@@ -1,6 +1,7 @@
 import {checkIterate, getFilterGroups, Observable} from '../utils';
 import {format as d3format} from 'd3-format';
 import {SubindicatorFilter} from "../profile/subindicator_filter";
+import DropdownMenu from "./dropdown_menu";
 
 const wrapperClsName = 'content__map_current-display';
 const mapOptionsClass = '.map-options';
@@ -17,8 +18,10 @@ export class MapChip extends Observable {
     constructor(legendColors) {
         super();
         this.legendColors = legendColors;
+        this.filterArgs = null;
         this.prepareDomElements();
         this.title = '';
+        this.filter = null;
     }
 
     prepareDomElements() {
@@ -27,7 +30,7 @@ export class MapChip extends Observable {
         this.clonedLegend = $('.map-options__legend')[0].cloneNode(true);	//the legend itself
         this.clearLegend();
 
-        $('a.mapping-options__add-filter').on('click', this.addFilter);
+        $('a.mapping-options__add-filter').on('click', () => this.addFilter());
     }
 
     showMapChip(args) {
@@ -46,7 +49,7 @@ export class MapChip extends Observable {
         let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
         const filterArea = $(mapOptionsClass).find(filterContentClass);
 
-        new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, args.filter, args.data.child_data);
+        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, args.filter, args.data.child_data);
     }
 
     applyFilter = (filterResult, selectedGroup, selectedFilter) => {
@@ -113,6 +116,7 @@ export class MapChip extends Observable {
             return;
         }
 
+        this.filterArgs = args;
         let label = `${args.indicatorTitle} (${args.selectedSubindicator})`;
         if (args.indicatorTitle === args.selectedSubindicator) {
             label = args.indicatorTitle;
@@ -127,5 +131,12 @@ export class MapChip extends Observable {
     addFilter() {
         let filterRow = $(filterRowClass)[0].cloneNode(true);
         $(filterRow).insertBefore($('a.mapping-options__add-filter'));
+        let indicatorDd = $(filterRow).find('.mapping-options__filter')[0];
+        let subindicatorDd = $(filterRow).find('.mapping-options__filter')[1];
+
+        new DropdownMenu($(filterRow), '');
+        this.filter.allDropdowns.push(indicatorDd);
+        this.filter.allDropdowns.push(subindicatorDd);
+        this.filter.setDropdownEvents(indicatorDd, subindicatorDd);
     }
 }

@@ -1,6 +1,7 @@
 import {SubIndicator} from "../dataobjects";
 import {Observable} from "../utils";
 
+const DROPDOWN_MESSAGES = ['Select an attribute', 'Select a value'];
 const ALLVALUES = 'All values';
 
 export class SubindicatorFilter extends Observable {
@@ -37,7 +38,7 @@ export class SubindicatorFilter extends Observable {
     }
 
     setDropdownEvents = (indicatorDd, subindicatorDd) => {
-        let callback = (selected) => this.groupSelected(selected, subindicatorDd, this.title);
+        let callback = (selected) => this.groupSelected(selected, subindicatorDd, DROPDOWN_MESSAGES[1]);
         this.populateDropdown(indicatorDd, this.groups, callback);
     }
 
@@ -56,7 +57,7 @@ export class SubindicatorFilter extends Observable {
         this.selectedGroup = defaultFilter.group;
         const selectedFilter = defaultFilter.value;
 
-        let groupCallback = (selected) => this.groupSelected(selected, subindicatorDd, title);
+        let groupCallback = (selected) => this.groupSelected(selected, subindicatorDd, DROPDOWN_MESSAGES[1]);
 
         this.setOptionSelected(indicatorDd, this.selectedGroup, groupCallback);
         this.setOptionSelected(subindicatorDd, selectedFilter, this.handleFilter);
@@ -93,16 +94,16 @@ export class SubindicatorFilter extends Observable {
 
     }
 
-    resetDropdown = (dropdown) => {
+    resetDropdown = (dropdown, text) => {
         $(dropdown).addClass('disabled')
 
-        $(dropdown).find('.dropdown-menu__selected-item .truncate').text(ALLVALUES);
+        $(dropdown).find('.dropdown-menu__selected-item .truncate').text(text);
         let ddWrapper = $(dropdown).find('.dropdown-menu__content');
         let listItem = $(dropdown).find('.dropdown__list_item')[0].cloneNode(true);
         $(ddWrapper).html('');
         let li = listItem.cloneNode(true);
         $(li).removeClass('selected')
-        $('.truncate', li).text(ALLVALUES);
+        $('.truncate', li).text(text);
         $(li).off('click');
         $(ddWrapper).append(li);
 
@@ -117,15 +118,16 @@ export class SubindicatorFilter extends Observable {
 
         $(ddWrapper).html('');
 
-        itemList = [ALLVALUES].concat(itemList);
+        if ($(dropdown).closest('.map-options__filter-row').attr('data-isextra') !== 'true'){
+            itemList = [ALLVALUES].concat(itemList);
+        }
 
         itemList.forEach((item, i) => {
             if (item !== null) {
                 let li = listItem.cloneNode(true);
-                if (i !== 0 && $(li).hasClass('selected')) {
-                    //leave the first item selected in default
-                    $(li).removeClass('selected');
-                }
+
+                $(li).removeClass('selected');
+
                 if (typeof item.name === 'undefined') {
                     $('.truncate', li).text(item);
 
@@ -164,18 +166,18 @@ export class SubindicatorFilter extends Observable {
         }
     }
 
-    groupSelected = (selectedGroup, subindicatorDd, title) => {
+    groupSelected = (selectedGroup, subindicatorDd, text) => {
         this.selectedGroup = selectedGroup;
-        this.resetDropdown(subindicatorDd);
-        this.handleFilter(ALLVALUES);
-        if (selectedGroup !== ALLVALUES) {
+        this.resetDropdown(subindicatorDd, text);
+        this.handleFilter(text);
+        if (selectedGroup !== text && selectedGroup !== ALLVALUES) {
             let subindicators = selectedGroup.subindicators;
             this.populateDropdown(subindicatorDd, subindicators, this.handleFilter);
         }
     }
 
     getFilteredData = (selectedFilter) => {
-        if (selectedFilter !== null){
+        if (selectedFilter !== null) {
             this.triggerEvent('point_tray.subindicator_filter.filter', {
                 indicator: this.title,
                 group: this.selectedGroup,
@@ -196,7 +198,7 @@ export class SubindicatorFilter extends Observable {
             let key = $(this.allDropdowns[i * 2]).find('.dropdown-menu__selected-item .truncate').text();
             let value = $(this.allDropdowns[(i * 2) + 1]).find('.dropdown-menu__selected-item .truncate').text();
             filter[key] = value;
-            if (value !== ALLVALUES) {
+            if (value !== DROPDOWN_MESSAGES[1] && value !== ALLVALUES) {
                 this.selectedFilters.push(filter)
             }
         }
@@ -220,22 +222,27 @@ export class SubindicatorFilter extends Observable {
     }
 
     resetDropdowns = (dropdowns) => {
-        console.log({dropdowns})
+        console.log({'reset': dropdowns})
         let self = this;
         for (let i = 0; i < dropdowns.length; i++) {
             const dropdown = dropdowns[i];
-            self.setOptionSelected(dropdown, ALLVALUES, null);
+            self.setOptionSelected(dropdown, DROPDOWN_MESSAGES[i], null);
         }
     }
 
     setOptionSelected = (dropdown, value, callback) => {
         let self = this;
+        let deselect = true;
 
         $(dropdown).find('.dropdown__list_item').each(function () {
             const li = $(this);
             if (li.text().trim() === value) {
                 self.dropdownOptionSelected(dropdown, li, null, callback);
+                deselect = false;
             }
-        })
+        });
+
+
+        $(dropdown).find(".dropdown-menu__trigger .dropdown-menu__selected-item .truncate").text(value);
     }
 }

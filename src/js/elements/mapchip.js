@@ -139,7 +139,7 @@ export class MapChip extends Observable {
         this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
         $(filterRow).insertBefore($('a.mapping-options__add-filter'));
 
-        new DropdownMenu($(filterRow), 'All values');
+        new DropdownMenu($(filterRow));
         this.filter.allDropdowns.push(indicatorDd);
         this.filter.allDropdowns.push(subindicatorDd);
         this.filter.setDropdownEvents(indicatorDd, subindicatorDd);

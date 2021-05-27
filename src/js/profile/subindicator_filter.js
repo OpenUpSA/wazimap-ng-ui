@@ -5,7 +5,7 @@ const DROPDOWN_MESSAGES = ['Select an attribute', 'Select a value'];
 const ALLVALUES = 'All values';
 
 export class SubindicatorFilter extends Observable {
-    constructor(filterArea, groups, title, filterCallback, _dropdowns, _defaultFilter, childData) {
+    constructor(filterArea, groups, title, filterCallback, _dropdowns, _defaultFilters, childData) {
         super()
         this.childData = childData;
         this.filterCallback = filterCallback;
@@ -34,7 +34,7 @@ export class SubindicatorFilter extends Observable {
             let indicatorDd = dd['indicatorDd'];
             this.setDropdownEvents(indicatorDd, subindicatorDd);
         })
-        //this.handleDefaultFilter(_defaultFilter, indicatorDd, subindicatorDd, title);
+        this.handleDefaultFilter(_defaultFilters, dds);
     }
 
     setDropdownEvents = (indicatorDd, subindicatorDd) => {
@@ -43,25 +43,40 @@ export class SubindicatorFilter extends Observable {
     }
 
     handleFilter = (filter) => {
-        this.filterCallback(this.getFilteredData(filter), this.selectedGroup, filter);
+        let filterArr = [];
+        let filteredData = this.getFilteredData(filter);
+
+        this.selectedFilters.forEach((sf) => {
+            for (const [group, value] of Object.entries(sf)) {
+                filterArr.push({
+                    group: group,
+                    value: value
+                })
+            }
+        })
+        this.filterCallback(filteredData, filterArr);
     }
 
     /**
      *    *      * this function enables choropleth filters to be remained when user clicks on a child geo
      *       *           */
-    handleDefaultFilter = (defaultFilter, indicatorDd, subindicatorDd, title) => {
-        if (typeof defaultFilter === 'undefined') {
+    handleDefaultFilter = (defaultFilters, dds) => {
+        if (typeof defaultFilters === 'undefined' || defaultFilters.length <= 0) {
             return;
         }
 
-        this.selectedGroup = defaultFilter.group;
-        const selectedFilter = defaultFilter.value;
+        dds.forEach((dropdowns, index) => {
+            this.selectedGroup = defaultFilters[index].group;
+            const selectedFilter = defaultFilters[index].value;
 
-        let groupCallback = (selected) => this.groupSelected(selected, subindicatorDd, DROPDOWN_MESSAGES[1]);
+            let indicatorDd = dropdowns['indicatorDd'];
+            let subindicatorDd = dropdowns['subindicatorDd'];
 
-        this.setOptionSelected(indicatorDd, this.selectedGroup, groupCallback);
-        this.setOptionSelected(subindicatorDd, selectedFilter, this.handleFilter);
+            let groupCallback = (selected) => this.groupSelected(selected, subindicatorDd, DROPDOWN_MESSAGES[1]);
 
+            this.setOptionSelected(indicatorDd, this.selectedGroup, groupCallback);
+            this.setOptionSelected(subindicatorDd, selectedFilter, this.handleFilter);
+        })
     }
 
     /**
@@ -108,6 +123,7 @@ export class SubindicatorFilter extends Observable {
         $(ddWrapper).append(li);
 
     }
+
     populateDropdown = (dropdown, itemList, callback) => {
         if ($(dropdown).hasClass('disabled')) {
             $(dropdown).removeClass('disabled')
@@ -118,7 +134,7 @@ export class SubindicatorFilter extends Observable {
 
         $(ddWrapper).html('');
 
-        if ($(dropdown).closest('.map-options__filter-row').attr('data-isextra') !== 'true'){
+        if ($(dropdown).closest('.map-options__filter-row').attr('data-isextra') !== 'true') {
             itemList = [ALLVALUES].concat(itemList);
         }
 
@@ -167,11 +183,14 @@ export class SubindicatorFilter extends Observable {
     }
 
     groupSelected = (selectedGroup, subindicatorDd, text) => {
-        this.selectedGroup = selectedGroup;
+        let name = typeof selectedGroup.name === 'undefined' ? selectedGroup : selectedGroup.name
+        this.selectedGroup = this.groups.filter((g) => {
+            return g.name === name
+        })[0];
         this.resetDropdown(subindicatorDd, text);
         this.handleFilter(text);
         if (selectedGroup !== text && selectedGroup !== ALLVALUES) {
-            let subindicators = selectedGroup.subindicators;
+            let subindicators = this.selectedGroup.subindicators;
             this.populateDropdown(subindicatorDd, subindicators, this.handleFilter);
         }
     }
@@ -222,7 +241,6 @@ export class SubindicatorFilter extends Observable {
     }
 
     resetDropdowns = (dropdowns) => {
-        console.log({'reset': dropdowns})
         let self = this;
         for (let i = 0; i < dropdowns.length; i++) {
             const dropdown = dropdowns[i];
@@ -237,7 +255,7 @@ export class SubindicatorFilter extends Observable {
         $(dropdown).find('.dropdown__list_item').each(function () {
             const li = $(this);
             if (li.text().trim() === value) {
-                self.dropdownOptionSelected(dropdown, li, null, callback);
+                self.dropdownOptionSelected(dropdown, li, value, callback);
                 deselect = false;
             }
         });

@@ -21,6 +21,7 @@ export class MapChip extends Observable {
         this.filterArgs = null;
         this.prepareDomElements();
         this.title = '';
+        this.groups = null;
         this.filter = null;
     }
 
@@ -45,19 +46,37 @@ export class MapChip extends Observable {
     handleChoroplethFilter(args) {
         let primaryGroup = args.data.metadata.primary_group;
         let groups = getFilterGroups(args.data.metadata.groups, primaryGroup);
+        this.groups = groups;
 
         $(mapOptionsClass).find(`${filterRowClass}[data-isextra=true]`).remove();
-        let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
         const filterArea = $(mapOptionsClass).find(filterContentClass);
+        let defaultFilters = [];
+        if (typeof args.filter !== 'undefined') {
+            Array.prototype.push.apply(defaultFilters, args.filter);
+        } else if (typeof args.data.chartConfiguration.filter !== 'undefined') {
+            defaultFilters = [];
+            args.data.chartConfiguration.filter['defaults'].forEach((f) => {
+                let defaultFilter = {
+                    group: f.name,
+                    value: f.value
+                }
 
-        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, args.filter, args.data.child_data);
+                defaultFilters.push(defaultFilter);
+            })
+        }
+
+        for (let i = 1; i < defaultFilters.length; i++) {
+            this.addFilter();
+        }
+        let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
+
+        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, defaultFilters, args.data.child_data);
     }
 
-    applyFilter = (filterResult, selectedGroup, selectedFilter) => {
+    applyFilter = (filterResult, selectedFilter) => {
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,
-                selectedGroup: selectedGroup.name,
                 selectedFilter: selectedFilter
             }
 
@@ -129,6 +148,14 @@ export class MapChip extends Observable {
         this.showMapChip(args);
     }
 
+    setAddFilterButton(){
+        if (this.filter.allDropdowns.length >= this.groups.length * 2){
+            $('a.mapping-options__add-filter').addClass('disabled');
+        }else{
+            $('a.mapping-options__add-filter').removeClass('disabled');
+        }
+    }
+
     addFilter() {
         let filterRow = $(filterRowClass)[0].cloneNode(true);
 
@@ -140,9 +167,13 @@ export class MapChip extends Observable {
         $(filterRow).insertBefore($('a.mapping-options__add-filter'));
 
         new DropdownMenu($(filterRow));
-        this.filter.allDropdowns.push(indicatorDd);
-        this.filter.allDropdowns.push(subindicatorDd);
-        this.filter.setDropdownEvents(indicatorDd, subindicatorDd);
+        if (this.filter !== null) {
+            this.filter.allDropdowns.push(indicatorDd);
+            this.filter.allDropdowns.push(subindicatorDd);
+            this.filter.setDropdownEvents(indicatorDd, subindicatorDd);
+        }
+
+       this.setAddFilterButton();
     }
 
     setRemoveFilter(filterRow, indicatorDd, subindicatorDd) {
@@ -160,5 +191,7 @@ export class MapChip extends Observable {
         })
 
         this.filter.handleFilter(null);
+
+        this.setAddFilterButton();
     }
 }

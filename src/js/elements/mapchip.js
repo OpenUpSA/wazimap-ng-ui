@@ -51,26 +51,45 @@ export class MapChip extends Observable {
         $(mapOptionsClass).find(`${filterRowClass}[data-isextra=true]`).remove();
         const filterArea = $(mapOptionsClass).find(filterContentClass);
         let defaultFilters = [];
+        /*
+        args.data.chartConfiguration.filter = {
+            "defaults": [
+                {"name": "race", "value": "Indian or asian"},
+                {"name": "gender", "value": "Male"}
+            ]
+        }
+        */
         if (typeof args.filter !== 'undefined') {
             Array.prototype.push.apply(defaultFilters, args.filter);
-        } else if (typeof args.data.chartConfiguration.filter !== 'undefined') {
-            defaultFilters = [];
+        }
+
+        if (typeof args.data.chartConfiguration.filter !== 'undefined') {
             args.data.chartConfiguration.filter['defaults'].forEach((f) => {
                 let defaultFilter = {
                     group: f.name,
-                    value: f.value
+                    value: f.value,
+                    default: true
                 }
 
-                defaultFilters.push(defaultFilter);
+                let item = defaultFilters.filter((df) => {
+                    return df.group === f.name
+                })[0];
+                if (item !== null && typeof item !== 'undefined') {
+                    item.default = true;
+                } else {
+                    defaultFilters.push(defaultFilter);
+                }
             })
         }
 
         for (let i = 1; i < defaultFilters.length; i++) {
-            this.addFilter();
+            this.addFilter(defaultFilters[i].default);
         }
         let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
 
         this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, defaultFilters, args.data.child_data);
+
+        this.setAddFilterButton();
     }
 
     applyFilter = (filterResult, selectedFilter) => {
@@ -148,22 +167,24 @@ export class MapChip extends Observable {
         this.showMapChip(args);
     }
 
-    setAddFilterButton(){
-        if (this.filter.allDropdowns.length >= this.groups.length * 2){
+    setAddFilterButton() {
+        if (this.filter.allDropdowns.length >= this.groups.length * 2) {
             $('a.mapping-options__add-filter').addClass('disabled');
-        }else{
+        } else {
             $('a.mapping-options__add-filter').removeClass('disabled');
         }
     }
 
-    addFilter() {
+    addFilter(isDefault = false) {
         let filterRow = $(filterRowClass)[0].cloneNode(true);
 
         let indicatorDd = $(filterRow).find('.mapping-options__filter')[0];
         let subindicatorDd = $(filterRow).find('.mapping-options__filter')[1];
 
         $(filterRow).attr('data-isextra', true);
-        this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
+        if (!isDefault) {
+            this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
+        }
         $(filterRow).insertBefore($('a.mapping-options__add-filter'));
 
         new DropdownMenu($(filterRow));
@@ -171,9 +192,9 @@ export class MapChip extends Observable {
             this.filter.allDropdowns.push(indicatorDd);
             this.filter.allDropdowns.push(subindicatorDd);
             this.filter.setDropdownEvents(indicatorDd, subindicatorDd);
-        }
 
-       this.setAddFilterButton();
+            this.setAddFilterButton();
+        }
     }
 
     setRemoveFilter(filterRow, indicatorDd, subindicatorDd) {

@@ -76,6 +76,10 @@ export class SubindicatorFilter extends Observable {
 
             this.setOptionSelected(indicatorDd, this.selectedGroup, groupCallback);
             this.setOptionSelected(subindicatorDd, selectedFilter, this.handleFilter);
+
+            if (defaultFilters[index].default) {
+                $(indicatorDd).addClass('disabled')
+            }
         })
     }
 

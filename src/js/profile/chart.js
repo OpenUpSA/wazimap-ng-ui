@@ -9,7 +9,7 @@ import XLSX from 'xlsx';
 import Papa from 'papaparse';
 
 import embed from "vega-embed";
-import { calculatePosition, DEFAULT_OPTIONS, formatValue } from "vega-tooltip";
+import { calculatePosition } from "vega-tooltip";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -244,12 +244,11 @@ export class Chart extends Observable {
 
 
     var handler = (h, event, item, value) => {
-      this.el = document.getElementById(DEFAULT_OPTIONS.id);
+      var tooltipClassFormatted = tooltipClass.substring(1)
+      this.el = document.getElementsByClassName(tooltipClassFormatted)[0];
       if (!this.el) {
         this.el = document.createElement('div');
-        this.el.setAttribute('id', DEFAULT_OPTIONS.id);
-        this.el.classList.add('vg-tooltip');
-
+        this.el.classList.add(tooltipClassFormatted);
         document.body.appendChild(this.el);
       }
 
@@ -258,21 +257,20 @@ export class Chart extends Observable {
 
       // hide tooltip for null, undefined, or empty string values
       if (value == null || value === '') {
-        this.el.classList.remove('visible', `${DEFAULT_OPTIONS.theme}-theme`);
+        this.el.classList.remove('visible', tooltipClassFormatted);
         return;
       }
 
       // set the tooltip content
-      this.el.innerHTML = formatValue(value, DEFAULT_OPTIONS.sanitize, DEFAULT_OPTIONS.maxDepth);
+      this.el.innerHTML = ``;
 
       // make the tooltip visible
-      this.el.classList.add('visible', `${DEFAULT_OPTIONS.theme}-theme`);
+      this.el.classList.add('visible', tooltipClass);
 
       const {x, y} = calculatePosition(
         event,
         this.el.getBoundingClientRect(),
-        DEFAULT_OPTIONS.offsetX,
-        DEFAULT_OPTIONS.offsetY
+        10, 10
       );
 
       this.el.setAttribute('style', `top: ${y}px; left: ${x}px`);

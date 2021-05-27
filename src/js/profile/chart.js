@@ -245,7 +245,7 @@ export class Chart extends Observable {
 
     var handler = (h, event, item, value) => {
       var tooltipClassFormatted = tooltipClass.substring(1)
-      this.el = document.getElementsByClassName(tooltipClassFormatted)[0];
+      this.el = $(tooltipClass)[0]
       if (!this.el) {
         this.el = document.createElement('div');
         this.el.classList.add(tooltipClassFormatted);

@@ -146,7 +146,7 @@ export class Chart extends Observable {
       $(btn).on("click", () => {
         showExtraRows = !showExtraRows;
         showExtraRows ? $(btn).text('Show less rows') : $(btn).text('Load more rows');
-        showExtraRows ? $(table).removeClass("profile-indicator__table_content") : $(this.table).addClass("profile-indicator__table_content");
+        showExtraRows ? $(this.table).removeClass("profile-indicator__table_content") : $(this.table).addClass("profile-indicator__table_content");
       })
       btnDiv.append(btn);
       this.containerParent.append(btnDiv);

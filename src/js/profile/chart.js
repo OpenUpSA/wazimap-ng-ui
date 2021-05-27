@@ -190,7 +190,6 @@ export class Chart extends Observable {
       $(this).on('click', () => {
         let displayType = $(this).data('id');
         self.selectedGraphValueTypeChanged(self.containerParent, displayType);
-        //self.vegaView.signal("Units", graphValueTypes[displayType]).run();
         self.vegaView.signal("Units", graphValueTypes[displayType]).run();
         self.setDownloadUrl();
       })
@@ -266,10 +265,12 @@ export class Chart extends Observable {
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
     const { name:filterName } = selectedGroup;
-    this.setDownloadUrl();
-    this.vegaView.signal(`${filterName}Filter`, true)
-    this.vegaView.signal(`${filterName}FilterValue`, selectedFilter).run()
-    this.appendDataToTable();
+    if(selectedFilter !== "All values") {
+      this.setDownloadUrl();
+      this.vegaView.signal(`${filterName}Filter`, true)
+      this.vegaView.signal(`${filterName}FilterValue`, selectedFilter).run()
+      this.appendDataToTable();
+    }
   };
 
   exportAsCsv = () => {

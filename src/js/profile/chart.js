@@ -60,11 +60,15 @@ export class Chart extends Observable {
 
     let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
 
-    embed(this.container, vegaSpec, { actions: false})
+    embed(this.container, vegaSpec, { renderer: 'svg', actions: false})
       .then(async (result) => {
         this.vegaView = result.view;
         this.setChartMenu();
         this.showChartDataTable();
+        let $svg = $(this.container).find('svg')
+        $svg.attr('preserveAspectRatio', 'xMinYMin meet')
+        $svg.removeAttr('width')
+        $svg.removeAttr('height')
       })
       .catch(console.error);
   };

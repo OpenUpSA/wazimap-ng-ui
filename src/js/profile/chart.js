@@ -10,6 +10,8 @@ import Papa from 'papaparse';
 
 import embed from "vega-embed";
 
+import { configureBarchart } from './charts/barChart';
+
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
 const graphValueTypes = {
@@ -56,191 +58,9 @@ export class Chart extends Observable {
     $(".bar-chart", this.container).remove();
     $("svg", this.container).remove();
 
-    const chartConfig = this.config.types["Value"];
-    const percentageChartConfig = this.config.types["Percentage"];
+    let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
 
-    const barChart = {
-      $schema: "https://vega.github.io/schema/vega/v5.json",
-      description: "A",
-      width: 800,
-      padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
-      data: [
-        {
-          name: "table",
-          values: data.data,
-          transform: [
-            {
-              type: "filter",
-              expr: "applyFilter ? datum[filterIndicator] === filterValue : datum"
-            }
-          ]
-        },
-        {
-          name: "data_formatted",
-          source: "table",
-          transform: [
-            {
-              type: "aggregate",
-              ops: ["sum"],
-              as: ["count"],
-              fields: ["count"],
-              groupby: { signal: "groups" }
-            },
-            {
-              type: "joinaggregate",
-              as: ["TotalCount"],
-              ops: ["sum"],
-              fields: ["count"]
-            },
-            {
-              type: "formula",
-              expr: "datum.count/datum.TotalCount",
-              as: "percentage"
-            }
-          ]
-        }
-      ],
-      signals: [
-        {
-          name: "groups",
-          value: [data.metadata.primary_group],
-        },
-        {
-          name: "barvalue",
-          value: "datum",
-        },
-        {
-          name: "Units",
-          value: graphValueTypes[this.config.defaultType]
-        },
-        {
-          name: "applyFilter",
-          value: false,
-        },
-        {
-          name: "filterIndicator",
-        },
-        {
-          name: "filterValue",
-        },
-        {
-          name: "mainGroup",
-          value: data.metadata.primary_group,
-        },
-        {
-          name: "numberFormat",
-          value: { percentage: percentageChartConfig.formatting, value: chartConfig.formatting },
-        },
-        {
-          name: "datatype",
-          value: { percentage: "percentage", value: "count" },
-        },
-        {
-          name: "y_step",
-          value: 30
-        },
-        {
-          name: "height",
-          update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
-        }
-      ],
-      scales: [
-        {
-          name: "yscale",
-          type: "band",
-          domain: { data: "data_formatted", field: {signal: "mainGroup"} },
-          range: {step: {signal: "y_step"}},
-          padding: 0.1,
-        },
-        {
-          name: "xscale",
-          type: "linear",
-          domain: { data: "data_formatted", field: { signal: "datatype[Units]" } },
-          range: "width",
-          nice: true,
-        },
-      ],
-
-      axes: [
-        {
-          orient: "left",
-          scale: "yscale",
-          domainOpacity: 0.5,
-          labelOpacity: 0.5,
-          tickSize: 0,
-          labelPadding: 6,
-          zindex: 1,
-        },
-        {
-          orient: "bottom",
-          scale: "xscale",
-          bandPosition: 0,
-          domainOpacity: 0.5,
-          tickSize: 0,
-          format: { signal: "numberFormat[Units]" },
-          grid: true,
-          gridOpacity: 0.5,
-          labelOpacity: 0.5,
-          labelPadding: 6,
-        },
-      ],
-
-      marks: [
-        {
-          name: "bars",
-          from: { data: "data_formatted" },
-          type: "rect",
-          encode: {
-            enter: {
-              y: { scale: "yscale", field: {signal: "mainGroup"} },
-              height: { scale: "yscale", band: 1 },
-              x: { scale: "xscale", field: { signal: "datatype[Units]" } },
-              x2: { scale: "xscale", value: 0 },
-            },
-            update: {
-              fill: { value: "rgb(57, 173, 132)" },
-              x: { scale: "xscale", field: { signal: "datatype[Units]" } },
-              x2: { scale: "xscale", value: 0 },
-            },
-            hover: {
-              fill: { value: "rgb(57, 173, 132, 0.7)" },
-            },
-          },
-        },
-        {
-          type: "text",
-          from: { data: "data_formatted" },
-          encode: {
-            enter: {
-              align: { value: "left" },
-              baseline: { value: "middle" },
-              fill: { value: "grey" },
-              fontSize: { value: 10 },
-            },
-            update: {
-              text: {
-                signal: "format(datum[datatype[Units]],numberFormat[Units])"
-              },
-              x: {
-                scale: "xscale",
-                field: { signal: "datatype[Units]" },
-                offset: 5,
-              },
-              y: {
-                scale: "yscale",
-                field: { signal: "mainGroup" },
-                band: 0.5,
-              },
-            },
-          },
-        },
-      ],
-    };
-
-    if(this.config.xTicks) {
-      barChart.axes[1].tickCount = this.config.xTicks;
-    }
-    embed(this.container, barChart, { actions: false})
+    embed(this.container, vegaSpec, { actions: false})
       .then(async (result) => {
         this.vegaView = result.view;
         this.setChartMenu();
@@ -370,6 +190,7 @@ export class Chart extends Observable {
       $(this).on('click', () => {
         let displayType = $(this).data('id');
         self.selectedGraphValueTypeChanged(self.containerParent, displayType);
+        //self.vegaView.signal("Units", graphValueTypes[displayType]).run();
         self.vegaView.signal("Units", graphValueTypes[displayType]).run();
         self.setDownloadUrl();
       })
@@ -444,14 +265,10 @@ export class Chart extends Observable {
     this.filteredData = filteredData;
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
-      this.setDownloadUrl();
-      this.vegaView.signal('filterIndicator', selectedGroup.name)
-      this.vegaView.signal('filterValue', selectedFilter)
-      if(selectedGroup && selectedFilter !== "All values") {
-        this.vegaView.signal('applyFilter', true).run()
-      } else {
-        this.vegaView.signal('applyFilter', false).run()
-      }
+    const { name:filterName } = selectedGroup;
+    this.setDownloadUrl();
+    this.vegaView.signal(`${filterName}Filter`, true)
+    this.vegaView.signal(`${filterName}FilterValue`, selectedFilter).run()
     this.appendDataToTable();
   };
 

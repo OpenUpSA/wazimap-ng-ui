@@ -243,36 +243,43 @@ export class Chart extends Observable {
     };
 
 
-    var handler = (h, event, item, value) => {
-      var tooltipClassFormatted = tooltipClass.substring(1)
-      this.el = $(tooltipClass)[0]
+    var handler = (_, event, item, value) => {
+      var tooltipClassSubstr = tooltipClass.substring(1)
+      this.el = $(tooltipClass) ? $(tooltipClass)[0] : null;
       if (!this.el) {
         this.el = document.createElement('div');
-        this.el.classList.add(tooltipClassFormatted);
+        this.el.classList.add(tooltipClassSubstr);
         document.body.appendChild(this.el);
       }
-
       const tooltipContainer = document.fullscreenElement != null ? document.fullscreenElement : document.body;
       tooltipContainer.appendChild(this.el);
-
       // hide tooltip for null, undefined, or empty string values
       if (value == null || value === '') {
-        this.el.classList.remove('visible', tooltipClassFormatted);
+        this.el.remove()
         return;
       }
-
       // set the tooltip content
-      this.el.innerHTML = ``;
+      this.el.innerHTML = `
+        <div class="bar-chart__row_tooltip-card">
+          <div class="bar-chart__tooltip_name">
+              <div>${value}</div>
+          </div>
+          <div class="bar-chart__tooltip_value">
+              <div>${item.datum.percentage}%</div>
+          </div>
+          <div class="bar-chart__tooltip_alt-value">
+              <div>${item.datum.count}</div>
+          </div>
+          <div class="bar-chart__row_tooltip-notch"></div>
+        </div>`
 
       // make the tooltip visible
-      this.el.classList.add('visible', tooltipClass);
-
+      this.el.classList.add('visible', tooltipClassSubstr);
       const {x, y} = calculatePosition(
         event,
         this.el.getBoundingClientRect(),
         10, 10
       );
-
       this.el.setAttribute('style', `top: ${y}px; left: ${x}px`);
     }
 

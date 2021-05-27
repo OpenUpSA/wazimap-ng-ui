@@ -2032,6 +2032,7 @@ label {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  z-index: 9999;
 }
 
 .bar-chart__tooltip_alt-value {
@@ -8676,4 +8677,3 @@ label {
       display: none !important;
     }
 }
-

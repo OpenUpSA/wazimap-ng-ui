@@ -1,4 +1,5 @@
-import{ xAxis, xScale } from"./properties";
+import { xAxis, xScale } from"./properties";
+import { createFiltersForGroups } from"./utils";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -23,6 +24,8 @@ export const configureBarchart = (data, metadata, config) => {
     xAxis.tickCount = xTicks;
   }
 
+  const { signals: filterSignals, filters } = createFiltersForGroups(metadata.groups);
+
   return {
     $schema: "https://vega.github.io/schema/vega/v5.json",
     description: "A",
@@ -32,6 +35,9 @@ export const configureBarchart = (data, metadata, config) => {
       {
         name: "table",
         values: data,
+        transform: [
+          ...filters
+        ]
       },
       {
         name: "data_formatted",
@@ -135,6 +141,7 @@ export const configureBarchart = (data, metadata, config) => {
         name: "height",
         update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
       },
+      ...filterSignals
     ],
     scales: [
       {

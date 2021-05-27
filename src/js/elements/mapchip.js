@@ -46,6 +46,7 @@ export class MapChip extends Observable {
         let primaryGroup = args.data.metadata.primary_group;
         let groups = getFilterGroups(args.data.metadata.groups, primaryGroup);
 
+        $(mapOptionsClass).find(`${filterRowClass}[data-isextra=true]`).remove();
         let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
         const filterArea = $(mapOptionsClass).find(filterContentClass);
 
@@ -130,13 +131,34 @@ export class MapChip extends Observable {
 
     addFilter() {
         let filterRow = $(filterRowClass)[0].cloneNode(true);
-        $(filterRow).insertBefore($('a.mapping-options__add-filter'));
+
         let indicatorDd = $(filterRow).find('.mapping-options__filter')[0];
         let subindicatorDd = $(filterRow).find('.mapping-options__filter')[1];
 
-        new DropdownMenu($(filterRow), '');
+        $(filterRow).attr('data-isextra', true);
+        this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
+        $(filterRow).insertBefore($('a.mapping-options__add-filter'));
+
+        new DropdownMenu($(filterRow), 'All values');
         this.filter.allDropdowns.push(indicatorDd);
         this.filter.allDropdowns.push(subindicatorDd);
         this.filter.setDropdownEvents(indicatorDd, subindicatorDd);
+    }
+
+    setRemoveFilter(filterRow, indicatorDd, subindicatorDd) {
+        let btn = $(filterRow).find('.mapping-options__remove-filter');
+        btn.removeClass('is--hidden');
+        btn.on('click', () => {
+            this.removeFilter(filterRow, indicatorDd, subindicatorDd);
+        })
+    }
+
+    removeFilter(filterRow, indicatorDd, subindicatorDd) {
+        $(filterRow).remove();
+        this.filter.allDropdowns = this.filter.allDropdowns.filter((dd, el) => {
+            return el !== indicatorDd && el !== subindicatorDd
+        })
+
+        this.filter.handleFilter(null);
     }
 }

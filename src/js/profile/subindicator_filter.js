@@ -124,8 +124,7 @@ export class SubindicatorFilter extends Observable {
                 let li = listItem.cloneNode(true);
                 if (i !== 0 && $(li).hasClass('selected')) {
                     //leave the first item selected in default
-                    //                    $(li).removeClass('selected')
-                    //
+                    $(li).removeClass('selected');
                 }
                 if (typeof item.name === 'undefined') {
                     $('.truncate', li).text(item);
@@ -134,17 +133,14 @@ export class SubindicatorFilter extends Observable {
                     $('.truncate', li).text(item.name);
 
                 }
+
                 $(li).off('click');
                 $(li).on('click', () => {
                     this.dropdownOptionSelected(dropdown, li, item, callback);
-
                 })
                 $(ddWrapper).append(li);
-
             }
-
         })
-
     }
 
     dropdownOptionSelected = (dropdown, li, item, callback) => {
@@ -179,11 +175,13 @@ export class SubindicatorFilter extends Observable {
     }
 
     getFilteredData = (selectedFilter) => {
-        this.triggerEvent('point_tray.subindicator_filter.filter', {
-            indicator: this.title,
-            group: this.selectedGroup,
-            subindicator: selectedFilter
-        });
+        if (selectedFilter !== null){
+            this.triggerEvent('point_tray.subindicator_filter.filter', {
+                indicator: this.title,
+                group: this.selectedGroup,
+                subindicator: selectedFilter
+            });
+        }
 
         return this.getFilteredGroups()
     }
@@ -222,6 +220,7 @@ export class SubindicatorFilter extends Observable {
     }
 
     resetDropdowns = (dropdowns) => {
+        console.log({dropdowns})
         let self = this;
         for (let i = 0; i < dropdowns.length; i++) {
             const dropdown = dropdowns[i];

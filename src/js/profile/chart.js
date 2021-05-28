@@ -274,7 +274,7 @@ export class Chart extends Observable {
               <div>${value.group}</div>
           </div>
           <div class="bar-chart__tooltip_value">
-              <div>${value.percentage}%</div>
+              <div>${value.percentage}</div>
           </div>
           <div class="bar-chart__tooltip_alt-value">
               <div>${value.count}</div>

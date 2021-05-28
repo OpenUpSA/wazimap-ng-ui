@@ -177,6 +177,9 @@ export const configureBarchart = (data, metadata, config) => {
             y: { scale: "yscale", field: {signal: "mainGroup"} },
             height: { scale: "yscale", band: 1 },
             x: { scale: "xscale", field: { signal: "datatype[Units]" } },
+            tooltip: {
+              signal: "{'percentage': format(datum.percentage, numberFormat.percentage), 'group': datum[mainGroup], 'count': format(datum.count, numberFormat.value)}"
+            }
           },
           update: {
             fill: { value: "rgb(57, 173, 132)" },

@@ -197,7 +197,7 @@ export class Chart extends Observable {
               x: { scale: "xscale", field: { signal: "datatype[Units]" } },
               x2: { scale: "xscale", value: 0 },
               tooltip: {
-                signal: "{'percentage': format(datum.percentage, numberFormat.percentage), 'group': mainGroup, 'count': format(datum.count, numberFormat.value)}"
+                signal: "{'percentage': format(datum.percentage, numberFormat.percentage), 'group': datum[mainGroup], 'count': format(datum.count, numberFormat.value)}"
               }
             },
             update: {

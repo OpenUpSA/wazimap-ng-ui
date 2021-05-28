@@ -196,10 +196,9 @@ export class Chart extends Observable {
               height: { scale: "yscale", band: 1 },
               x: { scale: "xscale", field: { signal: "datatype[Units]" } },
               x2: { scale: "xscale", value: 0 },
-              tooltip: [{
-                field: `${data.metadata.primary_group}`,
-                type: "quantitative"
-              }]
+              tooltip: {
+                signal: "{'percentage': format(datum.percentage, numberFormat.percentage), 'group': mainGroup, 'count': format(datum.count, numberFormat.value)}"
+              }
             },
             update: {
               fill: { value: "rgb(57, 173, 132)" },
@@ -272,13 +271,13 @@ export class Chart extends Observable {
       this.el.innerHTML = `
         <div class="bar-chart__row_tooltip-card">
           <div class="bar-chart__tooltip_name">
-              <div>${value}</div>
+              <div>${value.group}</div>
           </div>
           <div class="bar-chart__tooltip_value">
-              <div>${item.datum.percentage}%</div>
+              <div>${value.percentage}%</div>
           </div>
           <div class="bar-chart__tooltip_alt-value">
-              <div>${item.datum.count}</div>
+              <div>${value.count}</div>
           </div>
           <div class="bar-chart__row_tooltip-notch"></div>
         </div>`

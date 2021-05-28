@@ -57,10 +57,63 @@ export class Chart extends Observable {
   addChart = (data) => {
     $(".bar-chart", this.container).remove();
     $("svg", this.container).remove();
-
+    
     let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
 
-    embed(this.container, vegaSpec, { renderer: 'svg', actions: false})
+    const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
+      let x = event.pageX + offsetX;
+      if (x + tooltipBox.width > window.innerWidth) {
+        x =+ event.pageX - offsetX - tooltipBox.width;
+      }
+      let y = event.pageY + offsetY;
+      if (y + tooltipBox.height > window.innerHeight) {
+        y =+ event.pageY - offsetY - tooltipBox.height;
+      }
+      return {x, y};
+    }
+
+    const handler = (_, event, item, value) => {
+      const tooltipClassSubstr = tooltipClass.substring(1)
+      this.el = $(tooltipClass) ? $(tooltipClass)[0] : null;
+      if (!this.el) {
+        this.el = document.createElement('div');
+        this.el.classList.add(tooltipClassSubstr);
+        document.body.appendChild(this.el);
+      }
+      const tooltipContainer = document.fullscreenElement != null ? document.fullscreenElement : document.body;
+      tooltipContainer.appendChild(this.el);
+      // hide tooltip for null, undefined, or empty string values
+      if (value == null || value === '') {
+        this.el.remove()
+        return;
+      }
+      // set the tooltip content
+      this.el.innerHTML = `
+        <div class="bar-chart__row_tooltip-card">
+          <div class="bar-chart__tooltip_name">
+              <div>${value.group}</div>
+          </div>
+          <div class="bar-chart__tooltip_value">
+              <div>${value.percentage}</div>
+          </div>
+          <div class="bar-chart__tooltip_alt-value">
+              <div>${value.count}</div>
+          </div>
+          <div class="bar-chart__row_tooltip-notch"></div>
+        </div>`
+
+      // make the tooltip visible
+      this.el.classList.add('visible', tooltipClassSubstr);
+      const {x, y} = calculatePosition(
+        event,
+        this.el.getBoundingClientRect(),
+        10, 10
+      );
+      this.el.setAttribute('style', `top: ${y}px; left: ${x}px; z-index: 999;`);
+    }
+
+    embed(this.container, vegaSpec, { renderer: 'svg', actions: false, tooltip: handler.bind(this)})
+
       .then(async (result) => {
         this.vegaView = result.view;
         this.setChartMenu();

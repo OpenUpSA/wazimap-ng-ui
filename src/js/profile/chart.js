@@ -9,7 +9,6 @@ import XLSX from 'xlsx';
 import Papa from 'papaparse';
 
 import embed from "vega-embed";
-import { calculatePosition } from "vega-tooltip";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -242,9 +241,20 @@ export class Chart extends Observable {
       ],
     };
 
+    const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
+      let x = event.pageX + offsetX;
+      if (x + tooltipBox.width > window.innerWidth) {
+        x =+ event.pageX - offsetX - tooltipBox.width;
+      }
+      let y = event.pageY + offsetY;
+      if (y + tooltipBox.height > window.innerHeight) {
+        y =+ event.pageY - offsetY - tooltipBox.height;
+      }
+      return {x, y};
+    }
 
-    var handler = (_, event, item, value) => {
-      var tooltipClassSubstr = tooltipClass.substring(1)
+    const handler = (_, event, item, value) => {
+      const tooltipClassSubstr = tooltipClass.substring(1)
       this.el = $(tooltipClass) ? $(tooltipClass)[0] : null;
       if (!this.el) {
         this.el = document.createElement('div');

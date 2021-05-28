@@ -289,7 +289,7 @@ export class Chart extends Observable {
         this.el.getBoundingClientRect(),
         10, 10
       );
-      this.el.setAttribute('style', `top: ${y}px; left: ${x}px`);
+      this.el.setAttribute('style', `top: ${y}px; left: ${x}px; z-index: 999;`);
     }
 
     embed(this.container, barChart, { actions: false, tooltip: handler.bind(this)})

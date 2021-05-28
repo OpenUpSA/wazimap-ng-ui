@@ -2032,7 +2032,6 @@ label {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  z-index: 999;
 }
 
 .bar-chart__tooltip_alt-value {

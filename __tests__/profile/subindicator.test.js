@@ -1,35 +1,35 @@
 import {SubindicatorFilter} from "../../src/js/profile/subindicator_filter";
-import { screen, fireEvent, getByText } from '@testing-library/dom'
+import {screen, fireEvent, getByText} from '@testing-library/dom'
 
 const DATA = [
-  {"race":"Race1","count":35,"gender":"Female"},
-  {"race":"Race1","count":30,"gender":"Male"},
-  {"race":"Race2","count":60,"gender":"Male"},
+    {"race": "Race1", "count": 35, "gender": "Female"},
+    {"race": "Race1", "count": 30, "gender": "Male"},
+    {"race": "Race2", "count": 60, "gender": "Male"},
 ]
 const CHILD_DATA = {
-  "Geography1": [
-    {"race":"Race1","count":15,"gender":"Female"},
-    {"race":"Race1","count":20,"gender":"Male"},
-    {"race":"Race2","count":30,"gender":"Male"},
-  ],
-  "Geography2": [
-    {"race":"Race1","count":20,"gender":"Female"},
-    {"race":"Race1","count":10,"gender":"Male"},
-    {"race":"Race2","count":30,"gender":"Male"},
-  ]
+    "Geography1": [
+        {"race": "Race1", "count": 15, "gender": "Female"},
+        {"race": "Race1", "count": 20, "gender": "Male"},
+        {"race": "Race2", "count": 30, "gender": "Male"},
+    ],
+    "Geography2": [
+        {"race": "Race1", "count": 20, "gender": "Female"},
+        {"race": "Race1", "count": 10, "gender": "Male"},
+        {"race": "Race2", "count": 30, "gender": "Male"},
+    ]
 }
 const GROUPS = [
-  { subindicators: ["Male", "Female"], name: "gender", },
-  { subindicators: ["Race1", "Race2"], name: "race", }
+    {subindicators: ["Male", "Female"], name: "gender",},
+    {subindicators: ["Race1", "Race2"], name: "race",}
 ];
 
 describe('SubindicatorFilter', () => {
-  let si;
-  const title = 'Age by race';
-  let applyFilter;
-  beforeEach(() => {
-    // probably better to read the index.html file and include it here
-    document.body.innerHTML = `
+    let si;
+    const title = 'Age by race';
+    let applyFilter;
+    beforeEach(() => {
+        // probably better to read the index.html file and include it here
+        document.body.innerHTML = `
       <div class="mapping-options__filter">
         <div class="mapping-options__filter_label">
           <div>Select a value:</div>
@@ -84,83 +84,89 @@ describe('SubindicatorFilter', () => {
       </div>
     </div>
     `;
-    let dropdowns = $(document).find('.mapping-options__filter');
-    const filterArea = $(document).find('.map-options__filters_content');
-    applyFilter = jest.fn();
-    si = new SubindicatorFilter(filterArea, GROUPS, title, applyFilter, dropdowns, [], CHILD_DATA, true);
-  })
+        let dropdowns = $(document).find('.mapping-options__filter');
+        const filterArea = $(document).find('.map-options__filters_content');
+        applyFilter = jest.fn();
+        si = new SubindicatorFilter(filterArea, GROUPS, title, applyFilter, dropdowns, [], CHILD_DATA, true);
+    })
 
 
     test.each([
-        [{ filterGroup: GROUPS[0], filter: "Male" }, 2],
-        [{ filterGroup: GROUPS[1], filter: "Race2" }, 1],
+        [{filterGroup: GROUPS[0], filter: "Male"}, 2],
+        [{filterGroup: GROUPS[1], filter: "Race2"}, 1],
     ])('Extract groups correctly', (value, expected) => {
-      si.selectedGroup = value.filterGroup;
-      const chartData = si.getFilteredGroups(value.filter)
+        $(si.allDropdowns[0]).find('.dropdown-menu__selected-item .truncate').text(value.filterGroup.name);
+        $(si.allDropdowns[1]).find('.dropdown-menu__selected-item .truncate').text(value.filter);
 
-      expect(chartData["Geography1"].length).toBe(expected);
+        const chartData = si.getFilteredGroups(value.filter)
+
+        expect(chartData["Geography1"].length).toBe(expected);
     })
 
     test('Handles missing group correctly', () => {
-      si.selectedGroup = GROUPS[0];
-      const chartData = si.getFilteredGroups('XXXXXX')
+        $(si.allDropdowns[0]).find('.dropdown-menu__selected-item .truncate').text('XXXXXX');
+        $(si.allDropdowns[1]).find('.dropdown-menu__selected-item .truncate').text('Male');
+        const chartData = si.getFilteredGroups()
 
-      expect(chartData["Geography1"].length).toBe(0)
+        expect(chartData["Geography1"].length).toBe(0)
     })
 
     test('Handles missing subindicator correctly', () => {
-      si.selectedGroup = GROUPS[0];
-      const chartData = si.getFilteredGroups('Missing subindicator')
+        $(si.allDropdowns[0]).find('.dropdown-menu__selected-item .truncate').text('gender');
+        $(si.allDropdowns[1]).find('.dropdown-menu__selected-item .truncate').text('XXXXXX');
+        const chartData = si.getFilteredGroups()
 
-      expect(chartData["Geography1"].length).toBe(0)
+        expect(chartData["Geography1"].length).toBe(0)
     })
 
     describe('#getFilteredData', () => {
-      test('all values returns the defaults', () => {
-        si.selectedGroup = GROUPS[0];
-        let chartData = si.getFilteredData('All values')
+        test('all values returns the defaults', () => {
+            $(si.allDropdowns[0]).find('.dropdown-menu__selected-item .truncate').text('All values');
+            $(si.allDropdowns[1]).find('.dropdown-menu__selected-item .truncate').text('All values');
+            let chartData = si.getFilteredData()
 
-        expect(chartData).toBe(CHILD_DATA);
-      });
+            expect(chartData).toStrictEqual(CHILD_DATA);
+        });
 
-      test('group filter returns the subindcator values', () => {
+        test('group filter returns the subindcator values', () => {
 
-        si.selectedGroup = GROUPS[0]
-        let chartData = si.getFilteredData('Female')
+            $(si.allDropdowns[0]).find('.dropdown-menu__selected-item .truncate').text('gender');
+            $(si.allDropdowns[1]).find('.dropdown-menu__selected-item .truncate').text('Female');
+            let chartData = si.getFilteredData()
 
-        expect(chartData["Geography1"].length).toBe(1);
-        expect(chartData["Geography1"][0]["gender"]).toBe("Female");
+            expect(chartData["Geography1"].length).toBe(1);
+            expect(chartData["Geography1"][0]["gender"]).toBe("Female");
 
-        expect(chartData["Geography2"].length).toBe(1);
-        expect(chartData["Geography2"][0]["gender"]).toBe("Female");
+            expect(chartData["Geography2"].length).toBe(1);
+            expect(chartData["Geography2"][0]["gender"]).toBe("Female");
+        })
     })
-  })
-  describe('UI interactions', () => {
-    test('select subcategory', () => {
-      fireEvent.click(screen.getByText('race').parentNode);
+    describe('UI interactions', () => {
+        test('select subcategory', () => {
+            fireEvent.click(screen.getByText('race').parentNode);
 
-      expect(screen.getByText('Race1')).toBeVisible();
-      expect(applyFilter).toHaveBeenCalled();
-    });
+            expect(screen.getByText('Race1')).toBeVisible();
+            expect(applyFilter).toHaveBeenCalled();
+        });
 
-    describe('returning to all values', () => {
-      beforeEach(() => {
-        // set the group values first to be "race"
-        fireEvent.click(screen.getByText('race').parentNode);
-      })
-      test('should reset the filter dropdown', () => {
-        let groupDropdowns = screen.getByTestId('group-by');
-        fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
+        describe('returning to all values', () => {
+            beforeEach(() => {
+                // set the group values first to be "race"
+                fireEvent.click(screen.getByText('race').parentNode);
+            })
+            test('should reset the filter dropdown', () => {
+                let groupDropdowns = screen.getByTestId('group-by');
+                fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
 
-        expect(screen.queryByText('Race1')).not.toBeInTheDocument();
-      });
+                expect(screen.queryByText('Race1')).not.toBeInTheDocument();
+            });
 
-      test('should call parent filter twice', () => {
-        let groupDropdowns = screen.getByTestId('group-by');
-        fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
+            test('should call parent filter twice', () => {
+                let groupDropdowns = screen.getByTestId('group-by');
+                fireEvent.click(getByText(groupDropdowns, 'All values').parentNode);
 
-        expect(applyFilter).toHaveBeenCalled();
-      });
+                expect(applyFilter).toHaveBeenCalled();
+            });
+        })
     })
-  })
 })

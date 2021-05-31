@@ -51,14 +51,6 @@ export class MapChip extends Observable {
         $(mapOptionsClass).find(`${filterRowClass}[data-isextra=true]`).remove();
         const filterArea = $(mapOptionsClass).find(filterContentClass);
         let defaultFilters = [];
-        /*
-        args.data.chartConfiguration.filter = {
-            "defaults": [
-                {"name": "race", "value": "Indian or asian"},
-                {"name": "gender", "value": "Male"}
-            ]
-        }
-        */
         if (typeof args.filter !== 'undefined') {
             Array.prototype.push.apply(defaultFilters, args.filter);
         }

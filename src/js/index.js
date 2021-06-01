@@ -7,8 +7,8 @@ import {API} from './api';
 import * as Sentry from '@sentry/browser';
 import { getHostname, loadDevTools }from './utils';
 
-const mainUrl = 'https://staging.wazimap-ng.openup.org.za';
-const productionUrl = 'https://production.wazimap-ng.openup.org.za';
+const mainUrl = process.env.API_URL || 'https://staging.wazimap-ng.openup.org.za';
+const productionUrl = process.env.API_URL || 'https://production.wazimap-ng.openup.org.za';
 let config = new SAConfig();
 
 let hostname = getHostname();
@@ -98,7 +98,7 @@ async function init() {
             config: defaultConfig
         }
     }
-    const api = new API(pc.baseUrl);
+    const api = new API(pc.baseUrl, hostname);
     const data = await api.getProfileConfiguration(hostname);
 
     pc.config.setConfig(data.configuration || {})
@@ -128,4 +128,3 @@ loadDevTools(() => {
     }
   }, 3000)
 })
-

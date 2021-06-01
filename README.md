@@ -56,6 +56,12 @@ yarn push-gh-pages # pushes to github for hosting
 
 The build is configured using environment variables.
 
+These could be defined in a .env file in the root directory, or on the command line, e.g. for development
+
+```
+HOSTNAME=youthexplorer.org.za yarn start`
+```
+
 | Variable                | Default                              | Description                                                                                                       |
 | ----------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
 | HOSTNAME                | unset                                | If set, overrides using the hostname in the address bar to determine the profile being requested. e.g. `youthexplorer.org.za` |

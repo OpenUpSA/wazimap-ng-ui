@@ -293,12 +293,12 @@ export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
     return merge({}, defaultObj, obj)
 }
 
-export function checkIfSubCategoryHasChildren (subcategory, detail)  {
+export function checkIfSubCategoryHasChildren(subcategory, detail) {
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
-        hasChildren = hasChildren || data.data.some(function (e) {
+        hasChildren = hasChildren || (typeof data.data !== 'undefined' && data.data.some(function (e) {
             return e.count > 0
-        });
+        }));
     }
 
     return hasChildren;

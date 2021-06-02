@@ -244,6 +244,10 @@ export function getHostname() {
     return hostname;
 }
 
+export function getAPIUrl(defaultUrl) {
+    return sessionStorage.getItem("wazi.apiUrl") || process.env.API_URL || defaultUrl;
+}
+
 export function loadDevTools(callback) {
     const explicitlyDisabled =
         window.location.search.includes('dev-tools=false') ||

@@ -1,6 +1,6 @@
 
 export const slugify = (string) => {
-    return string.replace(/^\s+|\s+$/g, '').replace(/[^a-z0-9 -]/g, '').replace(/\s+/g, '_').replace(/_+/g, '_');
+    return string.replace(/^\s+|\s+$/g, '').replace(/[^a-z0-9]/g, '').replace(/\s+/g, '_').replace(/_+/g, '_');
 }
 /**
  * createFiltersForGroups

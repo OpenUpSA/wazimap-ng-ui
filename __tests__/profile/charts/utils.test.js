@@ -1,4 +1,4 @@
-import { createFiltersForGroups } from '../../../src/js/profile/charts/utils';
+import { createFiltersForGroups, slugify } from '../../../src/js/profile/charts/utils';
 
 describe('#createFiltersForGroups', () => {
   let groups;
@@ -40,5 +40,12 @@ describe('#createFiltersForGroups', () => {
      * 
     **/
     expect(filter).toHaveProperty('expr', '!ageFilter || (ageFilter && datum.age === ageFilterValue)')
+  });
+});
+describe('#slugify', () => {
+  test.each([
+    ['abc123', 'abc123'], ['ab c', 'abc'],  ['ab-c', 'abc'],
+    ['ab.cd-_fsw', 'abcdfsw'], ['ab  ', 'ab'],  ['ab-c', 'abc']])('slugify(%s)', (value, expected) => {
+      expect(slugify(value)).toBe(expected);
   });
 });

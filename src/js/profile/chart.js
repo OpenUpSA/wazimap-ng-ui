@@ -11,6 +11,7 @@ import Papa from 'papaparse';
 import embed from "vega-embed";
 
 import { configureBarchart } from './charts/barChart';
+import { slugify } from './charts/utils';
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -321,7 +322,8 @@ export class Chart extends Observable {
     this.filteredData = filteredData;
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
-    const { name:filterName } = selectedGroup;
+    let { name:filterName } = selectedGroup;
+    filterName = slugify(filterName)
     if(selectedFilter !== "All values") {
       this.setDownloadUrl();
       this.vegaView.signal(`${filterName}Filter`, true)

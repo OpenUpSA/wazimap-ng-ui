@@ -5,10 +5,10 @@ import {Config as SAConfig} from './configurations/geography_sa';
 import Analytics from './analytics';
 import {API} from './api';
 import * as Sentry from '@sentry/browser';
-import { getHostname, loadDevTools }from './utils';
+import { getHostname, getAPIUrl, loadDevTools }from './utils';
 
-const mainUrl = process.env.API_URL || 'https://staging.wazimap-ng.openup.org.za';
-const productionUrl = process.env.API_URL || 'https://production.wazimap-ng.openup.org.za';
+const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
+const productionUrl = getAPIUrl('https://production.wazimap-ng.openup.org.za');
 let config = new SAConfig();
 
 let hostname = getHostname();

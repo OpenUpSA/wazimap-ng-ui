@@ -45,6 +45,7 @@
     "@testing-library/jest-dom": "^5.11.6",
     "babel-jest": "^26.3.0",
     "babel-plugin-transform-regenerator": "^6.26.0",
+    "canvas": "^2.8.0",
     "cssnano": "^4.1.10",
     "cypress": "^5.2.0",
     "cypress-cucumber-preprocessor": "^2.5.5",

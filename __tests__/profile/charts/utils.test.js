@@ -1,4 +1,4 @@
-import { createFiltersForGroups } from '../../../src/js/profile/charts/utils';
+import { createFiltersForGroups, slugify } from '../../../src/js/profile/charts/utils';
 
 describe('#createFiltersForGroups', () => {
   let groups;
@@ -39,6 +39,27 @@ describe('#createFiltersForGroups', () => {
      * Vega is set out to filter values that return false, only filters that return true will be left in. 
      * 
     **/
-    expect(filter).toHaveProperty('expr', '!ageFilter || (ageFilter && datum.age === ageFilterValue)')
+    expect(filter).toHaveProperty('expr', '!ageFilter || (ageFilter && datum["age"] === ageFilterValue)')
+  });
+  describe('strange values', () => {
+    test.each([
+      ['age group', 'agegroup']
+    ])('createFilterForGroups name %s', (value, expected) => {
+      let groups = [
+        {
+          name: value
+        }
+      ]
+      let { signals, filters } = createFiltersForGroups(groups);
+      let [filter] = filters;
+      expect(filter).toHaveProperty('expr', `!${expected}Filter || (${expected}Filter && datum["${value}"] === ${expected}FilterValue)`)
+    });
+  });
+});
+describe('#slugify', () => {
+  test.each([
+    ['abc123', 'abc123'], ['ab c', 'abc'],  ['ab-c', 'abc'],
+    ['ab.cd-_fsw', 'abcdfsw'], ['ab  ', 'ab'],  ['ab-c', 'abc']])('slugify(%s)', (value, expected) => {
+      expect(slugify(value)).toBe(expected);
   });
 });

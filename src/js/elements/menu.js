@@ -37,7 +37,7 @@ function subindicatorsInSubCategory(subcategory) {
 }
 
 function subindicatorsInIndicator(indicator) {
-  return indicator.metadata.groups.length;
+  return indicator.metadata.groups ? indicator.metadata.groups.length : 0;
 }
 
 // TODO this entire file needs to be refactored to use thhe observer pattern

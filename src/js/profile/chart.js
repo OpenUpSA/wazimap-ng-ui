@@ -58,7 +58,7 @@ export class Chart extends Observable {
   addChart = (data) => {
     $(".bar-chart", this.container).remove();
     $("svg", this.container).remove();
-    
+
     let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
 
     const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
@@ -314,8 +314,8 @@ export class Chart extends Observable {
       ".profile-indicator__filters"
     );
 
-    let g = groups.filter((g) => { return g.name !== indicators.metadata.primary_group })
-    let siFilter = new SubindicatorFilter(filterArea, g, title, this.applyFilter, dropdowns, undefined, indicators.child_data);
+    this.filterGroups = groups.filter((g) => { return g.name !== indicators.metadata.primary_group })
+    let siFilter = new SubindicatorFilter(filterArea, this.filterGroups, title, this.applyFilter, dropdowns, undefined, indicators.child_data);
     this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
   };
 
@@ -323,14 +323,21 @@ export class Chart extends Observable {
     this.filteredData = filteredData;
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
-    let { name:filterName } = selectedGroup;
-    filterName = slugify(filterName)
+    this.filterGroups.forEach((group) => {
+      let { name:filterName } = group;
+      filterName = slugify(filterName)
+      this.vegaView.signal(`${filterName}Filter`, false)
+    });
+
     if(selectedFilter !== "All values") {
+      let { name:filterName } = selectedGroup;
+      filterName = slugify(filterName)
       this.setDownloadUrl();
       this.vegaView.signal(`${filterName}Filter`, true)
-      this.vegaView.signal(`${filterName}FilterValue`, selectedFilter).run()
+      this.vegaView.signal(`${filterName}FilterValue`, selectedFilter)
       this.appendDataToTable();
     }
+    this.vegaView.run()
   };
 
   exportAsCsv = () => {

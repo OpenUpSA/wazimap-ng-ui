@@ -5,6 +5,12 @@ function changeHost(value) {
   window.location.reload(false);
 }
 
+function changeAPIUrl(value) {
+  sessionStorage.setItem('wazi.apiUrl', value);
+  window.location.reload(false);
+}
+
+
 function changePanel(value) {
   sessionStorage.setItem('wazi.defaultPanel', value);
   window.location.reload(false);
@@ -33,6 +39,11 @@ function tools(profiles) {
       title: 'Hostname',
       callback: changeHost,
       values: 'Hostname'
+    },
+    { type: 'input',
+      title: 'API Url',
+      callback: changeAPIUrl,
+      values: 'API Url'
     },
     { type: 'checkbox',
       title: 'enable Local Server',

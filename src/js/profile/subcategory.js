@@ -49,16 +49,27 @@ export class Subcategory extends Observable {
         let formattingConfig = this.formattingConfig;
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
+        let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
 
-        for (const [title, indicatorData] of Object.entries(detail.indicators)) {
-            let isLast = index === lastIndex;
-            let i = new Indicator(formattingConfig, wrapper, title, indicatorData, detail, isLast);
-            this.bubbleEvents(i, [
-                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter'
-            ]);
-            index++;
+        if (!isEmpty) {
+            for (const [title, indicatorData] of Object.entries(detail.indicators)) {
+                if (typeof indicatorData.data !== 'undefined') {
+                    let isLast = index === lastIndex;
+                    let i = new Indicator(formattingConfig, wrapper, title, indicatorData, detail, isLast);
+                    this.bubbleEvents(i, [
+                        'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+                        'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                        'point_tray.subindicator_filter.filter'
+                    ]);
+                    index++;
+                } else {
+                    $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
+                    $(wrapper).find(descriptionClass).removeClass('hidden')
+                }
+            }
+        } else {
+            $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
+            $(wrapper).find(descriptionClass).removeClass('hidden')
         }
     }
 

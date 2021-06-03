@@ -13,13 +13,15 @@ let indicatorTemplate = null;
 let profileWrapper = null;
 
 
+
 export default class ProfileLoader extends Observable {
-    constructor(formattingConfig, _api, _profileId) {
+    constructor(formattingConfig, _api, _profileId, _config) {
         super();
 
         this.api = _api;
         this.profileId = _profileId;
         this.formattingConfig = formattingConfig;
+        this.config = _config;
     }
 
     loadProfile = (dataBundle) => {
@@ -32,7 +34,7 @@ export default class ProfileLoader extends Observable {
         this.loadCategories(profile);
         this.updateGeography(profile);
 
-        let profileHeader = new Profile_header(profile.parents, geometries, this.api, this.profileId, geography);
+        let profileHeader = new Profile_header(profile.parents, geometries, this.api, this.profileId, geography, this.config);
         profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
     }
 

@@ -31,7 +31,9 @@ import {configureBoundaryEvents} from "./setup/boundaryevents";
 import {configureMapDownloadEvents} from "./setup/mapdownload";
 import {configureTutorialEvents} from "./setup/tutorial";
 import {configureTabNoticeEvents} from "./setup/tabnotice";
+import {configureTranslationEvents} from "./setup/translations"
 import {configurePage} from "./setup/general";
+import {Translations} from "./elements/translations";
 
 
 export default function configureApplication(profileId, config) {
@@ -54,7 +56,7 @@ export default function configureApplication(profileId, config) {
     const pointDataTray = new PointDataTray(api, profileId);
     const mapchip = new MapChip(config.choropleth);
     const search = new Search(api, profileId, 2);
-    const profileLoader = new ProfileLoader(formattingConfig, api, profileId);
+    const profileLoader = new ProfileLoader(formattingConfig, api, profileId, config.config);
     const locationInfoBox = new LocationInfoBox(formattingConfig);
     const zoomToggle = new ZoomToggle();
     const preferredChildToggle = new PreferredChildToggle();
@@ -62,6 +64,7 @@ export default function configureApplication(profileId, config) {
     const mapDownload = new MapDownload(mapchip);
     const tutorial = new Tutorial();
     const tabNotice = new TabNotice(config.config.feedback);
+    const translations = new Translations(config.config.translations);
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();
@@ -81,6 +84,7 @@ export default function configureApplication(profileId, config) {
     configureMapDownloadEvents(mapDownload);
     configureTutorialEvents(controller, tutorial, config.config.tutorial);
     configureTabNoticeEvents(controller, tabNotice);
+    configureTranslationEvents(controller, translations);
     configurePage(controller, config);
 
     controller.on('profile.loaded', payload => {

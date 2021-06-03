@@ -1,4 +1,4 @@
-import {checkIterate, Observable} from '../utils';
+import {checkIterate, getFilterGroups, Observable} from '../utils';
 import {format as d3format} from 'd3-format';
 import {SubindicatorFilter} from "../profile/subindicator_filter";
 
@@ -31,52 +31,29 @@ export class MapChip extends Observable {
         $(mapOptionsClass).show();  //webflow.js adds display:none when clicked on x
         $(mapOptionsClass).find('.filters__header_close').on('click', () => this.removeMapChip());
 
-        this.setDescription(args);
+        $('.map-options__context .map-option__context_text div').text(args.description);
         this.handleChoroplethFilter(args);
     }
 
-    setDescription(args) {
-        const indicatorTitle = args.indicatorTitle;
-        const indicators = args.indicators[indicatorTitle];
-        if (typeof indicators !== 'undefined' && indicators !== null) {
-            const description = indicators.description;
-
-            $('.map-options__context .map-option__context_text div').text(description);
-        }
-    }
-
     handleChoroplethFilter(args) {
-        let groups = [];
-        subindicatorKey = args.subindicatorKey;
-
-        for (const [title, detail] of Object.entries(args.indicators)) {
-            if (title === args.indicatorTitle && typeof detail.groups !== 'undefined') {
-                for (const [group, items] of Object.entries(detail.groups)) {
-                    groups.push(group);
-                }
-            }
-        }
+        let primaryGroup = args.data.metadata.primary_group;
+        let groups = getFilterGroups(args.data.metadata.groups, primaryGroup);
 
         let dropdowns = $(mapOptionsClass).find('.mapping-options__filter');
         const filterArea = $(mapOptionsClass).find('.map-options__filters_content');
-        let indicators = args.indicators;
-        new SubindicatorFilter(indicators, filterArea, groups, args.indicatorTitle, this, dropdowns, args.filter);
+
+        new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, args.filter, args.data.child_data);
     }
 
-    applyFilter = (subindicatorArr, selectedGroup, selectedFilter) => {
-        if (subindicatorArr !== null) {
-            checkIterate(subindicatorArr, (s) => {
-                if (s.keys === subindicatorKey) {
-                    const payload = {
-                        data: s.children,
-                        subindicatorArr: subindicatorArr,
-                        selectedGroup: selectedGroup,
-                        selectedFilter: selectedFilter
-                    }
+    applyFilter = (filterResult, selectedGroup, selectedFilter) => {
+        if (filterResult !== null) {
+            const payload = {
+                data: filterResult,
+                selectedGroup: selectedGroup.name,
+                selectedFilter: selectedFilter
+            }
 
-                    this.triggerEvent("mapchip.choropleth.filtered", payload)
-                }
-            })
+            this.triggerEvent("mapchip.choropleth.filtered", payload)
         }
     }
 
@@ -128,12 +105,12 @@ export class MapChip extends Observable {
     }
 
     onSubIndicatorChange(args) {
-        if (typeof args.children === 'undefined') {
+        if (typeof args.data.child_data === 'undefined') {
             return;
         }
 
-        let label = `${args.indicatorTitle} (${args.subindicatorKey})`;
-        if (args.indicatorTitle === args.subindicatorKey) {
+        let label = `${args.indicatorTitle} (${args.selectedSubindicator})`;
+        if (args.indicatorTitle === args.selectedSubindicator) {
             label = args.indicatorTitle;
         }
 

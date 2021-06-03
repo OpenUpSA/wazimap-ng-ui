@@ -191,7 +191,8 @@ export class Chart extends Observable {
 
     $(this.table).append(tbody);
 
-    if (dataArr.length > MAX_RICH_TABLE_ROWS) {
+    let $showExtra = $('.profile-indicator__table_load-more', this.containerParent);
+    if (dataArr.length > MAX_RICH_TABLE_ROWS && $showExtra.length < 1) {
       let showExtraRows = false;
       let btnDiv = document.createElement('div');
       $(btnDiv).addClass('profile-indicator__table_show-more profile-indicator__table_showing profile-indicator__table_load-more');

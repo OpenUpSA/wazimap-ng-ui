@@ -1,6 +1,6 @@
 
 export const slugify = (string) => {
-    return string.replace(/^\s+|\s+$/g, '').replace(/[^a-z0-9 -]/g, '').replace(/\s+/g, '_').replace(/_+/g, '_');
+    return string.replace(/^\s+|\s+$/g, '').replace(/[^a-z0-9]/g, '').replace(/\s+/g, '_').replace(/_+/g, '_');
 }
 /**
  * createFiltersForGroups
@@ -12,11 +12,11 @@ export const createFiltersForGroups = (groups) => {
   let filters = new Map();
   let signals = new Map();
   groups.forEach((group) => {
-    let { name:keyName } = group;
-    keyName = slugify(keyName)
+    let { name } = group;
+    let keyName = slugify(name)
     filters.set(keyName, {
       type: "filter",
-      expr: `!${keyName}Filter || (${keyName}Filter && datum.${keyName} === ${keyName}FilterValue)`
+      expr: `!${keyName}Filter || (${keyName}Filter && datum["${name}"] === ${keyName}FilterValue)`
     })
     signals.set(keyName, { name: `${keyName}Filter`, value: false })
     signals.set(`${keyName}Value`, { name: `${keyName}FilterValue`})

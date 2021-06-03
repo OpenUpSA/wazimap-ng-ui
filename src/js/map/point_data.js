@@ -83,7 +83,6 @@ export class PointData extends Observable {
      * */
 
     async showCategoryPoint(category) {
-
         const self = this;
         let layer = this.categoryLayers[category.id];
 
@@ -99,7 +98,7 @@ export class PointData extends Observable {
 
             const data = await this.getAddressPoints(category);
             self.showPointLegend(category);
-            self.createMarkers(data, layer);
+            self.createMarkers(data, category.data, layer);
             self.map.addLayer(layer);
             self.showDone(category);
 
@@ -164,7 +163,7 @@ export class PointData extends Observable {
     /**
      * individual markers
      */
-    createMarkers = (points, layer) => {
+    createMarkers = (points, categoryData, layer) => {
         const self = this;
         let col = '';
 
@@ -195,10 +194,10 @@ export class PointData extends Observable {
                 pane: 'markerPane'
             })
             marker.on('click', (e) => {
-                this.showMarkerPopup(e, point, true);
+                this.showMarkerPopup(e, point, categoryData, true);
                 stopPropagation(e); //prevent map click event
             }).on('mouseover', (e) => {
-                this.showMarkerPopup(e, point);
+                this.showMarkerPopup(e, point, categoryData);
             }).on('mouseout', () => {
                 this.hideMarkerPopup();
             });
@@ -206,9 +205,9 @@ export class PointData extends Observable {
         })
     }
 
-    showMarkerPopup = (e, point, isClicked = false) => {
+    showMarkerPopup = (e, point, categoryData, isClicked = false) => {
         this.map.closePopup();
-        const popupContent = this.createPopupContent(point);
+        const popupContent = this.createPopupContent(point, categoryData.visible_tooltip_attributes);
         let popup = L.popup({
             autoPan: false,
             autoClose: !isClicked,
@@ -248,7 +247,7 @@ export class PointData extends Observable {
         this.map.map_variables.popup = null;
     }
 
-    createPopupContent = (point) => {
+    createPopupContent = (point, visibleAttributes) => {
         let item = tooltipItem.cloneNode(true);
 
         $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
@@ -261,6 +260,12 @@ export class PointData extends Observable {
         ThemeStyle.replaceChildDivWithIcon($(item).find('.facility-tooltip__header_icon'), point.icon)
 
         $('.' + tooltipItemsClsName, item).html('');
+
+        if (typeof visibleAttributes === 'undefined'){
+            visibleAttributes = [];
+        }
+
+        this.appendPointData(point, item, tooltipRowItem, tooltipItemsClsName, 'tooltip__facility-item_label', 'tooltip__facility-item_value', visibleAttributes);
 
         if (point.image != null)
             $('.' + tooltipItemsClsName, item).append(`<img src="${point.image}"/>`);
@@ -284,10 +289,10 @@ export class PointData extends Observable {
         $('.facility-info').css('display', 'flex');
     }
 
-    appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName) => {
+    appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName, visibleAttributes = null) => {
         $('.' + itemsClsName, item).empty();
         point.data.forEach((a, i) => {
-            if (Object.prototype.toString.call(a.value) !== '[object Object]') {
+            if (Object.prototype.toString.call(a.value) !== '[object Object]' && (visibleAttributes === null || visibleAttributes.indexOf(a.key) >= 0)) {
                 let itemRow = rowItem.cloneNode(true);
                 $(itemRow).removeClass('last');
                 $('.' + labelClsName, itemRow).text(a.key);

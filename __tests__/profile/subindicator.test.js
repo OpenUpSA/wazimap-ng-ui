@@ -87,7 +87,7 @@ describe('SubindicatorFilter', () => {
     let dropdowns = $(document).find('.mapping-options__filter');
     const filterArea = $(document).find('.map-options__filters_content');
     applyFilter = jest.fn();
-    si = new SubindicatorFilter(filterArea, GROUPS, title, applyFilter, dropdowns, [], CHILD_DATA, true);
+    si = new SubindicatorFilter(filterArea, GROUPS, title, applyFilter, dropdowns, undefined, CHILD_DATA, true);
   })
 
 

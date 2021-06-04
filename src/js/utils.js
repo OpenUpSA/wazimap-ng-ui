@@ -356,9 +356,10 @@ export function extractSheetsData(data) {
 export function extractSheetData(rawData, categoryName) {
     const sheetName = getSheetName(categoryName);
     let rows = rawData.features.map((f) => {
-        let {properties: {name, data}} = f;
+        let {geometry: {coordinates:[longitude, latitude]}, properties: {name, data}} = f;
+
         let mapped = data.map(item => ({[item.key]: item.value}));
-        return Object.assign({name}, ...mapped);
+        return Object.assign({name, longitude, latitude}, ...mapped);
     })
 
     return {

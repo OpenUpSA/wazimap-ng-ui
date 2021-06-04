@@ -114,8 +114,6 @@ export default class Controller extends Observable {
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.selectedSubindicator;
 
-        console.log({'state': this.state})
-
         this.triggerEvent("map_explorer.subindicator.click", payload);
     };
 

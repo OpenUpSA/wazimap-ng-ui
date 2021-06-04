@@ -113,7 +113,7 @@ export class SubindicatorFilter extends Observable {
         if (i !== 0 && $(li).hasClass('selected')) {
           //leave the first item selected in default
           //                    $(li).removeClass('selected')
-          //                                    
+          //
         }
         if (typeof item.name === 'undefined') {
           $('.truncate', li).text(item);

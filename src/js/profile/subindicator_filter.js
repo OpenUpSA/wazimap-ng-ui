@@ -113,7 +113,7 @@ export class SubindicatorFilter extends Observable {
         if (i !== 0 && $(li).hasClass('selected')) {
           //leave the first item selected in default
           //                    $(li).removeClass('selected')
-          //                                    
+          //
         }
         if (typeof item.name === 'undefined') {
           $('.truncate', li).text(item);
@@ -196,19 +196,15 @@ export class SubindicatorFilter extends Observable {
   getFilteredGroups(selectedFilter) {
     let filteredData = {};
 
-    Object.entries(this.childData).map(([code, data]) => {
-      filteredData[code] = data.filter((cd) => {
-        return cd[this.selectedGroup.name] === selectedFilter
-
-
-      })
-
-
-    })
+    if(typeof this.childData !== 'undefined'){
+        Object.entries(this.childData).map(([code, data]) => {
+            filteredData[code] = data.filter((cd) => {
+                return cd[this.selectedGroup.name] === selectedFilter
+            })
+        })
+    }
 
     return filteredData;
-
-
   }
 
   resetDropdowns = (dropdowns) => {

@@ -198,19 +198,15 @@ export class SubindicatorFilter extends Observable {
   getFilteredGroups(selectedFilter) {
     let filteredData = {};
 
-    Object.entries(this.childData).map(([code, data]) => {
-      filteredData[code] = data.filter((cd) => {
-        return cd[this.selectedGroup.name] === selectedFilter
-
-
-      })
-
-
-    })
+    if(typeof this.childData !== 'undefined'){
+        Object.entries(this.childData).map(([code, data]) => {
+            filteredData[code] = data.filter((cd) => {
+                return cd[this.selectedGroup.name] === selectedFilter
+            })
+        })
+    }
 
     return filteredData;
-
-
   }
 
   resetDropdowns = (dropdowns) => {

@@ -22,8 +22,6 @@ const graphValueTypes = {
 const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
 
-let tooltipClone = null;
-
 const MAX_RICH_TABLE_ROWS = 7
 
 export class Chart extends Observable {
@@ -44,7 +42,6 @@ export class Chart extends Observable {
     this.selectedGroup = null;
     this.table = null;
 
-    tooltipClone = $(tooltipClass)[0].cloneNode(true);
     this.subCategoryNode = _subCategoryNode;
 
     const chartContainer = $(chartContainerClass, this.subCategoryNode);

@@ -231,7 +231,7 @@ export class Chart extends Observable {
     }
   }
 
-  setChartMenu = (barChart`) => {
+  setChartMenu = (barChart) => {
     const self = this;
     const saveImgButton = $(this.containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');
 

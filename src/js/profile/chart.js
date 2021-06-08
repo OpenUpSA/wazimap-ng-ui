@@ -116,6 +116,7 @@ export class Chart extends Observable {
         this.vegaView = result.view;
         this.setChartMenu();
         this.showChartDataTable();
+        this.setDownloadUrl()
         let $svg = $(this.container).find('svg')
         $svg.attr('preserveAspectRatio', 'xMinYMin meet')
         $svg.removeAttr('width')
@@ -230,7 +231,7 @@ export class Chart extends Observable {
     }
   }
 
-  setChartMenu = (barChart) => {
+  setChartMenu = (barChart`) => {
     const self = this;
     const saveImgButton = $(this.containerParent).find('.hover-menu__content a.hover-menu__content_item:nth-child(1)');
 

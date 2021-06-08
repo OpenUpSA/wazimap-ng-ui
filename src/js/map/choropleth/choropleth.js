@@ -73,6 +73,7 @@ export class Choropleth extends Observable {
     }
 
     showChoropleth(calculations, setLayerToSelected) {
+        this.reset(true);
         const self = this;
         const childGeographyValues = [...calculations];
         const values = childGeographyValues.map(el => el.val);

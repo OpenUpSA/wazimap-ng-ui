@@ -315,9 +315,11 @@ export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindica
             return a[primaryGroup] === selectedSubindicator;
         });
 
+      if(filteredArr.length > 0) {
         sumData[code] = filteredArr.reduce(function (s, a) {
             return s + parseFloat(a.count);
         }, 0);
+      }
     })
 
     return sumData;

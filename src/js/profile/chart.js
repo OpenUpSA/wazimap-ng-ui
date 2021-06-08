@@ -119,7 +119,7 @@ export class Chart extends Observable {
         this.vegaView = result.view;
         this.setChartMenu();
         this.showChartDataTable();
-        this.setDownloadUrl()
+        this.setDownloadUrl();
         let $svg = $(this.container).find('svg')
         $svg.attr('preserveAspectRatio', 'xMinYMin meet')
         $svg.removeAttr('width')

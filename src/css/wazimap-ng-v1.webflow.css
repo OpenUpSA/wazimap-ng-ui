@@ -6741,7 +6741,7 @@ label {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display: flex;
+  display: flex; 
   height: 44px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
@@ -7003,12 +7003,9 @@ label {
   grid-template-rows: auto;
 }
 
-.facility-info__print {
+.facility-info__download {
   z-index: 1;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   width: 36px;
   height: 36px;
   padding: 2px;
@@ -7031,11 +7028,11 @@ label {
   cursor: pointer;
 }
 
-.facility-info__print:hover {
+.facility-info__download:hover {
   color: #000;
 }
 
-.facility-info__print.hidden {
+.facility-info__download.hidden {
   display: none;
 }
 
@@ -8770,29 +8767,4 @@ label {
     .rich-data__print, .tab-notice{
       display: none;
     }
-
-    .rich-data[style*="display: none;"]{
-        display: none !important;
-    }
-
-    .facility-info{
-      display: inline-table !important;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-color: #fff;
-      max-height: 100%;
-      max-width: 100%;
-    }
-
-    .facility-info__view-google-map, .facility-info__print, .facility-info__close{
-      display: none;
-    }
-
-    .facility-info[style*="display: none;"]{
-      display: none !important;
-    }
 }
-

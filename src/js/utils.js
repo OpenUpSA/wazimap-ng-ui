@@ -244,6 +244,10 @@ export function getHostname() {
     return hostname;
 }
 
+export function getAPIUrl(defaultUrl) {
+    return sessionStorage.getItem("wazi.apiUrl") || process.env.API_URL || defaultUrl;
+}
+
 export function loadDevTools(callback) {
     const explicitlyDisabled =
         window.location.search.includes('dev-tools=false') ||
@@ -293,33 +297,35 @@ export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
     return merge({}, defaultObj, obj)
 }
 
-export function checkIfSubCategoryHasChildren (subcategory, detail)  {
+export function checkIfSubCategoryHasChildren(subcategory, detail) {
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
-        hasChildren = hasChildren || data.data.some(function (e) {
+        hasChildren = hasChildren || (typeof data.data !== 'undefined' && data.data.some(function (e) {
             return e.count > 0
-        });
+        }));
     }
 
     return hasChildren;
 }
 
-export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator){
+export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator) {
     let sumData = {};
     Object.entries(childData).map(([code, data]) => {
         let filteredArr = data.filter((a) => {
             return a[primaryGroup] === selectedSubindicator;
         });
 
+      if(filteredArr.length > 0) {
         sumData[code] = filteredArr.reduce(function (s, a) {
             return s + parseFloat(a.count);
         }, 0);
+      }
     })
 
     return sumData;
 }
 
-export function getFilterGroups(groups, primaryGroup){
+export function getFilterGroups(groups, primaryGroup) {
     groups = groups.reduce(function (memo, e1) {
         let matches = memo.filter(function (e2) {
             return e1.name === e2.name
@@ -352,9 +358,10 @@ export function extractSheetsData(data) {
 export function extractSheetData(rawData, categoryName) {
     const sheetName = getSheetName(categoryName);
     let rows = rawData.features.map((f) => {
-        let { properties: { name, data } } =  f;
-        let mapped = data.map(item => ({ [item.key]: item.value }) );
-        return Object.assign({name}, ...mapped );
+        let {geometry: {coordinates:[longitude, latitude]}, properties: {name, data}} = f;
+
+        let mapped = data.map(item => ({[item.key]: item.value}));
+        return Object.assign({name, longitude, latitude}, ...mapped);
     })
 
     return {

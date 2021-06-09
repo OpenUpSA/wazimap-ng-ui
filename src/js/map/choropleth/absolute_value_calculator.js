@@ -8,7 +8,7 @@ export default class AbsoluteValueCalculator {
         const result = Object.entries(sumData).map(childGeography => {
             const code = childGeography[0];
             const count = childGeography[1];
-            return {code: code, total: count};
+            return {code: code, val: count, total: count};
         })
 
         return result

@@ -10,6 +10,9 @@ import Papa from 'papaparse';
 
 import embed from "vega-embed";
 
+import { configureBarchart } from './charts/barChart';
+import { slugify } from './charts/utils';
+
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
 const graphValueTypes = {
@@ -19,9 +22,8 @@ const graphValueTypes = {
 const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
 
-let tooltipClone = null;
+const MAX_RICH_TABLE_ROWS = 7;
 
-const MAX_RICH_TABLE_ROWS = 7
 
 export class Chart extends Observable {
   constructor(
@@ -41,7 +43,6 @@ export class Chart extends Observable {
     this.selectedGroup = null;
     this.table = null;
 
-    tooltipClone = $(tooltipClass)[0].cloneNode(true);
     this.subCategoryNode = _subCategoryNode;
 
     const chartContainer = $(chartContainerClass, this.subCategoryNode);
@@ -56,192 +57,71 @@ export class Chart extends Observable {
     $(".bar-chart", this.container).remove();
     $("svg", this.container).remove();
 
-    const chartConfig = this.config.types["Value"];
-    const percentageChartConfig = this.config.types["Percentage"];
+    let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
 
-    const barChart = {
-      $schema: "https://vega.github.io/schema/vega/v5.json",
-      description: "A",
-      width: 800,
-      padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
-      data: [
-        {
-          name: "table",
-          values: data.data,
-          transform: [
-            {
-              type: "filter",
-              expr: "applyFilter ? datum[filterIndicator] === filterValue : datum"
-            }
-          ]
-        },
-        {
-          name: "data_formatted",
-          source: "table",
-          transform: [
-            {
-              type: "aggregate",
-              ops: ["sum"],
-              as: ["count"],
-              fields: ["count"],
-              groupby: { signal: "groups" }
-            },
-            {
-              type: "joinaggregate",
-              as: ["TotalCount"],
-              ops: ["sum"],
-              fields: ["count"]
-            },
-            {
-              type: "formula",
-              expr: "datum.count/datum.TotalCount",
-              as: "percentage"
-            }
-          ]
-        }
-      ],
-      signals: [
-        {
-          name: "groups",
-          value: [data.metadata.primary_group],
-        },
-        {
-          name: "barvalue",
-          value: "datum",
-        },
-        {
-          name: "Units",
-          value: graphValueTypes[this.config.defaultType]
-        },
-        {
-          name: "applyFilter",
-          value: false,
-        },
-        {
-          name: "filterIndicator",
-        },
-        {
-          name: "filterValue",
-        },
-        {
-          name: "mainGroup",
-          value: data.metadata.primary_group,
-        },
-        {
-          name: "numberFormat",
-          value: { percentage: percentageChartConfig.formatting, value: chartConfig.formatting },
-        },
-        {
-          name: "datatype",
-          value: { percentage: "percentage", value: "count" },
-        },
-        {
-          name: "y_step",
-          value: 30
-        },
-        {
-          name: "height",
-          update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
-        }
-      ],
-      scales: [
-        {
-          name: "yscale",
-          type: "band",
-          domain: { data: "data_formatted", field: {signal: "mainGroup"} },
-          range: {step: {signal: "y_step"}},
-          padding: 0.1,
-        },
-        {
-          name: "xscale",
-          type: "linear",
-          domain: { data: "data_formatted", field: { signal: "datatype[Units]" } },
-          range: "width",
-          nice: true,
-        },
-      ],
+    const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
+      let x = event.pageX + offsetX;
+      if (x + tooltipBox.width > window.innerWidth) {
+        x =+ event.pageX - offsetX - tooltipBox.width;
+      }
+      let y = event.pageY + offsetY;
+      if (y + tooltipBox.height > window.innerHeight) {
+        y =+ event.pageY - offsetY - tooltipBox.height;
+      }
+      return {x, y};
+    }
 
-      axes: [
-        {
-          orient: "left",
-          scale: "yscale",
-          domainOpacity: 0.5,
-          labelOpacity: 0.5,
-          tickSize: 0,
-          labelPadding: 6,
-          zindex: 1,
-        },
-        {
-          orient: "bottom",
-          scale: "xscale",
-          bandPosition: 0,
-          domainOpacity: 0.5,
-          tickSize: 0,
-          format: { signal: "numberFormat[Units]" },
-          grid: true,
-          gridOpacity: 0.5,
-          labelOpacity: 0.5,
-          labelPadding: 6,
-        },
-      ],
+    const handler = (_, event, item, value) => {
+      const tooltipClassSubstr = tooltipClass.substring(1)
+      this.el = $(tooltipClass) ? $(tooltipClass)[0] : null;
+      if (!this.el) {
+        this.el = document.createElement('div');
+        this.el.classList.add(tooltipClassSubstr);
+        document.body.appendChild(this.el);
+      }
+      const tooltipContainer = document.fullscreenElement != null ? document.fullscreenElement : document.body;
+      tooltipContainer.appendChild(this.el);
+      // hide tooltip for null, undefined, or empty string values
+      if (value == null || value === '') {
+        this.el.remove()
+        return;
+      }
+      // set the tooltip content
+      this.el.innerHTML = `
+        <div class="bar-chart__row_tooltip-card">
+          <div class="bar-chart__tooltip_name">
+              <div>${value.group}</div>
+          </div>
+          <div class="bar-chart__tooltip_value">
+              <div>${value.percentage}</div>
+          </div>
+          <div class="bar-chart__tooltip_alt-value">
+              <div>${value.count}</div>
+          </div>
+          <div class="bar-chart__row_tooltip-notch"></div>
+        </div>`
 
-      marks: [
-        {
-          name: "bars",
-          from: { data: "data_formatted" },
-          type: "rect",
-          encode: {
-            enter: {
-              y: { scale: "yscale", field: {signal: "mainGroup"} },
-              height: { scale: "yscale", band: 1 },
-              x: { scale: "xscale", field: { signal: "datatype[Units]" } },
-              x2: { scale: "xscale", value: 0 },
-            },
-            update: {
-              fill: { value: "rgb(57, 173, 132)" },
-              x: { scale: "xscale", field: { signal: "datatype[Units]" } },
-              x2: { scale: "xscale", value: 0 },
-            },
-            hover: {
-              fill: { value: "rgb(57, 173, 132, 0.7)" },
-            },
-          },
-        },
-        {
-          type: "text",
-          from: { data: "data_formatted" },
-          encode: {
-            enter: {
-              align: { value: "left" },
-              baseline: { value: "middle" },
-              fill: { value: "grey" },
-              fontSize: { value: 10 },
-            },
-            update: {
-              text: {
-                signal: "format(datum[datatype[Units]],numberFormat[Units])"
-              },
-              x: {
-                scale: "xscale",
-                field: { signal: "datatype[Units]" },
-                offset: 5,
-              },
-              y: {
-                scale: "yscale",
-                field: { signal: "mainGroup" },
-                band: 0.5,
-              },
-            },
-          },
-        },
-      ],
-    };
+      // make the tooltip visible
+      this.el.classList.add('visible', tooltipClassSubstr);
+      const {x, y} = calculatePosition(
+        event,
+        this.el.getBoundingClientRect(),
+        10, 10
+      );
+      this.el.setAttribute('style', `top: ${y}px; left: ${x}px; z-index: 999;`);
+    }
 
-    embed(this.container, barChart, { actions: false})
+    embed(this.container, vegaSpec, { renderer: 'svg', actions: false, tooltip: handler.bind(this)})
+
       .then(async (result) => {
         this.vegaView = result.view;
         this.setChartMenu();
         this.showChartDataTable();
+        this.setDownloadUrl();
+        let $svg = $(this.container).find('svg')
+        $svg.attr('preserveAspectRatio', 'xMinYMin meet')
+        $svg.removeAttr('width')
+        $svg.removeAttr('height')
       })
       .catch(console.error);
   };
@@ -310,7 +190,8 @@ export class Chart extends Observable {
 
     $(this.table).append(tbody);
 
-    if (dataArr.length > MAX_RICH_TABLE_ROWS) {
+    let $showExtra = $('.profile-indicator__table_load-more', this.containerParent);
+    if (dataArr.length > MAX_RICH_TABLE_ROWS && $showExtra.length < 1) {
       let showExtraRows = false;
       let btnDiv = document.createElement('div');
       $(btnDiv).addClass('profile-indicator__table_show-more profile-indicator__table_showing profile-indicator__table_load-more');
@@ -319,7 +200,7 @@ export class Chart extends Observable {
       $(btn).on("click", () => {
         showExtraRows = !showExtraRows;
         showExtraRows ? $(btn).text('Show less rows') : $(btn).text('Load more rows');
-        showExtraRows ? $(table).removeClass("profile-indicator__table_content") : $(this.table).addClass("profile-indicator__table_content");
+        showExtraRows ? $(this.table).removeClass("profile-indicator__table_content") : $(this.table).addClass("profile-indicator__table_content");
       })
       btnDiv.append(btn);
       this.containerParent.append(btnDiv);
@@ -432,8 +313,8 @@ export class Chart extends Observable {
       ".profile-indicator__filters"
     );
 
-    let g = groups.filter((g) => { return g.name !== indicators.metadata.primary_group })
-    let siFilter = new SubindicatorFilter(filterArea, g, title, this.applyFilter, dropdowns, undefined, indicators.child_data);
+    this.filterGroups = groups.filter((g) => { return g.name !== indicators.metadata.primary_group })
+    let siFilter = new SubindicatorFilter(filterArea, this.filterGroups, title, this.applyFilter, dropdowns, undefined, indicators.child_data);
     this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
   };
 
@@ -441,15 +322,21 @@ export class Chart extends Observable {
     this.filteredData = filteredData;
     this.selectedFilter = selectedFilter;
     this.selectedGroup = selectedGroup;
+    this.filterGroups.forEach((group) => {
+      let { name:filterName } = group;
+      filterName = slugify(filterName)
+      this.vegaView.signal(`${filterName}Filter`, false)
+    });
+
+    if(selectedFilter !== "All values") {
+      let { name:filterName } = selectedGroup;
+      filterName = slugify(filterName)
       this.setDownloadUrl();
-      this.vegaView.signal('filterIndicator', selectedGroup.name)
-      this.vegaView.signal('filterValue', selectedFilter)
-      if(selectedGroup && selectedFilter !== "All values") {
-        this.vegaView.signal('applyFilter', true).run()
-      } else {
-        this.vegaView.signal('applyFilter', false).run()
-      }
-    this.appendDataToTable();
+      this.vegaView.signal(`${filterName}Filter`, true)
+      this.vegaView.signal(`${filterName}FilterValue`, selectedFilter)
+      this.appendDataToTable();
+    }
+    this.vegaView.run()
   };
 
   exportAsCsv = () => {

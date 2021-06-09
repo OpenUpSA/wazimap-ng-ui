@@ -1,6 +1,3 @@
-import { EVENTS as TAB_EVENTS } from './elements/tab_notice';
-import {EVENTS as TUTORIAL_EVENTS} from './elements/tutorial';
-
 window.dataLayer = window.dataLayer || [];
 
 const MISSING_TIME = -1;
@@ -305,22 +302,7 @@ export default class Analytics {
         })
 
     }
-    
-    registerTutorialEvents(controller) {
-        controller.on(TUTORIAL_EVENTS.next, payload => {
-            this.basicLogEvent(payload, 'tutorial', 'next');
-        })
 
-        controller.on(TUTORIAL_EVENTS.prev, payload => {
-            this.basicLogEvent(payload, 'tutorial', 'previous');
-        })
-    }
-
-    registerTabNoticeEvents(controller) {
-        controller.on(TAB_EVENTS.clicked, payload => {
-            this.basicLogEvent(payload, 'tab_notice', 'clicked');
-        })
-    }
 
     registerEvents(controller) {
 
@@ -332,8 +314,6 @@ export default class Analytics {
         this.registerProfileEvents(controller);
         this.registerChoroplethEvents(controller);
         this.registerMapchipEvents(controller);
-        this.registerTabNoticeEvents(controller);
-        this.registerTutorialEvents(controller);
 
 
     // controller.on("map.zoomed", payload => pointData.onMapZoomed(payload.payload));

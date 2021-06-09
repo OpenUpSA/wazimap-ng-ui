@@ -40,9 +40,6 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         mapchip.onSubIndicatorChange(args);
     });
 
-    controller.on('redraw', payload => {
-        controller.handleNewProfileChoropleth()
-    })
 }
 
 function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, childData = null) {
@@ -53,6 +50,9 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
     const selectedSubindicator = ps.selectedSubindicator;
     const filter = ps.subindicator.filter;
     let data = ps.subindicator.data
-    if (childData) data.child_data = childData;
+    if (childData) {
+        data.originalChildData = data.child_data;
+        data.child_data = childData;
+    }
     mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter);
 }

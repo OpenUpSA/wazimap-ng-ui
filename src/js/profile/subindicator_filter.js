@@ -46,7 +46,9 @@ export class SubindicatorFilter extends Observable {
     let groupCallback = (selected) => this.groupSelected(selected, subindicatorDd, title);
 
     this.setOptionSelected(indicatorDd, this.selectedGroup, groupCallback);
+    $(indicatorDd).find('.dropdown__list_item.selected').click();
     this.setOptionSelected(subindicatorDd, selectedFilter, this.handleFilter);
+    $(subindicatorDd).find('.dropdown__list_item.selected').click();
 
   }
 

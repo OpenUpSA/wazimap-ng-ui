@@ -50,10 +50,27 @@ export class MapChip extends Observable {
 
         $(mapOptionsClass).find(`${filterRowClass}[data-isextra=true]`).remove();
         const filterArea = $(mapOptionsClass).find(filterContentClass);
-        let defaultFilters = [];
+        let filtersToAdd = [];
         if (typeof args.filter !== 'undefined') {
-            Array.prototype.push.apply(defaultFilters, args.filter);
+            Array.prototype.push.apply(filtersToAdd, args.filter);
         }
+
+        let defaultFilters = this.getDefaultFilters(args);
+        let nonAggFilters = this.getNonAggFilters(args);
+        filtersToAdd = defaultFilters.concat(nonAggFilters);
+
+        for (let i = 1; i < filtersToAdd.length; i++) {
+            this.addFilter(filtersToAdd[i].default);
+        }
+        let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
+
+        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, filtersToAdd, args.data.child_data);
+
+        this.setAddFilterButton();
+    }
+
+    getDefaultFilters = (args) => {
+        let defaultFilters = [];
 
         if (typeof args.data.chartConfiguration.filter !== 'undefined') {
             args.data.chartConfiguration.filter['defaults'].forEach((f) => {
@@ -74,14 +91,33 @@ export class MapChip extends Observable {
             })
         }
 
-        for (let i = 1; i < defaultFilters.length; i++) {
-            this.addFilter(defaultFilters[i].default);
-        }
-        let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
+        return defaultFilters;
+    }
 
-        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, defaultFilters, args.data.child_data);
+    getNonAggFilters = (args) => {
+        let filterArr = [];
 
-        this.setAddFilterButton();
+        let nonAgg = [...args.data.metadata.groups].filter((g) => {
+            return !g.can_aggregate;
+        })
+        nonAgg.forEach((n) => {
+            let filter = {
+                group: n.name,
+                value: n.subindicators[Math.floor(Math.random() * n.subindicators.length)],
+                default: true
+            }
+
+            let item = filterArr.filter((df) => {
+                return df.group === n.name
+            })[0];
+            if (item !== null && typeof item !== 'undefined') {
+                item.default = true;
+            } else {
+                filterArr.push(filter);
+            }
+        })
+
+        return filterArr;
     }
 
     applyFilter = (filterResult, selectedFilter) => {

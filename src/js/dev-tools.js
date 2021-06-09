@@ -5,6 +5,22 @@ function changeHost(value) {
   window.location.reload(false);
 }
 
+function changeAPIUrl(value) {
+  sessionStorage.setItem('wazi.apiUrl', value);
+  window.location.reload(false);
+}
+
+
+function changePanel(value) {
+  sessionStorage.setItem('wazi.defaultPanel', value);
+  window.location.reload(false);
+}
+
+function enableServer(value) {
+  sessionStorage.setItem('wazi.localServer', value);
+  window.location.reload(false);
+}
+
 function tools(profiles) {
   let hostnames = profiles.map((profile) => {
     if(profile.configuration && profile.configuration.urls) {
@@ -23,6 +39,25 @@ function tools(profiles) {
       title: 'Hostname',
       callback: changeHost,
       values: 'Hostname'
+    },
+    { type: 'input',
+      title: 'API Url',
+      callback: changeAPIUrl,
+      values: 'API Url'
+    },
+    { type: 'checkbox',
+      title: 'enable Local Server',
+      callback: enableServer,
+      values: true
+    },
+    { type: 'select',
+      title: 'Default Panel',
+      callback: changePanel,
+      values: [
+        {title: 'Rich Data', value: 1},
+        {title: 'Point Mapper', value: 2},
+        {title: 'Data Mapper', value: 3}
+      ]
     }
   ]
   return tools;

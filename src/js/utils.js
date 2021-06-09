@@ -3,6 +3,8 @@ import {format as d3format} from 'd3-format';
 
 const queryCache = {};
 
+const SHEETNAME_CHAR_LIMIT = 31;
+
 export class Cache {
     constructor() {
         this.memoryCache = {}
@@ -242,6 +244,10 @@ export function getHostname() {
     return hostname;
 }
 
+export function getAPIUrl(defaultUrl) {
+    return sessionStorage.getItem("wazi.apiUrl") || process.env.API_URL || defaultUrl;
+}
+
 export function loadDevTools(callback) {
     const explicitlyDisabled =
         window.location.search.includes('dev-tools=false') ||
@@ -289,4 +295,84 @@ export function saveAs(uri, filename) {
 
 export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
     return merge({}, defaultObj, obj)
+}
+
+export function checkIfSubCategoryHasChildren(subcategory, detail) {
+    let hasChildren = false;
+    for (const [title, data] of Object.entries(detail.indicators)) {
+        hasChildren = hasChildren || (typeof data.data !== 'undefined' && data.data.some(function (e) {
+            return e.count > 0
+        }));
+    }
+
+    return hasChildren;
+}
+
+export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator) {
+    let sumData = {};
+    Object.entries(childData).map(([code, data]) => {
+        let filteredArr = data.filter((a) => {
+            return a[primaryGroup] === selectedSubindicator;
+        });
+
+      if(filteredArr.length > 0) {
+        sumData[code] = filteredArr.reduce(function (s, a) {
+            return s + parseFloat(a.count);
+        }, 0);
+      }
+    })
+
+    return sumData;
+}
+
+export function getFilterGroups(groups, primaryGroup) {
+    groups = groups.reduce(function (memo, e1) {
+        let matches = memo.filter(function (e2) {
+            return e1.name === e2.name
+        })
+        if (matches.length == 0)
+            memo.push(e1)
+        return memo;
+    }, [])
+
+    groups = groups.filter((g) => {
+        return g.name !== primaryGroup
+    });
+
+    return groups;
+}
+
+export function extractSheetsData(data) {
+    let sheets = [];
+
+    data.results.forEach((r) => {
+        let sheet = extractSheetData(r, r.category);
+        if (sheet.sheetData.length > 0) {
+            sheets.push(sheet);
+        }
+    })
+
+    return sheets;
+}
+
+export function extractSheetData(rawData, categoryName) {
+    const sheetName = getSheetName(categoryName);
+    let rows = rawData.features.map((f) => {
+        let {geometry: {coordinates:[longitude, latitude]}, properties: {name, data}} = f;
+
+        let mapped = data.map(item => ({[item.key]: item.value}));
+        return Object.assign({name, longitude, latitude}, ...mapped);
+    })
+
+    return {
+        sheetName: sheetName,
+        sheetData: rows
+    }
+}
+
+export function getSheetName(name) {
+    const suffix = '...';
+    const sheetName = name.length > SHEETNAME_CHAR_LIMIT ? name.substring(0, SHEETNAME_CHAR_LIMIT - suffix.length) + suffix : name;
+
+    return sheetName;
 }

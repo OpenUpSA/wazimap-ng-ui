@@ -5,13 +5,14 @@ const DROPDOWN_MESSAGES = ['Select an attribute', 'Select a value'];
 const ALLVALUES = 'All values';
 
 export class SubindicatorFilter extends Observable {
-    constructor(filterArea, groups, title, filterCallback, _dropdowns, _defaultFilters, childData) {
+    constructor(filterArea, groups, title, filterCallback, _dropdowns, _defaultFilters, childData, filterRowClass = '.profile-indicator__filter-row') {
         super()
         this.childData = childData;
         this.filterCallback = filterCallback;
         this.title = title;
         this.selectedFilters = [];
         this.groups = groups;
+        this.filterRowClass = filterRowClass;
         let dropdowns = _dropdowns;
         let dds = [];
         for (let i = 0; i < dropdowns.length / 2; i++) {
@@ -72,14 +73,15 @@ export class SubindicatorFilter extends Observable {
             let indicatorDd = dropdowns['indicatorDd'];
             let subindicatorDd = dropdowns['subindicatorDd'];
 
+            if (defaultFilters[index].default) {
+                $(indicatorDd).closest(this.filterRowClass).attr('data-isextra', true);
+                $(indicatorDd).addClass('disabled');
+            }
+
             let groupCallback = (selected) => this.groupSelected(selected, subindicatorDd, DROPDOWN_MESSAGES[1]);
 
             this.setOptionSelected(indicatorDd, this.selectedGroup, groupCallback);
             this.setOptionSelected(subindicatorDd, selectedFilter, this.handleFilter);
-
-            if (defaultFilters[index].default) {
-                $(indicatorDd).addClass('disabled')
-            }
         })
     }
 
@@ -138,7 +140,7 @@ export class SubindicatorFilter extends Observable {
 
         $(ddWrapper).html('');
 
-        if ($(dropdown).closest('.map-options__filter-row').attr('data-isextra') !== 'true') {
+        if ($(dropdown).closest(this.filterRowClass).attr('data-isextra') !== 'true') {
             itemList = [ALLVALUES].concat(itemList);
         }
 

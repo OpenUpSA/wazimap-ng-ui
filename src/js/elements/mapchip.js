@@ -64,7 +64,7 @@ export class MapChip extends Observable {
         }
         let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
 
-        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, filtersToAdd, args.data.child_data);
+        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, filtersToAdd, args.data.child_data, '.map-options__filter-row');
 
         this.setAddFilterButton();
     }
@@ -209,7 +209,7 @@ export class MapChip extends Observable {
         let indicatorDd = $(filterRow).find('.mapping-options__filter')[0];
         let subindicatorDd = $(filterRow).find('.mapping-options__filter')[1];
 
-        $(filterRow).attr('data-isextra', true);
+        $(filterRow).attr('data-isextra', isDefault);
         if (!isDefault) {
             this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
         }

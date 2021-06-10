@@ -137,6 +137,10 @@ export class SubindicatorFilter extends Observable {
             $(dropdown).removeClass('disabled')
         }
 
+        if ($(dropdown).hasClass('is--disabled')) {
+            $(dropdown).removeClass('is--disabled')
+        }
+
         let ddWrapper = $(dropdown).find('.dropdown-menu__content');
         let listItem = $(dropdown).find('.dropdown__list_item')[0].cloneNode(true);
 

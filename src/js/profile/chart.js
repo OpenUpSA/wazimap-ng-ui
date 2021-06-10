@@ -329,7 +329,7 @@ export class Chart extends Observable {
         this.filterGroups = groups.filter((g) => {
             return g.name !== indicators.metadata.primary_group
         })
-        let siFilter = new SubindicatorFilter(filterArea, this.filterGroups, this.title, this.applyFilter, dropdowns, filtersToAdd, indicators.child_data);
+        let siFilter = new SubindicatorFilter(filterArea, this.filterGroups, this.title, this.applyFilter, dropdowns, filtersToAdd, indicators.child_data, '.profile-indicator__filter-row');
         this.filter = siFilter;
 
         this.setAddFilterButton();

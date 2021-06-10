@@ -13,6 +13,7 @@ export class SubindicatorFilter extends Observable {
         this.selectedFilters = [];
         this.groups = groups;
         this.filterRowClass = filterRowClass;
+        this.defaultFilters = _defaultFilters;
         let dropdowns = _dropdowns;
         let dds = [];
         for (let i = 0; i < dropdowns.length / 2; i++) {
@@ -51,11 +52,23 @@ export class SubindicatorFilter extends Observable {
             for (const [group, value] of Object.entries(sf)) {
                 filterArr.push({
                     group: group,
-                    value: value
+                    value: value,
+                    default: this.checkIfGroupIsDefault(group)
                 })
             }
         })
         this.filterCallback(filteredData, filterArr);
+    }
+
+    checkIfGroupIsDefault = (group) => {
+        let isDefault = false;
+        this.defaultFilters.forEach((df) => {
+            if (group === df.group) {
+                isDefault = true;
+            }
+        })
+
+        return isDefault
     }
 
     /**

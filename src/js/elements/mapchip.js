@@ -49,15 +49,17 @@ export class MapChip extends Observable {
         this.groups = groups;
 
         $(mapOptionsClass).find(`${filterRowClass}[data-isextra=true]`).remove();
+        $(mapOptionsClass).find(`${filterRowClass} .mapping-options__remove-filter`).addClass('is--hidden');
         const filterArea = $(mapOptionsClass).find(filterContentClass);
+
         let filtersToAdd = [];
         if (typeof args.filter !== 'undefined') {
-            Array.prototype.push.apply(filtersToAdd, args.filter);
+            filtersToAdd = filtersToAdd.concat(args.filter);
+        } else {
+            let defaultFilters = this.getDefaultFilters(args);
+            let nonAggFilters = this.getNonAggFilters(args);
+            filtersToAdd = defaultFilters.concat(nonAggFilters);
         }
-
-        let defaultFilters = this.getDefaultFilters(args);
-        let nonAggFilters = this.getNonAggFilters(args);
-        filtersToAdd = defaultFilters.concat(nonAggFilters);
 
         for (let i = 1; i < filtersToAdd.length; i++) {
             this.addFilter(filtersToAdd[i].default);
@@ -210,9 +212,7 @@ export class MapChip extends Observable {
         let subindicatorDd = $(filterRow).find('.mapping-options__filter')[1];
 
         $(filterRow).attr('data-isextra', isDefault);
-        if (!isDefault) {
-            this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
-        }
+        this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd, isDefault);
         $(filterRow).insertBefore($('a.mapping-options__add-filter'));
 
         new DropdownMenu($(filterRow));
@@ -225,12 +225,16 @@ export class MapChip extends Observable {
         }
     }
 
-    setRemoveFilter(filterRow, indicatorDd, subindicatorDd) {
+    setRemoveFilter(filterRow, indicatorDd, subindicatorDd, isDefault) {
         let btn = $(filterRow).find('.mapping-options__remove-filter');
-        btn.removeClass('is--hidden');
-        btn.on('click', () => {
-            this.removeFilter(filterRow, indicatorDd, subindicatorDd);
-        })
+        if (!isDefault) {
+            btn.removeClass('is--hidden');
+            btn.on('click', () => {
+                this.removeFilter(filterRow, indicatorDd, subindicatorDd);
+            })
+        } else {
+            btn.addClass('is--hidden');
+        }
     }
 
     removeFilter(filterRow, indicatorDd, subindicatorDd) {

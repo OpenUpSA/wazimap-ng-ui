@@ -54,7 +54,6 @@ export class Chart extends Observable {
         this.container = chartContainer[0];
         this.containerParent = $(this.container).closest('.profile-indicator');
 
-        this.handleChartFilter(data, data.metadata.groups, title);
         this.addChart(data);
     }
 
@@ -127,6 +126,8 @@ export class Chart extends Observable {
                 $svg.attr('preserveAspectRatio', 'xMinYMin meet')
                 $svg.removeAttr('width')
                 $svg.removeAttr('height')
+
+                this.handleChartFilter(data, data.metadata.groups);
             })
             .catch(console.error);
     };
@@ -312,20 +313,80 @@ export class Chart extends Observable {
         return percentage;
     };
 
-    handleChartFilter = (indicators, groups, title) => {
-        let dropdowns = $(this.subCategoryNode).find(`${filterRowClass} .profile-indicator__filter`);
+    handleChartFilter = (indicators, groups) => {
         const filterArea = $(this.subCategoryNode).find(".profile-indicator__filters");
+
+        let filtersToAdd = [];
+        let defaultFilters = this.getDefaultFilters();
+        let nonAggFilters = this.getNonAggFilters();
+        filtersToAdd = defaultFilters.concat(nonAggFilters);
+
+        for (let i = 1; i < filtersToAdd.length; i++) {
+            this.addFilter(filtersToAdd[i].default);
+        }
+        let dropdowns = $(this.subCategoryNode).find(`${filterRowClass} .profile-indicator__filter`);
 
         this.filterGroups = groups.filter((g) => {
             return g.name !== indicators.metadata.primary_group
         })
-        let siFilter = new SubindicatorFilter(filterArea, this.filterGroups, title, this.applyFilter, dropdowns, undefined, indicators.child_data);
+        let siFilter = new SubindicatorFilter(filterArea, this.filterGroups, this.title, this.applyFilter, dropdowns, filtersToAdd, indicators.child_data);
         this.filter = siFilter;
 
         this.setAddFilterButton();
 
         this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
     };
+
+    getDefaultFilters = () => {
+        let defaultFilters = [];
+
+        if (typeof this.data.chartConfiguration.filter !== 'undefined') {
+            this.data.chartConfiguration.filter['defaults'].forEach((f) => {
+                let defaultFilter = {
+                    group: f.name,
+                    value: f.value,
+                    default: true
+                }
+
+                let item = defaultFilters.filter((df) => {
+                    return df.group === f.name
+                })[0];
+                if (item !== null && typeof item !== 'undefined') {
+                    item.default = true;
+                } else {
+                    defaultFilters.push(defaultFilter);
+                }
+            })
+        }
+
+        return defaultFilters;
+    }
+
+    getNonAggFilters = () => {
+        let filterArr = [];
+
+        let nonAgg = [...this.data.metadata.groups].filter((g) => {
+            return !g.can_aggregate;
+        })
+        nonAgg.forEach((n) => {
+            let filter = {
+                group: n.name,
+                value: n.subindicators[Math.floor(Math.random() * n.subindicators.length)],
+                default: true
+            }
+
+            let item = filterArr.filter((df) => {
+                return df.group === n.name
+            })[0];
+            if (item !== null && typeof item !== 'undefined') {
+                item.default = true;
+            } else {
+                filterArr.push(filter);
+            }
+        })
+
+        return filterArr;
+    }
 
     setAddFilterButton = () => {
         let rowCount = $(this.subCategoryNode).find(filterRowClass).length;

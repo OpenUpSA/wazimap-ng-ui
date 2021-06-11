@@ -413,7 +413,8 @@ export class Chart extends Observable {
         let indicatorDd = $(filterRow).find('.profile-indicator__filter')[0];
         let subindicatorDd = $(filterRow).find('.profile-indicator__filter')[1];
 
-        $(filterRow).attr('data-isextra', isDefault);
+        $(filterRow).attr('data-isextra', true);
+        $(filterRow).attr('data-isdefault', isDefault);
         if (!isDefault) {
             this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
         }

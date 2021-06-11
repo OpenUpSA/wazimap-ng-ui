@@ -41,11 +41,11 @@ export class FilterController extends Observable {
 
         $(filterRow).attr('data-isextra', true);
         if (!isDefault) {
-            this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd); // TODO add from main class
+            this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
         }
-        $(filterRow).insertBefore($('a.mapping-options__add-filter')); // TODO can I point this directly to the add-filter button?
+        $(filterRow).insertBefore($('a.mapping-options__add-filter'));
 
-        new DropdownMenu($(filterRow)); // TODO - do something with this - it's gross
+        const dropdownMenu = new DropdownMenu($(filterRow));
         if (this.filter !== null) {
             this.filter.allDropdowns.push(indicatorDd);
             this.filter.allDropdowns.push(subindicatorDd);

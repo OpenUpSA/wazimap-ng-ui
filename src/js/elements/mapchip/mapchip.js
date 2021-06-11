@@ -15,9 +15,6 @@ const legendContainerClass = '.map-options__legend_wrap';
     constructor(legendColors) {
         super();
         
-        this.title = '';
-        // this.filterArgs = null;
-
         this.prepareDomElements();
         this.prepareEvents();
         
@@ -31,6 +28,7 @@ const legendContainerClass = '.map-options__legend_wrap';
         this.container = $(mapChipBlockClass);
         this.filterArea = this.container.find(filterContentClass);
         this.closeButton = $(mapChipBlockClass).find('.filters__header_close')
+        this.descriptionArea = $('.map-options__context .map-option__context_text div');
     }
 
     prepareEvents() {
@@ -38,7 +36,7 @@ const legendContainerClass = '.map-options__legend_wrap';
     }
 
     setDescription(text) {
-        $('.map-options__context .map-option__context_text div').text(text);
+        this.descriptionArea.text(text);
     }
 
     setTitle(indicatorTitle, selectedSubindicator) {
@@ -62,8 +60,6 @@ const legendContainerClass = '.map-options__legend_wrap';
 
     showMapChip(params) {
         this.show();
-        this.setDescription(params.description); // TODO can I move this to prepareDomElements?
-        
         this.handleChoroplethFilter(params);
     }
 
@@ -137,6 +133,7 @@ const legendContainerClass = '.map-options__legend_wrap';
         }
 
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
+        this.setDescription(params.description);
         this.showMapChip(params);
     }
 }

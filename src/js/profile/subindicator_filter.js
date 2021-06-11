@@ -12,7 +12,7 @@ export class SubindicatorFilter extends Observable {
         this.title = title;
         this.selectedFilters = [];
         this.groups = groups;
-        let dropdowns = dropdowns;
+        
         let dds = [];
         for (let i = 0; i < dropdowns.length / 2; i++) {
             let item = {};
@@ -21,6 +21,7 @@ export class SubindicatorFilter extends Observable {
             dds.push(item);
         }
         this.allDropdowns = dropdowns;
+
 
         const filtersAvailable = this.checkGroups(groups);
         if (filtersAvailable) {

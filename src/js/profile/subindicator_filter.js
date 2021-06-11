@@ -64,7 +64,7 @@ export class SubindicatorFilter extends Observable {
         let isDefault = false;
         this.defaultFilters.forEach((df) => {
             if (group === df.group) {
-                isDefault = true;
+                isDefault = df.default;
             }
         })
 
@@ -87,7 +87,7 @@ export class SubindicatorFilter extends Observable {
             let subindicatorDd = dropdowns['subindicatorDd'];
 
             if (defaultFilters[index].default) {
-                $(indicatorDd).closest(this.filterRowClass).attr('data-isextra', true);
+                $(indicatorDd).closest(this.filterRowClass).attr('data-isdefault', true);
                 $(indicatorDd).addClass('disabled');
             }
 
@@ -153,7 +153,7 @@ export class SubindicatorFilter extends Observable {
 
         $(ddWrapper).html('');
 
-        if ($(dropdown).closest(this.filterRowClass).attr('data-isextra') !== 'true') {
+        if ($(dropdown).closest(this.filterRowClass).attr('data-isdefault') !== 'true') {
             itemList = [ALLVALUES].concat(itemList);
         }
 

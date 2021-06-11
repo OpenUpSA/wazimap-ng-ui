@@ -211,7 +211,8 @@ export class MapChip extends Observable {
         let indicatorDd = $(filterRow).find('.mapping-options__filter')[0];
         let subindicatorDd = $(filterRow).find('.mapping-options__filter')[1];
 
-        $(filterRow).attr('data-isextra', isDefault);
+        $(filterRow).attr('data-isextra', true);
+        $(filterRow).attr('data-isdefault', isDefault);
         this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd, isDefault);
         $(filterRow).insertBefore($('a.mapping-options__add-filter'));
 

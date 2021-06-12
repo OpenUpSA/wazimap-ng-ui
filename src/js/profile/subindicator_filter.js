@@ -5,14 +5,16 @@ const DROPDOWN_MESSAGES = ['Select an attribute', 'Select a value'];
 const ALLVALUES = 'All values';
 
 export class SubindicatorFilter extends Observable {
-    constructor(filterArea, groups, title, filterCallback, dropdowns, defaultFilters, childData) {
+    constructor(filterArea, groups, title, filterCallback, _dropdowns, _defaultFilters, childData, filterRowClass = '.profile-indicator__filter-row') {
         super()
         this.childData = childData;
         this.filterCallback = filterCallback;
         this.title = title;
         this.selectedFilters = [];
         this.groups = groups;
-        
+        this.filterRowClass = filterRowClass;
+        this.defaultFilters = _defaultFilters;
+        let dropdowns = _dropdowns;
         let dds = [];
         for (let i = 0; i < dropdowns.length / 2; i++) {
             let item = {};
@@ -55,11 +57,23 @@ export class SubindicatorFilter extends Observable {
             for (const [group, value] of Object.entries(sf)) {
                 filterArr.push({
                     group: group,
-                    value: value
+                    value: value,
+                    default: this.checkIfGroupIsDefault(group)
                 })
             }
         })
         this.filterCallback(filteredData, filterArr);
+    }
+
+    checkIfGroupIsDefault = (group) => {
+        let isDefault = false;
+        this.defaultFilters.forEach((df) => {
+            if (group === df.group) {
+                isDefault = df.default;
+            }
+        })
+
+        return isDefault
     }
 
     /**
@@ -77,14 +91,15 @@ export class SubindicatorFilter extends Observable {
             let indicatorDd = dropdowns['indicatorDd'];
             let subindicatorDd = dropdowns['subindicatorDd'];
 
+            if (defaultFilters[index].default) {
+                $(indicatorDd).closest(this.filterRowClass).attr('data-isdefault', true);
+                $(indicatorDd).addClass('disabled');
+            }
+
             let groupCallback = (selected) => this.groupSelected(selected, subindicatorDd, DROPDOWN_MESSAGES[1]);
 
             this.setOptionSelected(indicatorDd, this.selectedGroup, groupCallback);
             this.setOptionSelected(subindicatorDd, selectedFilter, this.handleFilter);
-
-            if (defaultFilters[index].default) {
-                $(indicatorDd).addClass('disabled')
-            }
         })
     }
 
@@ -138,12 +153,16 @@ export class SubindicatorFilter extends Observable {
             $(dropdown).removeClass('disabled')
         }
 
+        if ($(dropdown).hasClass('is--disabled')) {
+            $(dropdown).removeClass('is--disabled')
+        }
+
         let ddWrapper = $(dropdown).find('.dropdown-menu__content');
         let listItem = $(dropdown).find('.dropdown__list_item')[0].cloneNode(true);
 
         $(ddWrapper).html('');
 
-        if ($(dropdown).closest('.map-options__filter-row').attr('data-isextra') !== 'true') {
+        if ($(dropdown).closest(this.filterRowClass).attr('data-isdefault') !== 'true') {
             itemList = [ALLVALUES].concat(itemList);
         }
 

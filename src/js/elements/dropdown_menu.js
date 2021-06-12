@@ -1,6 +1,6 @@
 export default class DropdownMenu {
-    constructor(container) {
-        $(container).find(".mapping-options__filter_menu").each(function (index){
+    constructor(container, ele = '.mapping-options__filter_menu') {
+        $(container).find(ele).each(function (index) {
             let element = $(this);
 
             element.find('.dropdown-menu__trigger').on('click', () => {

@@ -1,7 +1,7 @@
 import {format as d3format} from "d3-format/src/defaultLocale";
 import {select as d3select} from "d3-selection";
 
-import {Observable} from "../utils";
+import {appendFilterArrays, Observable} from "../utils";
 import {defaultValues} from "../defaultValues";
 
 import {SubindicatorFilter} from "./subindicator_filter";
@@ -319,7 +319,7 @@ export class Chart extends Observable {
         let filtersToAdd = [];
         let defaultFilters = this.getDefaultFilters();
         let nonAggFilters = this.getNonAggFilters();
-        filtersToAdd = defaultFilters.concat(nonAggFilters);
+        filtersToAdd = appendFilterArrays(defaultFilters, nonAggFilters, indicators.metadata.primary_group);
 
         for (let i = 1; i < filtersToAdd.length; i++) {
             this.addFilter(filtersToAdd[i].default);

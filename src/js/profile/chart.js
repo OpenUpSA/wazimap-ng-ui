@@ -321,6 +321,12 @@ export class Chart extends Observable {
         let nonAggFilters = this.getNonAggFilters();
         filtersToAdd = defaultFilters.concat(nonAggFilters);
 
+        filtersToAdd = filtersToAdd.filter((f, index, self) =>
+            index === self.findIndex((t) => (
+                t.group === f.group
+            ))
+        )
+
         for (let i = 1; i < filtersToAdd.length; i++) {
             this.addFilter(filtersToAdd[i].default);
         }

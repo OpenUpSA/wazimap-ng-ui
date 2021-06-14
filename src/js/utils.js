@@ -376,3 +376,17 @@ export function getSheetName(name) {
 
     return sheetName;
 }
+
+export function appendFilterArrays(arr1, arr2, primaryGroup){
+    let filterArr = arr1.concat(arr2).filter((f) => {
+        return f.group !== primaryGroup
+    });;
+
+    filterArr = filterArr.filter((f, index, self) =>
+        index === self.findIndex((t) => (
+            t.group === f.group
+        ))
+    )
+
+    return filterArr;
+}

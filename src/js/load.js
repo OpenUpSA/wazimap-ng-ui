@@ -5,8 +5,7 @@ import {MapControl} from './map/maps';
 import {numFmt} from './utils';
 import {Profile} from './profile';
 import {onProfileLoaded as onProfileLoadedSearch, Search} from './elements/search';
-import {MapChip} from './elements/mapchip/mapchip';
-
+import {MapChip} from './elements/mapchip';
 import {LocationInfoBox} from './elements/location_info_box';
 import {PointData} from "./map/point_data";
 import {ZoomToggle} from "./mapmenu/zoomtoggle";

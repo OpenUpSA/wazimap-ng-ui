@@ -52,17 +52,6 @@ export class MapChip extends Observable {
         $(mapOptionsClass).find(`${filterRowClass} .mapping-options__remove-filter`).addClass('is--hidden');
         const filterArea = $(mapOptionsClass).find(filterContentClass);
 
-        //remove this
-        args.data.chartConfiguration.filter = {
-            defaults: [{
-                name: 'race',
-                value: 'Indian or Asian'
-            }]
-        };
-
-        args.data.metadata.groups[1].can_aggregate = false;
-        //remove this
-
         let filtersToAdd = [];
         if (typeof args.filter !== 'undefined') {
             filtersToAdd = appendFilterArrays(filtersToAdd, args.filter, primaryGroup);

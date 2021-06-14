@@ -302,39 +302,129 @@ export class Chart extends Observable {
       total += value.count;
     }
 
-    percentage = currentValue / total;
+    setAddFilterButton = () => {
+        let rowCount = $(this.subCategoryNode).find(filterRowClass).length;
+        let btn = 'a.profile-indicator__new-filter';
+        $(this.subCategoryNode).find(filterRowClass).each(function (index) {
+            if (index !== rowCount - 1) {
+                $(this).find(btn).addClass('is--hidden');
+            } else {
+                $(this).find(btn).removeClass('is--hidden');
+            }
+        });
 
-    return percentage;
-  };
+        if (this.filter.allDropdowns.length >= this.filterGroups.length * 2) {
+            $(this.subCategoryNode).find(btn).addClass('disabled');
+        } else {
+            $(this.subCategoryNode).find(btn).removeClass('disabled');
+            $(this.subCategoryNode).find(btn).off('click').on('click', () => this.addFilter());
+        }
+    }
 
-  handleChartFilter = (indicators, groups, title) => {
-    let dropdowns = $(this.subCategoryNode).find(".filter__dropdown_wrap");
-    const filterArea = $(this.subCategoryNode).find(
-      ".profile-indicator__filters"
-    );
+    addFilter = (isDefault = false) => {
+        let filterRow = $(this.subCategoryNode).find(filterRowClass)[0].cloneNode(true);
 
-    this.filterGroups = groups.filter((g) => { return g.name !== indicators.metadata.primary_group })
-    let siFilter = new SubindicatorFilter(filterArea, this.filterGroups, title, this.applyFilter, dropdowns, undefined, indicators.child_data);
-    this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
-  };
+        let indicatorDd = $(filterRow).find('.profile-indicator__filter')[0];
+        let subindicatorDd = $(filterRow).find('.profile-indicator__filter')[1];
 
-  applyFilter = (filteredData, selectedGroup, selectedFilter) => {
-    this.filteredData = filteredData;
-    this.selectedFilter = selectedFilter;
-    this.selectedGroup = selectedGroup;
-    this.filterGroups.forEach((group) => {
-      let { name:filterName } = group;
-      filterName = slugify(filterName)
-      this.vegaView.signal(`${filterName}Filter`, false)
-    });
+        $(filterRow).attr('data-isextra', true);
+        $(filterRow).attr('data-isdefault', isDefault);
+        if (!isDefault) {
+            this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
+        }
+        new DropdownMenu($(filterRow), '.profile-indicator__filter_menu');
+        $(this.subCategoryNode).find(filterWrapperClass).append(filterRow);
+        if (this.filter !== null) {
+            this.filter.allDropdowns.push(indicatorDd);
+            this.filter.allDropdowns.push(subindicatorDd);
+            this.filter.setDropdownEvents(indicatorDd, subindicatorDd);
 
-    if(selectedFilter !== "All values") {
-      let { name:filterName } = selectedGroup;
-      filterName = slugify(filterName)
-      this.setDownloadUrl();
-      this.vegaView.signal(`${filterName}Filter`, true)
-      this.vegaView.signal(`${filterName}FilterValue`, selectedFilter)
-      this.appendDataToTable();
+            this.setAddFilterButton();
+        }
+    }
+
+    setRemoveFilter = (filterRow, indicatorDd, subindicatorDd) => {
+        let btn = $(filterRow).find('.profile-indicator__remove-filter');
+        btn.removeClass('is--hidden');
+        btn.on('click', () => {
+            this.removeFilter(filterRow, indicatorDd, subindicatorDd);
+        })
+    }
+
+    removeFilter = (filterRow, indicatorDd, subindicatorDd) => {
+        $(filterRow).remove();
+        this.filter.allDropdowns = this.filter.allDropdowns.filter((dd, el) => {
+            return el !== indicatorDd && el !== subindicatorDd
+        })
+
+        this.filter.handleFilter(null);
+
+        this.setAddFilterButton();
+    }
+
+    applyFilter = (filteredData, selectedFilter) => {
+        this.filteredData = filteredData;
+        this.filterGroups.forEach((group) => {
+            let {name: filterName} = group;
+            filterName = slugify(filterName)
+            this.vegaView.signal(`${filterName}Filter`, false)
+        });
+
+        if (selectedFilter.length > 0) {
+            selectedFilter.forEach((sf) => {
+                if (sf.value !== "All values") {
+                    let filterName = sf.group;
+                    filterName = slugify(filterName)
+                    this.setDownloadUrl();
+                    this.vegaView.signal(`${filterName}Filter`, true)
+                    this.vegaView.signal(`${filterName}FilterValue`, sf.value)
+                }
+            });
+        }
+        this.vegaView.run();
+        this.appendDataToTable();
+    };
+
+    exportAsCsv = () => {
+        const data = this.vegaView.data('table');
+
+        const fileName = `${this.title}.csv`;
+
+        let csvContent = "data:text/csv;charset=utf-8,"
+            + Papa.unparse(data);
+
+        let encodedUri = encodeURI(csvContent);
+        let link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link); // Required for FF
+
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    exportAsExcel = () => {
+        const table = this.vegaView.data('table');
+        // export json (only array possible) to Worksheet of Excel
+        const data = XLSX.utils.json_to_sheet(table);
+        // A workbook is the name given to an Excel file
+        const wb = XLSX.utils.book_new(); // make Workbook of Excel
+        // add Worksheet to Workbook
+        XLSX.utils.book_append_sheet(wb, data, this.title);
+        // export Excel file
+        XLSX.writeFile(wb, this.title + '.xlsx');
+    }
+
+    exportAsJson = () => {
+        const data = this.vegaView.data('table');
+
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", this.title + ".json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
     }
     this.vegaView.run()
   };

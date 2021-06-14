@@ -5,7 +5,7 @@ const DROPDOWN_MESSAGES = ['Select an attribute', 'Select a value'];
 const ALLVALUES = 'All values';
 
 export class SubindicatorFilter extends Observable {
-    constructor(filterArea, groups, title, filterCallback, _dropdowns, _defaultFilters, childData, filterRowClass = '.profile-indicator__filter-row') {
+    constructor(filterArea, groups, title, filterCallback, dropdowns, defaultFilters, childData, filterRowClass = '.profile-indicator__filter-row') {
         super()
         this.childData = childData;
         this.filterCallback = filterCallback;
@@ -13,8 +13,8 @@ export class SubindicatorFilter extends Observable {
         this.selectedFilters = [];
         this.groups = groups;
         this.filterRowClass = filterRowClass;
-        this.defaultFilters = _defaultFilters;
-        let dropdowns = _dropdowns;
+        this.defaultFilters = defaultFilters;
+        
         let dds = [];
         for (let i = 0; i < dropdowns.length / 2; i++) {
             let item = {};
@@ -23,6 +23,7 @@ export class SubindicatorFilter extends Observable {
             dds.push(item);
         }
         this.allDropdowns = dropdowns;
+
 
         const filtersAvailable = this.checkGroups(groups);
         if (filtersAvailable) {
@@ -36,12 +37,16 @@ export class SubindicatorFilter extends Observable {
             let indicatorDd = dd['indicatorDd'];
             this.setDropdownEvents(indicatorDd, subindicatorDd);
         })
-        this.handleDefaultFilter(_defaultFilters, dds);
+        this.handleDefaultFilter(this.defaultFilters, dds);
     }
 
     setDropdownEvents = (indicatorDd, subindicatorDd) => {
         let callback = (selected) => this.groupSelected(selected, subindicatorDd, DROPDOWN_MESSAGES[1]);
         this.populateDropdown(indicatorDd, this.groups, callback);
+
+        $(indicatorDd).find('.dropdown-menu__trigger').on('click', () => {
+            this.disableSelectedOptions(indicatorDd);
+        })
     }
 
     handleFilter = (filter) => {
@@ -146,6 +151,10 @@ export class SubindicatorFilter extends Observable {
     populateDropdown = (dropdown, itemList, callback) => {
         if ($(dropdown).hasClass('disabled')) {
             $(dropdown).removeClass('disabled')
+        }
+
+        if ($(dropdown).hasClass('is--disabled')) {
+            $(dropdown).removeClass('is--disabled')
         }
 
         let ddWrapper = $(dropdown).find('.dropdown-menu__content');
@@ -281,5 +290,26 @@ export class SubindicatorFilter extends Observable {
 
 
         $(dropdown).find(".dropdown-menu__trigger .dropdown-menu__selected-item .truncate").text(value);
+    }
+
+    disableSelectedOptions = (dropdown) => {
+        let self = this;
+        $(dropdown).find('.dropdown__list_item').each(function () {
+            const li = $(this);
+            let disableOption = false;
+            self.selectedFilters.forEach((sf) => {
+                for (const [group, value] of Object.entries(sf)) {
+                    if (li.text().trim() === group) {
+                        disableOption = true;
+                    }
+                }
+            })
+
+            if (disableOption) {
+                $(li).addClass('disabled');
+            } else {
+                $(li).removeClass('disabled');
+            }
+        });
     }
 }

@@ -37,18 +37,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             return;
         }
 
-        const metadata = args.data.metadata;
-        const params = {
-            primaryGroup: metadata.primary_group,
-            groups: metadata.groups,
-            indicatorTitle: args.indicatorTitle,
-            selectedSubindicator: args.selectedSubindicator,
-            childData: args.data.child_data,
-            description: args.description,
-            chartConfiguration: args.data.chartConfiguration,
-            filter: args.filter,
-        }
-        mapchip.onSubIndicatorChange(params);
+        mapchip.onSubIndicatorChange(args);
     });
 
 }

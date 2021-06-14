@@ -5,7 +5,7 @@ const DROPDOWN_MESSAGES = ['Select an attribute', 'Select a value'];
 const ALLVALUES = 'All values';
 
 export class SubindicatorFilter extends Observable {
-    constructor(filterArea, groups, title, filterCallback, dropdowns, defaultFilters, childData, filterRowClass = '.profile-indicator__filter-row') {
+    constructor(filterArea, groups, title, filterCallback, _dropdowns, _defaultFilters, childData, filterRowClass = '.profile-indicator__filter-row') {
         super()
         this.childData = childData;
         this.filterCallback = filterCallback;
@@ -13,8 +13,8 @@ export class SubindicatorFilter extends Observable {
         this.selectedFilters = [];
         this.groups = groups;
         this.filterRowClass = filterRowClass;
-        this.defaultFilters = defaultFilters;
-        
+        this.defaultFilters = _defaultFilters;
+        let dropdowns = _dropdowns;
         let dds = [];
         for (let i = 0; i < dropdowns.length / 2; i++) {
             let item = {};
@@ -23,7 +23,6 @@ export class SubindicatorFilter extends Observable {
             dds.push(item);
         }
         this.allDropdowns = dropdowns;
-
 
         const filtersAvailable = this.checkGroups(groups);
         if (filtersAvailable) {
@@ -37,7 +36,7 @@ export class SubindicatorFilter extends Observable {
             let indicatorDd = dd['indicatorDd'];
             this.setDropdownEvents(indicatorDd, subindicatorDd);
         })
-        this.handleDefaultFilter(this.defaultFilters, dds);
+        this.handleDefaultFilter(_defaultFilters, dds);
     }
 
     setDropdownEvents = (indicatorDd, subindicatorDd) => {

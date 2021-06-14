@@ -1,69 +1,104 @@
-export function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip: null}) {
-    const mapcontrol = objs['mapcontrol'];
-    const mapchip = objs['mapchip'];
+import {scaleSequential as d3scaleSequential} from 'd3-scale';
+import {min as d3min, max as d3max} from 'd3-array';
 
-    mapchip.on('mapchip.removed', payload => controller.onMapChipRemoved(payload));
-    mapchip.on('mapchip.choropleth.filtered', payload => {
-        controller.onChoroplethFiltered(payload);
-    })
+import {Observable} from '../../utils';
+import SubindicatorCalculator from './subindicator_calculator';
+import SiblingCalculator from './sibling_calculator';
+import AbsoluteValueCalculator from './absolute_value_calculator';
 
-    //let the choropleth persist
-    controller.on('profile.loaded', payload => controller.handleNewProfileChoropleth())
-    controller.on('mapchip.removed', payload => mapcontrol.choropleth.reset(true));
-    controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
+export class Choropleth extends Observable {
+    constructor(layers, layerStyler, options, buffer = 0.1) {
+        super();
 
-    controller.on('mapchip.choropleth.filtered', payload => {
-        payload.payload.indicatorTitle = payload.state.subindicator.indicatorTitle;
-
-        loadAndDisplayChoropleth(payload, mapcontrol, false, payload.payload.data);
-    })
-
-    controller.on('newProfileWithChoropleth', args => {
-        setTimeout(() => {
-            loadAndDisplayChoropleth(args, mapcontrol, true, null);
-        }, 0);
-    })
-
-    controller.on('map.choropleth.display', payload => {
-        payload.state.choroplethData = payload.payload.data;
-        mapchip.onChoropleth(payload.payload);
-    });
-    controller.on('map_explorer.subindicator.click', payload => {
-        loadAndDisplayChoropleth(payload, mapcontrol, true, null);
-    })
-
-    mapcontrol.on('map.choropleth.loaded', args => {
-        if (!args.showMapchip) {
-            return;
-        }
-
-        const metadata = args.data.metadata;
-        const params = {
-            primaryGroup: metadata.primary_group,
-            groups: metadata.groups,
-            indicatorTitle: args.indicatorTitle,
-            selectedSubindicator: args.selectedSubindicator,
-            childData: args.data.child_data,
-            description: args.description,
-            chartConfiguration: args.data.chartConfiguration,
-            filter: args.filter,
-        }
-        mapchip.onSubIndicatorChange(params);
-    });
-
-}
-
-function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, childData = null) {
-    const geo = payload.state.profile.geometries.boundary.properties.code;
-    const ps = payload.state;
-    const method = ps.subindicator.choropleth_method;
-    const indicatorTitle = payload.payload.indicatorTitle;
-    const selectedSubindicator = ps.selectedSubindicator;
-    const filter = ps.subindicator.filter;
-    let data = ps.subindicator.data
-    if (childData) {
-        data.originalChildData = data.child_data;
-        data.child_data = childData;
+        this.layers = layers;
+        this.layerStyler = layerStyler;
+        this.legendColors = options.colors;
+        this.options = options;
+        this.buffer = buffer;
+        this.currentLayers = [];
     }
-    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter);
+
+    getCalculator(method) {
+        let calculator = {
+            subindicator: new SubindicatorCalculator(),
+            sibling: new SiblingCalculator(),
+            absolute_value: new AbsoluteValueCalculator(),
+        }[method];
+
+
+        if (calculator == undefined)
+            calculator = SubindicatorCalculator
+
+        return calculator;
+
+    }
+
+    getIntervals(values) {
+        const bounds = this.getBounds(values);
+        const numIntervals = this.legendColors.length;
+        const domain = [...Array(numIntervals).keys()]
+        const scale = d3scaleSequential()
+            .domain([0, numIntervals - 1])
+            .range([bounds.lower, bounds.upper])
+
+        const intervals = domain.map(idx => scale(idx))
+
+        return intervals
+    }
+
+    reset(setLayerToSelected) {
+        const self = this;
+        this.currentLayers.forEach(code => {
+            //setLayerToSelected -> removemapchip
+            //setLayerToHoverOnly -> display
+            const layer = self.layers[code];
+            if (setLayerToSelected) {
+                self.layerStyler.setLayerToSelected(layer);
+            }
+        })
+
+        this.currentLayers = [];
+
+        this.triggerEvent('map.choropleth.reset', null);
+    }
+
+    getBounds(values) {
+        const lowest = (1 - this.buffer) * d3min(values) < 0 ? 0 : (1 - this.buffer) * d3min(values);
+        const highest = (1 + this.buffer) * d3max(values) > 1 ? 1 : (1 + this.buffer) * d3max(values);
+
+        return {
+            lower: d3min(values),
+            upper: d3max(values)
+        }
+    }
+
+    showChoropleth(calculations, setLayerToSelected) {
+        this.reset(true);
+        const self = this;
+        const childGeographyValues = [...calculations];
+        const values = childGeographyValues.map(el => el.val);
+        const bounds = this.getBounds(values);
+        const numIntervals = this.legendColors.length;
+
+        const scale = d3scaleSequential()
+            .domain([bounds.lower, bounds.upper])
+            .range([this.legendColors[0], this.legendColors[numIntervals - 1]]);
+
+        // this.reset(setLayerToSelected);
+
+        childGeographyValues.forEach(el => {
+            const layer = self.layers[el.code];
+            if (layer != undefined) {
+                self.currentLayers.push(el.code);
+                const color = scale(el.val);
+                self.layerStyler.setLayerStyle(layer, {
+                    over: {fillColor: color, fillOpacity: self.options.opacity_over},
+                    out: {fillColor: color, fillOpacity: self.options.opacity},
+                })
+                if (typeof layer.feature !== 'undefined') {
+                    layer.feature.properties.percentage = el.val;
+                }
+            }
+        })
+    }
 }

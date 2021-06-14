@@ -319,7 +319,9 @@ export class Chart extends Observable {
         let filtersToAdd = [];
         let defaultFilters = this.getDefaultFilters();
         let nonAggFilters = this.getNonAggFilters();
-        filtersToAdd = defaultFilters.concat(nonAggFilters);
+        filtersToAdd = defaultFilters.concat(nonAggFilters).filter((f) => {
+            return f.group !== indicators.metadata.primary_group
+        });
 
         for (let i = 1; i < filtersToAdd.length; i++) {
             this.addFilter(filtersToAdd[i].default);

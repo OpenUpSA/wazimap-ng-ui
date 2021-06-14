@@ -7531,6 +7531,11 @@ label {
   background-color: rgba(0, 0, 0, 0.06);
 }
 
+.mapping-options__add-filter.disabled {
+  opacity: 0.4;
+}
+
+
 .profile-indicator__filters-wrapper {
   display: -webkit-box;
   display: -webkit-flex;

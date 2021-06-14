@@ -4,7 +4,6 @@ import {LayerStyler} from './layerstyler';
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
 import {Choropleth} from './choropleth/choropleth';
 import {MapLocker} from './maplocker';
-import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 
 export class MapControl extends Observable {

@@ -24,20 +24,20 @@ export class SubindicatorFilter extends Observable {
         }
         this.allDropdowns = dropdowns;
 
-
         const filtersAvailable = this.checkGroups(groups);
         if (filtersAvailable) {
             this.showFilterArea(filterArea);
+
+            this.resetDropdowns(dropdowns);
+            dds.forEach((dd) => {
+                let subindicatorDd = dd['subindicatorDd'];
+                let indicatorDd = dd['indicatorDd'];
+                this.setDropdownEvents(indicatorDd, subindicatorDd);
+            })
+            this.handleDefaultFilter(this.defaultFilters, dds);
         } else {
             this.hideFilterArea(filterArea);
         }
-        this.resetDropdowns(dropdowns);
-        dds.forEach((dd) => {
-            let subindicatorDd = dd['subindicatorDd'];
-            let indicatorDd = dd['indicatorDd'];
-            this.setDropdownEvents(indicatorDd, subindicatorDd);
-        })
-        this.handleDefaultFilter(this.defaultFilters, dds);
     }
 
     setDropdownEvents = (indicatorDd, subindicatorDd) => {
@@ -119,10 +119,8 @@ export class SubindicatorFilter extends Observable {
 
     hideFilterArea = (filterArea) => {
         if (!$(filterArea).hasClass('hidden')) {
-            $(filterArea).addClass('hidden')
-
+            $(filterArea).addClass('hidden');
         }
-
     }
 
     showFilterArea = (filterArea) => {

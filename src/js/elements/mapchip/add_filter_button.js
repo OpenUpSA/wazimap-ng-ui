@@ -1,6 +1,9 @@
 import { Observable } from "../../utils";
 
 export class AddFilterButton extends Observable {
+    static EVENTS = {
+        "clicked": "addButton.clicked"
+    }
     constructor() {
         super();
         this.prepareDomElements();
@@ -12,7 +15,7 @@ export class AddFilterButton extends Observable {
     }
 
     prepareEvents() {
-        this.button.on('click', () => this.triggerEvent('mapchip.filters.addButton.clicked'));
+        this.button.on('click', () => this.triggerEvent(AddFilterButton.EVENTS.clicked));
     }
 
     disable() {

@@ -14,7 +14,7 @@ export class SubindicatorFilter extends Observable {
         this.groups = groups;
         this.filterRowClass = filterRowClass;
         this.defaultFilters = defaultFilters;
-        
+
         let dds = [];
         for (let i = 0; i < dropdowns.length / 2; i++) {
             let item = {};
@@ -274,6 +274,7 @@ export class SubindicatorFilter extends Observable {
             const dropdown = dropdowns[i];
             self.setOptionSelected(dropdown, DROPDOWN_MESSAGES[i], null);
         }
+        $(dropdowns[dropdowns.length - 1]).addClass('disabled');
     }
 
     setOptionSelected = (dropdown, value, callback) => {

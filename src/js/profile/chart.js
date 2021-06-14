@@ -464,11 +464,11 @@ export class Chart extends Observable {
                     this.setDownloadUrl();
                     this.vegaView.signal(`${filterName}Filter`, true)
                     this.vegaView.signal(`${filterName}FilterValue`, sf.value)
-                    this.appendDataToTable()
                 }
             });
         }
-        this.vegaView.run()
+        this.vegaView.run();
+        this.appendDataToTable();
     };
 
     exportAsCsv = () => {

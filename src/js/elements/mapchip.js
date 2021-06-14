@@ -49,30 +49,11 @@ export class MapChip extends Observable {
         this.groups = groups;
 
         $(mapOptionsClass).find(`${filterRowClass}[data-isextra=true]`).remove();
-        $(mapOptionsClass).find(`${filterRowClass} .mapping-options__remove-filter`).addClass('is--hidden');
         const filterArea = $(mapOptionsClass).find(filterContentClass);
-
-        let filtersToAdd = [];
-        if (typeof args.filter !== 'undefined') {
-            filtersToAdd = filtersToAdd.concat(args.filter);
-        } else {
-            let defaultFilters = this.getDefaultFilters(args);
-            let nonAggFilters = this.getNonAggFilters(args);
-            filtersToAdd = defaultFilters.concat(nonAggFilters);
-        }
-
-        for (let i = 1; i < filtersToAdd.length; i++) {
-            this.addFilter(filtersToAdd[i].default);
-        }
-        let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
-
-        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, filtersToAdd, args.data.child_data, '.map-options__filter-row');
-
-        this.setAddFilterButton();
-    }
-
-    getDefaultFilters = (args) => {
         let defaultFilters = [];
+        if (typeof args.filter !== 'undefined') {
+            Array.prototype.push.apply(defaultFilters, args.filter);
+        }
 
         if (typeof args.data.chartConfiguration.filter !== 'undefined') {
             args.data.chartConfiguration.filter['defaults'].forEach((f) => {
@@ -93,33 +74,14 @@ export class MapChip extends Observable {
             })
         }
 
-        return defaultFilters;
-    }
+        for (let i = 1; i < defaultFilters.length; i++) {
+            this.addFilter(defaultFilters[i].default);
+        }
+        let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
 
-    getNonAggFilters = (args) => {
-        let filterArr = [];
+        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, defaultFilters, args.data.child_data);
 
-        let nonAgg = [...args.data.metadata.groups].filter((g) => {
-            return !g.can_aggregate;
-        })
-        nonAgg.forEach((n) => {
-            let filter = {
-                group: n.name,
-                value: n.subindicators[Math.floor(Math.random() * n.subindicators.length)],
-                default: true
-            }
-
-            let item = filterArr.filter((df) => {
-                return df.group === n.name
-            })[0];
-            if (item !== null && typeof item !== 'undefined') {
-                item.default = true;
-            } else {
-                filterArr.push(filter);
-            }
-        })
-
-        return filterArr;
+        this.setAddFilterButton();
     }
 
     applyFilter = (filterResult, selectedFilter) => {
@@ -212,8 +174,9 @@ export class MapChip extends Observable {
         let subindicatorDd = $(filterRow).find('.mapping-options__filter')[1];
 
         $(filterRow).attr('data-isextra', true);
-        $(filterRow).attr('data-isdefault', isDefault);
-        this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd, isDefault);
+        if (!isDefault) {
+            this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
+        }
         $(filterRow).insertBefore($('a.mapping-options__add-filter'));
 
         new DropdownMenu($(filterRow));
@@ -226,16 +189,12 @@ export class MapChip extends Observable {
         }
     }
 
-    setRemoveFilter(filterRow, indicatorDd, subindicatorDd, isDefault) {
+    setRemoveFilter(filterRow, indicatorDd, subindicatorDd) {
         let btn = $(filterRow).find('.mapping-options__remove-filter');
-        if (!isDefault) {
-            btn.removeClass('is--hidden');
-            btn.on('click', () => {
-                this.removeFilter(filterRow, indicatorDd, subindicatorDd);
-            })
-        } else {
-            btn.addClass('is--hidden');
-        }
+        btn.removeClass('is--hidden');
+        btn.on('click', () => {
+            this.removeFilter(filterRow, indicatorDd, subindicatorDd);
+        })
     }
 
     removeFilter(filterRow, indicatorDd, subindicatorDd) {

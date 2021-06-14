@@ -315,11 +315,11 @@ export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindica
             return a[primaryGroup] === selectedSubindicator;
         });
 
-      if(filteredArr.length > 0) {
-        sumData[code] = filteredArr.reduce(function (s, a) {
-            return s + parseFloat(a.count);
-        }, 0);
-      }
+        if (filteredArr.length > 0) {
+            sumData[code] = filteredArr.reduce(function (s, a) {
+                return s + parseFloat(a.count);
+            }, 0);
+        }
     })
 
     return sumData;
@@ -358,7 +358,7 @@ export function extractSheetsData(data) {
 export function extractSheetData(rawData, categoryName) {
     const sheetName = getSheetName(categoryName);
     let rows = rawData.features.map((f) => {
-        let {geometry: {coordinates:[longitude, latitude]}, properties: {name, data}} = f;
+        let {geometry: {coordinates: [longitude, latitude]}, properties: {name, data}} = f;
 
         let mapped = data.map(item => ({[item.key]: item.value}));
         return Object.assign({name, longitude, latitude}, ...mapped);

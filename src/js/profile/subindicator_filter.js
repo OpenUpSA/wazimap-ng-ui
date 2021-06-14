@@ -42,10 +42,6 @@ export class SubindicatorFilter extends Observable {
     setDropdownEvents = (indicatorDd, subindicatorDd) => {
         let callback = (selected) => this.groupSelected(selected, subindicatorDd, DROPDOWN_MESSAGES[1]);
         this.populateDropdown(indicatorDd, this.groups, callback);
-
-        $(indicatorDd).find('.dropdown-menu__trigger').on('click', () => {
-            this.disableSelectedOptions(indicatorDd);
-        })
     }
 
     handleFilter = (filter) => {
@@ -150,10 +146,6 @@ export class SubindicatorFilter extends Observable {
     populateDropdown = (dropdown, itemList, callback) => {
         if ($(dropdown).hasClass('disabled')) {
             $(dropdown).removeClass('disabled')
-        }
-
-        if ($(dropdown).hasClass('is--disabled')) {
-            $(dropdown).removeClass('is--disabled')
         }
 
         let ddWrapper = $(dropdown).find('.dropdown-menu__content');
@@ -289,26 +281,5 @@ export class SubindicatorFilter extends Observable {
 
 
         $(dropdown).find(".dropdown-menu__trigger .dropdown-menu__selected-item .truncate").text(value);
-    }
-
-    disableSelectedOptions = (dropdown) => {
-        let self = this;
-        $(dropdown).find('.dropdown__list_item').each(function () {
-            const li = $(this);
-            let disableOption = false;
-            self.selectedFilters.forEach((sf) => {
-                for (const [group, value] of Object.entries(sf)) {
-                    if (li.text().trim() === group) {
-                        disableOption = true;
-                    }
-                }
-            })
-
-            if (disableOption) {
-                $(li).addClass('disabled');
-            } else {
-                $(li).removeClass('disabled');
-            }
-        });
     }
 }

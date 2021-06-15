@@ -1,6 +1,5 @@
 import {SubIndicator} from '../dataobjects'
-import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren} from '../utils'
-
+import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Observable} from '../utils'
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
@@ -41,7 +40,7 @@ function subindicatorsInIndicator(indicator) {
 }
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
-export function loadMenu(data, subindicatorCallback) {
+export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, choropleth_method, indicatorId) {
 
         $(".data-category__h3", wrapper).remove();
@@ -153,12 +152,23 @@ export function loadMenu(data, subindicatorCallback) {
     }
 
     if (hasNoItems) {
-        showNoData()
+        dataMapperMenu.showNoData()
     }
 }
 
-export function showNoData(){
-    $(parentContainer).empty();
-    $('.' + loadingClsName).addClass('hidden');
-    $('.' + noDataWrapperClsName).removeClass('hidden');
+/**
+* This class is a stub for a menu component
+*/
+export class DataMapperMenu extends Observable {
+    constructor() {
+        super()
+    }
+
+    showNoData() {
+        $(parentContainer).empty();
+        $('.' + loadingClsName).addClass('hidden');
+        $('.' + noDataWrapperClsName).removeClass('hidden');
+
+        this.triggerEvent('data_mapper_menu.nodata', this);
+    }
 }

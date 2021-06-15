@@ -46,6 +46,9 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, childData = null) {
     const geo = payload.state.profile.geometries.boundary.properties.code;
     const ps = payload.state;
+    if (ps.subindicator == null)
+        return
+
     const method = ps.subindicator.choropleth_method;
     const indicatorTitle = payload.payload.indicatorTitle;
     const selectedSubindicator = ps.selectedSubindicator;

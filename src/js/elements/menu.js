@@ -1,4 +1,5 @@
 import {SubIndicator} from '../dataobjects'
+import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren} from '../utils'
 
 
 const hideondeployClsName = 'hideondeploy';
@@ -36,7 +37,7 @@ function subindicatorsInSubCategory(subcategory) {
 }
 
 function subindicatorsInIndicator(indicator) {
-  return indicator.metadata.groups.length;
+    return indicator.metadata.groups.length;
 }
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
@@ -111,9 +112,13 @@ export function loadMenu(data, subindicatorCallback) {
         $(".data-category__h2", h2Wrapper).remove();
 
         for (const [subcategory, detail] of Object.entries(subcategories)) {
-            let count = subindicatorsInSubCategory(detail);
-            if (count > 0) {
-                addIndicators(h2Wrapper, category, subcategory, detail.indicators);
+            let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
+
+            if (hasChildren) {
+                let count = subindicatorsInSubCategory(detail);
+                if (count > 0) {
+                    addIndicators(h2Wrapper, category, subcategory, detail.indicators);
+                }
             }
         }
     }
@@ -133,9 +138,9 @@ export function loadMenu(data, subindicatorCallback) {
 
 
     for (const [category, detail] of Object.entries(data)) {
-        let count = subindicatorsInCategory(detail);
+        let hasChildren = checkIfCategoryHasChildren(category, detail)
 
-        if (count > 0) {
+        if (hasChildren) {
             if (!$('.' + noDataWrapperClsName).hasClass(hideondeployClsName)) {
                 $('.' + noDataWrapperClsName).addClass(hideondeployClsName);
             }

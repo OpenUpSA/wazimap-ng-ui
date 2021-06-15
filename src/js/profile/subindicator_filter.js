@@ -248,20 +248,22 @@ export class SubindicatorFilter extends Observable {
             }
         }
 
-        Object.entries(this.childData).map(([code, data]) => {
-            filteredData[code] = data.filter((cd) => {
-                let isFiltered = true;
-                this.selectedFilters.forEach((f) => {
-                    for (let key in f) {
-                        if (cd[key] !== f[key]) {
-                            isFiltered = false;
+        if (typeof this.childData !== 'undefined') {
+            Object.entries(this.childData).map(([code, data]) => {
+                filteredData[code] = data.filter((cd) => {
+                    let isFiltered = true;
+                    this.selectedFilters.forEach((f) => {
+                        for (let key in f) {
+                            if (cd[key] !== f[key]) {
+                                isFiltered = false;
+                            }
                         }
-                    }
-                })
+                    })
 
-                return isFiltered;
+                    return isFiltered;
+                })
             })
-        })
+        }
 
         return filteredData;
     }

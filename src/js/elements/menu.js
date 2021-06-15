@@ -134,6 +134,8 @@ export function loadMenu(data, subindicatorCallback) {
 
     $(".data-menu__category").remove();
     let hasNoItems = true;
+    let hiddenClass = hideondeployClsName;
+    hiddenClass = 'hidden';
     $(parentContainer).find('.data-category').remove();
 
 
@@ -141,8 +143,8 @@ export function loadMenu(data, subindicatorCallback) {
         let hasChildren = checkIfCategoryHasChildren(category, detail)
 
         if (hasChildren) {
-            if (!$('.' + noDataWrapperClsName).hasClass(hideondeployClsName)) {
-                $('.' + noDataWrapperClsName).addClass(hideondeployClsName);
+            if (!$('.' + noDataWrapperClsName).hasClass(hiddenClass)) {
+                $('.' + noDataWrapperClsName).addClass(hiddenClass);
             }
             hasNoItems = false;
 
@@ -151,9 +153,7 @@ export function loadMenu(data, subindicatorCallback) {
     }
 
     if (hasNoItems) {
-        if ($('.' + noDataWrapperClsName).hasClass(hideondeployClsName)) {
-            $('.' + noDataWrapperClsName).removeClass(hideondeployClsName);
-        }
+        showNoData()
     }
 }
 

@@ -1,4 +1,4 @@
-import {Observable, setPopupStyle, formatNumericalValue} from '../utils';
+import {Component, setPopupStyle, formatNumericalValue} from '../utils';
 import {format as d3format} from "d3-format/src/defaultLocale";
 
 const PERCENTAGE_TYPE = 'Percentage';
@@ -8,9 +8,9 @@ const POPUP_OFFSET = [20, 0];
 /**
  * this class creates & manipulates the popup over the map
  */
-export class Popup extends Observable {
-    constructor(formattingConfig, map) {
-        super();
+export class Popup extends Component {
+    constructor(parent, formattingConfig, map) {
+        super(parent);
 
         this.map = map;
         this.formattingConfig = formattingConfig;

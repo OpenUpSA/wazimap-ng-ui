@@ -158,6 +158,27 @@ export class Observable {
     }
 }
 
+export class Component extends Observable {
+    constructor(parent = null) {
+        super()
+
+        this._parent = parent;
+        this._children = [];
+    }
+
+    registerChild(child) {
+        this._children.push(child);
+    }
+
+    get children() {
+        return this._children;
+    }
+
+    get parent() {
+        return this._parent;
+    }
+}
+
 export const numFmt = d3format(",.2f");
 export const numFmtAlt = d3format("~s");
 // export const percFmt = x => (x * 100).toFixed(2);

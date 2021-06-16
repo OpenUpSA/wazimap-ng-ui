@@ -1,4 +1,4 @@
-import {appendFilterArrays, checkIterate, getFilterGroups, Observable} from '../utils';
+import {appendFilterArrays, checkIterate, getFilterGroups, Component} from '../utils';
 import {format as d3format} from 'd3-format';
 import {SubindicatorFilter} from "../profile/subindicator_filter";
 import DropdownMenu from "./dropdown_menu";
@@ -14,9 +14,10 @@ let subindicatorKey = '';
 /**
  * Represent the map chip at the bottom of the map
  */
-export class MapChip extends Observable {
-    constructor(legendColors) {
-        super();
+export class MapChip extends Component {
+    constructor(parent, legendColors) {
+        super(parent);
+
         this.legendColors = legendColors;
         this.filterArgs = null;
         this.prepareDomElements();
@@ -66,7 +67,8 @@ export class MapChip extends Observable {
         }
         let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
 
-        this.filter = new SubindicatorFilter(filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, filtersToAdd, args.data.child_data, '.map-options__filter-row');
+        this.filter = new SubindicatorFilter(this, filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, filtersToAdd, args.data.child_data, '.map-options__filter-row');
+        this.registerChild(this.filter)
 
         this.setAddFilterButton();
     }

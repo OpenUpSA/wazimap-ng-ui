@@ -1,13 +1,14 @@
-import {Observable} from '../utils';
+import {Component} from '../utils';
 
 export const RICH_DATA_PANEL = "rich_data";
 export const POINT_DATA_PANEL = "point_data";
 export const DATA_EXPLORER_PANEL = "data_explorer";
 export const NO_PANELS = "no_panels";
 
-export class SidePanels extends Observable {
-    constructor(showPanels) {
-        super();
+export class SidePanels extends Component {
+    constructor(parent, showPanels) {
+        super(parent);
+
         this.prepareDomElements();
         this.initialiseTriggers();
 

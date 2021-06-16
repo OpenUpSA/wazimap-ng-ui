@@ -1,5 +1,3 @@
-//import {Observable} from './utils';
-
 let removeClsName = 'hide';
 
 /**

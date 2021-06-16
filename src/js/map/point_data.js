@@ -1,4 +1,4 @@
-import {Observable, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
+import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
 import {getJSON} from '../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
@@ -34,9 +34,9 @@ const POPUP_OFFSET = [20, 0];
 /**
  * this class creates the point data dialog
  */
-export class PointData extends Observable {
-    constructor(api, _map, profileId) {
-        super();
+export class PointData extends Component {
+    constructor(parent, api, _map, profileId) {
+        super(parent);
 
         this.api = api;
         this.map = _map;

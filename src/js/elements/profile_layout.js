@@ -1,10 +1,10 @@
-import {Observable} from '../utils';
+import {Component} from '../utils';
 
 const logoContainer = $('img.profile-logo');
 
-export class ProfileLayout extends Observable {
-    constructor() {
-        super();
+export class ProfileLayout extends Component {
+    constructor(parent) {
+        super(parent);
     }
 
     displayLogo(logo) {

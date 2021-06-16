@@ -41,6 +41,8 @@ export class IndicatorHelper {
     static fixIndicator(indicator) {
         indicator.metadata = this.getMetadata(indicator)
         indicator.chartConfiguration = this.getChartConfiguration(indicator.chart_configuration)
+        if (indicator.child_data == undefined)
+            indicator.child_data = []
         return indicator
     }
 }

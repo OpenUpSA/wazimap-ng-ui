@@ -1,5 +1,5 @@
 import {SubIndicator} from '../dataobjects'
-
+import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Observable} from '../utils'
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
@@ -36,11 +36,11 @@ function subindicatorsInSubCategory(subcategory) {
 }
 
 function subindicatorsInIndicator(indicator) {
-  return indicator.metadata.groups.length;
+    return indicator.metadata.groups.length;
 }
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
-export function loadMenu(data, subindicatorCallback) {
+export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, choropleth_method, indicatorId) {
 
         $(".data-category__h3", wrapper).remove();
@@ -111,9 +111,13 @@ export function loadMenu(data, subindicatorCallback) {
         $(".data-category__h2", h2Wrapper).remove();
 
         for (const [subcategory, detail] of Object.entries(subcategories)) {
-            let count = subindicatorsInSubCategory(detail);
-            if (count > 0) {
-                addIndicators(h2Wrapper, category, subcategory, detail.indicators);
+            let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
+
+            if (hasChildren) {
+                let count = subindicatorsInSubCategory(detail);
+                if (count > 0) {
+                    addIndicators(h2Wrapper, category, subcategory, detail.indicators);
+                }
             }
         }
     }
@@ -129,15 +133,17 @@ export function loadMenu(data, subindicatorCallback) {
 
     $(".data-menu__category").remove();
     let hasNoItems = true;
+    let hiddenClass = hideondeployClsName;
+    hiddenClass = 'hidden';
     $(parentContainer).find('.data-category').remove();
 
 
     for (const [category, detail] of Object.entries(data)) {
-        let count = subindicatorsInCategory(detail);
+        let hasChildren = checkIfCategoryHasChildren(category, detail)
 
-        if (count > 0) {
-            if (!$('.' + noDataWrapperClsName).hasClass(hideondeployClsName)) {
-                $('.' + noDataWrapperClsName).addClass(hideondeployClsName);
+        if (hasChildren) {
+            if (!$('.' + noDataWrapperClsName).hasClass(hiddenClass)) {
+                $('.' + noDataWrapperClsName).addClass(hiddenClass);
             }
             hasNoItems = false;
 
@@ -146,14 +152,23 @@ export function loadMenu(data, subindicatorCallback) {
     }
 
     if (hasNoItems) {
-        if ($('.' + noDataWrapperClsName).hasClass(hideondeployClsName)) {
-            $('.' + noDataWrapperClsName).removeClass(hideondeployClsName);
-        }
+        dataMapperMenu.showNoData()
     }
 }
 
-export function showNoData(){
-    $(parentContainer).empty();
-    $('.' + loadingClsName).addClass('hidden');
-    $('.' + noDataWrapperClsName).removeClass('hidden');
+/**
+* This class is a stub for a menu component
+*/
+export class DataMapperMenu extends Observable {
+    constructor() {
+        super()
+    }
+
+    showNoData() {
+        $(parentContainer).empty();
+        $('.' + loadingClsName).addClass('hidden');
+        $('.' + noDataWrapperClsName).removeClass('hidden');
+
+        this.triggerEvent('data_mapper_menu.nodata', this);
+    }
 }

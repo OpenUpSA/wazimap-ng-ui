@@ -16,6 +16,7 @@ import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
 import {MapDownload} from "./map/map_download";
 import {Tutorial} from "./elements/tutorial";
+import {DataMapperMenu} from './elements/menu';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -72,6 +73,7 @@ export default function configureApplication(profileId, config) {
     const tutorial = new Tutorial();
     const tabNotice = new TabNotice(config.config.feedback);
     const translations = new Translations(config.config.translations);
+    const dataMapperMenu = new DataMapperMenu();
 
     // TODO not certain if it is need to register both here and in the controller in loadedGeography
     // controller.registerWebflowEvents();
@@ -83,7 +85,7 @@ export default function configureApplication(profileId, config) {
     configurePointDataEvents(controller, {pointData: pointData, pointDataTray: pointDataTray});
     configureChoroplethEvents(controller, {mapcontrol: mapcontrol, mapchip: mapchip});
     configureBreadcrumbsEvents(controller, {profileLoader: profileLoader, locationInfoBox: locationInfoBox});
-    configureDataExplorerEvents(controller);
+    configureDataExplorerEvents(controller, dataMapperMenu);
     configureProfileEvents(controller, {profileLoader: profileLoader});
     configureMiscElementEvents(controller);
     configureRichDataView(controller);

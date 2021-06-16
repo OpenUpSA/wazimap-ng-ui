@@ -1,12 +1,14 @@
-import {loadMenu, showNoData} from '../elements/menu';
+import {loadMenu, showNoData, DataMenu} from '../elements/menu';
 
-export function configureDataExplorerEvents(controller) {
+export function configureDataExplorerEvents(controller, dataMapperMenu) {
+    controller.bubbleEvent(dataMapperMenu, 'data_mapper_menu.nodata')
     controller.on('profile.loaded', payload => {
         if ($.isEmptyObject(payload.payload.geometries.children)) {
             //no children -- show no-data chip
-            showNoData();
+            dataMenu.showNoData();
         } else {
-            loadMenu(payload.payload.profile.profileData, payload => {
+            const profileData = payload.payload.profile.profileData;
+            loadMenu(dataMapperMenu, profileData, payload => {
                 controller.onSubIndicatorClick(payload)
             })
         }

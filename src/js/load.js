@@ -15,6 +15,7 @@ import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
 import {MapDownload} from "./map/map_download";
 import {Tutorial} from "./elements/tutorial";
+import {DataMapperMenu} from './elements/menu';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -77,6 +78,7 @@ class Application extends Component {
         const tutorial = new Tutorial(this);
         const tabNotice = new TabNotice(this, config.config.feedback);
         const translations = new Translations(config.config.translations);
+        const dataMapperMenu = new DataMapperMenu(this);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);
@@ -85,10 +87,9 @@ class Application extends Component {
         configurePointDataEvents(controller, {pointData: pointData, pointDataTray: pointDataTray});
         configureChoroplethEvents(controller, {mapcontrol: mapcontrol, mapchip: mapchip});
         configureBreadcrumbsEvents(controller, {profileLoader: profileLoader, locationInfoBox: locationInfoBox});
-        configureDataExplorerEvents(controller);
+        configureDataExplorerEvents(controller, dataMapperMenu);
         configureProfileEvents(controller, {profileLoader: profileLoader});
         configureMiscElementEvents(this, controller);
-        configureRichDataView(controller);
         configureBoundaryEvents(controller, boundaryTypeBox);
         configureMapDownloadEvents(mapDownload);
         configureTutorialEvents(controller, tutorial, config.config.tutorial);
@@ -123,11 +124,4 @@ class Application extends Component {
         this.registerChild(translations);
 
     }
-}
-
-function configureRichDataView(controller) {
-    // $('.rich-data-nav__item').click(e => {
-    //     controller.triggerEvent('panel.rich_data.nav')
-    // })
-
 }

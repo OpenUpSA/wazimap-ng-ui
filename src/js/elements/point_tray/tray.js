@@ -1,4 +1,4 @@
-import {numFmt, Observable, hasElements, ThemeStyle, checkIterate} from '../../utils';
+import {numFmt, Component, hasElements, ThemeStyle, checkIterate} from '../../utils';
 import {Theme} from './theme';
 
 const categoryWrapperClsName = '.point-mapper__h1_content';
@@ -9,9 +9,9 @@ const categoryItemClsName = '.point-mapper__h2'; //'.point-mapper__h2_wrapper';
 const stylesClsName = '.styles';
 const loadingClsName = '.point-mapper-content__loading';
 
-export class PointDataTray extends Observable {
-    constructor(api, profileId) {
-        super();
+export class PointDataTray extends Component {
+    constructor(parent, api, profileId) {
+        super(parent);
         this.api = api;
         this.profileId = profileId;
 
@@ -32,12 +32,14 @@ export class PointDataTray extends Observable {
     }
 
     createTheme(themeIndex, datum) {
-        const theme = new Theme(themeIndex, datum, this.pointDataItem, this.categoryItem);
+        const theme = new Theme(this, themeIndex, datum, this.pointDataItem, this.categoryItem);
 
         this.bubbleEvents(theme, [
             'point_tray.category.selected', 'point_tray.category.unselected',
             'point_tray.theme.selected', 'point_tray.them.unselected'
         ])
+
+        this.registerChild(theme)
 
         return theme;
     }

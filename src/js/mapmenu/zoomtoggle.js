@@ -1,10 +1,11 @@
-import {Observable} from '../utils';
+import {Component} from '../utils';
 
 const zoomToggleClass = '.map-settings__list-item_checkbox .switch';
 
-export class ZoomToggle extends Observable {
-    constructor() {
-        super();
+export class ZoomToggle extends Component {
+    constructor(parent) {
+        super(parent);
+
         this.enabled = false;
         this.state = 0;
 

@@ -1,4 +1,4 @@
-import {Observable} from "../utils";
+import {Component} from "../utils";
 import {Category} from "./category";
 import {Profile_header} from "./profile_header";
 
@@ -14,9 +14,9 @@ let profileWrapper = null;
 
 
 
-export default class ProfileLoader extends Observable {
-    constructor(formattingConfig, _api, _profileId, _config) {
-        super();
+export default class ProfileLoader extends Component {
+    constructor(parent, formattingConfig, _api, _profileId, _config) {
+        super(parent);
 
         this.api = _api;
         this.profileId = _profileId;
@@ -34,8 +34,10 @@ export default class ProfileLoader extends Observable {
         this.loadCategories(profile);
         this.updateGeography(profile);
 
-        let profileHeader = new Profile_header(profile.parents, geometries, this.api, this.profileId, geography, this.config);
+        let profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config);
         profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
+
+        this.registerChild(profileHeader)
     }
 
     prepareDomElements = () => {
@@ -68,7 +70,7 @@ export default class ProfileLoader extends Observable {
         for (const [category, detail] of Object.entries(categories)) {
             const id = this.getNewId();
             this.createNavItem(id, category);
-            let c = new Category(this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories, isFirst)
+            let c = new Category(this, this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories, isFirst)
             isFirst = false;
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
@@ -77,6 +79,8 @@ export default class ProfileLoader extends Observable {
             ]);
 
             removePrevCategories = false;
+
+            this.registerChild(c)
         }
     }
 

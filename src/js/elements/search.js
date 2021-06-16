@@ -1,4 +1,4 @@
-import {Observable} from '../utils';
+import {Component} from '../utils';
 import {select as d3select} from 'd3-selection';
 
 // TODO should change this to jquery instead
@@ -25,13 +25,13 @@ let minLength = 3;
 /**
  * This class is responsible for handling the search box with all of its events
  * */
-export class Search extends Observable {
+export class Search extends Component {
     /**
      * constructor of the class
      * sets the default values, calls init function(this.setSearchInput)
      * */
-    constructor(api, profileId, minChars) {
-        super();
+    constructor(parent, api, profileId, minChars) {
+        super(parent);
 
         minLength = minChars;
         this.api = api;

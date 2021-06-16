@@ -1,7 +1,7 @@
 import {format as d3format} from "d3-format/src/defaultLocale";
 import {select as d3select} from "d3-selection";
 
-import {appendFilterArrays, Observable} from "../utils";
+import {appendFilterArrays, Component} from "../utils";
 import {defaultValues} from "../defaultValues";
 
 import {SubindicatorFilter} from "./subindicator_filter";
@@ -28,8 +28,9 @@ const filterWrapperClass = '.profile-indicator__filters-wrapper';
 const MAX_RICH_TABLE_ROWS = 7;
 
 
-export class Chart extends Observable {
+export class Chart extends Component {
     constructor(
+        parent,
         config,
         data,
         groups,
@@ -37,7 +38,7 @@ export class Chart extends Observable {
         title
     ) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
-        super();
+        super(parent);
 
         this.data = data;
         this.title = title;
@@ -329,7 +330,7 @@ export class Chart extends Observable {
         this.filterGroups = groups.filter((g) => {
             return g.name !== indicators.metadata.primary_group
         })
-        let siFilter = new SubindicatorFilter(filterArea, this.filterGroups, this.title, this.applyFilter, dropdowns, filtersToAdd, indicators.child_data, '.profile-indicator__filter-row');
+        let siFilter = new SubindicatorFilter(this, filterArea, this.filterGroups, this.title, this.applyFilter, dropdowns, filtersToAdd, indicators.child_data, '.profile-indicator__filter-row');
         this.filter = siFilter;
 
         this.setAddFilterButton();

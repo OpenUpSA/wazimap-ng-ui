@@ -1,5 +1,9 @@
-export class Tutorial {
-    constructor() {
+import {Component} from '../utils';
+
+export class Tutorial extends Component {
+    constructor(parent) {
+        super(parent)
+
         this.wrapperClass = '.w-slider-mask';
         this.slideClass = '.w-slide';
     }

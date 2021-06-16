@@ -1,5 +1,5 @@
 import {SubIndicator} from '../dataobjects'
-import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Observable} from '../utils'
+import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
@@ -159,9 +159,9 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
 /**
 * This class is a stub for a menu component
 */
-export class DataMapperMenu extends Observable {
-    constructor() {
-        super()
+export class DataMapperMenu extends Component {
+    constructor(parent) {
+        super(parent)
     }
 
     showNoData() {

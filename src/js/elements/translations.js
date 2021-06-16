@@ -1,9 +1,9 @@
-import {Observable} from "../utils";
+import {Component} from "../utils";
 import i18next from 'i18next';
 
-export class Translations extends Observable {
-    constructor(translations) {
-        super();
+export class Translations extends Component {
+    constructor(parent, translations) {
+        super(parent);
 
         this.translations = translations;
     }

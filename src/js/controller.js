@@ -1,9 +1,9 @@
-import {Observable} from './utils';
+import {Component} from './utils';
 import {Geography, Profile, DataBundle} from './dataobjects';
 
-export default class Controller extends Observable {
-    constructor(api, config, profileId = 1) {
-        super();
+export default class Controller extends Component {
+    constructor(parent, api, config, profileId = 1) {
+        super(parent);
         this.config = config
         this.profileId = profileId;
         this.api = api;

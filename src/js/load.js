@@ -110,21 +110,5 @@ class Application extends Component {
 
         controller.triggerHashChange()
 
-        this.registerChild(mapcontrol);
-        this.registerChild(mapcontrol.popup);
-        this.registerChild(pointData);
-        this.registerChild(pointDataTray);
-        this.registerChild(mapchip);
-        this.registerChild(search);
-        this.registerChild(profileLoader);
-        this.registerChild(locationInfoBox);
-        this.registerChild(zoomToggle);
-        this.registerChild(preferredChildToggle);
-        this.registerChild(boundaryTypeBox);
-        this.registerChild(mapDownload);
-        this.registerChild(tutorial);
-        this.registerChild(tabNotice);
-        this.registerChild(translations);
-
     }
 }

@@ -80,8 +80,6 @@ export class Category extends Component {
                 'point_tray.subindicator_filter.filter'
             ]);
             index++;
-
-            this.registerChild(sc);
         }
     }
 }

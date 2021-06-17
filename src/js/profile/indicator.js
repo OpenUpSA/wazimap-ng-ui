@@ -65,7 +65,6 @@ export class Indicator extends Component {
 
             wrapper.append(indicatorNode);
 
-            this.registerChild(c);
         }
     }
 }

@@ -163,7 +163,11 @@ export class Component extends Observable {
         super()
 
         this._parent = parent;
-        this._children = [];
+        this._children = [];    
+
+        if (parent != null) {
+            this._parent.registerChild(this);    
+        }
     }
 
     registerChild(child) {

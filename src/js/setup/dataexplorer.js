@@ -1,4 +1,4 @@
-import {loadMenu, showNoData, DataMenu} from '../elements/menu';
+import {LoadMenu, showNoData, DataMenu} from '../elements/menu';
 
 export function configureDataExplorerEvents(controller, dataMapperMenu) {
     controller.bubbleEvent(dataMapperMenu, 'data_mapper_menu.nodata')
@@ -8,9 +8,9 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
             dataMenu.showNoData();
         } else {
             const profileData = payload.payload.profile.profileData;
-            loadMenu(dataMapperMenu, profileData, payload => {
-                controller.onSubIndicatorClick(payload)
-            })
+            new LoadMenu(dataMapperMenu, profileData, payload=> {
+              controller.onSubIndicatorClick(payload)
+          });
         }
     })
 }

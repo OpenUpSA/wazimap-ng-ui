@@ -77,7 +77,7 @@ class Application extends Component {
         const mapDownload = new MapDownload(this, mapchip);
         const tutorial = new Tutorial(this);
         const tabNotice = new TabNotice(this, config.config.feedback);
-        const translations = new Translations(config.config.translations);
+        const translations = new Translations(this, config.config.translations);
         const dataMapperMenu = new DataMapperMenu(this);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});

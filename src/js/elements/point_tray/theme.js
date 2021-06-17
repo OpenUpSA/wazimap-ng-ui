@@ -37,8 +37,6 @@ export class Theme extends Component {
         const category = new Category(this, this.themeIndex, categoryDatum, this.categoryItem, isLast);
         this.bubbleEvents(category, ['point_tray.category.selected', 'point_tray.category.unselected']);
 
-        this.registerChild(category)
-
         return category;
     }
 

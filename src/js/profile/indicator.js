@@ -1,4 +1,5 @@
 import {Chart} from './chart';
+import {Text} from './text';
 import {Component, isNull, isEmptyString} from '../utils';
 
 let indicatorClone = null;
@@ -20,7 +21,12 @@ export class Indicator extends Component {
 
         isLast = _isLast;
 
-        this.addIndicatorChart(wrapper, title, indicatorData, detail);
+        if (indicatorData.chartConfiguration.rawText) {
+            this.addIndicatorText(wrapper, title, indicatorData);
+        }
+        else {
+            this.addIndicatorChart(wrapper, title, indicatorData, detail);
+        }
     }
 
     addIndicatorChart(wrapper, title, indicatorData, detail) {
@@ -66,5 +72,30 @@ export class Indicator extends Component {
             wrapper.append(indicatorNode);
 
         }
+    }
+
+    addIndicatorText(wrapper, title, indicatorData) {
+        let indicatorNode = indicatorClone.cloneNode(true);
+        $(indicatorTitleClass, indicatorNode).text(title);
+        $(chartDescClass, indicatorNode).text(indicatorData.description);
+        const isLink = !isNull(indicatorData.metadata.url) && !isEmptyString(indicatorData.metadata.url);
+
+        if (isLink) {
+            let ele = $('<a></a>');
+            $(ele).text(indicatorData.metadata.source);
+            $(ele).attr('href', indicatorData.metadata.url);
+            $(ele).attr('target', '_blank');
+            $(sourceClass, indicatorNode).html(ele);
+        } else {
+            $(sourceClass, indicatorNode).text(indicatorData.metadata.source);
+        }
+
+        let c = new Text(this, indicatorNode, indicatorData);
+
+        if (!isLast) {
+            $(indicatorNode).removeClass('last');
+        }
+
+        wrapper.append(indicatorNode);
     }
 }

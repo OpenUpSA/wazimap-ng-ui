@@ -1,6 +1,7 @@
 import {FilterRow} from "./filter_row";
 import {Observable} from "../../utils";
 import {AddFilterButton} from "../mapchip/add_filter_button";
+import {DataFilterModel} from "../../models/data_filter_model";
 
 const filterRowClass = '.map-options__filter-row';
 
@@ -13,7 +14,7 @@ class FilterControllerModel extends Observable {
     constructor(dataModelFilter = null) {
         super()
         this._filterRows = [];
-        this._dataFilterModel = dataModelFilter
+        this._dataFilterModel = dataModelFilter;
     }
 
     get filterRows() {
@@ -69,6 +70,7 @@ export class FilterController extends Observable {
         this._model = new FilterControllerModel();
         this._addFilterButton = new AddFilterButton(); // TODO should pass in a container
         this._dataFilterModel = null;
+        this._filterCallback = null;
 
         this.prepareDomElements();
         this.prepareEvents();
@@ -84,6 +86,14 @@ export class FilterController extends Observable {
 
     get addFilterButton() {
         return this._addFilterButton;
+    }
+
+    get filterCallback() {
+        return this._filterCallback;
+    }
+
+    set filterCallback(_filterCallback) {
+        this._filterCallback = _filterCallback;
     }
 
     prepareDomElements() {
@@ -151,7 +161,6 @@ export class FilterController extends Observable {
             this.addFilterButton.disable();
     }
 
-
     addFilter(filterName, isDefault = false, isExtra = true) {
         const self = this;
 
@@ -198,8 +207,6 @@ export class FilterController extends Observable {
     setDataFilterModel(dataFilterModel) {
         const self = this;
 
-        console.log({'filter_cont setDataFilterModel':dataFilterModel})
-
         this.reset();
         this.model.setDataFilterModel(dataFilterModel);
 
@@ -214,10 +221,12 @@ export class FilterController extends Observable {
         } else {
             this.addInitialFilterRow(dataFilterModel)
         }
-        // this._dataFilterModel.selectedFilters.forEach(filter => {
-        //     self.addFilter(dataFilter);
-        // })
 
-
+        this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, () => {
+            if (this.filterCallback !== null) {
+                console.log({'this.model.dataFilterModel':this.model.dataFilterModel})
+                this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators);
+            }
+        })
     }
 }

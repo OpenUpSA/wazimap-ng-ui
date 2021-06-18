@@ -95,9 +95,9 @@ class FilterRowModel extends Observable {
 
     set currentSubindicatorValue(value) {
         if (this._currentSubindicatorValue != value) {
-            console.log({'currentSubindicatorValue': this.dataFilterModel})
             this._currentSubindicatorValue = value;
             this.dataFilterModel.setSelectedSubindicator(this.currentIndicatorValue, value);
+            this.dataFilterModel.filterChildData();
             this.triggerEvent(FilterRowModel.EVENTS.updated, this);
         }
     }
@@ -107,8 +107,6 @@ class FilterRowModel extends Observable {
         this._dataFilterModel = dataFilterModel;
         this._currentIndicatorValue = null;
         this._currentSubindicatorValue = null;
-
-        console.log({'setDataFilterModel': dataFilterModel})
 
         this.triggerEvent(FilterRowModel.EVENTS.updated, this)
     }

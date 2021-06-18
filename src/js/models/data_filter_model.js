@@ -63,12 +63,16 @@ export class DataFilterModel extends Observable {
         return this._selectedSubindicators;
     }
 
-    get childData(){
+    get childData() {
         return this._childData;
     }
 
-    get filteredData(){
+    get filteredData() {
         return this._filteredData;
+    }
+
+    set filteredData(_filteredData) {
+        this._filteredData = _filteredData;
     }
 
     get availableFilters() {
@@ -114,7 +118,25 @@ export class DataFilterModel extends Observable {
 
         if (this._selectedSubindicators[indicatorName] != subindicatorValue) {
             this._selectedSubindicators[indicatorName] = subindicatorValue
-            this.triggerEvent(DataFilterModel.EVENTS.updated, this)
         }
+    }
+
+    filterChildData() {
+        let _filteredData = {};
+        for (const [geo, arr] of Object.entries(this.childData)) {
+            _filteredData[geo] = arr.filter((a) => {
+                let isFiltered = true;
+                for (let key in this.selectedSubIndicators) {
+                    if (a[key] !== this.selectedSubIndicators[key]) {
+                        isFiltered = false;
+                    }
+                }
+
+                return isFiltered;
+            });
+        }
+
+        this.filteredData = _filteredData;
+        this.triggerEvent(DataFilterModel.EVENTS.updated, this)
     }
 }

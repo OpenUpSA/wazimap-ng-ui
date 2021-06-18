@@ -152,6 +152,7 @@ export class MapChip extends Observable {
     }
 
     applyFilter = (filterResult, selectedFilter) => {
+        console.log({filterResult, selectedFilter})
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,
@@ -178,5 +179,6 @@ export class MapChip extends Observable {
         this.show()
         this.handleChoroplethFilter(params, dataFilterModel);
         this._filterController.setDataFilterModel(dataFilterModel);
+        this._filterController.filterCallback = this.applyFilter;
     }
 }

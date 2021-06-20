@@ -21,15 +21,17 @@ export class DataFilterModel extends Observable {
         'updated': 'DataFilterModel.updated' // triggered whenever an event occurs that would affect the filtering of a dataset
     }
 
-    constructor(groups, primaryGroup, childData) {
+    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData) {
         super()
 
         const self = this;
 
         this.filters = [];
-        this.groupLookup = {}
+        this.groupLookup = {};
+        this.configFilters = configFilters;
 
         this._primaryGroup = primaryGroup;
+        this._previouslySelectedFilters = previouslySelectedFilters;
         this._selectedFilters = new Set()
         this._selectedSubindicators = {}
         this._childData = childData;
@@ -49,6 +51,23 @@ export class DataFilterModel extends Observable {
 
     get nonAggregatableGroups() {
         return Object.values(this.groupLookup).filter(group => !(group.can_aggregate));
+    }
+
+    get defaultFilterGroups() {
+        let defaultFilterGroups = [];
+        if (typeof this.configFilters !== 'undefined') {
+            this.configFilters['defaults'].forEach((f) => {
+                    let defaultFilter = {
+                        group: f.name,
+                        value: f.value
+                    }
+
+                    defaultFilterGroups.push(defaultFilter);
+                }
+            );
+        }
+
+        return defaultFilterGroups;
     }
 
     get selectedFilters() {
@@ -73,6 +92,10 @@ export class DataFilterModel extends Observable {
 
     set filteredData(_filteredData) {
         this._filteredData = _filteredData;
+    }
+
+    get previouslySelectedFilters(){
+        return this._previouslySelectedFilters;
     }
 
     get availableFilters() {
@@ -105,7 +128,8 @@ export class DataFilterModel extends Observable {
     removeFilter(indicatorName) {
         let dataFilter = this.groupLookup[indicatorName];
         if (dataFilter != undefined) {
-            this._selectedFilters.delete(dataFilter)
+            this._selectedFilters.delete(dataFilter);
+            delete this.selectedSubIndicators[dataFilter.name];
             this.triggerEvent(DataFilterModel.EVENTS.updated, this)
         } else {
             throw `removeFilter: Can't find indicator: ${indicatorName}`
@@ -121,8 +145,9 @@ export class DataFilterModel extends Observable {
         }
     }
 
-    filterChildData() {
+    updateFilteredData() {
         let _filteredData = {};
+
         for (const [geo, arr] of Object.entries(this.childData)) {
             _filteredData[geo] = arr.filter((a) => {
                 let isFiltered = true;
@@ -137,6 +162,6 @@ export class DataFilterModel extends Observable {
         }
 
         this.filteredData = _filteredData;
-        this.triggerEvent(DataFilterModel.EVENTS.updated, this)
+        this.triggerEvent(DataFilterModel.EVENTS.updated, this);
     }
 }

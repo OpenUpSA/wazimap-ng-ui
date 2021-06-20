@@ -152,7 +152,7 @@ export class MapChip extends Observable {
     }
 
     applyFilter = (filterResult, selectedFilter) => {
-        console.log({filterResult, selectedFilter})
+        console.log({selectedFilter})
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,
@@ -173,12 +173,26 @@ export class MapChip extends Observable {
             return;
         }
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.primaryGroup, params.childData);
+        //remove this
+        params.chartConfiguration.filter = {
+            defaults: [{
+                name: 'race',
+                value: 'Indian or Asian'
+            }]
+        };
+
+        params.groups[1].can_aggregate = false;
+        //remove this
+        const previouslySelectedFilters = params.filter;
+
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
         this.setDescription(params.description);
         this.show()
         this.handleChoroplethFilter(params, dataFilterModel);
+        if (this._filterController.filterCallback === null) {
+            this._filterController.filterCallback = this.applyFilter;
+        }
         this._filterController.setDataFilterModel(dataFilterModel);
-        this._filterController.filterCallback = this.applyFilter;
     }
 }

@@ -97,7 +97,7 @@ class FilterRowModel extends Observable {
         if (this._currentSubindicatorValue != value) {
             this._currentSubindicatorValue = value;
             this.dataFilterModel.setSelectedSubindicator(this.currentIndicatorValue, value);
-            this.dataFilterModel.filterChildData();
+            this.dataFilterModel.updateFilteredData();
             this.triggerEvent(FilterRowModel.EVENTS.updated, this);
         }
     }
@@ -224,6 +224,7 @@ export class FilterRow extends Observable {
     removeRow() {
         this.model.currentIndicatorValue = null;
         $(this.container).remove();
+        this.model.dataFilterModel.updateFilteredData();
         this.triggerEvent(FilterRow.EVENTS.removed, self);
     }
 }

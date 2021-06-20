@@ -149,9 +149,24 @@ export class FilterController extends Observable {
         let isExtra = false;
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra);
+        let selectedRandomVal = group.values[Math.floor(Math.random() * group.values.length)];
         filterRow.indicatorDropdown.disable();
-        filterRow.indicatorDropdown.setText(group.name)
+        filterRow.indicatorDropdown.setText(group.name);
+        filterRow.subIndicatorDropdown.setText(selectedRandomVal);
         filterRow.model.currentIndicatorValue = group.name;
+        filterRow.model.currentSubindicatorValue = selectedRandomVal;
+    }
+
+    addDefaultFilter(group) {
+        let isDefault = true;
+        let isExtra = false;
+
+        let filterRow = this.addEmptyFilter(isDefault, isExtra);
+        filterRow.indicatorDropdown.disable();
+        filterRow.indicatorDropdown.setText(group.group);
+        filterRow.subIndicatorDropdown.setText(group.value);
+        filterRow.model.currentIndicatorValue = group.group;
+        filterRow.model.currentSubindicatorValue = group.value;
     }
 
     setAddFilterButton() { // TODO write an unselected filters getter in the data model
@@ -205,28 +220,45 @@ export class FilterController extends Observable {
     }
 
     setDataFilterModel(dataFilterModel) {
-        const self = this;
-
         this.reset();
         this.model.setDataFilterModel(dataFilterModel);
 
-        let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
-
-        if (nonAggregatableGroups.length > 0) {
-            nonAggregatableGroups.forEach(group => {
-                if (group.name != this.model.dataFilterModel.primaryGroup) {
-                    self.addNonAggregatableFilter(group);
-                }
-            })
-        } else {
-            this.addInitialFilterRow(dataFilterModel)
-        }
-
         this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, () => {
             if (this.filterCallback !== null) {
-                console.log({'this.model.dataFilterModel':this.model.dataFilterModel})
                 this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators);
             }
         })
+
+        this.checkAndAddNonAggregatableGroups();
+        this.checkAndAddDefaultFilterGroups();
+        //this.checkAndAddPreviouslySelectedFilters();
+        this.addInitialFilterRow(dataFilterModel);
+    }
+
+    checkAndAddNonAggregatableGroups() {
+        const self = this;
+        let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
+
+        nonAggregatableGroups.forEach(group => {
+            if (group.name != this.model.dataFilterModel.primaryGroup) {
+                self.addNonAggregatableFilter(group);
+            }
+        })
+    }
+
+    checkAndAddDefaultFilterGroups() {
+        const self = this;
+        let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+
+        defaultGroups.forEach(group => {
+            if (group.group != this.model.dataFilterModel.primaryGroup) {
+                self.addDefaultFilter(group);
+            }
+        })
+    }
+
+    checkAndAddPreviouslySelectedFilters() {
+        const self = this;
+        let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilters;
     }
 }

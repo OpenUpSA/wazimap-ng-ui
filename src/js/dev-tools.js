@@ -77,7 +77,6 @@ async function getProfileData(profileUrl) {
   return data;
 }
 
-
 export async function install() {
   let data = []
   let profileUrl = 'https://production.wazimap-ng.openup.org.za/api/v1/profiles';

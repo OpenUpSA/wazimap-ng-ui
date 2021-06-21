@@ -1,9 +1,9 @@
-import {Observable} from './utils';
+import {Component} from './utils';
 import {Geography, Profile, DataBundle} from './dataobjects';
 
-export default class Controller extends Observable {
-    constructor(api, config, profileId = 1) {
-        super();
+export default class Controller extends Component {
+    constructor(parent, api, config, profileId = 1) {
+        super(parent);
         this.config = config
         this.profileId = profileId;
         this.api = api;
@@ -122,10 +122,7 @@ export default class Controller extends Observable {
         let subindicator = this.state.subindicator;
         subindicator.subindicatorArr = payload.subindicatorArr;
         subindicator.children = payload.data;
-        subindicator.filter = {
-            group: payload.selectedGroup,
-            value: payload.selectedFilter
-        }
+        subindicator.filter = payload.selectedFilter
 
         this.state.subindicator = subindicator;
 
@@ -189,6 +186,7 @@ export default class Controller extends Observable {
                     // self.registerWebflowEvents();
                 }
             }, 600)
+            document.title = dataBundle.overview.name;
         })
     }
 

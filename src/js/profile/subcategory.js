@@ -1,5 +1,5 @@
 import {Indicator} from "./indicator";
-import {Observable, formatNumericalValue} from "../utils";
+import {Component, formatNumericalValue} from "../utils";
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -12,9 +12,9 @@ const keyMetricClass = '.key-metric';
 const descriptionTextClass = '.sub-category-header__description p';
 const descriptionClass = '.sub-category-header__description';
 
-export class Subcategory extends Observable {
-    constructor(formattingConfig, wrapper, subcategory, detail, _isFirst) {
-        super();
+export class Subcategory extends Component {
+    constructor(parent, formattingConfig, wrapper, subcategory, detail, _isFirst) {
+        super(parent);
 
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
         isFirst = _isFirst;
@@ -55,7 +55,7 @@ export class Subcategory extends Observable {
             for (const [title, indicatorData] of Object.entries(detail.indicators)) {
                 if (typeof indicatorData.data !== 'undefined') {
                     let isLast = index === lastIndex;
-                    let i = new Indicator(formattingConfig, wrapper, title, indicatorData, detail, isLast);
+                    let i = new Indicator(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
                     this.bubbleEvents(i, [
                         'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                         'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

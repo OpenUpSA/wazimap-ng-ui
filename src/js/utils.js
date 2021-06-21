@@ -158,6 +158,31 @@ export class Observable {
     }
 }
 
+export class Component extends Observable {
+    constructor(parent = null) {
+        super()
+
+        this._parent = parent;
+        this._children = [];    
+
+        if (parent != null) {
+            this._parent.registerChild(this);    
+        }
+    }
+
+    registerChild(child) {
+        this._children.push(child);
+    }
+
+    get children() {
+        return this._children;
+    }
+
+    get parent() {
+        return this._parent;
+    }
+}
+
 export const numFmt = d3format(",.2f");
 export const numFmtAlt = d3format("~s");
 // export const percFmt = x => (x * 100).toFixed(2);
@@ -297,12 +322,24 @@ export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
     return merge({}, defaultObj, obj)
 }
 
+export function checkIfCategoryHasChildren(category, detail) {
+    let hasChildren = false
+    for (const [subcategory, subcategoryDetail] of Object.entries(detail.subcategories)) {
+        if (checkIfSubCategoryHasChildren(subcategory, subcategoryDetail))
+            return true
+    }
+
+    return false
+}
+
 export function checkIfSubCategoryHasChildren(subcategory, detail) {
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
-        hasChildren = hasChildren || (typeof data.data !== 'undefined' && data.data.some(function (e) {
-            return e.count > 0
-        }));
+        if (!hasChildren && typeof data.child_data !== 'undefined') {
+            for (const [geo, arr] of Object.entries(data.child_data)) {
+                hasChildren = hasChildren || arr.length > 0;
+            }
+        }
     }
 
     return hasChildren;
@@ -315,9 +352,11 @@ export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindica
             return a[primaryGroup] === selectedSubindicator;
         });
 
-        sumData[code] = filteredArr.reduce(function (s, a) {
-            return s + parseFloat(a.count);
-        }, 0);
+        if (filteredArr.length > 0) {
+            sumData[code] = filteredArr.reduce(function (s, a) {
+                return s + parseFloat(a.count);
+            }, 0);
+        }
     })
 
     return sumData;
@@ -356,7 +395,7 @@ export function extractSheetsData(data) {
 export function extractSheetData(rawData, categoryName) {
     const sheetName = getSheetName(categoryName);
     let rows = rawData.features.map((f) => {
-        let {geometry: {coordinates:[longitude, latitude]}, properties: {name, data}} = f;
+        let {geometry: {coordinates: [longitude, latitude]}, properties: {name, data}} = f;
 
         let mapped = data.map(item => ({[item.key]: item.value}));
         return Object.assign({name, longitude, latitude}, ...mapped);
@@ -373,4 +412,18 @@ export function getSheetName(name) {
     const sheetName = name.length > SHEETNAME_CHAR_LIMIT ? name.substring(0, SHEETNAME_CHAR_LIMIT - suffix.length) + suffix : name;
 
     return sheetName;
+}
+
+export function appendFilterArrays(arr1, arr2, primaryGroup){
+    let filterArr = arr1.concat(arr2).filter((f) => {
+        return f.group !== primaryGroup
+    });
+
+    filterArr = filterArr.filter((f, index, self) =>
+        index === self.findIndex((t) => (
+            t.group === f.group
+        ))
+    )
+
+    return filterArr;
 }

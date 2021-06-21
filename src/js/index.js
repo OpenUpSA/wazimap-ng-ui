@@ -119,12 +119,4 @@ loadDevTools(() => {
     import('./server').then(server => server.makeServer())
   }
   init();
-  setTimeout(function() {
-    const panel = sessionStorage.getItem("wazi.defaultPanel");
-    if(panel) {
-      $(`.rich-data-toggles .panel-toggle:nth-child(${panel})`).click()
-      $(`.point-mapper-toggles .panel-toggle:nth-child(${panel})`).click()
-
-    }
-  }, 3000)
 })

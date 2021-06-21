@@ -1,4 +1,4 @@
-import {Observable, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
+import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
 import {getJSON} from '../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
@@ -26,9 +26,6 @@ let tooltipRowItem = null;
 let facilityItem = null;
 let facilityRowItem = null;
 
-let googleMapsButton = null;
-let googleMapsButtonClsName = 'facility-info__view-google-map';
-
 let activeMarkers = [];
 let activePoints = [];  //the visible points on the map
 
@@ -37,9 +34,9 @@ const POPUP_OFFSET = [20, 0];
 /**
  * this class creates the point data dialog
  */
-export class PointData extends Observable {
-    constructor(api, _map, profileId) {
-        super();
+export class PointData extends Component {
+    constructor(parent, api, _map, profileId) {
+        super(parent);
 
         this.api = api;
         this.map = _map;
@@ -58,7 +55,6 @@ export class PointData extends Observable {
         facilityItem = $('.' + facilityClsName);
         pointLegend = $('.' + pointLegendWrapperClsName);
         pointLegendItem = $('.' + pointLegendItemClsName)[0].cloneNode(true);
-        googleMapsButton = $('.' + googleMapsButtonClsName);
 
         $(pointLegend).empty();
         $('.facility-info__close').on('click', () => this.hideInfoWindows());
@@ -281,10 +277,6 @@ export class PointData extends Observable {
     showFacilityModal = (point) => {
         $('.facility-info__title').text(point.name);
         this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');
-
-        let gMapsUrl = `https://www.google.com/maps/search/?api=1&query=${point.y},${point.x}`;
-        googleMapsButton.removeClass('hidden');
-        googleMapsButton.attr('href', gMapsUrl);
 
         $('.facility-info').css('display', 'flex');
     }

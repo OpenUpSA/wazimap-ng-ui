@@ -18,7 +18,7 @@ export class Text extends Component {
     addRawHtml = (data) => {
         $(".bar-chart").remove();
         $(".profile-indicator__filters-wrapper").remove();
-        
-        $(".indicator__chart").append("<p>placeholder</p>");
+
+        $(".indicator__chart").append(data);
     };
 }

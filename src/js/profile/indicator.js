@@ -71,7 +71,7 @@ export class Indicator extends Component {
 
         this.extractMetadata(indicatorData.metadata, indicatorNode);
 
-        let c = new Text(this, indicatorNode, indicatorData);
+        let c = new Text(this, indicatorData.html);
 
         if (!isLast) {
             $(indicatorNode).removeClass('last');

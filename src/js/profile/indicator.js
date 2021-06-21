@@ -21,7 +21,7 @@ export class Indicator extends Component {
 
         isLast = _isLast;
 
-        if (indicatorData.chartConfiguration.rawText) {
+        if (indicatorData.chartConfiguration.rawHtml) {
             this.addIndicatorText(wrapper, title, indicatorData);
         }
         else {
@@ -33,17 +33,7 @@ export class Indicator extends Component {
         let indicatorNode = indicatorClone.cloneNode(true);
         $(indicatorTitleClass, indicatorNode).text(title);
         $(chartDescClass, indicatorNode).text(indicatorData.description);
-        const isLink = !isNull(indicatorData.metadata.url) && !isEmptyString(indicatorData.metadata.url);
-
-        if (isLink) {
-            let ele = $('<a></a>');
-            $(ele).text(indicatorData.metadata.source);
-            $(ele).attr('href', indicatorData.metadata.url);
-            $(ele).attr('target', '_blank');
-            $(sourceClass, indicatorNode).html(ele);
-        } else {
-            $(sourceClass, indicatorNode).text(indicatorData.metadata.source);
-        }
+        this.extractMetadata(indicatorData.metadata, indicatorNode);
 
         if (indicatorData.groups !== null && typeof indicatorData.groups !== 'undefined') {
             for (const [group, items] of Object.entries(indicatorData.groups)) {
@@ -78,17 +68,8 @@ export class Indicator extends Component {
         let indicatorNode = indicatorClone.cloneNode(true);
         $(indicatorTitleClass, indicatorNode).text(title);
         $(chartDescClass, indicatorNode).text(indicatorData.description);
-        const isLink = !isNull(indicatorData.metadata.url) && !isEmptyString(indicatorData.metadata.url);
 
-        if (isLink) {
-            let ele = $('<a></a>');
-            $(ele).text(indicatorData.metadata.source);
-            $(ele).attr('href', indicatorData.metadata.url);
-            $(ele).attr('target', '_blank');
-            $(sourceClass, indicatorNode).html(ele);
-        } else {
-            $(sourceClass, indicatorNode).text(indicatorData.metadata.source);
-        }
+        this.extractMetadata(indicatorData.metadata, indicatorNode);
 
         let c = new Text(this, indicatorNode, indicatorData);
 
@@ -97,5 +78,17 @@ export class Indicator extends Component {
         }
 
         wrapper.append(indicatorNode);
+    }
+
+    extractMetadata(metadata, indicatorNode) {
+        if (metadata.url) {
+            let ele = $('<a></a>');
+            $(ele).text(metadata.source);
+            $(ele).attr('href', metadata.url);
+            $(ele).attr('target', '_blank');
+            $(sourceClass, indicatorNode).html(ele);
+        } else {
+            $(sourceClass, indicatorNode).text(metadata.source);
+        }
     }
 }

@@ -6,15 +6,19 @@ export class Text extends Component {
         data,
     ) {
         super(parent);
-        this.data = data;
-        
-        this.addRawText(data);
+        this._data = data;
+
+        this.addRawHtml(this._data);
     }
 
-    addRawText = (data) => {
-        $(".bar-chart", this.container).remove();
-        $(".profile-indicator__filters-wrapper", this.container).remove();
+    get html() {
+        return this._data;
+    }
+
+    addRawHtml = (data) => {
+        $(".bar-chart").remove();
+        $(".profile-indicator__filters-wrapper").remove();
         
-        // Display data
+        $(".indicator__chart").append("<p>placeholder</p>");
     };
 }

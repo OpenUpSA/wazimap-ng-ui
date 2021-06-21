@@ -26,10 +26,10 @@ export class IndicatorHelper {
         return indicator.metadata || {
             source: '',
             description: '',
-            url: '',
+            url: null,
             licence: {
                 name: '',
-                url: ''
+                url: null
             }
         }
     }

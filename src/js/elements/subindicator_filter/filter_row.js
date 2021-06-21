@@ -6,8 +6,8 @@ import {Observable} from "../../utils";
  */
 class FilterRowModel extends Observable {
     static EVENTS = {
-        'updated': 'filterRowModel.updated',  // triggered when new datafiltermodel is set
-        'indicatorSelected': 'filterRowModel.indicatorSelected' //
+        updated: 'filterRowModel.updated',  // triggered when new datafiltermodel is set
+        indicatorSelected: 'filterRowModel.indicatorSelected' //
     }
 
     static ALL_VALUES = 'All values';
@@ -120,7 +120,7 @@ class FilterRowModel extends Observable {
  */
 export class FilterRow extends Observable {
     static EVENTS = {
-        'removed': 'filterRow.removed'
+        removed: 'filterRow.removed'
     }
 
     constructor(container, dataFilterModel = null, isDefault = false, isExtra = true) {

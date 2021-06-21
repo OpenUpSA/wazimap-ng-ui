@@ -1,9 +1,10 @@
-import { Observable } from "../../utils";
+import {Component} from "../../utils";
 
-export class AddFilterButton extends Observable {
+export class AddFilterButton extends Component {
     static EVENTS = {
-        "clicked": "addButton.clicked"
+        clicked: "addButton.clicked"
     }
+
     constructor() {
         super();
         this.prepareDomElements();

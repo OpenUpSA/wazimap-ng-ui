@@ -1,12 +1,13 @@
 import {format as d3format} from 'd3-format';
 
-import { Observable } from "../../utils";
+import {Component} from "../../utils";
 
-const lightStart = 3;
-
-export class Legend extends Observable {
+export class Legend extends Component {
     constructor(container, legendColors) {
         super();
+
+        this.lightStart = 3;
+
         this.prepareDomElements(container);
         this.legendColors = legendColors;
     }
@@ -21,12 +22,12 @@ export class Legend extends Observable {
     }
 
     clear() {
-        
+
     }
 
     show(colors, intervals) {
         if (colors.length != intervals.length)
-            throw "Expected the number of intervals to be the same as the number of colours."
+            throw 'Expected the number of intervals to be the same as the number of colours.'
 
         const legend = $(this.clonedLegend);
         const fmt = d3format(".1%")
@@ -38,7 +39,7 @@ export class Legend extends Observable {
             const item = this.clonedLegendBlock.cloneNode(true);
             const label = interval;
 
-            if (i >= lightStart) {
+            if (i >= this.lightStart) {
                 $(item).addClass('light');
             }
 

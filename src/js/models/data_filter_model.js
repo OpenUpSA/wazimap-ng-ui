@@ -18,7 +18,7 @@ import {DataFilter} from "./data_filter";
  */
 export class DataFilterModel extends Observable {
     static EVENTS = {
-        'updated': 'DataFilterModel.updated' // triggered whenever an event occurs that would affect the filtering of a dataset
+        updated: 'DataFilterModel.updated' // triggered whenever an event occurs that would affect the filtering of a dataset
     }
 
     constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData) {

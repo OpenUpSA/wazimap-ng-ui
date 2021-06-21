@@ -7,8 +7,8 @@ const filterRowClass = '.map-options__filter-row';
 
 class FilterControllerModel extends Observable {
     static EVENTS = {
-        'filterRemoved': 'FilterControllerModel.filterRemoved',
-        'dataFilterModelUpdated': 'FilterControllerModel.dataFilterModelUpdated'
+        filterRemoved: 'FilterControllerModel.filterRemoved',
+        dataFilterModelUpdated: 'FilterControllerModel.dataFilterModelUpdated'
     }
 
     constructor(dataModelFilter = null) {
@@ -49,7 +49,7 @@ class FilterControllerModel extends Observable {
 export class FilterController extends Observable {
 
     static EVENTS = {
-        'ready': 'FilterController.ready'
+        ready: 'FilterController.ready'
     }
 
     /*

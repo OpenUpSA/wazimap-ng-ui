@@ -1,7 +1,7 @@
 import {FilterController} from "../subindicator_filter/filter_controller";
 import {Legend} from "./legend";
 import {DataFilterModel} from "../../models/data_filter_model";
-import {Observable} from "../../utils";
+import {Component} from "../../utils";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockClass = '.map-options';
@@ -11,7 +11,7 @@ const legendContainerClass = '.map-options__legend_wrap';
 /**
  * Represent the map chip at the bottom of the map
  */
-export class MapChip extends Observable {
+export class MapChip extends Component {
     constructor(legendColors) {
         super();
 
@@ -29,7 +29,6 @@ export class MapChip extends Observable {
 
     prepareDomElements() {
         this._container = $(mapChipBlockClass)[0];
-        // this.filterArea = this.container.find(filterContentClass); // TODO should this live here?
         this._closeButton = $(this.container).find('.filters__header_close')
         this._descriptionArea = $('.map-options__context .map-option__context_text div');
         this._filtersContainer = $(this.container).find(filterContentClass);
@@ -56,7 +55,6 @@ export class MapChip extends Observable {
 
     hide() {
         $(this.container).addClass('hidden');
-        // $(mapChipBlockClass).addClass('hidden');
     }
 
     show() {
@@ -67,88 +65,6 @@ export class MapChip extends Observable {
     removeMapChip() {
         this.hide();
         this.triggerEvent('mapchip.removed', this.container);
-    }
-
-    handleChoroplethFilter(params, dataFilterModel) {
-        let defaultFilters = [];
-        // let primaryGroup = params.primaryGroup;
-        // let groups = params.groups.filter(g => g.name != primaryGroup)
-        // this.filterController.groups = groups; // TODO should pass in the dataFilterModel, should also reset
-        // this._filterController.setDataFilterModel(dataFilterModel);
-
-        // this.filterController.clearExtraFilters();
-
-        // let filtersToAdd = [];
-        // if (typeof params.filter !== 'undefined') {
-        //     filtersToAdd = filtersToAdd.concat(params.filter);
-        // } else {
-        //     let defaultFilters = this.getDefaultFilters(params.chartConfiguration);
-        //     let nonAggFilters = this.getNonAggFilters(params.groups);
-        //     filtersToAdd = defaultFilters.concat(nonAggFilters);
-        // }
-
-        // for (let i = 1; i < filtersToAdd.length; i++) {
-        //     this.filterController.addFilter(filtersToAdd[i].default);
-        // }
-
-        // let dropdowns = $(mapChipBlockClass).find(`${filterRowClass} .mapping-options__filter`);
-
-        // this.filterController.filter = new SubindicatorFilter(
-        //     this.filterArea, groups, params.indicatorTitle, this.applyFilter, dropdowns, filtersToAdd, params.childData, '.map-options__filter-row'
-        // );
-
-        // this.filterController.setAddFilterButton();
-    }
-
-    getDefaultFilters = (chartConfiguration) => {
-        let defaultFilters = [];
-
-        if (typeof chartConfiguration.filter !== 'undefined') {
-            chartConfiguration.filter['defaults'].forEach((f) => {
-                let defaultFilter = {
-                    group: f.name,
-                    value: f.value,
-                    default: true
-                }
-
-                let item = defaultFilters.filter((df) => {
-                    return df.group === f.name
-                })[0];
-                if (item !== null && typeof item !== 'undefined') {
-                    item.default = true;
-                } else {
-                    defaultFilters.push(defaultFilter);
-                }
-            })
-        }
-
-        return defaultFilters;
-    }
-
-    getNonAggFilters = (groups) => {
-        let filterArr = [];
-
-        let nonAgg = [...groups].filter((g) => {
-            return !g.can_aggregate;
-        })
-        nonAgg.forEach((n) => {
-            let filter = {
-                group: n.name,
-                value: n.subindicators[Math.floor(Math.random() * n.subindicators.length)],
-                default: true
-            }
-
-            let item = filterArr.filter((df) => {
-                return df.group === n.name
-            })[0];
-            if (item !== null && typeof item !== 'undefined') {
-                item.default = true;
-            } else {
-                filterArr.push(filter);
-            }
-        })
-
-        return filterArr;
     }
 
     applyFilter = (filterResult, selectedFilter) => {
@@ -173,23 +89,12 @@ export class MapChip extends Observable {
             return;
         }
 
-        //remove this
-        params.chartConfiguration.filter = {
-            defaults: [{
-                name: 'race',
-                value: 'Indian or Asian'
-            }]
-        };
-
-        params.groups[1].can_aggregate = false;
-        //remove this
         const previouslySelectedFilters = params.filter;
 
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
         this.setDescription(params.description);
-        this.show()
-        this.handleChoroplethFilter(params, dataFilterModel);
+        this.show();
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }

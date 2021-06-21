@@ -3,10 +3,10 @@ import {Observable} from "../../utils";
 
 export class DropdownModel extends Observable {
     static EVENTS = {
-        'update': 'DropdownModel.update',     // triggered when new items are added or removed
-        'selected': 'DropdownModel.selected', // triggered when a new item is selected
-        'enabled': 'DropdownModel.enabled',   // triggered when the dropdown is set to enabled
-        'disabled': 'DropdownModel.disabled', // triggered when the dropdown is set to disabled
+        update: 'DropdownModel.update',     // triggered when new items are added or removed
+        selected: 'DropdownModel.selected', // triggered when a new item is selected
+        enabled: 'DropdownModel.enabled',   // triggered when the dropdown is set to enabled
+        disabled: 'DropdownModel.disabled', // triggered when the dropdown is set to disabled
     }
 
     constructor(items = [], currentIndex = 0, isDisabled = false) {
@@ -35,7 +35,7 @@ export class DropdownModel extends Observable {
     }
 
     set currentItem(value) {
-        for (idx in this.items) {
+        for (let idx in this.items) {
             let item = this.items[idx];
             if (item == value) {
                 this.currentIndex = idx;
@@ -175,7 +175,5 @@ export class Dropdown extends Observable {
             $(li).show();
             self._listItemElements.push(li);
         })
-
-        //self.setSelected(0);
     }
 }

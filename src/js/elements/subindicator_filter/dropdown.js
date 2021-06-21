@@ -97,7 +97,7 @@ export class Dropdown extends Observable {
     }
 
     get model() {
-        return this._model;
+        return this._model;f
     }
 
     prepareDomElements() {

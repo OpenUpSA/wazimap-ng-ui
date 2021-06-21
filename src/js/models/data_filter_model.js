@@ -26,8 +26,8 @@ export class DataFilterModel extends Observable {
 
         const self = this;
 
-        this.filters = [];
-        this.groupLookup = {};
+        this._filters = [];
+        this._groupLookup = {};
         this.configFilters = configFilters;
 
         this._primaryGroup = primaryGroup;
@@ -39,18 +39,26 @@ export class DataFilterModel extends Observable {
 
         groups.forEach(group => {
             let dataFilter = new DataFilter(group);
-            self.filters.push(dataFilter);
+            self._filters.push(dataFilter);
 
-            this.groupLookup[dataFilter.name] = dataFilter;
+            this._groupLookup[dataFilter.name] = dataFilter;
         });
     }
 
     get aggregatableGroups() {
-        return Object.values(this.groupLookup).filter(group => group.can_aggregate);
+        return Object.values(this._groupLookup).filter(group => group.can_aggregate);
     }
 
     get nonAggregatableGroups() {
-        return Object.values(this.groupLookup).filter(group => !(group.can_aggregate));
+        return Object.values(this._groupLookup).filter(group => !(group.can_aggregate));
+    }
+
+    get groupLookup(){
+        return this._groupLookup;
+    }
+
+    get filters(){
+        return this._filters;
     }
 
     get defaultFilterGroups() {
@@ -100,7 +108,7 @@ export class DataFilterModel extends Observable {
 
     get availableFilters() {
         const self = this;
-        let filters = Object.values(this.groupLookup);
+        let filters = Object.values(this._groupLookup);
 
         return filters.filter(filter => {
             if (filter.name == this.primaryGroup)
@@ -116,7 +124,7 @@ export class DataFilterModel extends Observable {
     }
 
     addFilter(indicatorName) {
-        let dataFilter = this.groupLookup[indicatorName];
+        let dataFilter = this._groupLookup[indicatorName];
         if (dataFilter != undefined) {
             this._selectedFilters.add(dataFilter);
             this.triggerEvent(DataFilterModel.EVENTS.updated, this)
@@ -126,7 +134,7 @@ export class DataFilterModel extends Observable {
     }
 
     removeFilter(indicatorName) {
-        let dataFilter = this.groupLookup[indicatorName];
+        let dataFilter = this._groupLookup[indicatorName];
         if (dataFilter != undefined) {
             this._selectedFilters.delete(dataFilter);
             delete this.selectedSubIndicators[dataFilter.name];

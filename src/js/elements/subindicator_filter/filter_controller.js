@@ -21,6 +21,10 @@ class FilterControllerModel extends Observable {
         return this._filterRows;
     }
 
+    addFilterRow(filterRow) {
+        this._filterRows.push(filterRow);
+    }
+
     get dataFilterModel() {
         return this._dataFilterModel;
     }
@@ -38,7 +42,7 @@ class FilterControllerModel extends Observable {
         this._filterRows = []
     }
 
-    setDataFilterModel(dataFilterModel) {
+    set dataFilterModel(dataFilterModel) {
         this.reset();
 
         this._dataFilterModel = dataFilterModel;
@@ -68,7 +72,7 @@ export class FilterController extends Observable {
 
         this._container = container;
         this._model = new FilterControllerModel();
-        this._addFilterButton = new AddFilterButton(); // TODO should pass in a container
+        this._addFilterButton = new AddFilterButton(this); // TODO should pass in a container
         this._dataFilterModel = null;
         this._filterCallback = null;
 
@@ -92,8 +96,8 @@ export class FilterController extends Observable {
         return this._filterCallback;
     }
 
-    set filterCallback(_filterCallback) {
-        this._filterCallback = _filterCallback;
+    set filterCallback(filterCallback) {
+        this._filterCallback = filterCallback;
     }
 
     prepareDomElements() {
@@ -128,7 +132,7 @@ export class FilterController extends Observable {
             $(filterRowContainer).show();
 
             let filterRow = new FilterRow(filterRowContainer, this.model.dataFilterModel, isDefault, isExtra);
-            this.model.filterRows.push(filterRow);
+            this.model.addFilterRow(filterRow);
 
             $(filterRow.container).insertBefore($('a.mapping-options__add-filter')); // TODO can I change this to addButton or something
             filterRow.on(FilterRow.EVENTS.removed, filterRow => {
@@ -221,7 +225,7 @@ export class FilterController extends Observable {
 
     setDataFilterModel(dataFilterModel) {
         this.reset();
-        this.model.setDataFilterModel(dataFilterModel);
+        this.model.dataFilterModel = dataFilterModel;
 
         this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, () => {
             if (this.filterCallback !== null) {

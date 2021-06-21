@@ -5,8 +5,8 @@ export class AddFilterButton extends Component {
         clicked: "addButton.clicked"
     }
 
-    constructor() {
-        super();
+    constructor(parent) {
+        super(parent);
         this.prepareDomElements();
         this.prepareEvents();
     }

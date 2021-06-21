@@ -89,6 +89,16 @@ export class MapChip extends Component {
             return;
         }
 
+        //remove this
+        params.chartConfiguration.filter = {
+            defaults: [{
+                name: 'race',
+                value: 'Indian or Asian'
+            }]
+        };
+
+        params.groups[1].can_aggregate = false;
+        //remove this
         const previouslySelectedFilters = params.filter;
 
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);

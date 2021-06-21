@@ -1,10 +1,10 @@
 import {Dropdown, DropdownModel} from "./dropdown";
-import {Observable} from "../../utils";
+import {Component, Observable} from "../../utils";
 
 /**
  *
  */
-class FilterRowModel extends Observable {
+class FilterRowModel extends Component {
     static EVENTS = {
         updated: 'filterRowModel.updated',  // triggered when new datafiltermodel is set
         indicatorSelected: 'filterRowModel.indicatorSelected' //
@@ -22,7 +22,7 @@ class FilterRowModel extends Observable {
         this._defaultSubindicatorText = defaultSubindicatorText
         this._dataFilterModel = null;
 
-        this.setDataFilterModel(dataFilterModel)
+        this.dataFilterModel = dataFilterModel;
     }
 
     get dataFilterModel() {
@@ -43,8 +43,8 @@ class FilterRowModel extends Observable {
          * Returns the subindicator values for the currently selected indicatorValue. Returns [] if this is not possible
          */
         if (this.dataFilterModel != null) {
-            if (this._currentIndicatorValue != null && this._dataFilterModel.groupLookup[this._currentIndicatorValue] != undefined)
-                return this._dataFilterModel.groupLookup[this._currentIndicatorValue].values;
+            if (this._currentIndicatorValue != null && this.dataFilterModel.groupLookup[this._currentIndicatorValue] != undefined)
+                return this.dataFilterModel.groupLookup[this._currentIndicatorValue].values;
         }
 
         return [];
@@ -74,11 +74,11 @@ class FilterRowModel extends Observable {
          */
 
         if (this._currentIndicatorValue != null && this._currentIndicatorValue != FilterRowModel.ALL_VALUES)
-            this._dataFilterModel.removeFilter(this._currentIndicatorValue);
+            this.dataFilterModel.removeFilter(this._currentIndicatorValue);
         this._currentIndicatorValue = value;
 
         if (value != null && value != FilterRowModel.ALL_VALUES)
-            this._dataFilterModel.addFilter(value);
+            this.dataFilterModel.addFilter(value);
 
         this.triggerEvent(FilterRowModel.EVENTS.indicatorSelected, this);
     }
@@ -103,7 +103,7 @@ class FilterRowModel extends Observable {
     }
 
 
-    setDataFilterModel(dataFilterModel) {
+    set dataFilterModel(dataFilterModel) {
         this._dataFilterModel = dataFilterModel;
         this._currentIndicatorValue = null;
         this._currentSubindicatorValue = null;
@@ -118,7 +118,7 @@ class FilterRowModel extends Observable {
  *
  * TODO - should isDefault and isExtra be stored here instead of the parent widget?
  */
-export class FilterRow extends Observable {
+export class FilterRow extends Component {
     static EVENTS = {
         removed: 'filterRow.removed'
     }

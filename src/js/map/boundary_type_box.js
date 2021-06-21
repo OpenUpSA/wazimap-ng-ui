@@ -1,4 +1,4 @@
-import {Observable} from "../utils";
+import {Component} from "../utils";
 
 let selectElement = $('.map-geo-select')[0];
 let selectedOption = null;
@@ -6,9 +6,9 @@ let optionWrapper = null;
 let optionItem = null;
 let BOUNDARY_MODAL_COOKIE_NAME = 'boundary_selection';
 
-export class BoundaryTypeBox extends Observable {
-    constructor(preferredChildren) {
-        super();
+export class BoundaryTypeBox extends Component {
+    constructor(parent, preferredChildren) {
+        super(parent);
 
         this.preferredChildren = preferredChildren;
 

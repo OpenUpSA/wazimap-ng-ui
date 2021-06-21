@@ -1,9 +1,9 @@
-import {Observable} from './utils';
+import {Component} from './utils';
 import {Geography, Profile, DataBundle} from './dataobjects';
 
-export default class Controller extends Observable {
-    constructor(api, config, profileId = 1) {
-        super();
+export default class Controller extends Component {
+    constructor(parent, api, config, profileId = 1) {
+        super(parent);
         this.config = config
         this.profileId = profileId;
         this.api = api;
@@ -107,6 +107,10 @@ export default class Controller extends Observable {
             chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,
             indicatorId: payload.indicatorId
         }
+        if (typeof subindicator.data.originalChildData !== 'undefined' && subindicator.data.originalChildData !== null) {
+            subindicator.data.child_data = subindicator.data.originalChildData;
+            subindicator.data.originalChildData = null;
+        }
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.selectedSubindicator;
 
@@ -118,10 +122,7 @@ export default class Controller extends Observable {
         let subindicator = this.state.subindicator;
         subindicator.subindicatorArr = payload.subindicatorArr;
         subindicator.children = payload.data;
-        subindicator.filter = {
-            group: payload.selectedGroup,
-            value: payload.selectedFilter
-        }
+        subindicator.filter = payload.selectedFilter
 
         this.state.subindicator = subindicator;
 
@@ -185,6 +186,7 @@ export default class Controller extends Observable {
                     // self.registerWebflowEvents();
                 }
             }, 600)
+            document.title = dataBundle.overview.name;
         })
     }
 
@@ -249,7 +251,7 @@ export default class Controller extends Observable {
         this.triggerEvent('controller.breadcrumbs.selected', payload);
         this.changeHash(payload.code)
     }
-    
+
     onTutorial(event, payload) {
         this.triggerEvent(event)
     }

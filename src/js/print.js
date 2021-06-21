@@ -1,6 +1,10 @@
-import {Observable} from './utils';
+import {Component} from './utils';
 
-export default class PDFPrinter extends Observable {
+export default class PDFPrinter extends Component {
+    constructor(parent) {
+        super(parent)
+    }
+
     printDiv(payload) {
         let filename = 'geography';
         if (payload.payload != undefined)

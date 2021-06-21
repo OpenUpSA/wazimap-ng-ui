@@ -1,5 +1,5 @@
 import {Chart} from './chart';
-import {Observable, isNull, isEmptyString} from '../utils';
+import {Component, isNull, isEmptyString} from '../utils';
 
 let indicatorClone = null;
 let isLast = false;
@@ -9,9 +9,9 @@ const indicatorTitleClass = '.profile-indicator__title h4';
 const chartDescClass = '.profile-indicator__chart_description p';
 const sourceClass = '.data-source';
 
-export class Indicator extends Observable {
-    constructor(formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
-        super();
+export class Indicator extends Component {
+    constructor(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
+        super(parent);
         this.groups = [];
         this.indicatorData = indicatorData;
         this.formattingConfig = formattingConfig;
@@ -52,7 +52,7 @@ export class Indicator extends Observable {
         let hasValues = this.indicatorData.data.some(function(e) { return e.count > 0 });
 
         if (hasValues) {
-            let c = new Chart(configuration, indicatorData, this.groups, indicatorNode, title);
+            let c = new Chart(this, configuration, indicatorData, this.groups, indicatorNode, title);
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
@@ -64,6 +64,7 @@ export class Indicator extends Observable {
             }
 
             wrapper.append(indicatorNode);
+
         }
     }
 }

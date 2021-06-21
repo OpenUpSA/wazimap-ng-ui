@@ -1,14 +1,14 @@
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {min as d3min, max as d3max} from 'd3-array';
 
-import {Observable} from '../../utils';
+import {Component} from '../../utils';
 import SubindicatorCalculator from './subindicator_calculator';
 import SiblingCalculator from './sibling_calculator';
 import AbsoluteValueCalculator from './absolute_value_calculator';
 
-export class Choropleth extends Observable {
-    constructor(layers, layerStyler, options, buffer = 0.1) {
-        super();
+export class Choropleth extends Component {
+    constructor(parent, layers, layerStyler, options, buffer = 0.1) {
+        super(parent);
 
         this.layers = layers;
         this.layerStyler = layerStyler;
@@ -73,6 +73,7 @@ export class Choropleth extends Observable {
     }
 
     showChoropleth(calculations, setLayerToSelected) {
+        this.reset(true);
         const self = this;
         const childGeographyValues = [...calculations];
         const values = childGeographyValues.map(el => el.val);

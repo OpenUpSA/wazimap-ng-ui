@@ -1,12 +1,12 @@
-import {Observable} from '../../utils';
+import {Component} from '../../utils';
 
 let activeClsName = 'active';
 const categoryItemDoneClsName = '.point-mapper__h2_load-complete';
 const categoryItemLoadingClsName = '.point-mapper__h2_loading';
 
-export class Category extends Observable {
-    constructor(themeIndex, data, categoryItem, isLast) {
-        super()
+export class Category extends Component {
+    constructor(parent, themeIndex, data, categoryItem, isLast) {
+        super(parent)
 
         this.active = false;
         this.data = this.fixData(data);

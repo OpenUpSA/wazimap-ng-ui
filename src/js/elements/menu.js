@@ -1,5 +1,4 @@
-import Controller from '../controller';
-import { checkIfCategoryHasChildren, checkIfSubCategoryHasChildren, Component } from '../utils';
+import { Component, checkIfCategoryHasChildren, checkIfSubCategoryHasChildren } from '../utils';
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
@@ -10,32 +9,35 @@ const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 
 
-function subindicatorsInSubCategory(subcategory) {
+class LoadMenuModel extends Observable {
+  static EVENTS = {}
+}
 
-  let count = 0;
+function subindicatorsInIndicator(groups) {
+  return groups.length;
+}
+
+function subindicatorsInSubCategory(subcategory) {
   const indicators = Object.values(subcategory.indicators);
+  let count = 0;
   if (indicators.length > 0) {
     for (const idx in indicators) {
-      let indicator = indicators[idx];
-      count += subindicatorsInIndicator(indicator);
+      let groups = indicators[idx].metadata.groups;
+      count += subindicatorsInIndicator(groups);
     }
   }
 
   return count;
 }
 
-// TODO: possible provide the simplest possible arguments to methods
-function subindicatorsInIndicator(indicator) {
-  return indicator.metadata.groups.length;
-}
-
 // TODO this entire file needs to be refactored to use thhe observer pattern
-export class LoadMenu extends Controller {
+export class LoadMenu extends Component {
   constructor(dataMapperMenu, data, subindicatorCallback) {
-    super();
+    super(dataMapperMenu);
     this._dataMapperMenu = dataMapperMenu;
     this._data = data;
     this._subindicatorCallback = subindicatorCallback;
+    // this._model = new LoadMenuModel();
     // Execute main function
     this.main();
   }

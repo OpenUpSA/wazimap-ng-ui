@@ -1,4 +1,4 @@
-import { Component, checkIfCategoryHasChildren, checkIfSubCategoryHasChildren, Observable } from '../utils';
+import { Component, Observable } from '../utils';
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
@@ -28,6 +28,29 @@ class LoadMenuModel extends Observable {
 
     return count;
   }
+
+  checkIfSubCategoryHasChildren(detail) {
+    let hasChildren = false;
+    for (const [_, data] of Object.entries(detail.indicators)) {
+      if (!hasChildren && typeof data.child_data !== 'undefined') {
+        for (const [_, arr] of Object.entries(data.child_data)) {
+          hasChildren = hasChildren || arr.length > 0;
+        }
+      }
+    }
+
+    return hasChildren;
+  }
+
+  checkIfCategoryHasChildren(detail) {
+    for (const [_, subcategoryDetail] of Object.entries(detail.subcategories)) {
+      if (this.checkIfSubCategoryHasChildren(subcategoryDetail))
+        return true
+    }
+
+    return false
+  }
+
 }
 
 
@@ -116,7 +139,7 @@ export class DataMapperMenu extends Component {
     $(".data-category__h2", h2Wrapper).remove();
 
     for (const [subcategory, detail] of Object.entries(subcategories)) {
-      let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
+      let hasChildren = this._model.checkIfSubCategoryHasChildren(detail);
 
       if (hasChildren) {
         let count = this._model.subindicatorsInSubCategory(detail);
@@ -144,7 +167,7 @@ export class DataMapperMenu extends Component {
     hiddenClass = 'hidden';
     $(parentContainer).find('.data-category').remove();
     for (const [category, detail] of Object.entries(this._data)) {
-      let hasChildren = checkIfCategoryHasChildren(category, detail)
+      let hasChildren = this._model.checkIfCategoryHasChildren(detail)
 
       if (hasChildren) {
         if (!$('.' + noDataWrapperClsName).hasClass(hiddenClass)) {

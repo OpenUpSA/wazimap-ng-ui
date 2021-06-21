@@ -1,4 +1,5 @@
-import {Indicator} from "./indicator";
+import {IndicatorBlock} from "./indicator";
+import {MarkdownBlock} from "./indicator";
 import {Component, formatNumericalValue} from "../utils";
 
 let isFirst = false;
@@ -55,7 +56,7 @@ export class Subcategory extends Component {
             for (const [title, indicatorData] of Object.entries(detail.indicators)) {
                 if (typeof indicatorData.data !== 'undefined') {
                     let isLast = index === lastIndex;
-                    let i = new Indicator(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
+                    let i = new IndicatorBlock(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
                     this.bubbleEvents(i, [
                         'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                         'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

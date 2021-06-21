@@ -10,7 +10,7 @@ const indicatorTitleClass = '.profile-indicator__title h4';
 const chartDescClass = '.profile-indicator__chart_description p';
 const sourceClass = '.data-source';
 
-export class Indicator extends Component {
+export class InfoBlock extends Component {
     constructor(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
         super(parent);
         this.groups = [];
@@ -21,63 +21,10 @@ export class Indicator extends Component {
 
         isLast = _isLast;
 
-        if (indicatorData.chartConfiguration.rawHtml) {
-            this.addIndicatorText(wrapper, title, indicatorData);
-        }
-        else {
-            this.addIndicatorChart(wrapper, title, indicatorData, detail);
-        }
-    }
-
-    addIndicatorChart(wrapper, title, indicatorData, detail) {
-        let indicatorNode = indicatorClone.cloneNode(true);
-        $(indicatorTitleClass, indicatorNode).text(title);
-        $(chartDescClass, indicatorNode).text(indicatorData.description);
-        this.extractMetadata(indicatorData.metadata, indicatorNode);
-
-        if (indicatorData.groups !== null && typeof indicatorData.groups !== 'undefined') {
-            for (const [group, items] of Object.entries(indicatorData.groups)) {
-                this.groups.push(group);
-            }
-        }
-
-
-        const configuration = detail.indicators[title].chartConfiguration;
-        const indicators = detail.indicators;
-
-        let hasValues = this.indicatorData.data.some(function(e) { return e.count > 0 });
-
-        if (hasValues) {
-            let c = new Chart(this, configuration, indicatorData, this.groups, indicatorNode, title);
-            this.bubbleEvents(c, [
-                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter'
-            ]);
-
-            if (!isLast) {
-                $(indicatorNode).removeClass('last');
-            }
-
-            wrapper.append(indicatorNode);
-
-        }
-    }
-
-    addIndicatorText(wrapper, title, indicatorData) {
-        let indicatorNode = indicatorClone.cloneNode(true);
-        $(indicatorTitleClass, indicatorNode).text(title);
-        $(chartDescClass, indicatorNode).text(indicatorData.description);
-
-        this.extractMetadata(indicatorData.metadata, indicatorNode);
-
-        let c = new Text(this, indicatorData.html);
-
-        if (!isLast) {
-            $(indicatorNode).removeClass('last');
-        }
-
-        wrapper.append(indicatorNode);
+        this.indicatorNode = indicatorClone.cloneNode(true);
+        $(indicatorTitleClass, this.indicatorNode).text(this.title);
+        $(chartDescClass, this.indicatorNode).text(this.indicatorData.description);
+        this.extractMetadata(this.indicatorData.metadata, this.indicatorNode);
     }
 
     extractMetadata(metadata, indicatorNode) {
@@ -90,5 +37,65 @@ export class Indicator extends Component {
         } else {
             $(sourceClass, indicatorNode).text(metadata.source);
         }
+    }
+}
+
+export class IndicatorBlock extends InfoBlock {
+    constructor(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
+    //constructor(wrapper, title, indicatorData, detail) {
+        super(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast);
+        this.wrapper = wrapper;
+        this.title = title;
+        this.detail = detail;
+        this.addIndicator();
+    }
+    addIndicator() {
+
+        if (this.indicatorData.groups !== null && typeof this.indicatorData.groups !== 'undefined') {
+            for (const [group, items] of Object.entries(this.indicatorData.groups)) {
+                this.groups.push(group);
+            }
+        }
+
+
+        const configuration = this.detail.indicators[this.title].chartConfiguration;
+        const indicators = this.detail.indicators;
+
+        let hasValues = this.indicatorData.data.some(function(e) { return e.count > 0 });
+
+        if (hasValues) {
+            let c = new Chart(this.Indicator, configuration, this.indicatorData, this.groups, this.indicatorNode, this.title);
+            this.bubbleEvents(c, [
+                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                'point_tray.subindicator_filter.filter'
+            ]);
+
+            if (!isLast) {
+                $(this.indicatorNode).removeClass('last');
+            }
+
+            this.wrapper.append(this.indicatorNode);
+        }
+    }
+}
+
+export class MarkdownBlock extends InfoBlock {
+    constructor(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
+        super(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast);
+        this.wrapper = wrapper;
+        this.title = title;
+        this.detail = detail;
+
+        this.addMarkdown();
+    }
+    addMarkdown() {
+        let c = new Text(this.Indicator, this.indicatorData);
+
+        if (!isLast) {
+            $(this.indicatorNode).removeClass('last');
+        }
+
+        this.wrapper.append(this.indicatorNode);
     }
 }

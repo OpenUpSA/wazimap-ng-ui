@@ -1,5 +1,7 @@
 import {Component} from "../utils";
 
+const chartContainerClass = ".indicator__chart";
+
 export class Text extends Component {
     constructor(
         parent,
@@ -7,6 +9,10 @@ export class Text extends Component {
     ) {
         super(parent);
         this._data = data;
+
+        const chartContainer = $(chartContainerClass);
+        this.container = chartContainer[0];
+        this.containerParent = $(this.container).closest('.profile-indicator');
 
         this.addRawHtml(this._data);
     }
@@ -19,6 +25,12 @@ export class Text extends Component {
         $(".bar-chart").remove();
         $(".profile-indicator__filters-wrapper").remove();
 
-        $(".indicator__chart").append(data);
+        this.containerParent.find('.indicator__chart').remove();
+
+        this.rawHtml = document.createElement('div');
+        $(this.rawHtml).addClass('profile-indicator__html');
+        $(this.rawHtml).append(data.html);
+
+        this.containerParent.append(this.rawHtml);
     };
 }

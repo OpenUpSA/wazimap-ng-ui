@@ -318,29 +318,6 @@ export function fillMissingKeys(obj, defaultObj, deep_copy = false) {
     return merge({}, defaultObj, obj)
 }
 
-export function checkIfCategoryHasChildren(category, detail) {
-    let hasChildren = false
-    for (const [subcategory, subcategoryDetail] of Object.entries(detail.subcategories)) {
-        if (checkIfSubCategoryHasChildren(subcategory, subcategoryDetail))
-            return true
-    }
-
-    return false
-}
-
-export function checkIfSubCategoryHasChildren(subcategory, detail) {
-    let hasChildren = false;
-    for (const [title, data] of Object.entries(detail.indicators)) {
-        if (!hasChildren && typeof data.child_data !== 'undefined') {
-            for (const [geo, arr] of Object.entries(data.child_data)) {
-                hasChildren = hasChildren || arr.length > 0;
-            }
-        }
-    }
-
-    return hasChildren;
-}
-
 export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator) {
     let sumData = {};
     Object.entries(childData).map(([code, data]) => {

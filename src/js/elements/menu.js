@@ -1,4 +1,4 @@
-import { Component, checkIfCategoryHasChildren, checkIfSubCategoryHasChildren } from '../utils';
+import { Component, checkIfCategoryHasChildren, checkIfSubCategoryHasChildren, Observable } from '../utils';
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
@@ -11,34 +11,38 @@ const loadingClsName = 'data-mapper-content__loading';
 
 class LoadMenuModel extends Observable {
   static EVENTS = {}
-}
 
-function subindicatorsInIndicator(groups) {
-  return groups.length;
-}
-
-function subindicatorsInSubCategory(subcategory) {
-  const indicators = Object.values(subcategory.indicators);
-  let count = 0;
-  if (indicators.length > 0) {
-    for (const idx in indicators) {
-      let groups = indicators[idx].metadata.groups;
-      count += subindicatorsInIndicator(groups);
-    }
+  _subindicatorsInIndicator(groups) {
+    return groups.length;
   }
 
-  return count;
+  subindicatorsInSubCategory(subcategory) {
+    const indicators = Object.values(subcategory.indicators);
+    let count = 0;
+    if (indicators.length > 0) {
+      for (const idx in indicators) {
+        let groups = indicators[idx].metadata.groups;
+        count += this._subindicatorsInIndicator(groups);
+      }
+    }
+
+    return count;
+  }
 }
 
+
 // TODO this entire file needs to be refactored to use thhe observer pattern
-export class LoadMenu extends Component {
-  constructor(dataMapperMenu, data, subindicatorCallback) {
-    super(dataMapperMenu);
-    this._dataMapperMenu = dataMapperMenu;
+export class DataMapperMenu extends Component {
+  constructor(parent) {
+    super(parent);
+    this._data = null;
+    this._subindicatorCallback = null;
+  }
+
+  init(data, subindicatorCallback) {
     this._data = data;
     this._subindicatorCallback = subindicatorCallback;
-    // this._model = new LoadMenuModel();
-    // Execute main function
+    this._model = new LoadMenuModel();
     this.main();
   }
 
@@ -115,7 +119,7 @@ export class LoadMenu extends Component {
       let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
 
       if (hasChildren) {
-        let count = subindicatorsInSubCategory(detail);
+        let count = this._model.subindicatorsInSubCategory(detail);
         if (count > 0) {
           this.addIndicators(h2Wrapper, category, subcategory, detail.indicators);
         }
@@ -153,19 +157,8 @@ export class LoadMenu extends Component {
     }
 
     if (hasNoItems) {
-      this._dataMapperMenu.showNoData()
+      this.showNoData()
     }
-  }
-
-
-}
-
-/**
-* This class is a stub for a menu component
-*/
-export class DataMapperMenu extends Component {
-  constructor(parent) {
-    super(parent)
   }
 
   showNoData() {

@@ -12,7 +12,7 @@ export class Text extends Component {
 
         const chartContainer = $(chartContainerClass);
         this.container = chartContainer[0];
-        this.containerParent = $(this.container).closest('.profile-indicator');
+        this.containerParent = $(this.container).closest('.profile-indicator__chart_body');
 
         this.addRawHtml(this._data);
     }

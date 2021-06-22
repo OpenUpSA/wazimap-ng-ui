@@ -155,10 +155,11 @@ export class FilterController extends Observable {
         let filterRow = this.addEmptyFilter(isDefault, isExtra);
         let selectedRandomVal = group.values[Math.floor(Math.random() * group.values.length)];
         filterRow.indicatorDropdown.disable();
-        filterRow.indicatorDropdown.setText(group.name);
-        filterRow.subIndicatorDropdown.setText(selectedRandomVal);
-        filterRow.model.currentIndicatorValue = group.name;
-        filterRow.model.currentSubindicatorValue = selectedRandomVal;
+        let indicatorSelectedIndex = filterRow.indicatorDropdown.model.getIndexForValue(group.name);
+        filterRow.indicatorDropdown.model.currentIndex = indicatorSelectedIndex;
+
+        let subindicatorSelectedIndex = filterRow.subIndicatorDropdown.model.getIndexForValue(selectedRandomVal);
+        filterRow.subIndicatorDropdown.model.currentIndex = subindicatorSelectedIndex;
     }
 
     addDefaultFilter(group) {
@@ -167,10 +168,12 @@ export class FilterController extends Observable {
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra);
         filterRow.indicatorDropdown.disable();
-        filterRow.indicatorDropdown.setText(group.group);
-        filterRow.subIndicatorDropdown.setText(group.value);
-        filterRow.model.currentIndicatorValue = group.group;
-        filterRow.model.currentSubindicatorValue = group.value;
+        let indicatorSelectedIndex = filterRow.indicatorDropdown.model.getIndexForValue(group.group);
+        filterRow.indicatorDropdown.model.currentIndex = indicatorSelectedIndex;
+
+        let subindicatorSelectedIndex = filterRow.subIndicatorDropdown.model.getIndexForValue(group.value);
+        filterRow.subIndicatorDropdown.model.currentIndex = subindicatorSelectedIndex;
+
     }
 
     setAddFilterButton() { // TODO write an unselected filters getter in the data model

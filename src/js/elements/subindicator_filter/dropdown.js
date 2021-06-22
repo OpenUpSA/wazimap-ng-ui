@@ -60,6 +60,10 @@ export class DropdownModel extends Observable {
         }
     }
 
+    getIndexForValue(value) {
+        return this.items.indexOf(value);
+    }
+
     updateItems(items) {
         this._items = items;
         this._currentIndex = 0;
@@ -97,7 +101,8 @@ export class Dropdown extends Observable {
     }
 
     get model() {
-        return this._model;f
+        return this._model;
+        f
     }
 
     prepareDomElements() {
@@ -114,6 +119,10 @@ export class Dropdown extends Observable {
 
         this.model.on(DropdownModel.EVENTS.update, model => {
             self.redrawItems(model.items);
+        })
+
+        this.model.on(DropdownModel.EVENTS.selected, () => {
+            self.updateSelectedText();
         })
 
         $(this._trigger).on('click', () => {
@@ -134,6 +143,10 @@ export class Dropdown extends Observable {
         })
 
         this._listItemElements = [];
+    }
+
+    updateSelectedText(){
+        this.setText(this.model.currentItem);
     }
 
     setSelected(idx) {

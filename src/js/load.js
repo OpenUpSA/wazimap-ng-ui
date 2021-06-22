@@ -79,7 +79,7 @@ class Application extends Component {
         const tutorial = new Tutorial(this);
 		const styleConfig = new StyleConfig(config.style);
         const tabNotice = new TabNotice(this, config.config.feedback);
-        const translations = new Translations(config.config.translations);
+        const translations = new Translations(this, config.config.translations);
         const dataMapperMenu = new DataMapperMenu(this);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
@@ -109,22 +109,6 @@ class Application extends Component {
         preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))
 
         controller.triggerHashChange()
-
-        this.registerChild(mapcontrol);
-        this.registerChild(mapcontrol.popup);
-        this.registerChild(pointData);
-        this.registerChild(pointDataTray);
-        this.registerChild(mapchip);
-        this.registerChild(search);
-        this.registerChild(profileLoader);
-        this.registerChild(locationInfoBox);
-        this.registerChild(zoomToggle);
-        this.registerChild(preferredChildToggle);
-        this.registerChild(boundaryTypeBox);
-        this.registerChild(mapDownload);
-        this.registerChild(tutorial);
-        this.registerChild(tabNotice);
-        this.registerChild(translations);
 
     }
 }

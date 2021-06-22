@@ -36,8 +36,7 @@ export default class ProfileLoader extends Component {
 
         let profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config);
         profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
-
-        this.registerChild(profileHeader)
+        
     }
 
     prepareDomElements = () => {
@@ -79,8 +78,6 @@ export default class ProfileLoader extends Component {
             ]);
 
             removePrevCategories = false;
-
-            this.registerChild(c)
         }
     }
 

@@ -64,6 +64,11 @@ export class DropdownModel extends Observable {
         return this.items.indexOf(value);
     }
 
+    setIndexUsingValue(value){
+        let index = this.getIndexForValue(value);
+        this.currentIndex = index;
+    }
+
     updateItems(items) {
         this._items = items;
         this._currentIndex = 0;

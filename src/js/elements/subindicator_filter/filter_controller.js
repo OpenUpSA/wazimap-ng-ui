@@ -155,11 +155,9 @@ export class FilterController extends Observable {
         let filterRow = this.addEmptyFilter(isDefault, isExtra);
         let selectedRandomVal = group.values[Math.floor(Math.random() * group.values.length)];
         filterRow.indicatorDropdown.disable();
-        let indicatorSelectedIndex = filterRow.indicatorDropdown.model.getIndexForValue(group.name);
-        filterRow.indicatorDropdown.model.currentIndex = indicatorSelectedIndex;
 
-        let subindicatorSelectedIndex = filterRow.subIndicatorDropdown.model.getIndexForValue(selectedRandomVal);
-        filterRow.subIndicatorDropdown.model.currentIndex = subindicatorSelectedIndex;
+        filterRow.setPrimaryIndexUsingValue(group.name);
+        filterRow.setSecondaryIndexUsingValue(selectedRandomVal);
     }
 
     addDefaultFilter(group) {
@@ -168,12 +166,9 @@ export class FilterController extends Observable {
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra);
         filterRow.indicatorDropdown.disable();
-        let indicatorSelectedIndex = filterRow.indicatorDropdown.model.getIndexForValue(group.group);
-        filterRow.indicatorDropdown.model.currentIndex = indicatorSelectedIndex;
 
-        let subindicatorSelectedIndex = filterRow.subIndicatorDropdown.model.getIndexForValue(group.value);
-        filterRow.subIndicatorDropdown.model.currentIndex = subindicatorSelectedIndex;
-
+        filterRow.setPrimaryIndexUsingValue(group.group);
+        filterRow.setSecondaryIndexUsingValue(group.value);
     }
 
     setAddFilterButton() { // TODO write an unselected filters getter in the data model

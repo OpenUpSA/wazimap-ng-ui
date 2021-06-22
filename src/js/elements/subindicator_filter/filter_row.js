@@ -151,6 +151,14 @@ export class FilterRow extends Component {
         return this._container;
     }
 
+    setPrimaryIndexUsingValue(value){
+        this.indicatorDropdown.model.setIndexUsingValue(value);
+    }
+
+    setSecondaryIndexUsingValue(value){
+        this.subIndicatorDropdown.model.setIndexUsingValue(value);
+    }
+
     prepareDomElements() {
         $(this.container).attr('data-isextra', this._isExtra);
         $(this.container).attr('data-isdefault', this._isDefault);

@@ -19,6 +19,14 @@ export class MapDownload extends Component {
         });
     }
 
+    hideButton = () => {
+        $('.map-download').hide();
+    }
+
+    showButton = () => {
+        $('.map-download').show();
+    }
+
     downloadMap = () => {
         let self = this;
 

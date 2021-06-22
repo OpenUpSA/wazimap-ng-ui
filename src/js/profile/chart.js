@@ -268,15 +268,15 @@ export class Chart extends Component {
             $(this).on('click', () => {
                 let exportType = $(this).data('id');
                 const downloadFn = {
-                    0: {type: 'csv', fn: self.exportAsCsv},
-                    1: {type: 'excel', fn: self.exportAsExcel},
-                    2: {type: 'json', fn: self.exportAsJson},
-                    3: {type: 'kml', fn: self.exportAsKml},
-                }[index];
-                self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
+                    'csv': self.exportAsCsv,
+                    'excel': self.exportAsExcel,
+                    'json': self.exportAsJson,
+                    'kml': self.exportAsKml,
+                };
+                self.triggerEvent(`profile.chart.download_${exportType}`, self);
 
                 let fileName = self.getChartTitle('-');
-                downloadFn.fn(fileName);
+                downloadFn[exportType](fileName);
             })
         });
     };

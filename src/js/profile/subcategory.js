@@ -56,12 +56,16 @@ export class Subcategory extends Component {
             for (const [title, indicatorData] of Object.entries(detail.indicators)) {
                 if (typeof indicatorData.data !== 'undefined') {
                     let isLast = index === lastIndex;
-                    let i = new IndicatorBlock(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
-                    this.bubbleEvents(i, [
-                        'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                        'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                        'point_tray.subindicator_filter.filter'
-                    ]);
+                    if (indicatorData.html) {
+                        let i = new MarkdownBlock(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
+                    } else {
+                        let i = new IndicatorBlock(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
+                        this.bubbleEvents(i, [
+                            'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+                            'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+                            'point_tray.subindicator_filter.filter'
+                        ]);
+                    }
                     index++;
                 } else {
                     $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');

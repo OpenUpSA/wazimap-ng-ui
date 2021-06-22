@@ -16,19 +16,20 @@ export class InfoBlock extends Component {
         this.groups = [];
         this.indicatorData = indicatorData;
         this.formattingConfig = formattingConfig;
+        this.title = title;
 
         indicatorClone = $(indicatorClass)[0].cloneNode(true);
 
         isLast = _isLast;
 
-        this.prepareDomElements(this.indicatorNode, this.title, this.indicatorData);
+        this.prepareDomElements(this.title, this.indicatorData);
     }
 
-    prepareDomElements(indicatorNode, title, indicatorData) {
+    prepareDomElements(title, indicatorData) {
         this.indicatorNode = indicatorClone.cloneNode(true);
-        $(indicatorTitleClass, indicatorNode).text(title);
-        $(chartDescClass, indicatorNode).text(indicatorData.description);
-        this.extractMetadata(indicatorData.metadata, indicatorNode);
+        $(indicatorTitleClass, this.indicatorNode).text(title);
+        $(chartDescClass, this.indicatorNode).text(indicatorData.description);
+        this.extractMetadata(indicatorData.metadata, this.indicatorNode);
     }
 
     extractMetadata(metadata, indicatorNode) {
@@ -46,7 +47,6 @@ export class InfoBlock extends Component {
 
 export class IndicatorBlock extends InfoBlock {
     constructor(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
-    //constructor(wrapper, title, indicatorData, detail) {
         super(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast);
         this.wrapper = wrapper;
         this.title = title;

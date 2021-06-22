@@ -21,10 +21,14 @@ export class InfoBlock extends Component {
 
         isLast = _isLast;
 
+        this.prepareDomElements(this.indicatorNode, this.title, this.indicatorData);
+    }
+
+    prepareDomElements(indicatorNode, title, indicatorData) {
         this.indicatorNode = indicatorClone.cloneNode(true);
-        $(indicatorTitleClass, this.indicatorNode).text(this.title);
-        $(chartDescClass, this.indicatorNode).text(this.indicatorData.description);
-        this.extractMetadata(this.indicatorData.metadata, this.indicatorNode);
+        $(indicatorTitleClass, indicatorNode).text(title);
+        $(chartDescClass, indicatorNode).text(indicatorData.description);
+        this.extractMetadata(indicatorData.metadata, indicatorNode);
     }
 
     extractMetadata(metadata, indicatorNode) {

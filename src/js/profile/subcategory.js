@@ -51,11 +51,19 @@ export class Subcategory extends Component {
         let lastIndex = Object.entries(detail.indicators).length - 1;
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
 
+        const indicatorClass = '.profile-indicator';
+
         if (!isEmpty) {
-            for (const [title, indicatorData] of Object.entries(detail.indicators)) {
-                if (typeof indicatorData.data !== 'undefined') {
+            for (const [title, indicator] of Object.entries(detail.indicators)) {
+                if (typeof indicator.data !== 'undefined') {
                     let isLast = index === lastIndex;
-                    let i = new Indicator(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
+                    let i = null;
+                    let indicatorContainer = $(indicatorClass)[0].cloneNode(true);
+                    $(wrapper).append(indicatorContainer);
+                    if (indicator.type == "chart") {
+                        i = new Indicator(this, indicatorContainer, title, indicator, isLast);
+                    }
+                    
                     this.bubbleEvents(i, [
                         'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                         'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

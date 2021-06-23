@@ -39,6 +39,8 @@ import {configureTabNoticeEvents} from "./setup/tabnotice";
 import {configureTranslationEvents} from "./setup/translations"
 import {configurePage} from "./setup/general";
 import {Translations} from "./elements/translations";
+import {StyleConfig} from "./elements/style_config";
+import {configureStyleConfigEvents} from "./setup/styleconfig";
 
 let defaultFormattingConfig = {
     decimal: ",.1f",
@@ -48,7 +50,6 @@ let defaultFormattingConfig = {
 
 export default function configureApplication(profileId, config) {
     let application = new Application(profileId, config);
-
 }
 
 class Application extends Component {
@@ -76,6 +77,7 @@ class Application extends Component {
         const boundaryTypeBox = new BoundaryTypeBox(this, config.config.preferred_children);
         const mapDownload = new MapDownload(this, mapchip);
         const tutorial = new Tutorial(this);
+		const styleConfig = new StyleConfig(config.style);
         const tabNotice = new TabNotice(this, config.config.feedback);
         const translations = new Translations(this, config.config.translations);
         const dataMapperMenu = new DataMapperMenu(this);
@@ -96,6 +98,7 @@ class Application extends Component {
         configureTabNoticeEvents(controller, tabNotice);
         configureTranslationEvents(controller, translations);
         configurePage(controller, config);
+		configureStyleConfigEvents(controller, styleConfig);
 
         controller.on('profile.loaded', payload => {
             // there seems to be a bug where menu items close if this is not set

@@ -2,7 +2,7 @@ import {Component} from "../utils";
 
 const chartContainerClass = ".indicator__chart";
 
-export class Text extends Component {
+export class Html extends Component {
     constructor(
         parent,
         data,
@@ -17,7 +17,7 @@ export class Text extends Component {
         this.addRawHtml(this._data);
     }
 
-    get html() {
+    get data() {
         return this._data;
     }
 

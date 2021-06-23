@@ -1,5 +1,5 @@
 import {Chart} from './chart';
-import {Text} from './text';
+import {Html} from './html';
 import {Component, isNull, isEmptyString} from '../utils';
 
 let indicatorClone = null;
@@ -84,17 +84,17 @@ export class IndicatorBlock extends InfoBlock {
     }
 }
 
-export class MarkdownBlock extends InfoBlock {
+export class HtmlBlock extends InfoBlock {
     constructor(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast) {
         super(parent, formattingConfig, wrapper, title, indicatorData, detail, _isLast);
         this.wrapper = wrapper;
         this.title = title;
         this.detail = detail;
 
-        this.addMarkdown();
+        this.addHtml();
     }
-    addMarkdown() {
-        let c = new Text(this.Indicator, this.indicatorData);
+    addHtml() {
+        let c = new Html(this.Indicator, this.indicatorData);
 
         if (!isLast) {
             $(this.indicatorNode).removeClass('last');

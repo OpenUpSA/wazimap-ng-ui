@@ -1,5 +1,5 @@
 import {IndicatorBlock} from "./indicator";
-import {MarkdownBlock} from "./indicator";
+import {HtmlBlock} from "./indicator";
 import {Component, formatNumericalValue} from "../utils";
 
 let isFirst = false;
@@ -57,7 +57,7 @@ export class Subcategory extends Component {
                 if (typeof indicatorData.data !== 'undefined') {
                     let isLast = index === lastIndex;
                     if (indicatorData.html) {
-                        let i = new MarkdownBlock(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
+                        let i = new HtmlBlock(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
                     } else {
                         let i = new IndicatorBlock(this, formattingConfig, wrapper, title, indicatorData, detail, isLast);
                         this.bubbleEvents(i, [

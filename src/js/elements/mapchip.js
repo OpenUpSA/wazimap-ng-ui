@@ -74,13 +74,30 @@ export class MapChip extends Component {
 
     getDefaultFilters = (args) => {
         let defaultFilters = [];
+        let defaultFilter = {};
 
         if (typeof args.data.chartConfiguration.filter !== 'undefined') {
             args.data.chartConfiguration.filter['defaults'].forEach((f) => {
-                let defaultFilter = {
-                    group: f.name,
-                    value: f.value,
-                    default: true
+
+                let defaultExists = args.data.data.filter(function (o) {
+                  return o[f.name]==f.value;
+                }).length > 0;
+
+                if (defaultExists) {
+                    defaultFilter = {
+                        group: f.name,
+                        value: f.value,
+                        default: true
+                    }
+                } else {
+                    let existingGroup = Object.keys(args.data.data[0])[0]
+                    let existingValue = args.data.data[0][existingGroup]
+
+                    defaultFilter = {
+                        group: existingGroup,
+                        value: existingValue,
+                        default: true
+                    }
                 }
 
                 let item = defaultFilters.filter((df) => {

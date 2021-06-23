@@ -1,4 +1,5 @@
 import {defaultValues} from './defaultValues';
+import {ContentBlock} from './profile/blocks/content_block';
 import {fillMissingKeys} from './utils';
 
 export class Geography {
@@ -46,9 +47,13 @@ export class IndicatorHelper {
         if (indicator.child_data == undefined)
             indicator.child_data = []
 
-        indicator.type = "chart"
+
         if (indicator.type == undefined) {
             console.warn(`Indicator ${title} does not have a type`)
+            indicator.type = ContentBlock.BLOCK_TYPES.Indicator
+        } else if (indicator.type == ContentBlock.BLOCK_TYPES.HTMLBlock) { // Not sure why this isn't working
+            if (indicator.html == undefined)
+                indicator.html = '';
         }
 
         if (indicator.groups == null || indicator.groups == undefined)

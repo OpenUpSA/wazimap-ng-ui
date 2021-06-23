@@ -1,5 +1,7 @@
-import {Indicator} from "./indicator";
+import {Indicator} from "./blocks/indicator";
 import {Component, formatNumericalValue} from "../utils";
+import { ContentBlock } from "./blocks/content_block";
+import { HTMLBlock } from "./blocks/html_block";
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -11,18 +13,27 @@ const keyMetricWrapperClass = '.sub-category-header__key-metrics_wrap';
 const keyMetricClass = '.key-metric';
 const descriptionTextClass = '.sub-category-header__description p';
 const descriptionClass = '.sub-category-header__description';
+const indicatorClass = '.profile-indicator';
 
 export class Subcategory extends Component {
-    constructor(parent, formattingConfig, wrapper, subcategory, detail, _isFirst) {
+    constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst) {
         super(parent);
 
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
-        isFirst = _isFirst;
-        this.formattingConfig = formattingConfig;
+        this._indicators = [];
+        this._formattingConfig = formattingConfig;
 
         this.addKeyMetrics($(scHeaderClone), detail);
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
         this.addIndicators(wrapper, detail);
+    }
+
+    get indicators() {
+        return this._indicators;
+    }
+
+    get formattingConfig() {
+        return this._formattingConfig;
     }
 
     addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
@@ -45,30 +56,46 @@ export class Subcategory extends Component {
         wrapper.append(scHeader);
     }
 
+    addIndicatorBlock(container, title, indicator, isLast) {
+        let block = new Indicator(this, container, title, indicator, isLast);
+        this.bubbleEvents(block, [
+            'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+            'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+            'point_tray.subindicator_filter.filter'
+        ]);
+
+        return block;
+    }
+
+    addHTMLBlock(container, title, html, isLast) {
+        let block = new HTMLBlock(this, container, title, html, isLast)
+
+        return block;
+    }
+
     addIndicators = (wrapper, detail) => {
-        let formattingConfig = this.formattingConfig;
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
 
-        const indicatorClass = '.profile-indicator';
 
         if (!isEmpty) {
             for (const [title, indicator] of Object.entries(detail.indicators)) {
                 if (typeof indicator.data !== 'undefined') {
                     let isLast = index === lastIndex;
-                    let i = null;
+                    let block = null;
                     let indicatorContainer = $(indicatorClass)[0].cloneNode(true);
                     $(wrapper).append(indicatorContainer);
-                    if (indicator.type == "chart") {
-                        i = new Indicator(this, indicatorContainer, title, indicator, isLast);
+                    if (indicator.type == ContentBlock.BLOCK_TYPES.Indicator) {
+                        block = this.addIndicatorBlock(indicatorContainer, title, indicator, isLast);
+                    } else if (indicator.type == ContentBlock.BLOCK_TYPES.HTMLBlock) {
+                        block = this.addHTMLBlock(indicatorContainer, title, indicator.html, isLast);
                     }
                     
-                    this.bubbleEvents(i, [
-                        'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                        'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                        'point_tray.subindicator_filter.filter'
-                    ]);
+                    this._indicators.push(block);
+
+                    
+                    
                     index++;
                 } else {
                     $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
@@ -83,7 +110,6 @@ export class Subcategory extends Component {
 
     addKeyMetrics = (wrapper, detail) => {
         let key_metrics = detail.key_metrics;
-        let formattingConfig = this.formattingConfig;
 
         let metricWrapper = $(wrapper).find(keyMetricWrapperClass);
         $(metricWrapper).find(keyMetricClass).remove();
@@ -100,7 +126,7 @@ export class Subcategory extends Component {
 
         key_metrics.forEach((km) => {
             let item = metricTemplate.cloneNode(true);
-            $('.key-metric__value div', item).text(formatNumericalValue(km.value, formattingConfig, km.method));
+            $('.key-metric__value div', item).text(formatNumericalValue(km.value, this.formattingConfig, km.method));
             $('.key-metric__title', item).text(km.label);
             $('.key-metric__description', item).addClass('hidden');
             metricWrapper.append(item);

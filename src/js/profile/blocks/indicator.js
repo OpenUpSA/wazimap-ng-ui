@@ -1,32 +1,15 @@
-import {Chart} from './chart';
-import {Component, isNull, isEmptyString} from '../utils';
+import {Chart} from '../chart';
+import {isNull} from '../../utils';
+import {ContentBlock} from './content_block';
 
-let indicatorClone = null;
-
-const indicatorClass = '.profile-indicator';
 const indicatorTitleClass = '.profile-indicator__title h4';
 const chartDescClass = '.profile-indicator__chart_description p';
 const sourceClass = '.data-source';
 
-export class ContentBlock extends Component {
-    constructor(parent, title, isLast) {
-        super(parent)
-        self._title = title;
-        self._isLast = isLast;
-    }
-
-    get title() {
-        return self._title;
-    }
-
-    get isLast() {
-        return self._isLast;
-    }
-}
-
 export class Indicator extends ContentBlock {
     constructor(parent, container, title, indicatorData, isLast) {
         super(parent, title, isLast);
+        
         this._indicatorData = indicatorData;
         this._container = container;
         this._metadata = indicatorData.metadata;

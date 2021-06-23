@@ -92,14 +92,19 @@ export class Chart extends Component {
                 return;
             }
             // set the tooltip content
+            let tooltipPercentageType = ''
+            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE) {
+                tooltipPercentageType = `
+          <div class="bar-chart__tooltip_value">
+              <div>${value.percentage}</div>
+          </div>`
+            }
             this.el.innerHTML = `
         <div class="bar-chart__row_tooltip-card">
           <div class="bar-chart__tooltip_name">
               <div>${value.group}</div>
           </div>
-          <div class="bar-chart__tooltip_value">
-              <div>${value.percentage}</div>
-          </div>
+          ${tooltipPercentageType}
           <div class="bar-chart__tooltip_alt-value">
               <div>${value.count}</div>
           </div>
@@ -155,11 +160,12 @@ export class Chart extends Component {
         $(headCol2).addClass('profile-indicator__table_cell');
         $(headCol2).text('Absolute');
         $(headRow).append(headCol2);
-        let headCol3 = document.createElement('th');
-        $(headCol3).addClass('profile-indicator__table_cell');
-        $(headCol3).text('Percentage');
-        $(headRow).append(headCol3);
-
+        if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE) {
+            let headCol3 = document.createElement('th');
+            $(headCol3).addClass('profile-indicator__table_cell');
+            $(headCol3).text('Percentage');
+            $(headRow).append(headCol3);
+        }
         $(thead).append(headRow);
         $(this.table).append(thead);
 
@@ -183,15 +189,17 @@ export class Chart extends Component {
             let col1 = document.createElement('td');
             $(col1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
             $(col1).text(d[primaryGroup]);
+            $(row).append(col1);
             let col2 = document.createElement('td');
             $(col2).text(d3format(formatting[VALUE_TYPE])(absoluteVal));
             $(col2).addClass('profile-indicator__table_cell');
-            let col3 = document.createElement('td');
-            $(col3).addClass('profile-indicator__table_cell');
-            $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
-            $(row).append(col1);
             $(row).append(col2);
-            $(row).append(col3);
+            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE) {
+                let col3 = document.createElement('td');
+                $(col3).addClass('profile-indicator__table_cell');
+                $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
+                $(row).append(col3);
+            }
             $(tbody).append(row);
         })
 
@@ -233,7 +241,7 @@ export class Chart extends Component {
     }
 
     disableChartTypeToggle = (disable) => {
-        if (disable) {
+        if (disable || this.config.defaultType.toLowerCase() == VALUE_TYPE) {
             $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
             $(this.containerParent).find('.hover-menu__content_list').hide()
         }

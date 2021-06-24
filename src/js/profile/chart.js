@@ -93,7 +93,7 @@ export class Chart extends Component {
             }
             // set the tooltip content
             let tooltipPercentageType = ''
-            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE) {
+            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
                 tooltipPercentageType = `
           <div class="bar-chart__tooltip_value">
               <div>${value.percentage}</div>
@@ -160,7 +160,7 @@ export class Chart extends Component {
         $(headCol2).addClass('profile-indicator__table_cell');
         $(headCol2).text('Absolute');
         $(headRow).append(headCol2);
-        if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE) {
+        if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
             let headCol3 = document.createElement('th');
             $(headCol3).addClass('profile-indicator__table_cell');
             $(headCol3).text('Percentage');
@@ -194,7 +194,7 @@ export class Chart extends Component {
             $(col2).text(d3format(formatting[VALUE_TYPE])(absoluteVal));
             $(col2).addClass('profile-indicator__table_cell');
             $(row).append(col2);
-            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE) {
+            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
                 let col3 = document.createElement('td');
                 $(col3).addClass('profile-indicator__table_cell');
                 $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
@@ -241,7 +241,7 @@ export class Chart extends Component {
     }
 
     disableChartTypeToggle = (disable) => {
-        if (disable || this.config.defaultType.toLowerCase() == VALUE_TYPE) {
+        if (disable) {
             $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
             $(this.containerParent).find('.hover-menu__content_list').hide()
         }
@@ -268,6 +268,7 @@ export class Chart extends Component {
             })
         });
 
+        self.selectedGraphValueTypeChanged(self.containerParent, this.config.defaultType);
         this.disableChartTypeToggle(this.config.disableToggle);
 
 

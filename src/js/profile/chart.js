@@ -158,7 +158,7 @@ export class Chart extends Component {
         $(headRow).append(headCol1);
         let headCol2 = document.createElement('th');
         $(headCol2).addClass('profile-indicator__table_cell');
-        $(headCol2).text('Absolute');
+        $(headCol2).text('Value');
         $(headRow).append(headCol2);
         if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
             let headCol3 = document.createElement('th');

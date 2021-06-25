@@ -1,4 +1,5 @@
 import {defaultValues} from './defaultValues';
+import {ContentBlock} from './profile/blocks/content_block';
 import {fillMissingKeys} from './utils';
 
 export class Geography {
@@ -23,26 +24,40 @@ export class Geography {
 
 export class IndicatorHelper {
     static getMetadata(indicator) {
-        return indicator.metadata || {
+        let emptyMetadata = {
             source: '',
             description: '',
-            url: '',
+            url: null,
             licence: {
                 name: '',
-                url: ''
+                url: null
             }
         }
+
+        return fillMissingKeys(indicator.metadata, emptyMetadata);
     }
 
     static getChartConfiguration(chart_configuration) {
         return fillMissingKeys(chart_configuration, defaultValues.chartConfiguration || {})
     }
 
-    static fixIndicator(indicator) {
+    static fixIndicator(title, indicator) {
         indicator.metadata = this.getMetadata(indicator)
         indicator.chartConfiguration = this.getChartConfiguration(indicator.chart_configuration)
         if (indicator.child_data == undefined)
             indicator.child_data = []
+
+
+        if (indicator.type == undefined) {
+            console.warn(`Indicator ${title} does not have a type`)
+            indicator.type = ContentBlock.BLOCK_TYPES.Indicator
+        } else if (indicator.type == ContentBlock.BLOCK_TYPES.HTMLBlock) { // Not sure why this isn't working
+            if (indicator.html == undefined)
+                indicator.html = '';
+        }
+
+        if (indicator.groups == null || indicator.groups == undefined)
+            indicator.groups = [];
         return indicator
     }
 }
@@ -61,9 +76,9 @@ export class Profile {
             category = self._fixCategory(category)
             Object.values(category.subcategories).forEach(subcategory => {
                 subcategory = self._fixSubcategory(subcategory)
-                Object.values(subcategory.indicators).forEach(indicator => {
-                    indicator = IndicatorHelper.fixIndicator(indicator)
-                })
+                for (const [title, indicator] of Object.entries(subcategory.indicators)) {
+                    indicator = IndicatorHelper.fixIndicator(title, indicator)
+                }
             })
         })
     }

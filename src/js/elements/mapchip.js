@@ -139,27 +139,34 @@ export class MapChip extends Component {
     }
 
     showLegend(colors, intervals) {
-        if (colors.length != intervals.length)
-            throw "Expected the number of intervals to be the same as the number of colours."
+        if (isNaN(intervals[0])) {
+            $('.map-options__legend_wrap').text("No data available for this indicator for this geographic area");
+            $('.map-options__legend_label').addClass('hidden');
+        }
+        else {
+            $('.map-options__legend_label').removeClass('hidden');
+            if (colors.length != intervals.length)
+                throw "Expected the number of intervals to be the same as the number of colours."
 
-        const legend = $(this.clonedLegend);
-        const fmt = d3format(".1%")
+            const legend = $(this.clonedLegend);
+            const fmt = d3format(".1%")
 
-        $(mapOptionsClass).find('.map-options__legend_wrap').html('');
+            $(mapOptionsClass).find('.map-options__legend_wrap').html('');
 
-        for (let i = 0; i < intervals.length; i++) {
-            const interval = intervals[i];
-            const item = this.clonedLegendBlock.cloneNode(true);
-            const label = interval;
+            for (let i = 0; i < intervals.length; i++) {
+                const interval = intervals[i];
+                const item = this.clonedLegendBlock.cloneNode(true);
+                const label = interval;
 
-            if (i >= lightStart) {
-                $(item).addClass('light');
+                if (i >= lightStart) {
+                    $(item).addClass('light');
+                }
+
+                $('.truncate', item).text(label);
+                $(item).css('background-color', colors[i]);
+                $(item).css('opacity', this.legendColors.opacity);
+                $(mapOptionsClass).find('.map-options__legend_wrap').append(item);
             }
-
-            $('.truncate', item).text(label);
-            $(item).css('background-color', colors[i]);
-            $(item).css('opacity', this.legendColors.opacity);
-            $(mapOptionsClass).find('.map-options__legend_wrap').append(item);
         }
     }
 

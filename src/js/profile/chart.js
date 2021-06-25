@@ -70,6 +70,9 @@ export class Chart extends Component {
                 x = +event.pageX - offsetX - tooltipBox.width;
             }
             let y = event.pageY + offsetY;
+            if (y < window.innerHeight) {
+              y = window.innerHeight + offsetY;
+            }
             if (y + tooltipBox.height > window.innerHeight) {
                 y = +event.pageY - offsetY - tooltipBox.height;
             }
@@ -111,7 +114,7 @@ export class Chart extends Component {
             const {x, y} = calculatePosition(
                 event,
                 this.el.getBoundingClientRect(),
-                10, 10
+                0, 10
             );
             this.el.setAttribute('style', `top: ${y}px; left: ${x}px; z-index: 999;`);
         }
@@ -268,15 +271,15 @@ export class Chart extends Component {
             $(this).on('click', () => {
                 let exportType = $(this).data('id');
                 const downloadFn = {
-                    0: {type: 'csv', fn: self.exportAsCsv},
-                    1: {type: 'excel', fn: self.exportAsExcel},
-                    2: {type: 'json', fn: self.exportAsJson},
-                    3: {type: 'kml', fn: self.exportAsKml},
-                }[index];
-                self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
+                    'csv': self.exportAsCsv,
+                    'excel': self.exportAsExcel,
+                    'json': self.exportAsJson,
+                    'kml': self.exportAsKml,
+                };
+                self.triggerEvent(`profile.chart.download_${exportType}`, self);
 
                 let fileName = self.getChartTitle('-');
-                downloadFn.fn(fileName);
+                downloadFn[exportType](fileName);
             })
         });
     };

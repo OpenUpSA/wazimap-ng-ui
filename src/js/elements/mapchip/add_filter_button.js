@@ -5,14 +5,19 @@ export class AddFilterButton extends Component {
         clicked: "addButton.clicked"
     }
 
-    constructor(parent) {
+    constructor(parent, elements) {
         super(parent);
+
+        this._elements = elements;
+        this._parent = parent;
+
         this.prepareDomElements();
         this.prepareEvents();
     }
 
     prepareDomElements() {
-        this.button = $('a.mapping-options__add-filter');
+        console.log({'elements': $(this._parent.container).find(this._elements.addButton)})
+        this.button = $(this._parent.container).find(this._elements.addButton);
     }
 
     prepareEvents() {

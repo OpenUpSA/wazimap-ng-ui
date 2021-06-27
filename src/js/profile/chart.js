@@ -13,6 +13,8 @@ import embed from "vega-embed";
 import {configureBarchart} from './charts/barChart';
 import {slugify} from './charts/utils';
 import DropdownMenu from "../elements/dropdown_menu";
+import {FilterController} from "../elements/subindicator_filter/filter_controller";
+import {DataFilterModel} from "../models/data_filter_model";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -54,6 +56,14 @@ export class Chart extends Component {
         const chartContainer = $(chartContainerClass, this.subCategoryNode);
         this.container = chartContainer[0];
         this.containerParent = $(this.container).closest('.profile-indicator');
+
+        this._filtersContainer = $(this.containerParent).find(filterWrapperClass);
+        this._filterController = new FilterController(this._filtersContainer, {
+            filterRowClass: filterRowClass,
+            filterDropdown: '.profile-indicator__filter',
+            addButton: 'a.profile-indicator__new-filter',
+            isMapchip: false
+        });
 
         this.addChart(data);
     }
@@ -330,12 +340,14 @@ export class Chart extends Component {
         this.filterGroups = groups.filter((g) => {
             return g.name !== indicators.metadata.primary_group
         })
-        let siFilter = new SubindicatorFilter(this, filterArea, this.filterGroups, this.title, this.applyFilter, dropdowns, filtersToAdd, indicators.child_data, '.profile-indicator__filter-row');
-        this.filter = siFilter;
+        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, [], indicators.metadata.primary_group, this.data.child_data);
+        if (this._filterController.filterCallback === null) {
+            this._filterController.filterCallback = this.applyFilter;
+        }
+        this._filterController.setDataFilterModel(dataFilterModel);
+        /* */
 
-        this.setAddFilterButton();
-
-        this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
+        //this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
     };
 
     getDefaultFilters = () => {
@@ -457,17 +469,16 @@ export class Chart extends Component {
             this.vegaView.signal(`${filterName}Filter`, false)
         });
 
-        if (selectedFilter.length > 0) {
-            selectedFilter.forEach((sf) => {
-                if (sf.value !== "All values") {
-                    let filterName = sf.group;
-                    filterName = slugify(filterName)
-                    this.setDownloadUrl();
-                    this.vegaView.signal(`${filterName}Filter`, true)
-                    this.vegaView.signal(`${filterName}FilterValue`, sf.value)
-                }
-            });
+        for (const [group, value] of Object.entries(selectedFilter)) {
+            if (value !== "All values") {
+                let filterName = group;
+                filterName = slugify(filterName)
+                this.setDownloadUrl();
+                this.vegaView.signal(`${filterName}Filter`, true)
+                this.vegaView.signal(`${filterName}FilterValue`, value)
+            }
         }
+
         this.vegaView.run();
         this.appendDataToTable();
     };

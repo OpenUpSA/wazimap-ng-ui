@@ -3,8 +3,6 @@ import {Observable} from "../../utils";
 import {AddFilterButton} from "../mapchip/add_filter_button";
 import {DataFilterModel} from "../../models/data_filter_model";
 
-const filterRowClass = '.map-options__filter-row';
-
 class FilterControllerModel extends Observable {
     static EVENTS = {
         filterRemoved: 'FilterControllerModel.filterRemoved',
@@ -67,14 +65,20 @@ export class FilterController extends Observable {
     2. Removing filterRows is a little messsy
     */
 
-    constructor(container) {
+    constructor(container, elements = {
+        filterRowClass: '.map-options__filter-row',
+        filterDropdown: '.mapping-options__filter',
+        addButton:'a.mapping-options__add-filter',
+        isMapchip: true
+    }) {
         super();
 
         this._container = container;
         this._model = new FilterControllerModel();
-        this._addFilterButton = new AddFilterButton(this); // TODO should pass in a container
+        this._addFilterButton = new AddFilterButton(this, elements); // TODO should pass in a container
         this._dataFilterModel = null;
         this._filterCallback = null;
+        this._elements = elements;
 
         this.prepareDomElements();
         this.prepareEvents();
@@ -101,14 +105,14 @@ export class FilterController extends Observable {
     }
 
     prepareDomElements() {
-        this._rowContainer = $(this.container).find(filterRowClass)[0];
+        this._rowContainer = $(this.container).find(this._elements.filterRowClass)[0];
         $(this._rowContainer).hide();
-        // $(this.container).find(filterRowClass).hide();
     }
 
     prepareEvents() {
         const self = this;
         this.addFilterButton.on(AddFilterButton.EVENTS.clicked, () => {
+            console.log('click')
             self.addEmptyFilter()
         })
     }
@@ -131,10 +135,15 @@ export class FilterController extends Observable {
             let filterRowContainer = this._rowContainer.cloneNode(true);
             $(filterRowContainer).show();
 
-            let filterRow = new FilterRow(filterRowContainer, this.model.dataFilterModel, isDefault, isExtra);
+            let filterRow = new FilterRow(filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, this._elements);
             this.model.addFilterRow(filterRow);
 
-            $(filterRow.container).insertBefore($('a.mapping-options__add-filter')); // TODO can I change this to addButton or something
+            //TODO : Find a better way to do this
+            if (this._elements.isMapchip) {
+                $(filterRow.container).insertBefore($('a.mapping-options__add-filter')); // TODO can I change this to addButton or something
+            } else {
+                $(this.container).append(filterRow.container);
+            }
             filterRow.on(FilterRow.EVENTS.removed, filterRow => {
                 self.removeFilter(filterRow);
             })
@@ -184,8 +193,8 @@ export class FilterController extends Observable {
         let dataFilter = this._dataFilterModel[filterName];
 
         if (dataFilter != undefined) {
-            let filterRowContainer = $(filterRowClass)[0].cloneNode(true);
-            let filterRow = new FilterRow(filterRowContainer, dataFilter, isDefault, isExtra);
+            let filterRowContainer = $(this._elements.filterRowClass)[0].cloneNode(true);
+            let filterRow = new FilterRow(filterRowContainer, dataFilter, isDefault, isExtra, this._elements);
             this.filterRows.push(filterRow);
             this._dataFilterModel.addFilter(filterName);
 

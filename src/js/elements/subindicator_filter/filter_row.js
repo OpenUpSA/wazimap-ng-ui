@@ -123,9 +123,10 @@ export class FilterRow extends Component {
         removed: 'filterRow.removed'
     }
 
-    constructor(container, dataFilterModel = null, isDefault = false, isExtra = true) {
+    constructor(container, dataFilterModel = null, isDefault = false, isExtra = true, elements = {filterDropdown: '.mapping-options__filter'}) {
         super();
         this._container = container;
+        this._elements = elements;
 
         this.prepareDomElements();
 
@@ -151,11 +152,11 @@ export class FilterRow extends Component {
         return this._container;
     }
 
-    setPrimaryIndexUsingValue(value){
+    setPrimaryIndexUsingValue(value) {
         this.indicatorDropdown.model.setIndexUsingValue(value);
     }
 
-    setSecondaryIndexUsingValue(value){
+    setSecondaryIndexUsingValue(value) {
         this.subIndicatorDropdown.model.setIndexUsingValue(value);
     }
 
@@ -164,9 +165,8 @@ export class FilterRow extends Component {
         $(this.container).attr('data-isdefault', this._isDefault);
         this._removeFilterButton = $(this.container).find('.mapping-options__remove-filter');
 
-        this._indicatorDd = $(this.container).find('.mapping-options__filter')[0];
-        this._subindicatorDd = $(this.container).find('.mapping-options__filter')[1];
-
+        this._indicatorDd = $(this.container).find(this._elements.filterDropdown)[0];
+        this._subindicatorDd = $(this.container).find(this._elements.filterDropdown)[1];
     }
 
 

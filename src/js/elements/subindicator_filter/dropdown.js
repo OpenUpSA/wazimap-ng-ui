@@ -64,7 +64,7 @@ export class DropdownModel extends Observable {
         return this.items.indexOf(value);
     }
 
-    setIndexUsingValue(value){
+    setIndexUsingValue(value) {
         let index = this.getIndexForValue(value);
         this.currentIndex = index;
     }
@@ -150,7 +150,7 @@ export class Dropdown extends Observable {
         this._listItemElements = [];
     }
 
-    updateSelectedText(){
+    updateSelectedText() {
         this.setText(this.model.currentItem);
     }
 

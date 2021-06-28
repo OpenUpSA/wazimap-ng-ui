@@ -65,7 +65,8 @@ export class LocationInfoBox extends Component {
             }
 
             $(locationElement).on('click', el => {
-                self.triggerEvent('location_infobox.breadcrumbs.selected', location);
+                let payload = {el, location};
+                self.triggerEvent('location_infobox.breadcrumbs.selected', payload);
                 $(locationElement).off("click")
             })
 

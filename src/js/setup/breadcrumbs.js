@@ -5,5 +5,8 @@ export function configureBreadcrumbsEvents(controller, objs = {profileLoader: nu
     controller.bubbleEvents(profileLoader, ['profile.breadcrumbs.selected', 'profile.nav.clicked']);
     controller.bubbleEvent(locationInfoBox, 'location_infobox.breadcrumbs.selected');
     profileLoader.on('profile.breadcrumbs.selected', payload => controller.onBreadcrumbSelected(payload))
-    locationInfoBox.on('location_infobox.breadcrumbs.selected', payload => controller.onBreadcrumbSelected(payload))
+    locationInfoBox.on('location_infobox.breadcrumbs.selected', payload => {
+        $(payload.el.target).closest('.location-tag').find('.location-tag__loading-icon').removeClass('hidden');
+        controller.onBreadcrumbSelected(payload.location)
+    })
 }

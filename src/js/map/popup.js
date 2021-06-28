@@ -1,4 +1,4 @@
-import {Observable, setPopupStyle, formatNumericalValue} from '../utils';
+import {Component, setPopupStyle, formatNumericalValue} from '../utils';
 import {format as d3format} from "d3-format/src/defaultLocale";
 
 const PERCENTAGE_TYPE = 'Percentage';
@@ -8,9 +8,9 @@ const POPUP_OFFSET = [20, 0];
 /**
  * this class creates & manipulates the popup over the map
  */
-export class Popup extends Observable {
-    constructor(formattingConfig, map) {
-        super();
+export class Popup extends Component {
+    constructor(parent, formattingConfig, map) {
+        super(parent);
 
         this.map = map;
         this.formattingConfig = formattingConfig;
@@ -83,20 +83,22 @@ export class Popup extends Observable {
             for (let i = 0; i < state.choroplethData.length; i++) {
                 if (state.choroplethData[i].code === areaCode) {
                     isChild = true;
-                    let chartConfig = state.subindicator.chartConfiguration;
-                    let percentageFormatting = chartConfig.types[PERCENTAGE_TYPE].formatting;
-                    let absoluteFormatting = chartConfig.types[VALUE_TYPE].formatting;
+                    if(state.subindicator && state.subindicator.chartConfiguration) {
+                      let chartConfig = state.subindicator.chartConfiguration;
+                      let percentageFormatting = chartConfig.types[PERCENTAGE_TYPE].formatting;
+                      let absoluteFormatting = chartConfig.types[VALUE_TYPE].formatting;
 
-                    const countFmt = d3format(absoluteFormatting)(state.choroplethData[i].total);
-                    const perc = d3format(percentageFormatting)(state.choroplethData[i].val);
+                      const countFmt = d3format(absoluteFormatting)(state.choroplethData[i].total);
+                      const perc = d3format(percentageFormatting)(state.choroplethData[i].val);
 
-                    $('.map-tooltip__value', item).removeClass('hidden');
-                    $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);
-                    $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
-                    if (state.subindicator.choropleth_method != 'absolute_value') {
-                        $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc})`);
-                    } else {
-                        $('.map-tooltip__value .tooltip__value_detail div', item).text('');
+                      $('.map-tooltip__value', item).removeClass('hidden');
+                      $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);
+                      $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
+                      if (state.subindicator.choropleth_method != 'absolute_value') {
+                          $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc})`);
+                      } else {
+                          $('.map-tooltip__value .tooltip__value_detail div', item).text('');
+                      }
                     }
                 }
             }

@@ -11,6 +11,12 @@ export class Config {
         this.config = config;
     }
 
+    get style() {
+        if (this.config.style == undefined)
+            return {}
+        return this.config.style
+    }
+
     get profileId() {
         if (this.config.profileId != undefined)
             return this.config.profileId;

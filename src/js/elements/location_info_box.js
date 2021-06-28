@@ -1,4 +1,4 @@
-import {Observable, numFmt, formatNumericalValue} from '../utils';
+import {Component, numFmt, formatNumericalValue} from '../utils';
 import {Profile} from '../profile';
 
 const container = $('.map-location');
@@ -10,9 +10,9 @@ const metricTemplate = $('.location-highlight')[0].cloneNode(true);
 
 const infoContainer = $('.map__location-info', container);
 
-export class LocationInfoBox extends Observable {
-    constructor(formattingConfig) {
-        super();
+export class LocationInfoBox extends Component {
+    constructor(parent, formattingConfig) {
+        super(parent);
 
         this.formattingConfig = formattingConfig;
     }
@@ -65,7 +65,8 @@ export class LocationInfoBox extends Observable {
             }
 
             $(locationElement).on('click', el => {
-                self.triggerEvent('location_infobox.breadcrumbs.selected', location);
+                let payload = {el, location};
+                self.triggerEvent('location_infobox.breadcrumbs.selected', payload);
                 $(locationElement).off("click")
             })
 

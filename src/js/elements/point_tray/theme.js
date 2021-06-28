@@ -1,4 +1,4 @@
-import {Observable, checkIterate} from '../../utils';
+import {Component, checkIterate} from '../../utils';
 import {API} from '../../api';
 import {Category} from './category';
 
@@ -7,9 +7,9 @@ const hideondeployClsName = 'hideondeploy';
 const categoryWrapperClsName = '.point-mapper__h2_wrapper';
 const categorySourceClsName = '.point-mapper__h2_source .truncate';
 
-export class Theme extends Observable {
-    constructor(themeIndex, data, pointDataItem, categoryItem) {
-        super()
+export class Theme extends Component {
+    constructor(parent, themeIndex, data, pointDataItem, categoryItem) {
+        super(parent)
 
         this.active = false;
         this.data = data;
@@ -34,7 +34,7 @@ export class Theme extends Observable {
     }
 
     createCategory(categoryDatum, isLast) {
-        const category = new Category(this.themeIndex, categoryDatum, this.categoryItem, isLast);
+        const category = new Category(this, this.themeIndex, categoryDatum, this.categoryItem, isLast);
         this.bubbleEvents(category, ['point_tray.category.selected', 'point_tray.category.unselected']);
 
         return category;

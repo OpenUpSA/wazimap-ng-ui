@@ -3,8 +3,8 @@ import {format as d3format} from 'd3-format';
 import {Component} from "../../utils";
 
 export class Legend extends Component {
-    constructor(container, legendColors) {
-        super();
+    constructor(parent, container, legendColors) {
+        super(parent);
 
         this.lightStart = 3;
 

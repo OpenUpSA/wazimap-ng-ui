@@ -12,8 +12,8 @@ class FilterRowModel extends Component {
 
     static ALL_VALUES = 'All values';
 
-    constructor(dataFilterModel, isDefault, isExtra, defaultIndicatorText = 'All indicators', defaultSubindicatorText = 'All values') {
-        super()
+    constructor(parent, dataFilterModel, isDefault, isExtra, defaultIndicatorText = 'All indicators', defaultSubindicatorText = 'All values') {
+        super(parent)
         this._isDefault = isDefault;
         this._isExtra = isExtra;
         this._currentIndicatorValue = null;
@@ -129,7 +129,7 @@ export class FilterRow extends Component {
 
         this.prepareDomElements();
 
-        this._model = new FilterRowModel(dataFilterModel, isDefault, isExtra);
+        this._model = new FilterRowModel(this, dataFilterModel, isDefault, isExtra);
 
         if (this.model.isDefault)
             this.hideRemoveButton();
@@ -151,11 +151,11 @@ export class FilterRow extends Component {
         return this._container;
     }
 
-    setPrimaryIndexUsingValue(value){
+    setPrimaryIndexUsingValue(value) {
         this.indicatorDropdown.model.setIndexUsingValue(value);
     }
 
-    setSecondaryIndexUsingValue(value){
+    setSecondaryIndexUsingValue(value) {
         this.subIndicatorDropdown.model.setIndexUsingValue(value);
     }
 

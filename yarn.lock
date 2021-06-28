@@ -6461,6 +6461,11 @@ outpipe@^1.1.0:
   dependencies:
     shell-quote "^1.4.2"
 
+overlapping-marker-spiderfier-leaflet@^0.2.7:
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/overlapping-marker-spiderfier-leaflet/-/overlapping-marker-spiderfier-leaflet-0.2.7.tgz#ab18c3d5e2b2c31a4f864114e1594cb6efbd73e1"
+  integrity sha512-U2biV2Ge0SU+4IEmq4BZOglvzA8Aj8G7/hp5v6lBnF9Kd3/Xf6ZEPsJyPOExtLvMxOqlrlTAfl55s6JJDND7Ew==
+
 p-each-series@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/p-each-series/-/p-each-series-2.2.0.tgz#105ab0357ce72b202a8a8b94933672657b5e2a9a"

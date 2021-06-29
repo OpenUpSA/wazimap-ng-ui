@@ -67,8 +67,8 @@ export class FilterController extends Component {
     2. Removing filterRows is a little messsy
     */
 
-    constructor(container) {
-        super();
+    constructor(parent, container) {
+        super(parent);
 
         this._container = container;
         this._model = new FilterControllerModel();

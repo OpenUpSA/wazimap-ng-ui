@@ -1,5 +1,5 @@
 import {FilterRow} from "./filter_row";
-import {Observable} from "../../utils";
+import {Component, Observable} from "../../utils";
 import {AddFilterButton} from "../mapchip/add_filter_button";
 import {DataFilterModel} from "../../models/data_filter_model";
 
@@ -50,7 +50,7 @@ class FilterControllerModel extends Observable {
     }
 }
 
-export class FilterController extends Observable {
+export class FilterController extends Component {
 
     static EVENTS = {
         ready: 'FilterController.ready'
@@ -151,13 +151,13 @@ export class FilterController extends Observable {
     addNonAggregatableFilter(group) {
         let isDefault = true;
         let isExtra = false;
+        let index = 0;
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra);
-        let selectedRandomVal = group.values[Math.floor(Math.random() * group.values.length)];
         filterRow.indicatorDropdown.disable();
 
         filterRow.setPrimaryIndexUsingValue(group.name);
-        filterRow.setSecondaryIndexUsingValue(selectedRandomVal);
+        filterRow.setSecondaryIndex(index);
     }
 
     addDefaultFilter(group) {

@@ -25,8 +25,8 @@ export class Legend extends Component {
 
     }
 
-    show(colors, intervals) {
-        if (colors.length != intervals.length)
+    show(colors, intervalLabels) {
+        if (colors.length != intervalLabels.length)
             throw 'Expected the number of intervals to be the same as the number of colours.'
 
         const legend = $(this.clonedLegend);
@@ -34,8 +34,8 @@ export class Legend extends Component {
 
         this.legendContainer.html('');
 
-        for (let i = 0; i < intervals.length; i++) {
-            const interval = intervals[i];
+        for (let i = 0; i < intervalLabels.length; i++) {
+            const interval = intervalLabels[i];
             const item = this.clonedLegendBlock.cloneNode(true);
             const label = interval;
 

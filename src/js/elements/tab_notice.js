@@ -1,5 +1,9 @@
-export class TabNotice {
-    constructor(feedback) {
+import {Component} from '../utils';
+
+export class TabNotice extends Component {
+    constructor(parent, feedback) {
+        super(parent)
+
         this.tab = $('.tab-notice');
         this.feedback = feedback;
     }

@@ -1,4 +1,4 @@
-import {Observable} from '../utils';
+import {Component} from '../utils';
 import {polygon} from 'leaflet/dist/leaflet-src.esm';
 import {LayerStyler} from './layerstyler';
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
@@ -7,9 +7,9 @@ import {MapLocker} from './maplocker';
 import {SubindicatorFilter} from "../profile/subindicator_filter";
 
 
-export class MapControl extends Observable {
-    constructor(config, zoomToPosition = () => true) {
-        super();
+export class MapControl extends Component {
+    constructor(parent, config, zoomToPosition = () => true) {
+        super(parent);
 
         this.config = config;
         this.api = config.api;
@@ -41,7 +41,7 @@ export class MapControl extends Observable {
 
         this.registerEvents();
 
-        this.choropleth = new Choropleth(this.layerCache, this.layerStyler, config.map.choropleth);
+        this.choropleth = new Choropleth(this, this.layerCache, this.layerStyler, config.map.choropleth);
     };
 
     registerEvents() {

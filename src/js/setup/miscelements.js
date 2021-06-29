@@ -2,18 +2,21 @@ import {ProfileLayout} from "../elements/profile_layout";
 import PDFPrinter from '../print';
 import {SidePanels, RICH_DATA_PANEL, POINT_DATA_PANEL, DATA_EXPLORER_PANEL} from '../elements/side_panels';
 
-export const profileLayout = new ProfileLayout();
-export const pdfprinter = new PDFPrinter();
+export let profileLayout = new ProfileLayout();
+export let pdfprinter = new PDFPrinter();
 export const printButton = $("#profile-print");
 
-export function configureMiscElementEvents(controller) {
+export function configureMiscElementEvents(application, controller) {
+    profileLayout = new ProfileLayout(application);
+    pdfprinter = new PDFPrinter(application);
+
     let showPanels = {}
 
     showPanels[RICH_DATA_PANEL] = controller.config.panelEnabled(RICH_DATA_PANEL)
     showPanels[POINT_DATA_PANEL] = controller.config.panelEnabled(POINT_DATA_PANEL)
     showPanels[DATA_EXPLORER_PANEL] = controller.config.panelEnabled(DATA_EXPLORER_PANEL)
 
-    const sidePanels = new SidePanels(showPanels);
+    const sidePanels = new SidePanels(application, showPanels);
     const defaultPanel = controller.config.defaultPanel;
 
     controller.on('profile.loaded', payload => profileLayout.displayLogo(payload.payload.logo))

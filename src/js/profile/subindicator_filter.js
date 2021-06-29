@@ -1,12 +1,13 @@
 import {SubIndicator} from "../dataobjects";
-import {Observable} from "../utils";
+import {Component} from "../utils";
 
 const DROPDOWN_MESSAGES = ['Select an attribute', 'Select a value'];
 const ALLVALUES = 'All values';
 
-export class SubindicatorFilter extends Observable {
-    constructor(filterArea, groups, title, filterCallback, dropdowns, defaultFilters, childData, filterRowClass = '.profile-indicator__filter-row') {
-        super()
+export class SubindicatorFilter extends Component {
+    constructor(parent, filterArea, groups, title, filterCallback, dropdowns, defaultFilters, childData, filterRowClass = '.profile-indicator__filter-row') {
+        super(parent)
+
         this.childData = childData;
         this.filterCallback = filterCallback;
         this.title = title;

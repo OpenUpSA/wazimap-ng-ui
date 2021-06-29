@@ -17,7 +17,7 @@ export class MapChip extends Component {
 
         this.prepareDomElements();
 
-        this._filterController = new FilterController(this._filtersContainer);
+        this._filterController = new FilterController(this, this._filtersContainer);
         this._legend = new Legend(this, this._legendContainer, legendColors);
 
         this.prepareEvents();

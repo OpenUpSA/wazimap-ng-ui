@@ -93,7 +93,7 @@ class Application extends Component {
         configureProfileEvents(controller, {profileLoader: profileLoader});
         configureMiscElementEvents(this, controller);
         configureBoundaryEvents(controller, boundaryTypeBox);
-        configureMapDownloadEvents(mapDownload);
+        configureMapDownloadEvents(controller, mapDownload);
         configureTutorialEvents(controller, tutorial, config.config.tutorial);
         configureTabNoticeEvents(controller, tabNotice);
         configureTranslationEvents(controller, translations);

@@ -9,7 +9,7 @@ const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 
 
-class LoadMenuModel extends Observable {
+class DataMapperMenuModel extends Observable {
   static EVENTS = {}
 
   _subindicatorsInIndicator(groups) {
@@ -31,9 +31,9 @@ class LoadMenuModel extends Observable {
 
   checkIfSubCategoryHasChildren(detail) {
     let hasChildren = false;
-    for (const [_, data] of Object.entries(detail.indicators)) {
-      if (!hasChildren && typeof data.child_data !== 'undefined') {
-        for (const [_, arr] of Object.entries(data.child_data)) {
+    for (const data of Object.values(detail.indicators)) {
+      if (!hasChildren && data.child_data !== undefined) {
+        for (const arr of Object.values(data.child_data)) {
           hasChildren = hasChildren || arr.length > 0;
         }
       }
@@ -43,7 +43,7 @@ class LoadMenuModel extends Observable {
   }
 
   checkIfCategoryHasChildren(detail) {
-    for (const [_, subcategoryDetail] of Object.entries(detail.subcategories)) {
+    for (const subcategoryDetail of Object.values(detail.subcategories)) {
       if (this.checkIfSubCategoryHasChildren(subcategoryDetail))
         return true
     }
@@ -65,7 +65,7 @@ export class DataMapperMenu extends Component {
   init(data, subindicatorCallback) {
     this._data = data;
     this._subindicatorCallback = subindicatorCallback;
-    this._model = new LoadMenuModel();
+    this._model = new DataMapperMenuModel();
     this.main();
   }
 
@@ -163,28 +163,30 @@ export class DataMapperMenu extends Component {
   main() {
     $(".data-menu__category").remove();
     let hasNoItems = true;
-    let hiddenClass = hideondeployClsName;
-    hiddenClass = 'hidden';
     $(parentContainer).find('.data-category').remove();
     for (const [category, detail] of Object.entries(this._data)) {
-      let hasChildren = this._model.checkIfCategoryHasChildren(detail)
-
+      let hasChildren = this._model.checkIfCategoryHasChildren(detail);
       if (hasChildren) {
-        if (!$('.' + noDataWrapperClsName).hasClass(hiddenClass)) {
-          $('.' + noDataWrapperClsName).addClass(hiddenClass);
-        }
+        this.hideNoDataMessage()
         hasNoItems = false;
-
         this.addSubcategories(parentContainer, category, detail.subcategories)
       }
     }
 
     if (hasNoItems) {
-      this.showNoData()
+      this.showNoDataMessage()
     }
   }
 
-  showNoData() {
+  hideNoDataMessage(){
+    let hiddenClass = hideondeployClsName;
+    hiddenClass = 'hidden';
+    if (!$('.' + noDataWrapperClsName).hasClass(hiddenClass)) {
+      $('.' + noDataWrapperClsName).addClass(hiddenClass);
+    }
+  }
+
+  showNoDataMessage() {
     $(parentContainer).empty();
     $('.' + loadingClsName).addClass('hidden');
     $('.' + noDataWrapperClsName).removeClass('hidden');

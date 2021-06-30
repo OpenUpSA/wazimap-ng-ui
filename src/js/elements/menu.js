@@ -58,7 +58,6 @@ class DataMapperMenuModel extends Observable {
 }
 
 
-// TODO this entire file needs to be refactored to use thhe observer pattern
 export class DataMapperMenu extends Component {
   constructor(parent) {
     super(parent);

@@ -11,6 +11,10 @@ const loadingClsName = 'data-mapper-content__loading';
 
 class DataMapperMenuModel extends Observable {
   static EVENTS = {}
+  constructor() {
+    super();
+  }
+
 
   _subindicatorsInIndicator(groups) {
     return groups.length;
@@ -67,6 +71,10 @@ export class DataMapperMenu extends Component {
     this._subindicatorCallback = subindicatorCallback;
     this._model = new DataMapperMenuModel();
     this.main();
+  }
+
+  get model() {
+    return this._model;
   }
 
   addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, choropleth_method, indicatorId) {
@@ -139,10 +147,10 @@ export class DataMapperMenu extends Component {
     $(".data-category__h2", h2Wrapper).remove();
 
     for (const [subcategory, detail] of Object.entries(subcategories)) {
-      let hasChildren = this._model.checkIfSubCategoryHasChildren(detail);
+      let hasChildren = this.model.checkIfSubCategoryHasChildren(detail);
 
       if (hasChildren) {
-        let count = this._model.subindicatorsInSubCategory(detail);
+        let count = this.model.subindicatorsInSubCategory(detail);
         if (count > 0) {
           this.addIndicators(h2Wrapper, category, subcategory, detail.indicators);
         }
@@ -165,7 +173,7 @@ export class DataMapperMenu extends Component {
     let hasNoItems = true;
     $(parentContainer).find('.data-category').remove();
     for (const [category, detail] of Object.entries(this._data)) {
-      let hasChildren = this._model.checkIfCategoryHasChildren(detail);
+      let hasChildren = this.model.checkIfCategoryHasChildren(detail);
       if (hasChildren) {
         this.hideNoDataMessage()
         hasNoItems = false;
@@ -178,7 +186,7 @@ export class DataMapperMenu extends Component {
     }
   }
 
-  hideNoDataMessage(){
+  hideNoDataMessage() {
     let hiddenClass = hideondeployClsName;
     hiddenClass = 'hidden';
     if (!$('.' + noDataWrapperClsName).hasClass(hiddenClass)) {

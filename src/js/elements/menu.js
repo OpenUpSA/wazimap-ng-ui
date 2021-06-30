@@ -128,7 +128,7 @@ export class DataMapperMenu extends Component {
   }
 
 
-  addSubcategories(wrapper, category, subcategories) {
+  addSubcategories(category, subcategories) {
     var newCategory = categoryTemplate.cloneNode(true)
     $(newCategory).removeClass(hideondeployClsName);
     $(".data-category__h1_title div", newCategory).text(category);
@@ -169,7 +169,7 @@ export class DataMapperMenu extends Component {
       if (hasChildren) {
         this.hideNoDataMessage()
         hasNoItems = false;
-        this.addSubcategories(parentContainer, category, detail.subcategories)
+        this.addSubcategories(category, detail.subcategories)
       }
     }
 

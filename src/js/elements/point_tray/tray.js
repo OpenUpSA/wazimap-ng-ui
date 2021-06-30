@@ -39,8 +39,6 @@ export class PointDataTray extends Component {
             'point_tray.theme.selected', 'point_tray.them.unselected'
         ])
 
-        this.registerChild(theme)
-
         return theme;
     }
 

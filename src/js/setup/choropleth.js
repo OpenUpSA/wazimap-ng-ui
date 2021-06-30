@@ -10,7 +10,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     //let the choropleth persist
     controller.on('profile.loaded', payload => controller.handleNewProfileChoropleth())
     controller.on('mapchip.removed', payload => mapcontrol.choropleth.reset(true));
-    controller.on('data_mapper_menu.nodata', payload => mapchip.removeMapChip()) 
+    controller.on('data_mapper_menu.nodata', payload => mapchip.removeMapChip())
     controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
 
     controller.on('mapchip.choropleth.filtered', payload => {
@@ -55,7 +55,7 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
     const filter = ps.subindicator.filter;
     let data = ps.subindicator.data
     if (childData) {
-        data.originalChildData = data.child_data;
+        data.originalChildData = (typeof data.originalChildData !== 'undefined' && data.originalChildData !== null) ? data.originalChildData : data.child_data;
         data.child_data = childData;
     }
     mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter);

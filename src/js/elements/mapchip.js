@@ -68,7 +68,6 @@ export class MapChip extends Component {
         let dropdowns = $(mapOptionsClass).find(`${filterRowClass} .mapping-options__filter`);
 
         this.filter = new SubindicatorFilter(this, filterArea, groups, args.indicatorTitle, this.applyFilter, dropdowns, filtersToAdd, args.data.child_data, '.map-options__filter-row');
-        this.registerChild(this.filter)
 
         this.setAddFilterButton();
     }

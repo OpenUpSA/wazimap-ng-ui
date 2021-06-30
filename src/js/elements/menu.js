@@ -1,5 +1,5 @@
 import {SubIndicator} from '../dataobjects'
-import {checkIfSubIndicatorHasData, checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
+import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
@@ -49,7 +49,7 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
         if (groups !== null && typeof groups.subindicators !== 'undefined') {
 
             groups.subindicators.forEach((subindicator) => {
-                let display = checkIfSubIndicatorHasData(subindicator, indicatorDetail);
+                let display = subindicatorHasData(subindicator, indicatorDetail);
 
                 if (display) {
                     const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
@@ -134,6 +134,20 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
 
     function resetActive() {
         $(".menu__link_h4--active", parentContainer).removeClass("menu__link_h4--active");
+    }
+
+    function subindicatorHasData(subindicator, detail) {
+        let hasData = false;
+        for (const [geography, data] of Object.entries(detail.child_data)) {
+            data.forEach((indicatorDataPoint) => {
+                for (const [title, value] of Object.entries(indicatorDataPoint)) {
+                    if (subindicator == value) {
+                        hasData = true;
+                    }
+                }
+            })
+        }
+        return hasData;
     }
 
     $(".data-menu__category").remove();

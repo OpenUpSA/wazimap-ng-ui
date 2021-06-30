@@ -1,6 +1,7 @@
 import { screen, fireEvent, getByText } from '@testing-library/dom'
 
 import { SidePanels } from "../../src/js/elements/side_panels.js";
+import {Component} from '../../src/js/utils';
 
 describe('SidePanels', () => {
   let sp;
@@ -33,7 +34,8 @@ describe('SidePanels', () => {
   describe('click interactions', () => {
     describe('just close the panel', () => {
       test('calls close event', () => {
-        sp = new SidePanels(showPanels)
+        let component = new Component();
+        sp = new SidePanels(component, showPanels)
         triggerEvent = jest.spyOn(sp, 'triggerEvent')
 
         fireEvent.click(screen.getByTestId('rich-data-rich'));
@@ -44,7 +46,8 @@ describe('SidePanels', () => {
       })
     describe('open a new panel', () => {
       test('call close and open event', () => {
-        sp = new SidePanels(showPanels)
+        let component = new Component();
+        sp = new SidePanels(component, showPanels)
         triggerEvent = jest.spyOn(sp, 'triggerEvent')
 
         fireEvent.click(screen.getByTestId('rich-data-point'));

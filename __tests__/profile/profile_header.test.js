@@ -1,6 +1,7 @@
 import {Profile_header} from "../../src/js/profile/profile_header";
 import {extractSheetsData} from "../../src/js/utils";
 import {screen} from "@testing-library/dom";
+import {Component} from '../../src/js/utils';
 
 const FACILITIES = {
     count: 2,
@@ -115,7 +116,7 @@ describe('profile header', () => {
         expect(result[1].sheetName).toBe('Municipal Traffic Departments');
         expect(result[0].sheetData[2].phase).toBe('Secondary school (Gr 8 - 12)');
     })
-
+    let component = new Component();
     const parents = [];
     const geometries = {themes: []};
     const api = null;
@@ -123,7 +124,7 @@ describe('profile header', () => {
     const config = {};
 
     test('initialize successully', () => {
-        const header = new Profile_header(parents, geometries, api, null, geography, config);
+        const header = new Profile_header(component, parents, geometries, api, null, geography, config);
     })
 })
 
@@ -175,7 +176,8 @@ describe('downloading facilities', () => {
     })
 
     test('download is enabled', () => {
-        const header = new Profile_header(parents, geometries, api, null, geography, config);
+        let component = new Component();
+        const header = new Profile_header(component, parents, geometries, api, null, geography, config);
         let downloadBtn = screen.getByTestId('download-btn');
         expect(downloadBtn.classList.contains('hidden')).toBe(false);
     })
@@ -186,8 +188,8 @@ describe('downloading facilities', () => {
                 hide: ['facility-downloads']
             }
         }
-
-        const header = new Profile_header(parents, geometries, api, null, geography, config);
+        let component = new Component();
+        const header = new Profile_header(component, parents, geometries, api, null, geography, config);
         let downloadBtn = screen.getByTestId('download-btn');
         expect(downloadBtn).toHaveClass('hidden');
     })

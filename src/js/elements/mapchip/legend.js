@@ -6,8 +6,6 @@ export class Legend extends Component {
     constructor(parent, container, legendColors) {
         super(parent);
 
-        this.lightStart = 3;
-
         this.prepareDomElements(container);
         this.legendColors = legendColors;
     }
@@ -25,7 +23,7 @@ export class Legend extends Component {
 
     }
 
-    show(colors, intervalLabels) {
+    show(colors, intervalLabels, lightStart = 3) {
         if (colors.length != intervalLabels.length)
             throw 'Expected the number of intervals to be the same as the number of colours.'
 
@@ -39,7 +37,7 @@ export class Legend extends Component {
             const item = this.clonedLegendBlock.cloneNode(true);
             const label = interval;
 
-            if (i >= this.lightStart) {
+            if (i >= lightStart) {
                 $(item).addClass('light');
             }
 

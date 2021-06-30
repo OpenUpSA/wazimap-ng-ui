@@ -54,8 +54,8 @@ describe('default value filters', () => {
                         "maxX": 1
                     }
                 },
-                "disableToggle": false,
-                "defaultType": "Percentage"
+                "disableToggle": true,
+                "defaultType": "Value"
             },
             "type": "indicator",
             "groups": []
@@ -94,7 +94,7 @@ describe('default value filters', () => {
                                 <div>Chart values as:</div>
                               </div>
                             </div>
-                            <div class="hover-menu__content_list">
+                            <div data-testid="data-toggle" class="hover-menu__content_list">
                               <a data-id="Percentage" href="#" class="hover-menu__content_list-item active w-inline-block">
                                 <div>Percentage</div>
                               </a>
@@ -299,7 +299,7 @@ describe('default value filters', () => {
                                       <div class="bar-chart__tooltip_name">
                                         <div>Long chart label looks like this</div>
                                       </div>
-                                      <div class="bar-chart__tooltip_value">
+                                      <div data-testid="tooltip-percentage" class="bar-chart__tooltip_value">
                                         <div>00%</div>
                                       </div>
                                       <div class="bar-chart__tooltip_alt-value">
@@ -349,8 +349,17 @@ describe('default value filters', () => {
         c = new Chart(component, configuration, indicatorData, groups, indicatorNode, title);
     })
 
+    test('variables are set by config', () => {
+        expect(c.config.disableToggle).toBeTruthy();
+        expect(c.config.defaultType).toBe("Value");
+    })
+
+    test('data toggle respects config', () => {
+        expect(screen.getByTestId('data-toggle')).not.toBeVisible();
+    })
+
     test('tooltip respects config', () => {
-        expect(PERCENTAGE_TYPE).toBe("percentage");
+        expect(screen.getByTestId('tooltip-percentage')).not.toBeVisible();
     })
 })
 

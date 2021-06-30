@@ -80,7 +80,7 @@ export class DataMapperMenu extends Component {
     $(".data-category__h3", wrapper).remove();
     $(".data-category__h4", wrapper).remove();
 
-    if (groups !== null && typeof groups.subindicators !== 'undefined') {
+    if (groups !== null && groups.subindicators !== 'undefined') {
       groups.subindicators.forEach((subindicator) => {
         const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
         $(".truncate", newSubIndicatorElement).text(subindicator);
@@ -113,12 +113,12 @@ export class DataMapperMenu extends Component {
   }
 
   addIndicators(wrapper, category, subcategory, indicators) {
-    var newSubCategory = subCategoryTemplate.cloneNode(true);
+    let newSubCategory = subCategoryTemplate.cloneNode(true);
 
     $(".data-category__h2_trigger div", newSubCategory).text(subcategory);
     wrapper.append(newSubCategory);
 
-    var h3Wrapper = $(".data-category__h2_wrapper", newSubCategory);
+    let h3Wrapper = $(".data-category__h2_wrapper", newSubCategory);
 
     let indicatorClone = $(h3Wrapper).find('.data-category__h3')[0].cloneNode(true);
     $(".data-category__h3", h3Wrapper).remove();
@@ -136,13 +136,13 @@ export class DataMapperMenu extends Component {
 
 
   addSubcategories(category, subcategories) {
-    var newCategory = categoryTemplate.cloneNode(true)
+    let newCategory = categoryTemplate.cloneNode(true)
     $(newCategory).removeClass(hideondeployClsName);
     $(".data-category__h1_title div", newCategory).text(category);
     $('.' + loadingClsName).addClass('hidden');
     $('.' + noDataWrapperClsName).addClass('hidden');
     parentContainer.append(newCategory);
-    var h2Wrapper = $(".data-category__h1_wrapper", newCategory);
+    let h2Wrapper = $(".data-category__h1_wrapper", newCategory);
     $(".data-category__h2", h2Wrapper).remove();
 
     for (const [subcategory, detail] of Object.entries(subcategories)) {

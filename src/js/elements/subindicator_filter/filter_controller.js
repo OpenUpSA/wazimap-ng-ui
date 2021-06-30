@@ -56,23 +56,12 @@ export class FilterController extends Component {
         ready: 'FilterController.ready'
     }
 
-    /*
-    Note to self
-
-    About to figure out how to filter the data appropriately and send it via signal for the choropleth to be created
-    After that, evaluate how easy it is to adapt this to the charts
-
-    Things that don't currently work:
-    1. Disabling the add filter button isn't working great - it checks the number of available filters, not the number of filterRowson the screen
-    2. Removing filterRows is a little messsy
-    */
-
     constructor(parent, container) {
         super(parent);
 
         this._container = container;
         this._model = new FilterControllerModel();
-        this._addFilterButton = new AddFilterButton(this); // TODO should pass in a container
+        this._addFilterButton = new AddFilterButton(this);
         this._dataFilterModel = null;
         this._filterCallback = null;
 
@@ -103,7 +92,6 @@ export class FilterController extends Component {
     prepareDomElements() {
         this._rowContainer = $(this.container).find(filterRowClass)[0];
         $(this._rowContainer).hide();
-        // $(this.container).find(filterRowClass).hide();
     }
 
     prepareEvents() {
@@ -114,13 +102,9 @@ export class FilterController extends Component {
     }
 
     addInitialFilterRow(dataFilterModel) {
-        // let rowContainer = $(this.container).find(filterRowClass)[0]
-        // $(rowContainer).show();
-
         let isDefault = true;
         let isExtra = false;
 
-        // this.model.filterRows.push(new FilterRow(rowContainer, dataFilterModel, isDefault, isExtra))
         this.addEmptyFilter(isDefault, isExtra);
     }
 
@@ -131,7 +115,7 @@ export class FilterController extends Component {
             let filterRowContainer = this._rowContainer.cloneNode(true);
             $(filterRowContainer).show();
 
-            let filterRow = new FilterRow(filterRowContainer, this.model.dataFilterModel, isDefault, isExtra);
+            let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra);
             this.model.addFilterRow(filterRow);
 
             $(filterRow.container).insertBefore($('a.mapping-options__add-filter')); // TODO can I change this to addButton or something
@@ -185,7 +169,7 @@ export class FilterController extends Component {
 
         if (dataFilter != undefined) {
             let filterRowContainer = $(filterRowClass)[0].cloneNode(true);
-            let filterRow = new FilterRow(filterRowContainer, dataFilter, isDefault, isExtra);
+            let filterRow = new FilterRow(this, filterRowContainer, dataFilter, isDefault, isExtra);
             this.filterRows.push(filterRow);
             this._dataFilterModel.addFilter(filterName);
 
@@ -210,8 +194,6 @@ export class FilterController extends Component {
     clearExtraFilters() {
         const self = this;
         this.model.filterRows.forEach(filterRow => {
-            // if (filterRow.isExtra)
-            // self.model.removeFilterRow(filterRow);
             filterRow.removeRow();
         })
     }
@@ -233,7 +215,6 @@ export class FilterController extends Component {
 
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
-        //this.checkAndAddPreviouslySelectedFilters();
         this.addInitialFilterRow(dataFilterModel);
     }
 

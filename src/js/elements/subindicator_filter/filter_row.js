@@ -123,8 +123,11 @@ export class FilterRow extends Component {
         removed: 'filterRow.removed'
     }
 
-    constructor(container, dataFilterModel = null, isDefault = false, isExtra = true) {
-        super();
+    static SELECT_ATTRIBUTE = 'Select an attribute';
+    static SELECT_VALUE = 'Select a value';
+
+    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true) {
+        super(parent);
         this._container = container;
 
         this.prepareDomElements();
@@ -137,8 +140,8 @@ export class FilterRow extends Component {
             this.showRemoveButton();
         }
 
-        this.indicatorDropdown = new Dropdown(this._indicatorDd, this.model.indicatorValues, 'Select an attribute', false);
-        this.subIndicatorDropdown = new Dropdown(this._subindicatorDd, this.model.subindicatorValues, 'Select a value', true);
+        this.indicatorDropdown = new Dropdown(this, this._indicatorDd, this.model.indicatorValues, FilterRow.SELECT_ATTRIBUTE, false);
+        this.subIndicatorDropdown = new Dropdown(this, this._subindicatorDd, this.model.subindicatorValues, FilterRow.SELECT_VALUE, true);
 
         this.prepareEvents();
     }
@@ -152,18 +155,18 @@ export class FilterRow extends Component {
     }
 
     setPrimaryIndexUsingValue(value) {
-        this.indicatorDropdown.model.setIndexUsingValue(value);
+        this.indicatorDropdown.model.currentItem = value;
     }
 
     setSecondaryIndexUsingValue(value) {
-        this.subIndicatorDropdown.model.setIndexUsingValue(value);
+        this.subIndicatorDropdown.model.currentItem = value;
     }
 
-    setPrimaryIndex(index){
+    setPrimaryIndex(index) {
         this.indicatorDropdown.model.currentIndex = index;
     }
 
-    setSecondaryIndex(index){
+    setSecondaryIndex(index) {
         this.subIndicatorDropdown.model.currentIndex = index;
     }
 
@@ -179,10 +182,12 @@ export class FilterRow extends Component {
 
 
     prepareEvents() {
+       this.prepareModelEvents();
+       this.prepareUIEvents();
+    }
+
+    prepareModelEvents(){
         const self = this;
-        this._removeFilterButton.on('click', () => {
-            self.removeRow();
-        })
 
         this.model.on(FilterRowModel.EVENTS.updated, model => {
             self.updateIndicatorDropdowns(model);
@@ -201,6 +206,13 @@ export class FilterRow extends Component {
         })
     }
 
+    prepareUIEvents(){
+        const self = this;
+
+        this._removeFilterButton.on('click', () => {
+            self.removeRow();
+        })
+    }
 
     onIndicatorSelected(selectedItem) {
         if (selectedItem == FilterRowModel.ALL_VALUES) {

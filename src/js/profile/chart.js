@@ -1,4 +1,4 @@
-import {format as d3format} from "d3-format/src/defaultLocale";
+import {format as d3format} from "d3-format";
 import {select as d3select} from "d3-selection";
 
 import {appendFilterArrays, Component} from "../utils";
@@ -95,19 +95,18 @@ export class Chart extends Component {
                 return;
             }
             // set the tooltip content
-            let tooltipPercentageType = ''
-            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
-                tooltipPercentageType = `
-          <div class="bar-chart__tooltip_value">
-              <div>${value.percentage}</div>
-          </div>`
+            let tooltipPercentageType = ``;
+            if (this.config.defaultType.toLowerCase() == VALUE_TYPE || this.config.disableToggle) {
+                tooltipPercentageType = `hidden`;
             }
             this.el.innerHTML = `
         <div class="bar-chart__row_tooltip-card">
           <div class="bar-chart__tooltip_name">
               <div>${value.group}</div>
           </div>
-          ${tooltipPercentageType}
+          <div class="bar-chart__tooltip_value ${tooltipPercentageType}">
+              <div>${value.percentage}</div>
+          </div>
           <div class="bar-chart__tooltip_alt-value">
               <div>${value.count}</div>
           </div>
@@ -245,8 +244,8 @@ export class Chart extends Component {
 
     disableChartTypeToggle = (disable) => {
         if (disable) {
-            $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
-            $(this.containerParent).find('.hover-menu__content_list').hide()
+            $(this.containerParent).find('.hover-menu__content_item--no-link:first').addClass('hidden');
+            $(this.containerParent).find('.hover-menu__content_list').addClass('hidden');
         }
     }
 

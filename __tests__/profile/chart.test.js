@@ -355,11 +355,13 @@ describe('default value filters', () => {
     })
 
     test('data toggle respects config', () => {
-        expect(screen.getByTestId('data-toggle')).not.toBeVisible();
+        let tooltip = screen.getByTestId('data-toggle');
+        expect(tooltip).toHaveClass('hidden');
     })
 
     test('tooltip respects config', () => {
-        expect(screen.getByTestId('tooltip-percentage')).not.toBeVisible();
+        let tooltip = screen.getByTestId('tooltip-percentage');
+        expect(tooltip).toHaveClass('hidden');
     })
 })
 

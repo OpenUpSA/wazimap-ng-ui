@@ -8,61 +8,61 @@ const indicatorClass = '.profile-indicator';
 
 
 describe('default value filters', () => {
-        let c;
-        let mockIndicator = {
-            "choropleth_method": "subindicator",
-            "metadata": {
-                "primary_group": "age",
-                "groups": [
-                    {
-                        "subindicators": [
-                            "Language"
-                        ],
-                        "dataset": 100,
-                        "name": "language",
-                        "can_aggregate": true,
-                        "can_filter": true
-                    }
-                ]
-            },
-            "data": [
+    let c;
+    let mockIndicator = {
+        "choropleth_method": "subindicator",
+        "metadata": {
+            "primary_group": "age",
+            "groups": [
                 {
-                    "age": "1",
-                    "race": "Race",
-                    "count": "10000",
-                    "gender": "Female",
-                    "language": "Language"
-                },
-                {
-                    "age": "1",
-                    "race": "Race",
-                    "count": "10000",
-                    "gender": "Male",
-                    "language": "Language"
+                    "subindicators": [
+                        "Language"
+                    ],
+                    "dataset": 100,
+                    "name": "language",
+                    "can_aggregate": true,
+                    "can_filter": true
                 }
-            ],
-            "chartConfiguration": {
-                "types": {
-                    "Value": {
-                        "formatting": ",.0f",
-                        "minX": "default",
-                        "maxX": "default"
-                    },
-                    "Percentage": {
-                        "formatting": ".0%",
-                        "minX": 0,
-                        "maxX": 1
-                    }
-                },
-                "disableToggle": true,
-                "defaultType": "Value"
+            ]
+        },
+        "data": [
+            {
+                "age": "1",
+                "race": "Race",
+                "count": "10000",
+                "gender": "Female",
+                "language": "Language"
             },
-            "type": "indicator",
-            "groups": []
-        };
+            {
+                "age": "1",
+                "race": "Race",
+                "count": "10000",
+                "gender": "Male",
+                "language": "Language"
+            }
+        ],
+        "chartConfiguration": {
+            "types": {
+                "Value": {
+                    "formatting": ",.0f",
+                    "minX": "default",
+                    "maxX": "default"
+                },
+                "Percentage": {
+                    "formatting": ".0%",
+                    "minX": 0,
+                    "maxX": 1
+                }
+            },
+            "disableToggle": true,
+            "defaultType": "Value"
+        },
+        "type": "indicator",
+        "groups": []
+    };
 
-        beforeEach(() => {
-            document.body.innerHTML = `<div class="profile-indicator last">
+    beforeEach(async () => {
+        document.body.innerHTML = `<div class="profile-indicator last">
                 <div class="profile-indicator__header">
                   <div class="profile-indicator__title">
                     <h4>Indicator chart title</h4>
@@ -342,11 +342,12 @@ describe('default value filters', () => {
         const configuration = mockIndicator.chartConfiguration;
         let indicatorData = mockIndicator;
         let groups = [];
-        let indicatorNode = $(indicatorClass)[0].cloneNode(true);
+        let indicatorNode = $(document).find(indicatorClass);
         let title = '';
 
         let component = new Component();
         c = new Chart(component, configuration, indicatorData, groups, indicatorNode, title);
+        await new Promise(resolve => setTimeout(resolve, 200))
     })
 
     test('variables are set by config', () => {
@@ -359,9 +360,11 @@ describe('default value filters', () => {
         expect(tooltip).toHaveClass('hidden');
     })
 
+    /*
     test('tooltip respects config', () => {
         let tooltip = screen.getByTestId('tooltip-percentage');
         expect(tooltip).toHaveClass('hidden');
     })
+    */
 })
 

@@ -299,7 +299,7 @@ describe('default value filters', () => {
                                       <div class="bar-chart__tooltip_name">
                                         <div>Long chart label looks like this</div>
                                       </div>
-                                      <div data-testid="tooltip-percentage" class="bar-chart__tooltip_value">
+                                      <div class="bar-chart__tooltip_value">
                                         <div>00%</div>
                                       </div>
                                       <div class="bar-chart__tooltip_alt-value">
@@ -356,15 +356,13 @@ describe('default value filters', () => {
     })
 
     test('data toggle respects config', () => {
-        let tooltip = screen.getByTestId('data-toggle');
-        expect(tooltip).toHaveClass('hidden');
+        let toggle = screen.getByTestId('data-toggle');
+        expect(toggle).toHaveClass('hidden');
     })
 
-    /*
-    test('tooltip respects config', () => {
-        let tooltip = screen.getByTestId('tooltip-percentage');
-        expect(tooltip).toHaveClass('hidden');
+    test('table and toggle respects config', () => {
+        let table = screen.getAllByText('Percentage');
+        expect(table).toHaveLength(1);
     })
-    */
 })
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Mon Jun 28 2021 09:14:11 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Fri Jul 02 2021 06:15:41 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="5fd05e808ba660ae5c285574" data-wf-site="5fd05e808ba6609d12285571">
 <head>
   <meta charset="utf-8">
@@ -392,7 +392,7 @@
                     </svg></div>
                 </div>
                 <div class="filters__header_name truncate">
-                  <div class="truncate">Loading asd as dsad sa dasd sad sa sa das dsa dsa dsa dsad asd sd asdsadsadasdasdasd</div>
+                  <div class="truncate">Loading...</div>
                 </div>
               </div>
               <div data-w-id="86654d00-b063-c2ad-61db-f5ff0f0a4611" class="filters__header_toggle">
@@ -411,6 +411,81 @@
                     <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
                   </svg></div>
               </div>
+            </div>
+            <div class="map-options__filters_content hidden">
+              <div class="map-options__filter-labels">
+                <div class="mapping-options__filter">
+                  <div class="mapping-options__filter_label">
+                    <div>Filter by attribute</div>
+                  </div>
+                </div>
+                <div class="mapping-options__filter disabled">
+                  <div class="mapping-options__filter_label">
+                    <div>Select a value:</div>
+                  </div>
+                </div>
+              </div>
+              <div class="map-options__filter-row">
+                <div class="mapping-options__filter">
+                  <div data-w-id="12072a39-b6dc-5a3c-8bd9-809d5d0a98c7" class="mapping-options__filter_menu">
+                    <div class="dropdown-menu__trigger">
+                      <div class="dropdown-menu__selected-item">
+                        <div class="truncate">Select an attribute</div>
+                      </div>
+                      <div class="dropdown-menu__icon">
+                        <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                            <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                          </svg></div>
+                      </div>
+                    </div>
+                    <div class="dropdown-menu__content position-top scroll-element">
+                      <div class="dropdown__list_item selected">
+                        <div class="truncate">Select an attribute</div>
+                      </div>
+                      <div class="dropdown__list_item">
+                        <div class="truncate">Attribute</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mapping-options__filter disabled">
+                  <div data-w-id="12072a39-b6dc-5a3c-8bd9-809d5d0a98d6" class="mapping-options__filter_menu">
+                    <div class="dropdown-menu__trigger disabled">
+                      <div class="dropdown-menu__selected-item">
+                        <div class="truncate">Select a value</div>
+                      </div>
+                      <div class="dropdown-menu__icon">
+                        <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                            <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                          </svg></div>
+                      </div>
+                    </div>
+                    <div class="dropdown-menu__content position-top scroll-element">
+                      <div class="dropdown__list_item selected">
+                        <div class="truncate">Select a value</div>
+                      </div>
+                      <div class="dropdown__list_item">
+                        <div class="truncate">Value</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <a title="Remove filter" href="#" class="mapping-options__remove-filter is--hidden w-inline-block">
+                  <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                      <path d="M0 0h24v24H0z" fill="none"></path>
+                      <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                    </svg></div>
+                </a>
+              </div>
+              <a title="Add new filter" href="#" class="mapping-options__add-filter w-inline-block">
+                <div class="text-block-3">Add new filter</div>
+                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                  </svg></div>
+              </a>
             </div>
           </div>
           <div class="map-options__legend">
@@ -3017,83 +3092,6 @@
         <div class="styles__subsection">
           <div>Map filters content</div>
         </div>
-        <div class="styles__area_block horizontal wide">
-          <div style="display:flex" class="map-options__filters_content">
-            <div class="map-options__filter-labels">
-              <div class="mapping-options__filter">
-                <div class="mapping-options__filter_label">
-                  <div>Filter by attribute</div>
-                </div>
-              </div>
-              <div class="mapping-options__filter disabled">
-                <div class="mapping-options__filter_label">
-                  <div>Select a value:</div>
-                </div>
-              </div>
-            </div>
-            <div class="map-options__filter-row">
-              <div class="mapping-options__filter">
-                <div data-w-id="d3734850-d6e7-b79f-679f-3ea65f58a100" class="mapping-options__filter_menu">
-                  <div class="dropdown-menu__trigger">
-                    <div class="dropdown-menu__selected-item">
-                      <div class="truncate">Select an attribute</div>
-                    </div>
-                    <div class="dropdown-menu__icon">
-                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                          <path d="M0 0h24v24H0z" fill="none"></path>
-                          <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-                        </svg></div>
-                    </div>
-                  </div>
-                  <div class="dropdown-menu__content position-top scroll-element">
-                    <div class="dropdown__list_item selected">
-                      <div class="truncate">Select an attribute</div>
-                    </div>
-                    <div class="dropdown__list_item">
-                      <div class="truncate">Attribute</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="mapping-options__filter disabled">
-                <div data-w-id="d3734850-d6e7-b79f-679f-3ea65f58a10f" class="mapping-options__filter_menu">
-                  <div class="dropdown-menu__trigger disabled">
-                    <div class="dropdown-menu__selected-item">
-                      <div class="truncate">Select a value</div>
-                    </div>
-                    <div class="dropdown-menu__icon">
-                      <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                          <path d="M0 0h24v24H0z" fill="none"></path>
-                          <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
-                        </svg></div>
-                    </div>
-                  </div>
-                  <div class="dropdown-menu__content position-top scroll-element">
-                    <div class="dropdown__list_item selected">
-                      <div class="truncate">Select a value</div>
-                    </div>
-                    <div class="dropdown__list_item">
-                      <div class="truncate">Value</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <a title="Remove filter" href="#" class="mapping-options__remove-filter is--hidden w-inline-block">
-                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                    <path d="M0 0h24v24H0z" fill="none"></path>
-                    <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
-                  </svg></div>
-              </a>
-            </div>
-            <a title="Add new filter" href="#" class="mapping-options__add-filter w-inline-block">
-              <div class="text-block-3">Add new filter</div>
-              <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                  <path d="M0 0h24v24H0z" fill="none"></path>
-                  <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
-                </svg></div>
-            </a>
-          </div>
-        </div>
       </div>
       <div class="styles__section">
         <div class="styles__title">
@@ -3135,7 +3133,7 @@
   </div>
   <div class="w-embed">
     <style>
-.truncate {
+.truncate, .profile-indicator__table_cell {
 	width: 100%;
 	white-space: nowrap;
 	overflow: hidden;
@@ -3279,12 +3277,12 @@
   }
 });
 </script>
+  <script src="js/index.js"></script>
   <script>
 setTimeout(function(){
 		$('.w-webflow-badge').css({'display':'none !important'});
 }, 2000);
 </script>
-<script src="js/index.js"></script>
   <style>
 /*------------------------------------- Map attribution hide */
   .leaflet-control-attribution {
@@ -3304,7 +3302,7 @@ setTimeout(function(){
 /*------------------------------------- Hide webflow items on deploy */
 .disabled {
   pointer-events: none;
-}
+}  
 /*------------------------------------- Hide scrollbar for Chrome, Safari and Opera */
 .no-scroll::-webkit-scrollbar {
   display: none;
@@ -3329,14 +3327,14 @@ setTimeout(function(){
   border-color:rgb(51, 51, 51);
   border-radius:2px;
 }
-/*-------- Custom slider checkbox */
+/*-------- Custom slider checkbox */  
 .switch {
   position: relative;
   display: inline-block;
   width: 32px;
   height: 20px;
 }
-.switch input {
+.switch input { 
   opacity: 0;
   width: 0;
   height: 0;
@@ -3378,7 +3376,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-/*-------- Fixing Chart Lines */
+/*-------- Fixing Chart Lines */  
 .bar-tooltip {
   z-index: 100;
 }

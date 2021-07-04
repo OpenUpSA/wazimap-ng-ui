@@ -149,12 +149,14 @@ export class SubindicatorFilter extends Component {
 
     populateDropdown = (dropdown, itemList, callback) => {
         if ($(dropdown).hasClass('disabled')) {
-            $(dropdown).removeClass('disabled')
+            $(dropdown).removeClass('disabled');
         }
 
         if ($(dropdown).hasClass('is--disabled')) {
             $(dropdown).removeClass('is--disabled')
         }
+
+        $(dropdown).find('.dropdown-menu__trigger').removeClass('disabled')
 
         let ddWrapper = $(dropdown).find('.dropdown-menu__content');
         let listItem = $(dropdown).find('.dropdown__list_item')[0].cloneNode(true);

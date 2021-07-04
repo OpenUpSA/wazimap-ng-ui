@@ -7504,6 +7504,7 @@ label {
 }
 
 .profile-indicator__table_cell {
+  overflow: hidden;
   padding: 8px;
   border-left: 1px solid rgba(0, 0, 0, 0.06);
   white-space: nowrap;

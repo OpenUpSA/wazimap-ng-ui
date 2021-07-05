@@ -15,8 +15,17 @@ export class MapDownload extends Component {
             this.triggerEvent('mapdownload.started');
             this.titleClass = '.map-title';
             this.legendClass = '.map-bottom-items';
+            this.downloadClass = '.map-download';
             this.downloadMap();
         });
+    }
+
+    disableButton = () => {
+        $(this.downloadClass).addClass('.disabled');
+    }
+
+    enableButton = () => {
+        $(this.downloadClass).removeClass('.disabled');
     }
 
     downloadMap = () => {
@@ -54,3 +63,4 @@ export class MapDownload extends Component {
         }, 10)
     }
 }
+

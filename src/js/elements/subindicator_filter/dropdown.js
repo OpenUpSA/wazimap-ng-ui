@@ -60,9 +60,9 @@ export class DropdownModel extends Observable {
         }
     }
 
-    updateItems(items) {
+    updateItems(items, currentIndex = 0) {
         this._items = items;
-        this._currentIndex = 0;
+        this._currentIndex = currentIndex;
         this.triggerEvent(DropdownModel.EVENTS.update, this);
     }
 }
@@ -146,8 +146,8 @@ export class Dropdown extends Component {
         $(this._ddWrapper).hide()
     }
 
-    updateItems(items) {
-        this.model.updateItems(items);
+    updateItems(items, currentIndex = 0) {
+        this.model.updateItems(items, currentIndex);
     }
 
     reset() {

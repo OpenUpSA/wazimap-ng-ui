@@ -11,8 +11,9 @@ class FilterRowModel extends Component {
     }
 
     static ALL_VALUES = 'All values';
+    static ALL_INDICATORS = 'All indicators';
 
-    constructor(parent, dataFilterModel, isDefault, isExtra, defaultIndicatorText = 'All indicators', defaultSubindicatorText = 'All values') {
+    constructor(parent, dataFilterModel, isDefault, isExtra, defaultIndicatorText = FilterRowModel.ALL_INDICATORS, defaultSubindicatorText = FilterRowModel.ALL_VALUES) {
         super(parent)
         this._isDefault = isDefault;
         this._isExtra = isExtra;
@@ -33,8 +34,13 @@ class FilterRowModel extends Component {
         /**
          * Returns the available indicatorValues or [] if none are available
          */
-        if (this.dataFilterModel != null)
-            return [FilterRowModel.ALL_VALUES].concat(this.dataFilterModel.availableFilterNames);
+        if (this.dataFilterModel != null) {
+            let indicatorValues = [FilterRowModel.ALL_VALUES].concat(this.dataFilterModel.availableFilterNames);
+            if (this.currentIndicatorValue !== FilterRowModel.ALL_INDICATORS && this.currentIndicatorValue !== FilterRowModel.ALL_VALUES) {
+                indicatorValues.push(this.currentIndicatorValue);
+            }
+            return indicatorValues;
+        }
         return []
     }
 
@@ -73,12 +79,16 @@ class FilterRowModel extends Component {
          * an indicatorSelected event
          */
 
-        if (this._currentIndicatorValue != null && this._currentIndicatorValue != FilterRowModel.ALL_VALUES)
-            this.dataFilterModel.removeFilter(this._currentIndicatorValue);
+        let prevIndicator = this._currentIndicatorValue;
         this._currentIndicatorValue = value;
 
-        if (value != null && value != FilterRowModel.ALL_VALUES)
+        if (prevIndicator != null && prevIndicator != FilterRowModel.ALL_VALUES)
+            this.dataFilterModel.removeFilter(prevIndicator);
+
+        if (value != null && value != FilterRowModel.ALL_VALUES) {
             this.dataFilterModel.addFilter(value);
+        }
+        this.dataFilterModel.updateFilteredData();
 
         this.triggerEvent(FilterRowModel.EVENTS.indicatorSelected, this);
     }
@@ -182,11 +192,11 @@ export class FilterRow extends Component {
 
 
     prepareEvents() {
-       this.prepareModelEvents();
-       this.prepareUIEvents();
+        this.prepareModelEvents();
+        this.prepareUIEvents();
     }
 
-    prepareModelEvents(){
+    prepareModelEvents() {
         const self = this;
 
         this.model.on(FilterRowModel.EVENTS.updated, model => {
@@ -202,11 +212,13 @@ export class FilterRow extends Component {
         })
 
         this.model.on(FilterRowModel.EVENTS.indicatorSelected, model => {
-            self.updateSubindicatorDropdown();
+            if (model.currentIndicatorValue !== FilterRowModel.ALL_VALUES) {
+                self.updateSubindicatorDropdown();
+            }
         })
     }
 
-    prepareUIEvents(){
+    prepareUIEvents() {
         const self = this;
 
         this._removeFilterButton.on('click', () => {
@@ -215,8 +227,8 @@ export class FilterRow extends Component {
     }
 
     onIndicatorSelected(selectedItem) {
+        this.subIndicatorDropdown.setText(FilterRow.SELECT_VALUE);
         if (selectedItem == FilterRowModel.ALL_VALUES) {
-            this.subIndicatorDropdown.setText('');
             this.subIndicatorDropdown.disable();
         } else {
             this.subIndicatorDropdown.enable();
@@ -230,9 +242,8 @@ export class FilterRow extends Component {
     }
 
 
-    updateIndicatorDropdowns(model) {
-        this.indicatorDropdown.updateItems(model.indicatorValues);
-        this.indicatorDropdown.currentItem = model.currentIndicatorValue;
+    updateIndicatorDropdowns(model, currentIndex = 0) {
+        this.indicatorDropdown.updateItems(model.indicatorValues, currentIndex);
     }
 
     updateSubindicatorDropdown() {

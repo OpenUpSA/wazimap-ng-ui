@@ -18,7 +18,8 @@ import {DataFilter} from "./data_filter";
  */
 export class DataFilterModel extends Observable {
     static EVENTS = {
-        updated: 'DataFilterModel.updated' // triggered whenever an event occurs that would affect the filtering of a dataset
+        updated: 'DataFilterModel.updated', // triggered whenever an event occurs that would affect the filtering of a dataset
+        filtersChanged: 'DataFilterModel.filtersChanged'
     }
 
     constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData) {
@@ -53,11 +54,11 @@ export class DataFilterModel extends Observable {
         return Object.values(this._groupLookup).filter(group => !(group.can_aggregate));
     }
 
-    get groupLookup(){
+    get groupLookup() {
         return this._groupLookup;
     }
 
-    get filters(){
+    get filters() {
         return this._filters;
     }
 
@@ -102,7 +103,7 @@ export class DataFilterModel extends Observable {
         this._filteredData = _filteredData;
     }
 
-    get previouslySelectedFilters(){
+    get previouslySelectedFilters() {
         return this._previouslySelectedFilters;
     }
 

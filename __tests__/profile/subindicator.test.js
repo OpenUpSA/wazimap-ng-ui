@@ -1,5 +1,6 @@
 import {SubindicatorFilter} from "../../src/js/profile/subindicator_filter";
 import {screen, fireEvent, getByText} from '@testing-library/dom'
+import {Component} from '../../src/js/utils';
 
 const DATA = [
     {"race": "Race1", "count": 35, "gender": "Female"},
@@ -87,7 +88,8 @@ describe('SubindicatorFilter', () => {
     let dropdowns = $(document).find('.mapping-options__filter');
     const filterArea = $(document).find('.map-options__filters_content');
     applyFilter = jest.fn();
-    si = new SubindicatorFilter(filterArea, GROUPS, title, applyFilter, dropdowns, undefined, CHILD_DATA, true);
+    let component = new Component();
+    si = new SubindicatorFilter(component, filterArea, GROUPS, title, applyFilter, dropdowns, undefined, CHILD_DATA, true);
   })
 
 

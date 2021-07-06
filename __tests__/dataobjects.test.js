@@ -1,5 +1,6 @@
 import {IndicatorHelper} from '../src/js/dataobjects';
 import {defaultValues} from '../src/js/defaultValues';
+import {ContentBlock} from '../src/js/profile/blocks/content_block';
 
 describe('Test IndicatorHelper static methods', () => {
     test('missing data is correctly fixed', () => {
@@ -8,9 +9,9 @@ describe('Test IndicatorHelper static methods', () => {
 
         expect(indicator.metadata.source).toBe('')
         expect(indicator.metadata.description).toBe('')
-        expect(indicator.metadata.url).toBe('')
+        expect(indicator.metadata.url).toBe(null)
         expect(indicator.metadata.licence.name).toBe('')
-        expect(indicator.metadata.licence.url).toBe('')
+        expect(indicator.metadata.licence.url).toBe(null)
     })
 
     test('missing configuration values inserted', () => {
@@ -32,12 +33,13 @@ describe('Test IndicatorHelper static methods', () => {
         defaultValues.chartConfiguration = {test1: 1, test2: 2, test3: {test4: 4}}
         
         let indicator = {}
-        indicator = IndicatorHelper.fixIndicator(indicator)
+        indicator.type = ContentBlock.BLOCK_TYPES.Indicator
+        indicator = IndicatorHelper.fixIndicator('', indicator)
 
         expect(indicator.metadata.source).toBe('')
         expect(indicator.metadata.description).toBe('')
         expect(indicator.metadata.licence.name).toBe('')
-        expect(indicator.metadata.licence.url).toBe('')
+        expect(indicator.metadata.licence.url).toBe(null)
         expect(indicator.chartConfiguration).toBeDefined()
         expect(indicator.chartConfiguration.test1).toBe(1)
         expect(indicator.chartConfiguration.test2).toBe(2)

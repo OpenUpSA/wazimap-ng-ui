@@ -57,7 +57,6 @@ class DataMapperMenuModel extends Observable {
 
 }
 
-
 export class DataMapperMenu extends Component {
   constructor(parent) {
     super(parent);
@@ -76,38 +75,56 @@ export class DataMapperMenu extends Component {
     return this._model;
   }
 
-  addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, choropleth_method, indicatorId) {
+  addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, indicatorDetail) {
     $(".data-category__h3", wrapper).remove();
     $(".data-category__h4", wrapper).remove();
 
     if (groups !== null && groups.subindicators !== 'undefined') {
       groups.subindicators.forEach((subindicator) => {
-        const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
-        $(".truncate", newSubIndicatorElement).text(subindicator);
-        $(newSubIndicatorElement).attr('title', subindicator);
+        let display = this.subindicatorHasData(subindicator, indicatorDetail);
 
-        wrapper.append(newSubIndicatorElement);
+        if (display) {
+          const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
+          $(".truncate", newSubIndicatorElement).text(subindicator);
+          $(newSubIndicatorElement).attr('title', subindicator);
 
-        const parents = {
-          category: category,
-          subcategory: subcategory,
-          indicator: indicator
+          wrapper.append(newSubIndicatorElement);
+
+          const parents = {
+            category: category,
+            subcategory: subcategory,
+            indicator: indicator
+          }
+
+          $(newSubIndicatorElement).on("click", (el) => {
+            this.setActive(el);
+            if (this._subindicatorCallback != undefined)
+              this._subindicatorCallback({
+                el: el,
+                data: this._data,
+                indicatorTitle: indicator,
+                selectedSubindicator: subindicator,
+                indicators: indicators,
+                parents: parents,
+                choropleth_method: indicatorDetail.choropleth_method,
+                indicatorId: indicatorDetail.id
+              })
+          });
+          $(newSubIndicatorElement).on("click", (el) => {
+            this.setActive(el);
+            if (this._subindicatorCallback != undefined)
+              this._subindicatorCallback({
+                el: el,
+                data: this._data,
+                indicatorTitle: indicator,
+                selectedSubindicator: subindicator,
+                indicators: indicators,
+                parents: parents,
+                choropleth_method: indicatorDetail.choropleth_method,
+                indicatorId: indicatorDetail.id
+              })
+          });
         }
-
-        $(newSubIndicatorElement).on("click", (el) => {
-          this.setActive(el);
-          if (this._subindicatorCallback != undefined)
-            this._subindicatorCallback({
-              el: el,
-              data: this._data,
-              indicatorTitle: indicator,
-              selectedSubindicator: subindicator,
-              indicators: indicators,
-              parents: parents,
-              choropleth_method: choropleth_method,
-              indicatorId: indicatorId
-            })
-        });
       });
     }
   }
@@ -128,9 +145,8 @@ export class DataMapperMenu extends Component {
       $('.truncate', newIndicator).text(indicator);
       $(h3Wrapper).append(newIndicator);
       const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
-
       let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
-      this.addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail.choropleth_method, detail.id);
+      this.addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
     }
   }
 
@@ -167,6 +183,20 @@ export class DataMapperMenu extends Component {
   }
 
 
+  subindicatorHasData(subindicator, detail) {
+    let hasData = false;
+    for (const data of Object.values(detail.child_data)) {
+      data.forEach((indicatorDataPoint) => {
+        for (const value of Object.values(indicatorDataPoint)) {
+          if (subindicator == value) {
+            hasData = true;
+          }
+        }
+      })
+    }
+    return hasData;
+  }
+
   main() {
     $(".data-menu__category").remove();
     let hasNoItems = true;
@@ -179,11 +209,12 @@ export class DataMapperMenu extends Component {
         this.addSubcategories(category, detail.subcategories)
       }
     }
-
     if (hasNoItems) {
-      this.showNoDataMessage()
+      this.showNoDataMessage();
     }
   }
+
+
 
   hideNoDataMessage() {
     let hiddenClass = hideondeployClsName;

@@ -71,7 +71,7 @@ export class Chart extends Component {
             }
             let y = event.pageY + offsetY;
             if (y < window.innerHeight) {
-              y = window.innerHeight + offsetY;
+                y = window.innerHeight + offsetY;
             }
             if (y + tooltipBox.height > window.innerHeight) {
                 y = +event.pageY - offsetY - tooltipBox.height;
@@ -327,7 +327,7 @@ export class Chart extends Component {
     };
 
     handleChartFilter = (indicators, groups) => {
-        const filterArea = $(this.subCategoryNode).find(".profile-indicator__filters");
+        const filterArea = $(this.subCategoryNode).find(".profile-indicator__filters-wrapper");
 
         let filtersToAdd = [];
         let defaultFilters = this.getDefaultFilters();
@@ -342,6 +342,7 @@ export class Chart extends Component {
         this.filterGroups = groups.filter((g) => {
             return g.name !== indicators.metadata.primary_group
         })
+
         let siFilter = new SubindicatorFilter(this, filterArea, this.filterGroups, this.title, this.applyFilter, dropdowns, filtersToAdd, indicators.child_data, '.profile-indicator__filter-row');
         this.filter = siFilter;
 

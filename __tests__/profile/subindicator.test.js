@@ -31,6 +31,7 @@ describe('SubindicatorFilter', () => {
     beforeEach(() => {
         // probably better to read the index.html file and include it here
         document.body.innerHTML = `
+    <div style="display:flex" class="map-options__filters_content" data-testid="filter-content">
       <div class="mapping-options__filter">
         <div class="mapping-options__filter_label">
           <div>Select a value:</div>
@@ -85,12 +86,12 @@ describe('SubindicatorFilter', () => {
       </div>
     </div>
     `;
-    let dropdowns = $(document).find('.mapping-options__filter');
-    const filterArea = $(document).find('.map-options__filters_content');
-    applyFilter = jest.fn();
-    let component = new Component();
-    si = new SubindicatorFilter(component, filterArea, GROUPS, title, applyFilter, dropdowns, undefined, CHILD_DATA, true);
-  })
+        let dropdowns = $(document).find('.mapping-options__filter');
+        const filterArea = $(document).find('.map-options__filters_content');
+        applyFilter = jest.fn();
+        let component = new Component();
+        si = new SubindicatorFilter(component, filterArea, GROUPS, title, applyFilter, dropdowns, undefined, CHILD_DATA, true);
+    })
 
 
     test.each([
@@ -121,6 +122,22 @@ describe('SubindicatorFilter', () => {
         expect(chartData["Geography1"].length).toBe(0)
     })
 
+    test('Does not hide filter area when there are groups to filter by', () => {
+        let filterContent = screen.getByTestId('filter-content');
+        expect(filterContent.classList.contains('hidden')).toBe(false);
+    })
+
+    test('Hides filter area when there are no groups', () => {
+        let dropdowns = $(document).find('.mapping-options__filter');
+        const filterArea = $(document).find('.map-options__filters_content');
+        applyFilter = jest.fn();
+        let component = new Component();
+        new SubindicatorFilter(component, filterArea, [], title, applyFilter, dropdowns, undefined, CHILD_DATA, true);
+
+        let filterContent = screen.getByTestId('filter-content');
+        expect(filterContent).toHaveClass('hidden');
+    })
+
     describe('#getFilteredData', () => {
         test('all values returns the defaults', () => {
             $(si.allDropdowns[0]).find('.dropdown-menu__selected-item .truncate').text('All values');
@@ -143,6 +160,7 @@ describe('SubindicatorFilter', () => {
             expect(chartData["Geography2"][0]["gender"]).toBe("Female");
         })
     })
+
     describe('UI interactions', () => {
         test('select subcategory', () => {
             fireEvent.click(screen.getByText('race').parentNode);
@@ -171,4 +189,6 @@ describe('SubindicatorFilter', () => {
             });
         })
     })
+
+
 })

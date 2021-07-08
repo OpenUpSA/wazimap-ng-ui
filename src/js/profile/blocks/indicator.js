@@ -41,7 +41,7 @@ export class Indicator extends ContentBlock {
 
     prepareDomElements() {
         $(indicatorTitleClass, this.container).text(this.title);
-        $(chartDescClass, this.container).text(this.description);
+        $(chartDescClass, this.container).html(this.description);
 
         const isLink = !isNull(this.metadata.url);
         if (isLink)

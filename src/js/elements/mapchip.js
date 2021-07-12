@@ -31,8 +31,6 @@ export class MapChip extends Component {
         this.clonedLegendBlock = legendBlock.cloneNode(true);	//a legend block
         this.clonedLegend = $('.map-options__legend')[0].cloneNode(true);	//the legend itself
         this.clearLegend();
-
-        $('a.mapping-options__add-filter').on('click', () => this.addFilter());
     }
 
     showMapChip(args) {
@@ -199,10 +197,21 @@ export class MapChip extends Component {
     }
 
     setAddFilterButton() {
+        let rowCount = $(filterContentClass).find(filterRowClass).length;
+        let btn = 'a.mapping-options__new-filter';
+        $(filterContentClass).find(filterRowClass).each(function (index) {
+            if (index !== rowCount - 1) {
+                $(this).find(btn).addClass('hidden');
+            } else {
+                $(this).find(btn).removeClass('hidden');
+            }
+        });
+
         if (this.filter.allDropdowns.length >= this.groups.length * 2) {
-            $('a.mapping-options__add-filter').addClass('disabled');
+            $(btn).addClass('disabled');
         } else {
-            $('a.mapping-options__add-filter').removeClass('disabled');
+            $(btn).removeClass('disabled');
+            $(filterContentClass).find(btn).off('click').on('click', () => this.addFilter());
         }
     }
 
@@ -215,7 +224,8 @@ export class MapChip extends Component {
         $(filterRow).attr('data-isextra', true);
         $(filterRow).attr('data-isdefault', isDefault);
         this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd, isDefault);
-        $(filterRow).insertBefore($('a.mapping-options__add-filter'));
+        $(filterContentClass).append(filterRow);
+
 
         new DropdownMenu($(filterRow));
         if (this.filter !== null) {

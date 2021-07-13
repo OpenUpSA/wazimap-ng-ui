@@ -40,7 +40,7 @@ export class MapChip extends Component {
         $(mapOptionsClass).show();  //webflow.js adds display:none when clicked on x
         $(mapOptionsClass).find('.filters__header_close').on('click', () => this.removeMapChip());
 
-        $('.map-options__context .map-option__context_text div').text(args.description);
+        $('.map-options__context .map-option__context_text div').text(args.data.description);
         this.handleChoroplethFilter(args);
     }
 

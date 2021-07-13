@@ -432,7 +432,8 @@ export class Chart extends Component {
             this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
         }
         new DropdownMenu($(filterRow), '.profile-indicator__filter_menu');
-        $(this.subCategoryNode).find(filterWrapperClass).append(filterRow);
+        //$(this.subCategoryNode).find(filterWrapperClass).append(filterRow);
+        $(filterRow).insertBefore($(this.subCategoryNode).find('a.profile-indicator__new-filter'));
         if (this.filter !== null) {
             this.filter.allDropdowns.push(indicatorDd);
             this.filter.allDropdowns.push(subindicatorDd);

@@ -286,6 +286,7 @@ export class PointData extends Component {
         let gMapsUrl = `https://www.google.com/maps/search/?api=1&query=${point.y},${point.x}`;
         this.googleMapsButton.removeClass('hidden');
         this.googleMapsButton.attr('href', gMapsUrl);
+        this.googleMapsButton.attr('target', '_blank');
 
         $('.facility-info').css('display', 'flex');
     }

@@ -107,8 +107,9 @@ export default class Controller extends Component {
             chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,
             indicatorId: payload.indicatorId
         }
-        if (subindicator.data.originalChildData !== undefined) {
+        if (typeof subindicator.data.originalChildData !== 'undefined' && subindicator.data.originalChildData !== null) {
             subindicator.data.child_data = subindicator.data.originalChildData;
+            subindicator.data.originalChildData = null;
         }
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.selectedSubindicator;

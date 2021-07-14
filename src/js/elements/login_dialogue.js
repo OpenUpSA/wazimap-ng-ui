@@ -32,9 +32,11 @@ export class LoginDialogue extends Observable {
   _loginClicked() {
     this.username = $('input#Email').val();
     this.password = $('input#Password').val();
-    this.credentialsReceived = true;
+    if (this.username && this.password) {
+      this.credentialsReceived = true;
+      $(this.loginModalClassName).addClass('hidden');
+    }
 
-    $(this.loginModalClassName).addClass('hidden');
   }
 
   async _waitForCredentials() {

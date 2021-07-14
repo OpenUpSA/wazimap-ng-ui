@@ -10,7 +10,6 @@ const indicatorClass = '.profile-indicator';
 describe('default value filters', () => {
     let c;
     let mockIndicator = {
-        "choropleth_method": "subindicator",
         "metadata": {
             "primary_group": "age",
             "groups": [
@@ -29,15 +28,8 @@ describe('default value filters', () => {
             {
                 "age": "1",
                 "race": "Race",
-                "count": "10000",
+                "count": "10",
                 "gender": "Female",
-                "language": "Language"
-            },
-            {
-                "age": "1",
-                "race": "Race",
-                "count": "10000",
-                "gender": "Male",
                 "language": "Language"
             }
         ],
@@ -56,9 +48,7 @@ describe('default value filters', () => {
             },
             "disableToggle": true,
             "defaultType": "Value"
-        },
-        "type": "indicator",
-        "groups": []
+        }
     };
 
     beforeEach(async () => {

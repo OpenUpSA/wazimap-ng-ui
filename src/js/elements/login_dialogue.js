@@ -19,6 +19,7 @@ export class LoginDialogue extends Observable {
   }
 
   async _showModal() {
+    $(".login__close").addClass('hidden');
     $(this.loginModalClassName).removeClass('hidden');
     $(this.loginModalClassName).css('display', 'block');
     $(this.loginModalClassName).find('input[type="submit"]').on('click', () => {

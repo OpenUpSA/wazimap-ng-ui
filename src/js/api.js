@@ -69,7 +69,6 @@ export class API extends Observable {
     while (true) {
       if (!this.busyLoggingIn)
         break
-      console.log("Another login request already sent. Waiting")
       await new Promise(resolve => setTimeout(resolve, 200))
 
       count += 1
@@ -91,12 +90,8 @@ export class API extends Observable {
         response = await this._getTokenJSON(url, headers);
       } catch (err) {
         console.error(err)
-
       } finally {
-        console.log("stopped logging in")
-
         this.busyLoggingIn = false;
-
       }
     }
     return await response.json();
@@ -106,7 +101,6 @@ export class API extends Observable {
     const url = `${this.baseUrl}/rest-auth/login/`;
     this.token = this.getToken();
     if (this.token != null && this.token != '') {
-      console.log("Already logged in, skipping login")
       return
     }
 

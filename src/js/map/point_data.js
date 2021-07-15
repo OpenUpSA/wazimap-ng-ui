@@ -1,6 +1,7 @@
 import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
+import 'overlapping-marker-spiderfier-leaflet/dist/oms';
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
@@ -166,6 +167,7 @@ export class PointData extends Component {
     createMarkers = (points, categoryData, layer) => {
         const self = this;
         let col = '';
+        let oms = new OverlappingMarkerSpiderfier(self.map);
 
         checkIterate(points, point => {
             if (col === '') {
@@ -191,10 +193,10 @@ export class PointData extends Component {
                 fill: true,
                 fillColor: col,
                 fillOpacity: 1,
-                pane: 'markerPane'
+                pane: 'markerPane',
+                point:point
             })
             marker.on('click', (e) => {
-                this.showMarkerPopup(e, point, categoryData, true);
                 stopPropagation(e); //prevent map click event
             }).on('mouseover', (e) => {
                 this.showMarkerPopup(e, point, categoryData);
@@ -202,7 +204,11 @@ export class PointData extends Component {
                 this.hideMarkerPopup();
             });
             layer.addLayer(marker);
+            oms.addMarker(marker);
         })
+        oms.addListener('click', function (m) {
+            self.showMarkerPopup(m, m.options.point, true);
+        });
     }
 
     showMarkerPopup = (e, point, categoryData, isClicked = false) => {

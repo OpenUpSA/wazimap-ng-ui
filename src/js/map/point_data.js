@@ -278,18 +278,19 @@ export class PointData extends Component {
   showFacilityModal = (point) => {
     $('.facility-info__title').text(point.name);
     this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');
-    $('.facility-info').css('display', 'flex');
-    $(".facility-info__print").on('click', () => {
+    const facilityInfo = $('.facility-info')
+    const facilityModalPrint = '.facility-info__print';
+    const facilityModalClose = '.facility-info__close';
+    facilityInfo.css('display', 'flex');
+    $(facilityModalPrint).on('click', () => {
       // ensure the modal is full length to capture all the details in PDF
-      $('.facility-info').css('max-height', '100vh');
-      $(".facility-info__print").addClass('hidden');
-      $(".facility-info__close").addClass('hidden');
+      facilityInfo.css('max-height', '100vh');
+      $(facilityModalPrint, facilityModalClose).addClass('hidden');
       const pdfPrinter = new PDFPrinter();
       pdfPrinter.printToPDF('facility-info', point.name);
       // Restore original modal height
-      $('.facility-info').css('max-height', '40vh');
-      $(".facility-info__print").removeClass('hidden');
-      $(".facility-info__close").removeClass('hidden');
+      facilityInfo.css('max-height', '40vh');
+      $(facilityModalPrint, facilityModalClose).removeClass('hidden');
     })
   }
 

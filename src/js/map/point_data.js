@@ -1,5 +1,4 @@
 import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
-import {getJSON} from '../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
 

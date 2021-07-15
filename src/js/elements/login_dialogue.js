@@ -22,6 +22,8 @@ export class LoginDialogue extends Observable {
     $(".login__close").addClass('hidden');
     $(this.loginModalClassName).removeClass('hidden');
     $(this.loginModalClassName).css('display', 'flex', 'align', 'center', 'justify', 'center');
+    // TODO remove forgot functionality
+    $("a:contains('Forgot your password?')").addClass('hidden');
     $(this.loginModalClassName).find('input[type="submit"]').on('click', () => {
       this._loginClicked();
     })

@@ -283,19 +283,25 @@ export class PointData extends Component {
     this.googleMapsButton.attr('href', gMapsUrl);
     this.googleMapsButton.attr('target', '_blank');
     const facilityInfo = $('.facility-info')
-    const facilityModalPrint = '.facility-info__print';
-    const facilityModalClose = '.facility-info__close';
     facilityInfo.css('display', 'flex');
-    $(facilityModalPrint).on('click', () => {
-      // ensure the modal is full length to capture all the details in PDF
-      facilityInfo.css('max-height', '100vh');
-      $(facilityModalPrint, facilityModalClose).addClass('hidden');
-      const pdfPrinter = new PDFPrinter();
-      pdfPrinter.printToPDF('facility-info', point.name);
-      // Restore original modal height
-      facilityInfo.css('max-height', '40vh');
-      $(facilityModalPrint, facilityModalClose).removeClass('hidden');
+    const facilityModalPrintBtn = '.facility-info__print';
+    $(facilityModalPrintBtn).on('click', () => {
+      this.printFacilityInfoPDF(point.name, facilityModalPrintBtn);
     })
+  }
+
+  printFacilityInfoPDF = (name, facilityModalPrintBtn) => {
+    const facilityModalClose = '.facility-info__close';
+    // ensure the modal is full length to capture all the details in scrollable div
+    facilityInfo.css('max-height', '100vh');
+    const gmapsButton = ".facility-info__view-google-map"
+    const removeElementsInPdf = `${facilityModalPrintBtn}, ${facilityModalClose}, ${gmapsButton}`
+    $(removeElementsInPdf).addClass('hidden');
+    const pdfPrinter = new PDFPrinter();
+    pdfPrinter.printToPDF('facility-info', name);
+    // Restore original modal height
+    facilityInfo.css('max-height', '40vh');
+    $(removeElementsInPdf).removeClass('hidden');
   }
 
   appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName, visibleAttributes = null) => {

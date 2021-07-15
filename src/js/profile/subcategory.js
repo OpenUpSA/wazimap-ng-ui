@@ -1,10 +1,8 @@
-import {Indicator} from "./blocks/indicator";
-import {Component, formatNumericalValue} from "../utils";
+import { Component, formatNumericalValue } from "../utils";
 import { ContentBlock } from "./blocks/content_block";
 import { HTMLBlock } from "./blocks/html_block";
+import { Indicator } from "./blocks/indicator";
 
-let isFirst = false;
-let scHeaderClone = null;
 
 const subcategoryHeaderClass = '.sub-category-header';
 const subcategoryTitleClass = '.indicator__title_wrapper h3';
@@ -16,120 +14,123 @@ const descriptionClass = '.sub-category-header__description';
 const indicatorClass = '.profile-indicator';
 
 export class Subcategory extends Component {
-    constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst) {
-        super(parent);
+  constructor(parent, formattingConfig, categorySectionWrapper, subcategory, detail, isFirst) {
+    super(parent);
+    this.scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
+    this._indicators = [];
+    this._formattingConfig = formattingConfig;
+    this._indicatorHasNoData = {}
+    this.addKeyMetrics($(this.scHeaderClone), detail);
+    this.addSubCategoryHeaders(categorySectionWrapper, subcategory, detail, isFirst);
+    this.addIndicators(categorySectionWrapper, detail, subcategory);
+  }
 
-        scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
-        this._indicators = [];
-        this._formattingConfig = formattingConfig;
+  get indicators() {
+    return this._indicators;
+  }
 
-        this.addKeyMetrics($(scHeaderClone), detail);
-        this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
-        this.addIndicators(wrapper, detail);
+  get formattingConfig() {
+    return this._formattingConfig;
+  }
+
+  addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
+    let scHeader = this.scHeaderClone.cloneNode(true);
+
+    if (isFirst) {
+      $(wrapper).find(subcategoryHeaderClass).remove();
+    } else {
+      $(scHeader).removeClass('first');
+      $(scHeader).addClass('page-break-before');
     }
 
-    get indicators() {
-        return this._indicators;
+    $(subcategoryTitleClass, scHeader).text(subcategory);
+    $(descriptionTextClass, scHeader).text(detail.description);
+
+    if (detail.description === '') {
+      $(descriptionClass, scHeader).addClass('hidden');
     }
 
-    get formattingConfig() {
-        return this._formattingConfig;
+    wrapper.append(scHeader);
+  }
+
+  addIndicatorBlock(container, title, indicator, isLast) {
+    let block = new Indicator(this, container, title, indicator, isLast);
+    this.bubbleEvents(block, [
+      'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+      'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+      'point_tray.subindicator_filter.filter'
+    ]);
+
+    return block;
+  }
+
+  addHTMLBlock(container, title, html, isLast) {
+    let block = new HTMLBlock(this, container, title, html, isLast)
+
+    return block;
+  }
+
+  displayNoDataMsg(wrapper, msg, sc) {
+    if (!this._indicatorHasNoData[sc]) {
+      let msgBox = document.createElement('p');
+      $(msgBox).addClass('msg-box').text(msg);
+      $(wrapper).append(msgBox);
+      this._indicatorHasNoData[sc] = true
     }
+  }
 
-    addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
-        let scHeader = scHeaderClone.cloneNode(true);
+  addIndicators = (wrapper, detail, sc) => {
+    let index = 0;
+    let lastIndex = Object.entries(detail.indicators).length - 1;
+    let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
 
-        if (isFirst) {
-            $(wrapper).find(subcategoryHeaderClass).remove();
+    if (!isEmpty) {
+      for (const [title, indicator] of Object.entries(detail.indicators)) {
+        if (typeof indicator.data !== 'undefined') {
+          let isLast = index === lastIndex;
+          let block = null;
+          let indicatorContainer = $(indicatorClass)[0].cloneNode(true);
+          $(wrapper).append(indicatorContainer);
+          if (indicator.type == ContentBlock.BLOCK_TYPES.Indicator) {
+            block = this.addIndicatorBlock(indicatorContainer, title, indicator, isLast);
+          } else if (indicator.type == ContentBlock.BLOCK_TYPES.HTMLBlock) {
+            block = this.addHTMLBlock(indicatorContainer, title, indicator.html, isLast);
+          }
+
+          this._indicators.push(block);
+
+          index++;
         } else {
-            $(scHeader).removeClass('first');
-            $(scHeader).addClass('page-break-before');
+          this.displayNoDataMsg(wrapper, "No data available for this indicator for this geographic area", sc);
         }
+      }
+    } else {
+      this.displayNoDataMsg(wrapper, "No data available for this indicator for this geographic area", sc);
+    }
+  }
 
-        $(subcategoryTitleClass, scHeader).text(subcategory);
-        $(descriptionTextClass, scHeader).text(detail.description);
+  addKeyMetrics = (wrapper, detail) => {
+    let key_metrics = detail.key_metrics;
 
-        if (detail.description === '') {
-            $(descriptionClass, scHeader).addClass('hidden');
-        }
+    let metricWrapper = $(wrapper).find(keyMetricWrapperClass);
+    $(metricWrapper).find(keyMetricClass).remove();
 
-        wrapper.append(scHeader);
+    if (typeof key_metrics === 'undefined' || key_metrics.length <= 0) {
+      $(wrapper).find(keyMetricParentClass).addClass('hidden');
+
+      return;
     }
 
-    addIndicatorBlock(container, title, indicator, isLast) {
-        let block = new Indicator(this, container, title, indicator, isLast);
-        this.bubbleEvents(block, [
-            'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-            'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-            'point_tray.subindicator_filter.filter'
-        ]);
+    $(wrapper).find(keyMetricParentClass).removeClass('hidden');
 
-        return block;
-    }
+    let metricTemplate = $(keyMetricClass)[0].cloneNode(true);
 
-    addHTMLBlock(container, title, html, isLast) {
-        let block = new HTMLBlock(this, container, title, html, isLast)
-
-        return block;
-    }
-
-    addIndicators = (wrapper, detail) => {
-        let index = 0;
-        let lastIndex = Object.entries(detail.indicators).length - 1;
-        let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
-
-
-        if (!isEmpty) {
-            for (const [title, indicator] of Object.entries(detail.indicators)) {
-                if (typeof indicator.data !== 'undefined') {
-                    let isLast = index === lastIndex;
-                    let block = null;
-                    let indicatorContainer = $(indicatorClass)[0].cloneNode(true);
-                    $(wrapper).append(indicatorContainer);
-                    if (indicator.type == ContentBlock.BLOCK_TYPES.Indicator) {
-                        block = this.addIndicatorBlock(indicatorContainer, title, indicator, isLast);
-                    } else if (indicator.type == ContentBlock.BLOCK_TYPES.HTMLBlock) {
-                        block = this.addHTMLBlock(indicatorContainer, title, indicator.html, isLast);
-                    }
-                    
-                    this._indicators.push(block);
-
-                    
-                    
-                    index++;
-                } else {
-                    $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
-                    $(wrapper).find(descriptionClass).removeClass('hidden')
-                }
-            }
-        } else {
-            $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
-            $(wrapper).find(descriptionClass).removeClass('hidden')
-        }
-    }
-
-    addKeyMetrics = (wrapper, detail) => {
-        let key_metrics = detail.key_metrics;
-
-        let metricWrapper = $(wrapper).find(keyMetricWrapperClass);
-        $(metricWrapper).find(keyMetricClass).remove();
-
-        if (typeof key_metrics === 'undefined' || key_metrics.length <= 0) {
-            $(wrapper).find(keyMetricParentClass).addClass('hidden');
-
-            return;
-        }
-
-        $(wrapper).find(keyMetricParentClass).removeClass('hidden');
-
-        let metricTemplate = $(keyMetricClass)[0].cloneNode(true);
-
-        key_metrics.forEach((km) => {
-            let item = metricTemplate.cloneNode(true);
-            $('.key-metric__value div', item).text(formatNumericalValue(km.value, this.formattingConfig, km.method));
-            $('.key-metric__title', item).text(km.label);
-            $('.key-metric__description', item).addClass('hidden');
-            metricWrapper.append(item);
-        })
-    }
+    key_metrics.forEach((km) => {
+      let item = metricTemplate.cloneNode(true);
+      $('.key-metric__value div', item).text(formatNumericalValue(km.value, this.formattingConfig, km.method));
+      $('.key-metric__title', item).text(km.label);
+      $('.key-metric__description', item).addClass('hidden');
+      metricWrapper.append(item);
+    })
+  }
 }

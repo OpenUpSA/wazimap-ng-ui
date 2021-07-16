@@ -240,7 +240,8 @@ export class Chart extends Component {
             ".hover-menu__content a.hover-menu__content_item:nth-child(1)"
         );
         saveImgButton.attr('href', pngDownloadUrl);
-        saveImgButton.attr('download', 'chart.png');
+        const chartTitle = this.title;
+        saveImgButton.attr('download', `${chartTitle ? chartTitle :'chart'}.png`);
     }
 
     disableChartTypeToggle = (disable) => {
@@ -256,8 +257,6 @@ export class Chart extends Component {
 
         $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
-            let chartTitle = self.getChartTitle(':');
-            let fileName = 'chart.png';
             this.triggerEvent('profile.chart.saveAsPng', this);
         })
 

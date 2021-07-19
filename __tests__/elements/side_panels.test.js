@@ -53,8 +53,8 @@ describe('SidePanels', () => {
         fireEvent.click(screen.getByTestId('rich-data-point'));
 
         expect(triggerEvent).toBeCalledTimes(2);
-        expect(triggerEvent).toHaveBeenNthCalledWith(1, 'panel.point_mapper.opened');
-        expect(triggerEvent).toHaveBeenNthCalledWith(2, 'panel.rich_data.closed');
+        expect(triggerEvent).toHaveBeenNthCalledWith(1, 'panel.rich_data.closed');
+        expect(triggerEvent).toHaveBeenNthCalledWith(2, 'panel.point_mapper.opened');
       });
     });
 

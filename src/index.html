@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Tue Jul 13 2021 09:24:48 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Mon Jul 19 2021 08:20:51 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="60ed4accb8a175783a8133c8" data-wf-site="5fd05e808ba6609d12285571">
 <head>
   <meta charset="utf-8">
@@ -97,7 +97,7 @@
           <div class="slide w-slide">
             <div class="tutorial__slide-content">
               <div class="tutorial__slide-info">
-                <div><span class="slide-info__title bg-primary">Location Search:</span> To get started, first select a location on the map or use the search box to find the location you would like to analyse.</div>
+                <div><span class="slide-info__title bg-primary">Location Search:</span> <span class="slide-info__introduction">To get started, first select a location on the map or use the search box to find the location you would like to analyse.</span></div>
               </div>
               <div class="tutorial__slide-image _2">
                 <div class="tutorial__slide-number">
@@ -109,7 +109,7 @@
           <div class="slide w-slide">
             <div class="tutorial__slide-content">
               <div class="tutorial__slide-info">
-                <div><span class="slide-info__title bg-primary">Location Panel:</span> Basic information for your selected location can be found in the Location Panel. Use the buttons to navigate to parent locations.</div>
+                <div><span class="slide-info__title bg-primary">Location Panel:</span> <span class="slide-info__introduction">Basic information for your selected location can be found in the Location Panel. Use the buttons to navigate to parent locations.</span></div>
               </div>
               <div class="tutorial__slide-image _2b">
                 <div class="tutorial__slide-number">
@@ -121,7 +121,7 @@
           <div class="slide w-slide">
             <div class="tutorial__slide-content">
               <div class="tutorial__slide-info">
-                <div><span class="slide-info__title bg-primary">Rich Data:</span> To view rich data specific to the location you selected, open the Rich Data panel in the left toolbar.</div>
+                <div><span class="slide-info__title bg-primary">Rich Data:</span> <span class="slide-info__introduction">To view rich data specific to the location you selected, open the Rich Data panel in the left toolbar.</span></div>
               </div>
               <div class="tutorial__slide-image _3">
                 <div class="tutorial__slide-number">
@@ -133,7 +133,7 @@
           <div class="slide w-slide">
             <div class="tutorial__slide-content">
               <div class="tutorial__slide-info">
-                <div><span class="slide-info__title bg-primary">Point Mapper:</span> To add point data to the map, use the Point Mapper to show different facilities in that area.</div>
+                <div><span class="slide-info__title bg-primary">Point Mapper:</span> <span class="slide-info__introduction">To add point data to the map, use the Point Mapper to show different facilities in that area.</span></div>
               </div>
               <div class="tutorial__slide-image _4">
                 <div class="tutorial__slide-number">
@@ -145,7 +145,7 @@
           <div class="slide w-slide">
             <div class="tutorial__slide-content">
               <div class="tutorial__slide-info">
-                <div><span class="slide-info__title bg-primary">Data Mapper:</span> To overlay compatible datasets onto your location, open the Data Mapper and choose from the available indicators.</div>
+                <div><span class="slide-info__title bg-primary">Data Mapper:</span> <span class="slide-info__introduction">To overlay compatible datasets onto your location, open the Data Mapper and choose from the available indicators.</span></div>
               </div>
               <div class="tutorial__slide-image _5">
                 <div class="tutorial__slide-number">
@@ -157,7 +157,7 @@
           <div class="slide w-slide">
             <div class="tutorial__slide-content">
               <div class="tutorial__slide-info">
-                <div><span class="slide-info__title bg-primary">Data Filtering:</span> Once you&#x27;ve mapped a data-set (eg. gender), use the Data Filter to select a sub-indicator for that data-set (eg. male)</div>
+                <div class="slide-info__introduction"><span class="slide-info__title bg-primary">Data Filtering:</span> Once you&#x27;ve mapped a data-set (eg. gender), use the Data Filter to select a sub-indicator for that data-set (eg. male)</div>
               </div>
               <div class="tutorial__slide-image _7">
                 <div class="tutorial__slide-number">
@@ -169,7 +169,9 @@
           <div class="slide w-slide">
             <div class="tutorial__slide-content">
               <div class="tutorial__slide-info">
-                <div><span class="slide-info__title bg-primary">Learn more:</span> For more information on how to use specific features, look out for tutorial icons. For an in-depth guide on using this site, please see our <a href="https://openup.gitbook.io/wazimap-ng-user-guide/" target="_blank">user manual</a>.</div>
+                <div><span class="slide-info__title bg-primary">Learn more:</span> <span class="slide-info__introduction">For more information on how to use specific features, look out for tutorial icons. For an in-depth guide on using this site, please see our </span>
+                  <a href="https://openup.gitbook.io/wazimap-ng/wazimap-ng-user-guide/" target="_blank"><span class="slide-info__introduction">user manual</span></a><span class="slide-info__introduction">.</span>
+                </div>
               </div>
               <div class="tutorial__slide-image _7">
                 <div class="tutorial__slide-number">
@@ -321,25 +323,6 @@
     </div>
     <div class="map">
       <div class="map-title hidden">Loading...</div>
-      <div class="map-print hidden">
-        <div class="map-print__point-legend">
-          <div class="point-legend">
-            <div class="point-legend__color"></div>
-            <div class="point-legend__text">Loading...</div>
-          </div>
-        </div>
-        <div class="map-print__choropleth-legend">
-          <div class="map-print__legend_label">
-            <div>LEGEND:</div>
-          </div>
-          <div class="map-print__legend_wrap">
-            <div class="map-print__legend_loading">
-              <div class="truncate">Loading...</div>
-              <div class="legend-block__loading-icon"><img src="images/loading.gif" alt=""></div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="map-about hidden">
         <div class="map-about__icon">
           <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
@@ -502,6 +485,31 @@
           <div style="display:flex" class="map-options__context">
             <div class="map-option__context_text">
               <div>Indicator context</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="map-print hidden">
+        <div class="map-print__point-legend">
+          <div class="point-legend">
+            <div class="point-legend__color"></div>
+            <div class="point-legend__text">Loading...</div>
+            <div title="Remove from map" class="point-legend__remove hidden">
+              <div class="svg-icon icon--small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                  <path d="M0 0h24v24H0z" fill="none"></path>
+                  <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                </svg></div>
+            </div>
+          </div>
+        </div>
+        <div class="map-print__choropleth-legend">
+          <div class="map-print__legend_label">
+            <div>LEGEND:</div>
+          </div>
+          <div class="map-print__legend_wrap">
+            <div class="map-print__legend_loading">
+              <div class="truncate">Loading...</div>
+              <div class="legend-block__loading-icon"><img src="images/loading.gif" alt=""></div>
             </div>
           </div>
         </div>
@@ -2047,7 +2055,7 @@
           <div class="data-category">
             <div href="#" class="data-category__h1_trigger bg-primary">
               <div class="data-category__h1_header">
-                <div class="data-category__h1_icon">
+                <div class="data-category__h1_icon hidden">
                   <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
                       <path d="M0 0h24v24H0z" fill="none"></path>
                       <path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"></path>

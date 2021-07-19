@@ -3602,6 +3602,7 @@ label {
   -ms-flex-align: center;
   align-items: center;
   border-radius: 2px;
+  background-color: #f0f0f0;
   background-image: none;
   -webkit-transition: all 200ms ease;
   transition: all 200ms ease;
@@ -3614,7 +3615,6 @@ label {
 .data-category__h1_trigger:hover {
   background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.05)), to(rgba(0, 0, 0, 0.05)));
   background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
-  color: #fff;
 }
 
 .data-category__h1_icon {
@@ -3838,6 +3838,7 @@ label {
 }
 
 .map-options {
+  position: relative;
   z-index: 999;
   display: block;
   width: 100%;
@@ -5468,7 +5469,10 @@ label {
   right: 0%;
   bottom: 0%;
   z-index: 2;
-  display: none;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   width: 100vw;
   height: 100vh;
   -webkit-box-pack: center;
@@ -7200,6 +7204,8 @@ label {
 }
 
 .map-point-legend {
+  position: relative;
+  z-index: 999;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -7360,6 +7366,7 @@ label {
   top: auto;
   right: auto;
   bottom: 20px;
+  z-index: 999;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -7548,7 +7555,6 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  margin-top: 2em;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -7574,6 +7580,7 @@ label {
 
 .profile-indicator__table_inner {
   max-height: 400px;
+  margin-bottom: 2em;
 }
 
 .map__legend-block_value {

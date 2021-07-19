@@ -19,6 +19,14 @@ export class MapDownload extends Component {
         });
     }
 
+    disableButton = () => {
+        $('.map-download').addClass('disabled');
+    }
+
+    enableButton = () => {
+        $('.map-download').removeClass('disabled');
+    }
+
     downloadMap = () => {
         let self = this;
 
@@ -54,3 +62,4 @@ export class MapDownload extends Component {
         }, 10)
     }
 }
+

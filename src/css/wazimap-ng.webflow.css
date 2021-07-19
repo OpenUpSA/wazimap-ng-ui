@@ -6722,6 +6722,19 @@ label {
   cursor: pointer;
 }
 
+.map-download.disabled {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1)));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
+  color: #9e9e9e;
+  cursor: auto;
+}
+
+.map-download.disabled:hover {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.1)), to(rgba(0, 0, 0, 0.1)));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
+  color: #9e9e9e;
+}
+
 .plate {
   position: absolute;
   left: 0%;
@@ -7200,7 +7213,6 @@ label {
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  z-index: 999;
 }
 
 .map-point-legend.hidden {
@@ -7359,7 +7371,6 @@ label {
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  z-index: 999;
 }
 
 .map-bottom-items.hidden {
@@ -7518,7 +7529,6 @@ label {
 
 .profile-indicator__table_content {
   max-height: 300px;
-  overflow: hidden;
 }
 
 .div-block {
@@ -12842,3 +12852,4 @@ label {
     grid-column-start: 1;
   }
 }
+

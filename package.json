@@ -98,6 +98,10 @@
         "glob": "index.html",
         "destDir": "src",
         "transforms": "./src/js/webflow/import.js"
+      },
+      {
+        "glob": "{401,about}.html",
+        "destDir": "src"
       }
     ]
   }

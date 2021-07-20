@@ -50,6 +50,7 @@ yarn start
 ```bash
 yarn build # compile the relevant bundles for production
 yarn push-gh-pages # pushes to github for hosting
+yarn test # Runs all the included test suites
 ```
 
 ## Configuration

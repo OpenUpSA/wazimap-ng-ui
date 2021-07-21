@@ -13,7 +13,6 @@ let indicatorTemplate = null;
 let profileWrapper = null;
 
 
-
 export default class ProfileLoader extends Component {
     constructor(parent, formattingConfig, _api, _profileId, _config) {
         super(parent);
@@ -36,7 +35,9 @@ export default class ProfileLoader extends Component {
 
         let profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config);
         profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
-        
+
+        //scroll
+        this.bindScroll();
     }
 
     prepareDomElements = () => {
@@ -108,5 +109,35 @@ export default class ProfileLoader extends Component {
         })
 
         $(navWrapperClass).append(navItem);
+    }
+
+    bindScroll = () => {
+        let topMenuHeight = $('.nav').outerHeight();
+        let menuItems = $(navWrapperClass).find(navItemClass);
+        let scrollItems = menuItems.map(function () {
+            let item = $($(this).attr("href"));
+            if (item.length) {
+                return item;
+            }
+        });
+        let lastId;
+        $(window).on('scroll', function () {
+            let fromTop = $(this).scrollTop() + topMenuHeight;
+
+            let currentItem = scrollItems.map(function () {
+                if ($(this).offset().top < fromTop)
+                    return this;
+            });
+
+            currentItem = currentItem[currentItem.length - 1];
+            let id = currentItem && currentItem.length ? currentItem[0].id : "";
+
+            if (lastId !== id) {
+                lastId = id;
+                // Set/remove active class
+                menuItems.removeClass(activeNavClass);
+                menuItems.filter("[href='#" + id + "']").addClass(activeNavClass);
+            }
+        })
     }
 }

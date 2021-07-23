@@ -129,6 +129,7 @@ export class FilterRow extends Component {
     constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true) {
         super(parent);
         this._container = container;
+        this._elements = elements;
 
         this.prepareDomElements();
 
@@ -175,9 +176,8 @@ export class FilterRow extends Component {
         $(this.container).attr('data-isdefault', this._isDefault);
         this._removeFilterButton = $(this.container).find('.mapping-options__remove-filter');
 
-        this._indicatorDd = $(this.container).find('.mapping-options__filter')[0];
-        this._subindicatorDd = $(this.container).find('.mapping-options__filter')[1];
-
+        this._indicatorDd = $(this.container).find(this._elements.filterDropdown)[0];
+        this._subindicatorDd = $(this.container).find(this._elements.filterDropdown)[1];
     }
 
 

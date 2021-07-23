@@ -36,17 +36,19 @@ export default class ProfileLoader extends Component {
         let profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config);
         profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
 
-        //scroll
-        this.bindScroll();
+        this.prepareEvents()
+
     }
 
     prepareDomElements = () => {
-        //get the objects first, them remove defaults
         indicatorTemplate = $(indicatorClass)[0].cloneNode(true);
         profileWrapper = $(profileWrapperClass);
 
-        //remove
         $(navWrapperClass).find(navItemClass).remove();
+    }
+
+    prepareEvents = () => {
+        this.bindPageScroll();
     }
 
     updateGeography = (profile) => {
@@ -111,17 +113,18 @@ export default class ProfileLoader extends Component {
         $(navWrapperClass).append(navItem);
     }
 
-    bindScroll = () => {
+    bindPageScroll = () => {
+        let lastId;
         let topMenuHeight = $('.nav').outerHeight();
         let menuItems = $(navWrapperClass).find(navItemClass);
-        let scrollItems = menuItems.map(function () {
-            let item = $($(this).attr("href"));
+        let scrollItems = menuItems.map(function() {
+            let item = $($(this).attr('href'));
             if (item.length) {
                 return item;
             }
         });
-        let lastId;
-        $(window).on('scroll', function () {
+
+        $(window).on('scroll', function() {
             let fromTop = $(this).scrollTop() + topMenuHeight;
 
             let currentItem = scrollItems.map(function () {
@@ -130,7 +133,7 @@ export default class ProfileLoader extends Component {
             });
 
             currentItem = currentItem[currentItem.length - 1];
-            let id = currentItem && currentItem.length ? currentItem[0].id : "";
+            let id = currentItem && currentItem.length ? currentItem[0].id : ''
 
             if (lastId !== id) {
                 lastId = id;

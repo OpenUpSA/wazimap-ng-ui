@@ -12,15 +12,15 @@ const legendContainerClass = '.map-options__legend_wrap';
  * Represent the map chip at the bottom of the map
  */
 export class MapChip extends Component {
-    constructor(legendColors) {
-        super();
+    constructor(parent, legendColors) {
+        super(parent);
 
         this.prepareDomElements();
 
-        this._filterController = new FilterController(this._filtersContainer);
-        this._legend = new Legend(this._legendContainer, legendColors);
+        this._filterController = new FilterController(this, this._filtersContainer);
+        this._legend = new Legend(this, this._legendContainer, legendColors);
 
-        this.prepareEvents();
+        this.prepareUIEvents();
     }
 
     get container() {
@@ -35,7 +35,7 @@ export class MapChip extends Component {
         this._legendContainer = $(this.container).find(legendContainerClass);
     }
 
-    prepareEvents() {
+    prepareUIEvents() {
         this._closeButton.on('click', () => this.removeMapChip());
     }
 
@@ -85,7 +85,7 @@ export class MapChip extends Component {
 
 
     onSubIndicatorChange(params) {
-        if (typeof params.childData === 'undefined') {
+        if (params.childData === undefined) {
             return;
         }
 

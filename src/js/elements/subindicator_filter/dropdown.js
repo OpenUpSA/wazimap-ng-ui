@@ -1,4 +1,4 @@
-import {Observable} from "../../utils";
+import {Component, Observable} from "../../utils";
 
 
 export class DropdownModel extends Observable {
@@ -77,15 +77,15 @@ export class DropdownModel extends Observable {
 }
 
 
-export class Dropdown extends Observable {
+export class Dropdown extends Component {
     /**
      * A class representing a dropdown widget
      */
 
     static EVENTS = {}
 
-    constructor(container, items, defaultText = '', disabled = false) {
-        super();
+    constructor(parent, container, items, defaultText = '', disabled = false) {
+        super(parent);
         this._container = container;
         this._model = new DropdownModel(items, 0);
         this._defaultText = defaultText;
@@ -120,6 +120,11 @@ export class Dropdown extends Observable {
     }
 
     prepareEvents() {
+        this.prepareModelEvents();
+        this.prepareUIEvents();
+    }
+
+    prepareModelEvents() {
         const self = this;
 
         this.model.on(DropdownModel.EVENTS.update, model => {
@@ -130,12 +135,24 @@ export class Dropdown extends Observable {
             self.updateSelectedText();
         })
 
-        $(this._trigger).on('click', () => {
-            $(self._ddWrapper).show();
-        })
-
         this.model.on(DropdownModel.EVENTS.disabled, () => self.disable())
         this.model.on(DropdownModel.EVENTS.enabled, () => self.enable())
+    }
+
+    prepareUIEvents() {
+        const self = this;
+
+        $(this._trigger).on('click', () => {
+            self.showItems();
+        })
+    }
+
+    showItems() {
+        $(this._ddWrapper).show()
+    }
+
+    hideItems() {
+        $(this._ddWrapper).hide()
     }
 
     updateItems(items) {
@@ -186,7 +203,7 @@ export class Dropdown extends Observable {
             $(li).off('click');
             $(li).on('click', () => {
                 self.setSelected(idx)
-                $(self._ddWrapper).hide()
+                self.hideItems();
                 $(this).addClass("selected");
             })
             $(self._ddWrapper).append(li);

@@ -3,10 +3,8 @@ import {format as d3format} from 'd3-format';
 import {Component} from "../../utils";
 
 export class Legend extends Component {
-    constructor(container, legendColors) {
-        super();
-
-        this.lightStart = 3;
+    constructor(parent, container, legendColors) {
+        super(parent);
 
         this.prepareDomElements(container);
         this.legendColors = legendColors;
@@ -25,8 +23,8 @@ export class Legend extends Component {
 
     }
 
-    show(colors, intervals) {
-        if (colors.length != intervals.length)
+    show(colors, intervalLabels, lightStart = 3) {
+        if (colors.length != intervalLabels.length)
             throw 'Expected the number of intervals to be the same as the number of colours.'
 
         const legend = $(this.clonedLegend);
@@ -34,12 +32,12 @@ export class Legend extends Component {
 
         this.legendContainer.html('');
 
-        for (let i = 0; i < intervals.length; i++) {
-            const interval = intervals[i];
+        for (let i = 0; i < intervalLabels.length; i++) {
+            const interval = intervalLabels[i];
             const item = this.clonedLegendBlock.cloneNode(true);
             const label = interval;
 
-            if (i >= this.lightStart) {
+            if (i >= lightStart) {
                 $(item).addClass('light');
             }
 

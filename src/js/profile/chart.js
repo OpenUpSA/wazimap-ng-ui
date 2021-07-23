@@ -80,6 +80,9 @@ export class Chart extends Component {
                 x = +event.pageX - offsetX - tooltipBox.width;
             }
             let y = event.pageY + offsetY;
+            if (y < window.innerHeight) {
+              y = window.innerHeight + offsetY;
+            }
             if (y + tooltipBox.height > window.innerHeight) {
                 y = +event.pageY - offsetY - tooltipBox.height;
             }
@@ -121,7 +124,7 @@ export class Chart extends Component {
             const {x, y} = calculatePosition(
                 event,
                 this.el.getBoundingClientRect(),
-                10, 10
+                0, 10
             );
             this.el.setAttribute('style', `top: ${y}px; left: ${x}px; z-index: 999;`);
         }

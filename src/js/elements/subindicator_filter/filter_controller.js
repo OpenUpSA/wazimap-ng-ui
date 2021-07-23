@@ -1,5 +1,5 @@
 import {FilterRow} from "./filter_row";
-import {Observable} from "../../utils";
+import {Component, Observable} from "../../utils";
 import {AddFilterButton} from "../mapchip/add_filter_button";
 import {DataFilterModel} from "../../models/data_filter_model";
 
@@ -48,34 +48,19 @@ class FilterControllerModel extends Observable {
     }
 }
 
-export class FilterController extends Observable {
+export class FilterController extends Component {
 
     static EVENTS = {
         ready: 'FilterController.ready'
     }
 
-    /*
-    Note to self
 
-    About to figure out how to filter the data appropriately and send it via signal for the choropleth to be created
-    After that, evaluate how easy it is to adapt this to the charts
-
-    Things that don't currently work:
-    1. Disabling the add filter button isn't working great - it checks the number of available filters, not the number of filterRowson the screen
-    2. Removing filterRows is a little messsy
-    */
-
-    constructor(container, elements = {
-        filterRowClass: '.map-options__filter-row',
-        filterDropdown: '.mapping-options__filter',
-        addButton:'a.mapping-options__add-filter',
-        isMapchip: true
-    }) {
-        super();
+    constructor(parent, container) {
+        super(parent);
 
         this._container = container;
         this._model = new FilterControllerModel();
-        this._addFilterButton = new AddFilterButton(this, elements); // TODO should pass in a container
+        this._addFilterButton = new AddFilterButton(this);
         this._dataFilterModel = null;
         this._filterCallback = null;
         this._elements = elements;
@@ -118,13 +103,9 @@ export class FilterController extends Observable {
     }
 
     addInitialFilterRow(dataFilterModel) {
-        // let rowContainer = $(this.container).find(filterRowClass)[0]
-        // $(rowContainer).show();
-
         let isDefault = true;
         let isExtra = false;
 
-        // this.model.filterRows.push(new FilterRow(rowContainer, dataFilterModel, isDefault, isExtra))
         this.addEmptyFilter(isDefault, isExtra);
     }
 
@@ -135,7 +116,7 @@ export class FilterController extends Observable {
             let filterRowContainer = this._rowContainer.cloneNode(true);
             $(filterRowContainer).show();
 
-            let filterRow = new FilterRow(filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, this._elements);
+            let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra);
             this.model.addFilterRow(filterRow);
 
             //TODO : Find a better way to do this
@@ -160,13 +141,13 @@ export class FilterController extends Observable {
     addNonAggregatableFilter(group) {
         let isDefault = true;
         let isExtra = false;
+        let index = 0;
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra);
-        let selectedRandomVal = group.values[Math.floor(Math.random() * group.values.length)];
         filterRow.indicatorDropdown.disable();
 
         filterRow.setPrimaryIndexUsingValue(group.name);
-        filterRow.setSecondaryIndexUsingValue(selectedRandomVal);
+        filterRow.setSecondaryIndex(index);
     }
 
     addDefaultFilter(group) {
@@ -193,8 +174,8 @@ export class FilterController extends Observable {
         let dataFilter = this._dataFilterModel[filterName];
 
         if (dataFilter != undefined) {
-            let filterRowContainer = $(this._elements.filterRowClass)[0].cloneNode(true);
-            let filterRow = new FilterRow(filterRowContainer, dataFilter, isDefault, isExtra, this._elements);
+            let filterRowContainer = $(filterRowClass)[0].cloneNode(true);
+            let filterRow = new FilterRow(this, filterRowContainer, dataFilter, isDefault, isExtra);
             this.filterRows.push(filterRow);
             this._dataFilterModel.addFilter(filterName);
 
@@ -219,8 +200,6 @@ export class FilterController extends Observable {
     clearExtraFilters() {
         const self = this;
         this.model.filterRows.forEach(filterRow => {
-            // if (filterRow.isExtra)
-            // self.model.removeFilterRow(filterRow);
             filterRow.removeRow();
         })
     }
@@ -242,7 +221,6 @@ export class FilterController extends Observable {
 
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
-        //this.checkAndAddPreviouslySelectedFilters();
         this.addInitialFilterRow(dataFilterModel);
     }
 

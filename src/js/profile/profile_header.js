@@ -20,7 +20,7 @@ const locationDescriptionClass = '.location__description';
 const downloadAllFacilities = '.location__facilities_download-all';
 
 export class Profile_header extends Component {
-    constructor(parent, _parents, _geometries, _api, _profileId, _geography, _config) {
+    constructor(parent, _parents, geometries, _api, _profileId, _geography, _config) {
         super(parent);
 
         this.api = _api;
@@ -29,7 +29,7 @@ export class Profile_header extends Component {
         this.isDownloadsDisabled = false;
 
         parents = _parents;
-        geometries = _geometries;
+        this._geometries = geometries
         geography = _geography;
 
         breadcrumbsContainer = $('.location__breadcrumbs');
@@ -46,6 +46,10 @@ export class Profile_header extends Component {
         this.addBreadCrumbs();
         this.addFacilities();
         this.setLocationDescription();
+    }
+
+    get geometries() {
+        return this._geometries;
     }
 
     checkIfDownloadsDisabled = () => {
@@ -82,7 +86,7 @@ export class Profile_header extends Component {
         let categoryArr = [];
         let themes = [];
 
-        geometries.themes.forEach((theme) => {
+        this.geometries.themes.forEach((theme) => {
             let totalCount = 0;
             theme.subthemes.forEach((st) => {
                 totalCount += st.count;

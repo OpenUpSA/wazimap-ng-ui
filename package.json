@@ -34,7 +34,7 @@
     "vega": "^5.17.0",
     "vega-embed": "^6.13.0",
     "vega-lite": "^4.17.0",
-    "xlsx": "^0.16.9"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",

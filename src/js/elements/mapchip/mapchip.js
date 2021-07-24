@@ -80,6 +80,7 @@ export class MapChip extends Component {
     }
 
     applyFilter = (filterResult, selectedFilter) => {
+        console.log({'mapchip': selectedFilter})
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,

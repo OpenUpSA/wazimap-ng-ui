@@ -105,14 +105,19 @@ export class Chart extends Component {
                 return;
             }
             // set the tooltip content
+            let tooltipPercentageType = ''
+            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
+                tooltipPercentageType = `
+          <div class="bar-chart__tooltip_value">
+              <div>${value.percentage}</div>
+          </div>`
+            }
             this.el.innerHTML = `
         <div class="bar-chart__row_tooltip-card">
           <div class="bar-chart__tooltip_name">
               <div>${value.group}</div>
           </div>
-          <div class="bar-chart__tooltip_value">
-              <div>${value.percentage}</div>
-          </div>
+          ${tooltipPercentageType}
           <div class="bar-chart__tooltip_alt-value">
               <div>${value.count}</div>
           </div>
@@ -166,13 +171,14 @@ export class Chart extends Component {
         $(headRow).append(headCol1);
         let headCol2 = document.createElement('th');
         $(headCol2).addClass('profile-indicator__table_cell');
-        $(headCol2).text('Absolute');
+        $(headCol2).text('Value');
         $(headRow).append(headCol2);
-        let headCol3 = document.createElement('th');
-        $(headCol3).addClass('profile-indicator__table_cell');
-        $(headCol3).text('Percentage');
-        $(headRow).append(headCol3);
-
+        if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
+            let headCol3 = document.createElement('th');
+            $(headCol3).addClass('profile-indicator__table_cell');
+            $(headCol3).text('Percentage');
+            $(headRow).append(headCol3);
+        }
         $(thead).append(headRow);
         $(this.table).append(thead);
 
@@ -196,15 +202,17 @@ export class Chart extends Component {
             let col1 = document.createElement('td');
             $(col1).addClass('profile-indicator__table_cell profile-indicator__table_cell--first');
             $(col1).text(d[primaryGroup]);
+            $(row).append(col1);
             let col2 = document.createElement('td');
             $(col2).text(d3format(formatting[VALUE_TYPE])(absoluteVal));
             $(col2).addClass('profile-indicator__table_cell');
-            let col3 = document.createElement('td');
-            $(col3).addClass('profile-indicator__table_cell');
-            $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
-            $(row).append(col1);
             $(row).append(col2);
-            $(row).append(col3);
+            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
+                let col3 = document.createElement('td');
+                $(col3).addClass('profile-indicator__table_cell');
+                $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
+                $(row).append(col3);
+            }
             $(tbody).append(row);
         })
 
@@ -273,6 +281,7 @@ export class Chart extends Component {
             })
         });
 
+        self.selectedGraphValueTypeChanged(self.containerParent, this.config.defaultType);
         this.disableChartTypeToggle(this.config.disableToggle);
 
 
@@ -281,15 +290,15 @@ export class Chart extends Component {
             $(this).on('click', () => {
                 let exportType = $(this).data('id');
                 const downloadFn = {
-                    0: {type: 'csv', fn: self.exportAsCsv},
-                    1: {type: 'excel', fn: self.exportAsExcel},
-                    2: {type: 'json', fn: self.exportAsJson},
-                    3: {type: 'kml', fn: self.exportAsKml},
-                }[index];
-                self.triggerEvent(`profile.chart.download_${downloadFn['type']}`, self);
+                    'csv': self.exportAsCsv,
+                    'excel': self.exportAsExcel,
+                    'json': self.exportAsJson,
+                    'kml': self.exportAsKml,
+                };
+                self.triggerEvent(`profile.chart.download_${exportType}`, self);
 
                 let fileName = self.getChartTitle('-');
-                downloadFn.fn(fileName);
+                downloadFn[exportType](fileName);
             })
         });
     };

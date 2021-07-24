@@ -54,7 +54,6 @@ export class FilterController extends Component {
         ready: 'FilterController.ready'
     }
 
-
     constructor(parent, container, elements = {
         filterRowClass: '.map-options__filter-row',
         filterDropdown: '.mapping-options__filter',
@@ -222,11 +221,22 @@ export class FilterController extends Component {
             if (this.filterCallback !== null) {
                 this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators);
             }
+
+            this.updateAvailableFiltersOfRows();
         })
 
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
         this.addInitialFilterRow(dataFilterModel);
+    }
+
+    updateAvailableFiltersOfRows() {
+        this.model.filterRows.forEach((fr) => {
+            if (fr.model.currentIndicatorValue !== 'All values') {
+                let lastIndex = fr.model.indicatorValues.length - 1;
+                fr.updateIndicatorDropdowns(fr.model, lastIndex);
+            }
+        })
     }
 
     checkAndAddNonAggregatableGroups() {

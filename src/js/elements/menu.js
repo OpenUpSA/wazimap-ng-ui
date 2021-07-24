@@ -41,39 +41,44 @@ function subindicatorsInIndicator(indicator) {
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
-    function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, choropleth_method, indicatorId) {
+    function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, indicatorDetail) {
 
         $(".data-category__h3", wrapper).remove();
         $(".data-category__h4", wrapper).remove();
 
         if (groups !== null && typeof groups.subindicators !== 'undefined') {
+
             groups.subindicators.forEach((subindicator) => {
-                const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
-                $(".truncate", newSubIndicatorElement).text(subindicator);
-                $(newSubIndicatorElement).attr('title', subindicator);
+                let display = subindicatorHasData(subindicator, indicatorDetail);
 
-                wrapper.append(newSubIndicatorElement);
+                if (display) {
+                    const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
+                    $(".truncate", newSubIndicatorElement).text(subindicator);
+                    $(newSubIndicatorElement).attr('title', subindicator);
 
-                const parents = {
-                    category: category,
-                    subcategory: subcategory,
-                    indicator: indicator
+                    wrapper.append(newSubIndicatorElement);
+
+                    const parents = {
+                        category: category,
+                        subcategory: subcategory,
+                        indicator: indicator
+                    }
+
+                    $(newSubIndicatorElement).on("click", (el) => {
+                        setActive(el);
+                        if (subindicatorCallback != undefined)
+                            subindicatorCallback({
+                                el: el,
+                                data: data,
+                                indicatorTitle: indicator,
+                                selectedSubindicator: subindicator,
+                                indicators: indicators,
+                                parents: parents,
+                                choropleth_method: indicatorDetail.choropleth_method,
+                                indicatorId: indicatorDetail.id
+                            })
+                    });
                 }
-
-                $(newSubIndicatorElement).on("click", (el) => {
-                    setActive(el);
-                    if (subindicatorCallback != undefined)
-                        subindicatorCallback({
-                            el: el,
-                            data: data,
-                            indicatorTitle: indicator,
-                            selectedSubindicator: subindicator,
-                            indicators: indicators,
-                            parents: parents,
-                            choropleth_method: choropleth_method,
-                            indicatorId: indicatorId
-                        })
-                });
             });
         }
     }
@@ -96,7 +101,7 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
             const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
 
             let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
-            addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail.choropleth_method, detail.id);
+            addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
         }
     }
 
@@ -129,6 +134,20 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
 
     function resetActive() {
         $(".menu__link_h4--active", parentContainer).removeClass("menu__link_h4--active");
+    }
+
+    function subindicatorHasData(subindicator, detail) {
+        let hasData = false;
+        for (const [geography, data] of Object.entries(detail.child_data)) {
+            data.forEach((indicatorDataPoint) => {
+                for (const [title, value] of Object.entries(indicatorDataPoint)) {
+                    if (subindicator == value) {
+                        hasData = true;
+                    }
+                }
+            })
+        }
+        return hasData;
     }
 
     $(".data-menu__category").remove();

@@ -5,7 +5,6 @@ import {Component} from "../../utils";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockClass = '.map-options';
-const filterRowClass = '.map-options__filter-row';
 const legendContainerClass = '.map-options__legend_wrap';
 
 /**
@@ -27,20 +26,33 @@ export class MapChip extends Component {
         return this._container;
     }
 
+    get description() {
+        return $(this._descriptionArea).text();
+    }
+
+    get title() {
+        return $(this._titleArea).text();
+    }
+
+    set title(text) {
+        $(this._titleArea).text(text);
+    }
+
+    set description(text) {
+        $(this._descriptionArea).text(text)
+    }
+
     prepareDomElements() {
         this._container = $(mapChipBlockClass)[0];
         this._closeButton = $(this.container).find('.filters__header_close')
         this._descriptionArea = $('.map-options__context .map-option__context_text div');
+        this._titleArea = $(this.container).find('.filters__header_name div');
         this._filtersContainer = $(this.container).find(filterContentClass);
         this._legendContainer = $(this.container).find(legendContainerClass);
     }
 
     prepareUIEvents() {
         this._closeButton.on('click', () => this.removeMapChip());
-    }
-
-    setDescription(text) {
-        this._descriptionArea.text(text);
     }
 
     setTitle(indicatorTitle, selectedSubindicator) {
@@ -50,7 +62,7 @@ export class MapChip extends Component {
             label = indicatorTitle;
         }
 
-        $(this.container).find('.filters__header_name div').text(label);
+        this.title = label;
     }
 
     hide() {
@@ -83,7 +95,6 @@ export class MapChip extends Component {
         this._legend.show(payload.colors, payload.intervals);
     }
 
-
     onSubIndicatorChange(params) {
         if (params.childData === undefined) {
             return;
@@ -93,7 +104,8 @@ export class MapChip extends Component {
 
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
-        this.setDescription(params.description);
+        this.description = params.description;
+        
         this.show();
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;

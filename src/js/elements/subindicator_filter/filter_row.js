@@ -126,7 +126,7 @@ export class FilterRow extends Component {
     static SELECT_ATTRIBUTE = 'Select an attribute';
     static SELECT_VALUE = 'Select a value';
 
-    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true) {
+    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true, elements = {filterDropdown: '.mapping-options__filter'}) {
         super(parent);
         this._container = container;
         this._elements = elements;
@@ -190,6 +190,7 @@ export class FilterRow extends Component {
         const self = this;
 
         this.model.on(FilterRowModel.EVENTS.updated, model => {
+            console.log('here')
             self.updateIndicatorDropdowns(model);
         })
 

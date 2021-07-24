@@ -55,12 +55,17 @@ export class FilterController extends Component {
     }
 
 
-    constructor(parent, container) {
+    constructor(parent, container, elements = {
+        filterRowClass: '.map-options__filter-row',
+        filterDropdown: '.mapping-options__filter',
+        addButton: 'a.mapping-options__add-filter',
+        isMapchip: true
+    }) {
         super(parent);
 
         this._container = container;
         this._model = new FilterControllerModel();
-        this._addFilterButton = new AddFilterButton(this);
+        this._addFilterButton = new AddFilterButton(this, elements);
         this._dataFilterModel = null;
         this._filterCallback = null;
         this._elements = elements;
@@ -116,7 +121,7 @@ export class FilterController extends Component {
             let filterRowContainer = this._rowContainer.cloneNode(true);
             $(filterRowContainer).show();
 
-            let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra);
+            let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, this._elements);
             this.model.addFilterRow(filterRow);
 
             //TODO : Find a better way to do this
@@ -174,8 +179,8 @@ export class FilterController extends Component {
         let dataFilter = this._dataFilterModel[filterName];
 
         if (dataFilter != undefined) {
-            let filterRowContainer = $(filterRowClass)[0].cloneNode(true);
-            let filterRow = new FilterRow(this, filterRowContainer, dataFilter, isDefault, isExtra);
+            let filterRowContainer = $(this._elements.filterRowClass)[0].cloneNode(true);
+            let filterRow = new FilterRow(this, filterRowContainer, dataFilter, isDefault, isExtra, this._elements);
             this.filterRows.push(filterRow);
             this._dataFilterModel.addFilter(filterName);
 

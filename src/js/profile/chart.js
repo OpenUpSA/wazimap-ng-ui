@@ -58,7 +58,7 @@ export class Chart extends Component {
         this.containerParent = $(this.container).closest('.profile-indicator');
 
         this._filtersContainer = $(this.containerParent).find(filterWrapperClass);
-        this._filterController = new FilterController(this._filtersContainer, {
+        this._filterController = new FilterController(this, this._filtersContainer, {
             filterRowClass: filterRowClass,
             filterDropdown: '.profile-indicator__filter',
             addButton: 'a.profile-indicator__new-filter',
@@ -81,7 +81,7 @@ export class Chart extends Component {
             }
             let y = event.pageY + offsetY;
             if (y < window.innerHeight) {
-              y = window.innerHeight + offsetY;
+                y = window.innerHeight + offsetY;
             }
             if (y + tooltipBox.height > window.innerHeight) {
                 y = +event.pageY - offsetY - tooltipBox.height;

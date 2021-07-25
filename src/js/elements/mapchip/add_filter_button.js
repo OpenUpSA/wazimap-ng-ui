@@ -16,7 +16,6 @@ export class AddFilterButton extends Component {
     }
 
     prepareDomElements() {
-        console.log({'elements': $(this._parent.container).find(this._elements.addButton)})
         this.button = $(this._parent.container).find(this._elements.addButton);
     }
 

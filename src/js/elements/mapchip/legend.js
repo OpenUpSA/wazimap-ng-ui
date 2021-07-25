@@ -27,7 +27,7 @@ export class Legend extends Component {
 
         for (let i = 0; i < intervalLabels.length; i++) {
             const interval = intervalLabels[i];
-            const item = this.clonedLegendBlock.cloneNode(true);
+            const item = this._clonedLegendBlock.cloneNode(true);
             const label = interval;
           
             if (i >= lightStart) {

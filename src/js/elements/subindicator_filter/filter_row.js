@@ -136,7 +136,7 @@ export class FilterRow extends Component {
     static SELECT_ATTRIBUTE = 'Select an attribute';
     static SELECT_VALUE = 'Select a value';
 
-    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true, elements = {filterDropdown: '.mapping-options__filter'}) {
+    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true, elements) {
         super(parent);
         this._container = container;
         this._elements = elements;
@@ -184,7 +184,7 @@ export class FilterRow extends Component {
     prepareDomElements() {
         $(this.container).attr('data-isextra', this._isExtra);
         $(this.container).attr('data-isdefault', this._isDefault);
-        this._removeFilterButton = $(this.container).find('.mapping-options__remove-filter');
+        this._removeFilterButton = $(this.container).find(this._elements.removeFilterButton);
 
         this._indicatorDd = $(this.container).find(this._elements.filterDropdown)[0];
         this._subindicatorDd = $(this.container).find(this._elements.filterDropdown)[1];
@@ -192,15 +192,14 @@ export class FilterRow extends Component {
 
 
     prepareEvents() {
-       this.prepareModelEvents();
-       this.prepareUIEvents();
+        this.prepareModelEvents();
+        this.prepareUIEvents();
     }
 
-    prepareModelEvents(){
+    prepareModelEvents() {
         const self = this;
 
         this.model.on(FilterRowModel.EVENTS.updated, model => {
-            console.log('here')
             self.updateIndicatorDropdowns(model);
         })
 
@@ -219,7 +218,7 @@ export class FilterRow extends Component {
         })
     }
 
-    prepareUIEvents(){
+    prepareUIEvents() {
         const self = this;
 
         this._removeFilterButton.on('click', () => {

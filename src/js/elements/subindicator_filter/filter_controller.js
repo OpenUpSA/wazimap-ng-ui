@@ -58,7 +58,8 @@ export class FilterController extends Component {
         filterRowClass: '.map-options__filter-row',
         filterDropdown: '.mapping-options__filter',
         addButton: 'a.mapping-options__add-filter',
-        isMapchip: true
+        isMapchip: true,
+        removeFilterButton: '.mapping-options__remove-filter'
     }) {
         super(parent);
 
@@ -101,7 +102,6 @@ export class FilterController extends Component {
     prepareEvents() {
         const self = this;
         this.addFilterButton.on(AddFilterButton.EVENTS.clicked, () => {
-            console.log('click')
             self.addEmptyFilter()
         })
     }
@@ -123,23 +123,14 @@ export class FilterController extends Component {
             let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, this._elements);
             this.model.addFilterRow(filterRow);
 
-            //TODO : Find a better way to do this
-            if (this._elements.isMapchip) {
-                $(filterRow.container).insertBefore($('a.mapping-options__add-filter')); // TODO can I change this to addButton or something
-            } else {
-                $(this.container).append(filterRow.container);
-            }
+            $(filterRow.container).insertBefore($(this.container).find(this._elements.addButton));
+
             filterRow.on(FilterRow.EVENTS.removed, filterRow => {
                 self.removeFilter(filterRow);
             })
 
-            this.setAddFilterButton()
-
             return filterRow;
         }
-
-        this.setAddFilterButton();
-
     }
 
     addNonAggregatableFilter(group) {
@@ -198,7 +189,6 @@ export class FilterController extends Component {
 
     removeFilter(filterRow) {
         this.model.removeFilterRow(filterRow);
-        this.setAddFilterButton()
     }
 
     clearExtraFilters() {
@@ -223,6 +213,7 @@ export class FilterController extends Component {
             }
 
             this.updateAvailableFiltersOfRows();
+            this.setAddFilterButton();
         })
 
         this.checkAndAddNonAggregatableGroups();
@@ -242,9 +233,10 @@ export class FilterController extends Component {
     checkAndAddNonAggregatableGroups() {
         const self = this;
         let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
+        let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
 
         nonAggregatableGroups.forEach(group => {
-            if (group.name != this.model.dataFilterModel.primaryGroup) {
+            if (group.name != this.model.dataFilterModel.primaryGroup && !defaultGroups.some(x => x.group === group.name)) {
                 self.addNonAggregatableFilter(group);
             }
         })

@@ -2,7 +2,7 @@ import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '.
 import {getJSON} from '../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
-import 'overlapping-marker-spiderfier-leaflet/dist/oms';
+import 'overlapping-marker-spiderfier-leaflet/build/oms';
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';

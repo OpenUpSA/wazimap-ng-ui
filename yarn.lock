@@ -6461,10 +6461,9 @@ outpipe@^1.1.0:
   dependencies:
     shell-quote "^1.4.2"
 
-overlapping-marker-spiderfier-leaflet@^0.2.7:
+"overlapping-marker-spiderfier-leaflet@https://github.com/emre2038/OverlappingMarkerSpiderfier-Leaflet.git":
   version "0.2.7"
-  resolved "https://registry.yarnpkg.com/overlapping-marker-spiderfier-leaflet/-/overlapping-marker-spiderfier-leaflet-0.2.7.tgz#ab18c3d5e2b2c31a4f864114e1594cb6efbd73e1"
-  integrity sha512-U2biV2Ge0SU+4IEmq4BZOglvzA8Aj8G7/hp5v6lBnF9Kd3/Xf6ZEPsJyPOExtLvMxOqlrlTAfl55s6JJDND7Ew==
+  resolved "https://github.com/emre2038/OverlappingMarkerSpiderfier-Leaflet.git#b1aa66038f6155ea0fbe56407bdfedf7d6552184"
 
 p-each-series@^2.1.0:
   version "2.2.0"

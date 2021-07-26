@@ -25,7 +25,7 @@
     "leaflet.markercluster": "^1.4.1",
     "main": "^1000.0.1",
     "main.js": "0.0.1",
-    "overlapping-marker-spiderfier-leaflet": "^0.2.7",
+    "overlapping-marker-spiderfier-leaflet": "https://github.com/emre2038/OverlappingMarkerSpiderfier-Leaflet.git",
     "papaparse": "^5.3.0",
     "save-svg-as-png": "^1.4.17",
     "sheetjs": "^2.0.0",

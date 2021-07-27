@@ -56,8 +56,8 @@ export class Subcategory extends Component {
         wrapper.append(scHeader);
     }
 
-    addIndicatorBlock(container, title, indicator, isLast) {
-        let block = new Indicator(this, container, title, indicator, isLast);
+    addIndicatorBlock(container, indicator, title, isLast) {
+        let block = new Indicator(this, container, indicator, title, isLast);
         this.bubbleEvents(block, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
@@ -67,8 +67,8 @@ export class Subcategory extends Component {
         return block;
     }
 
-    addHTMLBlock(container, title, html, isLast) {
-        let block = new HTMLBlock(this, container, title, html, isLast)
+    addHTMLBlock(container, indicator, title, html, isLast) {
+        let block = new HTMLBlock(this, container, indicator, title, isLast)
 
         return block;
     }
@@ -86,10 +86,11 @@ export class Subcategory extends Component {
                     let block = null;
                     let indicatorContainer = $(indicatorClass)[0].cloneNode(true);
                     $(wrapper).append(indicatorContainer);
-                    if (indicator.type == ContentBlock.BLOCK_TYPES.Indicator) {
-                        block = this.addIndicatorBlock(indicatorContainer, title, indicator, isLast);
-                    } else if (indicator.type == ContentBlock.BLOCK_TYPES.HTMLBlock) {
-                        block = this.addHTMLBlock(indicatorContainer, title, indicator.html, isLast);
+                    let metadata = indicator.metadata;
+                    if (indicator.content_type == ContentBlock.BLOCK_TYPES.Indicator) {
+                        block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast);
+                    } else if (indicator.content_type == ContentBlock.BLOCK_TYPES.HTMLBlock) {
+                        block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast);
                     }
                     
                     this._indicators.push(block);

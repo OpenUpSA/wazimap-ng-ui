@@ -163,7 +163,12 @@ export class PointData extends Component {
     createMarkers = (points, categoryData, layer) => {
         const self = this;
         let col = '';
-        let oms = new OverlappingMarkerSpiderfier(self.map);
+        let oms = new OverlappingMarkerSpiderfier(self.map, {
+            keepSpiderfied: true
+        });
+        oms.addListener('click', function (m) {
+            self.showMarkerPopup(m, m.options.point, categoryData, true);
+        });
 
         checkIterate(points, point => {
             if (col === '') {
@@ -190,7 +195,7 @@ export class PointData extends Component {
                 fillColor: col,
                 fillOpacity: 1,
                 pane: 'markerPane',
-                point:point
+                point: point
             })
             marker.on('click', (e) => {
                 stopPropagation(e); //prevent map click event
@@ -202,9 +207,6 @@ export class PointData extends Component {
             layer.addLayer(marker);
             oms.addMarker(marker);
         })
-        oms.addListener('click', function (m) {
-            self.showMarkerPopup(m, m.options.point, true);
-        });
     }
 
     showMarkerPopup = (e, point, categoryData, isClicked = false) => {
@@ -263,7 +265,7 @@ export class PointData extends Component {
 
         $('.' + tooltipItemsClsName, item).html('');
 
-        if (typeof visibleAttributes === 'undefined'){
+        if (typeof visibleAttributes === 'undefined') {
             visibleAttributes = [];
         }
 

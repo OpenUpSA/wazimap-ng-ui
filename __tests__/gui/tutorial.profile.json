@@ -1,0 +1,23 @@
+{
+  "id": 27,
+  "name": "Profile name",
+  "permission_type": "public",
+  "requires_authentication": false,
+  "geography_hierarchy": {
+    "id": 1,
+    "name": "2011 SA Boundaries",
+    "root_geography": {
+      "name": "South Africa",
+      "code": "ZA",
+      "level": "country",
+      "version": "2011 Boundaries"
+    },
+    "description": ""
+  },
+  "description": "",
+  "configuration": {
+    "urls": [
+      "example.com"
+    ]
+  }
+}

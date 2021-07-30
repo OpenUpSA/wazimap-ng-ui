@@ -19,7 +19,7 @@ export class Tutorial extends Component {
                 let intro = $('.slide-info__introduction', item);
                 intro.remove();
                 let slide = $('.tutorial__slide-info', item);
-                slide.append('<div><span class="slide-info__title bg-primary"></span><span class="slide-info__introduction"></span></div>');
+                slide.append('<div><span class="slide-info__title bg-primary"></span> <span class="slide-info__introduction"></span></div>');
             }
 
             else if (i == 7) {
@@ -29,7 +29,7 @@ export class Tutorial extends Component {
                 intro.remove();
 
                 let slide = $('.tutorial__slide-info', item);
-                slide.append('<div><span class="slide-info__title bg-primary"></span><a href="https://openup.gitbook.io/wazimap-ng-user-guide/" target="_blank"><span class="slide-info__introduction"></span></a></div>');
+                slide.append('<div><span class="slide-info__title bg-primary"></span> <span class="slide-info__introduction"></span></div>');
             }
 
             this.setTextOrLogError('.slide-info__title', item, slide.title, i);

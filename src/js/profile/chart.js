@@ -223,6 +223,8 @@ export class Chart extends Component {
             btnDiv.append(btn);
             this.containerParent.append(btnDiv);
         }
+
+        $('.profile-indicator__table_content').css('overflow', 'hidden');
     }
 
     setChartDomain(chart, config, chartType) {

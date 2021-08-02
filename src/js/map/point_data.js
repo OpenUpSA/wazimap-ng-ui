@@ -1,4 +1,5 @@
 import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
+import {getJSON} from '../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
 
@@ -41,8 +42,6 @@ export class PointData extends Component {
         this.map = _map;
         this.profileId = profileId;
 
-        this.googleMapsButton = null;
-
         this.markerLayer = this.genLayer();
         this.categoryLayers = {};
 
@@ -50,15 +49,12 @@ export class PointData extends Component {
     }
 
     prepareDomElements = () => {
-        let googleMapsButtonClsName = 'facility-info__view-google-map';
-
         tooltipItem = $('.' + tooltipClsName)[0].cloneNode(true);
         tooltipRowItem = $('.' + tooltipRowClsName)[0].cloneNode(true);
         facilityRowItem = $('.' + facilityRowClsName)[0].cloneNode(true);
         facilityItem = $('.' + facilityClsName);
         pointLegend = $('.' + pointLegendWrapperClsName);
         pointLegendItem = $('.' + pointLegendItemClsName)[0].cloneNode(true);
-        this.googleMapsButton = $('.' + googleMapsButtonClsName);
 
         $(pointLegend).empty();
         $('.facility-info__close').on('click', () => this.hideInfoWindows());
@@ -281,11 +277,6 @@ export class PointData extends Component {
     showFacilityModal = (point) => {
         $('.facility-info__title').text(point.name);
         this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');
-
-        let gMapsUrl = `https://www.google.com/maps/search/?api=1&query=${point.y},${point.x}`;
-        this.googleMapsButton.removeClass('hidden');
-        this.googleMapsButton.attr('href', gMapsUrl);
-        this.googleMapsButton.attr('target', '_blank');
 
         $('.facility-info').css('display', 'flex');
     }

@@ -106,6 +106,12 @@ export class FilterController extends Component {
         })
     }
 
+    setFilterVisibility(){
+        if (this.model.dataFilterModel.availableFilters.length <= 0) {
+            $(this.container).addClass('hidden');
+        }
+    }
+
     addInitialFilterRow(dataFilterModel) {
         let isDefault = true;
         let isExtra = false;
@@ -218,6 +224,7 @@ export class FilterController extends Component {
 
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
+        this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
     }
 

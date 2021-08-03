@@ -6741,7 +6741,7 @@ label {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display: flex;
+  display: flex; 
   height: 44px;
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
@@ -7614,7 +7614,7 @@ label {
   flex: 1;
 }
 
-.profile-indicator__filter.is--disabled {
+.profile-indicator__filter.disabled {
   opacity: 0.4;
   cursor: auto;
 }

@@ -6,6 +6,8 @@ import {Component} from '../../src/js/utils';
 import html from '../../src/index.html';
 
 describe('Check mapchip HTML description', () => {
+    document.body.innerHTML = html;
+
     const mapchip_args = {
         "data": {
             "description": "<p>An HTML description</p>",
@@ -30,29 +32,18 @@ describe('Check mapchip HTML description', () => {
             "#b30000"
         ]
     }
-    
+
+    let descriptionField;
+
     beforeEach(() => {
-        document.body.innerHTML = `
-        <div class="map-options__legend">
-          <div class="map-options__legend_label">
-            <div>LEGEND:</div>
-          </div>
-          <div class="map-options__legend_wrap">
-            <div class="map_legend-block"></div>
-          </div>
-        </div>
-        
-        <div class="map-options__context">
-          <div class="map-option__context_text" data-testid="mapchip-html-description"></div>
-        </div>
-        `;
-      })
-    
-    test('Description renderes HTML tags', () => {
+      descriptionField = document.querySelector('.mapchip-html-description');
+    })
+
+    test('Description renders HTML tags', () => {
       let component = new Component();
       let mc = new MapChip(component, mapchip_colors)
       mc.showMapChip(mapchip_args);
-      
-      expect(screen.getByTestId('mapchip-html-description')).toHaveTextContent('An HTML description')
+
+      expect(descriptionField).toBe('An HTML description')
     })
 })

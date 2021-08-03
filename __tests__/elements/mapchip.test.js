@@ -36,7 +36,7 @@ describe('Check mapchip HTML description', () => {
     let descriptionField;
 
     beforeEach(() => {
-      descriptionField = document.querySelector('.mapchip-html-description');
+      descriptionField = document.querySelector('.map-option__context_text');
     })
 
     test('Description renders HTML tags', () => {
@@ -44,6 +44,6 @@ describe('Check mapchip HTML description', () => {
       let mc = new MapChip(component, mapchip_colors)
       mc.showMapChip(mapchip_args);
 
-      expect(descriptionField).toBe('An HTML description')
+      expect(descriptionField.textContent.trim()).toBe('An HTML description')
     })
 })

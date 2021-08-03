@@ -22,17 +22,7 @@ describe('Check mapchip HTML description', () => {
             }
         }
     }
-
-    const mapchip_colors = {
-        "colors": [
-            "#fef0d9",
-            "#fdcc8a",
-            "#fc8d59",
-            "#e34a33",
-            "#b30000"
-        ]
-    }
-
+    const mapchip_colors = { "colors": [] }
     let descriptionField;
 
     beforeEach(() => {

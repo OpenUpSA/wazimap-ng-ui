@@ -10,7 +10,7 @@ describe('Check mapchip HTML description', () => {
 
     const mapchip_args = {
         "data": {
-            "description": "<p>An HTML description</p>",
+            "description": "<p>An <strong>HTML</strong> description</p>",
             "metadata": { 
                 "primary_group": "age group",
                 "groups": []
@@ -23,19 +23,17 @@ describe('Check mapchip HTML description', () => {
         }
     }
     const mapchip_colors = { "colors": [] }
-    let descriptionField;
-
-    beforeEach(() => {
-      descriptionField = document.querySelector('.map-option__context_text');
-    })
 
     test('Description is visible and renders HTML tags', () => {
       let component = new Component();
       let mc = new MapChip(component, mapchip_colors)
       mc.show();
       mc.description = mapchip_args.data.description;
+
+      let descriptionField = document.querySelector('.map-option__context_text');
+      let htmlTag = descriptionField.textContent.trim();
       
       expect(descriptionField).toBeVisible();
-      expect(descriptionField.textContent.trim()).toBe('An HTML description')
+      expect(htmlTag).toBe('An HTML description')
     })
 })

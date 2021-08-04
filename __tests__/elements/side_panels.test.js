@@ -29,6 +29,7 @@ describe('SidePanels', () => {
       <div class="panel-toggle" data-testid="empty-point"></div>
       <div class="panel-toggle" data-testid="empty-map"></div>
     </div>
+    <div class="map-download hover-text-primary disabled"></div>
     `;
   })
   describe('click interactions', () => {
@@ -42,6 +43,9 @@ describe('SidePanels', () => {
 
         expect(triggerEvent).toBeCalledTimes(1);
         expect(triggerEvent).toHaveBeenNthCalledWith(1, 'panel.rich_data.closed');
+
+        let mapDownloadButton = document.querySelector(".map-download");
+        expect(mapDownloadButton).not.toHaveClass('disabled');
       });
       })
     describe('open a new panel', () => {

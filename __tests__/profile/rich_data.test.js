@@ -20,13 +20,17 @@ describe('Rich data panel tests', () => {
                     "Mock indicator": {
                         "data": [{
                             "age": "1"
-                        }]
+                        }],
+                        "metadata": {},
+                        "groups": {},
+                        "description": "<p>An indicator description</p>",
+                        "type": "indicator"
                     }
                 }
             }
         }
     };
-    
+
     const profileWrapper = $(profileWrapperClass);
     const id = "category-1";
     const removePrevCategories = true;
@@ -36,18 +40,21 @@ describe('Rich data panel tests', () => {
     let category = new Category(component, formattingConfig, categoryName, categoryDetail, profileWrapper, id, removePrevCategories, isFirst)
 
     test('Category description is visible and renders HTML tags', () => {
-        let categoryField = document.querySelector('.category-header__description');
-        let htmlTag = categoryField.textContent.trim();
-
-        expect(categoryField).toBeVisible();
-        expect(htmlTag).toBe('An HTML description')
+        checkHTMLIsRendered('.category-header__description', 'An HTML description');
     })
-    
+
     test('Subcategory description is visible and renders HTML tags', () => {
-        let subcategoryField = document.querySelector('.sub-category-header__description');
-        let htmlTag = subcategoryField.textContent.trim();
-
-        expect(subcategoryField).toBeVisible();
-        expect(htmlTag).toBe('A subcategory description')
+        checkHTMLIsRendered('.sub-category-header__description', 'A subcategory description');
     })
+
+    test('Indicator description is visible and renders HTML tags', () => {
+        checkHTMLIsRendered('.profile-indicator__chart_description', 'An indicator description');
+    })
+
+    function checkHTMLIsRendered(elementClass, description) {
+        let descriptionElement = document.querySelector(elementClass);
+        let htmlTag = descriptionElement.textContent.trim();
+        expect(descriptionElement).toBeVisible();
+        expect(htmlTag).toBe(description)
+    }
 })

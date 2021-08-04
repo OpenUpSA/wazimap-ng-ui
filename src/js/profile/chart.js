@@ -13,6 +13,8 @@ import embed from "vega-embed";
 import {configureBarchart} from './charts/barChart';
 import {slugify} from './charts/utils';
 import DropdownMenu from "../elements/dropdown_menu";
+import {FilterController} from "../elements/subindicator_filter/filter_controller";
+import {DataFilterModel} from "../models/data_filter_model";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -55,6 +57,15 @@ export class Chart extends Component {
         this.container = chartContainer[0];
         this.containerParent = $(this.container).closest('.profile-indicator');
 
+        this._filtersContainer = $(this.containerParent).find(filterWrapperClass);
+        this._filterController = new FilterController(this, this._filtersContainer, {
+            filterRowClass: filterRowClass,
+            filterDropdown: '.profile-indicator__filter',
+            addButton: 'a.profile-indicator__new-filter',
+            isMapchip: false,
+            removeFilterButton: '.profile-indicator__remove-filter'
+        });
+
         this.addChart(data);
     }
 
@@ -71,7 +82,7 @@ export class Chart extends Component {
             }
             let y = event.pageY + offsetY;
             if (y < window.innerHeight) {
-              y = window.innerHeight + offsetY;
+                y = window.innerHeight + offsetY;
             }
             if (y + tooltipBox.height > window.innerHeight) {
                 y = +event.pageY - offsetY - tooltipBox.height;
@@ -134,7 +145,8 @@ export class Chart extends Component {
                 let $svg = $(this.container).find('svg')
                 $svg.attr('preserveAspectRatio', 'xMinYMin meet')
                 $svg.removeAttr('width')
-                $svg.removeAttr('height')
+                $svg.removeAttr('height');
+                this.filterGroups = data.metadata.groups;
 
                 this.handleChartFilter(data, data.metadata.groups);
             })
@@ -327,139 +339,12 @@ export class Chart extends Component {
     };
 
     handleChartFilter = (indicators, groups) => {
-        const filterArea = $(this.subCategoryNode).find(".profile-indicator__filters");
-
-        let filtersToAdd = [];
-        let defaultFilters = this.getDefaultFilters();
-        let nonAggFilters = this.getNonAggFilters();
-        filtersToAdd = appendFilterArrays(defaultFilters, nonAggFilters, indicators.metadata.primary_group);
-
-        for (let i = 1; i < filtersToAdd.length; i++) {
-            this.addFilter(filtersToAdd[i].default);
+        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, [], indicators.metadata.primary_group, this.data.child_data);
+        if (this._filterController.filterCallback === null) {
+            this._filterController.filterCallback = this.applyFilter;
         }
-        let dropdowns = $(this.subCategoryNode).find(`${filterRowClass} .profile-indicator__filter`);
-
-        this.filterGroups = groups.filter((g) => {
-            return g.name !== indicators.metadata.primary_group
-        })
-        let siFilter = new SubindicatorFilter(this, filterArea, this.filterGroups, this.title, this.applyFilter, dropdowns, filtersToAdd, indicators.child_data, '.profile-indicator__filter-row');
-        this.filter = siFilter;
-
-        this.setAddFilterButton();
-
-        this.bubbleEvent(siFilter, "point_tray.subindicator_filter.filter");
+        this._filterController.setDataFilterModel(dataFilterModel);
     };
-
-    getDefaultFilters = () => {
-        let defaultFilters = [];
-
-        if (typeof this.data.chartConfiguration.filter !== 'undefined') {
-            this.data.chartConfiguration.filter['defaults'].forEach((f) => {
-                let defaultFilter = {
-                    group: f.name,
-                    value: f.value,
-                    default: true
-                }
-
-                let item = defaultFilters.filter((df) => {
-                    return df.group === f.name
-                })[0];
-                if (item !== null && typeof item !== 'undefined') {
-                    item.default = true;
-                } else {
-                    defaultFilters.push(defaultFilter);
-                }
-            })
-        }
-
-        return defaultFilters;
-    }
-
-    getNonAggFilters = () => {
-        let filterArr = [];
-
-        let nonAgg = [...this.data.metadata.groups].filter((g) => {
-            return !g.can_aggregate;
-        })
-        nonAgg.forEach((n) => {
-            let filter = {
-                group: n.name,
-                value: n.subindicators[Math.floor(Math.random() * n.subindicators.length)],
-                default: true
-            }
-
-            let item = filterArr.filter((df) => {
-                return df.group === n.name
-            })[0];
-            if (item !== null && typeof item !== 'undefined') {
-                item.default = true;
-            } else {
-                filterArr.push(filter);
-            }
-        })
-
-        return filterArr;
-    }
-
-    setAddFilterButton = () => {
-        let rowCount = $(this.subCategoryNode).find(filterRowClass).length;
-        let btn = 'a.profile-indicator__new-filter';
-        $(this.subCategoryNode).find(filterRowClass).each(function (index) {
-            if (index !== rowCount - 1) {
-                $(this).find(btn).addClass('is--hidden');
-            } else {
-                $(this).find(btn).removeClass('is--hidden');
-            }
-        });
-
-        if (this.filter.allDropdowns.length >= this.filterGroups.length * 2) {
-            $(this.subCategoryNode).find(btn).addClass('disabled');
-        } else {
-            $(this.subCategoryNode).find(btn).removeClass('disabled');
-            $(this.subCategoryNode).find(btn).off('click').on('click', () => this.addFilter());
-        }
-    }
-
-    addFilter = (isDefault = false) => {
-        let filterRow = $(this.subCategoryNode).find(filterRowClass)[0].cloneNode(true);
-
-        let indicatorDd = $(filterRow).find('.profile-indicator__filter')[0];
-        let subindicatorDd = $(filterRow).find('.profile-indicator__filter')[1];
-
-        $(filterRow).attr('data-isextra', true);
-        $(filterRow).attr('data-isdefault', isDefault);
-        if (!isDefault) {
-            this.setRemoveFilter(filterRow, indicatorDd, subindicatorDd);
-        }
-        new DropdownMenu($(filterRow), '.profile-indicator__filter_menu');
-        $(this.subCategoryNode).find(filterWrapperClass).append(filterRow);
-        if (this.filter !== null) {
-            this.filter.allDropdowns.push(indicatorDd);
-            this.filter.allDropdowns.push(subindicatorDd);
-            this.filter.setDropdownEvents(indicatorDd, subindicatorDd);
-
-            this.setAddFilterButton();
-        }
-    }
-
-    setRemoveFilter = (filterRow, indicatorDd, subindicatorDd) => {
-        let btn = $(filterRow).find('.profile-indicator__remove-filter');
-        btn.removeClass('is--hidden');
-        btn.on('click', () => {
-            this.removeFilter(filterRow, indicatorDd, subindicatorDd);
-        })
-    }
-
-    removeFilter = (filterRow, indicatorDd, subindicatorDd) => {
-        $(filterRow).remove();
-        this.filter.allDropdowns = this.filter.allDropdowns.filter((dd, el) => {
-            return el !== indicatorDd && el !== subindicatorDd
-        })
-
-        this.filter.handleFilter(null);
-
-        this.setAddFilterButton();
-    }
 
     applyFilter = (filteredData, selectedFilter) => {
         this.filteredData = filteredData;
@@ -469,17 +354,16 @@ export class Chart extends Component {
             this.vegaView.signal(`${filterName}Filter`, false)
         });
 
-        if (selectedFilter.length > 0) {
-            selectedFilter.forEach((sf) => {
-                if (sf.value !== "All values") {
-                    let filterName = sf.group;
-                    filterName = slugify(filterName)
-                    this.setDownloadUrl();
-                    this.vegaView.signal(`${filterName}Filter`, true)
-                    this.vegaView.signal(`${filterName}FilterValue`, sf.value)
-                }
-            });
+        for (const [group, value] of Object.entries(selectedFilter)) {
+            if (value !== "All values") {
+                let filterName = group;
+                filterName = slugify(filterName)
+                this.setDownloadUrl();
+                this.vegaView.signal(`${filterName}Filter`, true)
+                this.vegaView.signal(`${filterName}FilterValue`, value)
+            }
         }
+
         this.vegaView.run();
         this.appendDataToTable();
     };

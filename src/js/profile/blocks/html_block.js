@@ -1,24 +1,26 @@
-import {ContentBlock} from "./content_block";
+import {ContentBlock} from './content_block';
+
+const hamburgerClass = '.profile-indicator__options'
+const filtersClass = '.profile-indicator__filters-wrapper';
+const bodyClass = '.profile-indicator__chart_body';
 
 export class HTMLBlock extends ContentBlock {
-    constructor(parent, container, title, html, isLast) {
-        super(parent, title, isLast)
-
-        this._container = container;
-        this._html = html;
+    constructor(parent, container, indicator, title, isLast) {
+        super(parent, container, indicator, title, isLast)
 
         this.prepareDomElements();
     }
 
-    get container() {
-        return this._container;
+    get html() {
+        return this.indicator.data[0].content;
     }
 
-    get html() {
-        return this._html;
-    }
 
     prepareDomElements() {
-        $(this.container).html(this.html);
+        super.prepareDomElements();
+        
+        $(filtersClass, this.container).remove();
+        $(bodyClass, this.container).html(this.html);
+        $(hamburgerClass, this.container).remove();
     }
 }

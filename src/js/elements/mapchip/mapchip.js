@@ -39,7 +39,7 @@ export class MapChip extends Component {
     }
 
     set description(text) {
-        $(this._descriptionArea).text(text)
+        $(this._descriptionArea).html(text)
     }
 
     prepareDomElements() {

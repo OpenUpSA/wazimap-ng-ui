@@ -45,7 +45,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             indicatorTitle: args.indicatorTitle,
             selectedSubindicator: args.selectedSubindicator,
             childData: args.data.child_data,
-            description: args.description,
+            description: args.data.description,
             chartConfiguration: args.data.chartConfiguration,
             filter: args.filter,
         }

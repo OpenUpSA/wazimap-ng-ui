@@ -10,7 +10,10 @@ test('Customised tutorial', async () => {
         const endpoint = interceptedRequest.url();
         const method = interceptedRequest.method();
         if (method === "GET" && endpoint.startsWith("https://staging.wazimap-ng.openup.org.za")) {
-            interceptedRequest.continue();
+            if (endpoint.endsWith("/api/v1/profile_by_url?format=json")) {
+                console.log(JSON.stringify(profile));
+                interceptedRequest.respond(JSON.stringify(profile));
+            }
         } else {
             interceptedRequest.continue();
         }

@@ -13,6 +13,8 @@ test('Customised tutorial', async () => {
             if (endpoint.endsWith("/api/v1/profile_by_url?format=json")) {
                 console.log(JSON.stringify(profile));
                 interceptedRequest.respond(JSON.stringify(profile));
+            } else {
+                interceptedRequest.continue();
             }
         } else {
             interceptedRequest.continue();

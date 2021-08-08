@@ -11,13 +11,27 @@ test('Customised tutorial', async () => {
         const method = interceptedRequest.method();
         if (method === "GET" && endpoint.startsWith("https://staging.wazimap-ng.openup.org.za")) {
             if (endpoint.endsWith("/api/v1/profile_by_url?format=json")) {
-                console.log(JSON.stringify(profile));
-                interceptedRequest.respond(JSON.stringify(profile));
+                interceptedRequest.respond({
+                    status: 200,
+                    contentType: 'application/json',
+                    body: JSON.stringify(profile),
+                });
+                //interceptedRequest.continue();
             } else {
                 interceptedRequest.continue();
             }
         } else {
             interceptedRequest.continue();
+        }
+    });
+
+    page.on('response', response => {
+        const endpoint = response.url();
+        const method = response.request().method();
+        if (method === "GET" && endpoint.startsWith("https://staging.wazimap-ng.openup.org.za")) {
+            if (endpoint.endsWith("/api/v1/profile_by_url?format=json")) {
+                console.log({response})
+            }
         }
     });
 

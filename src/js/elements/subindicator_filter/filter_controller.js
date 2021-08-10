@@ -107,8 +107,8 @@ export class FilterController extends Component {
     }
 
     setFilterVisibility() {
-        let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
-        let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+        const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
+        const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
         if (nonAggregatableGroups.length <= 0 && defaultGroups.length <= 0 && this.model.dataFilterModel.availableFilters.length <= 0) {
             $(this.container).addClass('hidden');
         } else {

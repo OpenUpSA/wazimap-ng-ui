@@ -52,7 +52,7 @@ describe('SidePanels', () => {
 
                 fireEvent.click(screen.getByTestId('rich-data-rich'));
 
-                expect(triggerEvent).toBeCalledTimes(1);
+                expect(triggerEvent).toBeCalledTimes(3);
                 expect(triggerEvent).toHaveBeenNthCalledWith(1, 'panel.rich_data.closed');
 
                 let mapDownloadButton = document.querySelector(".map-download");
@@ -67,7 +67,7 @@ describe('SidePanels', () => {
 
                 fireEvent.click(screen.getByTestId('rich-data-point'));
 
-                expect(triggerEvent).toBeCalledTimes(2);
+                expect(triggerEvent).toBeCalledTimes(3);
                 expect(triggerEvent).toHaveBeenNthCalledWith(1, 'panel.rich_data.closed');
                 expect(triggerEvent).toHaveBeenNthCalledWith(2, 'panel.point_mapper.opened');
             });

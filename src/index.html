@@ -3376,6 +3376,45 @@ input:checked + .slider:before {
 line, .grid {
   stroke: #999;
 }
+
+@media print {
+  .page-break-before {
+    break-before: page;
+  }
+
+  body, .main, .rich-data, .rich-data-content, .rich-data-content .section, .profile-indicator{
+    float: none !important;
+    display: block !important;
+  }
+
+  .rich-data__print, .tab-notice{
+    display: none;
+  }
+
+  .rich-data[style*="display: none;"]{
+    display: none !important;
+  }
+
+  .facility-info[style*="display: none;"]{
+    display: none !important;
+  }
+
+  .facility-info[style*="display: flex;"]{
+    display: inline-table;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  .facility-info__view-google-map, .facility-info__print, .facility-info__close{
+    display: none;
+  }
+}
 </style>
 </body>
 </html>

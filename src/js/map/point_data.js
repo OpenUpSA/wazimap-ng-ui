@@ -276,6 +276,9 @@ export class PointData extends Component {
 
     showFacilityModal = (point) => {
         $('.facility-info__title').text(point.name);
+        $('.facility-info__print').off('click').on('click',() => {
+            window.print();
+        });
         this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');
 
         $('.facility-info').css('display', 'flex');

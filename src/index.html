@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Mon Jul 19 2021 08:20:51 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Thu Aug 12 2021 10:34:48 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="60ed4accb8a175783a8133c8" data-wf-site="5fd05e808ba6609d12285571">
 <head>
   <meta charset="utf-8">
@@ -3141,6 +3141,7 @@
 	display: none !important;
 }
 .facility-info {
+	display: flex;
 	position: fixed;
   width: 100vw !important;
   height: 100vh !important;
@@ -3178,7 +3179,7 @@
   	margin-top: 0px;
   }
 /*--hide unwanted elements in print--*/
-  .nav, .login-modal, .category-header__link, .location__header, .profile-indicator__options, .sticky-header, .tutorial-modal, .styles, .map, .point-mapper, .data-mapper, .panel-toggles, .rich-data-nav, .rich-data-bumper, .rich-data-toggles {
+  .nav, .rich-data__print, .login-modal, .category-header__link, .location__header, .profile-indicator__options, .sticky-header, .tutorial-modal, .styles, .map, .point-mapper, .data-mapper, .panel-toggles, .rich-data-nav, .rich-data-bumper, .rich-data-toggles {
     display: none;
   }
 /*--display-block--*/
@@ -3220,6 +3221,38 @@
 .bar-chart__row_bar {
 	background-color: #000 !important;
   }
+@media print {
+  .page-break-before {
+    break-before: page;
+  }
+  body, .main, .rich-data, .rich-data-content, .rich-data-content .section, .profile-indicator{
+    float: none !important;
+    display: block !important;
+  }
+  .rich-data__print, .tab-notice{
+    display: none;
+  }
+  .rich-data[style*="display: none;"]{
+    display: none !important;
+  }
+  .facility-info[style*="display: none;"]{
+    display: none !important;
+  }
+  .facility-info[style*="display: flex;"]{
+    display: inline-table;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    max-height: 100%;
+    max-width: 100%;
+  }
+  .facility-info__view-google-map, .facility-info__print, .facility-info__close{
+    display: none;
+  }
+}
 }
 </style>
   </div>
@@ -3375,45 +3408,6 @@ input:checked + .slider:before {
 }
 line, .grid {
   stroke: #999;
-}
-
-@media print {
-  .page-break-before {
-    break-before: page;
-  }
-
-  body, .main, .rich-data, .rich-data-content, .rich-data-content .section, .profile-indicator{
-    float: none !important;
-    display: block !important;
-  }
-
-  .rich-data__print, .tab-notice{
-    display: none;
-  }
-
-  .rich-data[style*="display: none;"]{
-    display: none !important;
-  }
-
-  .facility-info[style*="display: none;"]{
-    display: none !important;
-  }
-
-  .facility-info[style*="display: flex;"]{
-    display: inline-table;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: #fff;
-    max-height: 100%;
-    max-width: 100%;
-  }
-
-  .facility-info__view-google-map, .facility-info__print, .facility-info__close{
-    display: none;
-  }
 }
 </style>
 </body>

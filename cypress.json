@@ -1,5 +1,5 @@
 {
-	"baseUrl": "http://localhost:1234",
+  "baseUrl": "http://localhost:1234",
   "testFiles": "**/*.{feature,features}",
-	"integrationFolder": "__tests__/integration"
+  "integrationFolder": "__tests__/integration"
 }

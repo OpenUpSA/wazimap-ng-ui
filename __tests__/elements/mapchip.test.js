@@ -34,6 +34,7 @@ describe('Check mapchip HTML description', () => {
       let htmlTag = descriptionField.textContent.trim();
       
       expect(descriptionField).toBeVisible();
+      expect(descriptionField.innerHTML).toContain("<strong>");
       expect(htmlTag).toBe('An HTML description')
     })
 })

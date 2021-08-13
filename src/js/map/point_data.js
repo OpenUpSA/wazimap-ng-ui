@@ -189,6 +189,7 @@ export class PointData extends Component {
                 fillOpacity: 1,
                 pane: 'markerPane'
             })
+
             marker.on('click', (e) => {
                 this.showMarkerPopup(e, point, categoryData, true);
                 stopPropagation(e); //prevent map click event

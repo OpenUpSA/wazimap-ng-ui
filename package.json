@@ -30,6 +30,7 @@
     "save-svg-as-png": "^1.4.17",
     "sheetjs": "^2.0.0",
     "shx": "^0.3.2",
+    "start-server-and-test": "^1.13.1",
     "svelte-dev-tools": "^0.0.2",
     "vega": "^5.17.0",
     "vega-embed": "^6.13.0",
@@ -60,8 +61,10 @@
   },
   "scripts": {
     "start": "parcel ./src/index.html",
-    "cypress": "cypress run --spec **/*.feature",
+    "cypress:gui": "cypress run --browser chrome --spec __tests__/gui/*.feature",
+    "cypress": "cypress run --spec __tests__/e2e/*.feature",
     "cypress:open": "cypress open",
+    "test:gui": "start-server-and-test start http://localhost:1234 cypress:gui",
     "test": "jest",
     "test:watch": "jest --watch",
     "prebuild-dev": "shx rm -rf dist/*",
@@ -75,8 +78,8 @@
   "browserslist": "> 0.25%, not dead",
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true,
-    "stepDefinitions": "__tests__/integration",
-    "commonPath": "__tests__/integration/common"
+    "stepDefinitions": "__tests__/gui",
+    "commonPath": "__tests__/gui/common"
   },
   "jest": {
     "setupFiles": [
@@ -86,7 +89,7 @@
       "./jest-custom-matchers.js"
     ],
     "testPathIgnorePatterns": [
-      "/__tests__/integration/",
+      "/__tests__/gui/",
       "/node_modules/"
     ],
     "moduleFileExtensions": [

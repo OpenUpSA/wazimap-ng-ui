@@ -12,3 +12,5 @@ jobs:
       run: yarn
     - name: Run tests
       run: yarn test
+    - name: Run gui tests
+      run: yarn test:gui

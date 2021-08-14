@@ -90,6 +90,7 @@
     ],
     "testPathIgnorePatterns": [
       "/__tests__/gui/",
+      "/__tests__/e2e/",
       "/node_modules/"
     ],
     "moduleFileExtensions": [

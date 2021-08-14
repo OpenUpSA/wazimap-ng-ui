@@ -30,7 +30,7 @@ When('I click on a marker', () => {
 })
 
 When('I click on the More info button', () => {
-    cy.get('.leaflet-popup-content-wrapper .facility-tooltip__open-modal').click({force:true});
+    cy.get('.leaflet-popup-content-wrapper .facility-tooltip__open-modal').click({force: true, multiple: true});
 })
 
 Then('Facility modal should be visible', () => {

@@ -14,5 +14,3 @@ jobs:
         run: yarn test
       - name: Run gui tests
         run: yarn test:gui
-        with:
-          chrome-version: latest

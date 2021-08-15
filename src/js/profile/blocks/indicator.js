@@ -10,7 +10,9 @@ export class Indicator extends ContentBlock {
     }
 
     get hasData() {
-        return this.indicator.data.some(function(e) { return e.count > 0 });
+        return this.indicator.data.some(function (e) {
+            return e.count > 0
+        });
     }
 
     prepareDomElements() {
@@ -22,7 +24,8 @@ export class Indicator extends ContentBlock {
         const configuration = this.indicator.chartConfiguration;
 
         if (this.hasData) {
-            let c = new Chart(this, configuration, this.indicator, groups, this.container, this.title);
+            let chartData = this.orderChartData();
+            let c = new Chart(this, configuration, chartData, groups, this.container, this.title);
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
@@ -30,5 +33,24 @@ export class Indicator extends ContentBlock {
             ]);
 
         }
+    }
+
+    orderChartData() {
+        let primaryGroup = this.indicator.metadata.primary_group;
+        let groupsOrder = this.indicator.metadata.groups.filter((g) => {
+            return g.name === primaryGroup
+        })[0];
+        let orderedGroups = [];
+
+        groupsOrder.subindicators.forEach((g) => {
+            let d = this.indicator.data.filter((x) => {
+                return x[primaryGroup] === g
+            })[0];
+            orderedGroups.push(d);
+        })
+
+        this.indicator.data = orderedGroups;
+
+        return this.indicator;
     }
 }

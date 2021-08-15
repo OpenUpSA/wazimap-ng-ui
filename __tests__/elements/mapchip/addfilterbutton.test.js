@@ -26,4 +26,62 @@ describe('Add filter button', () => {
 
         expect(afterFilterRow).toBe(prevFilterRow + 1);
     })
+
+    test('Is enabled', () => {
+        params.groups = [
+            {
+                subindicators: ["30-35", "20-24", "15-24 (Intl)", "15-35 (ZA)", "15-19", "25-29"],
+                dataset: 241,
+                name: "age",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Female", "Male"],
+                dataset: 241,
+                name: "gender",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Xitsonga", "Sign language", "isiNdebele", "Setswana", "Sesotho", "English", "Other", "Siswati", "Afrikaans", "Sepedi", "Tshivenda", "isiXhosa", "isiZulu"],
+                dataset: 241,
+                name: "language",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Black African", "Indian or Asian", "Other", "Coloured", "White"],
+                dataset: 241,
+                name: "race",
+                can_aggregate: true,
+                can_filter: true
+            }];
+
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+
+        let btn = document.querySelector('.mapping-options__add-filter');
+        expect(btn).not.toHaveClass('disabled');
+    })
+
+    test('Is disabled', () => {
+        params.groups = [{
+            subindicators: ["Female", "Male"],
+            dataset: 241,
+            name: "gender",
+            can_aggregate: false,
+            can_filter: true
+        }];
+
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+
+        let btn = document.querySelector('.mapping-options__add-filter');
+        expect(btn).toHaveClass('disabled');
+    })
 })

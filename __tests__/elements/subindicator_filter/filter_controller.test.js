@@ -87,4 +87,54 @@ describe('Filter controller', () => {
         let indicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("age")`);
         expect(indicatorDd.length).toBe(0);
     })
+
+    test('Hides filters when there are no groups to filter by', () => {
+        params.groups = [];
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+        let filterArea = document.querySelector('.map-options__filters_content');
+
+        expect(filterArea).toHaveClass('hidden');
+    })
+
+    test('Does not hide filters when there are groups to filter by', () => {
+        params.groups = [
+            {
+                subindicators: ["30-35", "20-24", "15-24 (Intl)", "15-35 (ZA)", "15-19", "25-29"],
+                dataset: 241,
+                name: "age",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Female", "Male"],
+                dataset: 241,
+                name: "gender",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Xitsonga", "Sign language", "isiNdebele", "Setswana", "Sesotho", "English", "Other", "Siswati", "Afrikaans", "Sepedi", "Tshivenda", "isiXhosa", "isiZulu"],
+                dataset: 241,
+                name: "language",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Black African", "Indian or Asian", "Other", "Coloured", "White"],
+                dataset: 241,
+                name: "race",
+                can_aggregate: true,
+                can_filter: true
+            }];
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+        let filterArea = document.querySelector('.map-options__filters_content');
+
+        expect(filterArea).not.toHaveClass('hidden');
+    })
 })

@@ -42,4 +42,16 @@ describe('Dropdowns', () => {
 
         expect(JSON.stringify(ddItems)).toBe(JSON.stringify(groups));
     })
+
+    test('Subindicator dropdown is disabled', () => {
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+
+        let rowLength = $('.map-options__filters_content .map-options__filter-row').length;
+        let subindicatorDd = $($('.map-options__filters_content .map-options__filter-row')[rowLength - 1]).find('.mapping-options__filter')[1];
+
+        expect(subindicatorDd).toHaveClass('disabled');
+    })
 })

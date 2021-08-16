@@ -7,6 +7,14 @@ import all_details from "../facility_modal/all_details.json";
 Given('I am on the Wazimap Homepage', () => {
     cy.visit("/")
 
+    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: all_details,
+            forceNetworkError: false // default
+        })
+    })
+
     cy.intercept('/api/v1/profile_by_url/?format=json', (req) => {
         req.reply({
             statusCode: 201,

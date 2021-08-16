@@ -1,7 +1,7 @@
 import {When, Given, Then} from "cypress-cucumber-preprocessor/steps";
 
 Then('I wait until map is ready', () => {
-    cy.get('.location-tag .location-tag__name .truncate', {timeout: 20000}).should('contain', 'South Africa')
+    cy.get('.map-location .location-tag .location-tag__name .truncate', {timeout: 20000}).should('contain', 'South Africa')
 })
 
 When('I click on a theme', () => {
@@ -33,8 +33,12 @@ When('I click on the More info button', () => {
     cy.get('.leaflet-popup-content-wrapper .facility-tooltip__open-modal').click({force: true, multiple: true});
 })
 
-Then('Facility modal should be visible', () => {
+Then('Facility modal and Google maps button should be visible', () => {
     cy.get('.facility-info').should('be.visible');
+    cy.get('.facility-info__view-google-map').should('be.visible');
+    cy.get('.facility-info__view-google-map')
+        .should('have.attr', 'href')
+        .and('include', 'google.com/maps');
 })
 
 When('I switch to print view', () => {

@@ -9,6 +9,6 @@ Feature: Facility Modal
     And I click on a category
       Then I click on a marker
     And I click on the More info button
-      Then Facility modal should be visible
+      Then Facility modal and Google maps button should be visible
     And I switch to print view
       Then I check if the print view is as expected

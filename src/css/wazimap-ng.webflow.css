@@ -5333,6 +5333,7 @@ label {
   height: 350px;
   background-image: url('../images/slide-1.jpg');
   background-position: 50% 0%;
+  background-size: cover;
 }
 
 .tutorial__slide-image._2 {
@@ -7579,6 +7580,7 @@ label {
 }
 
 .profile-indicator__table_inner {
+  overflow: hidden;
   max-height: 400px;
   margin-bottom: 2em;
 }

@@ -1,5 +1,6 @@
 import {SubIndicator} from '../dataobjects'
 import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
+import { ContentBlock } from "../profile/blocks/content_block";
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
@@ -95,13 +96,15 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
         $(".data-category__h3", h3Wrapper).remove();
 
         for (const [indicator, detail] of Object.entries(indicators)) {
-            let newIndicator = indicatorClone.cloneNode(true);
-            $('.truncate', newIndicator).text(indicator);
-            $(h3Wrapper).append(newIndicator);
-            const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
+            if (detail.content_type != ContentBlock.BLOCK_TYPES.HTMLBlock) {
+                let newIndicator = indicatorClone.cloneNode(true);
+                $('.truncate', newIndicator).text(indicator);
+                $(h3Wrapper).append(newIndicator);
+                const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
 
-            let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
-            addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
+                let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
+                addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
+            }
         }
     }
 
@@ -155,7 +158,6 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     let hiddenClass = hideondeployClsName;
     hiddenClass = 'hidden';
     $(parentContainer).find('.data-category').remove();
-
 
     for (const [category, detail] of Object.entries(data)) {
         let hasChildren = checkIfCategoryHasChildren(category, detail)

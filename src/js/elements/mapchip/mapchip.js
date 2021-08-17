@@ -16,7 +16,6 @@ export class MapChip extends Component {
 
         this.prepareDomElements();
 
-        this._filterController = new FilterController(this, this._filtersContainer);
         this._legend = new Legend(this, this._legendContainer, legendColors);
 
         this.prepareUIEvents();
@@ -99,12 +98,13 @@ export class MapChip extends Component {
             return;
         }
 
+        this._filterController = new FilterController(this, this._filtersContainer);
         const previouslySelectedFilters = params.filter;
 
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
         this.description = params.description;
-        
+
         this.show();
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;

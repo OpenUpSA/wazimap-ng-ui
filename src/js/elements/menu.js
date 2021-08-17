@@ -10,6 +10,7 @@ const indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0
 const indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
+const DATASET_TYPES = {Quantitative: 'quantitative', Qualitative: 'qualitative'};
 
 function subindicatorsInCategory(category) {
     let count = 0;
@@ -96,7 +97,7 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
         $(".data-category__h3", h3Wrapper).remove();
 
         for (const [indicator, detail] of Object.entries(indicators)) {
-            if (detail.content_type != ContentBlock.BLOCK_TYPES.HTMLBlock) {
+            if (detail.dataset_content_type != DATASET_TYPES.Qualitative) {
                 let newIndicator = indicatorClone.cloneNode(true);
                 $('.truncate', newIndicator).text(indicator);
                 $(h3Wrapper).append(newIndicator);

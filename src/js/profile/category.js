@@ -45,7 +45,7 @@ export class Category extends Component {
         $(newCategorySection).append(indicatorHeader);
 
         $(categoryTitleClass, newCategorySection).text(category);
-        $(descriptionTextClass, newCategorySection).text(detail.description);
+        $(descriptionTextClass, newCategorySection).html(detail.description);
 
         if (detail.description === '') {
             $(descriptionClass, newCategorySection).addClass('hidden');

@@ -40,6 +40,9 @@ export class Profile_header extends Component {
         facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
         $(downloadAllFacilities).on('click', () => this.downloadAllFacilities());
+        $('.rich-data__print').off('click').on('click', () => {
+            window.print();
+        });
 
         this.checkIfDownloadsDisabled();
         this.setPointSource();
@@ -113,7 +116,7 @@ export class Profile_header extends Component {
                 let facilityItem = facilityTemplate.cloneNode(true);
                 $('.location-facility__name div', facilityItem).text(theme.name);
                 ThemeStyle.replaceChildDivWithIcon($(facilityItem).find('.location-facility__icon'), theme.icon);
-                $('.location-facility__value div', facilityItem).text(theme.count);
+                $('.location-facility__value div', facilityItem).text('');
                 totalCount += theme.count;
 
                 //.location-facility__item .tooltip__points_label .truncate
@@ -129,7 +132,7 @@ export class Profile_header extends Component {
                     }
 
                     $('.location-facility__item_name .truncate', rowItem).text(themeCategories[i].label);
-                    $('.location-facility__item_value div', rowItem).text(themeCategories[i].count);
+                    $('.location-facility__item_value div', rowItem).text('');
 
                     $('.location-facility__list', facilityItem).append(rowItem);
 
@@ -149,7 +152,7 @@ export class Profile_header extends Component {
             $('.location__facilities_header').removeClass('hidden');
             $('.location__facilities_trigger').removeClass('hidden');
             $('.location__facilities_categories-value strong').text(categoryArr.length);
-            $('.location__facilities_facilities-value strong').text(totalCount);
+            $('.location__facilities_facilities-value strong').text('');
         } else {
             $('.location__facilities').addClass('hidden');
         }

@@ -97,6 +97,10 @@ export class FilterController extends Component {
     prepareDomElements() {
         this._rowContainer = $(this.container).find(this._elements.filterRowClass)[0];
         $(this._rowContainer).hide();
+
+        while ($(this.container).find(this._elements.filterRowClass).length > 1) {
+            $(this.container).find(this._elements.filterRowClass)[1].remove();
+        }
     }
 
     prepareEvents() {
@@ -106,9 +110,13 @@ export class FilterController extends Component {
         })
     }
 
-    setFilterVisibility(){
-        if (this.model.dataFilterModel.availableFilters.length <= 0) {
+    setFilterVisibility() {
+        const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
+        const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+        if (nonAggregatableGroups.length <= 0 && defaultGroups.length <= 0 && this.model.dataFilterModel.availableFilters.length <= 0) {
             $(this.container).addClass('hidden');
+        } else {
+            $(this.container).removeClass('hidden');
         }
     }
 
@@ -211,6 +219,7 @@ export class FilterController extends Component {
 
     setDataFilterModel(dataFilterModel) {
         this.reset();
+
         this.model.dataFilterModel = dataFilterModel;
 
         this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, () => {

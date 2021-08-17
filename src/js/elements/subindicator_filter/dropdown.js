@@ -41,6 +41,9 @@ export class DropdownModel extends Observable {
                 this.currentIndex = idx;
                 return;
             }
+            else {
+                this.currentIndex = 0;
+            }
         }
 
         throw `Did not find value: ${value} in dropdown items`;

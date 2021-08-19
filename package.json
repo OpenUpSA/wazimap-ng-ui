@@ -87,7 +87,16 @@
     "testPathIgnorePatterns": [
       "/__tests__/integration/",
       "/node_modules/"
-    ]
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "html"
+    ],
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      ".+\\.(css|styl|less|sass|scss|png|jpg|gif|ttf|woff|woff2)$": "jest-transform-stub",
+      "^.+\\.html$": "html-loader-jest"
+    }
   },
   "importWebflowExport": {
     "copyTrees": {
@@ -105,16 +114,7 @@
         "glob": "{401,about}.html",
         "destDir": "src"
       }
-    ],
+    ]
     
-    "moduleFileExtensions": [
-      "js",
-      "html"
-    ],
-    "transform": {
-      "^.+\\.js$": "babel-jest",
-      ".+\\.(css|styl|less|sass|scss|png|jpg|gif|ttf|woff|woff2)$": "jest-transform-stub",
-      "^.+\\.html$": "html-loader-jest"
-    }
   }
 }

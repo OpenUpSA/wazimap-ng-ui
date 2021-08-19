@@ -1,0 +1,71 @@
+{
+  "id": 8,
+  "name": "Profile name",
+  "permission_type": "public",
+  "requires_authentication": false,
+  "geography_hierarchy": {
+    "id": 1,
+    "name": "2011 SA Boundaries",
+    "root_geography": {
+      "name": "South Africa",
+      "code": "ZA",
+      "level": "country",
+      "version": "2011 Boundaries"
+    },
+    "description": ""
+  },
+  "description": "",
+  "configuration": {
+    "urls": [
+      "example.com"
+    ],
+    "default_panel": "point_data",
+    "tutorial": [
+      {
+        "body": "body A",
+        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-1.png",
+        "title": "Title A:"
+      },
+      {
+        "body": "Body B",
+        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-2.png",
+        "title": "Title B:"
+      },
+      {
+        "body": "Body C",
+        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-3.png",
+        "title": "Title C:"
+      },
+      {
+        "body": "body d",
+        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-4.png",
+        "title": "title d"
+      },
+      {
+        "body": "body e",
+        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-5.png",
+        "title": "title e:"
+      },
+      {
+        "body": "body f",
+        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-6.png",
+        "title": "title f"
+      },
+      {
+        "body": "body g",
+        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-7.png",
+        "title": "title g"
+      },
+      {
+        "body": "body h",
+        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-8.png",
+        "title": "title h"
+      }
+    ],
+    "default_coordinates": {
+      "lat": -28.995409163308832,
+      "long": 25.093833387362697,
+      "zoom": 6
+    }
+  }
+}

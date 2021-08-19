@@ -40,6 +40,9 @@ export class Profile_header extends Component {
         facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
 
         $(downloadAllFacilities).on('click', () => this.downloadAllFacilities());
+        $('.rich-data__print').off('click').on('click', () => {
+            window.print();
+        });
 
         this.checkIfDownloadsDisabled();
         this.setPointSource();

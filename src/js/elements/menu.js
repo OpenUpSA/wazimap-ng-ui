@@ -1,6 +1,5 @@
 import {SubIndicator} from '../dataobjects'
 import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
-import { ContentBlock } from "../profile/blocks/content_block";
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");

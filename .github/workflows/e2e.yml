@@ -17,5 +17,8 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Cypress run
         uses: cypress-io/github-action@v2.6.1
+        with:
+          browser: chrome
+          headless: true
         env:
           CYPRESS_BASE_URL: https://wazimap-staging.netlify.app

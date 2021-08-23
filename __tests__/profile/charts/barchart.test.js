@@ -60,7 +60,7 @@ describe('configureBarchart', () => {
           defaultType: "Value",
           xTicks: null
         }
-        let vegaSpec = configureBarchart(data, metadata, config);
+        let vegaSpec = configureBarchart(data, metadata, "chart title", config);
         view = renderVegaHeadless(vegaSpec)
       })
       it('scale domain will use the data extent', async () => {
@@ -97,7 +97,7 @@ describe('configureBarchart', () => {
         }
       })
       it('domain max from percentage config', async () => {
-        let vegaSpec = configureBarchart(data, metadata, config);
+        let vegaSpec = configureBarchart(data, metadata, "chart title", config);
         view = renderVegaHeadless(vegaSpec)
         await view.runAsync()
 
@@ -128,7 +128,7 @@ describe('configureBarchart', () => {
         }
       })
       it('xscale has domain max from value config', async () => {
-        let vegaSpec = configureBarchart(data, metadata, config);
+        let vegaSpec = configureBarchart(data, metadata, "chart title", config);
         let view = renderVegaHeadless(vegaSpec)
         await view.runAsync()
 
@@ -160,7 +160,7 @@ describe('configureBarchart', () => {
       }
     })
     it('axis has tickCount from config', async() => {
-      let vegaSpec = configureBarchart(data, metadata, config);
+      let vegaSpec = configureBarchart(data, metadata, "chart title", config);
 
       const [yAxis, xAxis] = vegaSpec.axes
 

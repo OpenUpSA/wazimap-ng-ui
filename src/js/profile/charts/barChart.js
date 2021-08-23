@@ -8,7 +8,7 @@ const graphValueTypes = {
   "Value": VALUE_TYPE
 };
 
-export const configureBarchart = (data, metadata, config) => {
+export const configureBarchart = (data, metadata, title, config) => {
   const {
     xTicks,
     defaultType,
@@ -30,6 +30,7 @@ export const configureBarchart = (data, metadata, config) => {
     $schema: "https://vega.github.io/schema/vega/v5.json",
     description: "A",
     width: 800,
+    background: "white",
     padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
     data: [
       {
@@ -141,8 +142,27 @@ export const configureBarchart = (data, metadata, config) => {
         name: "height",
         update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
       },
+      {
+        name: "title",
+        update: [title]
+      },
+      {
+        name: "source",
+        update: [metadata.source]
+      },
+      {
+        name: "bottom",
+        update: "height + 40"
+      },
       ...filterSignals
     ],
+    "title": {
+        "text": {signal: "title"},
+        "subtitle": {signal: "source"},
+        "subtitleFontStyle": "italic",
+        "anchor": "start",
+        "frame": "group"
+      },
     scales: [
       {
         name: "yscale",
@@ -217,6 +237,20 @@ export const configureBarchart = (data, metadata, config) => {
             },
           },
         },
+      },
+      {
+        "type": "text",
+        "interactive": false,
+        "encode": {
+          "enter": {
+            "y": {"signal": "bottom"},
+            "text": {"signal": "groups"},
+            "baseline": {"value": "bottom"},
+            "fontSize": {"value": 14},
+            "fontWeight": {"value": 500},
+            "fill": {"value": "black"}
+          }
+        }
       },
     ],
   };

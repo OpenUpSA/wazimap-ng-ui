@@ -73,7 +73,7 @@ export class Chart extends Component {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();
 
-        let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
+        let vegaSpec = configureBarchart(data.data, data.metadata, this.title, this.config);
 
         const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
             let x = event.pageX + offsetX;

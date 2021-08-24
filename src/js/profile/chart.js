@@ -9,8 +9,9 @@ import XLSX from 'xlsx';
 import Papa from 'papaparse';
 
 import embed from "vega-embed";
+import * as vega from "vega";
 
-import {configureBarchart} from './charts/barChart';
+import {configureBarchart, configureBarchartDownload} from './charts/barChart';
 import {slugify} from './charts/utils';
 import DropdownMenu from "../elements/dropdown_menu";
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
@@ -73,7 +74,7 @@ export class Chart extends Component {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();
 
-        let vegaSpec = configureBarchart(data.data, data.metadata, this.title, this.config);
+        let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
 
         const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
             let x = event.pageX + offsetX;
@@ -249,6 +250,11 @@ export class Chart extends Component {
 
     setDownloadUrl = async () => {
         const containerParent = $(this.container).closest(".profile-indicator");
+
+        let specDownload = configureBarchartDownload(this.data.data, this.data.metadata, this.title, this.config);
+        let vegaViewDownload = new vega.View(specDownload);
+        // vegaViewDownload should then be able to use with toImageURL below
+
         const pngDownloadUrl = await this.vegaView.toImageURL('png', 1);
         const saveImgButton = $(containerParent).find(
             ".hover-menu__content a.hover-menu__content_item:nth-child(1)"

@@ -22,3 +22,6 @@ jobs:
 
       - name: Cypress run
         uses: cypress-io/github-action@v2.6.1
+        with:
+          browser: chrome
+          headless: true

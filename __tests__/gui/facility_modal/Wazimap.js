@@ -1,6 +1,7 @@
 import {When, Given, Then} from "cypress-cucumber-preprocessor/steps";
 
 When('I click on a theme', () => {
+    cy.wait(1000);
     cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1').first().click();
 })
 

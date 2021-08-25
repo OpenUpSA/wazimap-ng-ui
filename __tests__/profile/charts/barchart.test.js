@@ -1,4 +1,4 @@
-import { configureBarchart } from '../../../src/js/profile/charts/barChart.js';
+import { configureBarchart, configureBarchartDownload } from '../../../src/js/profile/charts/barChart.js';
 
 import { parse, View }from 'vega';
 
@@ -167,4 +167,49 @@ describe('configureBarchart', () => {
       expect(xAxis).toHaveProperty('tickCount', 10)
     });
   });
+});
+
+describe('Test downloadable barchart', () => {
+  let data, metadata, config;
+  beforeEach(() => {
+    metadata = {
+      source: "Cencus 2021",
+      primary_group: "age",
+      groups: [{ name: "age" }]
+      },
+    data = [
+      { age: 15, gender: 'male', count: 1 },
+      { age: 12, gender: 'female', count: 3 },
+      { age: 14, gender: 'male', count: 2 }
+    ]
+    config = {
+      types: {
+        Value: {
+          formatting: ",.0f",
+          minX: "default",
+          maxX: "default"
+        },
+        Percentage: {
+          formatting: ".0%",
+          minX: "default",
+          maxX: "default"
+        }
+      },
+      disableToggle: false,
+      defaultType: "Value",
+      xTicks: null
+    }
+  });
+
+  test('Configure spec for downloadable Vega chart', () => {
+    let annotations = {'title':'Population', 'geography':'South Africa', 'filters':'Gender: female', 'custom':'Custom chart config'}
+    let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
+    let view = renderVegaHeadless(vegaDownloadSpec);
+
+    expect(view.signal('title')).toBe('Population');
+    expect(view.signal('source')).toBe('Cencus 2021');
+    expect(view.signal('geography')).toBe('South Africa');
+    expect(view.signal('filters')).toBe('Gender: female');
+    expect(view.signal('custom')).toBe('Custom chart config');
+  })
 });

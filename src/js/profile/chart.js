@@ -251,11 +251,11 @@ export class Chart extends Component {
     setDownloadUrl = async () => {
         const containerParent = $(this.container).closest(".profile-indicator");
 
-        let specDownload = configureBarchartDownload(this.data.data, this.data.metadata, this.title, this.config);
-        let vegaViewDownload = new vega.View(specDownload);
-        // vegaViewDownload should then be able to use with toImageURL below
+        let annotations = {"title":this.title, "geography":"", "filters":"", "custom":""}
+        let specDownload = configureBarchartDownload(this.data.data, this.data.metadata, this.config, annotations);
+        let vegaViewDownload = new vega.View(vega.parse(specDownload));
 
-        const pngDownloadUrl = await this.vegaView.toImageURL('png', 1);
+        const pngDownloadUrl = await vegaViewDownload.toImageURL('png', 1);
         const saveImgButton = $(containerParent).find(
             ".hover-menu__content a.hover-menu__content_item:nth-child(1)"
         );

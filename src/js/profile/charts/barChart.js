@@ -223,7 +223,7 @@ export const configureBarchart = (data, metadata, config) => {
   };
 };
 
-export const configureBarchartDownload = (data, metadata, title, config) => {
+export const configureBarchartDownload = (data, metadata, config, annotations) => {
   const {
     xTicks,
     defaultType,
@@ -358,22 +358,14 @@ export const configureBarchartDownload = (data, metadata, title, config) => {
         update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
       },
       {
-        name: "title",
-        update: [title]
-      },
-      {
-        name: "source",
-        update: [metadata.source]
-      },
-      {
-        name: "bottom",
+        name: "chart_bottom",
         update: "height + 40"
       },
       ...filterSignals
     ],
     "title": {
-        "text": {signal: "title"},
-        "subtitle": {signal: "source"},
+        "text": {"value": annotations.title},
+        "subtitle": {"value": [metadata.source]},
         "subtitleFontStyle": "italic",
         "anchor": "start",
         "frame": "group"
@@ -458,8 +450,8 @@ export const configureBarchartDownload = (data, metadata, title, config) => {
         "interactive": false,
         "encode": {
           "enter": {
-            "y": {"signal": "bottom"},
-            "text": {"value": "placeholder"},
+            "y": {"signal": "chart_bottom"},
+            "text": {"value": annotations.geography + " " + annotations.filters + " " + annotations.custom},
             "baseline": {"value": "bottom"},
             "fontSize": {"value": 14},
             "fontWeight": {"value": 500},

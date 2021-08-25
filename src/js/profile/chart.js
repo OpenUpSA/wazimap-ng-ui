@@ -255,11 +255,14 @@ export class Chart extends Component {
         let filters = "";
         if (this.selectedFilter) {
             for (const [group, attribute] of Object.entries(this.selectedFilter)) {
-                filters += group + " " + attribute + ", ";
+                filters += group.replace(/^\w/, g => g.toUpperCase()) + ": " + attribute;
             }
         }
+        if (this.config.chartCaption === undefined) {
+            this.config.chartCaption = "";
+        }
 
-        let annotations = {"title":this.title, "geography":titleEle.slice(-1).text().trim(), "filters":filters, "custom":""}
+        let annotations = {"title":this.title, "geography":titleEle.slice(-1).text().trim(), "filters":filters, "custom":this.config.chartCaption}
         let specDownload = configureBarchartDownload(this.data.data, this.data.metadata, this.config, annotations);
         let vegaViewDownload = new vega.View(vega.parse(specDownload));
 

@@ -363,12 +363,12 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
       },
       ...filterSignals
     ],
-    "title": {
-        "text": {"value": annotations.title},
-        "subtitle": {"value": [metadata.source]},
-        "subtitleFontStyle": "italic",
-        "anchor": "start",
-        "frame": "group"
+    title: {
+        text: {value: annotations.title},
+        subtitle: {value: [metadata.source]},
+        subtitleFontStyle: "italic",
+        anchor: "start",
+        frame: "group"
       },
     scales: [
       {
@@ -446,16 +446,16 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
         },
       },
       {
-        "type": "text",
-        "interactive": false,
-        "encode": {
-          "enter": {
-            "y": {"signal": "chart_bottom"},
-            "text": {"value": annotations.filters + ", " + annotations.geography + ". " + annotations.custom},
-            "baseline": {"value": "bottom"},
-            "fontSize": {"value": 14},
-            "fontWeight": {"value": 500},
-            "fill": {"value": "black"}
+        type: "text",
+        interactive: false,
+        encode: {
+          enter: {
+            y: {signal: "chart_bottom"},
+            text: {value: annotations.filters + ", " + annotations.geography + ". " + annotations.custom},
+            baseline: {value: "bottom"},
+            fontSize: {value: 14},
+            fontWeight: {value: 500},
+            fill: {value: "black"}
           }
         }
       },

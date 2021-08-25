@@ -255,7 +255,7 @@ export class Chart extends Component {
         let filters = "";
         if (this.selectedFilter) {
             for (const [group, attribute] of Object.entries(this.selectedFilter)) {
-                filters += group.replace(/^\w/, g => g.toUpperCase()) + ": " + attribute;
+                filters += group.replace(/^\w/, g => g.toUpperCase()) + ": " + attribute + ", ";
             }
         }
         if (this.config.chartCaption === undefined) {

@@ -358,14 +358,34 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
         update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
       },
       {
+        name: "title",
+        value: annotations.title
+      },
+      {
+        name: "source",
+        value: metadata.source
+      },
+      {
+        name: "geography",
+        value: annotations.geography
+      },
+      {
+        name: "filters",
+        value: annotations.filters
+      },
+      {
+        name: "custom",
+        value: annotations.custom
+      },
+      {
         name: "chart_bottom",
         update: "height + 40"
       },
       ...filterSignals
     ],
     title: {
-        text: {value: annotations.title},
-        subtitle: {value: [metadata.source]},
+        text: {signal: "title"},
+        subtitle: {signal: "source"},
         subtitleFontStyle: "italic",
         anchor: "start",
         frame: "group"
@@ -451,7 +471,7 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
         encode: {
           enter: {
             y: {signal: "chart_bottom"},
-            text: {value: annotations.filters + ", " + annotations.geography + ". " + annotations.custom},
+            text: {"signal": "filters + geography + '. ' + custom"},
             baseline: {value: "bottom"},
             fontSize: {value: 14},
             fontWeight: {value: 500},

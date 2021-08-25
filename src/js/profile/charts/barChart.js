@@ -451,7 +451,7 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
         "encode": {
           "enter": {
             "y": {"signal": "chart_bottom"},
-            "text": {"value": annotations.geography + " " + annotations.filters + " " + annotations.custom},
+            "text": {"value": annotations.filters + annotations.geography + annotations.custom},
             "baseline": {"value": "bottom"},
             "fontSize": {"value": 14},
             "fontWeight": {"value": 500},

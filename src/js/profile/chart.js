@@ -251,7 +251,15 @@ export class Chart extends Component {
     setDownloadUrl = async () => {
         const containerParent = $(this.container).closest(".profile-indicator");
 
-        let annotations = {"title":this.title, "geography":"", "filters":"", "custom":""}
+        let titleEle = $(".map-location__tags").find('.location-tag__name');
+        let filters = "";
+        if (this.selectedFilter) {
+            for (const [group, attribute] of Object.entries(this.selectedFilter)) {
+                filters += group + " " + attribute + ", ";
+            }
+        }
+
+        let annotations = {"title":this.title, "geography":titleEle.slice(-1).text().trim(), "filters":filters, "custom":""}
         let specDownload = configureBarchartDownload(this.data.data, this.data.metadata, this.config, annotations);
         let vegaViewDownload = new vega.View(vega.parse(specDownload));
 
@@ -370,6 +378,7 @@ export class Chart extends Component {
                 this.vegaView.signal(`${filterName}FilterValue`, value)
             }
         }
+        this.selectedFilter = selectedFilter;
 
         this.vegaView.run();
         this.appendDataToTable();

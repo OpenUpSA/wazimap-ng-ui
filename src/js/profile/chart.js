@@ -52,6 +52,7 @@ export class Chart extends Component {
         this.filter = null;
         this.groups = data.metadata.groups;
 
+        this.profileAttribution = parent.parent.parent.parent.config.chart_attribution;
         this.subCategoryNode = _subCategoryNode;
 
         const chartContainer = $(chartContainerClass, this.subCategoryNode);
@@ -258,11 +259,8 @@ export class Chart extends Component {
                 filters += group.replace(/^\w/, g => g.toUpperCase()) + ": " + attribute + ", ";
             }
         }
-        if (this.config.chartCaption === undefined) {
-            this.config.chartCaption = "";
-        }
 
-        let annotations = {"title":this.title, "geography":titleEle.slice(-1).text().trim(), "filters":filters, "custom":this.config.chartCaption}
+        let annotations = {"title":this.title, "geography":titleEle.slice(-1).text().trim(), "filters":filters, "attribution":this.profileAttribution}
         let specDownload = configureBarchartDownload(this.data.data, this.data.metadata, this.config, annotations);
         let vegaViewDownload = new vega.View(vega.parse(specDownload));
 

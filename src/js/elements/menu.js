@@ -5,6 +5,7 @@ const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
 let categoryTemplate = null;
 let subCategoryTemplate = null;
+let indicatorTemplate = null;
 let indicatorItemTemplate = null;
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';

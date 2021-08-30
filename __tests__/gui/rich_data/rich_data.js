@@ -12,7 +12,7 @@ Then('Rich Data should be displayed', () => {
 })
 
 When('I mouseover the hamburger menu', () => {
-    cy.get('.hover-menu').trigger('mouseover')
+    cy.get('.hover-menu').first().trigger('mouseover')
 })
 
 Then('the hamburger menu should show', () => {

@@ -5,3 +5,4 @@ export function configureMapDownloadEvents(mapDownload) {
     mapDownload.on('mapdownload.started', payload => $('.map-download').html(loadState))
     mapDownload.on('mapdownload.completed', payload => $('.map-download').html(initialHtml))
 }
+

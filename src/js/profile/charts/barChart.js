@@ -375,7 +375,8 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
       },
       {
         name: "attribution",
-        value: annotations.attribution
+        value: "",
+        update: annotations.attribution
       },
       {
         name: "chart_bottom",

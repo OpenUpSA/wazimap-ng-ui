@@ -16,7 +16,7 @@ When('I mouseover the hamburger menu', () => {
 })
 
 Then('the hamburger menu should show', () => {
-    cy.get('.hover-menu').should('be.visible');
+    cy.get('.hover-menu__content').should('be.visible');
 })
 
 When('I click on {word} in Data Mapper', () => {

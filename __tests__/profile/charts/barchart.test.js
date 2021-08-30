@@ -1,5 +1,5 @@
 import { configureBarchart, configureBarchartDownload } from '../../../src/js/profile/charts/barChart.js';
-
+import { screen, fireEvent, getByText } from '@testing-library/dom'
 import { parse, View }from 'vega';
 
 function renderVegaHeadless(spec) {
@@ -173,7 +173,7 @@ describe('Test downloadable barchart', () => {
   let data, metadata, config;
   beforeEach(() => {
     metadata = {
-      source: "Cencus 2021",
+      source: "Census 2021",
       primary_group: "age",
       groups: [{ name: "age" }]
       },
@@ -201,15 +201,16 @@ describe('Test downloadable barchart', () => {
     }
   });
 
-  test('Configure spec for downloadable Vega chart', () => {
-    let annotations = {'title':'Population', 'geography':'South Africa', 'filters':'Gender: female', 'custom':'Custom chart config'}
+  test('Configure spec for downloadable Vega chart', async () => {
+    let annotations = {'title':'Population', 'geography':'South Africa', 'filters':'Gender: female', 'attribution':'Profile config attribution'}
     let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
     let view = renderVegaHeadless(vegaDownloadSpec);
+    await view.runAsync()
 
     expect(view.signal('title')).toBe('Population');
-    expect(view.signal('source')).toBe('Cencus 2021');
+    expect(view.signal('source')).toBe('Census 2021');
     expect(view.signal('geography')).toBe('South Africa');
     expect(view.signal('filters')).toBe('Gender: female');
-    expect(view.signal('custom')).toBe('Custom chart config');
+    expect(view.signal('attribution').toString()).toBe('Profile config attribution');
   })
 });

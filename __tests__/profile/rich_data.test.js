@@ -52,6 +52,11 @@ describe('Rich data panel tests', () => {
         checkHTMLIsRendered('.profile-indicator__chart_description', 'An indicator description');
     })
 
+    test('Chart download is visible', () => {
+       let chartDownload = document.querySelector('.content__item_title');
+       expect(chartDownload).toBeVisible();
+    })
+
     function checkHTMLIsRendered(elementClass, description) {
         let descriptionElement = document.querySelector(elementClass);
         let htmlTag = descriptionElement.textContent.trim();

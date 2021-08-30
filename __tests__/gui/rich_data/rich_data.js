@@ -12,14 +12,11 @@ Then('Rich Data should be displayed', () => {
 })
 
 When('I mouseover the hamburger menu', () => {
-    cy.get('.hover-menu').invoke('show')
-})
-
-Then('the hamburger menu should show', () => {
+    cy.get('.hover-menu').invoke('show');
     cy.get('.hover-menu__content').should('be.visible');
 })
 
-When('I click on {word} in Data Mapper', () => {
+Then('I click on Save As Image in Data Mapper', () => {
     cy.get('.hover-menu__content_item').contains('Save As Image').click();
 })
 

@@ -4,7 +4,7 @@ import all_details from "../rich_data/all_details.json";
 
 When('I expand Rich Data', () => {
     cy.wait(100);
-    cy.get('.point-mapper-toggles .hover-text-primary .panel-toggle .rich-data-panel__open').click();
+    cy.get('.rich-data-toggles .rich-data-panel__open').click();
 })
 
 Then('Rich Data should be displayed', () => {

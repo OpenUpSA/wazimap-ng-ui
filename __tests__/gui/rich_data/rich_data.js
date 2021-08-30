@@ -15,7 +15,7 @@ When('I mouseover the hamburger menu', () => {
     cy.get('.hover-menu').invoke('show')
 })
 
-Then('The hamburger menu should show', () => {
+Then('the hamburger menu should show', () => {
     cy.get('.hover-menu').should('be.visible');
 })
 

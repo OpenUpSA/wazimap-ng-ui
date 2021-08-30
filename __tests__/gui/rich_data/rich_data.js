@@ -1,5 +1,5 @@
 import {When, Given, Then} from "cypress-cucumber-preprocessor/steps";
-import all_details from "../toggling_indicators/all_details.json";
+import all_details from "../rich_data/all_details.json";
 
 
 When('I expand Rich Data', () => {
@@ -8,7 +8,7 @@ When('I expand Rich Data', () => {
 })
 
 Then('Rich Data should be displayed', () => {
-    cy.get('.rich-data-content__list').should('be.visible');
+    cy.get('.rich-data-nav__list').should('be.visible');
 })
 
 When('I mouseover the hamburger menu', () => {

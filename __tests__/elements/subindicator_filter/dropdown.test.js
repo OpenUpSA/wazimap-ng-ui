@@ -54,4 +54,92 @@ describe('Dropdowns', () => {
 
         expect(subindicatorDd).toHaveClass('disabled');
     })
+
+    test('Selecting an indicator updates other indicator dropdowns items correctly', () => {
+        params.groups = [
+            {
+                subindicators: ["30-35", "20-24", "15-24 (Intl)", "15-35 (ZA)", "15-19", "25-29"],
+                dataset: 241,
+                name: "age",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Female", "Male"],
+                dataset: 241,
+                name: "gender",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Xitsonga", "Sign language", "isiNdebele", "Setswana", "Sesotho", "English", "Other", "Siswati", "Afrikaans", "Sepedi", "Tshivenda", "isiXhosa", "isiZulu"],
+                dataset: 241,
+                name: "language",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Black African", "Indian or Asian", "Other", "Coloured", "White"],
+                dataset: 241,
+                name: "race",
+                can_aggregate: true,
+                can_filter: true
+            }];
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+
+        mc._filterController.addEmptyFilter();
+
+        expect(mc._filterController.model.filterRows[0].indicatorDropdown.model.items).toContain('gender');
+        mc._filterController.model.filterRows[1].indicatorDropdown.model.currentItem = 'gender';
+        expect(mc._filterController.model.filterRows[0].indicatorDropdown.model.items).not.toContain('gender');
+    })
+
+    test('Selecting a new indicator resets subindicator dropdown', () => {
+        params.groups = [
+            {
+                subindicators: ["30-35", "20-24", "15-24 (Intl)", "15-35 (ZA)", "15-19", "25-29"],
+                dataset: 241,
+                name: "age",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Female", "Male"],
+                dataset: 241,
+                name: "gender",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Xitsonga", "Sign language", "isiNdebele", "Setswana", "Sesotho", "English", "Other", "Siswati", "Afrikaans", "Sepedi", "Tshivenda", "isiXhosa", "isiZulu"],
+                dataset: 241,
+                name: "language",
+                can_aggregate: true,
+                can_filter: true
+            },
+            {
+                subindicators: ["Black African", "Indian or Asian", "Other", "Coloured", "White"],
+                dataset: 241,
+                name: "race",
+                can_aggregate: true,
+                can_filter: true
+            }];
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+
+        mc._filterController.model.filterRows[0].indicatorDropdown.model.currentItem = 'gender';
+        expect(mc._filterController.model.filterRows[0].subIndicatorDropdown.model.items).toStrictEqual(["Female", "Male"]);
+
+        mc._filterController.model.filterRows[0].subIndicatorDropdown.model.currentItem = 'Male';
+        expect(mc._filterController.model.filterRows[0].subIndicatorDropdown.model.currentIndex).toBe("1");
+
+        mc._filterController.model.filterRows[0].indicatorDropdown.model.currentItem = 'race';
+        expect(mc._filterController.model.filterRows[0].subIndicatorDropdown.model.items).toStrictEqual(["Black African", "Indian or Asian", "Other", "Coloured", "White"]);
+        expect(mc._filterController.model.filterRows[0].subIndicatorDropdown.model.currentIndex).toBe(0);
+    })
 })

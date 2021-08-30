@@ -54,3 +54,4 @@ export class MapDownload extends Component {
         }, 10)
     }
 }
+

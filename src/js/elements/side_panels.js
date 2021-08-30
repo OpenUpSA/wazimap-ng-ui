@@ -4,6 +4,7 @@ export const RICH_DATA_PANEL = "rich_data";
 export const POINT_DATA_PANEL = "point_data";
 export const DATA_EXPLORER_PANEL = "data_explorer";
 export const NO_PANELS = "no_panels";
+const MAP_DOWNLOAD_BTN = ".map-download";
 
 export class SidePanels extends Component {
     constructor(parent, showPanels) {
@@ -46,69 +47,63 @@ export class SidePanels extends Component {
     initialiseTriggers = () => {
         this.initialiseRichDataTriggers();
         this.initialisePointDataTriggers();
-        this.initialiseMapeExplorerTriggers();
+        this.initialiseMapExplorerTriggers();
         this.initialiseBlankTriggers();
     }
 
     initialiseRichDataTriggers = () => {
         this.richDataPanel.richData.click(() => {
-            this.triggerEvent('panel.rich_data.closed');
+            this.setPanels(false, false, false)
         })
 
         this.richDataPanel.pointData.click(() => {
-            this.triggerEvent('panel.point_mapper.opened');
-            this.triggerEvent('panel.rich_data.closed');
+            this.setPanels(false, true, false)
         })
 
         this.richDataPanel.mapExplorer.click(() => {
-            this.triggerEvent('panel.data_mapper.opened');
-            this.triggerEvent('panel.rich_data.closed');
+            this.setPanels(false, false, true)
         })
     }
 
     initialisePointDataTriggers = () => {
         this.pointDataPanel.richData.click(() => {
-            this.triggerEvent('panel.rich_data.opened');
-            this.triggerEvent('panel.point_mapper.closed');
+            this.setPanels(true, false, false)
         })
 
         this.pointDataPanel.pointData.click(() => {
-            this.triggerEvent('panel.point_mapper.closed');
+            this.setPanels(false, false, false)
         })
 
         this.pointDataPanel.mapExplorer.click(() => {
-            this.triggerEvent('panel.data_mapper.opened');
-            this.triggerEvent('panel.point_mapper.closed');
+            this.setPanels(false, false, true)
         })
     }
 
-    initialiseMapeExplorerTriggers = () => {
+    initialiseMapExplorerTriggers = () => {
         this.mapExplorerPanel.richData.click(() => {
-            this.triggerEvent('panel.rich_data.opened');
-            this.triggerEvent('panel.data_mapper.closed');
+            this.setPanels(true, false, false)
         })
 
         this.mapExplorerPanel.pointData.click(() => {
-            this.triggerEvent('panel.point_mapper.opened');
-            this.triggerEvent('panel.data_mapper.closed');
+            this.setPanels(false, true, false)
         })
 
         this.mapExplorerPanel.mapExplorer.click(() => {
-            this.triggerEvent('panel.data_mapper.closed');
+            this.setPanels(false, false, false)
         })
     }
 
     initialiseBlankTriggers = () => {
         this.emptyPanel.richData.click(() => {
-            this.triggerEvent('panel.rich_data.opened');
+            this.setPanels(true, false, false)
         })
 
         this.emptyPanel.pointData.click(() => {
-            this.triggerEvent('panel.point_mapper.opened');
+            this.setPanels(false, true, false)
         })
 
         this.emptyPanel.mapExplorer.click(() => {
-            this.triggerEvent('panel.data_mapper.opened');
+            this.setPanels(false, false, true)
         })
     }
 
@@ -123,7 +118,6 @@ export class SidePanels extends Component {
     toggleMapExplorer = () => {
         this.emptyPanel.mapExplorer.click();
     }
-
 
     hidePanel = (panel) => {
         this.emptyPanel[panel].hide();
@@ -146,5 +140,27 @@ export class SidePanels extends Component {
             default:
                 break;
         }
+    }
+
+    setPanels = (isRichDataOpen, isPointMapperOpen, isDataMapperOpen) => {
+        if (isRichDataOpen)
+            this.triggerEvent('panel.rich_data.opened');
+        else
+            this.triggerEvent('panel.rich_data.closed');
+
+        if (isPointMapperOpen)
+            this.triggerEvent('panel.point_mapper.opened');
+        else
+            this.triggerEvent('panel.point_mapper.closed');
+
+        if (isDataMapperOpen)
+            this.triggerEvent('panel.data_mapper.opened');
+        else
+            this.triggerEvent('panel.data_mapper.closed');
+
+        if (isRichDataOpen || isPointMapperOpen || isDataMapperOpen)
+            $(MAP_DOWNLOAD_BTN).addClass('disabled');
+        else
+            $(MAP_DOWNLOAD_BTN).removeClass('disabled');
     }
 }

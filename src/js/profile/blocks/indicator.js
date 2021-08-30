@@ -46,7 +46,10 @@ export class Indicator extends ContentBlock {
             let d = this.indicator.data.filter((x) => {
                 return x[primaryGroup] === g
             })[0];
-            orderedGroups.push(d);
+
+            if(d !== undefined){
+                orderedGroups.push(d);
+            }
         })
 
         this.indicator.data = orderedGroups;

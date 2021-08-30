@@ -12,18 +12,19 @@ describe('Rich data panel tests', () => {
     const profileWrapperClass = '.rich-data-content';
     const categoryName = "Test category";
     const categoryDetail = {
-        "description": "<p>An <strong>HTML</strong> description</p>",
+        "description": "<p>A <strong>category</strong> description</p>",
         "subcategories": {
             "Mock subcategory": {
-                "description": "<p>A subcategory description</p>",
+                "description": "<p>A <strong>subcategory</strong> description</p>",
                 "indicators": {
                     "Mock indicator": {
                         "data": [{
                             "age": "1"
                         }],
+                        "content_type": "indicator",
                         "metadata": {},
-                        "groups": {},
-                        "description": "<p>An indicator description</p>",
+                        "groups": [],
+                        "description": "<p>An <strong>indicator</strong> description</p>",
                         "type": "indicator"
                     }
                 }
@@ -40,7 +41,7 @@ describe('Rich data panel tests', () => {
     let category = new Category(component, formattingConfig, categoryName, categoryDetail, profileWrapper, id, removePrevCategories, isFirst)
 
     test('Category description is visible and renders HTML tags', () => {
-        checkHTMLIsRendered('.category-header__description', 'An HTML description');
+        checkHTMLIsRendered('.category-header__description', 'A category description');
     })
 
     test('Subcategory description is visible and renders HTML tags', () => {
@@ -55,6 +56,7 @@ describe('Rich data panel tests', () => {
         let descriptionElement = document.querySelector(elementClass);
         let htmlTag = descriptionElement.textContent.trim();
         expect(descriptionElement).toBeVisible();
+        expect(descriptionElement.innerHTML).toContain("<strong>");
         expect(htmlTag).toBe(description)
     }
 })

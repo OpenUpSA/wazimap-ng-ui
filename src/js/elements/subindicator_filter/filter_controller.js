@@ -97,6 +97,10 @@ export class FilterController extends Component {
     prepareDomElements() {
         this._rowContainer = $(this.container).find(this._elements.filterRowClass)[0];
         $(this._rowContainer).hide();
+
+        while ($(this.container).find(this._elements.filterRowClass).length > 1) {
+            $(this.container).find(this._elements.filterRowClass)[1].remove();
+        }
     }
 
     prepareEvents() {
@@ -215,6 +219,7 @@ export class FilterController extends Component {
 
     setDataFilterModel(dataFilterModel) {
         this.reset();
+
         this.model.dataFilterModel = dataFilterModel;
 
         this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, () => {

@@ -41,7 +41,7 @@ export class SidePanels extends Component {
             richData: $('.panel-toggles .panel-toggle:nth-child(1)'),
             pointData: $('.panel-toggles .panel-toggle:nth-child(2)'),
             mapExplorer: $('.panel-toggles .panel-toggle:nth-child(3)'),
-        } 
+        }
     }
 
     initialiseTriggers = () => {
@@ -127,7 +127,7 @@ export class SidePanels extends Component {
     }
 
     togglePanel = panel => {
-        switch(panel) {
+        switch (panel) {
             case RICH_DATA_PANEL:
                 this.toggleRichData()
                 break;
@@ -158,9 +158,13 @@ export class SidePanels extends Component {
         else
             this.triggerEvent('panel.data_mapper.closed');
 
-        if (isRichDataOpen || isPointMapperOpen || isDataMapperOpen)
+        if (isRichDataOpen || isPointMapperOpen || isDataMapperOpen) {
             $(MAP_DOWNLOAD_BTN).addClass('disabled');
-        else
+            $(MAP_DOWNLOAD_BTN).css('pointer-events', 'unset');
+            $(MAP_DOWNLOAD_BTN).attr('title', 'Please close the panel on the left to be able to download the map');
+        } else {
             $(MAP_DOWNLOAD_BTN).removeClass('disabled');
+            $(MAP_DOWNLOAD_BTN).removeAttr('title').removeAttr('style');
+        }
     }
 }

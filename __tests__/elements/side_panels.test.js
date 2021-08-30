@@ -57,6 +57,7 @@ describe('SidePanels', () => {
 
                 let mapDownloadButton = document.querySelector(".map-download");
                 expect(mapDownloadButton).not.toHaveClass('disabled');
+                expect(mapDownloadButton).not.toHaveAttribute('title');
             });
         })
         describe('open a new panel', () => {
@@ -70,6 +71,10 @@ describe('SidePanels', () => {
                 expect(triggerEvent).toBeCalledTimes(3);
                 expect(triggerEvent).toHaveBeenNthCalledWith(1, 'panel.rich_data.closed');
                 expect(triggerEvent).toHaveBeenNthCalledWith(2, 'panel.point_mapper.opened');
+
+                let mapDownloadButton = document.querySelector(".map-download");
+                expect(mapDownloadButton).toHaveClass('disabled');
+                expect(mapDownloadButton).toHaveAttribute('title');
             });
         });
 

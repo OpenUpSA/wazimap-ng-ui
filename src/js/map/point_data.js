@@ -194,6 +194,7 @@ export class PointData extends Component {
                 fillOpacity: 1,
                 pane: 'markerPane'
             })
+
             marker.on('click', (e) => {
                 this.showMarkerPopup(e, point, categoryData, true);
                 stopPropagation(e); //prevent map click event
@@ -284,6 +285,9 @@ export class PointData extends Component {
 
     showFacilityModal = (point) => {
         $('.facility-info__title').text(point.name);
+        $('.facility-info__print').off('click').on('click',() => {
+            window.print();
+        });
         this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');
 
         let gMapsUrl = `https://www.google.com/maps/search/?api=1&query=${point.y},${point.x}`;

@@ -1,10 +1,7 @@
 import {When, Given, Then} from "cypress-cucumber-preprocessor/steps";
 
-Then('I wait until map is ready', () => {
-    cy.get('.map-location .location-tag .location-tag__name .truncate', {timeout: 20000}).should('contain', 'South Africa')
-})
-
 When('I click on a theme', () => {
+    cy.wait(1000);
     cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1').first().click();
 })
 

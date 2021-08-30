@@ -39,3 +39,7 @@ Given('I am on the Wazimap Homepage', () => {
         })
     })
 })
+
+Then('I wait until map is ready', () => {
+    cy.get('.map-location .location-tag .location-tag__name .truncate', {timeout: 20000}).should('contain', 'South Africa Test')
+})

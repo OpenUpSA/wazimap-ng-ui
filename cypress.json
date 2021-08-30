@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:1234",
   "testFiles": "**/*.{feature,features}",
-  "integrationFolder": "./__tests__"
+  "integrationFolder": "__tests__/gui",
+  "projectId": "1kvqay"
 }

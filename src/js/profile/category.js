@@ -30,7 +30,7 @@ export class Category extends Component {
   }
 
   addCategory = (category, detail, isFirst) => {
-      const newCategorySection = categoryTemplate.cloneNode(true);
+      const newCategorySection = this.categoryTemplate.cloneNode(true);
       const sectionHeader = $('.category-header')[0].cloneNode(true);
       const indicatorHeader = $('.sub-category-header')[0].cloneNode(true);
 

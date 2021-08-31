@@ -12,6 +12,7 @@ Then('Rich Data should be displayed', () => {
 })
 
 When('I mouseover the hamburger menu', () => {
+    cy.get('.point-mapper-toggles .rich-data-panel__open').click();
     cy.get('.hover-menu:first').trigger('mouseover')
 })
 

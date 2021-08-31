@@ -30,27 +30,30 @@ export class Category extends Component {
   }
 
   addCategory = (category, detail, isFirst) => {
-    const newCategorySection = this.categoryTemplate.cloneNode(true);
-    const sectionHeader = $('.category-header')[0].cloneNode(true);
+      const newCategorySection = categoryTemplate.cloneNode(true);
+      const sectionHeader = $('.category-header')[0].cloneNode(true);
+      const indicatorHeader = $('.sub-category-header')[0].cloneNode(true);
 
-    $(newCategorySection).html('');
-    $(newCategorySection).append(this.getSectionLink());
-    $(newCategorySection).append(sectionHeader);
 
-    $(categoryTitleClass, newCategorySection).text(category);
-    $(descriptionTextClass, newCategorySection).text(detail.description);
+      $(newCategorySection).html('');
+      $(newCategorySection).append(this.getSectionLink());
+      $(newCategorySection).append(sectionHeader);
+      $(newCategorySection).append(indicatorHeader);
 
-    if (detail.description === '') {
-      $(descriptionClass, newCategorySection).addClass('hidden');
-    }
+      $(categoryTitleClass, newCategorySection).text(category);
+      $(descriptionTextClass, newCategorySection).html(detail.description);
 
-    if (!isFirst) {
-      $(newCategorySection).addClass('page-break-before');
-    }
+      if (detail.description === '') {
+        $(descriptionClass, newCategorySection).addClass('hidden');
+      }
 
-    this.loadSubcategories(newCategorySection, detail);
+      if (!isFirst) {
+        $(newCategorySection).addClass('page-break-before');
+      }
 
-    this.profileWrapper.append(newCategorySection);
+      this.loadSubcategories(newCategorySection, detail);
+
+      this.profileWrapper.append(newCategorySection);
   }
 
   getSectionLink = () => {

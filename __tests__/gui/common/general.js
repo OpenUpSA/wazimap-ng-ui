@@ -5,8 +5,6 @@ import points from "../facility_modal/points.json";
 import all_details from "../facility_modal/all_details.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    cy.visit("/")
-
     cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?format=json', (req) => {
         req.reply({
             statusCode: 201,
@@ -38,6 +36,8 @@ Given('I am on the Wazimap Homepage', () => {
             forceNetworkError: false // default
         })
     })
+
+    cy.visit("/")
 })
 
 Then('I wait until map is ready', () => {

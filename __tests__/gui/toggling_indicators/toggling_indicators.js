@@ -2,8 +2,6 @@ import all_details from "../toggling_indicators/all_details.json";
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 
 Given('I am on the SANEF Homepage', () => {
-    cy.visit("/")
-
     cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?format=json', (req) => {
         req.reply({
             statusCode: 201,
@@ -11,6 +9,8 @@ Given('I am on the SANEF Homepage', () => {
             forceNetworkError: false // default
         })
     })
+
+    cy.visit("/")
 })
 
 When('I expand Data Mapper', () => {

@@ -1,6 +1,17 @@
 import {When, Given, Then} from "cypress-cucumber-preprocessor/steps";
 import all_details from "../rich_data/all_details.json";
 
+Given('I am on the Wazimap Homepage', () => {
+    cy.visit("/")
+
+    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: all_details,
+            forceNetworkError: false // default
+        })
+    })
+})
 
 When('I expand Rich Data', () => {
     cy.wait(100);
@@ -12,7 +23,7 @@ Then('Rich Data should be displayed', () => {
 })
 
 When('I mouseover the hamburger menu', () => {
-    cy.get('.hover-menu:first').trigger('mouseover')
+    cy.get('.hover-menu').first().trigger('mouseover');
 })
 
 Then('the hamburger menu should show', () => {
@@ -20,6 +31,7 @@ Then('the hamburger menu should show', () => {
 })
 
 When('I click on Save As Image in Rich Data', () => {
-    cy.get('.hover-menu__content_item').contains('Save As Image').click();
+    cy.get('.hover-menu__content_item').first().click();
+    cy.verifyDownload('Youth status.png');
 })
 

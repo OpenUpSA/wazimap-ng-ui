@@ -53,6 +53,7 @@
     "cssnano": "^4.1.10",
     "cypress": "^8.2.0",
     "cypress-cucumber-preprocessor": "^2.5.5",
+    "cy-verify-downloads":"^0.0.5",
     "html-loader-jest": "0.2.1",
     "jest": "^26.4.2",
     "jest-transform-stub": "2.0.0",

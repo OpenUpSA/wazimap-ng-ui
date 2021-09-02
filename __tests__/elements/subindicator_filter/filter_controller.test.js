@@ -37,6 +37,29 @@ describe('Filter controller', () => {
         expect(subindicatorDd.length).toBe(1);
     })
 
+    test('If a default filter doesnt exist, some value is set', () => {
+        params.chartConfiguration.filter = {
+            defaults: [
+                {name: "age", value: "17"}
+            ]
+        }
+        params.primaryGroup = '';
+        params.selectedSubindicator = '';
+
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        try {
+          mc.onSubIndicatorChange(params);
+        }
+        catch(err) {
+          // throw expected due to not finding the filter value
+        }
+
+        let filter = $('.mapping-options__filter_menu .dropdown-menu__trigger .dropdown-menu__selected-item .truncate');
+        expect(filter[3].textContent).not.toBe('Select a value');
+    })
+
     test('Handles non-aggregatable dropdown correctly', () => {
         params.groups[2].can_aggregate = false;
         let component = new Component();

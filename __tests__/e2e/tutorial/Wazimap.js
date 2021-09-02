@@ -21,7 +21,7 @@ When("I click back link", (link) => {
   cy.findByLabelText('previous slide').click()
 })
 
-When("I click on close", (link) => {
+When("I click on close button", (link) => {
   cy.findByTestId("tutorial-close").click()
 })
 

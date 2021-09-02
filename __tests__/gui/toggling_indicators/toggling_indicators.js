@@ -1,20 +1,19 @@
-import all_details from "../toggling_indicators/all_details.json";
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
+import {gotoHomepage, setupInterceptions, waitUntilGeographyIsLoaded} from "../common_cy_functions/general";
+import all_details from "../toggling_indicators/all_details.json";
+import profile from '../toggling_indicators/profile.json';
 
-Given('I am on the SANEF Homepage', () => {
-    cy.visit("/")
+Given('I am on the Wazimap Homepage', () => {
+    setupInterceptions(all_details, profile, null, null);
+    gotoHomepage();
+})
 
-    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?format=json', (req) => {
-        req.reply({
-            statusCode: 201,
-            body: all_details,
-            forceNetworkError: false // default
-        })
-    })
+Then('I wait until map is ready', () => {
+    waitUntilGeographyIsLoaded('South Africa Test');
 })
 
 When('I expand Data Mapper', () => {
-    cy.wait(100);
+    cy.wait(1000);
     cy.get('.point-mapper-toggles .data-mapper-panel__open').click();
 })
 

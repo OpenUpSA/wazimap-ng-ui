@@ -6,39 +6,11 @@ import {configureDataExplorerEvents} from "../../src/js/setup/dataexplorer";
 import {loadMenu} from '../../src/js/elements/menu';
 
 describe('Data explorer', () => {
+    let payload = null;
     beforeEach(() => {
         document.body.innerHTML = html;
-    })
 
-    test('Handles no data correctly', () => {
-        let config = new SAConfig();
-
-        const controller = new Controller(this, null, config, 1);
-        const dataMapperMenu = new DataMapperMenu(this);
-
-        configureDataExplorerEvents(controller, dataMapperMenu);
-
-        let payload = {
-            geometries: {
-                children: {}
-            }
-        }
-
-        controller.triggerEvent("profile.loaded", payload);
-
-        let noDataChip = document.querySelector('.data-mapper-content__no-data');
-        expect(noDataChip).not.toHaveClass('hidden');
-    })
-    
-    test('Qualitative indicators are not shown', () => {
-        let config = new SAConfig();
-
-        const controller = new Controller(this, null, config, 1);
-        const dataMapperMenu = new DataMapperMenu(this);
-
-        configureDataExplorerEvents(controller, dataMapperMenu);
-
-        let payload = {
+        payload = {
             geometries: {
                 children: {
                     "province": {
@@ -81,6 +53,8 @@ describe('Data explorer', () => {
                                                 }
                                             ]
                                         },
+                                        //"content_type": "indicator",
+                                        //"dataset_content_type": "quantitative",
                                         "content_type": "html",
                                         "dataset_content_type": "qualitative",
                                         "data": [
@@ -105,11 +79,60 @@ describe('Data explorer', () => {
                 }
             }
         }
+    })
+
+    test('Handles no data correctly', () => {
+        let config = new SAConfig();
+
+        const controller = new Controller(this, null, config, 1);
+        const dataMapperMenu = new DataMapperMenu(this);
+
+        configureDataExplorerEvents(controller, dataMapperMenu);
+
+        let payload = {
+            geometries: {
+                children: {}
+            }
+        }
+
+        controller.triggerEvent("profile.loaded", payload);
+
+        let noDataChip = document.querySelector('.data-mapper-content__no-data');
+        expect(noDataChip).not.toHaveClass('hidden');
+    })
+
+    test('Qualitative indicators are not shown', () => {
+        let config = new SAConfig();
+
+        const controller = new Controller(this, null, config, 1);
+        const dataMapperMenu = new DataMapperMenu(this);
+
+        configureDataExplorerEvents(controller, dataMapperMenu);
+
+        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "html";
+        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "qualitative";
 
         controller.triggerEvent("profile.loaded", payload);
 
         let descriptionElement = document.querySelector(".data-category__h3");
         expect(descriptionElement).not.toBeVisible();
+    })
+
+    test('Quantitative indicators are shown', () => {
+        let config = new SAConfig();
+
+        const controller = new Controller(this, null, config, 1);
+        const dataMapperMenu = new DataMapperMenu(this);
+
+        configureDataExplorerEvents(controller, dataMapperMenu);
+
+        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "indicator";
+        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "quantitative";
+
+        controller.triggerEvent("profile.loaded", payload);
+
+        let descriptionElement = document.querySelector(".data-category__h3");
+        expect(descriptionElement).toBeVisible();
     })
 })
 

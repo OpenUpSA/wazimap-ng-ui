@@ -2,7 +2,7 @@ import {SubIndicator} from '../dataobjects'
 import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
 
 const hideondeployClsName = 'hideondeploy';
-const parentContainer = $(".data-mapper-content__list");
+let parentContainer = null;
 let categoryTemplate = null;
 let subCategoryTemplate = null;
 let indicatorTemplate = null;
@@ -42,6 +42,7 @@ function subindicatorsInIndicator(indicator) {
 
 // TODO this entire file needs to be refactored to use thhe observer pattern
 export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
+    parentContainer = $(".data-mapper-content__list");
     categoryTemplate = $(".data-category")[0].cloneNode(true);
     subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
     indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
@@ -53,7 +54,6 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
         $(".data-category__h4", wrapper).remove();
 
         if (groups !== null && typeof groups.subindicators !== 'undefined') {
-
             groups.subindicators.forEach((subindicator) => {
                 let display = subindicatorHasData(subindicator, indicatorDetail);
 

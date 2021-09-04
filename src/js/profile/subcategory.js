@@ -1,7 +1,7 @@
 import {Indicator} from "./blocks/indicator";
 import {Component, formatNumericalValue} from "../utils";
-import { ContentBlock } from "./blocks/content_block";
-import { HTMLBlock } from "./blocks/html_block";
+import {ContentBlock} from "./blocks/content_block";
+import {HTMLBlock} from "./blocks/html_block";
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -92,20 +92,12 @@ export class Subcategory extends Component {
                     } else if (indicator.content_type == ContentBlock.BLOCK_TYPES.HTMLBlock) {
                         block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast);
                     }
-                    
+
                     this._indicators.push(block);
 
-                    
-                    
                     index++;
-                } else {
-                    $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
-                    $(wrapper).find(descriptionClass).removeClass('hidden')
                 }
             }
-        } else {
-            $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
-            $(wrapper).find(descriptionClass).removeClass('hidden')
         }
     }
 

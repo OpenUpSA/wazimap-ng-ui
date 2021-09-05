@@ -49,9 +49,11 @@ export class Category extends Component {
 
         if (detail.description === '') {
             $(descriptionClass, newCategorySection).addClass('hidden');
+        } else {
+            $(descriptionClass, newCategorySection).removeClass('hidden');
         }
 
-        if (!isFirst){
+        if (!isFirst) {
             $(newCategorySection).addClass('page-break-before');
         }
 

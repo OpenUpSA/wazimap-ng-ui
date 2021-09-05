@@ -51,6 +51,8 @@ export class Subcategory extends Component {
 
         if (detail.description === '') {
             $(descriptionClass, scHeader).addClass('hidden');
+        } else {
+            $(descriptionClass, scHeader).removeClass('hidden');
         }
 
         wrapper.append(scHeader);

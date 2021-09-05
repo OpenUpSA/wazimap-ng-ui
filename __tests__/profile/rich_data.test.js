@@ -62,9 +62,15 @@ describe('Rich text descriptions', () => {
 })
 
 describe('Rich data panel', () => {
+    let component;
+    let profileWrapper;
+    let id;
+    let removePrevCategories;
+    let isFirst;
+    let categoryDetail;
     beforeEach(() => {
         document.body.innerHTML = html;
-        const categoryDetail = {
+        categoryDetail = {
             "description": "",
             "subcategories": {
                 "Mock subcategory": {
@@ -76,21 +82,32 @@ describe('Rich data panel', () => {
             }
         }
 
-        let component = new Component();
-
-        const profileWrapper = $('.rich-data-content');
-        const id = "category-1";
-        const removePrevCategories = true;
-        const isFirst = true;
-
-        let category = new Category(component, {}, 'Test category', categoryDetail, profileWrapper, id, removePrevCategories, isFirst);
+        component = new Component();
+        profileWrapper = $('.rich-data-content');
+        id = "category-1";
+        removePrevCategories = true;
+        isFirst = true;
     })
 
     test('Empty descriptions are hidden and empty', () => {
+        new Category(component, {}, 'Test category', categoryDetail, profileWrapper, id, removePrevCategories, isFirst);
+
         let descEle = document.querySelector('.sub-category-header__description');
         let descText = document.querySelector('.sub-category-header__description p');
 
         expect(descEle).toHaveClass('hidden');
         expect(descText).toBeEmptyDOMElement();
+    })
+
+    test('Descriptions are displayed correctly', () => {
+        categoryDetail.subcategories['Mock subcategory'].description= 'test description';
+
+        new Category(component, {}, 'Test category', categoryDetail, profileWrapper, id, removePrevCategories, isFirst);
+
+        let descEle = document.querySelector('.sub-category-header__description');
+        let descText = document.querySelector('.sub-category-header__description p');
+
+        expect(descEle).not.toHaveClass('hidden');
+        expect(descText).toContainHTML('test description');
     })
 })

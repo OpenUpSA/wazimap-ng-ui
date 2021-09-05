@@ -78,7 +78,6 @@ export class Subcategory extends Component {
         let lastIndex = Object.entries(detail.indicators).length - 1;
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
 
-
         if (!isEmpty) {
             for (const [title, indicator] of Object.entries(detail.indicators)) {
                 if (typeof indicator.data !== 'undefined') {

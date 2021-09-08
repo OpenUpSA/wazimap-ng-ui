@@ -2,6 +2,9 @@ import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '.
 import {getJSON} from '../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
+import 'leaflet.markercluster';
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
@@ -27,7 +30,6 @@ let facilityItem = null;
 let facilityRowItem = null;
 
 let activeMarkers = [];
-let activePoints = [];  //the visible points on the map
 
 const POPUP_OFFSET = [20, 0];
 
@@ -43,9 +45,12 @@ export class PointData extends Component {
         this.profileId = profileId;
 
         this.googleMapsButton = null;
+        this.markers = L.markerClusterGroup();
 
+        this.activePoints = [];  //the visible points on the map
         this.markerLayer = this.genLayer();
         this.categoryLayers = {};
+        this.enableClustering = this.isClusteringEnabled();
 
         this.prepareDomElements();
     }
@@ -63,6 +68,11 @@ export class PointData extends Component {
 
         $(pointLegend).empty();
         $('.facility-info__close').on('click', () => this.hideInfoWindows());
+    }
+
+    isClusteringEnabled() {
+        //todo:get this from config when the BE is ready
+        return true;
     }
 
     genLayer() {
@@ -87,7 +97,7 @@ export class PointData extends Component {
         const self = this;
         let layer = this.categoryLayers[category.id];
 
-        if (layer != undefined) {
+        if (layer != undefined && !this.enableClustering) {
             this.map.addLayer(layer);
             self.showPointLegend(category);
             this.showDone(category)
@@ -98,6 +108,7 @@ export class PointData extends Component {
             this.triggerEvent('loadingCategoryPoints', category);
 
             const data = await this.getAddressPoints(category);
+            this.activePoints = this.activePoints.concat(data);
             self.showPointLegend(category);
             self.createMarkers(data, category.data, layer);
             self.map.addLayer(layer);
@@ -112,7 +123,15 @@ export class PointData extends Component {
         let layer = this.categoryLayers[category.id];
 
         if (layer != undefined) {
-            this.map.removeLayer(layer);
+            if (this.enableClustering) {
+                this.activePoints = this.activePoints.filter((p) => {
+                    return p.category.id !== category.id;
+                })
+
+                this.createMarkers(this.activePoints, category, layer);
+            } else {
+                this.map.removeLayer(layer);
+            }
             pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
         }
     }
@@ -167,8 +186,13 @@ export class PointData extends Component {
     createMarkers = (points, categoryData, layer) => {
         const self = this;
         let col = '';
+        let allPoints = points;
+        if (this.enableClustering) {
+            this.markers.clearLayers();
+            allPoints = this.activePoints;
+        }
 
-        checkIterate(points, point => {
+        checkIterate(allPoints, point => {
             if (col === '') {
                 //to get the color add "theme-@index" class to the trigger div. this way we can use css('color') function
                 let themeIndex = point.themeIndex;
@@ -203,8 +227,17 @@ export class PointData extends Component {
             }).on('mouseout', () => {
                 this.hideMarkerPopup();
             });
-            layer.addLayer(marker);
+
+            if (this.enableClustering) {
+                this.markers.addLayer(marker);
+            } else {
+                layer.addLayer(marker);
+            }
         })
+
+        if (this.enableClustering) {
+            this.map.addLayer(this.markers);
+        }
     }
 
     showMarkerPopup = (e, point, categoryData, isClicked = false) => {
@@ -263,7 +296,7 @@ export class PointData extends Component {
 
         $('.' + tooltipItemsClsName, item).html('');
 
-        if (typeof visibleAttributes === 'undefined'){
+        if (typeof visibleAttributes === 'undefined') {
             visibleAttributes = [];
         }
 
@@ -282,7 +315,7 @@ export class PointData extends Component {
 
     showFacilityModal = (point) => {
         $('.facility-info__title').text(point.name);
-        $('.facility-info__print').off('click').on('click',() => {
+        $('.facility-info__print').off('click').on('click', () => {
             window.print();
         });
         this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');

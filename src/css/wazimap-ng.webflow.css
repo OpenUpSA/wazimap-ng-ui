@@ -9073,3 +9073,35 @@ label {
     align-self: end;
   }
 }
+
+svg.marker-svg {
+  width: 25px;
+  border-radius: 50%;
+  background: #3f51b5;
+  transform: rotate(-90deg);
+}
+svg.marker-svg text {
+  transform: rotate(90deg);
+  font-size:16px;
+  font-weight: bold;
+}
+
+svg.marker-svg circle {
+  fill: none;
+  stroke-width: 32;
+  r: 16;
+  cx: 16;
+  cy: 16;
+}
+
+svg.marker-svg circle.first {
+  stroke: #b5366b;
+
+}
+svg.marker-svg circle.second {
+  stroke: #9e42f7;
+}
+
+svg.marker-svg circle.third {
+  stroke: #ff8849;
+}

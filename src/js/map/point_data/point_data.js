@@ -216,15 +216,19 @@ export class PointData extends Component {
                     }
                 }
 
-                let marker = L.circleMarker([point.y, point.x], {
-                    color: col,
-                    radius: self.markerRadius(),
-                    fill: true,
-                    fillColor: col,
-                    fillOpacity: 1,
-                    pane: 'markerPane',
-                    category: ap.category.id
-                })
+                let html = this.generateMarkerHtml(col);
+
+                let divIcon = L.divIcon({
+                    html: html,
+                    className: "leaflet-data-marker",
+                    iconSize: L.point(25, 25)
+                });
+
+                let marker = L.marker([point.y, point.x],
+                    {
+                        icon: divIcon,
+                        color: col
+                    });
 
                 marker.on('click', (e) => {
                     this.showMarkerPopup(e, point, ap.category, true);
@@ -242,6 +246,26 @@ export class PointData extends Component {
                 }
             })
         })
+    }
+
+    generateMarkerHtml(color) {
+        let html = `<svg xmlns="http://www.w3.org/2000/svg" width="21" height="33" viewBox="0 0 21 33" fill="none">
+                        <g opacity="0.5" filter="url(#filter0_f)">
+                            <ellipse cx="10.5" cy="29.5" rx="5.5" ry="0.5" fill="black"/>
+                        </g>
+                        <path d="M21 10.5C21 16.299 16.299 21 10.5 21C4.70101 21 0 16.299 0 10.5C0 4.70101 4.70101 0 10.5 0C16.299 0 21 4.70101 21 10.5Z" fill="white"/>
+                        <path d="M10.5 16.9991L16.4999 18.9999L10.5 28.9988L4.50012 18.9999L10.5 16.9991Z" fill="white"/>
+                        <circle cx="10.5" cy="10.5" r="8.5" fill="${color}"/>
+                        <defs>
+                            <filter id="filter0_f" x="2" y="26" width="17" height="7" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                <feGaussianBlur stdDeviation="1.5" result="effect1_foregroundBlur"/>
+                            </filter>
+                        </defs>
+                    </svg>`;
+
+        return html;
     }
 
     showMarkerPopup = (e, point, categoryData, isClicked = false) => {

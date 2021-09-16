@@ -1,4 +1,4 @@
-import {Component, setPopupStyle} from '../../utils';
+import {Component, setPopupStyle, ThemeStyle} from '../../utils';
 
 const POPUP_OFFSET = [20, 0];
 
@@ -7,6 +7,8 @@ export class Cluster extends Component {
         super(parent);
 
         this.map = map;
+        this.tooltipItem = $('.facility-tooltip.is--cluster')[0].cloneNode(true);
+
         this.initClustering();
     }
 
@@ -24,25 +26,8 @@ export class Cluster extends Component {
     }
 
     createClusterIcon(cluster) {
-        const markers = cluster.getAllChildMarkers();
         const markerCount = cluster.getChildCount();
-        let colors = [];
-        for (let i = 0; i < markerCount; i++) {
-            let m = markers[i];
-            let color = m.options.color;
-            let existingObj = colors.filter((c) => {
-                return c.color === color;
-            })[0];
-
-            if (existingObj !== null && existingObj !== undefined) {
-                existingObj.count += 1;
-            } else {
-                colors.push({
-                    color: color,
-                    count: 1
-                })
-            }
-        }
+        let colors = this.groupChildrenMarkers(cluster, true);
 
         let circles = '';
         let total = 0;
@@ -56,7 +41,7 @@ export class Cluster extends Component {
                             ${circles}
                             <text x="50%" y="-50%" alignment-baseline="middle" text-anchor="middle" fill="#fff" 
                                 style="transform: rotate(90deg); font-size:16px;font-weight: bold;">
-                                ${markers.length}
+                                ${markerCount}
                             </text>
                         </svg>`;
 
@@ -66,8 +51,43 @@ export class Cluster extends Component {
         });
     }
 
+    groupChildrenMarkers(cluster, groupByTheme = true) {
+        const markers = cluster.getAllChildMarkers();
+        const markerCount = cluster.getChildCount();
+        let children = [];
+        for (let i = 0; i < markerCount; i++) {
+            let m = markers[i];
+            let color = m.options.color;
+            let categoryName = m.options.categoryName;
+            let existingObj;
+            if (groupByTheme) {
+                existingObj = children.filter((c) => {
+                    return c.color === color;
+                })[0];
+            } else {
+                //group by category
+                existingObj = children.filter((c) => {
+                    return c.categoryName === categoryName;
+                })[0];
+            }
+
+            if (existingObj !== null && existingObj !== undefined) {
+                existingObj.count += 1;
+            } else {
+                children.push({
+                    color: color,
+                    count: 1,
+                    categoryName: m.options.categoryName
+                })
+            }
+        }
+
+        return children;
+    }
+
     showPopup(cluster) {
         const latlng = cluster.getLatLng();
+        const popupContent = this.createPopupContent(cluster);
         this.map.closePopup();
         let popup = L.popup({
             autoPan: false,
@@ -78,9 +98,35 @@ export class Cluster extends Component {
 
         popup
             .setLatLng(latlng)
-            .setContent('popupContent')
+            .setContent(popupContent)
             .openOn(this.map);
 
-        setPopupStyle('facility-tooltip');
+        setPopupStyle();
+    }
+
+    createPopupContent(cluster) {
+        let item = this.tooltipItem.cloneNode(true);
+        const clusterItemClass = '.tooltip__cluster-item';
+        const clusterItem = $(clusterItemClass)[0].cloneNode(true);
+
+        $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
+
+        $(item).find(clusterItemClass).remove();
+        const groupedMarkers = this.groupChildrenMarkers(cluster, false);
+
+        groupedMarkers.forEach((gm,index) => {
+            let ci = clusterItem.cloneNode(true);
+            $('.tooltip__cluster-title', ci).text(gm.categoryName);
+            $('.tootlip__cluster-facet', ci).text(gm.count);
+            $('.tooltip__cluster-icon', ci).css('background-color', gm.color);
+            
+            if (index === groupedMarkers.length - 1){
+                $(ci).addClass('is--last');
+            }
+
+            $('.facility-tooltip__cluster', item).append(ci);
+        })
+
+        return item;
     }
 }

@@ -200,20 +200,9 @@ export class PointData extends Component {
             let col = '';
             checkIterate(ap.data, point => {
                 if (col === '') {
-                    //to get the color add "theme-@index" class to the trigger div. this way we can use css('color') function
                     let themeIndex = point.themeIndex;
-                    let tempElement = $(`.theme-${themeIndex}`)[0];
-                    tempElement = tempElement.closest('div.point-mapper__h1');
-                    tempElement = $(tempElement).find('.point-mapper__h1_trigger');
 
-                    //if tempElement already has theme-@index class, dont remove it
-                    let removeClass = !$(tempElement).hasClass('theme-' + themeIndex);
-
-                    $(tempElement).addClass('theme-' + themeIndex);
-                    col = $(tempElement).css('color');
-                    if (removeClass) {
-                        $(tempElement).removeClass('theme-' + point.theme.id);
-                    }
+                    col = $(`.point-mapper__h1_trigger.theme-${themeIndex}:not(.point-mapper__h1--default-closed)`).css('color');
                 }
 
                 let html = this.generateMarkerHtml(col);
@@ -227,7 +216,8 @@ export class PointData extends Component {
                 let marker = L.marker([point.y, point.x],
                     {
                         icon: divIcon,
-                        color: col
+                        color: col,
+                        categoryName : point.category.data.name
                     });
 
                 marker.on('click', (e) => {

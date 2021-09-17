@@ -34,10 +34,10 @@ When('I click on a marker', () => {
     let height = Cypress.config("viewportHeight");
     let x = (width / 2);
     let y = (height / 2) + (navHeight / 2);
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated')
+    cy.get('#main-map')
         .trigger('mousemove', {clientX: 0, clientY: 0})
         .trigger('mousemove', {clientX: x, clientY: y});
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated').click();
+    cy.get('.leaflet-marker-pane .leaflet-zoom-animated').click({force: true});
 })
 
 When('I click on the More info button', () => {

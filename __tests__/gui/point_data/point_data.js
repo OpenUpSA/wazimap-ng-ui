@@ -74,7 +74,17 @@ When('I check if the cluster is created correctly', () => {
         cy.wrap($el.attr('stroke-dasharray')).should('equal', categories[index].circleVal);
     })
 
+    cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg text').should('have.text', 2);
+
+    cy.wait(100);
     hoverOverTheMapCenter();
+
+    cy.get("body").then(($body) => {
+        if (!$body.find(".leaflet-popup-content").length) {
+            cy.log('hover failed - try again');
+            hoverOverTheMapCenter();
+        }
+    })
 
     cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item', {timeout: 20000}).get(($el) => {
         cy.wrap($el.length).should('equal', 2);

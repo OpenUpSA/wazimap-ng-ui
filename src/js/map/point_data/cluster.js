@@ -40,9 +40,7 @@ export class Cluster extends Component {
         const html = `<svg style="width: 25px;border-radius: 50%;background: #3f51b5;transform: rotate(-90deg);" viewBox="0 0 32 32">
                             ${circles}
                             <text x="50%" y="-50%" alignment-baseline="middle" text-anchor="middle" fill="#fff" 
-                                style="transform: rotate(90deg); font-size:16px;font-weight: bold;">
-                                ${markerCount}
-                            </text>
+                                style="transform: rotate(90deg); font-size:16px;font-weight: bold;">${markerCount}</text>
                         </svg>`;
 
         return L.divIcon({

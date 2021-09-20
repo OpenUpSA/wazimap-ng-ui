@@ -1,20 +1,19 @@
-import all_details from "../toggling_indicators/all_details.json";
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
+import {gotoHomepage, setupInterceptions, waitUntilGeographyIsLoaded} from "../common_cy_functions/general";
+import all_details from "../toggling_indicators/all_details.json";
+import profile from '../toggling_indicators/profile.json';
 
-Given('I am on the SANEF Homepage', () => {
-    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?format=json', (req) => {
-        req.reply({
-            statusCode: 201,
-            body: all_details,
-            forceNetworkError: false // default
-        })
-    })
+Given('I am on the Wazimap Homepage', () => {
+    setupInterceptions(all_details, profile, null, null);
+    gotoHomepage();
+})
 
-    cy.visit("/")
+Then('I wait until map is ready', () => {
+    waitUntilGeographyIsLoaded('South Africa Test');
 })
 
 When('I expand Data Mapper', () => {
-    cy.wait(100);
+    cy.wait(1000);
     cy.get('.point-mapper-toggles .data-mapper-panel__open').click();
 })
 
@@ -38,7 +37,7 @@ When('I select another indicator', () => {
     cy.get('.data-category__h3_content').contains('Indian or Asian').click();
 })
 
-Then('I check if everything is zero', () => {
+Then('I check if everything is not zero', () => {
     cy.get('.map-options__legend_wrap .map_legend-block .truncate').each(($div) => {
         expect($div.text()).not.equal('0.0%');
     })

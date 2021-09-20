@@ -5,7 +5,7 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
     controller.on('profile.loaded', payload => {
         if ($.isEmptyObject(payload.payload.geometries.children)) {
             //no children -- show no-data chip
-            dataMenu.showNoData();
+            dataMapperMenu.showNoData();
         } else {
             const profileData = payload.payload.profile.profileData;
             loadMenu(dataMapperMenu, profileData, payload => {

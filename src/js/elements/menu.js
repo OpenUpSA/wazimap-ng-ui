@@ -3,23 +3,12 @@ import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} fr
 
 const hideondeployClsName = 'hideondeploy';
 const parentContainer = $(".data-mapper-content__list");
-const categoryTemplate = $(".data-category")[0].cloneNode(true);
-const subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
-const indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
-const indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
+let categoryTemplate = null;
+let subCategoryTemplate = null;
+let indicatorTemplate = null;
+let indicatorItemTemplate = null;
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
-
-function subindicatorsInCategory(category) {
-    let count = 0;
-    let subcategories = Object.values(category.subcategories);
-    for (const idx in subcategories) {
-        let subcategory = subcategories[idx];
-        count += subindicatorsInSubCategory(subcategory);
-    }
-
-    return count;
-}
 
 function subindicatorsInSubCategory(subcategory) {
 
@@ -39,8 +28,13 @@ function subindicatorsInIndicator(indicator) {
     return indicator.metadata.groups.length;
 }
 
-// TODO this entire file needs to be refactored to use thhe observer pattern
+
 export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
+    categoryTemplate = $(".data-category")[0].cloneNode(true);
+    subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
+    indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
+    indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
+
     function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, indicatorDetail) {
 
         $(".data-category__h3", wrapper).remove();
@@ -176,8 +170,8 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
 }
 
 /**
-* This class is a stub for a menu component
-*/
+ * This class is a stub for a menu component
+ */
 export class DataMapperMenu extends Component {
     constructor(parent) {
         super(parent)

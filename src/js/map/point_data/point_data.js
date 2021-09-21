@@ -137,10 +137,14 @@ export class PointData extends Component {
                 return ap.category.id === category.id
             });
 
-            checkIterate(pointsToRemove,(p) => {
-                this.markers.removeLayer(p.marker);
-                pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+            let removeMarkers = [];
+
+            checkIterate(pointsToRemove, (p) => {
+                removeMarkers.push(p.marker);
             })
+
+            this.markers.removeLayers(removeMarkers);
+            pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
         }
     }
 
@@ -193,6 +197,7 @@ export class PointData extends Component {
      */
     createMarkers = (points, layer) => {
         let col = '';
+        let newMarkers = [];
         checkIterate(points.data, point => {
             if (col === '') {
                 let themeIndex = point.themeIndex;
@@ -229,11 +234,16 @@ export class PointData extends Component {
                     marker: marker,
                     category: points.category
                 });
-                this.markers.addLayer(marker);
+
+                newMarkers.push(marker);
             } else {
                 layer.addLayer(marker);
             }
         })
+
+        if (this.enableClustering) {
+            this.markers.addLayers(newMarkers);
+        }
     }
 
     generateMarkerHtml(color) {

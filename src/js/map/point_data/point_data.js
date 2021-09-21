@@ -110,12 +110,12 @@ export class PointData extends Component {
             this.triggerEvent('loadingCategoryPoints', category);
 
             const data = await this.getAddressPoints(category);
-            this.activePoints = this.activePoints.concat({
+            const points = {
                 category: category,
                 data: data
-            });
+            };
             self.showPointLegend(category);
-            self.createMarkers(data, layer);
+            self.createMarkers(points, layer);
             self.map.addLayer(layer);
             self.showDone(category);
 
@@ -125,19 +125,22 @@ export class PointData extends Component {
     }
 
     removeCategoryPoints = (category) => {
-        let layer = this.categoryLayers[category.id];
+        if (!this.enableClustering) {
+            let layer = this.categoryLayers[category.id];
 
-        if (layer != undefined) {
-            if (this.enableClustering) {
-                this.activePoints = this.activePoints.filter((p) => {
-                    return p.category.id !== category.id;
-                })
-
-                this.createMarkers(this.activePoints, layer);
-            } else {
+            if (layer != undefined) {
                 this.map.removeLayer(layer);
+                pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
             }
-            pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+        } else {
+            let pointsToRemove = this.activePoints.filter((ap) => {
+                return ap.category.id === category.id
+            });
+
+            checkIterate(pointsToRemove,(p) => {
+                this.markers.removeLayer(p.marker);
+                pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+            })
         }
     }
 
@@ -189,52 +192,47 @@ export class PointData extends Component {
      * individual markers
      */
     createMarkers = (points, layer) => {
-        const self = this;
-        let allPoints = points;
-        if (this.enableClustering) {
-            this.markers.clearLayers();
-            allPoints = this.activePoints;
-        }
+        let col = '';
+        checkIterate(points.data, point => {
+            if (col === '') {
+                let themeIndex = point.themeIndex;
 
-        checkIterate(allPoints, ap => {
-            let col = '';
-            checkIterate(ap.data, point => {
-                if (col === '') {
-                    let themeIndex = point.themeIndex;
+                col = $(`.point-mapper__h1_trigger.theme-${themeIndex}:not(.point-mapper__h1--default-closed)`).css('color');
+            }
 
-                    col = $(`.point-mapper__h1_trigger.theme-${themeIndex}:not(.point-mapper__h1--default-closed)`).css('color');
-                }
+            let html = this.generateMarkerHtml(col);
 
-                let html = this.generateMarkerHtml(col);
+            let divIcon = L.divIcon({
+                html: html,
+                className: "leaflet-data-marker",
+                iconSize: L.point(25, 25)
+            });
 
-                let divIcon = L.divIcon({
-                    html: html,
-                    className: "leaflet-data-marker",
-                    iconSize: L.point(25, 25)
+            let marker = L.marker([point.y, point.x],
+                {
+                    icon: divIcon,
+                    color: col,
+                    categoryName: point.category.data.name
                 });
 
-                let marker = L.marker([point.y, point.x],
-                    {
-                        icon: divIcon,
-                        color: col,
-                        categoryName : point.category.data.name
-                    });
+            marker.on('click', (e) => {
+                this.showMarkerPopup(e, point, points.category, true);
+                stopPropagation(e); //prevent map click event
+            }).on('mouseover', (e) => {
+                this.showMarkerPopup(e, point, points.category);
+            }).on('mouseout', () => {
+                this.hideMarkerPopup();
+            });
 
-                marker.on('click', (e) => {
-                    this.showMarkerPopup(e, point, ap.category, true);
-                    stopPropagation(e); //prevent map click event
-                }).on('mouseover', (e) => {
-                    this.showMarkerPopup(e, point, ap.category);
-                }).on('mouseout', () => {
-                    this.hideMarkerPopup();
+            if (this.enableClustering) {
+                this.activePoints.push({
+                    marker: marker,
+                    category: points.category
                 });
-
-                if (this.enableClustering) {
-                    this.markers.addLayer(marker);
-                } else {
-                    layer.addLayer(marker);
-                }
-            })
+                this.markers.addLayer(marker);
+            } else {
+                layer.addLayer(marker);
+            }
         })
     }
 

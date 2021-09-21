@@ -112,13 +112,13 @@ export class Cluster extends Component {
         $(item).find(clusterItemClass).remove();
         const groupedMarkers = this.groupChildrenMarkers(cluster, false);
 
-        groupedMarkers.forEach((gm,index) => {
+        groupedMarkers.forEach((gm, index) => {
             let ci = clusterItem.cloneNode(true);
             $('.tooltip__cluster-title', ci).text(gm.categoryName);
             $('.tootlip__cluster-facet', ci).text(gm.count);
             $('.tooltip__cluster-icon', ci).css('background-color', gm.color);
-            
-            if (index === groupedMarkers.length - 1){
+
+            if (index === groupedMarkers.length - 1) {
                 $(ci).addClass('is--last');
             }
 

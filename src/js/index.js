@@ -6,7 +6,7 @@ import Analytics from './analytics';
 import {API} from './api';
 import * as Sentry from '@sentry/browser';
 import { getHostname, getAPIUrl, loadDevTools }from './utils';
-import {Error} from "./error";
+import {ErrorNotifier} from "./error-notifier";
 
 const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
 const productionUrl = getAPIUrl('https://production.wazimap-ng.openup.org.za');
@@ -100,8 +100,8 @@ async function init() {
         }
     }
 
-    const err = new Error();
-    err.handleErrors();
+    const errorNotifier = new ErrorNotifier();
+    errorNotifier.registerErrorHandler();
 
     const api = new API(pc.baseUrl, hostname);
     const data = await api.getProfileConfiguration(hostname);

@@ -34,7 +34,7 @@ export class Cluster extends Component {
         let total = 0;
         colors.forEach((c, i) => {
             const calc = (markerCount - total) / markerCount * 100;
-            circles += `<circle stroke-dasharray="${calc} 100" style="stroke: ${c.color};fill: none; stroke-width: 32; r: 16; cx: 16; cy: 16;"></circle>`;
+            circles += `<circle stroke-dasharray="${calc} 100" r="16" cx="16" cy="16" style="stroke: ${c.color};fill: none; stroke-width: 32;"></circle>`;
             total += c.count;
         })
 

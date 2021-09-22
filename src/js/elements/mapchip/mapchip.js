@@ -41,6 +41,10 @@ export class MapChip extends Component {
         $(this._descriptionArea).html(text)
     }
 
+    get filterController(){
+        return this._filterController;
+    }
+
     prepareDomElements() {
         this._container = $(mapChipBlockClass)[0];
         this._closeButton = $(this.container).find('.filters__header_close')

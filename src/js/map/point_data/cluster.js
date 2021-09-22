@@ -34,14 +34,31 @@ export class Cluster extends Component {
         let total = 0;
         colors.forEach((c, i) => {
             const calc = (markerCount - total) / markerCount * 100;
-            circles += `<circle stroke-dasharray="${calc} 100" r="16" cx="16" cy="16" style="stroke: ${c.color};fill: none; stroke-width: 32;"></circle>`;
+            circles += `<circle 
+                            stroke-dasharray="${calc} 100" 
+                            r="16" 
+                            cx="16" 
+                            cy="16" 
+                            stroke="${c.color}" 
+                            fill="none" 
+                            stroke-width="32"></circle>`;
             total += c.count;
         })
 
-        const html = `<svg style="width: 25px;border-radius: 50%;background: #3f51b5;transform: rotate(-90deg);" viewBox="0 0 32 32">
+        const html = `<svg 
+                        width="25px" 
+                        style="border-radius:50%; background:#3f51b5;"
+                        viewBox="0 0 32 32">
                             ${circles}
-                            <text x="50%" y="-50%" alignment-baseline="middle" text-anchor="middle" fill="#fff" 
-                                style="transform: rotate(90deg); font-size:16px;font-weight: bold;">${markerCount}</text>
+                            <text 
+                                x="50%" 
+                                y="50%" 
+                                alignment-baseline="middle"
+                                text-anchor="middle" 
+                                fill="#fff"
+                                font-size="16px" 
+                                font-weight="bold"
+                            >${markerCount}</text>
                         </svg>`;
 
         return L.divIcon({

@@ -1,10 +1,15 @@
 import {Facility} from "./facility";
 import XLSX from "xlsx";
 import {Component, extractSheetsData, Observable} from "../../utils";
+import {TestData} from "../../test_data";
 
-class FacilityControllerModel extends Observable {
-    constructor(controllerParent) {
-        super();
+export class FacilityControllerModel extends Component {
+    static EVENTS = {
+        facilitiesCreated: 'FacilityControllerModel.facilitiesCreated'
+    }
+
+    constructor(parent, controllerParent) {
+        super(parent);
 
         this._controllerParent = controllerParent;
     }
@@ -34,8 +39,10 @@ export class FacilityController extends Component {
     constructor(parent) {
         super(parent);
 
-        this._model = new FacilityControllerModel(parent);
+        this._model = new FacilityControllerModel(this, parent);
+        this.facilityItems = [];
         this.prepareDomElements();
+        this.prepareEvents();
     }
 
     get model() {
@@ -43,9 +50,17 @@ export class FacilityController extends Component {
     }
 
     prepareDomElements() {
-        this.facilityWrapper = $('.location__facilities .location__facilities_content-wrapper');
+        this.facilityWrapper = $('.rich-data-content .location__facilities .location__facilities_content-wrapper');
         this.facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
         this.facilityRowClone = this.facilityTemplate === null ? null : $(this.facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
+    }
+
+    prepareEvents() {
+        const self = this;
+
+        self.model.on(FacilityControllerModel.EVENTS.facilitiesCreated, () => {
+            self.getAndUpdateFacilityItemCounts();
+        })
     }
 
     addFacilities() {
@@ -78,17 +93,18 @@ export class FacilityController extends Component {
 
         if (themes.length > 0) {
             themes.forEach((theme) => {
-                const facility = new Facility(this, this.facilityTemplate, this.facilityRowClone, theme, categoryArr);
-                const facilityItem = facility.createFacility();
-                $('.location-facility__description', facilityItem).addClass('hidden')
+                const f = new Facility(this, this.facilityTemplate, this.facilityRowClone, theme, categoryArr);
+                $('.location-facility__description', f.facility).addClass('hidden')
 
-                this.facilityWrapper.prepend(facilityItem);
+                this.facilityWrapper.prepend(f.facility);
             })
 
             $('.location__facilities_header').removeClass('hidden');
             $('.location__facilities_trigger').removeClass('hidden');
             $('.location__facilities_categories-value strong').text(categoryArr.length);
             $('.location__facilities_facilities-value strong').text('');
+
+            self.model.triggerEvent(FacilityControllerModel.EVENTS.facilitiesCreated);
         } else {
             $('.location__facilities').addClass('hidden');
         }
@@ -111,5 +127,22 @@ export class FacilityController extends Component {
 
                 XLSX.writeFile(wb, fileName);
             });
+    }
+
+    getAndUpdateFacilityItemCounts() {
+        //call the API here - data should be the API data
+        const self = this;
+        const td = new TestData();
+        const data = td.themeData;
+
+        data.forEach((theme) => {
+            theme.subthemes.forEach((st) => {
+                let fi = self.facilityItems.filter((fi) => {
+                    return fi.category.category_id === st.id;
+                })[0];
+
+                fi.setFacilityCount(st.count);
+            })
+        })
     }
 }

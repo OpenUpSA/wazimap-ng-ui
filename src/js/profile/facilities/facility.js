@@ -1,72 +1,40 @@
-import {Component, extractSheetData, ThemeStyle} from "../../utils";
-import XLSX from "xlsx";
+import {Component, ThemeStyle} from "../../utils";
+import {FacilityItem} from "./facilityItem";
 
 export class Facility extends Component {
     constructor(parent, facilityTemplate, facilityRowClone, theme, categoryArr) {
         super(parent);
 
-        this.facilityTemplate = facilityTemplate;
         this.facilityRowClone = facilityRowClone;
-        this.theme = theme;
+        this.facilityTemplate = facilityTemplate;
         this.categoryArr = categoryArr;
+        this.theme = theme;
+        this.api = this.parent.model.api;
+        this.profileId = this.parent.model.profileId;
+        this.geoCode = this.parent.model.geography.code;
+        this.facility = null;
+
+        this.createFacility();
     }
 
     createFacility() {
         let self = this;
-        let facilityItem = self.facilityTemplate.cloneNode(true);
-        $('.location-facility__name div', facilityItem).text(self.theme.name);
-        ThemeStyle.replaceChildDivWithIcon($(facilityItem).find('.location-facility__icon'), self.theme.icon);
-        $('.location-facility__value div', facilityItem).text('');
+        self.facility = self.facilityTemplate.cloneNode(true);
+        $('.location-facility__name div', self.facility).text(self.theme.name);
+        ThemeStyle.replaceChildDivWithIcon($(self.facility).find('.location-facility__icon'), self.theme.icon);
+        $('.location-facility__value div', self.facility).text('');
 
-        //.location-facility__item .tooltip__points_label .truncate
-        $('.location-facility__list', facilityItem).html('');
+        $('.location-facility__list', self.facility).html('');
         let themeCategories = self.categoryArr.filter((c) => {
             return c.theme_id === self.theme.theme_id
         });
 
         for (let i = 0; i < themeCategories.length; i++) {
-            let rowItem = self.facilityRowClone.cloneNode(true);
-            if (i === themeCategories.length - 1) {
-                $(rowItem).addClass('last');
-            }
+            const isLast = i === themeCategories.length - 1;
+            let row = new FacilityItem(self, self.facilityRowClone, themeCategories[i], isLast, self.parent.model.isDownloadsDisabled);
+            self.parent.facilityItems.push(row);
 
-            $('.location-facility__item_name .truncate', rowItem).text(themeCategories[i].label);
-            $('.location-facility__item_value div', rowItem).text('14');
-
-            $('.location-facility__list', facilityItem).append(rowItem);
-
-            if (!self.parent.model.isDownloadsDisabled) {
-                $(rowItem).on('click', () => {
-                    self.downloadPointData(themeCategories[i]);
-                })
-            } else {
-                $('.location-facility__item_download', rowItem).addClass('hidden');
-            }
+            $('.location-facility__list', self.facility).append(row.facilityItem);
         }
-
-        return facilityItem;
-    }
-
-    downloadPointData(category) {
-        const fileName = 'Export-' + category.label + '.xlsx';
-        this.getAddressPoints(category)
-            .then((sheet) => {
-                // export json (only array possible) to Worksheet of Excel
-                const data = XLSX.utils.json_to_sheet(sheet.sheetData);
-                // A workbook is the name given to an Excel file
-                const wb = XLSX.utils.book_new(); // make Workbook of Excel
-                // add Worksheet to Workbook
-                XLSX.utils.book_append_sheet(wb, data, sheet.sheetName);
-                // export Excel file
-                XLSX.writeFile(wb, fileName);
-            });
-    }
-
-    getAddressPoints(category) {
-        return this.parent.model.api.loadPoints(this.parent.model.profileId, category.category_id, this.parent.model.geography.code).then(data => {
-            let sheet = extractSheetData(data, category.label);
-
-            return sheet;
-        })
     }
 }

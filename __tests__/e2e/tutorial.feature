@@ -23,5 +23,5 @@ Feature: Tutorial (?)
 		Then "Learn more:" should be displayed
     And I click back link
 		Then "Data Filtering:" should be displayed
-    And I click on close
+    And I click on close button
     Then Tutorial dialog box and Introduction should not be displayed

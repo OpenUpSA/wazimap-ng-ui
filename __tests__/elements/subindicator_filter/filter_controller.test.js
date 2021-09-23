@@ -87,22 +87,20 @@ describe('Filter controller', () => {
         let indicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("age")`);
         expect(indicatorDd.length).toBe(0);
     })
+})
 
-    test('Hides filters when there are no groups to filter by', () => {
-        params.groups = [];
-        let component = new Component();
-        let mc = new MapChip(component, mapchip_colors);
+describe('Visibility of the filter area', () => {
+    beforeEach(() => {
+        document.body.innerHTML = html;
 
-        mc.onSubIndicatorChange(params);
-        let filterArea = document.querySelector('.map-options__filters_content');
-
-        expect(filterArea).toHaveClass('hidden');
+        let td = new TestData();
+        params = td.filterData;
     })
 
-    test('Does not hide filters when there are groups to filter by', () => {
+    test('Filters are visible when there are groups to filter by', () => {
         params.groups = [
             {
-                subindicators: ["30-35", "20-24", "15-24 (Intl)", "15-35 (ZA)", "15-19", "25-29"],
+                subindicators: ["30-35", "20-24", "15-24 (Intl)", "14-35 (ZA)", "15-19", "25-29"],
                 dataset: 241,
                 name: "age",
                 can_aggregate: true,
@@ -133,8 +131,75 @@ describe('Filter controller', () => {
         let mc = new MapChip(component, mapchip_colors);
 
         mc.onSubIndicatorChange(params);
+        const isVisible = mc.filterController.shouldFiltersBeVisible();
         let filterArea = document.querySelector('.map-options__filters_content');
 
+        expect(isVisible).toBe(true);
+        expect(filterArea).not.toHaveClass('hidden');
+    })
+
+    test('Filters are hidden when there are no groups to filter by', () => {
+        params.groups = [];
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+        const isVisible = mc.filterController.shouldFiltersBeVisible();
+        let filterArea = document.querySelector('.map-options__filters_content');
+
+        expect(isVisible).toBe(false);
+        expect(filterArea).toHaveClass('hidden');
+    })
+
+    test('Filters are visible when all the groups are non-aggregatable', () => {
+        params.groups = [{
+            subindicators: ["Female", "Male"],
+            dataset: 241,
+            name: "gender",
+            can_aggregate: false,
+            can_filter: true
+        }];
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+        const isVisible = mc.filterController.shouldFiltersBeVisible();
+        const currentIndicatorValue = mc.filterController.model.filterRows[0].model.currentIndicatorValue;
+        let filterArea = document.querySelector('.map-options__filters_content');
+
+        expect(isVisible).toBe(true);
+        expect(currentIndicatorValue).toBe('gender');
+        expect(filterArea).not.toHaveClass('hidden');
+    })
+
+    test('Filters are visible when all the groups are default filter', () => {
+        params.groups = [{
+            subindicators: ["Female", "Male"],
+            dataset: 241,
+            name: "gender",
+            can_aggregate: true,
+            can_filter: true
+        }];
+
+        params.chartConfiguration.filter = {
+            defaults: [{
+                name: 'gender',
+                value: 'Male'
+            }]
+        }
+
+        let component = new Component();
+        let mc = new MapChip(component, mapchip_colors);
+
+        mc.onSubIndicatorChange(params);
+        const isVisible = mc.filterController.shouldFiltersBeVisible();
+        const currentIndicatorValue = mc.filterController.model.filterRows[0].model.currentIndicatorValue;
+        const currentSubindicatorValue = mc.filterController.model.filterRows[0].model.currentSubindicatorValue;
+        let filterArea = document.querySelector('.map-options__filters_content');
+
+        expect(isVisible).toBe(true);
+        expect(currentIndicatorValue).toBe('gender');
+        expect(currentSubindicatorValue).toBe('Male');
         expect(filterArea).not.toHaveClass('hidden');
     })
 })

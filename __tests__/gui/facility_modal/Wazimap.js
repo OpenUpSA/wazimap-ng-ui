@@ -1,10 +1,21 @@
 import {When, Given, Then} from "cypress-cucumber-preprocessor/steps";
+import {gotoHomepage, setupInterceptions, waitUntilGeographyIsLoaded} from "../common_cy_functions/general";
+import all_details from "./all_details.json";
+import profile from "./profile.json";
+import themes from "./themes.json";
+import points from "./points.json";
+
+Given('I am on the Wazimap Homepage', () => {
+    setupInterceptions(all_details, profile, themes, points);
+    gotoHomepage();
+})
 
 Then('I wait until map is ready', () => {
-    cy.get('.map-location .location-tag .location-tag__name .truncate', {timeout: 20000}).should('contain', 'South Africa')
+    waitUntilGeographyIsLoaded('South Africa Test');
 })
 
 When('I click on a theme', () => {
+    cy.wait(1000);
     cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1').first().click();
 })
 

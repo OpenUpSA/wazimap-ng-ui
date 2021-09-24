@@ -40,6 +40,7 @@ export class FacilityController extends Component {
         super(parent);
 
         this._model = new FacilityControllerModel(this, parent);
+        this._isLoading = false;
         this.facilityItems = [];
         this.prepareDomElements();
         this.prepareEvents();
@@ -47,6 +48,20 @@ export class FacilityController extends Component {
 
     get model() {
         return this._model;
+    }
+
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    set isLoading(value) {
+        if (value) {
+            this.showLoadingState();
+        } else {
+            this.hideLoadingState();
+        }
+
+        this._isLoading = value;
     }
 
     prepareDomElements() {
@@ -105,6 +120,7 @@ export class FacilityController extends Component {
             $('.location__facilities_facilities-value strong').text('');
 
             self.model.triggerEvent(FacilityControllerModel.EVENTS.facilitiesCreated);
+            self.isLoading = false;
         } else {
             $('.location__facilities').addClass('hidden');
         }
@@ -130,10 +146,8 @@ export class FacilityController extends Component {
     }
 
     getAndUpdateFacilityItemCounts() {
-        //call the API here - data should be the API data
         const self = this;
-        const td = new TestData();
-        const data = td.themeData;
+        const data = this.getFacilityItemCounts();
 
         data.forEach((theme) => {
             theme.subthemes.forEach((st) => {
@@ -141,8 +155,46 @@ export class FacilityController extends Component {
                     return fi.category.category_id === st.id;
                 })[0];
 
-                fi.setFacilityCount(st.count);
+                if (fi !== undefined) {
+                    fi.setFacilityCount(st.count);
+                }
             })
         })
+    }
+
+    getFacilityItemCounts() {
+        //call the API here - data should be the API data
+        const td = new TestData();
+        let data;
+        if (this.model.geography.code === 'ZA') {
+            data = td.themeDataZA;
+        } else if (this.model.geography.code === 'EC') {
+            data = td.themeDataEC;
+        }
+
+        return data;
+    }
+
+    hideLoadingState() {
+        $('.location__facilities_title--loading').addClass('hidden');
+        $('.location__facilities_title').removeClass('hidden');
+
+        $('.location-facilities__trigger--loading').addClass('hidden');
+        $('.location__facilities_expand').removeClass('hidden');
+        $('.location__facilities_contract').removeClass('hidden');
+
+        $('.location__facilities_download-all').removeClass('disabled');
+    }
+
+    showLoadingState() {
+        $('.location__facilities_title--loading').removeClass('hidden');
+        $('.location__facilities_title').addClass('hidden');
+
+        $('.location-facilities__trigger--loading').removeClass('hidden');
+        $('.location__facilities_expand').addClass('hidden');
+        $('.location__facilities_contract').addClass('hidden');
+        $('.location__facilities_contract').trigger('click');
+
+        $('.location__facilities_download-all').addClass('disabled');
     }
 }

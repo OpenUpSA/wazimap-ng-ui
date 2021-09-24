@@ -40,7 +40,7 @@ export class Profile_header extends Component {
 
         this.facilityController = new FacilityController(this);
         this.facilityController.addFacilities();
-        $(downloadAllFacilities).on('click', () => this.facilityController.downloadAllFacilities());
+        $(downloadAllFacilities).off('click').on('click', () => this.facilityController.downloadAllFacilities());
     }
 
     get geometries() {

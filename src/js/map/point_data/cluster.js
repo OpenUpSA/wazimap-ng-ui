@@ -41,22 +41,23 @@ export class Cluster extends Component {
                             cy="16" 
                             stroke="${c.color}" 
                             fill="none" 
-                            stroke-width="32"></circle>`;
+                            stroke-width="35"></circle>`;
             total += c.count;
         })
 
         const html = `<svg 
-                        width="25px" 
+                        width="35px" 
                         style="border-radius:50%; background:#3f51b5;"
-                        viewBox="0 0 32 32">
+                        viewBox="0 0 35 35">
                             ${circles}
                             <text 
                                 x="50%" 
                                 y="50%" 
                                 alignment-baseline="middle"
                                 text-anchor="middle" 
+                                dominant-baseline="middle"
                                 fill="#fff"
-                                font-size="16px" 
+                                font-size="10px" 
                                 font-weight="bold"
                             >${markerCount}</text>
                         </svg>`;

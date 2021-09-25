@@ -70,7 +70,7 @@ When('I check if the cluster is created correctly', () => {
     }]
 
     cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg circle').each(($el, index) => {
-        cy.wrap($el.attr('style')).should('contain', categories[index].color);
+        cy.wrap($el.attr('stroke')).should('contain', categories[index].color);
         cy.wrap($el.attr('stroke-dasharray')).should('equal', categories[index].circleVal);
     })
 

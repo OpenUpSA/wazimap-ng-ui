@@ -111,12 +111,22 @@ export class FilterController extends Component {
     }
 
     setFilterVisibility() {
+        const isVisible = this.shouldFiltersBeVisible();
+
+        if (isVisible) {
+            $(this.container).removeClass('hidden');
+        } else {
+            $(this.container).addClass('hidden');
+        }
+    }
+
+    shouldFiltersBeVisible() {
         const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
         const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
         if (nonAggregatableGroups.length <= 0 && defaultGroups.length <= 0 && this.model.dataFilterModel.availableFilters.length <= 0) {
-            $(this.container).addClass('hidden');
+            return false;
         } else {
-            $(this.container).removeClass('hidden');
+            return true;
         }
     }
 

@@ -11,17 +11,6 @@ const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 const DATASET_TYPES = {Quantitative: 'quantitative', Qualitative: 'qualitative'};
 
-function subindicatorsInCategory(category) {
-    let count = 0;
-    let subcategories = Object.values(category.subcategories);
-    for (const idx in subcategories) {
-        let subcategory = subcategories[idx];
-        count += subindicatorsInSubCategory(subcategory);
-    }
-
-    return count;
-}
-
 function subindicatorsInSubCategory(subcategory) {
 
     let count = 0;
@@ -40,7 +29,7 @@ function subindicatorsInIndicator(indicator) {
     return indicator.metadata.groups.length;
 }
 
-// TODO this entire file needs to be refactored to use thhe observer pattern
+
 export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     parentContainer = $(".data-mapper-content__list");
     categoryTemplate = $(".data-category")[0].cloneNode(true);

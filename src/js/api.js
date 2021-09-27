@@ -37,7 +37,7 @@ export class API extends Observable {
         return this.loadUrl(url, {'wm-hostname': hostname});
     }
 
-    loadChoroplethData(profileId, areaCode, indicatorId){
+    loadChoroplethData(profileId, areaCode, indicatorId) {
         const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/`;
         return this.loadUrl(url);
     }
@@ -61,8 +61,8 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
-    loadAllPoints(profileId, areaCode){
-        let url =`${this.baseUrl}/profile/${profileId}/points/geography/${areaCode}/points/?format=json`
+    loadAllPoints(profileId, areaCode) {
+        let url = `${this.baseUrl}/profile/${profileId}/points/geography/${areaCode}/points/?format=json`
         return this.loadUrl(url);
     }
 
@@ -91,9 +91,6 @@ export class API extends Observable {
             try {
                 await self.authenticate(url);
                 response = await this.getTokenJSON(url, headers);
-            } catch (err) {
-                console.error(err)
-
             } finally {
                 console.log("stopped logging in")
 

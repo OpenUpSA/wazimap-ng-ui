@@ -1,4 +1,4 @@
-import {Component} from "../../utils";
+import {Component} from "../utils";
 
 export class AddFilterButton extends Component {
     static EVENTS = {

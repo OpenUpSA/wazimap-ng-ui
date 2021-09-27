@@ -22,7 +22,12 @@ export class DataFilterModel extends Observable {
         filtersChanged: 'DataFilterModel.filtersChanged'
     }
 
-    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData) {
+    static FILTER_TYPE = {
+        indicators: 'indicators',
+        points: 'points'
+    }
+
+    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData, filterType = DataFilterModel.FILTER_TYPE.indicators) {
         super()
 
         const self = this;
@@ -37,6 +42,7 @@ export class DataFilterModel extends Observable {
         this._selectedSubindicators = {}
         this._childData = childData;
         this._filteredData = {};
+        this._filterFunction = filterType === DataFilterModel.FILTER_TYPE.indicators ? this.getFilteredIndicatorData : this.getFilteredPointData;
 
         groups.forEach(group => {
             let dataFilter = new DataFilter(group);
@@ -155,6 +161,14 @@ export class DataFilterModel extends Observable {
     }
 
     updateFilteredData() {
+        const _filteredData = this._filterFunction();
+
+        this.filteredData = _filteredData;
+        this.triggerEvent(DataFilterModel.EVENTS.updated, this);
+    }
+
+    getFilteredIndicatorData() {
+        console.log('getFilteredIndicatorData')
         let _filteredData = {};
 
         for (const [geo, arr] of Object.entries(this.childData)) {
@@ -170,7 +184,10 @@ export class DataFilterModel extends Observable {
             });
         }
 
-        this.filteredData = _filteredData;
-        this.triggerEvent(DataFilterModel.EVENTS.updated, this);
+        return _filteredData;
+    }
+
+    getFilteredPointData() {
+        console.log('getFilteredPointData')
     }
 }

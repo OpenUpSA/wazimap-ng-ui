@@ -1,4 +1,4 @@
-import {Component, Observable} from "../../utils";
+import {Component, Observable} from "../utils";
 
 
 export class DropdownModel extends Observable {
@@ -43,7 +43,7 @@ export class DropdownModel extends Observable {
             }
         }
 
-        throw `Did not find value: ${value} in dropdown items`;
+        console.error(`Did not find value: ${value} in dropdown items`);
     }
 
     get isDisabled() {
@@ -107,7 +107,6 @@ export class Dropdown extends Component {
 
     get model() {
         return this._model;
-        f
     }
 
     prepareDomElements() {

@@ -6,6 +6,7 @@ import {Cluster} from './cluster'
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import {PointFilter} from "./point_filter";
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
@@ -58,6 +59,7 @@ export class PointData extends Component {
         if (this.enableClustering) {
             this.map.addLayer(this.markers);
         }
+        this.pointFilter = new PointFilter(this);
 
         this.prepareDomElements();
     }
@@ -118,9 +120,9 @@ export class PointData extends Component {
             self.createMarkers(points, layer);
             self.map.addLayer(layer);
             self.showDone(category);
+            self.pointFilter.isVisible = true;
 
             self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
-
         }
     }
 

@@ -1,7 +1,8 @@
-import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
-import {getJSON} from '../api';
+import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../../utils';
+import {getJSON} from '../../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
+import {PointFilter} from "./point_filter";
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
@@ -46,6 +47,7 @@ export class PointData extends Component {
 
         this.markerLayer = this.genLayer();
         this.categoryLayers = {};
+        this.pointFilter = new PointFilter(this);
 
         this.prepareDomElements();
     }
@@ -102,9 +104,9 @@ export class PointData extends Component {
             self.createMarkers(data, category.data, layer);
             self.map.addLayer(layer);
             self.showDone(category);
+            self.pointFilter.isVisible = true;
 
             self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
-
         }
     }
 
@@ -266,7 +268,7 @@ export class PointData extends Component {
 
         $('.' + tooltipItemsClsName, item).html('');
 
-        if (typeof visibleAttributes === 'undefined'){
+        if (typeof visibleAttributes === 'undefined') {
             visibleAttributes = [];
         }
 
@@ -285,7 +287,7 @@ export class PointData extends Component {
 
     showFacilityModal = (point) => {
         $('.facility-info__title').text(point.name);
-        $('.facility-info__print').off('click').on('click',() => {
+        $('.facility-info__print').off('click').on('click', () => {
             window.print();
         });
         this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');

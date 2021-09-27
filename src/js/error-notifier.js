@@ -12,6 +12,6 @@ export class ErrorNotifier {
     }
 
     showNotification() {
-        alert('An unexpected error occurred. Please reload the page and try again. If the problem persists, please contact support@wazimap.co.za');
+        //alert('An unexpected error occurred. Please reload the page and try again. If the problem persists, please contact support@wazimap.co.za');
     }
 }

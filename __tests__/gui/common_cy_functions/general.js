@@ -43,3 +43,26 @@ export function waitUntilGeographyIsLoaded(geoName) {
 export function clickOnText(text){
     cy.findByText(text).click()
 }
+
+export function clickOnTheFirstTheme(){
+    cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1').first().click();
+}
+
+export function checkIfCategoriesAreDisplayed(){
+    cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1 .point-mapper__h1_content').should('be.visible');
+}
+
+export function clickOnTheFirstCategory(){
+    cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1 .point-mapper__h1_content .point-mapper__h2_wrapper .point-mapper__h2').first().click();
+}
+
+export function hoverOverTheMapCenter(){
+    let navHeight = 56;
+    let width = Cypress.config("viewportWidth");
+    let height = Cypress.config("viewportHeight");
+    let x = (width / 2);
+    let y = (height / 2) + (navHeight / 2);
+    cy.get('#main-map')
+        .trigger('mousemove', {clientX: 0, clientY: 0})
+        .trigger('mousemove', {clientX: x, clientY: y});
+}

@@ -67,6 +67,7 @@ export function setPopupStyle(clsName) {
     $('.map__tooltip_value').css('white-space', 'nowrap');
     $('.leaflet-popup-content-wrapper').css('padding', 0);
     $('.leaflet-popup-content').css('margin', 'unset');
+    $('.leaflet-popup-content p').css('margin', 'unset');
     $('.leaflet-container').css('font', 'unset');
 
     let popupWidth = 0;

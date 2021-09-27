@@ -5,26 +5,25 @@ import {Component} from '../../src/js/utils';
 
 import html from '../../src/index.html';
 
-describe('Rich data panel tests', () => {
+describe('Rich data panel HTML indicator test', () => {
     document.body.innerHTML = html;
 
     const formattingConfig = {}
     const profileWrapperClass = '.rich-data-content';
     const categoryName = "Test category";
     const categoryDetail = {
-        "description": "<p>A <strong>category</strong> description</p>",
+        "description": "mock category description",
         "subcategories": {
             "Mock subcategory": {
-                "description": "<p>A <strong>subcategory</strong> description</p>",
+                "description": "mock subcategory description",
                 "indicators": {
                     "Mock indicator": {
-                        "data": [{
-                            "age": "1"
-                        }],
-                        "content_type": "indicator",
+                        "data": [{contents: "<b>bold stuff</b>"}, {contents: "<em>emphasised stuf</em>"}],
+                        "content_type": "html",
+                        "dataset_content_type": "qualitative",
                         "metadata": {},
                         "groups": [],
-                        "description": "<p>An <strong>indicator</strong> description</p>",
+                        "description": "mock indicator description",
                         "type": "indicator"
                     }
                 }
@@ -40,23 +39,29 @@ describe('Rich data panel tests', () => {
     let component = new Component();
     let category = new Category(component, formattingConfig, categoryName, categoryDetail, profileWrapper, id, removePrevCategories, isFirst)
 
+    test('HTML content is shown', () => {
+      checkContent(
+        '.profile-indicator__chart_body',
+        '<div><b>bold stuff</b></div><div><em>emphasised stuf</em></div>'
+      )
+    })
+
+
     test('Category description is visible and renders HTML tags', () => {
-        checkHTMLIsRendered('.category-header__description', 'A category description');
+        checkContent('.category-header__description', '<p>mock category description</p>');
     })
 
     test('Subcategory description is visible and renders HTML tags', () => {
-        checkHTMLIsRendered('.sub-category-header__description', 'A subcategory description');
+        checkContent('.sub-category-header__description', '<p>mock subcategory description</p>');
     })
 
     test('Indicator description is visible and renders HTML tags', () => {
-        checkHTMLIsRendered('.profile-indicator__chart_description', 'An indicator description');
+        checkContent('.profile-indicator__chart_description', '<p>mock indicator description</p>');
     })
 
-    function checkHTMLIsRendered(elementClass, description) {
-        let descriptionElement = document.querySelector(elementClass);
-        let htmlTag = descriptionElement.textContent.trim();
-        expect(descriptionElement).toBeVisible();
-        expect(descriptionElement.innerHTML).toContain("<strong>");
-        expect(htmlTag).toBe(description)
+    function checkContent(elementClass, description) {
+        let element = document.querySelector(elementClass);
+        expect(element).toBeVisible();
+      expect(element.innerHTML.trim()).toBe(description);
     }
-});
+})

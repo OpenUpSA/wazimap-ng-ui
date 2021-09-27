@@ -12,13 +12,13 @@ export class HTMLBlock extends ContentBlock {
     }
 
     get html() {
-        return this.indicator.data[0].content;
+      return this.indicator.data.map(item => `<div>${item.contents}</div>`);
     }
 
 
     prepareDomElements() {
         super.prepareDomElements();
-        
+
         $(filtersClass, this.container).remove();
         $(bodyClass, this.container).html(this.html);
         $(hamburgerClass, this.container).remove();

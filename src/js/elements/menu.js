@@ -2,13 +2,14 @@ import {SubIndicator} from '../dataobjects'
 import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
 
 const hideondeployClsName = 'hideondeploy';
-const parentContainer = $(".data-mapper-content__list");
+let parentContainer = null;
 let categoryTemplate = null;
 let subCategoryTemplate = null;
 let indicatorTemplate = null;
 let indicatorItemTemplate = null;
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
+const DATASET_TYPES = {Quantitative: 'quantitative', Qualitative: 'qualitative'};
 
 function subindicatorsInSubCategory(subcategory) {
 
@@ -30,6 +31,7 @@ function subindicatorsInIndicator(indicator) {
 
 
 export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
+    parentContainer = $(".data-mapper-content__list");
     categoryTemplate = $(".data-category")[0].cloneNode(true);
     subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
     indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
@@ -41,7 +43,6 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
         $(".data-category__h4", wrapper).remove();
 
         if (groups !== null && typeof groups.subindicators !== 'undefined') {
-
             groups.subindicators.forEach((subindicator) => {
                 let display = subindicatorHasData(subindicator, indicatorDetail);
 
@@ -89,13 +90,15 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
         $(".data-category__h3", h3Wrapper).remove();
 
         for (const [indicator, detail] of Object.entries(indicators)) {
-            let newIndicator = indicatorClone.cloneNode(true);
-            $('.truncate', newIndicator).text(indicator);
-            $(h3Wrapper).append(newIndicator);
-            const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
+            if (detail.dataset_content_type != DATASET_TYPES.Qualitative) {
+                let newIndicator = indicatorClone.cloneNode(true);
+                $('.truncate', newIndicator).text(indicator);
+                $(h3Wrapper).append(newIndicator);
+                const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
 
-            let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
-            addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
+                let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
+                addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
+            }
         }
     }
 
@@ -149,7 +152,6 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     let hiddenClass = hideondeployClsName;
     hiddenClass = 'hidden';
     $(parentContainer).find('.data-category').remove();
-
 
     for (const [category, detail] of Object.entries(data)) {
         let hasChildren = checkIfCategoryHasChildren(category, detail)

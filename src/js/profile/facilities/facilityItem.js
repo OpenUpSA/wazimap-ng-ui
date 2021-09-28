@@ -40,7 +40,7 @@ export class FacilityItem extends Component {
         }
 
         $('.location-facility__item_name .truncate', self.facilityItem).text(self.category.label);
-        self.hideFacilityCount();
+        self.setFacilityCount(self.category.count);
 
         if (!isDownloadsDisabled) {
             $(self.facilityItem).on('click', () => {
@@ -72,11 +72,6 @@ export class FacilityItem extends Component {
 
             return sheet;
         })
-    }
-
-    hideFacilityCount() {
-        $('.location-facility__item_value', this.facilityItem).addClass('hidden');
-        $('.location-facility__item--loading', this.facilityItem).removeClass('hidden');
     }
 
     setFacilityCount(value) {

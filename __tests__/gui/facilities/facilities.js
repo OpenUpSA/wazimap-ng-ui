@@ -6,12 +6,21 @@ import {
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
 import all_details from "../facilities/all_details.json";
-import all_details_EC from "../facilities/all_details_EC.json";
+import themes_count from "./themes_count.json";
+import themes_count_EC from "./themes_count_EC.json";
 import profile from "../facilities/profile.json";
 
 Given('I am on the Wazimap Homepage', () => {
     setupInterceptions(all_details, profile, null, null);
-    //todo: intercept async point count endpoint here when the BE is ready
+
+    cy.intercept('/api/v1/profile/8/geography/ZA/themes_count', (request) => {
+        request.reply({
+            statusCode: 201,
+            body: themes_count,
+            forceNetworkError: false // default
+        });
+    });
+
     gotoHomepage();
 })
 
@@ -33,16 +42,16 @@ When('I check if the location count is correct', () => {
 })
 
 Then('I check if the facilities are created correctly', () => {
-    const themeCount = all_details.themes.length;
+    const themeCount = themes_count.length;
     cy.get('.rich-data .location__facilities_content-wrapper .location-facility').should('have.length', themeCount);
     cy.get('.rich-data .location__facilities_content-wrapper .location-facility').each(($div, index) => {
-        const themeTitle = all_details.themes[index].name
-        const categoryCount = all_details.themes[index].subthemes.length;
+        const themeTitle = themes_count[index].name
+        const categoryCount = themes_count[index].subthemes.length;
         expect($div.find('.location-facility__name div').text()).equal(themeTitle);
         expect($div.find('.location-facility__list_item').length).equal(categoryCount);
     })
 
-    const firstCategory = all_details.themes[0].subthemes[0].label;
+    const firstCategory = themes_count[0].subthemes[0].label;
     cy.get('.rich-data .location__facilities_content-wrapper .location-facility .location-facility__item_name div').first().should('have.text', firstCategory);
 })
 
@@ -56,7 +65,17 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,
-                body: all_details_EC,
+                body: all_details,
+                forceNetworkError: false // default
+            })
+        });
+    });
+
+    cy.intercept('/api/v1/profile/8/geography/EC/themes_count/?format=json', (request) => {
+        return trigger.then(() => {
+            request.reply({
+                statusCode: 201,
+                body: themes_count_EC,
                 forceNetworkError: false // default
             })
         });

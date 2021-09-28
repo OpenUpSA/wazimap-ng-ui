@@ -39,7 +39,7 @@ export class Profile_header extends Component {
         this.setLocationDescription();
 
         this.facilityController = new FacilityController(this);
-        this.facilityController.addFacilities();
+        this.facilityController.getAndAddFacilities();
         $(downloadAllFacilities).off('click').on('click', () => this.facilityController.downloadAllFacilities());
     }
 

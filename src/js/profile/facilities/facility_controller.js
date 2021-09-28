@@ -12,6 +12,7 @@ export class FacilityControllerModel extends Component {
         super(parent);
 
         this._controllerParent = controllerParent;
+        this._themes = null;
     }
 
     get profileId() {
@@ -32,6 +33,14 @@ export class FacilityControllerModel extends Component {
 
     get isDownloadsDisabled() {
         return this._controllerParent.isDownloadsDisabled;
+    }
+
+    get themes() {
+        return this._themes;
+    }
+
+    set themes(value) {
+        this._themes = value;
     }
 }
 
@@ -71,11 +80,15 @@ export class FacilityController extends Component {
     }
 
     prepareEvents() {
-        const self = this;
 
-        self.model.on(FacilityControllerModel.EVENTS.facilitiesCreated, () => {
-            self.getAndUpdateFacilityItemCounts();
-        })
+    }
+
+    getAndAddFacilities() {
+        this.model.api.getThemesCount(this.model.profileId, this.model.geography.code)
+            .then((data) => {
+                this.model.themes = data;
+                this.addFacilities();
+            })
     }
 
     addFacilities() {
@@ -85,7 +98,7 @@ export class FacilityController extends Component {
         let categoryArr = [];
         let themes = [];
 
-        this.model.geometries.themes.forEach((theme) => {
+        this.model.themes.forEach((theme) => {
             let totalCount = 0;
             theme.subthemes.forEach((st) => {
                 totalCount += st.count;
@@ -143,36 +156,6 @@ export class FacilityController extends Component {
 
                 XLSX.writeFile(wb, fileName);
             });
-    }
-
-    getAndUpdateFacilityItemCounts() {
-        const self = this;
-        const data = this.getFacilityItemCounts();
-
-        data.forEach((theme) => {
-            theme.subthemes.forEach((st) => {
-                let fi = self.facilityItems.filter((fi) => {
-                    return fi.category.category_id === st.id;
-                })[0];
-
-                if (fi !== undefined) {
-                    fi.setFacilityCount(st.count);
-                }
-            })
-        })
-    }
-
-    getFacilityItemCounts() {
-        //call the API here - data should be the API data
-        const td = new TestData();
-        let data;
-        if (this.model.geography.code === 'ZA') {
-            data = td.themeDataZA;
-        } else if (this.model.geography.code === 'EC') {
-            data = td.themeDataEC;
-        }
-
-        return data;
     }
 
     hideLoadingState() {

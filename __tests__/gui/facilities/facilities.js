@@ -33,8 +33,7 @@ When('I expand Rich Data Panel', () => {
 })
 
 Then('I click on Show Locations button', () => {
-    cy.wait(500);
-    cy.get('.rich-data .location__facilities_trigger .location__facilities_expand').click();
+    cy.get('.rich-data .location__facilities_trigger .location__facilities_expand', {timeout: 20000}).click();
 })
 
 When('I check if the location count is correct', () => {
@@ -56,6 +55,8 @@ Then('I check if the facilities are created correctly', () => {
 })
 
 When('I navigate to EC and check if the loading state is displayed correctly', () => {
+    //intercepting the request and testing the loading state
+    //for more info : https://blog.dai.codes/cypress-loading-state-tests/
     let sendResponse;
     const trigger = new Promise((resolve) => {
         sendResponse = resolve;

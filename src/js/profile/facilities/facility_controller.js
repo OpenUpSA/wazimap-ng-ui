@@ -84,11 +84,13 @@ export class FacilityController extends Component {
     }
 
     getAndAddFacilities() {
-        this.model.api.getThemesCount(this.model.profileId, this.model.geography.code)
-            .then((data) => {
-                this.model.themes = data;
-                this.addFacilities();
-            })
+        if(this.model.api !== null){
+            this.model.api.getThemesCount(this.model.profileId, this.model.geography.code)
+                .then((data) => {
+                    this.model.themes = data;
+                    this.addFacilities();
+                })
+        }
     }
 
     addFacilities() {
@@ -97,11 +99,13 @@ export class FacilityController extends Component {
 
         let categoryArr = [];
         let themes = [];
+        let totalCount = 0;
 
         this.model.themes.forEach((theme) => {
-            let totalCount = 0;
+            let themeCount = 0;
             theme.subthemes.forEach((st) => {
                 totalCount += st.count;
+                themeCount += st.count;
 
                 categoryArr.push({
                     theme_id: theme.id,
@@ -115,7 +119,7 @@ export class FacilityController extends Component {
                 theme_id: theme.id,
                 name: theme.name,
                 icon: theme.icon,
-                count: totalCount
+                count: themeCount
             });
         });
 
@@ -130,7 +134,7 @@ export class FacilityController extends Component {
             $('.location__facilities_header').removeClass('hidden');
             $('.location__facilities_trigger').removeClass('hidden');
             $('.location__facilities_categories-value strong').text(categoryArr.length);
-            $('.location__facilities_facilities-value strong').text('');
+            $('.location__facilities_facilities-value strong').text(totalCount + ' ');
 
             self.model.triggerEvent(FacilityControllerModel.EVENTS.facilitiesCreated);
             self.isLoading = false;

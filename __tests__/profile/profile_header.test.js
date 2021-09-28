@@ -2,6 +2,8 @@ import {Profile_header} from "../../src/js/profile/profile_header";
 import {extractSheetsData} from "../../src/js/utils";
 import {screen} from "@testing-library/dom";
 import {Component} from '../../src/js/utils';
+import {API} from '../../src/js/api';
+import {FacilityItem} from "../../src/js/profile/facilities/facilityItem";
 
 const FACILITIES = {
     count: 2,
@@ -124,28 +126,11 @@ describe('profile header', () => {
     const config = {};
 
     test('initialize successully', () => {
-        const header = new Profile_header(component, parents, geometries, api, null, geography, config);
+        const header = new Profile_header(component, parents, geometries, api, 8, geography, config);
     })
 })
 
 describe('downloading facilities', () => {
-    const parents = [];
-    const geometries = {
-        themes: [{
-            id: 1,
-            name: 'test',
-            icon: 'icon',
-            subthemes: [{
-                count: 5,
-                label: 'test category',
-                id: 14
-            }]
-        }]
-    };
-    const api = null;
-    const geography = {code: 'ZA'};
-    let config = {};
-
     beforeEach(() => {
         document.body.innerHTML = `
 <div class="rich-data-content">
@@ -178,21 +163,27 @@ describe('downloading facilities', () => {
     })
 
     test('download is enabled', () => {
-        let component = new Component();
-        const header = new Profile_header(component, parents, geometries, api, null, geography, config);
-        let downloadBtn = screen.getByTestId('download-btn');
-        expect(downloadBtn.classList.contains('hidden')).toBe(false);
+        const component = new Component();
+        const category = {
+            label: 'test',
+            count: 17
+        }
+        const facilityRowClone = $('body').find('.location-facility__list_item')[0].cloneNode(true);
+        let f = new FacilityItem(component, facilityRowClone, category, true, false);
+        const downloadBtn = $(f.facilityItem).find('.location-facility__item_download')[0];
+
+        expect(downloadBtn).not.toHaveClass('hidden');
     })
 
     test('download is disabled', () => {
-        config = {
-            richdata: {
-                hide: ['facility-downloads']
-            }
+        const component = new Component();
+        const category = {
+            label: 'test',
+            count: 17
         }
-        let component = new Component();
-        const header = new Profile_header(component, parents, geometries, api, null, geography, config);
-        let downloadBtn = screen.getByTestId('download-btn');
+        const facilityRowClone = $('body').find('.location-facility__list_item')[0].cloneNode(true);
+        let f = new FacilityItem(component, facilityRowClone, category, true, true);
+        const downloadBtn = $(f.facilityItem).find('.location-facility__item_download')[0];
 
         expect(downloadBtn).toHaveClass('hidden');
     })

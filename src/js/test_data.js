@@ -1,4 +1,4 @@
-export class TestData {
+export class TestData{
     constructor() {
         this.filterData = {
             chartConfiguration: {},

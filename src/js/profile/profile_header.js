@@ -83,6 +83,7 @@ export class Profile_header extends Component {
     }
 
     addFacilities = () => {
+        return;
         $('.location-facility', facilityWrapper).remove();
         let self = this;
 

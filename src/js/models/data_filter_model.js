@@ -30,10 +30,7 @@ export class DataFilterModel extends Observable {
     constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData, filterType = DataFilterModel.FILTER_TYPE.indicators) {
         super()
 
-        const self = this;
-
-        this._filters = [];
-        this._groupLookup = {};
+        this._groups = groups;
         this.configFilters = configFilters;
 
         this._primaryGroup = primaryGroup;
@@ -43,29 +40,57 @@ export class DataFilterModel extends Observable {
         this._childData = childData;
         this._filteredData = {};
         this._filterFunction = filterType === DataFilterModel.FILTER_TYPE.indicators ? this.getFilteredIndicatorData : this.getFilteredPointData;
-
-        groups.forEach(group => {
-            let dataFilter = new DataFilter(group);
-            self._filters.push(dataFilter);
-
-            this._groupLookup[dataFilter.name] = dataFilter;
-        });
+        this._filterType = filterType;
     }
 
     get aggregatableGroups() {
-        return Object.values(this._groupLookup).filter(group => group.can_aggregate);
+        return Object.values(this.groupLookup).filter(group => group.can_aggregate);
     }
 
     get nonAggregatableGroups() {
-        return Object.values(this._groupLookup).filter(group => !(group.can_aggregate));
+        return Object.values(this.groupLookup).filter(group => !(group.can_aggregate));
+    }
+
+    get groups() {
+        return this._groups;
+    }
+
+    set groups(value) {
+        this._groups = value;
+    }
+
+    get keys() {
+        let keys = {
+            name: 'name',
+            values: 'subindicators'
+        };
+        if (this._filterType === DataFilterModel.FILTER_TYPE.points) {
+            keys.values = 'values';
+        }
+
+        return keys;
     }
 
     get groupLookup() {
-        return this._groupLookup;
+        let self = this;
+        let gr = {};
+        this.groups.forEach(group => {
+            let dataFilter = new DataFilter(group, self.keys);
+
+            gr[dataFilter[this.keys.name]] = dataFilter;
+        });
+        return gr;
     }
 
     get filters() {
-        return this._filters;
+        let self = this;
+        let filters = [];
+        this.groups.forEach(group => {
+            let dataFilter = new DataFilter(group, self.keys);
+            filters.push(dataFilter);
+        });
+
+        return filters;
     }
 
     get defaultFilterGroups() {
@@ -101,6 +126,10 @@ export class DataFilterModel extends Observable {
         return this._childData;
     }
 
+    set childData(value) {
+        this._childData = value;
+    }
+
     get filteredData() {
         return this._filteredData;
     }
@@ -115,13 +144,20 @@ export class DataFilterModel extends Observable {
 
     get availableFilters() {
         const self = this;
-        let filters = Object.values(this._groupLookup);
+        let filters = Object.values(this.groupLookup);
 
         return filters.filter(filter => {
-            if (filter.name == this.primaryGroup)
-                return false;
+            let isAvailable = true;
 
-            return !(self.selectedFilters.has(filter));
+            if (filter.name == this.primaryGroup)
+                isAvailable = false;
+
+            self.selectedFilters.forEach((sf) => {
+                if (sf.name === filter.name)
+                    isAvailable = false;
+            })
+
+            return isAvailable;
         });
     }
 
@@ -131,7 +167,7 @@ export class DataFilterModel extends Observable {
     }
 
     addFilter(indicatorName) {
-        let dataFilter = this._groupLookup[indicatorName];
+        let dataFilter = this.groupLookup[indicatorName];
         if (dataFilter != undefined) {
             this._selectedFilters.add(dataFilter);
             this.triggerEvent(DataFilterModel.EVENTS.updated, this)
@@ -141,14 +177,30 @@ export class DataFilterModel extends Observable {
     }
 
     removeFilter(indicatorName) {
-        let dataFilter = this._groupLookup[indicatorName];
-        if (dataFilter != undefined) {
-            this._selectedFilters.delete(dataFilter);
+        let dataFilter = this.groupLookup[indicatorName];
+        let previouslyFiltered = this.isPreviouslyFiltered(indicatorName);
+        if (dataFilter !== undefined || previouslyFiltered) {
+            this.selectedFilters.forEach((sf) => {
+                if (sf.name === indicatorName) {
+                    this.selectedFilters.delete(sf);
+                }
+            })
             delete this.selectedSubIndicators[dataFilter.name];
             this.triggerEvent(DataFilterModel.EVENTS.updated, this)
         } else {
             throw `removeFilter: Can't find indicator: ${indicatorName}`
         }
+    }
+
+    isPreviouslyFiltered(indicatorName){
+        let filtered = false;
+        this.selectedFilters.forEach((sf) => {
+            if (sf.name === indicatorName) {
+                filtered = true;
+            }
+        })
+
+        return filtered;
     }
 
     setSelectedSubindicator(indicatorName, subindicatorValue) {
@@ -168,7 +220,6 @@ export class DataFilterModel extends Observable {
     }
 
     getFilteredIndicatorData() {
-        console.log('getFilteredIndicatorData')
         let _filteredData = {};
 
         for (const [geo, arr] of Object.entries(this.childData)) {
@@ -188,6 +239,22 @@ export class DataFilterModel extends Observable {
     }
 
     getFilteredPointData() {
-        console.log('getFilteredPointData')
+        let activePoints = [...this.childData];
+        let result = [];
+
+        activePoints.forEach((ap) => {
+            let add = true;
+            for (let key in this.selectedSubIndicators) {
+                if (ap.point.data.filter(x => x.key === key && x.value === this.selectedSubIndicators[key]).length <= 0) {
+                    add = false;
+                }
+            }
+
+            if (add) {
+                result.push(ap);
+            }
+        })
+
+        return result;
     }
 }

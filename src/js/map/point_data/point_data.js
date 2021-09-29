@@ -59,9 +59,14 @@ export class PointData extends Component {
         if (this.enableClustering) {
             this.map.addLayer(this.markers);
         }
-        this.pointFilter = new PointFilter(this);
 
+        this.initFilter();
         this.prepareDomElements();
+    }
+
+    initFilter() {
+        this.pointFilter = new PointFilter(this);
+        this.pointFilter.filterCallback = (filteredData, selectedSubIndicators) => this.filterPoints(filteredData, selectedSubIndicators);
     }
 
     prepareDomElements = () => {
@@ -120,6 +125,8 @@ export class PointData extends Component {
             self.createMarkers(points, layer);
             self.map.addLayer(layer);
             self.showDone(category);
+
+            self.pointFilter.activePoints = this.activePoints;
             self.pointFilter.isVisible = true;
 
             self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
@@ -145,9 +152,23 @@ export class PointData extends Component {
                 removeMarkers.push(p.marker);
             })
 
+            this.activePoints = this.activePoints.filter((ap) => {
+                return pointsToRemove.indexOf(ap) < 0;
+            })
             this.markers.removeLayers(removeMarkers);
+            this.pointFilter.activePoints = this.activePoints;
             pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
         }
+    }
+
+    filterPoints(filterResult, selectedFilter) {
+        let markers = [];
+        if (Object.keys(filterResult).length !== 0) {
+            markers = filterResult.map(a => a.marker);
+        }
+        this.markers.clearLayers();
+
+        this.markers.addLayers(markers);
     }
 
     /** end of category functions **/
@@ -234,7 +255,8 @@ export class PointData extends Component {
             if (this.enableClustering) {
                 this.activePoints.push({
                     marker: marker,
-                    category: points.category
+                    category: points.category,
+                    point: point
                 });
 
                 newMarkers.push(marker);

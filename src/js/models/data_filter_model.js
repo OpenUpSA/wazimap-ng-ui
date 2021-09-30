@@ -149,7 +149,7 @@ export class DataFilterModel extends Observable {
         return filters.filter(filter => {
             let isAvailable = true;
 
-            if (filter.name == this.primaryGroup)
+            if (filter.name === this.primaryGroup)
                 isAvailable = false;
 
             self.selectedFilters.forEach((sf) => {
@@ -168,7 +168,7 @@ export class DataFilterModel extends Observable {
 
     addFilter(indicatorName) {
         let dataFilter = this.groupLookup[indicatorName];
-        if (dataFilter != undefined) {
+        if (dataFilter !== undefined) {
             this._selectedFilters.add(dataFilter);
             this.triggerEvent(DataFilterModel.EVENTS.updated, this)
         } else {
@@ -180,12 +180,14 @@ export class DataFilterModel extends Observable {
         let dataFilter = this.groupLookup[indicatorName];
         let previouslyFiltered = this.isPreviouslyFiltered(indicatorName);
         if (dataFilter !== undefined || previouslyFiltered) {
+            // if the dataFilter is undefined and previouslyFiltered = true it means
+            // the only category that had this field is unchecked from point mapper
             this.selectedFilters.forEach((sf) => {
                 if (sf.name === indicatorName) {
                     this.selectedFilters.delete(sf);
                 }
             })
-            delete this.selectedSubIndicators[dataFilter.name];
+            delete this.selectedSubIndicators[indicatorName];
             this.triggerEvent(DataFilterModel.EVENTS.updated, this)
         } else {
             throw `removeFilter: Can't find indicator: ${indicatorName}`

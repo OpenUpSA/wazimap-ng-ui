@@ -171,6 +171,10 @@ export class PointData extends Component {
         this.markers.addLayers(markers);
     }
 
+    unSelectAllCategories() {
+        this.triggerEvent('point_data.all.unselected');
+    }
+
     /** end of category functions **/
 
     async getAddressPoints(category) {
@@ -210,6 +214,10 @@ export class PointData extends Component {
         $(item).attr('data-id', category.data.id);
         $('.point-legend__remove', item).on('click', () => {
             $(`.point-mapper__h2[data-id=${category.data.id}]`).trigger('click');
+            if ($('.map-point-legend .point-legend').length <= 0) {
+                //all the legend items are removed - remove filters too
+                $('.point-filters__header-close').trigger('click');
+            }
         })
 
         pointLegend.append(item);

@@ -58,7 +58,7 @@ export class FilterController extends Component {
             removeFilterButton: '.point-filters__remove-filter',
             addButton: '.point-filters__add-filter',
             filterDropdown: '.point-filters__filter',
-            filterRowClass: '.map-options__filter-row'
+            filterRowClass: '.point-filters__filter-row'
         }
     }
 
@@ -71,8 +71,12 @@ export class FilterController extends Component {
     }
 
     prepareDomElements() {
-        this._rowContainer = $('.point-filters').find('.point-filters__filter-row')[0];
+        this._rowContainer = $('.point-filters').find(this.elements.filterRowClass)[0];
         $(this._rowContainer).hide();
+
+        while ($(this.container).find(this.elements.filterRowClass).length > 1) {
+            $(this.container).find(this.elements.filterRowClass)[1].remove();
+        }
     }
 
     prepareEvents() {
@@ -129,6 +133,7 @@ export class FilterController extends Component {
             }
 
             this.updateAvailableFiltersOfRows();
+            this.setAddFilterButton();
         })
 
         this.addEmptyFilter(true, false);
@@ -146,12 +151,23 @@ export class FilterController extends Component {
         this.model.filterRows.forEach((fr) => {
             if (fr.model.currentIndicatorValue !== 'All indicators' && this.model.dataFilterModel.groupLookup[fr.model.currentIndicatorValue] === undefined) {
                 //the category is removed - remove the filter too
-                console.log('remove row')
-                fr.setPrimaryIndexUsingValue('All values');
+                const isDefault = fr.model.isDefault;
+                fr.removeRow();
+
+                if (isDefault) {
+                    this.addEmptyFilter(true, false);
+                }
             } else if (fr.model.currentIndicatorValue !== 'All values') {
                 let lastIndex = fr.model.indicatorValues.length - 1;
                 fr.updateIndicatorDropdowns(fr.model, lastIndex);
             }
         })
+    }
+
+    setAddFilterButton() { // TODO write an unselected filters getter in the data model
+        if (this.model.dataFilterModel.availableFilters.length > 0)
+            this.addFilterButton.enable();
+        else
+            this.addFilterButton.disable();
     }
 }

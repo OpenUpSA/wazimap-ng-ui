@@ -74,7 +74,9 @@ export class Theme extends Component {
     toggleOn() {
         this.active = true;
         this.categories.forEach(category => {
-            category.toggleOn();
+            if (!category.active) {
+                category.toggleOn();
+            }
         })
 
         this.highlight(true);

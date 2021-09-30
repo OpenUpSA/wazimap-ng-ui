@@ -12,6 +12,7 @@ export class PointFilter extends Component {
         this._filterController = null;
 
         this.prepareEvents();
+        this.prepareDomElements();
     }
 
     get filterCallback() {
@@ -41,12 +42,15 @@ export class PointFilter extends Component {
     get groups() {
         let groups = [];
         this.activePoints.forEach((ap) => {
+            const filterableFields = ap.category.filterableFields;
             ap.point.data.forEach((d) => {
                 if (groups.filter(g => g.name === d.key).length <= 0) {
-                    groups.push({
-                        name: d.key,
-                        values: [d.value]
-                    });
+                    if (filterableFields.length === 0 || filterableFields.indexOf(d.key) >= 0) {
+                        groups.push({
+                            name: d.key,
+                            values: [d.value]
+                        });
+                    }
                 } else {
                     let group = groups.filter(g => g.name === d.key)[0];
                     if (group.values.filter(v => v === d.value).length <= 0) {
@@ -81,5 +85,24 @@ export class PointFilter extends Component {
 
     prepareEvents() {
         $('.point-filters__header-close').on('click', () => this.isVisible = false);
+    }
+
+    prepareDomElements() {
+        this.setTitleElement();
+        this.setCloseButton();
+    }
+
+    setTitleElement() {
+        let titleEle = document.createElement('div');
+        $(titleEle).attr('data-i18n', 'Point Filter');
+        $(titleEle).addClass('i18n');
+
+        $('.filters__header_name .truncate').html(titleEle);
+    }
+
+    setCloseButton() {
+        $('.point-filters__header-close').on('click', () => {
+            this.parent.unSelectAllCategories();
+        })
     }
 }

@@ -198,50 +198,68 @@ export class PointData extends Component {
         let col = '';
         let newMarkers = [];
         checkIterate(points.data, point => {
-            if (col === '') {
-                let themeIndex = point.themeIndex;
+            const isValid = this.validateCoordinates(point.y, point.x)
+            if (isValid) {
+                if (col === '') {
+                    let themeIndex = point.themeIndex;
 
-                col = $(`.point-mapper__h1_trigger.theme-${themeIndex}:not(.point-mapper__h1--default-closed)`).css('color');
-            }
+                    col = $(`.point-mapper__h1_trigger.theme-${themeIndex}:not(.point-mapper__h1--default-closed)`).css('color');
+                }
 
-            let html = this.generateMarkerHtml(col);
+                let html = this.generateMarkerHtml(col);
 
-            let divIcon = L.divIcon({
-                html: html,
-                className: "leaflet-data-marker",
-                iconSize: L.point(25, 25)
-            });
-
-            let marker = L.marker([point.y, point.x],
-                {
-                    icon: divIcon,
-                    color: col,
-                    categoryName: point.category.data.name
+                let divIcon = L.divIcon({
+                    html: html,
+                    className: "leaflet-data-marker",
+                    iconSize: L.point(25, 25)
                 });
 
-            marker.on('click', (e) => {
-                this.showMarkerPopup(e, point, points.category, true);
-                stopPropagation(e); //prevent map click event
-            }).on('mouseover', (e) => {
-                this.showMarkerPopup(e, point, points.category);
-            }).on('mouseout', () => {
-                this.hideMarkerPopup();
-            });
+                let marker = L.marker([point.y, point.x],
+                    {
+                        icon: divIcon,
+                        color: col,
+                        categoryName: point.category.data.name
+                    });
 
-            if (this.enableClustering) {
-                this.activePoints.push({
-                    marker: marker,
-                    category: points.category
+                marker.on('click', (e) => {
+                    this.showMarkerPopup(e, point, points.category, true);
+                    stopPropagation(e); //prevent map click event
+                }).on('mouseover', (e) => {
+                    this.showMarkerPopup(e, point, points.category);
+                }).on('mouseout', () => {
+                    this.hideMarkerPopup();
                 });
 
-                newMarkers.push(marker);
+                if (this.enableClustering) {
+                    this.activePoints.push({
+                        marker: marker,
+                        category: points.category
+                    });
+
+                    newMarkers.push(marker);
+                } else {
+                    layer.addLayer(marker);
+                }
             } else {
-                layer.addLayer(marker);
+                console.error(`[${point.y}, ${point.x}] is not a valid coordinate : ${point.name}`);
             }
         })
 
         if (this.enableClustering) {
             this.markers.addLayers(newMarkers);
+        }
+    }
+
+    validateCoordinates(lat, lon) {
+        const latRgx = /^(-?[1-8]?\d(?:\.\d{1,18})?|90(?:\.0{1,18})?)$/;
+        const lonRgx = /^(-?(?:1[0-7]|[1-9])?\d(?:\.\d{1,18})?|180(?:\.0{1,18})?)$/;
+
+        const validLat = latRgx.test(lat);
+        const validLon = lonRgx.test(lon);
+        if (validLat && validLon) {
+            return true;
+        } else {
+            return false;
         }
     }
 

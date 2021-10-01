@@ -45,7 +45,7 @@ export class PointFilter extends Component {
             const filterableFields = ap.category.filterableFields;
             ap.point.data.forEach((d) => {
                 if (groups.filter(g => g.name === d.key).length <= 0) {
-                    if (filterableFields.length === 0 || filterableFields.indexOf(d.key) >= 0) {
+                    if (filterableFields.indexOf(d.key) >= 0) {
                         groups.push({
                             name: d.key,
                             values: [d.value]

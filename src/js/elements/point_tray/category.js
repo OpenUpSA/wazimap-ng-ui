@@ -69,11 +69,7 @@ export class Category extends Component {
 
     get filterableFields() {
         let fields = [];
-        /*
-        this.data.configuration = {
-            filterable_fields:['campus', 'facility type']
-        }
-        */
+
         if (this.data.configuration !== undefined && this.data.configuration.filterable_fields !== undefined) {
             fields = this.data.configuration.filterable_fields;
         }

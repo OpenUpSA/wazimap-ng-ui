@@ -87,7 +87,7 @@ export class FilterController extends Component {
     }
 
     addEmptyFilter(isDefault = false, isExtra = true) {
-        if (this.model.dataFilterModel.availableFilters.length > 0) {
+        if (this.model.dataFilterModel.availableFilters.length > 0 || isDefault) {
             const self = this;
 
             let filterRowContainer = self._rowContainer.cloneNode(true);

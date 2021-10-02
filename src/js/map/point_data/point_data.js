@@ -158,6 +158,10 @@ export class PointData extends Component {
             this.markers.removeLayers(removeMarkers);
             this.pointFilter.activePoints = this.activePoints;
             pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+
+            if (pointLegend.find(`.${pointLegendItemClsName}`).length <= 0){
+                this.pointFilter.isVisible = false;
+            }
         }
     }
 

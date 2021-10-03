@@ -43,3 +43,7 @@ export function waitUntilGeographyIsLoaded(geoName) {
 export function clickOnText(text){
     cy.findByText(text).click()
 }
+
+export function expandRichDataPanel(){
+    cy.get('.point-mapper-toggles .rich-data-panel__open').click();
+}

@@ -22,6 +22,7 @@ export default class ProfileLoader extends Component {
         this.profileId = _profileId;
         this.formattingConfig = formattingConfig;
         this.config = _config;
+        this.profileHeader = null;
     }
 
     loadProfile = (dataBundle) => {
@@ -34,8 +35,8 @@ export default class ProfileLoader extends Component {
         this.loadCategories(profile);
         this.updateGeography(profile);
 
-        let profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config);
-        profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
+        this.profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config);
+        this.profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
         
     }
 

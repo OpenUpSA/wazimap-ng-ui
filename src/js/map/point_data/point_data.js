@@ -39,19 +39,20 @@ const POPUP_OFFSET = [20, 0];
  * this class creates the point data dialog
  */
 export class PointData extends Component {
-    constructor(parent, api, _map, profileId) {
+    constructor(parent, api, _map, profileId, config) {
         super(parent);
 
         this.api = api;
         this.map = _map;
         this.profileId = profileId;
+        this.config = config;
 
         this.googleMapsButton = null;
 
         this.activePoints = [];  //the visible points on the map
         this.markerLayer = this.genLayer();
         this.categoryLayers = {};
-        this.cluster = new Cluster(this, this.map);
+        this.cluster = new Cluster(this, this.map, config);
 
         this.enableClustering = this.cluster.isClusteringEnabled();
         this.markers = this.cluster.markers;
@@ -126,7 +127,6 @@ export class PointData extends Component {
             self.map.addLayer(layer);
             self.showDone(category);
 
-            self.pointFilter.activePoints = this.activePoints;
             self.pointFilter.isVisible = true;
 
             self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
@@ -137,9 +137,14 @@ export class PointData extends Component {
         if (!this.enableClustering) {
             let layer = this.categoryLayers[category.id];
 
-            if (layer != undefined) {
+            if (layer !== undefined) {
                 this.map.removeLayer(layer);
                 pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+
+                this.activePoints = this.activePoints.filter((ap) => {
+                    return ap.category.id !== category.id
+                })
+                this.pointFilter.activePoints = this.activePoints;
             }
         } else {
             let pointsToRemove = this.activePoints.filter((ap) => {
@@ -158,21 +163,62 @@ export class PointData extends Component {
             this.markers.removeLayers(removeMarkers);
             this.pointFilter.activePoints = this.activePoints;
             pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+        }
 
-            if (pointLegend.find(`.${pointLegendItemClsName}`).length <= 0){
-                this.pointFilter.isVisible = false;
-            }
+        if (pointLegend.find(`.${pointLegendItemClsName}`).length <= 0) {
+            this.pointFilter.isVisible = false;
         }
     }
 
     filterPoints(filterResult, selectedFilter) {
+        if (this.enableClustering) {
+            this.filterClusteredPoints(filterResult);
+        } else {
+            this.filteredUnclusteredPoints(filterResult);
+        }
+    }
+
+    filterClusteredPoints(filterResult) {
         let markers = [];
         if (Object.keys(filterResult).length !== 0) {
             markers = filterResult.map(a => a.marker);
         }
+
         this.markers.clearLayers();
 
         this.markers.addLayers(markers);
+    }
+
+    filteredUnclusteredPoints(filterResult) {
+        let self = this;
+        let selectedCategoryIds = [];
+        if (Object.keys(filterResult).length !== 0) {
+            selectedCategoryIds = this.activePoints.map(a => a.category.id);
+            selectedCategoryIds = [...new Set(selectedCategoryIds)];
+        }
+
+        selectedCategoryIds.forEach((cId) => {
+            let categoryLayer = self.categoryLayers[cId];
+
+            const categoryPoints = filterResult.filter((ap) => {
+                return ap.category.id === cId;
+            })
+
+            const layerAvailable = categoryPoints.length > 0;
+            self.map.removeLayer(categoryLayer);
+
+            if (categoryLayer !== undefined) {
+                if (layerAvailable) {
+                    self.map.addLayer(categoryLayer);
+                }
+
+                let markers = categoryPoints.map(a => a.marker);
+                categoryLayer.clearLayers();
+                markers.forEach((m) => {
+                    categoryLayer.addLayer(m);
+                })
+            }
+        })
     }
 
     unSelectAllCategories() {
@@ -265,17 +311,18 @@ export class PointData extends Component {
             });
 
             if (this.enableClustering) {
-                this.activePoints.push({
-                    marker: marker,
-                    category: points.category,
-                    point: point
-                });
-
                 newMarkers.push(marker);
             } else {
                 layer.addLayer(marker);
             }
+
+            this.activePoints.push({
+                marker: marker,
+                category: points.category,
+                point: point
+            });
         })
+        this.pointFilter.activePoints = this.activePoints;
 
         if (this.enableClustering) {
             this.markers.addLayers(newMarkers);
@@ -409,14 +456,5 @@ export class PointData extends Component {
 
     hideFacilityModal = () => {
         $('.facility-info').hide();
-    }
-
-    onMapZoomed(map) {
-        const radius = this.markerRadius();
-        Object.values(this.categoryLayers).forEach(layer => {
-            layer.eachLayer(point => {
-                point.setRadius(radius);
-            })
-        })
     }
 }

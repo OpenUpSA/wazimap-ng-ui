@@ -3,11 +3,12 @@ import {Component, setPopupStyle, ThemeStyle} from '../../utils';
 const POPUP_OFFSET = [20, 0];
 
 export class Cluster extends Component {
-    constructor(parent, map) {
+    constructor(parent, map, config) {
         super(parent);
 
         this.map = map;
         this.tooltipItem = $('.facility-tooltip.is--cluster')[0].cloneNode(true);
+        this.config = config;
 
         this.initClustering();
     }
@@ -22,8 +23,14 @@ export class Cluster extends Component {
     }
 
     isClusteringEnabled() {
-        //todo:get this from config when the BE is ready
-        return true;
+        let enabled = false;
+        let pmConfig = this.config.config.point_markers;
+
+        if (pmConfig !== undefined && pmConfig.clustering !== undefined && pmConfig.clustering.enabled !== undefined) {
+            enabled = pmConfig.clustering.enabled;
+        }
+
+        return enabled;
     }
 
     createClusterIcon(cluster) {

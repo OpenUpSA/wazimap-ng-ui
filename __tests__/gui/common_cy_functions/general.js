@@ -66,3 +66,7 @@ export function hoverOverTheMapCenter(){
         .trigger('mousemove', {clientX: 0, clientY: 0})
         .trigger('mousemove', {clientX: x, clientY: y});
 }
+
+export function expandRichDataPanel(){
+    cy.get('.point-mapper-toggles .rich-data-panel__open').click();
+}

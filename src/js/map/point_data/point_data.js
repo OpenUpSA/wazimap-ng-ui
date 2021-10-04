@@ -38,19 +38,20 @@ const POPUP_OFFSET = [20, 0];
  * this class creates the point data dialog
  */
 export class PointData extends Component {
-    constructor(parent, api, _map, profileId) {
+    constructor(parent, api, _map, profileId, config) {
         super(parent);
 
         this.api = api;
         this.map = _map;
         this.profileId = profileId;
+        this.config = config;
 
         this.googleMapsButton = null;
 
         this.activePoints = [];  //the visible points on the map
         this.markerLayer = this.genLayer();
         this.categoryLayers = {};
-        this.cluster = new Cluster(this, this.map);
+        this.cluster = new Cluster(this, this.map, config);
 
         this.enableClustering = this.cluster.isClusteringEnabled();
         this.markers = this.cluster.markers;

@@ -4,6 +4,7 @@ export function configurePointDataEvents(controller, objs = {pointDataTray: null
 
     controller.on("point_tray.category.selected", payload => pointData.showCategoryPoint(payload.payload));
     controller.on("point_tray.category.unselected", payload => pointData.removeCategoryPoints(payload.payload));
+    controller.on("map.zoomed", payload => pointData.onMapZoomed(payload.payload));
     controller.on("point_data.all.unselected", () => pointDataTray.unSelectAll())
 
     controller.bubbleEvents(pointDataTray, [

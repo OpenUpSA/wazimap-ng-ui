@@ -213,8 +213,15 @@ export class PointData extends Component {
                     this.showMarkerPopup(e, point, points.category, true);
                     stopPropagation(e); //prevent map click event
                 }).on('mouseover', (e) => {
+                    if (!this.enableClustering) {
+                        e.target.setRadius(this.markerRadius() * 2);
+                        e.target.bringToFront();
+                    }
                     this.showMarkerPopup(e, point, points.category);
-                }).on('mouseout', () => {
+                }).on('mouseout', (e) => {
+                    if (!this.enableClustering) {
+                        e.target.setRadius(this.markerRadius());
+                    }
                     this.hideMarkerPopup();
                 });
 
@@ -256,8 +263,7 @@ export class PointData extends Component {
                     color: color,
                     categoryName: point.category.data.name
                 });
-        }
-        else {
+        } else {
             marker = L.circleMarker([point.y, point.x], {
                 color: color,
                 radius: this.markerRadius(),

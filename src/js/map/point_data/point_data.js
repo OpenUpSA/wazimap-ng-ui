@@ -207,20 +207,7 @@ export class PointData extends Component {
                     col = $(`.point-mapper__h1_trigger.theme-${themeIndex}:not(.point-mapper__h1--default-closed)`).css('color');
                 }
 
-                let html = this.generateMarkerHtml(col);
-
-                let divIcon = L.divIcon({
-                    html: html,
-                    className: "leaflet-data-marker",
-                    iconSize: L.point(25, 25)
-                });
-
-                let marker = L.marker([point.y, point.x],
-                    {
-                        icon: divIcon,
-                        color: col,
-                        categoryName: point.category.data.name
-                    });
+                let marker = this.generateMarker(col, point);
 
                 marker.on('click', (e) => {
                     this.showMarkerPopup(e, point, points.category, true);
@@ -249,6 +236,39 @@ export class PointData extends Component {
         if (this.enableClustering) {
             this.markers.addLayers(newMarkers);
         }
+    }
+
+    generateMarker(color, point) {
+        let marker;
+
+        if (this.enableClustering) {
+            let html = this.generateMarkerHtml(color);
+
+            let divIcon = L.divIcon({
+                html: html,
+                className: "leaflet-data-marker",
+                iconSize: L.point(25, 25)
+            });
+
+            marker = L.marker([point.y, point.x],
+                {
+                    icon: divIcon,
+                    color: color,
+                    categoryName: point.category.data.name
+                });
+        }
+        else {
+            marker = L.circleMarker([point.y, point.x], {
+                color: color,
+                radius: this.markerRadius(),
+                fill: true,
+                fillColor: color,
+                fillOpacity: 1,
+                pane: 'markerPane'
+            })
+        }
+
+        return marker;
     }
 
     validateCoordinates(lat, lon) {
@@ -391,5 +411,18 @@ export class PointData extends Component {
 
     hideFacilityModal = () => {
         $('.facility-info').hide();
+    }
+
+    onMapZoomed(map) {
+        if (this.enableClustering) {
+            return;
+        }
+
+        const radius = this.markerRadius();
+        Object.values(this.categoryLayers).forEach(layer => {
+            layer.eachLayer(point => {
+                point.setRadius(radius);
+            })
+        })
     }
 }

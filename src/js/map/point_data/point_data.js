@@ -392,13 +392,4 @@ export class PointData extends Component {
     hideFacilityModal = () => {
         $('.facility-info').hide();
     }
-
-    onMapZoomed(map) {
-        const radius = this.markerRadius();
-        Object.values(this.categoryLayers).forEach(layer => {
-            layer.eachLayer(point => {
-                point.setRadius(radius);
-            })
-        })
-    }
 }

@@ -222,7 +222,8 @@ export class PointData extends Component {
                     if (!this.enableClustering) {
                         e.target.setRadius(this.markerRadius());
                     }
-                    this.hideMarkerPopup();
+                    //hideMarkerPopup() is not needed - autoClose property is sufficient
+                    //hideMarkerPopup() caused a bug with spiderfied markers
                 });
 
                 if (this.enableClustering) {
@@ -345,11 +346,6 @@ export class PointData extends Component {
     hideInfoWindows = () => {
         this.hideFacilityModal();
         $('a.leaflet-popup-close-button')[0].click()
-    }
-
-    hideMarkerPopup = () => {
-        this.map.closePopup();
-        this.map.map_variables.popup = null;
     }
 
     createPopupContent = (point, visibleAttributes) => {

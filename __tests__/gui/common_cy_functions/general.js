@@ -65,16 +65,22 @@ export function clickOnTheFirstCategory() {
 }
 
 export function hoverOverTheMapCenter() {
+    const coordinates = getMapCenter();
+    cy.get('body')
+        .trigger('mousemove', {clientX: 0, clientY: 0})
+        .trigger('mousemove', {clientX: coordinates.x, clientY: coordinates.y});
+}
+
+export function getMapCenter() {
     let navHeight = 56;
     let width = Cypress.config("viewportWidth");
     let height = Cypress.config("viewportHeight");
     let x = (width / 2);
     let y = (height / 2) + (navHeight / 2);
-    cy.get('body')
-        .trigger('mousemove', {clientX: 0, clientY: 0})
-        .trigger('mousemove', {clientX: x, clientY: y});
+
+    return {x, y};
 }
 
-export function expandRichDataPanel(){
+export function expandRichDataPanel() {
     cy.get('.point-mapper-toggles .rich-data-panel__open').click();
 }

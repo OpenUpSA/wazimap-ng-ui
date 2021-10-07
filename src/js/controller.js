@@ -170,22 +170,44 @@ export default class Controller extends Component {
 
 
     loadProfile(payload, callRegisterFunction) {
-        const self = this;
         this.triggerEvent("profile.loading", payload.areaCode);
-        this.api.getProfile(this.profileId, payload.areaCode).then(js => {
-            const dataBundle = new DataBundle(js);
-            self.state.profile = dataBundle;
+        const versions = this.getVersions();
+        versions.forEach((version) => {
+            this.getAllDetails(payload, version, callRegisterFunction);
+        })
+    }
 
-            self.triggerEvent("profile.loaded", dataBundle);
-            // TODO this should be run after all dynamic stuff is run
-            // Shouldn't be here
-            setTimeout(() => {
-                if (callRegisterFunction) {
-                    Webflow.require('ix2').init()
-                    // self.registerWebflowEvents();
-                }
-            }, 600)
-            document.title = dataBundle.overview.name;
+    getVersions() {
+        //todo:get versions from the profile_by_url endpoint
+        const versions = [{
+            name: '2016 with wards',
+            isDefault: false
+        }, {
+            name: '2011 Boundaries',
+            isDefault: true
+        }];
+
+        return versions;
+    }
+
+    getAllDetails(payload, version, callRegisterFunction) {
+        const self = this;
+        this.api.getProfile(28/*this.profileId*/, payload.areaCode, version.name).then(js => {
+            if (version.isDefault) {
+                const dataBundle = new DataBundle(js);
+                self.state.profile = dataBundle;
+
+                self.triggerEvent("profile.loaded", dataBundle);
+                // TODO this should be run after all dynamic stuff is run
+                // Shouldn't be here
+                setTimeout(() => {
+                    if (callRegisterFunction) {
+                        Webflow.require('ix2').init()
+                        // self.registerWebflowEvents();
+                    }
+                }, 600)
+                document.title = dataBundle.overview.name;
+            }
         })
     }
 

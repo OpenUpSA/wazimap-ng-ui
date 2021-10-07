@@ -27,8 +27,8 @@ export class API extends Observable {
 
     }
 
-    getProfile(profileId, areaCode) {
-        const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?format=json`;
+    getProfile(profileId, areaCode, version) {
+        const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?version=${version}&format=json`;
         return this.loadUrl(url);
     }
 

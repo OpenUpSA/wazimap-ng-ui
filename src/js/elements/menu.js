@@ -70,7 +70,8 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
                                 indicators: indicators,
                                 parents: parents,
                                 choropleth_method: indicatorDetail.choropleth_method,
-                                indicatorId: indicatorDetail.id
+                                indicatorId: indicatorDetail.id,
+                                versionData:indicatorDetail.version_data
                             })
                     });
                 }
@@ -152,6 +153,8 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     let hiddenClass = hideondeployClsName;
     hiddenClass = 'hidden';
     $(parentContainer).find('.data-category').remove();
+
+    console.log({data})
 
     for (const [category, detail] of Object.entries(data)) {
         let hasChildren = checkIfCategoryHasChildren(category, detail)

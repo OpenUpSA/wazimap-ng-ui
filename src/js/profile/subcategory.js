@@ -1,7 +1,7 @@
 import {Indicator} from "./blocks/indicator";
 import {Component, formatNumericalValue} from "../utils";
-import { ContentBlock } from "./blocks/content_block";
-import { HTMLBlock } from "./blocks/html_block";
+import {ContentBlock} from "./blocks/content_block";
+import {HTMLBlock} from "./blocks/html_block";
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -78,7 +78,6 @@ export class Subcategory extends Component {
         let lastIndex = Object.entries(detail.indicators).length - 1;
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
 
-
         if (!isEmpty) {
             for (const [title, indicator] of Object.entries(detail.indicators)) {
                 if (typeof indicator.data !== 'undefined') {
@@ -94,7 +93,6 @@ export class Subcategory extends Component {
                     }
 
                     this._indicators.push(block);
-
 
 
                     index++;

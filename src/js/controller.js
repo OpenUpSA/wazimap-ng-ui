@@ -1,5 +1,5 @@
 import {Component} from './utils';
-import {Geography, Profile, DataBundle} from './dataobjects';
+import {VersionController} from "./versions/version_controller";
 
 export default class Controller extends Component {
     constructor(parent, api, config, profileId = 1) {
@@ -18,6 +18,7 @@ export default class Controller extends Component {
         }
 
         const self = this;
+        this.versionController = null;
 
         $(window).on('hashchange', () => {
             // On every hash change the render function is called with the new hash.
@@ -98,6 +99,8 @@ export default class Controller extends Component {
      * @return {[type]}         [description]
      */
     onSubIndicatorClick(payload) {
+        this.versionController.activeVersion = payload.versionData;
+
         const subindicator = {
             indicatorTitle: payload.indicatorTitle,
             selectedSubindicator: payload.selectedSubindicator,
@@ -113,8 +116,10 @@ export default class Controller extends Component {
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.selectedSubindicator;
 
-        this.triggerEvent("map_explorer.subindicator.click", payload);
-    };
+        setTimeout(() => {
+            this.triggerEvent("map_explorer.subindicator.click", payload);
+        }, 200)
+    }
 
     onChoroplethFiltered(payload) {
         //update this.state.subindicator with the filtered values
@@ -171,44 +176,9 @@ export default class Controller extends Component {
 
     loadProfile(payload, callRegisterFunction) {
         this.triggerEvent("profile.loading", payload.areaCode);
-        const versions = this.getVersions();
-        versions.forEach((version) => {
-            this.getAllDetails(payload, version, callRegisterFunction);
-        })
-    }
 
-    getVersions() {
-        //todo:get versions from the profile_by_url endpoint
-        const versions = [{
-            name: '2016 with wards',
-            isDefault: false
-        }, {
-            name: '2011 Boundaries',
-            isDefault: true
-        }];
-
-        return versions;
-    }
-
-    getAllDetails(payload, version, callRegisterFunction) {
-        const self = this;
-        this.api.getProfile(28/*this.profileId*/, payload.areaCode, version.name).then(js => {
-            if (version.isDefault) {
-                const dataBundle = new DataBundle(js);
-                self.state.profile = dataBundle;
-
-                self.triggerEvent("profile.loaded", dataBundle);
-                // TODO this should be run after all dynamic stuff is run
-                // Shouldn't be here
-                setTimeout(() => {
-                    if (callRegisterFunction) {
-                        Webflow.require('ix2').init()
-                        // self.registerWebflowEvents();
-                    }
-                }, 600)
-                document.title = dataBundle.overview.name;
-            }
-        })
+        this.versionController = new VersionController(this, payload.areaCode, callRegisterFunction);
+        this.versionController.loadAllVersions();
     }
 
     changeHash(areaCode) {

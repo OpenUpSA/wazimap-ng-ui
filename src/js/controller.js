@@ -117,6 +117,7 @@ export default class Controller extends Component {
         this.state.selectedSubindicator = payload.selectedSubindicator;
 
         setTimeout(() => {
+            //todo: find a better solution
             this.triggerEvent("map_explorer.subindicator.click", payload);
         }, 200)
     }
@@ -137,6 +138,11 @@ export default class Controller extends Component {
         if (this.state.subindicator === null) {
             return;
         }
+
+        console.log({
+            'profileData': this.state.profile.profile.profileData[this.state.subindicator.parents.category].subcategories,
+            'subcategory': this.state.subindicator.parents.subcategory
+        })
 
         let indicators = this.state.profile.profile
             .profileData[this.state.subindicator.parents.category]
@@ -177,7 +183,11 @@ export default class Controller extends Component {
     loadProfile(payload, callRegisterFunction) {
         this.triggerEvent("profile.loading", payload.areaCode);
 
-        this.versionController = new VersionController(this, payload.areaCode, callRegisterFunction);
+        if (this.versionController === null) {
+            this.versionController = new VersionController(this, payload.areaCode, callRegisterFunction);
+        }else{
+            this.versionController.reInit(payload.areaCode);
+        }
         this.versionController.loadAllVersions();
     }
 

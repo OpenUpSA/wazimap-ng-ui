@@ -19,6 +19,8 @@ export class VersionController extends Component {
         this._versions = [];
         this._allVersionsBundle = null;
         this._versionGeometries = {};
+        this._versionBundles = {};
+        this._activeVersion = null;
     }
 
     get api() {
@@ -43,12 +45,14 @@ export class VersionController extends Component {
 
     set activeVersion(version) {
         //todo: make this a promise
-        if (!version.isActive) {
+        if (!version.model.isActive) {
             this.versions.forEach((v) => {
-                v.isActive = false;
+                v.model.isActive = false;
             })
 
-            version.isActive = true;
+            version.model.isActive = true;
+
+            this._activeVersion = version;
 
             const payload = {
                 profile: this.parent.state.profile.profile,
@@ -58,13 +62,37 @@ export class VersionController extends Component {
         }
     }
 
+    get activeVersion() {
+        return this._activeVersion;
+    }
+
     get versionGeometries() {
         return this._versionGeometries;
+    }
+
+    get versionBundles() {
+        return this._versionBundles;
+    }
+
+    reInit(areaCode) {
+        this.areaCode = areaCode;
+        this._allVersionsBundle = null;
+        this._versionGeometries = {};
+        this._versionBundles = {};
     }
 
     loadAllVersions() {
         let self = this;
         self.versions = self.getVersions();
+        if (self._activeVersion !== null) {
+            this.versions.forEach((v) => {
+                v.model.isActive = v.model.name === self._activeVersion.model.name;
+            })
+        } else {
+            self._activeVersion = self.versions.filter((v) => {
+                return v.model.isDefault
+            })[0];
+        }
 
         self.versions.forEach((version, index) => {
             const isLast = index === self.versions.length - 1;
@@ -83,7 +111,7 @@ export class VersionController extends Component {
 
     getAllDetails(version, isLast) {
         this.api.getProfile(28/*this.profileId*/, this.areaCode, version.model.name).then(js => {
-            if (version.model.isDefault) {
+            if (version.model.isActive) {
                 this.setUpMainVersion(js);
             }
 
@@ -113,7 +141,8 @@ export class VersionController extends Component {
     appendAllBundles(rawData, version) {
         let dataBundle = new DataBundle(rawData);
 
-        this.addVersionGeometry(version, dataBundle.geometries)
+        this.addVersionGeometry(version, dataBundle.geometries);
+        this.addVersionBundle(version, dataBundle);
 
         this.setVersionData(dataBundle, version);
         if (this._allVersionsBundle === null) {
@@ -148,7 +177,7 @@ export class VersionController extends Component {
 
                 for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {
                     let allVersionsBundleIndicator = this.allVersionsBundle.profile.profileData[category].subcategories[subcategory].indicators[indicator];
-                    if (allVersionsBundleIndicator === undefined || $.isEmptyObject(allVersionsBundleIndicator) || version.isActive) {
+                    if (allVersionsBundleIndicator === undefined || $.isEmptyObject(allVersionsBundleIndicator) || version.model.isActive) {
                         this.allVersionsBundle.profile.profileData[category].subcategories[subcategory].indicators[indicator] = indicatorDetail;
                     }
                 }
@@ -158,5 +187,9 @@ export class VersionController extends Component {
 
     addVersionGeometry(version, geometries) {
         this._versionGeometries[version.model.name] = geometries;
+    }
+
+    addVersionBundle(version, dataBundle) {
+        this._versionBundles[version.model.name] = dataBundle;
     }
 }

@@ -86,14 +86,13 @@ export class Subcategory extends Component {
                     let indicatorContainer = $(indicatorClass)[0].cloneNode(true);
                     $(wrapper).append(indicatorContainer);
                     let metadata = indicator.metadata;
-                    if (indicator.content_type == ContentBlock.BLOCK_TYPES.Indicator) {
+                    if (indicator.content_type === ContentBlock.BLOCK_TYPES.Indicator) {
                         block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast);
-                    } else if (indicator.content_type == ContentBlock.BLOCK_TYPES.HTMLBlock) {
+                    } else if (indicator.content_type === ContentBlock.BLOCK_TYPES.HTMLBlock) {
                         block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast);
                     }
 
                     this._indicators.push(block);
-
 
                     index++;
                 } else {

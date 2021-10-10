@@ -139,11 +139,6 @@ export default class Controller extends Component {
             return;
         }
 
-        console.log({
-            'profileData': this.state.profile.profile.profileData[this.state.subindicator.parents.category].subcategories,
-            'subcategory': this.state.subindicator.parents.subcategory
-        })
-
         let indicators = this.state.profile.profile
             .profileData[this.state.subindicator.parents.category]
             .subcategories[this.state.subindicator.parents.subcategory]
@@ -304,8 +299,6 @@ export default class Controller extends Component {
         [arr[0], arr[index]] = [arr[index], arr[0]];
 
         this.config.config['preferred_children'][currentLevel] = arr;
-
-        this.reDrawChildren();
     }
 
     onPreferredChildChange(childLevel) {
@@ -318,7 +311,6 @@ export default class Controller extends Component {
     }
 
     reDrawChildren() {
-
         const payload = {
             profile: this.state.profile.profile,
             geometries: this.state.profile.geometries

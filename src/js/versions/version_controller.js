@@ -57,6 +57,7 @@ export class VersionController extends Component {
                 profile: this.parent.state.profile.profile,
                 geometries: this.versionGeometries[version.model.name]
             }
+
             this.parent.triggerEvent(VersionController.EVENTS.updated, payload);
         }
     }
@@ -84,9 +85,7 @@ export class VersionController extends Component {
         let self = this;
         self.versions = self.getVersions();
         if (self._activeVersion !== null) {
-            this.versions.forEach((v) => {
-                v.model.isActive = v.model.name === self._activeVersion.model.name;
-            })
+            this.setActiveVersionByName(self._activeVersion.model.name);
         } else {
             self._activeVersion = self.versions.filter((v) => {
                 return v.model.isDefault
@@ -190,5 +189,17 @@ export class VersionController extends Component {
 
     addVersionBundle(version, dataBundle) {
         this._versionBundles[version.model.name] = dataBundle;
+    }
+
+    setActiveVersionByName(versionName) {
+        let version = this.versions.filter((v) => {
+            return v.model.name === versionName
+        })[0];
+
+        if (version === null || version === undefined) {
+            console.error(`Version does not exist : ${versionName}`)
+        } else {
+            this.activeVersion = version;
+        }
     }
 }

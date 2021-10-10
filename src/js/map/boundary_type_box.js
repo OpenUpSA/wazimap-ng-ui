@@ -11,14 +11,33 @@ export class BoundaryTypeBox extends Component {
         super(parent);
 
         this.preferredChildren = preferredChildren;
+        this._activeVersion = null;
 
         this.prepareDomElements();
+    }
+
+    get activeVersion() {
+        return this._activeVersion;
+    }
+
+    set activeVersion(value) {
+        this._activeVersion = value;
     }
 
     prepareDomElements = () => {
         $('.warning-modal .button-wrapper a').click(() => {
             $('.warning-modal').addClass('hidden');
         });
+    }
+
+    activeVersionUpdated = (activeVersion) => {
+        this.activeVersion = activeVersion;
+
+        let text = $(selectedOption).find('.dropdown-menu__selected-item .truncate').text();
+        let arr = text.split('/');
+        let childType = arr[1];
+
+        this.setSelectedOption(`${activeVersion.model.name} / ${childType}`);
     }
 
     setVisibilityOfDropdown = (boundaryTypes) => {
@@ -29,19 +48,19 @@ export class BoundaryTypeBox extends Component {
         }
     }
 
-    populateBoundaryOptions = (children, currentLevel, versionController) => {
+    populateBoundaryOptions = (children, currentLevel, versions) => {
         if (typeof this.preferredChildren === 'undefined') {
             return;
         }
 
         let boundaryTypes = Object.keys(children);
-        let options = this.getOptions(boundaryTypes, versionController.versions);
+        let options = this.getOptions(boundaryTypes, versions);
 
         if (typeof this.preferredChildren[currentLevel] !== 'undefined') {
             const availableLevels = this.preferredChildren[currentLevel].filter(level => children[level] !== undefined)
 
             this.setElements();
-            this.setSelectedOption(`${versionController.activeVersion.model.name} / ${availableLevels[0]}`);
+            this.setSelectedOption(`${this.activeVersion.model.name} / ${availableLevels[0]}`);
             this.populateOptions(options, currentLevel);
         }
     }
@@ -120,8 +139,11 @@ export class BoundaryTypeBox extends Component {
     boundaryTypeSelected = (type, currentLevel) => {
         this.setSelectedOption(type);
 
+        let arr = type.split('/');
+
         let payload = {
-            selected_type: type,
+            selected_version_name: arr[0].trim(),
+            selected_type: arr[1].trim(),
             current_level: currentLevel
         }
         this.triggerEvent("boundary_types.option.selected", payload);

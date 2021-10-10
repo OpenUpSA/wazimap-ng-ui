@@ -24,7 +24,7 @@ export function configureMapEvents(controller, objs = {mapcontrol: null}) {
         }, 0)
     });
 
-    controller.on('version.redraw', payload => {
+    controller.on('version.active.updated', payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
         setTimeout(() => {

@@ -3,7 +3,7 @@ export function configureBoundaryEvents(controller, boundaryTypeBox) {
         let children = payload.payload.geometries.children;
         let currentLevel = payload.payload.geometries.boundary.properties.level;
 
-        boundaryTypeBox.populateBoundaryOptions(children, currentLevel);
+        boundaryTypeBox.populateBoundaryOptions(children, currentLevel, controller.versionController);
     });
 
     boundaryTypeBox.on('boundary_types.option.selected', (payload) => {

@@ -1,20 +1,32 @@
-import { Component } from '../../utils';
+import {Component} from '../../utils';
 import {isNull} from '../../utils';
 
 const sourceClass = '.data-source';
 const indicatorTitleClass = '.profile-indicator__title h4';
 const chartDescClass = '.profile-indicator__chart_description p';
+const chartFooterClass = '.profile-indicator__chart_footer';
 
 export class ContentBlock extends Component {
     static BLOCK_TYPES = {Indicator: 'indicator', HTMLBlock: 'html'};
 
-    constructor(parent, container, indicator, title, isLast) {
+    constructor(parent, container, indicator, title, isLast, geography) {
         super(parent);
 
         this._container = container;
         this._indicator = indicator;
         this._title = title;
         this._isLast = isLast;
+        this._geography = geography;
+        this._activeVersion = null;
+
+        this.prepareEvents();
+    }
+
+    prepareEvents() {
+        this.parent.on('version.updated', (activeVersion) => {
+            this._activeVersion = activeVersion;
+            this.createVersionData();
+        });
     }
 
     get container() {
@@ -41,6 +53,14 @@ export class ContentBlock extends Component {
         return this.indicator.description;
     }
 
+    get geography() {
+        return this._geography;
+    }
+
+    get activeVersion() {
+        return this._activeVersion;
+    }
+
     createMetaData() {
         const isLink = !isNull(this.metadata.url);
         if (isLink) {
@@ -49,8 +69,7 @@ export class ContentBlock extends Component {
             $(ele).attr('href', this.metadata.url);
             $(ele).attr('target', '_blank');
             $(sourceClass, this.container).html(ele);
-        }
-        else
+        } else
             $(sourceClass, this.container).text(this.metadata.source);
     }
 
@@ -62,10 +81,34 @@ export class ContentBlock extends Component {
         $(chartDescClass, this.container).html(this.description);
     }
 
+    createVersionData() {
+        $('.profile-indicator__version', this.container).remove();
+
+        if (this.indicator.version_data.model.isActive || this.activeVersion === null) {
+            return;
+        }
+
+        let ele = document.createElement('p');
+        $(ele).addClass('profile-indicator__version');
+        $(ele).html(`This indicator applies to 
+        <a href="#">
+            <span class="version-link is--location no-link">${this.geography.name}</span>
+        </a> in the 
+        <a href="#">
+            <span class="version-link is--version no-link">${this.indicator.version_data.model.name}</span>
+        </a> geographic demarcation. The map currently shows the 
+        <a href="#">
+            <span class="version-link is--current no-link">${this.activeVersion.model.name}</span>
+        </a> geographic demarcation.`);
+
+        $(ele).insertBefore($(chartFooterClass, this.container))
+    }
+
     prepareDomElements() {
         this.createTitle();
         this.createMetaData();
         this.createDescription();
+        this.createVersionData();
 
         if (!this.isLast) {
             $(this.container).removeClass('last');

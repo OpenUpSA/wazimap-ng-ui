@@ -29,20 +29,32 @@ export class BoundaryTypeBox extends Component {
         }
     }
 
-    populateBoundaryOptions = (children, currentLevel) => {
+    populateBoundaryOptions = (children, currentLevel, versionController) => {
         if (typeof this.preferredChildren === 'undefined') {
             return;
         }
 
         let boundaryTypes = Object.keys(children);
+        let options = this.getOptions(boundaryTypes, versionController.versions);
 
         if (typeof this.preferredChildren[currentLevel] !== 'undefined') {
-            const availableLevels = this.preferredChildren[currentLevel].filter(level => children[level] != undefined)
+            const availableLevels = this.preferredChildren[currentLevel].filter(level => children[level] !== undefined)
 
             this.setElements();
-            this.setSelectedOption(availableLevels[0]);
-            this.populateOptions(boundaryTypes, currentLevel);
+            this.setSelectedOption(`${versionController.activeVersion.model.name} / ${availableLevels[0]}`);
+            this.populateOptions(options, currentLevel);
         }
+    }
+
+    getOptions = (boundaryTypes, versions) => {
+        let options = [];
+        versions.forEach((v) => {
+            boundaryTypes.forEach((bt) => {
+                options.push(`${v.model.name} / ${bt}`);
+            })
+        })
+
+        return options;
     }
 
     setElements = () => {

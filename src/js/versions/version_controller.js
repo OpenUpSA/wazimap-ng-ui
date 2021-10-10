@@ -6,8 +6,7 @@ export class VersionController extends Component {
     static EVENTS = {
         updated: 'version.active.updated',
         ready: 'versions.all.loaded',
-        profileLoaded: 'profile.loaded',
-        redraw: 'version.redraw'
+        profileLoaded: 'profile.loaded'
     }
 
     constructor(parent, areaCode, callRegisterFunction) {
@@ -58,7 +57,7 @@ export class VersionController extends Component {
                 profile: this.parent.state.profile.profile,
                 geometries: this.versionGeometries[version.model.name]
             }
-            this.parent.triggerEvent(VersionController.EVENTS.redraw, payload);
+            this.parent.triggerEvent(VersionController.EVENTS.updated, payload);
         }
     }
 

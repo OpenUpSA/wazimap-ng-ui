@@ -16,16 +16,25 @@ const descriptionClass = '.sub-category-header__description';
 const indicatorClass = '.profile-indicator';
 
 export class Subcategory extends Component {
-    constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst) {
+    constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst, geography) {
         super(parent);
 
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
         this._indicators = [];
         this._formattingConfig = formattingConfig;
+        this._geography = geography;
 
         this.addKeyMetrics($(scHeaderClone), detail);
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
         this.addIndicators(wrapper, detail);
+
+        this.prepareEvents();
+    }
+
+    prepareEvents() {
+        this.parent.on('version.updated', (activeVersion) => {
+            this.triggerEvent('version.updated', activeVersion);
+        });
     }
 
     get indicators() {
@@ -34,6 +43,10 @@ export class Subcategory extends Component {
 
     get formattingConfig() {
         return this._formattingConfig;
+    }
+
+    get geography() {
+        return this._geography;
     }
 
     addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
@@ -57,7 +70,7 @@ export class Subcategory extends Component {
     }
 
     addIndicatorBlock(container, indicator, title, isLast) {
-        let block = new Indicator(this, container, indicator, title, isLast);
+        let block = new Indicator(this, container, indicator, title, isLast, this.geography);
         this.bubbleEvents(block, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

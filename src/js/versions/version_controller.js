@@ -58,7 +58,10 @@ export class VersionController extends Component {
                 geometries: this.versionGeometries[version.model.name]
             }
 
-            this.parent.triggerEvent(VersionController.EVENTS.updated, payload);
+            if (payload.geometries !== undefined) {
+                //while navigating to another geo, versionGeometries is empty
+                this.parent.triggerEvent(VersionController.EVENTS.updated, payload);
+            }
         }
     }
 

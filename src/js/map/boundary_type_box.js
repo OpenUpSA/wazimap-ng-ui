@@ -1,19 +1,18 @@
 import {Component} from "../utils";
+import {ConfirmationModal} from "../ui_components/confirmation_modal";
 
 let selectElement = $('.map-geo-select')[0];
 let selectedOption = null;
 let optionWrapper = null;
 let optionItem = null;
-let BOUNDARY_MODAL_COOKIE_NAME = 'boundary_selection';
 
 export class BoundaryTypeBox extends Component {
     constructor(parent, preferredChildren) {
         super(parent);
 
         this.preferredChildren = preferredChildren;
+        this.confirmationModal = new ConfirmationModal(this, ConfirmationModal.COOKIE_NAMES.BOUNDARY_TYPE_SELECTION);
         this._activeVersion = null;
-
-        this.prepareDomElements();
     }
 
     get activeVersion() {
@@ -24,18 +23,12 @@ export class BoundaryTypeBox extends Component {
         this._activeVersion = value;
     }
 
-    prepareDomElements = () => {
-        $('.warning-modal .button-wrapper a').click(() => {
-            $('.warning-modal').addClass('hidden');
-        });
-    }
-
     activeVersionUpdated = (activeVersion) => {
         this.activeVersion = activeVersion;
 
         let text = $(selectedOption).find('.dropdown-menu__selected-item .truncate').text();
         let arr = text.split('/');
-        let childType = arr[1];
+        let childType = arr[1].trim();
 
         this.setSelectedOption(`${activeVersion.model.name} / ${childType}`);
     }
@@ -94,7 +87,7 @@ export class BoundaryTypeBox extends Component {
             $(item).removeClass('selected');
             $('.truncate', item).text(bt);
             $(item).on('click', () => {
-                this.askForConfirmation()
+                this.confirmationModal.askForConfirmation()
                     .then((payload) => {
                         if (payload.confirmed) {
                             this.boundaryTypeSelected(bt, currentLevel);
@@ -108,34 +101,6 @@ export class BoundaryTypeBox extends Component {
         this.setVisibilityOfDropdown(boundaryTypes);
     }
 
-    askForConfirmation = () => {
-        let alreadyConfirmed = this.checkIfAlreadyConfirmed();
-        let payload = {
-            confirmed: false
-        }
-
-        if (alreadyConfirmed) {
-            return new Promise(function (resolve) {
-                payload.confirmed = true;
-                resolve(payload);
-            })
-        } else {
-            let rememberChoice = this.rememberChoice;
-            $('.warning-modal').removeClass('hidden');
-
-            return new Promise(function (resolve) {
-                $('.warning-modal .button-wrapper a[id="warning-proceed"]').click(() => {
-                    rememberChoice();
-                    payload.confirmed = true;
-                    resolve(payload);
-                });
-                $('.warning-modal .button-wrapper a:not(#warning-proceed)').click(() => {
-                    resolve(payload);
-                });
-            })
-        }
-    }
-
     boundaryTypeSelected = (type, currentLevel) => {
         this.setSelectedOption(type);
 
@@ -147,43 +112,5 @@ export class BoundaryTypeBox extends Component {
             current_level: currentLevel
         }
         this.triggerEvent("boundary_types.option.selected", payload);
-    }
-
-    checkIfAlreadyConfirmed = () => {
-        return this.readCookie(BOUNDARY_MODAL_COOKIE_NAME) || false;
-    }
-
-    rememberChoice = () => {
-        let remember = $('input[id="no-show"]').is(':checked');
-        if (remember) {
-            this.createCookie(BOUNDARY_MODAL_COOKIE_NAME, true, 365);
-        }
-    }
-
-    createCookie = (name, value, days) => {
-        let expires;
-        let dayToMs = 24 * 60 * 60 * 1000;
-
-        if (days) {
-            let date = new Date();
-            date.setTime(date.getTime() + (days * dayToMs));
-            expires = "; expires=" + date.toGMTString();
-        } else {
-            expires = "";
-        }
-        document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
-    }
-
-    readCookie = (name) => {
-        let nameEQ = encodeURIComponent(name) + "=";
-        let ca = document.cookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ')
-                c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) === 0)
-                return decodeURIComponent(c.substring(nameEQ.length, c.length));
-        }
-        return null;
     }
 }

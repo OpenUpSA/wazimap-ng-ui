@@ -1,5 +1,6 @@
 import {Component} from './utils';
 import {VersionController} from "./versions/version_controller";
+import {ConfirmationModal} from "./ui_components/confirmation_modal";
 
 export default class Controller extends Component {
     constructor(parent, api, config, profileId = 1) {
@@ -19,6 +20,7 @@ export default class Controller extends Component {
 
         const self = this;
         this.versionController = null;
+        this.confirmationModal = new ConfirmationModal(this, ConfirmationModal.COOKIE_NAMES.DATA_MAPPER_VERSION_SELECTION);
 
         $(window).on('hashchange', () => {
             // On every hash change the render function is called with the new hash.
@@ -99,8 +101,20 @@ export default class Controller extends Component {
      * @return {[type]}         [description]
      */
     onSubIndicatorClick(payload) {
-        this.versionController.activeVersion = payload.versionData;
+        if (!payload.versionData.model.isActive) {
+            this.confirmationModal.askForConfirmation()
+                .then((result) => {
+                    if (result.confirmed) {
+                        this.versionController.activeVersion = payload.versionData;
+                        this.setChoroplethData(payload);
+                    }
+                })
+        } else {
+            this.setChoroplethData(payload);
+        }
+    }
 
+    setChoroplethData(payload) {
         const subindicator = {
             indicatorTitle: payload.indicatorTitle,
             selectedSubindicator: payload.selectedSubindicator,
@@ -180,7 +194,7 @@ export default class Controller extends Component {
 
         if (this.versionController === null) {
             this.versionController = new VersionController(this, payload.areaCode, callRegisterFunction);
-        }else{
+        } else {
             this.versionController.reInit(payload.areaCode);
         }
         this.versionController.loadAllVersions();

@@ -1,8 +1,10 @@
 import {Given, Then} from "cypress-cucumber-preprocessor/steps";
-import {gotoHomepage, setupInterceptions, waitUntilGeographyIsLoaded} from "../common_cy_functions/general";
+import {gotoHomepage, setupInterceptions} from "../common_cy_functions/general";
+import profiles from "./profiles.json";
+import profile from "./profile.json";
 
 Given('I intercept the requests and respond null', () => {
-    setupInterceptions(null, null, null, null);
+    setupInterceptions(profiles, null, profile, null, null);
     gotoHomepage();
 })
 

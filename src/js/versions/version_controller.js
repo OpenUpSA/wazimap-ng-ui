@@ -30,6 +30,10 @@ export class VersionController extends Component {
         return this.parent.state;
     }
 
+    get profileId() {
+        return this.parent.profileId;
+    }
+
     get allVersionsBundle() {
         return this._allVersionsBundle;
     }
@@ -84,9 +88,9 @@ export class VersionController extends Component {
         this._versionBundles = {};
     }
 
-    loadAllVersions() {
+    loadAllVersions(versions) {
         let self = this;
-        self.versions = self.getVersions();
+        self.versions = versions;
         if (self._activeVersion !== null) {
             this.setActiveVersionByName(self._activeVersion.model.name);
         } else {
@@ -101,17 +105,8 @@ export class VersionController extends Component {
         })
     }
 
-    getVersions() {
-        //todo:get versions from the profile_by_url endpoint
-        const versions = [
-            new Version('2016 with wards', false),
-            new Version('2011 Boundaries', true)];
-
-        return versions;
-    }
-
     getAllDetails(version, isLast) {
-        this.api.getProfile(28/*this.profileId*/, this.areaCode, version.model.name).then(js => {
+        this.api.getProfile(this.profileId, this.areaCode, version.model.name).then(js => {
             if (version.model.isActive) {
                 this.setUpMainVersion(js);
             }

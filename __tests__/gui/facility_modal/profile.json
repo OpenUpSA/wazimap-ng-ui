@@ -12,7 +12,11 @@
       "level": "country",
       "version": "2011 Boundaries"
     },
-    "description": ""
+    "description": "",
+    "configuration": {
+      "default_version": "test",
+      "versions": ["test"]
+    }
   },
   "description": "",
   "configuration": {
@@ -25,6 +29,11 @@
       "lat": -28.995409163308832,
       "long": 25.093833387362697,
       "zoom": 6
+    },
+    "point_markers": {
+      "clustering": {
+        "enabled": false
+      }
     }
   }
 }

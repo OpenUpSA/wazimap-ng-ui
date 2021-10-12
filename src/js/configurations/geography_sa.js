@@ -1,14 +1,27 @@
 import {schemeBlues as d3schemeBlues} from 'd3-scale-chromatic';
 import {RICH_DATA_PANEL, POINT_DATA_PANEL, DATA_EXPLORER_PANEL, NO_PANELS} from '../elements/side_panels';
+import {Version} from "../versions/version";
 
 export class Config {
 
     constructor() {
-        this.config = {}
+        this.config = {};
+        this.versions = [];
     }
 
     setConfig(config) {
         this.config = config;
+    }
+
+    setVersions(geography_hierarchy) {
+        if (geography_hierarchy.configuration !== undefined) {
+            const defaultVersion = geography_hierarchy.configuration.default_version;
+            const versions = geography_hierarchy.configuration.versions;
+
+            versions.forEach((v) => {
+                this.versions.push(new Version(v, v === defaultVersion))
+            })
+        }
     }
 
     get style() {
@@ -52,8 +65,8 @@ export class Config {
             province: ['district', 'municipality'],
             district: ['municipality'],
             municipality: ['mainplace', 'planning_region', 'ward'],
-            mainplace: ['subplace']          
-        }        
+            mainplace: ['subplace']
+        }
 
         return {...defaultConfig, ...config}
     }
@@ -63,7 +76,7 @@ export class Config {
             mainplace: ['mainplace', 'subplace'],
             ward: ['ward']
         }
-        
+
     }
 
     get geographyLevels() {
@@ -99,7 +112,7 @@ export class Config {
         const defaultConfig = {
             zoomControl: false,
             preferCanvas: true
-        } 
+        }
 
         return {...defaultConfig, ...config}
     }

@@ -9,9 +9,10 @@ import all_details from "../facilities/all_details.json";
 import themes_count from "./themes_count.json";
 import themes_count_EC from "./themes_count_EC.json";
 import profile from "../facilities/profile.json";
+import profiles from "./profiles.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(all_details, profile, null, null);
+    setupInterceptions(profiles, all_details, profile, null, null);
 
     cy.intercept('/api/v1/profile/8/geography/ZA/themes_count', (request) => {
         request.reply({
@@ -62,7 +63,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         sendResponse = resolve;
     });
 
-    cy.intercept('/api/v1/all_details/profile/8/geography/EC/?format=json', (request) => {
+    cy.intercept('/api/v1/all_details/profile/8/geography/EC/?version=test&format=json', (request) => {
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,

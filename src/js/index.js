@@ -107,6 +107,7 @@ async function init() {
     const data = await api.getProfileConfiguration(hostname);
 
     pc.config.setConfig(data.configuration || {})
+    pc.config.setVersions(data.geography_hierarchy || {})
     pc.config.api = api;
     pc.profile = data.id;
     pc.config.baseUrl = pc.baseUrl;

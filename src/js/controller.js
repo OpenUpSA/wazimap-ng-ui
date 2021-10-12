@@ -197,7 +197,7 @@ export default class Controller extends Component {
         } else {
             this.versionController.reInit(payload.areaCode);
         }
-        this.versionController.loadAllVersions();
+        this.versionController.loadAllVersions(this.config.versions);
     }
 
     changeHash(areaCode) {

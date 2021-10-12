@@ -1,3 +1,5 @@
+import {VersionController} from "../versions/version_controller";
+
 export function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip: null}) {
     const mapcontrol = objs['mapcontrol'];
     const mapchip = objs['mapchip'];
@@ -11,6 +13,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('profile.loaded', payload => controller.handleNewProfileChoropleth())
     controller.on('mapchip.removed', payload => mapcontrol.choropleth.reset(true));
     controller.on('data_mapper_menu.nodata', payload => mapchip.removeMapChip())
+    controller.on(VersionController.EVENTS.updated, () => mapchip.removeMapChip())
     controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
 
     controller.on('mapchip.choropleth.filtered', payload => {

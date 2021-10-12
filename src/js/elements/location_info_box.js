@@ -13,7 +13,6 @@ const infoContainer = $('.map__location-info', container);
 export class LocationInfoBox extends Component {
     constructor(parent, formattingConfig) {
         super(parent);
-        console.log('info box')
 
         this.formattingConfig = formattingConfig;
     }

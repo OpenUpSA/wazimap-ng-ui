@@ -49,6 +49,8 @@ export class BoundaryTypeBox extends Component {
         let boundaryTypes = Object.keys(children);
         let options = this.getOptions(boundaryTypes, versions);
 
+        console.log({children})
+
         if (typeof this.preferredChildren[currentLevel] !== 'undefined') {
             const availableLevels = this.preferredChildren[currentLevel].filter(level => children[level] !== undefined)
 

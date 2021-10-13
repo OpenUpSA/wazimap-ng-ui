@@ -303,8 +303,10 @@ export default class Controller extends Component {
     onBoundaryTypeChange = (payload) => {
         let currentLevel = payload['current_level'];
         let selectedType = payload['selected_type'];
+        let redraw = false;
 
         if (selectedType !== null) {
+            redraw = this.state.preferredChild !== selectedType;
             this.state.preferredChild = selectedType;
         }
         this.triggerEvent("preferredChildChange", selectedType);
@@ -317,9 +319,14 @@ export default class Controller extends Component {
         }
 
         this.config.config['preferred_children'][currentLevel] = arr;
+
+        if (redraw) {
+            this.reDrawChildren();
+        }
     }
 
     onPreferredChildChange(childLevel) {
+        console.log({'onPreferredChildChange': childLevel})
         this.state.preferredChild = childLevel;
         this.triggerEvent("preferredChildChange", childLevel);
         // TODO remove SA specfic stuff

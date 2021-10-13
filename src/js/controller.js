@@ -304,13 +304,17 @@ export default class Controller extends Component {
         let currentLevel = payload['current_level'];
         let selectedType = payload['selected_type'];
 
-        this.state.preferredChild = selectedType;
+        if (selectedType !== null) {
+            this.state.preferredChild = selectedType;
+        }
         this.triggerEvent("preferredChildChange", selectedType);
         // TODO remove SA specfic stuff
 
         let arr = this.config.config['preferred_children'][currentLevel];
-        let index = arr.indexOf(selectedType);
-        [arr[0], arr[index]] = [arr[index], arr[0]];
+        if (selectedType !== null) {
+            let index = arr.indexOf(selectedType);
+            [arr[0], arr[index]] = [arr[index], arr[0]];
+        }
 
         this.config.config['preferred_children'][currentLevel] = arr;
     }

@@ -28,9 +28,10 @@ export class BoundaryTypeBox extends Component {
 
         let text = $(selectedOption).find('.dropdown-menu__selected-item .truncate').text();
         let arr = text.split('/');
-        let childType = arr[1].trim();
+        let childType = arr.length > 1 ? arr[1].trim() : '';
+        const selectedText = arr.length > 1 ? `${activeVersion.model.name} / ${childType}` : activeVersion.model.name;
 
-        this.setSelectedOption(`${activeVersion.model.name} / ${childType}`);
+        this.setSelectedOption(selectedText);
     }
 
     setVisibilityOfDropdown = (boundaryTypes) => {
@@ -45,27 +46,36 @@ export class BoundaryTypeBox extends Component {
         if (typeof this.preferredChildren === 'undefined') {
             return;
         }
+        let existingVersions = [...versions].filter((v) => {
+            return v.exists
+        });
 
         let boundaryTypes = Object.keys(children);
-        let options = this.getOptions(boundaryTypes, versions);
+        let options = this.getOptions(boundaryTypes, existingVersions);
 
-        console.log({children})
-
-        if (typeof this.preferredChildren[currentLevel] !== 'undefined') {
-            const availableLevels = this.preferredChildren[currentLevel].filter(level => children[level] !== undefined)
+        if (typeof this.preferredChildren[currentLevel] !== 'undefined' || (boundaryTypes.length === 0 && existingVersions.length > 0)) {
+            //(boundaryTypes.length === 0 && existingVersions.length > 0) -> there are no children but there are multiple versions
+            const availableLevels = this.preferredChildren[currentLevel] !== undefined ? this.preferredChildren[currentLevel].filter(level => children[level] !== undefined) : [];
+            const selectedOption = availableLevels.length > 0 ? `${this.activeVersion.model.name} / ${availableLevels[0]}` : this.activeVersion.model.name;
 
             this.setElements();
-            this.setSelectedOption(`${this.activeVersion.model.name} / ${availableLevels[0]}`);
+            this.setSelectedOption(selectedOption);
             this.populateOptions(options, currentLevel);
         }
     }
 
     getOptions = (boundaryTypes, versions) => {
         let options = [];
+        const boundaryTypeCounts = boundaryTypes.length;
+
         versions.forEach((v) => {
-            boundaryTypes.forEach((bt) => {
-                options.push(`${v.model.name} / ${bt}`);
-            })
+            if (boundaryTypeCounts > 0) {
+                boundaryTypes.forEach((bt) => {
+                    options.push(`${v.model.name} / ${bt}`);
+                })
+            } else {
+                options.push(v.model.name);
+            }
         })
 
         return options;
@@ -110,7 +120,7 @@ export class BoundaryTypeBox extends Component {
 
         let payload = {
             selected_version_name: arr[0].trim(),
-            selected_type: arr[1].trim(),
+            selected_type: arr.length > 1 ? arr[1].trim() : null,   //null = no children geo
             current_level: currentLevel
         }
         this.triggerEvent("boundary_types.option.selected", payload);

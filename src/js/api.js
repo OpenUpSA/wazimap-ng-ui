@@ -86,7 +86,7 @@ export class API extends Observable {
         let response;
         const self = this;
         response = await this.getTokenJSON(url, headers)
-        if (response.status == 401 || response.status == 403) {
+        if (response.status === 401 || response.status === 403) {
             await this.waitToLogIn();
             try {
                 await self.authenticate(url);
@@ -97,6 +97,8 @@ export class API extends Observable {
                 this.busyLoggingIn = false;
 
             }
+        } else if (response.status === 404) {
+            throw response;
         }
 
         const json = await response.json();

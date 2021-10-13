@@ -113,11 +113,17 @@ export class VersionController extends Component {
 
     getAllDetails(version) {
         const promise = this.api.getProfile(this.profileId, this.areaCode, version.model.name).then(js => {
+            version.exists = true;
             if (version.model.isActive) {
                 this.setUpMainVersion(js);
             }
 
             this.appendAllBundles(js, version);
+        }).catch((response) => {
+            if(response.status === 404){
+                //version does not exist for this geo
+                version.exists = false;
+            }
         })
 
         this._promises.push(promise);

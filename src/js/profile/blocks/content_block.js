@@ -96,11 +96,12 @@ export class ContentBlock extends Component {
         </a> in the 
         <a href="#">
             <span class="version-link is--version no-link">${this.indicator.version_data.model.name}</span>
-        </a> geographic demarcation. The map currently shows the 
+        </a>. The map currently shows the 
         <a href="#">
             <span class="version-link is--current no-link">${this.activeVersion.model.name}</span>
-        </a> geographic demarcation.`);
+        </a>.`);
 
+        $(ele).find('a').css('text-decoration', 'none');
         $(ele).insertBefore($(chartFooterClass, this.container))
     }
 

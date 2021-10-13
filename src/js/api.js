@@ -162,8 +162,8 @@ export class API extends Observable {
         return getJSON(url, headers)
     }
 
-    async getThemesCount(profileId, areaCode) {
-        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/themes_count`;
+    async getThemesCount(profileId, areaCode, version) {
+        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/themes_count/?version=${version}&format=json`;
         return this.loadUrl(url);
     }
 

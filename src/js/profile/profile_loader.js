@@ -24,7 +24,7 @@ export default class ProfileLoader extends Component {
         this.profileHeader = null;
     }
 
-    loadProfile = (dataBundle) => {
+    loadProfile = (dataBundle, activeVersion) => {
         //todo - make this constructor
         const profile = dataBundle.profile;
         const geometries = dataBundle.geometries;
@@ -34,7 +34,7 @@ export default class ProfileLoader extends Component {
         this.loadCategories(profile);
         this.updateGeography(profile);
 
-        this.profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config);
+        this.profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config, activeVersion);
         this.profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
     }
 

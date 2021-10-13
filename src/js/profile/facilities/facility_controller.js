@@ -83,9 +83,9 @@ export class FacilityController extends Component {
 
     }
 
-    getAndAddFacilities() {
+    getAndAddFacilities(activeVersion) {
         if(this.model.api !== null){
-            this.model.api.getThemesCount(this.model.profileId, this.model.geography.code)
+            this.model.api.getThemesCount(this.model.profileId, this.model.geography.code, activeVersion.model.name)
                 .then((data) => {
                     this.model.themes = data;
                     this.addFacilities();

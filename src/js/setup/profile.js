@@ -3,7 +3,7 @@ import {VersionController} from "../versions/version_controller";
 export function configureProfileEvents(controller, objs = {profileLoader: null}) {
     const profileLoader = objs['profileLoader'];
 
-    controller.on(VersionController.EVENTS.ready, payload => profileLoader.loadProfile(payload.payload));
+    controller.on(VersionController.EVENTS.ready, payload => profileLoader.loadProfile(payload.payload, controller.versionController.activeVersion));
     controller.on(VersionController.EVENTS.ready, () => {
         profileLoader.updateActiveVersion(controller.versionController.activeVersion)
     });
@@ -21,5 +21,9 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
             profileLoader.profileHeader.facilityController.isLoading = true;
         }
     })
+    controller.on(VersionController.EVENTS.updated, () => {
+        profileLoader.profileHeader.facilityController.isLoading = true;
+        profileLoader.profileHeader.facilityController.getAndAddFacilities(controller.versionController.activeVersion);
+    });
 }
 

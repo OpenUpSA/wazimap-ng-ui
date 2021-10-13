@@ -20,6 +20,7 @@ export class VersionController extends Component {
         this._versionGeometries = {};
         this._versionBundles = {};
         this._activeVersion = null;
+        this._promises = [];
     }
 
     get api() {
@@ -99,25 +100,27 @@ export class VersionController extends Component {
             })[0];
         }
 
-        self.versions.forEach((version, index) => {
-            const isLast = index === self.versions.length - 1;
-            self.getAllDetails(version, isLast);
+        self.versions.forEach((version) => {
+            self.getAllDetails(version);
         })
+
+        Promise.all(this._promises).then(() => {
+            //populate rich data, data mapper..
+            this._promises = [];
+            this.parent.triggerEvent(VersionController.EVENTS.ready, this.allVersionsBundle);
+        });
     }
 
-    getAllDetails(version, isLast) {
-        this.api.getProfile(this.profileId, this.areaCode, version.model.name).then(js => {
+    getAllDetails(version) {
+        const promise = this.api.getProfile(this.profileId, this.areaCode, version.model.name).then(js => {
             if (version.model.isActive) {
                 this.setUpMainVersion(js);
             }
 
             this.appendAllBundles(js, version);
-
-            if (isLast) {
-                //populate rich data, data mapper..
-                this.parent.triggerEvent(VersionController.EVENTS.ready, this.allVersionsBundle);
-            }
         })
+
+        this._promises.push(promise);
     }
 
     setUpMainVersion(rawData) {

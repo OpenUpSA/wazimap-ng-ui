@@ -101,17 +101,28 @@ export default class Controller extends Component {
      * @return {[type]}         [description]
      */
     onSubIndicatorClick(payload) {
+        let self = this;
+        let triggered = false;
         if (!payload.versionData.model.isActive) {
-            this.confirmationModal.askForConfirmation()
+            self.confirmationModal.askForConfirmation()
                 .then((result) => {
                     if (result.confirmed) {
-                        this.versionController.activeVersion = payload.versionData;
-                        this.setChoroplethData(payload);
+                        self.on('map.layer.loaded', (e) => {
+                            if (!triggered) {
+                                triggered = true;
+                                self.setChoroplethData(payload);
+                            }
+                        })
+                        self.versionController.activeVersion = payload.versionData;
                     }
                 })
         } else {
-            this.setChoroplethData(payload);
+            self.setChoroplethData(payload);
         }
+    }
+
+    test() {
+        console.log('aaa')
     }
 
     setChoroplethData(payload) {
@@ -130,10 +141,7 @@ export default class Controller extends Component {
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.selectedSubindicator;
 
-        setTimeout(() => {
-            //todo: find a better solution
-            this.triggerEvent("map_explorer.subindicator.click", payload);
-        }, 200)
+        this.triggerEvent("map_explorer.subindicator.click", payload);
     }
 
     onChoroplethFiltered(payload) {

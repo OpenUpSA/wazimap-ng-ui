@@ -139,11 +139,11 @@ export class Subcategory extends Component {
             let item = metricTemplate.cloneNode(true);
             $('.key-metric__value div', item).text(formatNumericalValue(km.value, this.formattingConfig, km.method));
             $('.key-metric__title', item).text(km.label);
-            if(detail.versionData.model.isActive){
+            if(detail.version_data.model.isActive){
                 $('.key-metric__description', item).addClass('hidden');
             }
             else {
-                $('.key-metric__description div', item).text(`(${detail.versionData.model.name})`);
+                $('.key-metric__description div', item).text(`(${detail.version_data.model.name})`);
             }
             metricWrapper.append(item);
         })

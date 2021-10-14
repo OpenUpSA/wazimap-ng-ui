@@ -326,7 +326,6 @@ export default class Controller extends Component {
     }
 
     onPreferredChildChange(childLevel) {
-        console.log({'onPreferredChildChange': childLevel})
         this.state.preferredChild = childLevel;
         this.triggerEvent("preferredChildChange", childLevel);
         // TODO remove SA specfic stuff

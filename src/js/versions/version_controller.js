@@ -48,7 +48,6 @@ export class VersionController extends Component {
     }
 
     set activeVersion(version) {
-        //todo: make this a promise
         if (!version.model.isActive) {
             this.versions.forEach((v) => {
                 v.model.isActive = false;
@@ -160,6 +159,7 @@ export class VersionController extends Component {
     setVersionData(dataBundle, version) {
         for (const [category, categoryDetail] of Object.entries(dataBundle.profile.profileData)) {
             for (const [subcategory, subcategoryDetail] of Object.entries(categoryDetail.subcategories)) {
+                subcategoryDetail.version_data = version;
                 for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {
                     indicatorDetail.version_data = version;
                 }

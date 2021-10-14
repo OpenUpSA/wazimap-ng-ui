@@ -38,44 +38,6 @@
         "url":null,
         "image":null
       }
-    },
-    {
-      "id":441479,
-      "type":"Feature",
-      "geometry":{
-        "type":"Point",
-        "coordinates":[
-          27.899702,
-          -33.000501
-        ]
-      },
-      "properties":{
-        "data":[
-          {
-            "key":"campus",
-            "value":"King Street Campus"
-          },
-          {
-            "key":"phone number",
-            "value":"0437049201"
-          },
-          {
-            "key":"email address",
-            "value":"ceo@bccollege.co.za"
-          },
-          {
-            "key":"institution type",
-            "value":"TVET"
-          },
-          {
-            "key":"physical address",
-            "value":"King Street Southernwood East London "
-          }
-        ],
-        "name":"Buffalo City FET College (C)",
-        "url":null,
-        "image":null
-      }
     }
   ]
 }

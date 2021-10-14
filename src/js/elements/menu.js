@@ -70,7 +70,8 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
                                 indicators: indicators,
                                 parents: parents,
                                 choropleth_method: indicatorDetail.choropleth_method,
-                                indicatorId: indicatorDetail.id
+                                indicatorId: indicatorDetail.id,
+                                versionData:indicatorDetail.version_data
                             })
                     });
                 }

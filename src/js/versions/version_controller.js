@@ -170,13 +170,13 @@ export class VersionController extends Component {
     appendProfileData(dataBundle, version) {
         for (const [category, categoryDetail] of Object.entries(dataBundle.profile.profileData)) {
             let allVersionsBundleCategory = this.allVersionsBundle.profile.profileData[category];
-            if (allVersionsBundleCategory === undefined || $.isEmptyObject(allVersionsBundleCategory) || version.model.isActive) {
+            if (allVersionsBundleCategory === undefined || $.isEmptyObject(allVersionsBundleCategory)) {
                 this.allVersionsBundle.profile.profileData[category] = categoryDetail;
             }
 
             for (const [subcategory, subcategoryDetail] of Object.entries(categoryDetail.subcategories)) {
                 let allVersionsBundleSubcategory = this.allVersionsBundle.profile.profileData[category].subcategories[subcategory];
-                if (allVersionsBundleSubcategory === undefined || $.isEmptyObject(allVersionsBundleSubcategory) || version.model.isActive) {
+                if (allVersionsBundleSubcategory === undefined || $.isEmptyObject(allVersionsBundleSubcategory)) {
                     this.allVersionsBundle.profile.profileData[category].subcategories[subcategory] = subcategoryDetail;
                 }
 

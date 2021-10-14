@@ -122,6 +122,8 @@ export class VersionController extends Component {
             if(response.status === 404){
                 //version does not exist for this geo
                 version.exists = false;
+            } else {
+              throw(response);
             }
         })
 

@@ -82,7 +82,7 @@ export class Subcategory extends Component {
     }
 
     addHTMLBlock(container, indicator, title, isLast) {
-        let block = new HTMLBlock(this, container, indicator, title, isLast)
+        let block = new HTMLBlock(this, container, indicator, title, isLast, this.geography)
 
         return block;
     }

@@ -2,6 +2,7 @@ import {Indicator} from "./blocks/indicator";
 import {Component, formatNumericalValue} from "../utils";
 import {ContentBlock} from "./blocks/content_block";
 import {HTMLBlock} from "./blocks/html_block";
+import {assertNTemplates} from "../utils";
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -13,7 +14,7 @@ const keyMetricWrapperClass = '.sub-category-header__key-metrics_wrap';
 const keyMetricClass = '.key-metric';
 const descriptionTextClass = '.sub-category-header__description p';
 const descriptionClass = '.sub-category-header__description';
-const indicatorClass = '.profile-indicator';
+const indicatorClass = '.styles .profile-indicator';
 
 export class Subcategory extends Component {
     constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst, geography) {
@@ -90,13 +91,16 @@ export class Subcategory extends Component {
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
+        const $template = $(indicatorClass);
+        assertNTemplates(2, $template);
 
         if (!isEmpty) {
             for (const [title, indicator] of Object.entries(detail.indicators)) {
                 if (typeof indicator.data !== 'undefined') {
                     let isLast = index === lastIndex;
                     let block = null;
-                    let indicatorContainer = $(indicatorClass)[0].cloneNode(true);
+
+                    let indicatorContainer = $template[0].cloneNode(true);
                     $(wrapper).append(indicatorContainer);
                     let metadata = indicator.metadata;
                     if (indicator.content_type === ContentBlock.BLOCK_TYPES.Indicator) {

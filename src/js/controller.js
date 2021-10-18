@@ -1,5 +1,6 @@
 import {Component} from './utils';
-import {Geography, Profile, DataBundle} from './dataobjects';
+import {VersionController} from "./versions/version_controller";
+import {ConfirmationModal} from "./ui_components/confirmation_modal";
 
 export default class Controller extends Component {
     constructor(parent, api, config, profileId = 1) {
@@ -18,6 +19,8 @@ export default class Controller extends Component {
         }
 
         const self = this;
+        this.versionController = null;
+        this.confirmationModal = new ConfirmationModal(this, ConfirmationModal.COOKIE_NAMES.DATA_MAPPER_VERSION_SELECTION);
 
         $(window).on('hashchange', () => {
             // On every hash change the render function is called with the new hash.
@@ -98,6 +101,31 @@ export default class Controller extends Component {
      * @return {[type]}         [description]
      */
     onSubIndicatorClick(payload) {
+        let self = this;
+        let triggered = false;
+        if (!payload.versionData.model.isActive) {
+            self.confirmationModal.askForConfirmation()
+                .then((result) => {
+                    if (result.confirmed) {
+                        self.on('map.layer.loaded', (e) => {
+                            if (!triggered) {
+                                triggered = true;
+                                self.setChoroplethData(payload);
+                            }
+                        })
+                        self.versionController.activeVersion = payload.versionData;
+                    }
+                })
+        } else {
+            self.setChoroplethData(payload);
+        }
+    }
+
+    test() {
+        console.log('aaa')
+    }
+
+    setChoroplethData(payload) {
         const subindicator = {
             indicatorTitle: payload.indicatorTitle,
             selectedSubindicator: payload.selectedSubindicator,
@@ -114,7 +142,7 @@ export default class Controller extends Component {
         this.state.selectedSubindicator = payload.selectedSubindicator;
 
         this.triggerEvent("map_explorer.subindicator.click", payload);
-    };
+    }
 
     onChoroplethFiltered(payload) {
         //update this.state.subindicator with the filtered values
@@ -170,23 +198,14 @@ export default class Controller extends Component {
 
 
     loadProfile(payload, callRegisterFunction) {
-        const self = this;
         this.triggerEvent("profile.loading", payload.areaCode);
-        this.api.getProfile(this.profileId, payload.areaCode).then(js => {
-            const dataBundle = new DataBundle(js);
-            self.state.profile = dataBundle;
 
-            self.triggerEvent("profile.loaded", dataBundle);
-            // TODO this should be run after all dynamic stuff is run
-            // Shouldn't be here
-            setTimeout(() => {
-                if (callRegisterFunction) {
-                    Webflow.require('ix2').init()
-                    // self.registerWebflowEvents();
-                }
-            }, 600)
-            document.title = dataBundle.overview.name;
-        })
+        if (this.versionController === null) {
+            this.versionController = new VersionController(this, payload.areaCode, callRegisterFunction);
+        } else {
+            this.versionController.reInit(payload.areaCode);
+        }
+        this.versionController.loadAllVersions(this.config.versions);
     }
 
     changeHash(areaCode) {
@@ -292,18 +311,26 @@ export default class Controller extends Component {
     onBoundaryTypeChange = (payload) => {
         let currentLevel = payload['current_level'];
         let selectedType = payload['selected_type'];
+        let redraw = false;
 
-        this.state.preferredChild = selectedType;
+        if (selectedType !== null) {
+            redraw = this.state.preferredChild !== selectedType;
+            this.state.preferredChild = selectedType;
+        }
         this.triggerEvent("preferredChildChange", selectedType);
         // TODO remove SA specfic stuff
 
         let arr = this.config.config['preferred_children'][currentLevel];
-        let index = arr.indexOf(selectedType);
-        [arr[0], arr[index]] = [arr[index], arr[0]];
+        if (selectedType !== null) {
+            let index = arr.indexOf(selectedType);
+            [arr[0], arr[index]] = [arr[index], arr[0]];
+        }
 
         this.config.config['preferred_children'][currentLevel] = arr;
 
-        this.reDrawChildren();
+        if (redraw) {
+            this.reDrawChildren();
+        }
     }
 
     onPreferredChildChange(childLevel) {
@@ -316,7 +343,6 @@ export default class Controller extends Component {
     }
 
     reDrawChildren() {
-
         const payload = {
             profile: this.state.profile.profile,
             geometries: this.state.profile.geometries

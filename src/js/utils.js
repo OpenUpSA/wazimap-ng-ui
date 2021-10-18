@@ -163,10 +163,10 @@ export class Component extends Observable {
         super()
 
         this._parent = parent;
-        this._children = [];    
+        this._children = [];
 
         if (parent != null) {
-            this._parent.registerChild(this);    
+            this._parent.registerChild(this);
         }
     }
 
@@ -426,4 +426,11 @@ export function appendFilterArrays(arr1, arr2, primaryGroup){
     )
 
     return filterArr;
+}
+
+export function assertNTemplates(n, $templateSelection) {
+  console.assert(
+    $templateSelection.length === n,
+    `Should be exactly ${n} template(s) but found ${$templateSelection.length}`
+  );
 }

@@ -1,16 +1,10 @@
-import {checkIterate, extractSheetData, extractSheetsData, Component, ThemeStyle} from "../utils";
-import XLSX from "xlsx";
+import {Component} from "../utils";
+import {FacilityController} from "./facilities/facility_controller";
 
 let breadcrumbsContainer = null;
 let breadcrumbTemplate = null;
 
-let facilityWrapper = null;
-let facilityTemplate = null;
-let facilityRowClone = null;
-
 let parents = null;
-let geometries = null;
-let geography = null;
 
 const FACILITY_DOWNLOADS = 'facility-downloads';
 
@@ -20,7 +14,7 @@ const locationDescriptionClass = '.location__description';
 const downloadAllFacilities = '.location__facilities_download-all';
 
 export class Profile_header extends Component {
-    constructor(parent, _parents, geometries, _api, _profileId, _geography, _config) {
+    constructor(parent, _parents, geometries, _api, _profileId, _geography, _config, activeVersion) {
         super(parent);
 
         this.api = _api;
@@ -30,16 +24,11 @@ export class Profile_header extends Component {
 
         parents = _parents;
         this._geometries = geometries
-        geography = _geography;
+        this.geography = _geography;
 
         breadcrumbsContainer = $('.location__breadcrumbs');
         breadcrumbTemplate = $('.styles').find(breadcrumbClass)[0];
 
-        facilityWrapper = $('.location__facilities .location__facilities_content-wrapper');
-        facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
-        facilityRowClone = facilityTemplate === null ? null : $(facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
-
-        $(downloadAllFacilities).on('click', () => this.downloadAllFacilities());
         $('.rich-data__print').off('click').on('click', () => {
             window.print();
         });
@@ -47,8 +36,11 @@ export class Profile_header extends Component {
         this.checkIfDownloadsDisabled();
         this.setPointSource();
         this.addBreadCrumbs();
-        this.addFacilities();
         this.setLocationDescription();
+
+        this.facilityController = new FacilityController(this);
+        this.facilityController.getAndAddFacilities(activeVersion);
+        $(downloadAllFacilities).off('click').on('click', () => this.facilityController.downloadAllFacilities());
     }
 
     get geometries() {
@@ -82,124 +74,6 @@ export class Profile_header extends Component {
         }
     }
 
-    addFacilities = () => {
-        $('.location-facility', facilityWrapper).remove();
-        let self = this;
-
-        let categoryArr = [];
-        let themes = [];
-
-        this.geometries.themes.forEach((theme) => {
-            let totalCount = 0;
-            theme.subthemes.forEach((st) => {
-                totalCount += st.count;
-
-                categoryArr.push({
-                    theme_id: theme.id,
-                    count: st.count,
-                    label: st.label,
-                    category_id: st.id
-                });
-            });
-
-            themes.push({
-                theme_id: theme.id,
-                name: theme.name,
-                icon: theme.icon,
-                count: totalCount
-            });
-        });
-
-        if (themes.length > 0) {
-            let totalCount = 0;
-            themes.forEach((theme) => {
-                let facilityItem = facilityTemplate.cloneNode(true);
-                $('.location-facility__name div', facilityItem).text(theme.name);
-                ThemeStyle.replaceChildDivWithIcon($(facilityItem).find('.location-facility__icon'), theme.icon);
-                $('.location-facility__value div', facilityItem).text('');
-                totalCount += theme.count;
-
-                //.location-facility__item .tooltip__points_label .truncate
-                $('.location-facility__list', facilityItem).html('');
-                let themeCategories = categoryArr.filter((c) => {
-                    return c.theme_id === theme.theme_id
-                });
-
-                for (let i = 0; i < themeCategories.length; i++) {
-                    let rowItem = facilityRowClone.cloneNode(true);
-                    if (i === themeCategories.length - 1) {
-                        $(rowItem).addClass('last');
-                    }
-
-                    $('.location-facility__item_name .truncate', rowItem).text(themeCategories[i].label);
-                    $('.location-facility__item_value div', rowItem).text('');
-
-                    $('.location-facility__list', facilityItem).append(rowItem);
-
-                    if (!this.isDownloadsDisabled) {
-                        $(rowItem).on('click', () => {
-                            self.downloadPointData(themeCategories[i]);
-                        })
-                    } else {
-                        $('.location-facility__item_download', rowItem).addClass('hidden');
-                    }
-                }
-                $('.location-facility__description', facilityItem).addClass('hidden')
-
-                facilityWrapper.prepend(facilityItem);
-            })
-
-            $('.location__facilities_header').removeClass('hidden');
-            $('.location__facilities_trigger').removeClass('hidden');
-            $('.location__facilities_categories-value strong').text(categoryArr.length);
-            $('.location__facilities_facilities-value strong').text('');
-        } else {
-            $('.location__facilities').addClass('hidden');
-        }
-
-        $('.location__facilities_loading').addClass('hidden');
-    }
-
-    downloadAllFacilities = () => {
-        this.api.loadAllPoints(this.profileId, geography.code)
-            .then((data) => {
-                const wb = XLSX.utils.book_new();
-                const fileName = 'Facilities-' + geography.code + '.xlsx';
-                let sheets = extractSheetsData(data);
-                sheets.forEach((s) => {
-                    const sheetData = XLSX.utils.json_to_sheet(s.sheetData);
-                    const sheetName = s.sheetName;
-
-                    XLSX.utils.book_append_sheet(wb, sheetData, sheetName);
-                })
-
-                XLSX.writeFile(wb, fileName);
-            });
-    }
-
-    downloadPointData = (category) => {
-        const fileName = 'Export-' + category.label + '.xlsx';
-        this.getAddressPoints(category)
-            .then((sheet) => {
-                // export json (only array possible) to Worksheet of Excel
-                const data = XLSX.utils.json_to_sheet(sheet.sheetData);
-                // A workbook is the name given to an Excel file
-                const wb = XLSX.utils.book_new(); // make Workbook of Excel
-                // add Worksheet to Workbook
-                XLSX.utils.book_append_sheet(wb, data, sheet.sheetName);
-                // export Excel file
-                XLSX.writeFile(wb, fileName);
-            });
-    }
-
-    getAddressPoints = (category) => {
-        return this.api.loadPoints(this.profileId, category.category_id, geography.code).then(data => {
-            let sheet = extractSheetData(data, category.label);
-
-            return sheet;
-        })
-    }
-
     setPointSource = () => {
         //todo:change this when the API is ready
         $('.location__sources_loading').addClass('hidden');
@@ -209,7 +83,7 @@ export class Profile_header extends Component {
 
     setLocationDescription = () => {
         if (parents !== null && parents.length > 0) {
-            $(locationDescriptionClass).find('.location-type').text(geography.level);
+            $(locationDescriptionClass).find('.location-type').text(this.geography.level);
             $(locationDescriptionClass).find('.parent-geography').text(parents[parents.length - 1].name);
             $(locationDescriptionClass).removeClass('hidden');
         } else {

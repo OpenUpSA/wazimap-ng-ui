@@ -27,8 +27,8 @@ export class API extends Observable {
 
     }
 
-    getProfile(profileId, areaCode) {
-        const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?format=json`;
+    getProfile(profileId, areaCode, version) {
+        const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?version=${version}&format=json`;
         return this.loadUrl(url);
     }
 
@@ -37,7 +37,7 @@ export class API extends Observable {
         return this.loadUrl(url, {'wm-hostname': hostname});
     }
 
-    loadChoroplethData(profileId, areaCode, indicatorId){
+    loadChoroplethData(profileId, areaCode, indicatorId) {
         const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/`;
         return this.loadUrl(url);
     }
@@ -61,8 +61,8 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
-    loadAllPoints(profileId, areaCode){
-        let url =`${this.baseUrl}/profile/${profileId}/points/geography/${areaCode}/points/?format=json`
+    loadAllPoints(profileId, areaCode) {
+        let url = `${this.baseUrl}/profile/${profileId}/points/geography/${areaCode}/points/?format=json`
         return this.loadUrl(url);
     }
 
@@ -86,20 +86,19 @@ export class API extends Observable {
         let response;
         const self = this;
         response = await this.getTokenJSON(url, headers)
-        if (response.status == 401 || response.status == 403) {
+        if (response.status === 401 || response.status === 403) {
             await this.waitToLogIn();
             try {
                 await self.authenticate(url);
                 response = await this.getTokenJSON(url, headers);
-            } catch (err) {
-                console.error(err)
-
             } finally {
                 console.log("stopped logging in")
 
                 this.busyLoggingIn = false;
 
             }
+        } else if (response.status === 404) {
+            throw response;
         }
 
         const json = await response.json();
@@ -161,6 +160,11 @@ export class API extends Observable {
             headers['Authorization'] = `Token ${token}`;
 
         return getJSON(url, headers)
+    }
+
+    async getThemesCount(profileId, areaCode, version) {
+        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/themes_count/?version=${version}&format=json`;
+        return this.loadUrl(url);
     }
 
 }

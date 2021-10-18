@@ -1,6 +1,6 @@
 import {screen, fireEvent, getByText} from '@testing-library/dom'
 
-import { Category } from "../../src/js/profile/category.js";
+import {Category} from "../../src/js/profile/category.js";
 import {Component} from '../../src/js/utils';
 
 import html from '../../src/index.html';
@@ -25,7 +25,12 @@ describe('Rich data panel tests', () => {
                         "metadata": {},
                         "groups": [],
                         "description": "<p>An <strong>indicator</strong> description</p>",
-                        "type": "indicator"
+                        "type": "indicator",
+                        "version_data": {
+                            "model": {
+                                "isActive": true
+                            }
+                        }
                     }
                 }
             }
@@ -59,4 +64,4 @@ describe('Rich data panel tests', () => {
         expect(descriptionElement.innerHTML).toContain("<strong>");
         expect(htmlTag).toBe(description)
     }
-})
+});

@@ -13,7 +13,6 @@ let indicatorTemplate = null;
 let profileWrapper = null;
 
 
-
 export default class ProfileLoader extends Component {
     constructor(parent, formattingConfig, _api, _profileId, _config) {
         super(parent);
@@ -22,9 +21,10 @@ export default class ProfileLoader extends Component {
         this.profileId = _profileId;
         this.formattingConfig = formattingConfig;
         this.config = _config;
+        this.profileHeader = null;
     }
 
-    loadProfile = (dataBundle) => {
+    loadProfile = (dataBundle, activeVersion) => {
         //todo - make this constructor
         const profile = dataBundle.profile;
         const geometries = dataBundle.geometries;
@@ -34,9 +34,8 @@ export default class ProfileLoader extends Component {
         this.loadCategories(profile);
         this.updateGeography(profile);
 
-        let profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config);
-        profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
-        
+        this.profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config, activeVersion);
+        this.profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
     }
 
     prepareDomElements = () => {
@@ -69,7 +68,7 @@ export default class ProfileLoader extends Component {
         for (const [category, detail] of Object.entries(categories)) {
             const id = this.getNewId();
             this.createNavItem(id, category);
-            let c = new Category(this, this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories, isFirst)
+            let c = new Category(this, this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories, isFirst, profile.geography)
             isFirst = false;
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
@@ -108,5 +107,9 @@ export default class ProfileLoader extends Component {
         })
 
         $(navWrapperClass).append(navItem);
+    }
+
+    updateActiveVersion = (activeVersion) => {
+        this.triggerEvent('version.updated', activeVersion);
     }
 }

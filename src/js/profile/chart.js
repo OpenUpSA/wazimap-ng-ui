@@ -1,4 +1,4 @@
-import {format as d3format} from "d3-format/src/defaultLocale";
+import {format as d3format} from "d3-format";
 import {select as d3select} from "d3-selection";
 
 import {appendFilterArrays, Component} from "../utils";
@@ -149,8 +149,7 @@ export class Chart extends Component {
                 this.filterGroups = data.metadata.groups;
 
                 this.handleChartFilter(data, data.metadata.groups);
-            })
-            .catch(console.error);
+            });
     };
 
     showChartDataTable = () => {

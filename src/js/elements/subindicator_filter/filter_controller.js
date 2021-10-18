@@ -97,6 +97,10 @@ export class FilterController extends Component {
     prepareDomElements() {
         this._rowContainer = $(this.container).find(this._elements.filterRowClass)[0];
         $(this._rowContainer).hide();
+
+        while ($(this.container).find(this._elements.filterRowClass).length > 1) {
+            $(this.container).find(this._elements.filterRowClass)[1].remove();
+        }
     }
 
     prepareEvents() {
@@ -104,6 +108,26 @@ export class FilterController extends Component {
         this.addFilterButton.on(AddFilterButton.EVENTS.clicked, () => {
             self.addEmptyFilter()
         })
+    }
+
+    setFilterVisibility() {
+        const isVisible = this.shouldFiltersBeVisible();
+
+        if (isVisible) {
+            $(this.container).removeClass('hidden');
+        } else {
+            $(this.container).addClass('hidden');
+        }
+    }
+
+    shouldFiltersBeVisible() {
+        const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
+        const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+        if (nonAggregatableGroups.length <= 0 && defaultGroups.length <= 0 && this.model.dataFilterModel.availableFilters.length <= 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     addInitialFilterRow(dataFilterModel) {
@@ -205,6 +229,7 @@ export class FilterController extends Component {
 
     setDataFilterModel(dataFilterModel) {
         this.reset();
+
         this.model.dataFilterModel = dataFilterModel;
 
         this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, () => {
@@ -218,6 +243,7 @@ export class FilterController extends Component {
 
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
+        this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
     }
 

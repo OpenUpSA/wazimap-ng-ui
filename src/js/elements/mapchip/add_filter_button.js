@@ -20,7 +20,7 @@ export class AddFilterButton extends Component {
     }
 
     prepareEvents() {
-        this.button.on('click', () => this.triggerEvent(AddFilterButton.EVENTS.clicked));
+        this.button.off('click').on('click', () => this.triggerEvent(AddFilterButton.EVENTS.clicked));
     }
 
     disable() {

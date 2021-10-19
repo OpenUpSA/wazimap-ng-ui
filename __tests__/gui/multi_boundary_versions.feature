@@ -12,3 +12,4 @@ Feature: Multiple geographic boundary versions
     And I select an indicator from Elections category
       Then I click on the Proceed button in confirmation modal
     And I check if "2011 Boundaries" is the selected version
+      Then I navigate to a geography with no children

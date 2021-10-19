@@ -21,7 +21,7 @@
           "2016 Municipal elections":{
             "description":"",
             "indicators":{
-              "Voter turnout":{
+              "2016 Voter turnout":{
                 "id":836,
                 "description":"The 2016 Municipal Election \"Voter turnout\" indicator shows the larger of the Ward and Proportional Representation ballots in each voting district. Elections in local municipalities that fall in district municipalities actually have a third ballot (DC40), because the district council is elected partly by the councils of the costituent local municipalities, and partly by this third ballot. The Ward and PR ballots are used to ensure a proper comparison between ward, municipality and provincial regions.",
                 "choropleth_method":"subindicator",

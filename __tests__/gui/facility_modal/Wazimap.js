@@ -8,11 +8,12 @@ import {
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profile from "./profile.json";
+import profiles from "./profiles.json";
 import themes from "./themes.json";
 import points from "./points.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(all_details, profile, themes, points);
+    setupInterceptions(profiles, all_details, profile, themes, points);
     gotoHomepage();
 })
 

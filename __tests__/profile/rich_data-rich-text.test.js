@@ -24,7 +24,12 @@ describe('Rich data panel HTML indicator test', () => {
                         "metadata": {},
                         "groups": [],
                         "description": "mock indicator description",
-                        "type": "indicator"
+                        "type": "indicator",
+                        "version_data": {
+                            "model": {
+                                "isActive": true
+                            }
+                        }
                     }
                 }
             }

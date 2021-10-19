@@ -5,8 +5,8 @@ import all_details_2011 from "../multi_boundary_versions/all_details_2011.json";
 import all_details_2016 from "../multi_boundary_versions/all_details_2016.json";
 import all_details_2011_41804004 from "../multi_boundary_versions/all_details_2011_41804004.json";
 import all_details_2016_41804004 from "../multi_boundary_versions/all_details_2016_41804004.json";
+import all_details_2011_NC085 from "./all_details_2011_NC085.json";
 import profile from "../multi_boundary_versions/profile.json";
-import themes_count from "../facilities/themes_count.json";
 
 Given('I am on the Wazimap Homepage', () => {
     cy.intercept('api/v1/all_details/profile/8/geography/VT/?version=2011%20Boundaries&format=json', (req) => {
@@ -56,6 +56,7 @@ Then(/^I check if "([^"]*)" is the selected version$/, (versionName) => {
 });
 
 Then(/^I switch to "([^"]*)" version$/, (versionName) => {
+    cy.wait(2000);
     cy.get('.dropdown-menu').click();
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${versionName}")`).click();
 });
@@ -80,7 +81,7 @@ When('I select an indicator from Elections category', () => {
     cy.get('.data-category__h3_content').contains('2011 Voted').click();
 })
 
-Given('I navigate to a geography with no children', () => {
+Then('I navigate to a geography with no children', () => {
     cy.intercept('/api/v1/all_details/profile/8/geography/41804004/?version=2011%20Boundaries&format=json', (request) => {
         request.reply({
             statusCode: 200,
@@ -114,4 +115,36 @@ Given('I navigate to a geography with no children', () => {
     })
 
     cy.visit('/#geo:41804004');
+})
+
+When('I navigate to a geography with multiple child type', () => {
+    cy.intercept('/api/v1/all_details/profile/8/geography/NC085/?version=2016%20with%20wards&format=json', (request) => {
+        request.reply({
+            statusCode: 404,
+            forceNetworkError: false // default
+        });
+    });
+
+    cy.intercept('/api/v1/all_details/profile/8/geography/NC085/?version=2011%20Boundaries&format=json', (request) => {
+        request.reply({
+            statusCode: 200,
+            body: all_details_2011_NC085,
+            forceNetworkError: false // default
+        });
+    });
+
+    cy.visit('/#geo:NC085');
+})
+
+Then('I check if the choropleth is removed', () => {
+    cy.get('.map-options').should('not.be.visible');
+})
+
+Then('I check if the profile highlight is hidden', () => {
+    cy.get('.map-location__info').should('be.empty');
+})
+
+Then('I check if the profile highlight is displayed correctly', () => {
+    cy.get('.map-location__info .location-highlight .location-highlight__title').should('have.text', 'Youth');
+    cy.get('.map-location__info .location-highlight .location-highlight__value').should('have.text', '34.9%');
 })

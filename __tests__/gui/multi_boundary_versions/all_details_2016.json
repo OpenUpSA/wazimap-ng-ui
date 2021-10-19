@@ -90,7 +90,11 @@
         }
       }
     },
-    "highlights": [],
+    "highlights": [{
+      "label":"Youth",
+      "value":0.34867438259952616,
+      "method":"subindicators"
+    }],
     "overview": {
       "name": "Test profile",
       "description": ""

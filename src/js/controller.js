@@ -121,10 +121,6 @@ export default class Controller extends Component {
         }
     }
 
-    test() {
-        console.log('aaa')
-    }
-
     setChoroplethData(payload) {
         const subindicator = {
             indicatorTitle: payload.indicatorTitle,
@@ -166,8 +162,15 @@ export default class Controller extends Component {
             .subcategories[this.state.subindicator.parents.subcategory]
             .indicators;
 
-        let childData = indicators[this.state.subindicator.parents.indicator].child_data;
-        let data = indicators[this.state.subindicator.parents.indicator].data;
+        let selectedIndicator = indicators[this.state.subindicator.parents.indicator];
+
+        if (selectedIndicator === undefined) {
+            this.triggerEvent('data_mapper_menu.nodata');
+            return;
+        }
+
+        let childData = selectedIndicator.child_data;
+        let data = selectedIndicator.data;
 
         this.state.subindicator.data.data = data;
         this.state.subindicator.data.child_data = childData;

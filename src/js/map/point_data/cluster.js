@@ -9,14 +9,13 @@ export class Cluster extends Component {
         this.map = map;
         this.tooltipItem = $('.facility-tooltip.is--cluster')[0].cloneNode(true);
         this.config = config;
-
-        this.initClustering();
     }
 
     initClustering() {
         this.markers = L.markerClusterGroup({
             iconCreateFunction: (cluster) => this.createClusterIcon(cluster),
-            chunkedLoading: true
+            chunkedLoading: true,
+            clusterPane: 'clusters'
         }).on('clustermouseover', (e) => {
             this.showPopup(e.layer);
         });

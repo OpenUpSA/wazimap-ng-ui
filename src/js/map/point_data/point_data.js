@@ -49,11 +49,13 @@ export class PointData extends Component {
         this.googleMapsButton = null;
 
         this.activePoints = [];  //the visible points on the map
-        this.markerLayer = this.genLayer();
         this.categoryLayers = {};
-        this.cluster = new Cluster(this, this.map, config);
 
+        this.cluster = new Cluster(this, this.map, config);
         this.enableClustering = this.cluster.isClusteringEnabled();
+        this.clusterLayer = this.genLayer();
+        this.cluster.initClustering();
+
         this.markers = this.cluster.markers;
 
         if (this.enableClustering) {
@@ -79,7 +81,20 @@ export class PointData extends Component {
     }
 
     genLayer() {
-        return L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
+        if (this.enableClustering) {
+            const CLUSTER_PANE = 'clusters';
+            const CLUSTER_Z_INDEX = 670;    //above the geo labels - below the tooltip layer
+
+            if (!this.map.hasLayer(this.clusterLayer)) {
+                this.map.createPane(CLUSTER_PANE);
+                this.map.getPane(CLUSTER_PANE).style.zIndex = CLUSTER_Z_INDEX;
+                this.map.getPane(CLUSTER_PANE).style.pointerEvents = 'none';
+            }
+
+            return L.featureGroup([], {pane: CLUSTER_PANE}).addTo(this.map);
+        } else {
+            return L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
+        }
     }
 
     showLoading(category) {
@@ -262,6 +277,7 @@ export class PointData extends Component {
                 {
                     icon: divIcon,
                     color: color,
+                    pane: 'clusters',
                     categoryName: point.category.data.name
                 });
         } else {

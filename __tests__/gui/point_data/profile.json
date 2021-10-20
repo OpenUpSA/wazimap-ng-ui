@@ -12,7 +12,13 @@
       "level": "country",
       "version": "2011 Boundaries"
     },
-    "description": ""
+    "description": "",
+    "configuration": {
+      "default_version": "test",
+      "versions": [
+        "test"
+      ]
+    }
   },
   "description": "",
   "configuration": {

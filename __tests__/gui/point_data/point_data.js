@@ -100,6 +100,7 @@ When('I check if the cluster is created correctly', () => {
 
 Then('I check if the filter pane is displayed', () => {
     cy.get('.point-filters').should('be.visible')
+    cy.get('.point-filters .point-filters__title .filters__header_name div div').should('have.text', 'Point Filter')
 })
 
 When('I click on the first filter dropdown', () => {

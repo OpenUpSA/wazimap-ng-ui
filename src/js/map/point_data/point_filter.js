@@ -95,6 +95,7 @@ export class PointFilter extends Component {
     setTitleElement() {
         let titleEle = document.createElement('div');
         $(titleEle).attr('data-i18n', 'Point Filter');
+        $(titleEle).text('Point Filter');
         $(titleEle).addClass('i18n');
 
         $('.filters__header_name .truncate').html(titleEle);

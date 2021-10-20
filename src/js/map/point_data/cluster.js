@@ -1,4 +1,4 @@
-import {Component, setPopupStyle, ThemeStyle} from '../../utils';
+import {Component, setPopupStyle} from '../../utils';
 
 const POPUP_OFFSET = [20, 0];
 

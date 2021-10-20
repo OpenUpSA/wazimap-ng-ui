@@ -38,6 +38,96 @@
         "url":null,
         "image":null
       }
+    }, {
+      "id":1007596,
+      "type":"Feature",
+      "geometry":{
+        "type":"Point",
+        "coordinates":[
+          18.41374,
+          -33.92949
+        ]
+      },
+      "properties":{
+        "data":[
+          {
+            "key":"data verification status",
+            "value":"Unverified"
+          },
+          {
+            "key":"facility type",
+            "value":"University"
+          },
+          {
+            "key":"campus",
+            "value":"Hiddingh Campus"
+          },
+          {
+            "key":"address",
+            "value":"31-37 Orange St, Gardens, 8001"
+          },
+          {
+            "key":"phone number",
+            "value":"0216509111"
+          },
+          {
+            "key":"email address",
+            "value":"hum-dean@uct.ac.za"
+          },
+          {
+            "key":"website",
+            "value":"https://www.uct.ac.za/"
+          }
+        ],
+        "name":"University of Cape Town",
+        "url":null,
+        "image":null
+      }
+    }, {
+      "id":1007598,
+      "type":"Feature",
+      "geometry":{
+        "type":"Point",
+        "coordinates":[
+          26.8329509,
+          -32.7901325
+        ]
+      },
+      "properties":{
+        "data":[
+          {
+            "key":"data verification status",
+            "value":"Unverified"
+          },
+          {
+            "key":"facility type",
+            "value":"University"
+          },
+          {
+            "key":"campus",
+            "value":"Alice"
+          },
+          {
+            "key":"address",
+            "value":"1 King Williamstown Road, Alice, 5700"
+          },
+          {
+            "key":"phone number",
+            "value":"0406022441"
+          },
+          {
+            "key":"email address",
+            "value":"admissions@ufh.ac.za"
+          },
+          {
+            "key":"website",
+            "value":"https://www.ufh.ac.za/"
+          }
+        ],
+        "name":"University of Fort Hare",
+        "url":null,
+        "image":null
+      }
     }
   ]
 }

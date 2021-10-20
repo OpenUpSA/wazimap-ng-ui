@@ -71,7 +71,7 @@ When('I check if the cluster is created correctly', () => {
 
     cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg text', {timeout: 20000}).should('have.text', 2);
 
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg circle').each(($el, index) => {
+    cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg circle[fill=none]').each(($el, index) => {
         expect($el.attr('stroke')).to.contain(categories[index].color);
         expect($el.attr('stroke-dasharray')).equal(categories[index].circleVal);
     })
@@ -124,11 +124,22 @@ Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {
 });
 
 When(/^I filter by "([^"]*)"$/, (filter) => {
+    let orderedList = {
+        0: 'Alice',
+        1: 'Hiddingh Campus',
+        2: 'Nongoma'
+    }
     const filters = filter.split(':');
     cy.get('.point-filters__filter-menu:visible').first().click();
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[0]}")`).click();
 
     cy.get('.point-filters__filter-menu:visible').last().click();
+
+    //check if the options are ordered alphabetically
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible`).each(($el, index) => {
+        const text = $el.text().trim();
+        expect(text).to.equal(orderedList[index]);
+    })
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[1]}")`).click();
 });
 
@@ -136,7 +147,7 @@ Then('I hide Point Mapper', () => {
     cy.get('.point-mapper-toggles .point-mapper-panel__close', {timeout: 20000}).click();
 })
 
-Then('I click on the close button', ()=>{
+Then('I click on the close button', () => {
     cy.get('.point-filters__header-close').click();
     cy.get('.point-filters').should('not.be.visible')
 })

@@ -14,9 +14,9 @@ import profiles from "./profiles.json";
 Given('I am on the Wazimap Homepage', () => {
     setupInterceptions(profiles, all_details, profile, null, null);
 
-    cy.intercept('/api/v1/profile/8/geography/ZA/themes_count', (request) => {
+    cy.intercept('/api/v1/profile/8/geography/ZA/themes_count/?version=test&format=json', (request) => {
         request.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: themes_count,
             forceNetworkError: false // default
         });
@@ -63,7 +63,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         sendResponse = resolve;
     });
 
-    cy.intercept('/api/v1/all_details/profile/8/geography/EC/?format=json', (request) => {
+    cy.intercept('/api/v1/all_details/profile/8/geography/EC/?version=test&format=json', (request) => {
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,

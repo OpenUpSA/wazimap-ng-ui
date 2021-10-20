@@ -14,7 +14,7 @@ const locationDescriptionClass = '.location__description';
 const downloadAllFacilities = '.location__facilities_download-all';
 
 export class Profile_header extends Component {
-    constructor(parent, _parents, geometries, _api, _profileId, _geography, _config) {
+    constructor(parent, _parents, geometries, _api, _profileId, _geography, _config, activeVersion) {
         super(parent);
 
         this.api = _api;
@@ -39,7 +39,7 @@ export class Profile_header extends Component {
         this.setLocationDescription();
 
         this.facilityController = new FacilityController(this);
-        this.facilityController.getAndAddFacilities();
+        this.facilityController.getAndAddFacilities(activeVersion);
         $(downloadAllFacilities).off('click').on('click', () => this.facilityController.downloadAllFacilities());
     }
 

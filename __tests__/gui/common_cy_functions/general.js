@@ -1,5 +1,5 @@
 export function setupInterceptions(profiles, all_details, profile, themes, points) {
-    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?format=json', (req) => {
+    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?version=test&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: all_details,

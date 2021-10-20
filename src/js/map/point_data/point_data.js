@@ -127,10 +127,10 @@ export class PointData extends Component {
             self.map.addLayer(layer);
             self.showDone(category);
 
-            self.pointFilter.isVisible = true;
-
             self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
         }
+
+        self.pointFilter.isVisible = true;
     }
 
     removeCategoryPoints = (category) => {

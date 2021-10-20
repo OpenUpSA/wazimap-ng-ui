@@ -21,3 +21,7 @@ Feature: Point Data
       Then I check if the filter options are "All values, website"
     And I check if the marker color is rgb(153, 58, 255)
       Then I click on the close button
+
+    #to make sure filter pane is visible when a category is unchecked and checked again
+    And I click on TVET colleges category
+    Then I check if the filter pane is displayed

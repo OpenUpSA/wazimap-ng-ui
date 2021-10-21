@@ -40,7 +40,7 @@ Then('I click on TVET colleges category', () => {
 })
 
 When(/^I check if the marker color is rgb\((\d+), (\d+), (\d+)\)$/, (color1, color2, color3) => {
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg circle').then(($el) => {
+    cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg circle').then(($el) => {
         const fill = $el.attr('fill');
         cy.wrap(fill).should('equal', `rgb(${color1}, ${color2}, ${color3})`);
     })
@@ -70,12 +70,12 @@ When('I check if the cluster is created correctly', () => {
         circleVal: '50 100'
     }]
 
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg circle').each(($el, index) => {
+    cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg circle').each(($el, index) => {
         cy.wrap($el.attr('stroke')).should('contain', categories[index].color);
         cy.wrap($el.attr('stroke-dasharray')).should('equal', categories[index].circleVal);
     })
 
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg text').should('have.text', 2);
+    cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg text').should('have.text', 2);
 
     cy.wait(100);
     hoverOverTheMapCenter();

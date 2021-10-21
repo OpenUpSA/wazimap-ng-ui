@@ -2,7 +2,7 @@ import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '.
 import {getJSON} from '../../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
-import {Cluster} from './cluster'
+import {ClusterController} from './cluster_controller'
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
@@ -51,12 +51,12 @@ export class PointData extends Component {
         this.activePoints = [];  //the visible points on the map
         this.categoryLayers = {};
 
-        this.cluster = new Cluster(this, this.map, config);
-        this.enableClustering = this.cluster.isClusteringEnabled();
+        this.clusterController = new ClusterController(this, this.map, config);
+        this.enableClustering = this.clusterController.isClusteringEnabled();
         this.clusterLayer = this.genLayer();
-        this.cluster.initClustering();
+        this.clusterController.initClustering();
 
-        this.markers = this.cluster.markers;
+        this.markers = this.clusterController.markers;
 
         if (this.enableClustering) {
             this.map.addLayer(this.markers);
@@ -161,6 +161,10 @@ export class PointData extends Component {
             this.markers.removeLayers(removeMarkers);
             pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
         }
+
+        this.activePoints = this.activePoints.filter((ap) => {
+            return ap.category.id !== category.id
+        });
     }
 
     /** end of category functions **/

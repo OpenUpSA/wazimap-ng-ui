@@ -2,7 +2,7 @@ import {Component, setPopupStyle} from '../../utils';
 
 const POPUP_OFFSET = [20, 0];
 
-export class Cluster extends Component {
+export class ClusterController extends Component {
     constructor(parent, map, config) {
         super(parent);
 

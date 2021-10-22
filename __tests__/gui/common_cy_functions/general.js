@@ -1,4 +1,4 @@
-export function setupInterceptions(profiles, all_details, profile, themes, points) {
+export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count=[]) {
     cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?version=test&format=json', (req) => {
         req.reply({
             statusCode: 201,
@@ -38,6 +38,15 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             forceNetworkError: false // default
         })
     })
+
+    cy.intercept('/api/v1/profile/8/geography/ZA/themes_count/?version=test&format=json', (request) => {
+        request.reply({
+            statusCode: 200,
+            body: themes_count,
+            forceNetworkError: false // default
+        });
+    });
+
 }
 
 export function gotoHomepage() {

@@ -3,10 +3,13 @@ import {gotoHomepage, setupInterceptions} from "../common_cy_functions/general";
 import profiles from "./profiles.json";
 import profile from "./profile.json";
 
-Given('I intercept the requests and respond null', () => {
+Given('I intercept the requests and respond null to force error', () => {
     setupInterceptions(profiles, null, profile, null, null);
+    cy.on('uncaught:exception', (err, runnable) => {
+      return false;
+    });
     gotoHomepage();
-})
+});
 
 Then('An alert message should be shown', () => {
     cy.on('window:alert', (str) => {

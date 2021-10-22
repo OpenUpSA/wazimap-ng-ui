@@ -107,7 +107,6 @@ export class Dropdown extends Component {
 
     get model() {
         return this._model;
-        f
     }
 
     prepareDomElements() {

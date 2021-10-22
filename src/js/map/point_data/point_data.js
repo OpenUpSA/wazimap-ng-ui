@@ -1,7 +1,11 @@
-import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../utils';
-import {getJSON} from '../api';
+import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '../../utils';
+import {getJSON} from '../../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
+import {ClusterController} from './cluster_controller'
+import 'leaflet.markercluster';
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
@@ -27,7 +31,6 @@ let facilityItem = null;
 let facilityRowItem = null;
 
 let activeMarkers = [];
-let activePoints = [];  //the visible points on the map
 
 const POPUP_OFFSET = [20, 0];
 
@@ -35,17 +38,29 @@ const POPUP_OFFSET = [20, 0];
  * this class creates the point data dialog
  */
 export class PointData extends Component {
-    constructor(parent, api, _map, profileId) {
+    constructor(parent, api, _map, profileId, config) {
         super(parent);
 
         this.api = api;
         this.map = _map;
         this.profileId = profileId;
+        this.config = config;
 
         this.googleMapsButton = null;
 
-        this.markerLayer = this.genLayer();
+        this.activePoints = [];  //the visible points on the map
         this.categoryLayers = {};
+
+        this.clusterController = new ClusterController(this, this.map, config);
+        this.enableClustering = this.clusterController.isClusteringEnabled();
+        this.clusterLayer = this.genLayer();
+        this.clusterController.initClustering();
+
+        this.markers = this.clusterController.markers;
+
+        if (this.enableClustering) {
+            this.map.addLayer(this.markers);
+        }
 
         this.prepareDomElements();
     }
@@ -66,7 +81,20 @@ export class PointData extends Component {
     }
 
     genLayer() {
-        return L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
+        if (this.enableClustering) {
+            const CLUSTER_PANE = 'clusters';
+            const CLUSTER_Z_INDEX = 670;    //above the geo labels - below the tooltip layer
+
+            if (!this.map.hasLayer(this.clusterLayer)) {
+                this.map.createPane(CLUSTER_PANE);
+                this.map.getPane(CLUSTER_PANE).style.zIndex = CLUSTER_Z_INDEX;
+                this.map.getPane(CLUSTER_PANE).style.pointerEvents = 'none';
+            }
+
+            return L.featureGroup([], {pane: CLUSTER_PANE}).addTo(this.map);
+        } else {
+            return L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
+        }
     }
 
     showLoading(category) {
@@ -87,7 +115,7 @@ export class PointData extends Component {
         const self = this;
         let layer = this.categoryLayers[category.id];
 
-        if (layer != undefined) {
+        if (layer != undefined && !this.enableClustering) {
             this.map.addLayer(layer);
             self.showPointLegend(category);
             this.showDone(category)
@@ -98,23 +126,45 @@ export class PointData extends Component {
             this.triggerEvent('loadingCategoryPoints', category);
 
             const data = await this.getAddressPoints(category);
+            const points = {
+                category: category,
+                data: data
+            };
             self.showPointLegend(category);
-            self.createMarkers(data, category.data, layer);
+            self.createMarkers(points, layer);
             self.map.addLayer(layer);
             self.showDone(category);
 
             self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
-
         }
     }
 
     removeCategoryPoints = (category) => {
-        let layer = this.categoryLayers[category.id];
+        if (!this.enableClustering) {
+            let layer = this.categoryLayers[category.id];
 
-        if (layer != undefined) {
-            this.map.removeLayer(layer);
+            if (layer != undefined) {
+                this.map.removeLayer(layer);
+                pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+            }
+        } else {
+            let pointsToRemove = this.activePoints.filter((ap) => {
+                return ap.category.id === category.id
+            });
+
+            let removeMarkers = [];
+
+            checkIterate(pointsToRemove, (p) => {
+                removeMarkers.push(p.marker);
+            })
+
+            this.markers.removeLayers(removeMarkers);
             pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
         }
+
+        this.activePoints = this.activePoints.filter((ap) => {
+            return ap.category.id !== category.id
+        });
     }
 
     /** end of category functions **/
@@ -164,50 +214,121 @@ export class PointData extends Component {
     /**
      * individual markers
      */
-    createMarkers = (points, categoryData, layer) => {
-        const self = this;
+    createMarkers = (points, layer) => {
         let col = '';
+        let newMarkers = [];
+        checkIterate(points.data, point => {
+            const isValid = this.validateCoordinates(point.y, point.x)
+            if (isValid) {
+                if (col === '') {
+                    let themeIndex = point.themeIndex;
 
-        checkIterate(points, point => {
-            if (col === '') {
-                //to get the color add "theme-@index" class to the trigger div. this way we can use css('color') function
-                let themeIndex = point.themeIndex;
-                let tempElement = $(`.theme-${themeIndex}`)[0];
-                tempElement = tempElement.closest('div.point-mapper__h1');
-                tempElement = $(tempElement).find('.point-mapper__h1_trigger');
-
-                //if tempElement already has theme-@index class, dont remove it
-                let removeClass = !$(tempElement).hasClass('theme-' + themeIndex);
-
-                $(tempElement).addClass('theme-' + themeIndex);
-                col = $(tempElement).css('color');
-                if (removeClass) {
-                    $(tempElement).removeClass('theme-' + point.theme.id);
+                    col = $(`.point-mapper__h1_trigger.theme-${themeIndex}:not(.point-mapper__h1--default-closed)`).css('color');
                 }
-            }
 
-            let marker = L.circleMarker([point.y, point.x], {
-                color: col,
-                radius: self.markerRadius(),
+                let marker = this.generateMarker(col, point);
+
+                marker.on('click', (e) => {
+                    this.showMarkerPopup(e, point, points.category, true);
+                    stopPropagation(e); //prevent map click event
+                }).on('mouseover', (e) => {
+                    if (!this.enableClustering) {
+                        e.target.setRadius(this.markerRadius() * 2);
+                        e.target.bringToFront();
+                    }
+                    this.showMarkerPopup(e, point, points.category);
+                }).on('mouseout', (e) => {
+                    if (!this.enableClustering) {
+                        e.target.setRadius(this.markerRadius());
+                    }
+                    //hideMarkerPopup() is not needed - autoClose property is sufficient
+                    //hideMarkerPopup() caused a bug with spiderfied markers
+                });
+
+                if (this.enableClustering) {
+                    this.activePoints.push({
+                        marker: marker,
+                        category: points.category
+                    });
+
+                    newMarkers.push(marker);
+                } else {
+                    layer.addLayer(marker);
+                }
+            } else {
+                console.error(`[${point.y}, ${point.x}] is not a valid coordinate : ${point.name}`);
+            }
+        })
+
+        if (this.enableClustering) {
+            this.markers.addLayers(newMarkers);
+        }
+    }
+
+    generateMarker(color, point) {
+        let marker;
+
+        if (this.enableClustering) {
+            let html = this.generateMarkerHtml(color);
+
+            let divIcon = L.divIcon({
+                html: html,
+                className: "leaflet-data-marker",
+                iconSize: L.point(25, 25)
+            });
+
+            marker = L.marker([point.y, point.x],
+                {
+                    icon: divIcon,
+                    color: color,
+                    pane: 'clusters',
+                    categoryName: point.category.data.name
+                });
+        } else {
+            marker = L.circleMarker([point.y, point.x], {
+                color: color,
+                radius: this.markerRadius(),
                 fill: true,
-                fillColor: col,
+                fillColor: color,
                 fillOpacity: 1,
                 pane: 'markerPane'
             })
+        }
 
-            marker.on('click', (e) => {
-                this.showMarkerPopup(e, point, categoryData, true);
-                stopPropagation(e); //prevent map click event
-            }).on('mouseover', (e) => {
-                e.target.setRadius(self.markerRadius() * 2);
-                e.target.bringToFront();
-                this.showMarkerPopup(e, point, categoryData);
-            }).on('mouseout', (e) => {
-                e.target.setRadius(self.markerRadius());
-                this.hideMarkerPopup();
-            });
-            layer.addLayer(marker);
-        })
+        return marker;
+    }
+
+    validateCoordinates(lat, lon) {
+        const latRgx = /^(-?[1-8]?\d(?:\.\d{1,18})?|90(?:\.0{1,18})?)$/;
+        const lonRgx = /^(-?(?:1[0-7]|[1-9])?\d(?:\.\d{1,18})?|180(?:\.0{1,18})?)$/;
+
+        const validLat = latRgx.test(lat);
+        const validLon = lonRgx.test(lon);
+        if (validLat && validLon) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    generateMarkerHtml(color) {
+        let html = `<svg xmlns="http://www.w3.org/2000/svg" width="21" height="33" viewBox="0 0 21 33" fill="none">
+                        <g opacity="0.5" filter="url(#filter0_f)">
+                            <ellipse cx="10.5" cy="29.5" rx="5.5" ry="0.5" fill="black"/>
+                        </g>
+                        <path d="M21 10.5C21 16.299 16.299 21 10.5 21C4.70101 21 0 16.299 0 10.5C0 4.70101 4.70101 0 10.5 0C16.299 0 21 4.70101 21 10.5Z" fill="white"/>
+                        <path d="M10.5 16.9991L16.4999 18.9999L10.5 28.9988L4.50012 18.9999L10.5 16.9991Z" fill="white"/>
+                        <circle cx="10.5" cy="10.5" r="8.5" fill="${color}"/>
+                        <defs>
+                            <filter id="filter0_f" x="2" y="26" width="17" height="7" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                <feGaussianBlur stdDeviation="1.5" result="effect1_foregroundBlur"/>
+                            </filter>
+                        </defs>
+                    </svg>`;
+
+        return html;
     }
 
     showMarkerPopup = (e, point, categoryData, isClicked = false) => {
@@ -247,11 +368,6 @@ export class PointData extends Component {
         $('a.leaflet-popup-close-button')[0].click()
     }
 
-    hideMarkerPopup = () => {
-        this.map.closePopup();
-        this.map.map_variables.popup = null;
-    }
-
     createPopupContent = (point, visibleAttributes) => {
         let item = tooltipItem.cloneNode(true);
 
@@ -266,7 +382,7 @@ export class PointData extends Component {
 
         $('.' + tooltipItemsClsName, item).html('');
 
-        if (typeof visibleAttributes === 'undefined'){
+        if (typeof visibleAttributes === 'undefined') {
             visibleAttributes = [];
         }
 
@@ -285,7 +401,7 @@ export class PointData extends Component {
 
     showFacilityModal = (point) => {
         $('.facility-info__title').text(point.name);
-        $('.facility-info__print').off('click').on('click',() => {
+        $('.facility-info__print').off('click').on('click', () => {
             window.print();
         });
         this.appendPointData(point, facilityItem, facilityRowItem, facilityItemsClsName, 'facility-info__item_label', 'facility-info__item_value');
@@ -320,6 +436,10 @@ export class PointData extends Component {
     }
 
     onMapZoomed(map) {
+        if (this.enableClustering) {
+            return;
+        }
+
         const radius = this.markerRadius();
         Object.values(this.categoryLayers).forEach(layer => {
             layer.eachLayer(point => {

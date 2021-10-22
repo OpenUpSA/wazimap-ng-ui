@@ -6,10 +6,11 @@ import {
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
 import profile from "../tutorial/profile.json";
+import profiles from "./profiles.json";
 import all_details from "../tutorial/all_details.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(all_details, profile, null, null);
+    setupInterceptions(profiles, all_details, profile, null, null);
     gotoHomepage();
 })
 

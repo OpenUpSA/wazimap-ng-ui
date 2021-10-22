@@ -1,24 +1,37 @@
 import {Component} from "../utils";
+import {ConfirmationModal} from "../ui_components/confirmation_modal";
 
 let selectElement = $('.map-geo-select')[0];
 let selectedOption = null;
 let optionWrapper = null;
 let optionItem = null;
-let BOUNDARY_MODAL_COOKIE_NAME = 'boundary_selection';
 
 export class BoundaryTypeBox extends Component {
     constructor(parent, preferredChildren) {
         super(parent);
 
         this.preferredChildren = preferredChildren;
-
-        this.prepareDomElements();
+        this.confirmationModal = new ConfirmationModal(this, ConfirmationModal.COOKIE_NAMES.BOUNDARY_TYPE_SELECTION);
+        this._activeVersion = null;
     }
 
-    prepareDomElements = () => {
-        $('.warning-modal .button-wrapper a').click(() => {
-            $('.warning-modal').addClass('hidden');
-        });
+    get activeVersion() {
+        return this._activeVersion;
+    }
+
+    set activeVersion(value) {
+        this._activeVersion = value;
+    }
+
+    activeVersionUpdated = (activeVersion) => {
+        this.activeVersion = activeVersion;
+
+        let text = $(selectedOption).find('.dropdown-menu__selected-item .truncate').text();
+        let arr = text.split('/');
+        let childType = arr.length > 1 ? arr[1].trim() : '';
+        const selectedText = arr.length > 1 ? `${activeVersion.model.name} / ${childType}` : activeVersion.model.name;
+
+        this.setSelectedOption(selectedText);
     }
 
     setVisibilityOfDropdown = (boundaryTypes) => {
@@ -29,20 +42,43 @@ export class BoundaryTypeBox extends Component {
         }
     }
 
-    populateBoundaryOptions = (children, currentLevel) => {
+    populateBoundaryOptions = (children, currentLevel, versions) => {
         if (typeof this.preferredChildren === 'undefined') {
             return;
         }
+        let existingVersions = [...versions].filter((v) => {
+            return v.exists
+        });
 
         let boundaryTypes = Object.keys(children);
+        let options = this.getOptions(boundaryTypes, existingVersions);
 
-        if (typeof this.preferredChildren[currentLevel] !== 'undefined') {
-            const availableLevels = this.preferredChildren[currentLevel].filter(level => children[level] != undefined)
+        if (typeof this.preferredChildren[currentLevel] !== 'undefined' || (boundaryTypes.length === 0 && existingVersions.length > 0)) {
+            //(boundaryTypes.length === 0 && existingVersions.length > 0) -> there are no children but there are multiple versions
+            const availableLevels = this.preferredChildren[currentLevel] !== undefined ? this.preferredChildren[currentLevel].filter(level => children[level] !== undefined) : [];
+            const selectedOption = availableLevels.length > 0 ? `${this.activeVersion.model.name} / ${availableLevels[0]}` : this.activeVersion.model.name;
 
             this.setElements();
-            this.setSelectedOption(availableLevels[0]);
-            this.populateOptions(boundaryTypes, currentLevel);
+            this.setSelectedOption(selectedOption);
+            this.populateOptions(options, currentLevel);
         }
+    }
+
+    getOptions = (boundaryTypes, versions) => {
+        let options = [];
+        const boundaryTypeCounts = boundaryTypes.length;
+
+        versions.forEach((v) => {
+            if (boundaryTypeCounts > 0) {
+                boundaryTypes.forEach((bt) => {
+                    options.push(`${v.model.name} / ${bt}`);
+                })
+            } else {
+                options.push(v.model.name);
+            }
+        })
+
+        return options;
     }
 
     setElements = () => {
@@ -63,7 +99,7 @@ export class BoundaryTypeBox extends Component {
             $(item).removeClass('selected');
             $('.truncate', item).text(bt);
             $(item).on('click', () => {
-                this.askForConfirmation()
+                this.confirmationModal.askForConfirmation()
                     .then((payload) => {
                         if (payload.confirmed) {
                             this.boundaryTypeSelected(bt, currentLevel);
@@ -77,79 +113,16 @@ export class BoundaryTypeBox extends Component {
         this.setVisibilityOfDropdown(boundaryTypes);
     }
 
-    askForConfirmation = () => {
-        let alreadyConfirmed = this.checkIfAlreadyConfirmed();
-        let payload = {
-            confirmed: false
-        }
-
-        if (alreadyConfirmed) {
-            return new Promise(function (resolve) {
-                payload.confirmed = true;
-                resolve(payload);
-            })
-        } else {
-            let rememberChoice = this.rememberChoice;
-            $('.warning-modal').removeClass('hidden');
-
-            return new Promise(function (resolve) {
-                $('.warning-modal .button-wrapper a[id="warning-proceed"]').click(() => {
-                    rememberChoice();
-                    payload.confirmed = true;
-                    resolve(payload);
-                });
-                $('.warning-modal .button-wrapper a:not(#warning-proceed)').click(() => {
-                    resolve(payload);
-                });
-            })
-        }
-    }
-
     boundaryTypeSelected = (type, currentLevel) => {
         this.setSelectedOption(type);
 
+        let arr = type.split('/');
+
         let payload = {
-            selected_type: type,
+            selected_version_name: arr[0].trim(),
+            selected_type: arr.length > 1 ? arr[1].trim() : null,   //null = no children geo
             current_level: currentLevel
         }
         this.triggerEvent("boundary_types.option.selected", payload);
-    }
-
-    checkIfAlreadyConfirmed = () => {
-        return this.readCookie(BOUNDARY_MODAL_COOKIE_NAME) || false;
-    }
-
-    rememberChoice = () => {
-        let remember = $('input[id="no-show"]').is(':checked');
-        if (remember) {
-            this.createCookie(BOUNDARY_MODAL_COOKIE_NAME, true, 365);
-        }
-    }
-
-    createCookie = (name, value, days) => {
-        let expires;
-        let dayToMs = 24 * 60 * 60 * 1000;
-
-        if (days) {
-            let date = new Date();
-            date.setTime(date.getTime() + (days * dayToMs));
-            expires = "; expires=" + date.toGMTString();
-        } else {
-            expires = "";
-        }
-        document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
-    }
-
-    readCookie = (name) => {
-        let nameEQ = encodeURIComponent(name) + "=";
-        let ca = document.cookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ')
-                c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) === 0)
-                return decodeURIComponent(c.substring(nameEQ.length, c.length));
-        }
-        return null;
     }
 }

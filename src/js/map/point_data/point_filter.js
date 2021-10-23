@@ -54,7 +54,14 @@ export class PointFilter extends Component {
                 } else {
                     let group = groups.filter(g => g.name === d.key)[0];
                     if (group.values.filter(v => v === d.value).length <= 0) {
-                        group.values.push(d.value.trim());
+                        const dVal = d.value;
+                        if (typeof dVal === 'string' || dVal instanceof String) {
+                            if (dVal.trim() !== '') {
+                                group.values.push(dVal.trim());
+                            }
+                        } else {
+                            group.values.push(dVal);
+                        }
                     }
 
                     group.values.sort();

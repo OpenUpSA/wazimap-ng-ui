@@ -32,7 +32,7 @@ let facilityRowItem = null;
 
 let activeMarkers = [];
 
-const POPUP_OFFSET = [20, 0];
+const POPUP_OFFSET = [30, -10];
 
 /**
  * this class creates the point data dialog
@@ -274,7 +274,8 @@ export class PointData extends Component {
             let divIcon = L.divIcon({
                 html: html,
                 className: "leaflet-data-marker",
-                iconSize: L.point(25, 25)
+                iconSize: [25, 25],
+                iconAnchor: [0, 25]
             });
 
             marker = L.marker([point.y, point.x],

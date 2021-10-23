@@ -33,6 +33,7 @@ let facilityRowItem = null;
 let activeMarkers = [];
 
 const POPUP_OFFSET = [30, -10];
+const CIRCLE_MARKER_POPUP_OFFSET = [20, 0];
 
 /**
  * this class creates the point data dialog
@@ -338,7 +339,7 @@ export class PointData extends Component {
         let popup = L.popup({
             autoPan: false,
             autoClose: !isClicked,
-            offset: POPUP_OFFSET,
+            offset: this.enableClustering ? POPUP_OFFSET : CIRCLE_MARKER_POPUP_OFFSET,
             closeButton: isClicked
         })
 

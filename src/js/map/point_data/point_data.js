@@ -192,17 +192,18 @@ export class PointData extends Component {
     filteredUnclusteredPoints(filterResult) {
         let self = this;
         let selectedCategoryIds = [];
-        if (Object.keys(filterResult).length !== 0) {
-            selectedCategoryIds = this.activePoints.map(a => a.category.id);
-            selectedCategoryIds = [...new Set(selectedCategoryIds)];
-        }
+        selectedCategoryIds = this.activePoints.map(a => a.category.id);
+        selectedCategoryIds = [...new Set(selectedCategoryIds)];
 
         selectedCategoryIds.forEach((cId) => {
             let categoryLayer = self.categoryLayers[cId];
 
-            const categoryPoints = filterResult.filter((ap) => {
-                return ap.category.id === cId;
-            })
+            let categoryPoints = [];
+            if (Object.keys(filterResult).length !== 0) {
+                categoryPoints = filterResult.filter((ap) => {
+                    return ap.category.id === cId;
+                })
+            }
 
             const layerAvailable = categoryPoints.length > 0;
             self.map.removeLayer(categoryLayer);
@@ -342,8 +343,7 @@ export class PointData extends Component {
                     color: color,
                     categoryName: point.category.data.name
                 });
-        }
-        else {
+        } else {
             marker = L.circleMarker([point.y, point.x], {
                 color: color,
                 radius: this.markerRadius(),

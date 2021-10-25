@@ -318,11 +318,11 @@ export class PointData extends Component {
                 point: point
             });
         })
-        this.pointFilter.activePoints = this.activePoints;
 
         if (this.enableClustering) {
             this.markers.addLayers(newMarkers);
         }
+        this.pointFilter.activePoints = this.activePoints;
     }
 
     generateMarker(color, point) {

@@ -151,3 +151,11 @@ Then('I click on the close button', () => {
     cy.get('.point-filters__header-close').click();
     cy.get('.point-filters').should('not.be.visible')
 })
+
+Then('I filter by a numerical value',()=>{
+    cy.get('.point-filters__filter-menu:visible').first().click();
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("numerical")`).click();
+
+    cy.get('.point-filters__filter-menu:visible').last().click();
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("14")`).click();
+})

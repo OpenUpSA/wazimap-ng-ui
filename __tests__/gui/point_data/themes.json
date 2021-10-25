@@ -21,7 +21,8 @@
         "configuration": {
           "filterable_fields": [
             "campus",
-            "institution type"
+            "institution type",
+            "numerical"
           ]
         }
       },

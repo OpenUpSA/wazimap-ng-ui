@@ -1,4 +1,4 @@
-import {Component} from "../../utils";
+import {Component, trimValue} from "../../utils";
 import {FilterController} from "./filter_controller";
 import {DataFilterModel} from "../../models/data_filter_model";
 
@@ -53,15 +53,9 @@ export class PointFilter extends Component {
                     }
                 } else {
                     let group = groups.filter(g => g.name === d.key)[0];
-                    if (group.values.filter(v => v === d.value).length <= 0) {
-                        const dVal = d.value;
-                        if (typeof dVal === 'string' || dVal instanceof String) {
-                            if (dVal.trim() !== '') {
-                                group.values.push(dVal.trim());
-                            }
-                        } else {
-                            group.values.push(dVal);
-                        }
+                    let dVal = trimValue(d.value);
+                    if (dVal !== '' && group.values.filter(v => trimValue(v) === dVal).length <= 0) {
+                        group.values.push(dVal);
                     }
 
                     group.values.sort();

@@ -124,6 +124,10 @@
           {
             "key": "website",
             "value": "https://www.ufh.ac.za/"
+          },
+          {
+            "key": "numerical",
+            "value": 14
           }
         ],
         "name": "University of Fort Hare",
@@ -186,6 +190,10 @@
           {
             "key": "campus",
             "value": "    "
+          },
+          {
+            "key": "numerical",
+            "value": 22
           }
         ],
         "name": "Eastern Cape CETC",

@@ -1,4 +1,4 @@
-import {Observable} from "../utils";
+import {Observable, trimValue} from "../utils";
 import {DataFilter} from "./data_filter";
 
 /**
@@ -248,8 +248,8 @@ export class DataFilterModel extends Observable {
             let add = true;
 
             for (let key in this.selectedSubIndicators) {
-                const value = this.selectedSubIndicators[key].trim();
-                if (ap.point.data.filter(x => x.key === key && x.value.trim() === value).length <= 0) {
+                const value = trimValue(this.selectedSubIndicators[key]);
+                if (ap.point.data.filter(x => x.key === key && trimValue(x.value) === value).length <= 0) {
                     add = false;
                 }
             }

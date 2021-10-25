@@ -194,7 +194,7 @@ export class DataFilterModel extends Observable {
         }
     }
 
-    isPreviouslyFiltered(indicatorName){
+    isPreviouslyFiltered(indicatorName) {
         let filtered = false;
         this.selectedFilters.forEach((sf) => {
             if (sf.name === indicatorName) {
@@ -246,8 +246,10 @@ export class DataFilterModel extends Observable {
 
         activePoints.forEach((ap) => {
             let add = true;
+
             for (let key in this.selectedSubIndicators) {
-                if (ap.point.data.filter(x => x.key === key && x.value === this.selectedSubIndicators[key]).length <= 0) {
+                const value = this.selectedSubIndicators[key].trim();
+                if (ap.point.data.filter(x => x.key === key && x.value.trim() === value).length <= 0) {
                     add = false;
                 }
             }

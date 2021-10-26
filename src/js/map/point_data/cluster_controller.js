@@ -2,7 +2,7 @@ import {Component, setPopupStyle, ThemeStyle} from '../../utils';
 
 const POPUP_OFFSET = [20, 0];
 
-export class Cluster extends Component {
+export class ClusterController extends Component {
     constructor(parent, map, config) {
         super(parent);
 
@@ -15,7 +15,8 @@ export class Cluster extends Component {
 
     initClustering() {
         this.markers = L.markerClusterGroup({
-            iconCreateFunction: (cluster) => this.createClusterIcon(cluster)
+            iconCreateFunction: (cluster) => this.createClusterIcon(cluster),
+            clusterPane: 'clusters'
         }).on('clustermouseover', (e) => {
             this.showPopup(e.layer);
         });

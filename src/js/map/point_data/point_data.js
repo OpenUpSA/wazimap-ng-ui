@@ -2,7 +2,7 @@ import {Component, ThemeStyle, hasElements, checkIterate, setPopupStyle} from '.
 import {getJSON} from '../../api';
 import {count} from "d3-array";
 import {stopPropagation} from "leaflet/src/dom/DomEvent";
-import {Cluster} from './cluster'
+import {ClusterController} from './cluster_controller'
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
@@ -52,10 +52,13 @@ export class PointData extends Component {
         this.activePoints = [];  //the visible points on the map
         this.markerLayer = this.genLayer();
         this.categoryLayers = {};
-        this.cluster = new Cluster(this, this.map, config);
 
-        this.enableClustering = this.cluster.isClusteringEnabled();
-        this.markers = this.cluster.markers;
+        this.clusterController = new ClusterController(this, this.map, config);
+        this.enableClustering = this.clusterController.isClusteringEnabled();
+        this.clusterLayer = this.genLayer();
+        this.clusterController.initClustering();
+
+        this.markers = this.clusterController.markers;
 
         if (this.enableClustering) {
             this.map.addLayer(this.markers);
@@ -86,7 +89,20 @@ export class PointData extends Component {
     }
 
     genLayer() {
-        return L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
+        if (this.enableClustering) {
+            const CLUSTER_PANE = 'clusters';
+            const CLUSTER_Z_INDEX = 670;    //above the geo labels - below the tooltip layer
+
+            if (!this.map.hasLayer(this.clusterLayer)) {
+                this.map.createPane(CLUSTER_PANE);
+                this.map.getPane(CLUSTER_PANE).style.zIndex = CLUSTER_Z_INDEX;
+                this.map.getPane(CLUSTER_PANE).style.pointerEvents = 'none';
+            }
+
+            return L.featureGroup([], {pane: CLUSTER_PANE}).addTo(this.map);
+        } else {
+            return L.featureGroup([], {pane: 'markerPane'}).addTo(this.map)
+        }
     }
 
     showLoading(category) {
@@ -341,6 +357,7 @@ export class PointData extends Component {
                 {
                     icon: divIcon,
                     color: color,
+                    pane: 'clusters',
                     categoryName: point.category.data.name
                 });
         } else {

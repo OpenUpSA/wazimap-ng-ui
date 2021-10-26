@@ -1,4 +1,4 @@
-import {Component, setPopupStyle, ThemeStyle} from '../../utils';
+import {Component, setPopupStyle} from '../../utils';
 
 const POPUP_OFFSET = [20, 0];
 
@@ -9,8 +9,6 @@ export class ClusterController extends Component {
         this.map = map;
         this.tooltipItem = $('.facility-tooltip.is--cluster')[0].cloneNode(true);
         this.config = config;
-
-        this.initClustering();
     }
 
     initClustering() {

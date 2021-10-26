@@ -53,7 +53,7 @@ export class Category extends Component {
     }
 
     get metadata() {
-        if (this.data.metadata == undefined) {
+        if (this.data.metadata === undefined) {
             return {
                 source: '',
                 description: '',
@@ -65,6 +65,16 @@ export class Category extends Component {
         } else {
             return this.data.metadata;
         }
+    }
+
+    get filterableFields() {
+        let fields = [];
+
+        if (this.data.configuration !== undefined && this.data.configuration.filterable_fields !== undefined) {
+            fields = this.data.configuration.filterable_fields;
+        }
+
+        return fields;
     }
 
 

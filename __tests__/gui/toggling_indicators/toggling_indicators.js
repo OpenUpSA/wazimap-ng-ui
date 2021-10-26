@@ -1,10 +1,11 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {gotoHomepage, setupInterceptions, waitUntilGeographyIsLoaded} from "../common_cy_functions/general";
 import all_details from "../toggling_indicators/all_details.json";
+import profiles from "./profiles.json";
 import profile from '../toggling_indicators/profile.json';
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(all_details, profile, null, null);
+    setupInterceptions(profiles, all_details, profile, null, null);
     gotoHomepage();
 })
 

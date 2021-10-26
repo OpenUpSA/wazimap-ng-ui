@@ -32,7 +32,7 @@ function subindicatorsInIndicator(indicator) {
 
 export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     parentContainer = $(".data-mapper-content__list");
-    categoryTemplate = $(".data-category")[0].cloneNode(true);
+    categoryTemplate = $(".styles .data-category")[0].cloneNode(true);
     subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
     indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
     indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
@@ -70,7 +70,8 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
                                 indicators: indicators,
                                 parents: parents,
                                 choropleth_method: indicatorDetail.choropleth_method,
-                                indicatorId: indicatorDetail.id
+                                indicatorId: indicatorDetail.id,
+                                versionData:indicatorDetail.version_data
                             })
                     });
                 }

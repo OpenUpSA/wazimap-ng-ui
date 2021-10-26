@@ -33,6 +33,9 @@ export class MapDownload extends Component {
         $(element).append(clonedLegend);
         $(element).prepend(title);
 
+        $(element).css('justify-content', 'center');
+        $(element).css('display', 'flex');
+
         const options = {
             useCORS: true,
             onclone: (clonedElement) => {
@@ -47,6 +50,8 @@ export class MapDownload extends Component {
         setTimeout(() => {
             html2canvas(element, options).then(function (canvas) {
                 $(element).find(title).remove();
+                $(element).css('justify-content', 'unset');
+                $(element).css('display', 'block');
                 $(clonedLegend).remove();
                 saveAs(canvas.toDataURL(), 'map.png');
                 self.triggerEvent('mapdownload.completed');

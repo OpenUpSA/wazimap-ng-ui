@@ -241,7 +241,6 @@ export class FilterRow extends Component {
         this.model.currentSubindicatorValue = selectedItem
     }
 
-
     updateIndicatorDropdowns(model, currentIndex = 0) {
         this.indicatorDropdown.updateItems(model.indicatorValues, currentIndex);
     }

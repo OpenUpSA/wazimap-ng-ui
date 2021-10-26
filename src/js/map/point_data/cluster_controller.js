@@ -14,7 +14,6 @@ export class ClusterController extends Component {
     initClustering() {
         this.markers = L.markerClusterGroup({
             iconCreateFunction: (cluster) => this.createClusterIcon(cluster),
-            chunkedLoading: true,
             clusterPane: 'clusters'
         }).on('clustermouseover', (e) => {
             this.showPopup(e.layer);

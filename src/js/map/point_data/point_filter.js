@@ -44,16 +44,16 @@ export class PointFilter extends Component {
         this.activePoints.forEach((ap) => {
             const filterableFields = ap.category.filterableFields;
             ap.point.data.forEach((d) => {
+                const dVal = trimValue(d.value);
                 if (groups.filter(g => g.name === d.key).length <= 0) {
-                    if (filterableFields.indexOf(d.key) >= 0) {
+                    if (dVal !== '' && filterableFields.indexOf(d.key) >= 0) {
                         groups.push({
                             name: d.key,
-                            values: [d.value]
+                            values: [dVal]
                         });
                     }
                 } else {
                     let group = groups.filter(g => g.name === d.key)[0];
-                    let dVal = trimValue(d.value);
                     if (dVal !== '' && group.values.filter(v => trimValue(v) === dVal).length <= 0) {
                         group.values.push(dVal);
                     }

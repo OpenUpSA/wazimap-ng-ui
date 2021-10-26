@@ -50,7 +50,6 @@ export class PointData extends Component {
         this.googleMapsButton = null;
 
         this.activePoints = [];  //the visible points on the map
-        this.markerLayer = this.genLayer();
         this.categoryLayers = {};
 
         this.clusterController = new ClusterController(this, this.map, config);

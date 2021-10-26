@@ -1,6 +1,6 @@
-import {FilterRow} from "../../ui_components/filter_row";
+import {FilterRow} from "./filter_row";
 import {Component, Observable} from "../../utils";
-import {AddFilterButton} from "../../ui_components/add_filter_button";
+import {AddFilterButton} from "../mapchip/add_filter_button";
 import {DataFilterModel} from "../../models/data_filter_model";
 
 class FilterControllerModel extends Observable {

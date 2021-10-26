@@ -157,9 +157,15 @@ export default class Controller extends Component {
             return;
         }
 
-        let indicators = this.state.profile.profile
-            .profileData[this.state.subindicator.parents.category]
-            .subcategories[this.state.subindicator.parents.subcategory]
+        let profileData = this.state.profile.profile
+            .profileData[this.state.subindicator.parents.category];
+
+        if (profileData === undefined) {
+            this.triggerEvent('data_mapper_menu.nodata');
+            return;
+        }
+
+        let indicators = profileData.subcategories[this.state.subindicator.parents.subcategory]
             .indicators;
 
         let selectedIndicator = indicators[this.state.subindicator.parents.indicator];

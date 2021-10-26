@@ -122,28 +122,22 @@ export class PointData extends Component {
         const self = this;
         let layer = this.categoryLayers[category.id];
 
-        if (layer != undefined && !this.enableClustering) {
-            this.map.addLayer(layer);
-            self.showPointLegend(category);
-            this.showDone(category)
-        } else {
-            layer = this.genLayer()
-            this.categoryLayers[category.id] = layer;
+        layer = this.genLayer()
+        this.categoryLayers[category.id] = layer;
 
-            this.triggerEvent('loadingCategoryPoints', category);
+        this.triggerEvent('loadingCategoryPoints', category);
 
-            const data = await this.getAddressPoints(category);
-            const points = {
-                category: category,
-                data: data
-            };
-            self.showPointLegend(category);
-            self.createMarkers(points, layer);
-            self.map.addLayer(layer);
-            self.showDone(category);
+        const data = await this.getAddressPoints(category);
+        const points = {
+            category: category,
+            data: data
+        };
+        self.showPointLegend(category);
+        self.createMarkers(points, layer);
+        self.map.addLayer(layer);
+        self.showDone(category);
 
-            self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
-        }
+        self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
 
         self.pointFilter.isVisible = true;
     }

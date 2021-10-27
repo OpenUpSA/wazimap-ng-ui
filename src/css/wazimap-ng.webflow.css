@@ -2861,6 +2861,11 @@ label {
 }
 
 .point-mapper__h2_loading {
+  position: absolute;
+  left: auto;
+  top: auto;
+  right: 10px;
+  bottom: auto;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -2872,6 +2877,10 @@ label {
   -webkit-justify-content: flex-end;
   -ms-flex-pack: end;
   justify-content: flex-end;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
   opacity: 0.4;
 }
 
@@ -2884,6 +2893,7 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  overflow: hidden;
   margin-top: 6px;
   margin-bottom: 6px;
   -webkit-box-orient: vertical;
@@ -2905,7 +2915,7 @@ label {
   display: flex;
   height: 38px;
   margin-bottom: 4px;
-  padding-right: 10px;
+  padding-right: 36px;
   padding-left: 10px;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
@@ -3053,6 +3063,7 @@ label {
   display: -ms-flexbox;
   display: flex;
   overflow: hidden;
+  max-width: 293px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -3084,17 +3095,30 @@ label {
   display: flex;
   overflow: hidden;
   width: 100%;
-  max-width: 178px;
+  margin-right: 0.5em;
+  margin-bottom: 0px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
   -webkit-box-align: center;
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
   color: #333;
   font-size: 0.9em;
+  line-height: 1.2;
   font-weight: 500;
 }
 
 .point-mapper__h2_load-complete {
+  position: absolute;
+  left: auto;
+  top: auto;
+  right: 10px;
+  bottom: auto;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3118,7 +3142,7 @@ label {
 }
 
 .point-mapper__h2_name {
-  line-height: 100%;
+  line-height: 1.1em;
 }
 
 .point-mapper__h1_checkbox {
@@ -3148,9 +3172,10 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  height: 36px;
+  width: 100%;
+  min-height: 36px;
   margin-bottom: 8px;
-  padding-right: 74px;
+  padding-right: 36px;
   padding-left: 8px;
   -webkit-box-align: center;
   -webkit-align-items: center;
@@ -3316,6 +3341,10 @@ label {
   text-decoration: none;
 }
 
+.point-mapper__h1_trigger.is--toggle-all {
+  padding-right: 72px;
+}
+
 .custom-checkbox {
   display: -webkit-box;
   display: -webkit-flex;
@@ -3379,6 +3408,10 @@ label {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
 }
 
 .point-mapper-content__list {
@@ -6729,16 +6762,15 @@ label {
 .point-mapper__h1_trigger-arrow {
   position: absolute;
   left: auto;
-  top: 0%;
+  top: auto;
   right: 0.3em;
-  bottom: 0%;
+  bottom: auto;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   width: 36px;
   height: 36px;
-  margin-left: 36px;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
@@ -6747,6 +6779,10 @@ label {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
   color: #333;
 }
 
@@ -8245,6 +8281,7 @@ label {
   display: none;
   margin-right: 0.5em;
   margin-bottom: 0px;
+  margin-left: 0.5em;
   padding-right: 0.5em;
   padding-left: 0.5em;
   -webkit-align-self: center;
@@ -8514,6 +8551,10 @@ label {
   -ms-flex-align: start;
   align-items: flex-start;
   border-radius: 4px;
+}
+
+.documentation__block.is--full {
+  padding-bottom: 2em;
 }
 
 .documentation__h3 {
@@ -10513,6 +10554,28 @@ label {
 }
 
 #w-node-a1fbc524-d46c-78fc-46af-4011e6b49689-3195fb1b {
+  -ms-grid-row: span 1;
+  grid-row-start: span 1;
+  -ms-grid-row-span: 1;
+  grid-row-end: span 1;
+  -ms-grid-column: span 2;
+  grid-column-start: span 2;
+  -ms-grid-column-span: 2;
+  grid-column-end: span 2;
+}
+
+#w-node-de90d542-cc0b-b32b-2c3c-57eeb685ffd2-3195fb1b {
+  -ms-grid-row: span 1;
+  grid-row-start: span 1;
+  -ms-grid-row-span: 1;
+  grid-row-end: span 1;
+  -ms-grid-column: span 2;
+  grid-column-start: span 2;
+  -ms-grid-column-span: 2;
+  grid-column-end: span 2;
+}
+
+#w-node-_5f4fd3a3-1c16-aa44-33f5-905265a58174-3195fb1b {
   -ms-grid-row: span 1;
   grid-row-start: span 1;
   -ms-grid-row-span: 1;

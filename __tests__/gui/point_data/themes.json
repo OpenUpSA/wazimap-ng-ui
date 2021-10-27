@@ -5,7 +5,7 @@
       {
         "id": 379,
         "name": "TVET colleges",
-        "description": "Modi non dolorem sed velit ut amet. Amet ut porro voluptatem sed. Velit modi modi quaerat adipisci quaerat eius modi. Dolore tempora sed consectetur porro voluptatem tempora adipisci. Sed dolor est magnam etincidunt modi quiquia magnam.",
+        "description": "Description field for id 379",
         "theme": {
           "id": 53,
           "name": "Higher Education",
@@ -13,7 +13,48 @@
         },
         "metadata": {
           "source": "",
-          "description": "Voluptatem dolorem eius voluptatem dolore dolorem numquam numquam. Dolor est ut non. Est porro voluptatem dolore. Numquam quaerat magnam dolor. Quaerat tempora dolore quisquam.",
+          "description": "Metadata description field for id 379",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": [],
+        "configuration": {
+          "filterable_fields": [
+            "campus",
+            "institution type",
+            "numerical"
+          ]
+        }
+      },
+      {
+        "id": 380,
+        "name": "Universities of technology",
+        "description": "Description field for id 380",
+        "theme": {
+          "id": 53,
+          "name": "Higher Education",
+          "icon": "account_balance"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 380",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": []
+      },
+      {
+        "id": 382,
+        "name": "Universities",
+        "description": "Description field for id 382",
+        "theme": {
+          "id": 53,
+          "name": "Higher Education",
+          "icon": "account_balance"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 382",
           "licence": null
         },
         "color": "",
@@ -33,7 +74,7 @@
       {
         "id": 394,
         "name": "Additional DEL facilities (unverified)",
-        "description": "Voluptatem quiquia quiquia est voluptatem quisquam quiquia. Quaerat etincidunt porro sed. Non modi sed quisquam est ut non ut. Non magnam neque voluptatem consectetur ipsum. Dolor numquam non quiquia velit dolorem sed quiquia. Sed etincidunt numquam aliquam dolor. Amet quiquia etincidunt adipisci. Magnam adipisci aliquam numquam ipsum eius consectetur.",
+        "description": "Description field for id 394",
         "theme": {
           "id": 7,
           "name": "Labour",
@@ -41,7 +82,46 @@
         },
         "metadata": {
           "source": "",
-          "description": "Neque amet non quiquia dolorem aliquam. Labore dolor dolor labore. Dolor sit etincidunt sed neque magnam non porro. Quaerat modi voluptatem etincidunt. Eius dolore tempora dolorem etincidunt modi porro dolore. Quaerat dolorem sed quiquia non aliquam. Etincidunt dolor amet ipsum quiquia modi porro. Porro dolorem sit magnam. Neque consectetur neque sit sed sit magnam velit.",
+          "description": "Metadata description field for id 394",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": [],
+        "configuration": {
+          "filterable_fields": [
+            "website"
+          ]
+        }
+      },
+      {
+        "id": 384,
+        "name": "Thusong centres (unverified)",
+        "description": "Description field for id 384",
+        "theme": {
+          "id": 7,
+          "name": "Labour",
+          "icon": "work"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 384",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": []
+      },
+      {
+        "id": 566,
+        "name": "Labour centres",
+        "description": "Description field for id 566",
+        "theme": {
+          "id": 7,
+          "name": "Labour",
+          "icon": "work"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 566",
           "licence": null
         },
         "color": "",
@@ -54,5 +134,5 @@
     "icon": "work",
     "order": 14,
     "profile": 8
-  },
+  }
 ]

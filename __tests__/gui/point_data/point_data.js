@@ -69,9 +69,9 @@ When('I check if the cluster is created correctly', () => {
         circleVal: '50 100'
     }]
 
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg text', {timeout: 20000}).should('have.text', 2);
+    cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg text', {timeout: 20000}).should('have.text', 2);
 
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg circle[fill=none]').each(($el, index) => {
+    cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg circle[fill=none]').each(($el, index) => {
         expect($el.attr('stroke')).to.contain(categories[index].color);
         expect($el.attr('stroke-dasharray')).equal(categories[index].circleVal);
     })

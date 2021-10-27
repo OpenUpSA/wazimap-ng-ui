@@ -22,7 +22,12 @@ export class DataFilterModel extends Observable {
         filtersChanged: 'DataFilterModel.filtersChanged'
     }
 
-    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData) {
+    static FILTER_TYPE = {
+        indicators: 'indicators',
+        points: 'points'
+    }
+
+    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData, filterType = DataFilterModel.FILTER_TYPE.indicators) {
         super()
 
         this._groups = groups;

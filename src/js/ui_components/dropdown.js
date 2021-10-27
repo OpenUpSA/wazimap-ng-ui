@@ -1,4 +1,4 @@
-import {Component, Observable} from "../../utils";
+import {Component, Observable} from "../utils";
 
 
 export class DropdownModel extends Observable {

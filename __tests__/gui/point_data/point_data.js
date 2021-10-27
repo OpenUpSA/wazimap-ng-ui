@@ -40,7 +40,7 @@ Then('I click on TVET colleges category', () => {
 })
 
 When(/^I check if the marker color is rgb\((\d+), (\d+), (\d+)\)$/, (color1, color2, color3) => {
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated svg circle').then(($el) => {
+    cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg circle').then(($el) => {
         const fill = $el.attr('fill');
         expect(fill).equal(`rgb(${color1}, ${color2}, ${color3})`);
     })

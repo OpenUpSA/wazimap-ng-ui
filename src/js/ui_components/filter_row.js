@@ -1,5 +1,5 @@
 import {Dropdown, DropdownModel} from "./dropdown";
-import {Component, Observable} from "../utils";
+import {Component, Observable} from "../../utils";
 
 /**
  *

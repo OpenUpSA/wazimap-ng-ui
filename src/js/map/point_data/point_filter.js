@@ -41,27 +41,34 @@ export class PointFilter extends Component {
 
     get groups() {
         let groups = [];
-        this.activePoints.forEach((ap) => {
-            const filterableFields = ap.category.filterableFields;
-            ap.point.data.forEach((d) => {
-                const dVal = trimValue(d.value);
-                if (groups.filter(g => g.name === d.key).length <= 0) {
-                    if (dVal !== '' && filterableFields.indexOf(d.key) >= 0) {
-                        groups.push({
-                            name: d.key,
-                            values: [dVal]
-                        });
-                    }
-                } else {
-                    let group = groups.filter(g => g.name === d.key)[0];
-                    if (dVal !== '' && group.values.filter(v => trimValue(v) === dVal).length <= 0) {
-                        group.values.push(dVal);
-                    }
+        let categories =  [...new Set(this.activePoints.map(x => x.category))];
+        let isFilterable = categories.some(x => x.filterableFields.length > 0);
 
-                    group.values.sort();
+        if (isFilterable){
+            this.activePoints.forEach((ap) => {
+                const filterableFields = ap.category.filterableFields;
+                if (filterableFields.length > 0){
+                    ap.point.data.forEach((d) => {
+                        const dVal = trimValue(d.value);
+                        if (groups.filter(g => g.name === d.key).length <= 0) {
+                            if (dVal !== '' && filterableFields.indexOf(d.key) >= 0) {
+                                groups.push({
+                                    name: d.key,
+                                    values: [dVal]
+                                });
+                            }
+                        } else {
+                            let group = groups.filter(g => g.name === d.key)[0];
+                            if (dVal !== '' && group.values.filter(v => trimValue(v) === dVal).length <= 0) {
+                                group.values.push(dVal);
+                            }
+
+                            group.values.sort();
+                        }
+                    })
                 }
             })
-        })
+        }
 
         return groups
     }

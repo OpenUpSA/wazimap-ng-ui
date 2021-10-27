@@ -46,7 +46,7 @@ export class FilterController extends Component {
     }
 
     get container() {
-        return $($('.point-filters')[0]).find('.point-filters_content');
+        return $('.point-filters:first').find('.point-filters_content');
     }
 
     get addFilterButton() {

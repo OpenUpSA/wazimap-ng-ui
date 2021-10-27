@@ -1,6 +1,6 @@
 export class ErrorNotifier {
-  registerErrorHandler() {
-    let self = this;
+    registerErrorHandler() {
+        let self = this;
         window.addEventListener("error", function (errorEvent) {
             self.showNotification();
         });

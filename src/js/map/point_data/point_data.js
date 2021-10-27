@@ -6,6 +6,7 @@ import {ClusterController} from './cluster_controller'
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import {PointFilter} from "./point_filter";
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
@@ -62,7 +63,13 @@ export class PointData extends Component {
             this.map.addLayer(this.markers);
         }
 
+        this.initFilter();
         this.prepareDomElements();
+    }
+
+    initFilter() {
+        this.pointFilter = new PointFilter(this);
+        this.pointFilter.filterCallback = (filteredData, selectedSubIndicators) => this.filterPoints(filteredData, selectedSubIndicators);
     }
 
     prepareDomElements = () => {
@@ -115,37 +122,38 @@ export class PointData extends Component {
         const self = this;
         let layer = this.categoryLayers[category.id];
 
-        if (layer != undefined && !this.enableClustering) {
-            this.map.addLayer(layer);
-            self.showPointLegend(category);
-            this.showDone(category)
-        } else {
-            layer = this.genLayer()
-            this.categoryLayers[category.id] = layer;
+        layer = this.genLayer()
+        this.categoryLayers[category.id] = layer;
 
-            this.triggerEvent('loadingCategoryPoints', category);
+        this.triggerEvent('loadingCategoryPoints', category);
 
-            const data = await this.getAddressPoints(category);
-            const points = {
-                category: category,
-                data: data
-            };
-            self.showPointLegend(category);
-            self.createMarkers(points, layer);
-            self.map.addLayer(layer);
-            self.showDone(category);
+        const data = await this.getAddressPoints(category);
+        const points = {
+            category: category,
+            data: data
+        };
+        self.showPointLegend(category);
+        self.createMarkers(points, layer);
+        self.map.addLayer(layer);
+        self.showDone(category);
 
-            self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
-        }
+        self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
+
+        self.pointFilter.isVisible = true;
     }
 
     removeCategoryPoints = (category) => {
         if (!this.enableClustering) {
             let layer = this.categoryLayers[category.id];
 
-            if (layer != undefined) {
+            if (layer !== undefined) {
                 this.map.removeLayer(layer);
                 pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+
+                this.activePoints = this.activePoints.filter((ap) => {
+                    return ap.category.id !== category.id
+                })
+                this.pointFilter.activePoints = this.activePoints;
             }
         } else {
             let pointsToRemove = this.activePoints.filter((ap) => {
@@ -158,13 +166,73 @@ export class PointData extends Component {
                 removeMarkers.push(p.marker);
             })
 
+            this.activePoints = this.activePoints.filter((ap) => {
+                return pointsToRemove.indexOf(ap) < 0;
+            })
             this.markers.removeLayers(removeMarkers);
+            this.pointFilter.activePoints = this.activePoints;
             pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
         }
 
-        this.activePoints = this.activePoints.filter((ap) => {
-            return ap.category.id !== category.id
-        });
+        if (pointLegend.find(`.${pointLegendItemClsName}`).length <= 0) {
+            this.pointFilter.isVisible = false;
+        }
+    }
+
+    filterPoints(filterResult, selectedFilter) {
+        if (this.enableClustering) {
+            this.filterClusteredPoints(filterResult);
+        } else {
+            this.filteredUnclusteredPoints(filterResult);
+        }
+    }
+
+    filterClusteredPoints(filterResult) {
+        let markers = [];
+        if (Object.keys(filterResult).length !== 0) {
+            markers = filterResult.map(a => a.marker);
+        }
+
+        this.markers.clearLayers();
+
+        this.markers.addLayers(markers);
+    }
+
+    filteredUnclusteredPoints(filterResult) {
+        let self = this;
+        let selectedCategoryIds = [];
+        selectedCategoryIds = this.activePoints.map(a => a.category.id);
+        selectedCategoryIds = [...new Set(selectedCategoryIds)];
+
+        selectedCategoryIds.forEach((cId) => {
+            let categoryLayer = self.categoryLayers[cId];
+
+            let categoryPoints = [];
+            if (Object.keys(filterResult).length !== 0) {
+                categoryPoints = filterResult.filter((ap) => {
+                    return ap.category.id === cId;
+                })
+            }
+
+            const layerAvailable = categoryPoints.length > 0;
+            self.map.removeLayer(categoryLayer);
+
+            if (categoryLayer !== undefined) {
+                if (layerAvailable) {
+                    self.map.addLayer(categoryLayer);
+                }
+
+                let markers = categoryPoints.map(a => a.marker);
+                categoryLayer.clearLayers();
+                markers.forEach((m) => {
+                    categoryLayer.addLayer(m);
+                })
+            }
+        })
+    }
+
+    unSelectAllCategories() {
+        this.triggerEvent('point_data.all.unselected');
     }
 
     /** end of category functions **/
@@ -206,6 +274,10 @@ export class PointData extends Component {
         $(item).attr('data-id', category.data.id);
         $('.point-legend__remove', item).on('click', () => {
             $(`.point-mapper__h2[data-id=${category.data.id}]`).trigger('click');
+            if ($('.map-point-legend .point-legend').length <= 0) {
+                //all the legend items are removed - remove filters too
+                $('.point-filters__header-close').trigger('click');
+            }
         })
 
         pointLegend.append(item);
@@ -218,51 +290,48 @@ export class PointData extends Component {
         let col = '';
         let newMarkers = [];
         checkIterate(points.data, point => {
-            const isValid = this.validateCoordinates(point.y, point.x)
-            if (isValid) {
-                if (col === '') {
-                    let themeIndex = point.themeIndex;
+            if (col === '') {
+                let themeIndex = point.themeIndex;
 
-                    col = $(`.point-mapper__h1_trigger.theme-${themeIndex}:not(.point-mapper__h1--default-closed)`).css('color');
-                }
-
-                let marker = this.generateMarker(col, point);
-
-                marker.on('click', (e) => {
-                    this.showMarkerPopup(e, point, points.category, true);
-                    stopPropagation(e); //prevent map click event
-                }).on('mouseover', (e) => {
-                    if (!this.enableClustering) {
-                        e.target.setRadius(this.markerRadius() * 2);
-                        e.target.bringToFront();
-                    }
-                    this.showMarkerPopup(e, point, points.category);
-                }).on('mouseout', (e) => {
-                    if (!this.enableClustering) {
-                        e.target.setRadius(this.markerRadius());
-                    }
-                    //hideMarkerPopup() is not needed - autoClose property is sufficient
-                    //hideMarkerPopup() caused a bug with spiderfied markers
-                });
-
-                if (this.enableClustering) {
-                    this.activePoints.push({
-                        marker: marker,
-                        category: points.category
-                    });
-
-                    newMarkers.push(marker);
-                } else {
-                    layer.addLayer(marker);
-                }
-            } else {
-                console.error(`[${point.y}, ${point.x}] is not a valid coordinate : ${point.name}`);
+                col = $(`.point-mapper__h1_trigger.theme-${themeIndex}:not(.point-mapper__h1--default-closed)`).css('color');
             }
+
+            let marker = this.generateMarker(col, point);
+
+            marker.on('click', (e) => {
+                this.showMarkerPopup(e, point, points.category, true);
+                stopPropagation(e); //prevent map click event
+            }).on('mouseover', (e) => {
+                if (!this.enableClustering) {
+                    e.target.setRadius(this.markerRadius() * 2);
+                    e.target.bringToFront();
+                }
+                this.showMarkerPopup(e, point, points.category);
+            }).on('mouseout', (e) => {
+                if (!this.enableClustering) {
+                    e.target.setRadius(this.markerRadius());
+                }
+                //hideMarkerPopup() is not needed - autoClose property is sufficient
+                //hideMarkerPopup() caused a bug with spiderfied markers
+            });
+
+            if (this.enableClustering) {
+                newMarkers.push(marker);
+            } else {
+                layer.addLayer(marker);
+            }
+
+            this.activePoints.push({
+                marker: marker,
+                category: points.category,
+                point: point
+            });
         })
 
         if (this.enableClustering) {
             this.markers.addLayers(newMarkers);
         }
+        this.pointFilter.activePoints = this.activePoints;
     }
 
     generateMarker(color, point) {

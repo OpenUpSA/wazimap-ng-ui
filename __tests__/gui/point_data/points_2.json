@@ -1,42 +1,38 @@
 {
-  "type":"FeatureCollection",
-  "features":[
+  "type": "FeatureCollection",
+  "features": [
     {
-      "id":441633,
-      "type":"Feature",
-      "geometry":{
-        "type":"Point",
-        "coordinates":[
+      "id": 441633,
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           25.093833387362697,
           -28.995409163308832
         ]
       },
-      "properties":{
-        "data":[
+      "properties": {
+        "data": [
           {
-            "key":"campus",
-            "value":"Nongoma"
+            "key": "website",
+            "value": "Nongoma"
           },
           {
-            "key":"phone number",
-            "value":"0358310358"
+            "key": "opening hours",
+            "value": "7.30am - 4pm, Monday to Friday"
           },
           {
-            "key":"email address",
-            "value":"campushead@nongoma.co.za"
+            "key": "services offered",
+            "value": "Career guidance, Assistance with job search, Job application assistance, Help with writing a CV, Job interview preparation, Job matching, Work-based training, Skills development and training based at your facility, Psycho-social support, Mental health care"
           },
           {
-            "key":"institution type",
-            "value":"TVET"
-          },
-          {
-            "key":"physical address",
-            "value":"Nongoma Main Road Nongoma"
+            "key": "other services and information",
+            "value": "Registration on the  ESSA database"
           }
         ],
-        "name":"Mthashana FET College (A)",
-        "url":null,
-        "image":null
+        "name": "Mthashana FET College (A)",
+        "url": null,
+        "image": null
       }
     }
   ]

@@ -435,3 +435,12 @@ export function assertNTemplates(n, $templateSelection) {
     `Should be exactly ${n} template(s) but found ${$templateSelection.length}`
   );
 }
+
+export function trimValue(val){
+    let result = val;
+    if (typeof val === 'string' || val instanceof String){
+        result = val.trim();
+    }
+
+    return result;
+}

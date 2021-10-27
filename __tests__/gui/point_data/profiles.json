@@ -12,9 +12,9 @@
             "id":1,
             "name":"2011 SA Boundaries",
             "root_geography":{
-               "name":"Version Test",
-               "code":"VT",
-               "level":"province",
+               "name":"South Africa",
+               "code":"ZA",
+               "level":"country",
                "version":"2011 Boundaries"
             },
             "description":""

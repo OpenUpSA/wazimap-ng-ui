@@ -43,3 +43,31 @@ Then('I check if everything is zero', () => {
         expect($div.text()).not.equal('0.0%');
     })
 })
+
+When('I navigate to EC and check if the loading state is displayed correctly', ()=>{
+    //intercepting the request and testing the loading state
+    //for more info : https://blog.dai.codes/cypress-loading-state-tests/
+    let sendResponse;
+    const trigger = new Promise((resolve) => {
+        sendResponse = resolve;
+    });
+
+    cy.intercept('/api/v1/all_details/profile/8/geography/EC/?version=test&format=json', (request) => {
+        return trigger.then(() => {
+            request.reply({
+                statusCode: 201,
+                body: all_details,
+                forceNetworkError: false // default
+            })
+        });
+    });
+
+    cy.visit('/#geo:EC');
+
+    cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
+        cy.get('.data-mapper-content__list').should('not.be.visible');
+        sendResponse();
+        cy.get('.data-mapper-content__loading').should('not.be.visible');
+        cy.get('.data-mapper-content__list').should('be.visible');
+    });
+})

@@ -180,7 +180,9 @@ export class FacilityController extends Component {
         $('.location-facilities__trigger--loading').removeClass('hidden');
         $('.location__facilities_expand').addClass('hidden');
         $('.location__facilities_contract').addClass('hidden');
-        $('.location__facilities_contract').trigger('click');
+        if ($('.location__facilities_content').height() > 0) {
+            $('.location__facilities_contract').trigger('click');
+        }
 
         $('.location__facilities_download-all').addClass('disabled');
     }

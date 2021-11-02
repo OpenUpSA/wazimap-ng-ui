@@ -9,3 +9,4 @@ Feature: Facility Modal
       Then I select an indicator
     And I select another indicator
       Then I check if everything is zero
+    And I navigate to EC and check if the loading state is displayed correctly

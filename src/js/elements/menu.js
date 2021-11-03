@@ -71,7 +71,7 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
                                 parents: parents,
                                 choropleth_method: indicatorDetail.choropleth_method,
                                 indicatorId: indicatorDetail.id,
-                                versionData:indicatorDetail.version_data
+                                versionData: indicatorDetail.version_data
                             })
                     });
                 }
@@ -170,6 +170,8 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     if (hasNoItems) {
         dataMapperMenu.showNoData()
     }
+
+    dataMapperMenu.isLoading = false;
 }
 
 /**
@@ -177,7 +179,34 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
  */
 export class DataMapperMenu extends Component {
     constructor(parent) {
-        super(parent)
+        super(parent);
+
+        this._isLoading = false;
+    }
+
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    set isLoading(value) {
+        if (value) {
+            this.showLoadingState();
+        } else {
+            this.hideLoadingState();
+        }
+
+        this._isLoading = value;
+    }
+
+    hideLoadingState() {
+        $(`.${loadingClsName}`).addClass('hidden');
+        $('.data-mapper-content__list').removeClass('hidden');
+    }
+
+    showLoadingState() {
+        $(`.${loadingClsName}`).removeClass('hidden');
+        $('.data-mapper-content__list').addClass('hidden');
+        $(`.${noDataWrapperClsName}`).addClass('hidden');
     }
 
     showNoData() {

@@ -13,4 +13,8 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
             })
         }
     })
+
+    controller.on('hashChange', () => {
+        dataMapperMenu.isLoading = true;
+    })
 }

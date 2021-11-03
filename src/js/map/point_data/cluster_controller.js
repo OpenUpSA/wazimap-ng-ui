@@ -14,7 +14,6 @@ export class ClusterController extends Component {
     initClustering() {
         this.markers = L.markerClusterGroup({
             iconCreateFunction: (cluster) => this.createClusterIcon(cluster),
-            chunkedLoading: true,
             clusterPane: 'clusters'
         }).on('clustermouseover', (e) => {
             this.showPopup(e.layer);
@@ -40,30 +39,30 @@ export class ClusterController extends Component {
         let total = 0;
         colors.forEach((c, i) => {
             const calc = (markerCount - total) / markerCount * 100;
-            circles += `<circle 
-                            stroke-dasharray="${calc} 100" 
-                            r="16" 
-                            cx="16" 
-                            cy="16" 
-                            stroke="${c.color}" 
-                            fill="none" 
+            circles += `<circle
+                            stroke-dasharray="${calc} 100"
+                            r="16"
+                            cx="16"
+                            cy="16"
+                            stroke="${c.color}"
+                            fill="none"
                             stroke-width="35"></circle>`;
             total += c.count;
         })
 
-        const html = `<svg 
-                        width="35px" 
+        const html = `<svg
+                        width="35px"
                         style="border-radius:50%; background:#3f51b5;"
                         viewBox="0 0 35 35">
                             ${circles}
-                            <text 
-                                x="50%" 
-                                y="50%" 
+                            <text
+                                x="50%"
+                                y="50%"
                                 alignment-baseline="middle"
-                                text-anchor="middle" 
+                                text-anchor="middle"
                                 dominant-baseline="middle"
                                 fill="#fff"
-                                font-size="10px" 
+                                font-size="10px"
                                 font-weight="bold"
                             >${markerCount}</text>
                         </svg>`;

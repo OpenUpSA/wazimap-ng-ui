@@ -259,8 +259,14 @@ export class Chart extends Component {
             }
         }
 
-        let annotations = {"title":this.title, "geography":titleEle.slice(-1).text().trim(), "filters":filters, "attribution":this.profileAttribution}
-        let specDownload = configureBarchartDownload(this.data.data, this.data.metadata, this.config, annotations);
+        let annotations = {
+            "title": this.title,
+            "geography": `Selected area : ${titleEle.slice(-1).text().trim()}`,
+            "filters": filters,
+            "attribution": this.profileAttribution
+        }
+
+        let specDownload = configureBarchartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
         let vegaViewDownload = new vega.View(vega.parse(specDownload));
 
         const pngDownloadUrl = await vegaViewDownload.toImageURL('png', 1);
@@ -269,7 +275,7 @@ export class Chart extends Component {
         );
         saveImgButton.attr('href', pngDownloadUrl);
         const chartTitle = this.title;
-        saveImgButton.attr('download', `${chartTitle ? chartTitle :'chart'}.png`);
+        saveImgButton.attr('download', `${chartTitle ? chartTitle : 'chart'}.png`);
     }
 
     disableChartTypeToggle = (disable) => {
@@ -373,7 +379,6 @@ export class Chart extends Component {
             if (value !== "All values") {
                 let filterName = group;
                 filterName = slugify(filterName)
-                this.setDownloadUrl();
                 this.vegaView.signal(`${filterName}Filter`, true)
                 this.vegaView.signal(`${filterName}FilterValue`, value)
             }
@@ -382,6 +387,7 @@ export class Chart extends Component {
 
         this.vegaView.run();
         this.appendDataToTable();
+        this.setDownloadUrl();
     };
 
     exportAsCsv = () => {

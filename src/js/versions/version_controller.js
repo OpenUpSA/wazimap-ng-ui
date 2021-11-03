@@ -21,6 +21,12 @@ export class VersionController extends Component {
         this._versionBundles = {};
         this._activeVersion = null;
         this._promises = [];
+        this._initEvents = {
+            'versions.all.loaded': false,
+            'point_tray.tray.themes_loaded': false
+        };
+
+        this.prepareEvents();
     }
 
     get api() {
@@ -81,6 +87,34 @@ export class VersionController extends Component {
         return this._versionBundles;
     }
 
+    get initEvents() {
+        return this._initEvents;
+    }
+
+    prepareEvents() {
+        this.parent.on('versions.all.loaded', () => {
+            this._initEvents['versions.all.loaded'] = true;
+            this.checkAndInitWebflow();
+        })
+        this.parent.on('point_tray.tray.themes_loaded', () => {
+            this._initEvents['point_tray.tray.themes_loaded'] = true;
+            this.checkAndInitWebflow();
+        })
+    }
+
+    checkAndInitWebflow() {
+        let allTriggered = true;
+        for (const key in this.initEvents) {
+            if (!this.initEvents[key]) {
+                allTriggered = false;
+            }
+        }
+
+        if(allTriggered){
+            Webflow.require('ix2').init();
+        }
+    }
+
     reInit(areaCode) {
         this.areaCode = areaCode;
         this._allVersionsBundle = null;
@@ -119,11 +153,11 @@ export class VersionController extends Component {
 
             this.appendAllBundles(js, version);
         }).catch((response) => {
-            if(response.status === 404){
+            if (response.status === 404) {
                 //version does not exist for this geo
                 version.exists = false;
             } else {
-              throw(response);
+                throw(response);
             }
         })
 
@@ -136,11 +170,6 @@ export class VersionController extends Component {
 
         this.parent.triggerEvent(VersionController.EVENTS.profileLoaded, dataBundle);
 
-        setTimeout(() => {
-            if (this.callRegisterFunction) {
-                Webflow.require('ix2').init();
-            }
-        }, 600)
         document.title = dataBundle.overview.name;
     }
 

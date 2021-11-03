@@ -1,8 +1,11 @@
 export class DataFilter {
-    constructor(group) {
-        this._values = group.subindicators;
+    constructor(group, keys = {
+        name: 'name',
+        values: 'subindicators'
+    }) {
+        this._values = group[keys.values];
         this._can_aggregate = group.can_aggregate;
-        this._name = group.name;
+        this._name = group[keys.name];
     }
 
     get values() {

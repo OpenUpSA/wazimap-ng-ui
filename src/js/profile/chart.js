@@ -151,8 +151,7 @@ export class Chart extends Component {
                 this.filterGroups = data.metadata.groups;
 
                 this.handleChartFilter(data, data.metadata.groups);
-            })
-            .catch(console.error);
+            });
     };
 
     showChartDataTable = () => {

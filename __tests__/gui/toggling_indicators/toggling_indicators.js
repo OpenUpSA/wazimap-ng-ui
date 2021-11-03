@@ -1,20 +1,20 @@
-import all_details from "../toggling_indicators/all_details.json";
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
+import {gotoHomepage, setupInterceptions, waitUntilGeographyIsLoaded} from "../common_cy_functions/general";
+import all_details from "../toggling_indicators/all_details.json";
+import profiles from "./profiles.json";
+import profile from '../toggling_indicators/profile.json';
 
-Given('I am on the SANEF Homepage', () => {
-    cy.visit("/")
+Given('I am on the Wazimap Homepage', () => {
+    setupInterceptions(profiles, all_details, profile, null, null);
+    gotoHomepage();
+})
 
-    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?format=json', (req) => {
-        req.reply({
-            statusCode: 201,
-            body: all_details,
-            forceNetworkError: false // default
-        })
-    })
+Then('I wait until map is ready', () => {
+    waitUntilGeographyIsLoaded('South Africa Test');
 })
 
 When('I expand Data Mapper', () => {
-    cy.wait(100);
+    cy.wait(1000);
     cy.get('.point-mapper-toggles .data-mapper-panel__open').click();
 })
 
@@ -42,4 +42,32 @@ Then('I check if everything is zero', () => {
     cy.get('.map-options__legend_wrap .map_legend-block .truncate').each(($div) => {
         expect($div.text()).not.equal('0.0%');
     })
+})
+
+When('I navigate to EC and check if the loading state is displayed correctly', ()=>{
+    //intercepting the request and testing the loading state
+    //for more info : https://blog.dai.codes/cypress-loading-state-tests/
+    let sendResponse;
+    const trigger = new Promise((resolve) => {
+        sendResponse = resolve;
+    });
+
+    cy.intercept('/api/v1/all_details/profile/8/geography/EC/?version=test&format=json', (request) => {
+        return trigger.then(() => {
+            request.reply({
+                statusCode: 201,
+                body: all_details,
+                forceNetworkError: false // default
+            })
+        });
+    });
+
+    cy.visit('/#geo:EC');
+
+    cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
+        cy.get('.data-mapper-content__list').should('not.be.visible');
+        sendResponse();
+        cy.get('.data-mapper-content__loading').should('not.be.visible');
+        cy.get('.data-mapper-content__list').should('be.visible');
+    });
 })

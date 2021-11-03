@@ -2,9 +2,9 @@ import {Chart} from '../chart';
 import {ContentBlock} from './content_block';
 
 export class Indicator extends ContentBlock {
-    constructor(parent, container, indicator, title, isLast) {
-        super(parent, container, indicator, title, isLast);
-        
+    constructor(parent, container, indicator, title, isLast, geography) {
+        super(parent, container, indicator, title, isLast, geography);
+
         this.prepareDomElements();
         this.addIndicatorChart();
     }

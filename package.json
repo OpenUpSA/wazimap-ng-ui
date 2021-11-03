@@ -65,9 +65,11 @@
   },
   "scripts": {
     "start": "parcel ./src/index.html",
-    "cypress:gui": "cypress run --browser chrome --spec __tests__/gui/*.feature --record --key=1d9905ed-3aca-49b4-8915-08406d8d8881 --ci-build-id=githubActions --parallel",
+    "cypress:gui": "cypress run --browser chrome --spec __tests__/gui/*.feature --record --key e45f872b-81b5-4f63-ad26-1dff310fb348",
+    "cypress:gui-local": "cypress run --browser chrome --spec __tests__/gui/*.feature",
     "cypress": "cypress run --spec __tests__/e2e/*.feature",
     "cypress:open": "cypress open",
+    "test:gui-local": "start-server-and-test start http://localhost:1234 cypress:gui-local",
     "test:gui": "start-server-and-test start http://localhost:1234 cypress:gui",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -82,8 +84,7 @@
   "browserslist": "> 0.25%, not dead",
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true,
-    "stepDefinitions": "__tests__/gui",
-    "commonPath": "__tests__/gui/common"
+    "stepDefinitions": "__tests__/gui"
   },
   "jest": {
     "setupFiles": [
@@ -95,7 +96,8 @@
     "testPathIgnorePatterns": [
       "/__tests__/gui/",
       "/__tests__/e2e/",
-      "/node_modules/"
+      "/node_modules/",
+      ".data.js"
     ],
     "moduleFileExtensions": [
       "js",
@@ -124,6 +126,6 @@
         "destDir": "src"
       }
     ]
-    
+
   }
 }

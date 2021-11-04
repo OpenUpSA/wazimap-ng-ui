@@ -3,7 +3,7 @@ import {extractSheetsData} from "../../src/js/utils";
 import {screen} from "@testing-library/dom";
 import {Component} from '../../src/js/utils';
 import {API} from '../../src/js/api';
-import {Facility_item} from "../../src/js/profile/facilities/facility_item";
+import {FacilityItem} from "../../src/js/profile/facilities/facility_item";
 
 const FACILITIES = {
     count: 2,
@@ -175,7 +175,7 @@ describe('downloading facilities', () => {
         }
         const header = new Profile_header(component, parents, geometries, api, 8, geography, config);
         const facilityRowClone = $('body').find('.location-facility__list_item')[0].cloneNode(true);
-        let f = new Facility_item(component, facilityRowClone, category, true, header.isDownloadsDisabled);
+        let f = new FacilityItem(component, facilityRowClone, category, true, header.isDownloadsDisabled);
         const downloadBtn = $(f.facilityItem).find('.location-facility__item_download')[0];
 
         expect(downloadBtn).not.toHaveClass('hidden');
@@ -198,7 +198,7 @@ describe('downloading facilities', () => {
         }
         const header = new Profile_header(component, parents, geometries, api, 8, geography, config);
         const facilityRowClone = $('body').find('.location-facility__list_item')[0].cloneNode(true);
-        let f = new Facility_item(component, facilityRowClone, category, true, header.isDownloadsDisabled);
+        let f = new FacilityItem(component, facilityRowClone, category, true, header.isDownloadsDisabled);
         const downloadBtn = $(f.facilityItem).find('.location-facility__item_download')[0];
 
         expect(downloadBtn).toHaveClass('hidden');

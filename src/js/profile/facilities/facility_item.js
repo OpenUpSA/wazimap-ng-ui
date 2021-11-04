@@ -14,7 +14,7 @@ export class FacilityItemModel extends Component {
     }
 }
 
-export class Facility_item extends Component {
+export class FacilityItem extends Component {
     constructor(parent, facilityRowClone, category, isLast, isDownloadsDisabled) {
         super(parent);
 

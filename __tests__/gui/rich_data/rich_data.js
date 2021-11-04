@@ -1,16 +1,16 @@
 import {When, Given, Then} from "cypress-cucumber-preprocessor/steps";
 import all_details from "../rich_data/all_details.json";
+import {gotoHomepage, setupInterceptions, waitUntilGeographyIsLoaded} from "../common_cy_functions/general";
+import profiles from "../rich_data/profiles.json";
+import profile from "../rich_data/profile.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    cy.visit("/")
+    setupInterceptions(profiles, all_details, profile, null, null);
+    gotoHomepage();
+})
 
-    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?format=json', (req) => {
-        req.reply({
-            statusCode: 201,
-            body: all_details,
-            forceNetworkError: false // default
-        })
-    })
+Then('I wait until map is ready', () => {
+    waitUntilGeographyIsLoaded('South Africa');
 })
 
 When('I expand Rich Data', () => {

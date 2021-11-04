@@ -84,7 +84,7 @@ export class FacilityController extends Component {
     }
 
     getAndAddFacilities(activeVersion) {
-        if(this.model.api !== null){
+        if (this.model.api !== null) {
             this.model.api.getThemesCount(this.model.profileId, this.model.geography.code, activeVersion.model.name)
                 .then((data) => {
                     this.model.themes = data;
@@ -180,7 +180,9 @@ export class FacilityController extends Component {
         $('.location-facilities__trigger--loading').removeClass('hidden');
         $('.location__facilities_expand').addClass('hidden');
         $('.location__facilities_contract').addClass('hidden');
-        $('.location__facilities_contract').trigger('click');
+        if ($('.location__facilities_content').height() > 0) {
+            $('.location__facilities_contract').trigger('click');
+        }
 
         $('.location__facilities_download-all').addClass('disabled');
     }

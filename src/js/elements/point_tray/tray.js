@@ -14,6 +14,7 @@ export class PointDataTray extends Component {
         super(parent);
         this.api = api;
         this.profileId = profileId;
+        this.themes = [];
 
         this.prepareDomElements();
     }
@@ -52,6 +53,7 @@ export class PointDataTray extends Component {
             checkIterate(data, themeDatum => {
                 themeIndex++;
                 let theme = self.createTheme(themeIndex, themeDatum);
+                this.themes.push(theme);
                 let item = theme.element;
 
                 //append tree
@@ -64,6 +66,20 @@ export class PointDataTray extends Component {
                 $(wrapperClsName).append(item);
             })
             self.triggerEvent("point_tray.tray.themes_loaded", data);
+        })
+    }
+
+    unSelectAll() {
+        checkIterate(this.themes, (theme) => {
+            checkIterate(theme.categories, (category) => {
+                if (category.active) {
+                    $(category.element).trigger('click');
+                }
+            })
+
+            if (theme.active) {
+                $(theme.element).find('.point-mapper__h1_checkbox input[type=checkbox]').trigger('click');
+            }
         })
     }
 }

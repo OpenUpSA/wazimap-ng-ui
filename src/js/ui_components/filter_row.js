@@ -1,5 +1,5 @@
 import {Dropdown, DropdownModel} from "./dropdown";
-import {Component, Observable} from "../../utils";
+import {Component, Observable} from "../utils";
 
 /**
  *
@@ -240,7 +240,6 @@ export class FilterRow extends Component {
     onSubindicatorSelected(selectedItem) {
         this.model.currentSubindicatorValue = selectedItem
     }
-
 
     updateIndicatorDropdowns(model, currentIndex = 0) {
         this.indicatorDropdown.updateItems(model.indicatorValues, currentIndex);

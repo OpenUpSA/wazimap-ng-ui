@@ -7,7 +7,7 @@
     "id": 1,
     "name": "2011 SA Boundaries",
     "root_geography": {
-      "name": "South Africa",
+      "name": "South Africa Test",
       "code": "ZA",
       "level": "country",
       "version": "2011 Boundaries"
@@ -15,13 +15,15 @@
     "description": "",
     "configuration": {
       "default_version": "test",
-      "versions": ["test"]
+      "versions": [
+        "test"
+      ]
     }
   },
   "description": "",
   "configuration": {
     "urls": [
-      "example.com"
+      "localhost"
     ],
     "default_panel": "point_data",
     "tutorial": [],

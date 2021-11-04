@@ -276,7 +276,7 @@ export class PointData extends Component {
                 html: html,
                 className: "leaflet-data-marker",
                 iconSize: [25, 25],
-                iconAnchor: [0, 25]
+                iconAnchor: [0, 21] // 21 => width property of the svg that is returned by generateMarkerHtml()
             });
 
             marker = L.marker([point.y, point.x],

@@ -1,6 +1,5 @@
 import {Component, extractSheetData, Observable} from "../../utils";
 import XLSX from "xlsx";
-import {FacilityControllerModel} from "./facility_controller";
 
 export class FacilityItemModel extends Component {
     constructor(parent, label) {
@@ -15,7 +14,7 @@ export class FacilityItemModel extends Component {
     }
 }
 
-export class FacilityItem extends Component {
+export class Facility_item extends Component {
     constructor(parent, facilityRowClone, category, isLast, isDownloadsDisabled) {
         super(parent);
 

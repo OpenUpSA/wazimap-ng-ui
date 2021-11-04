@@ -1,5 +1,5 @@
 import {Component, ThemeStyle} from "../../utils";
-import {FacilityItem} from "./facilityItem";
+import {Facility_item} from "./facility_item";
 
 export class Facility extends Component {
     constructor(parent, facilityTemplate, facilityRowClone, theme, categoryArr) {
@@ -31,7 +31,7 @@ export class Facility extends Component {
 
         for (let i = 0; i < themeCategories.length; i++) {
             const isLast = i === themeCategories.length - 1;
-            let row = new FacilityItem(self, self.facilityRowClone, themeCategories[i], isLast, self.parent.model.isDownloadsDisabled);
+            let row = new Facility_item(self, self.facilityRowClone, themeCategories[i], isLast, self.parent.model.isDownloadsDisabled);
             self.parent.facilityItems.push(row);
 
             $('.location-facility__list', self.facility).append(row.facilityItem);

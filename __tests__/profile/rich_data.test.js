@@ -5,7 +5,7 @@ import {Component} from '../../src/js/utils';
 
 import html from '../../src/index.html';
 
-describe('Rich text descriptions', () => {
+describe('Rich data panel tests', () => {
     document.body.innerHTML = html;
 
     const formattingConfig = {}
@@ -25,7 +25,12 @@ describe('Rich text descriptions', () => {
                         "metadata": {},
                         "groups": [],
                         "description": "<p>An <strong>indicator</strong> description</p>",
-                        "type": "indicator"
+                        "type": "indicator",
+                        "version_data": {
+                            "model": {
+                                "isActive": true
+                            }
+                        }
                     }
                 }
             }

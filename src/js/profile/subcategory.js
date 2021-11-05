@@ -65,6 +65,8 @@ export class Subcategory extends Component {
 
         if (detail.description === '') {
             $(descriptionClass, scHeader).addClass('hidden');
+        } else {
+            $(descriptionClass, scHeader).removeClass('hidden');
         }
 
         wrapper.append(scHeader);
@@ -112,14 +114,8 @@ export class Subcategory extends Component {
                     this._indicators.push(block);
 
                     index++;
-                } else {
-                    $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
-                    $(wrapper).find(descriptionClass).removeClass('hidden')
                 }
             }
-        } else {
-            $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
-            $(wrapper).find(descriptionClass).removeClass('hidden')
         }
     }
 

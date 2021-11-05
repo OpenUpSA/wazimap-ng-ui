@@ -1,32 +1,43 @@
 import {When, Given, Then} from "cypress-cucumber-preprocessor/steps";
+import {
+    checkIfCategoriesAreDisplayed, clickOnTheFirstCategory,
+    clickOnTheFirstTheme,
+    gotoHomepage, hoverOverTheMapCenter,
+    setupInterceptions,
+    waitUntilGeographyIsLoaded
+} from "../common_cy_functions/general";
+import all_details from "./all_details.json";
+import profile from "./profile.json";
+import profiles from "./profiles.json";
+import themes from "./themes.json";
+import points from "./points.json";
+
+Given('I am on the Wazimap Homepage', () => {
+    setupInterceptions(profiles, all_details, profile, themes, points);
+    gotoHomepage();
+})
 
 Then('I wait until map is ready', () => {
-    cy.get('.map-location .location-tag .location-tag__name .truncate', {timeout: 20000}).should('contain', 'South Africa')
+    waitUntilGeographyIsLoaded('South Africa Test');
 })
 
 When('I click on a theme', () => {
-    cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1').first().click();
+    cy.wait(1000);
+    clickOnTheFirstTheme();
 })
 
 Then('categories should be displayed', () => {
-    cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1 .point-mapper__h1_content').should('be.visible');
+    checkIfCategoriesAreDisplayed();
 })
 
 When('I click on a category', () => {
-    cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1 .point-mapper__h1_content .point-mapper__h2_wrapper .point-mapper__h2').first().click();
+    clickOnTheFirstCategory();
 })
 
 When('I click on a marker', () => {
     //click on the center of the window
-    let navHeight = 56;
-    let width = Cypress.config("viewportWidth");
-    let height = Cypress.config("viewportHeight");
-    let x = (width / 2);
-    let y = (height / 2) + (navHeight / 2);
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated')
-        .trigger('mousemove', {clientX: 0, clientY: 0})
-        .trigger('mousemove', {clientX: x, clientY: y});
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated').click();
+    hoverOverTheMapCenter();
+    cy.get('.leaflet-marker-pane .leaflet-zoom-animated').click({force: true});
 })
 
 When('I click on the More info button', () => {

@@ -67,6 +67,7 @@ export function setPopupStyle(clsName) {
     $('.map__tooltip_value').css('white-space', 'nowrap');
     $('.leaflet-popup-content-wrapper').css('padding', 0);
     $('.leaflet-popup-content').css('margin', 'unset');
+    $('.leaflet-popup-content p').css('margin', 'unset');
     $('.leaflet-container').css('font', 'unset');
 
     let popupWidth = 0;
@@ -163,10 +164,10 @@ export class Component extends Observable {
         super()
 
         this._parent = parent;
-        this._children = [];    
+        this._children = [];
 
         if (parent != null) {
-            this._parent.registerChild(this);    
+            this._parent.registerChild(this);
         }
     }
 
@@ -426,4 +427,20 @@ export function appendFilterArrays(arr1, arr2, primaryGroup){
     )
 
     return filterArr;
+}
+
+export function assertNTemplates(n, $templateSelection) {
+  console.assert(
+    $templateSelection.length === n,
+    `Should be exactly ${n} template(s) but found ${$templateSelection.length}`
+  );
+}
+
+export function trimValue(val){
+    let result = val;
+    if (typeof val === 'string' || val instanceof String){
+        result = val.trim();
+    }
+
+    return result;
 }

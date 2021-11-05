@@ -1,4 +1,5 @@
 import {ZoomToggle} from "../mapmenu/zoomtoggle";
+import {VersionController} from "../versions/version_controller";
 
 export const zoomToggle = new ZoomToggle();
 
@@ -17,6 +18,14 @@ export function configureMapEvents(controller, objs = {mapcontrol: null}) {
     });
 
     controller.on('redraw', payload => {
+        const geography = payload.payload.profile.geography;
+        const geometries = payload.payload.geometries;
+        setTimeout(() => {
+            mapcontrol.overlayBoundaries(geography, geometries);
+        }, 0)
+    });
+
+    controller.on(VersionController.EVENTS.updated, payload => {
         const geography = payload.payload.profile.geography;
         const geometries = payload.payload.geometries;
         setTimeout(() => {

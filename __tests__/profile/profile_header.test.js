@@ -2,6 +2,8 @@ import {Profile_header} from "../../src/js/profile/profile_header";
 import {extractSheetsData} from "../../src/js/utils";
 import {screen} from "@testing-library/dom";
 import {Component} from '../../src/js/utils';
+import {API} from '../../src/js/api';
+import {FacilityItem} from "../../src/js/profile/facilities/facilityItem";
 
 const FACILITIES = {
     count: 2,
@@ -124,50 +126,35 @@ describe('profile header', () => {
     const config = {};
 
     test('initialize successully', () => {
-        const header = new Profile_header(component, parents, geometries, api, null, geography, config);
+        const header = new Profile_header(component, parents, geometries, api, 8, geography, config);
     })
 })
 
 describe('downloading facilities', () => {
-    const parents = [];
-    const geometries = {
-        themes: [{
-            id: 1,
-            name: 'test',
-            icon: 'icon',
-            subthemes: [{
-                count: 5,
-                label: 'test category',
-                id: 14
-            }]
-        }]
-    };
-    const api = null;
-    const geography = {code: 'ZA'};
-    let config = {};
-
     beforeEach(() => {
         document.body.innerHTML = `
-<div class="location__facilities">
-    <div class="location__facilities_content">
-        <div class="location__facilities_content-wrapper">
-            <div class="location-facility">
-                <div class="location-facility__list">
-                    <a href="#" class="location-facility__list_item w-inline-block">
-                    <div class="location-facility__item_name">
-                      <div class="truncate">Thusong centres (unverified)</div>
-                    </div>
-                    <div class="location-facility__item_value">
-                      <div>140</div>
-                    </div>
-                    <div id="w-node-a4312e607bde-e148319d" class="location-facility__item_download" data-testid='download-btn'>
-                      <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                          <path d="M0 0h24v24H0z" fill="none"></path>
-                          <path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
-                        </svg>
+<div class="rich-data-content">
+    <div class="location__facilities">
+        <div class="location__facilities_content">
+            <div class="location__facilities_content-wrapper">
+                <div class="location-facility">
+                    <div class="location-facility__list">
+                        <a href="#" class="location-facility__list_item w-inline-block">
+                        <div class="location-facility__item_name">
+                          <div class="truncate">Thusong centres (unverified)</div>
                         </div>
+                        <div class="location-facility__item_value">
+                          <div>140</div>
+                        </div>
+                        <div id="w-node-a4312e607bde-e148319d" class="location-facility__item_download" data-testid='download-btn'>
+                          <div class="svg-icon small w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                              <path d="M0 0h24v24H0z" fill="none"></path>
+                              <path fill="currentColor" d="M19,9h-4V3H9v6H5l7,7L19,9z M5,18v2h14v-2H5z"></path>
+                            </svg>
+                            </div>
+                        </div>
+                    </a>
                     </div>
-                </a>
                 </div>
             </div>
         </div>
@@ -176,21 +163,44 @@ describe('downloading facilities', () => {
     })
 
     test('download is enabled', () => {
-        let component = new Component();
-        const header = new Profile_header(component, parents, geometries, api, null, geography, config);
-        let downloadBtn = screen.getByTestId('download-btn');
-        expect(downloadBtn.classList.contains('hidden')).toBe(false);
+        const component = new Component();
+        const parents = [];
+        const api = null;
+        const geometries = {themes: []};
+        const geography = {code: 'ZA'};
+        const config = {};
+        const category = {
+            label: 'test',
+            count: 17
+        }
+        const header = new Profile_header(component, parents, geometries, api, 8, geography, config);
+        const facilityRowClone = $('body').find('.location-facility__list_item')[0].cloneNode(true);
+        let f = new FacilityItem(component, facilityRowClone, category, true, header.isDownloadsDisabled);
+        const downloadBtn = $(f.facilityItem).find('.location-facility__item_download')[0];
+
+        expect(downloadBtn).not.toHaveClass('hidden');
     })
 
     test('download is disabled', () => {
-        config = {
+        const component = new Component();
+        const parents = [];
+        const api = null;
+        const geometries = {themes: []};
+        const geography = {code: 'ZA'};
+        const config = {
             richdata: {
                 hide: ['facility-downloads']
             }
         }
-        let component = new Component();
-        const header = new Profile_header(component, parents, geometries, api, null, geography, config);
-        let downloadBtn = screen.getByTestId('download-btn');
+        const category = {
+            label: 'test',
+            count: 17
+        }
+        const header = new Profile_header(component, parents, geometries, api, 8, geography, config);
+        const facilityRowClone = $('body').find('.location-facility__list_item')[0].cloneNode(true);
+        let f = new FacilityItem(component, facilityRowClone, category, true, header.isDownloadsDisabled);
+        const downloadBtn = $(f.facilityItem).find('.location-facility__item_download')[0];
+
         expect(downloadBtn).toHaveClass('hidden');
     })
 })

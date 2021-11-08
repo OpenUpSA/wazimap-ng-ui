@@ -336,7 +336,7 @@ export function checkIfCategoryHasChildren(category, detail) {
 export function checkIfSubCategoryHasChildren(subcategory, detail) {
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
-        if (!hasChildren && typeof data.child_data !== 'undefined') {
+        if (!hasChildren && data.child_data !== undefined && data.dataset_content_type !== 'qualitative') {
             for (const [geo, arr] of Object.entries(data.child_data)) {
                 hasChildren = hasChildren || arr.length > 0;
             }
@@ -415,30 +415,30 @@ export function getSheetName(name) {
     return sheetName;
 }
 
-export function appendFilterArrays(arr1, arr2, primaryGroup){
+export function appendFilterArrays(arr1, arr2, primaryGroup) {
     let filterArr = arr1.concat(arr2).filter((f) => {
         return f.group !== primaryGroup
     });
 
     filterArr = filterArr.filter((f, index, self) =>
-        index === self.findIndex((t) => (
-            t.group === f.group
-        ))
+            index === self.findIndex((t) => (
+                t.group === f.group
+            ))
     )
 
     return filterArr;
 }
 
 export function assertNTemplates(n, $templateSelection) {
-  console.assert(
-    $templateSelection.length === n,
-    `Should be exactly ${n} template(s) but found ${$templateSelection.length}`
-  );
+    console.assert(
+        $templateSelection.length === n,
+        `Should be exactly ${n} template(s) but found ${$templateSelection.length}`
+    );
 }
 
-export function trimValue(val){
+export function trimValue(val) {
     let result = val;
-    if (typeof val === 'string' || val instanceof String){
+    if (typeof val === 'string' || val instanceof String) {
         result = val.trim();
     }
 

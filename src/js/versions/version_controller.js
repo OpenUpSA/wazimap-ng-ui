@@ -110,7 +110,7 @@ export class VersionController extends Component {
             }
         }
 
-        if(allTriggered){
+        if (allTriggered) {
             Webflow.require('ix2').init();
         }
     }
@@ -209,6 +209,8 @@ export class VersionController extends Component {
                 let allVersionsBundleSubcategory = this.allVersionsBundle.profile.profileData[category].subcategories[subcategory];
                 if (allVersionsBundleSubcategory === undefined || $.isEmptyObject(allVersionsBundleSubcategory)) {
                     this.allVersionsBundle.profile.profileData[category].subcategories[subcategory] = subcategoryDetail;
+                } else {
+                    allVersionsBundleSubcategory.key_metrics = allVersionsBundleSubcategory.key_metrics.concat(subcategoryDetail.key_metrics);
                 }
 
                 for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {

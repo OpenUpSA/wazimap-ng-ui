@@ -85,7 +85,14 @@
             }
           },
           "Municipal leadership":{
-            "description":""
+            "description":"",
+            "key_metrics": [
+              {
+                "label": "test-key-metrics",
+                "method": "absolute_value",
+                "value": 4383173
+              }
+            ]
           }
         }
       }

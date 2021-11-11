@@ -349,7 +349,7 @@ export function checkIfSubCategoryHasChildren(subcategory, detail) {
 export function isIndicatorExcluded(indicatorData, excludeType) {
     let isExcluded = false;
 
-    if (indicatorData.chartConfiguration.exclude === undefined) {
+    if (indicatorData.chartConfiguration === undefined || indicatorData.chartConfiguration.exclude === undefined) {
         isExcluded = false;
     } else {
         if (indicatorData.chartConfiguration.exclude.indexOf(excludeType) >= 0) {

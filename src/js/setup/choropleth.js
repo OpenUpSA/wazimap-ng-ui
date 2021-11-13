@@ -1,3 +1,5 @@
+import {VersionController} from "../versions/version_controller";
+
 export function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip: null}) {
     const mapcontrol = objs['mapcontrol'];
     const mapchip = objs['mapchip'];
@@ -11,6 +13,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('profile.loaded', payload => controller.handleNewProfileChoropleth())
     controller.on('mapchip.removed', payload => mapcontrol.choropleth.reset(true));
     controller.on('data_mapper_menu.nodata', payload => mapchip.removeMapChip())
+    controller.on(VersionController.EVENTS.updated, () => mapchip.removeMapChip())
     controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
 
     controller.on('mapchip.choropleth.filtered', payload => {
@@ -38,7 +41,18 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             return;
         }
 
-        mapchip.onSubIndicatorChange(args);
+        const metadata = args.data.metadata;
+        const params = {
+            primaryGroup: metadata.primary_group,
+            groups: metadata.groups,
+            indicatorTitle: args.indicatorTitle,
+            selectedSubindicator: args.selectedSubindicator,
+            childData: args.data.child_data,
+            description: args.data.description,
+            chartConfiguration: args.data.chartConfiguration,
+            filter: args.filter,
+        }
+        mapchip.onSubIndicatorChange(params);
     });
 
     controller.on('redraw', payload => {
@@ -58,7 +72,7 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
     const filter = ps.subindicator.filter;
     let data = ps.subindicator.data
     if (childData) {
-        data.originalChildData = (typeof data.originalChildData !== 'undefined' && data.originalChildData !== null) ? data.originalChildData : data.child_data;
+        data.originalChildData = (data.originalChildData !== undefined) ? data.originalChildData : data.child_data;
         data.child_data = childData;
     }
     mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter);

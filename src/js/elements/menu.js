@@ -1,25 +1,16 @@
 import {SubIndicator} from '../dataobjects'
-import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
+import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component, isIndicatorExcluded} from '../utils'
 
 const hideondeployClsName = 'hideondeploy';
-const parentContainer = $(".data-mapper-content__list");
-const categoryTemplate = $(".data-category")[0].cloneNode(true);
-const subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
-const indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
-const indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
+let parentContainer = null;
+let categoryTemplate = null;
+let subCategoryTemplate = null;
+let indicatorTemplate = null;
+let indicatorItemTemplate = null;
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
-
-function subindicatorsInCategory(category) {
-    let count = 0;
-    let subcategories = Object.values(category.subcategories);
-    for (const idx in subcategories) {
-        let subcategory = subcategories[idx];
-        count += subindicatorsInSubCategory(subcategory);
-    }
-
-    return count;
-}
+const DATASET_TYPES = {Quantitative: 'quantitative', Qualitative: 'qualitative'};
+const EXCLUDE_TYPES = {DataMapper: 'data mapper'};
 
 function subindicatorsInSubCategory(subcategory) {
 
@@ -39,15 +30,19 @@ function subindicatorsInIndicator(indicator) {
     return indicator.metadata.groups.length;
 }
 
-// TODO this entire file needs to be refactored to use thhe observer pattern
-export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
-    function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, indicatorDetail) {
 
+export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
+    parentContainer = $(".data-mapper-content__list");
+    categoryTemplate = $(".styles .data-category")[0].cloneNode(true);
+    subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
+    indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
+    indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
+
+    function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, indicatorDetail) {
         $(".data-category__h3", wrapper).remove();
         $(".data-category__h4", wrapper).remove();
 
         if (groups !== null && typeof groups.subindicators !== 'undefined') {
-
             groups.subindicators.forEach((subindicator) => {
                 let display = subindicatorHasData(subindicator, indicatorDetail);
 
@@ -75,7 +70,8 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
                                 indicators: indicators,
                                 parents: parents,
                                 choropleth_method: indicatorDetail.choropleth_method,
-                                indicatorId: indicatorDetail.id
+                                indicatorId: indicatorDetail.id,
+                                versionData: indicatorDetail.version_data
                             })
                     });
                 }
@@ -95,13 +91,16 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
         $(".data-category__h3", h3Wrapper).remove();
 
         for (const [indicator, detail] of Object.entries(indicators)) {
-            let newIndicator = indicatorClone.cloneNode(true);
-            $('.truncate', newIndicator).text(indicator);
-            $(h3Wrapper).append(newIndicator);
-            const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
+            const isExcluded = isIndicatorExcluded(detail, EXCLUDE_TYPES.DataMapper);
+            if (detail.dataset_content_type !== DATASET_TYPES.Qualitative && !isExcluded) {
+                let newIndicator = indicatorClone.cloneNode(true);
+                $('.truncate', newIndicator).text(indicator);
+                $(h3Wrapper).append(newIndicator);
+                const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
 
-            let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
-            addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
+                let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
+                addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
+            }
         }
     }
 
@@ -156,7 +155,6 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     hiddenClass = 'hidden';
     $(parentContainer).find('.data-category').remove();
 
-
     for (const [category, detail] of Object.entries(data)) {
         let hasChildren = checkIfCategoryHasChildren(category, detail)
 
@@ -173,14 +171,43 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     if (hasNoItems) {
         dataMapperMenu.showNoData()
     }
+
+    dataMapperMenu.isLoading = false;
 }
 
 /**
-* This class is a stub for a menu component
-*/
+ * This class is a stub for a menu component
+ */
 export class DataMapperMenu extends Component {
     constructor(parent) {
-        super(parent)
+        super(parent);
+
+        this._isLoading = false;
+    }
+
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    set isLoading(value) {
+        if (value) {
+            this.showLoadingState();
+        } else {
+            this.hideLoadingState();
+        }
+
+        this._isLoading = value;
+    }
+
+    hideLoadingState() {
+        $(`.${loadingClsName}`).addClass('hidden');
+        $('.data-mapper-content__list').removeClass('hidden');
+    }
+
+    showLoadingState() {
+        $(`.${loadingClsName}`).removeClass('hidden');
+        $('.data-mapper-content__list').addClass('hidden');
+        $(`.${noDataWrapperClsName}`).addClass('hidden');
     }
 
     showNoData() {

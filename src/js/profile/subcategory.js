@@ -1,7 +1,8 @@
 import {Indicator} from "./blocks/indicator";
 import {Component, formatNumericalValue} from "../utils";
-import { ContentBlock } from "./blocks/content_block";
-import { HTMLBlock } from "./blocks/html_block";
+import {ContentBlock} from "./blocks/content_block";
+import {HTMLBlock} from "./blocks/html_block";
+import {assertNTemplates} from "../utils";
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -13,19 +14,28 @@ const keyMetricWrapperClass = '.sub-category-header__key-metrics_wrap';
 const keyMetricClass = '.key-metric';
 const descriptionTextClass = '.sub-category-header__description p';
 const descriptionClass = '.sub-category-header__description';
-const indicatorClass = '.profile-indicator';
+const indicatorClass = '.styles .profile-indicator';
 
 export class Subcategory extends Component {
-    constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst) {
+    constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst, geography) {
         super(parent);
 
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
         this._indicators = [];
         this._formattingConfig = formattingConfig;
+        this._geography = geography;
 
         this.addKeyMetrics($(scHeaderClone), detail);
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
         this.addIndicators(wrapper, detail);
+
+        this.prepareEvents();
+    }
+
+    prepareEvents() {
+        this.parent.on('version.updated', (activeVersion) => {
+            this.triggerEvent('version.updated', activeVersion);
+        });
     }
 
     get indicators() {
@@ -34,6 +44,10 @@ export class Subcategory extends Component {
 
     get formattingConfig() {
         return this._formattingConfig;
+    }
+
+    get geography() {
+        return this._geography;
     }
 
     addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
@@ -47,17 +61,19 @@ export class Subcategory extends Component {
         }
 
         $(subcategoryTitleClass, scHeader).text(subcategory);
-        $(descriptionTextClass, scHeader).text(detail.description);
+        $(descriptionTextClass, scHeader).html(detail.description);
 
         if (detail.description === '') {
             $(descriptionClass, scHeader).addClass('hidden');
+        } else {
+            $(descriptionClass, scHeader).removeClass('hidden');
         }
 
         wrapper.append(scHeader);
     }
 
-    addIndicatorBlock(container, title, indicator, isLast) {
-        let block = new Indicator(this, container, title, indicator, isLast);
+    addIndicatorBlock(container, indicator, title, isLast) {
+        let block = new Indicator(this, container, indicator, title, isLast, this.geography);
         this.bubbleEvents(block, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
@@ -67,8 +83,8 @@ export class Subcategory extends Component {
         return block;
     }
 
-    addHTMLBlock(container, title, html, isLast) {
-        let block = new HTMLBlock(this, container, title, html, isLast)
+    addHTMLBlock(container, indicator, title, isLast) {
+        let block = new HTMLBlock(this, container, indicator, title, isLast, this.geography)
 
         return block;
     }
@@ -77,34 +93,29 @@ export class Subcategory extends Component {
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
-
+        const $template = $(indicatorClass);
+        assertNTemplates(2, $template);
 
         if (!isEmpty) {
             for (const [title, indicator] of Object.entries(detail.indicators)) {
                 if (typeof indicator.data !== 'undefined') {
                     let isLast = index === lastIndex;
                     let block = null;
-                    let indicatorContainer = $(indicatorClass)[0].cloneNode(true);
+
+                    let indicatorContainer = $template[0].cloneNode(true);
                     $(wrapper).append(indicatorContainer);
-                    if (indicator.type == ContentBlock.BLOCK_TYPES.Indicator) {
-                        block = this.addIndicatorBlock(indicatorContainer, title, indicator, isLast);
-                    } else if (indicator.type == ContentBlock.BLOCK_TYPES.HTMLBlock) {
-                        block = this.addHTMLBlock(indicatorContainer, title, indicator.html, isLast);
+                    let metadata = indicator.metadata;
+                    if (indicator.content_type === ContentBlock.BLOCK_TYPES.Indicator) {
+                        block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast);
+                    } else if (indicator.content_type === ContentBlock.BLOCK_TYPES.HTMLBlock) {
+                        block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast);
                     }
-                    
+
                     this._indicators.push(block);
 
-                    
-                    
                     index++;
-                } else {
-                    $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
-                    $(wrapper).find(descriptionClass).removeClass('hidden')
                 }
             }
-        } else {
-            $(wrapper).find(descriptionTextClass).text('No data available for this indicator for this geographic area');
-            $(wrapper).find(descriptionClass).removeClass('hidden')
         }
     }
 
@@ -128,7 +139,12 @@ export class Subcategory extends Component {
             let item = metricTemplate.cloneNode(true);
             $('.key-metric__value div', item).text(formatNumericalValue(km.value, this.formattingConfig, km.method));
             $('.key-metric__title', item).text(km.label);
-            $('.key-metric__description', item).addClass('hidden');
+            if(detail.version_data.model.isActive){
+                $('.key-metric__description', item).addClass('hidden');
+            }
+            else {
+                $('.key-metric__description div', item).text(`(${detail.version_data.model.name})`);
+            }
             metricWrapper.append(item);
         })
     }

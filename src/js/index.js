@@ -5,7 +5,8 @@ import {Config as SAConfig} from './configurations/geography_sa';
 import Analytics from './analytics';
 import {API} from './api';
 import * as Sentry from '@sentry/browser';
-import { getHostname, getAPIUrl, loadDevTools }from './utils';
+import {getHostname, getAPIUrl, loadDevTools} from './utils';
+import {ErrorNotifier} from "./error-notifier";
 
 const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
 const productionUrl = getAPIUrl('https://production.wazimap-ng.openup.org.za');
@@ -98,10 +99,15 @@ async function init() {
             config: defaultConfig
         }
     }
+
+    const errorNotifier = new ErrorNotifier();
+    errorNotifier.registerErrorHandler();
+
     const api = new API(pc.baseUrl, hostname);
     const data = await api.getProfileConfiguration(hostname);
 
     pc.config.setConfig(data.configuration || {})
+    pc.config.setVersions(data.geography_hierarchy || {})
     pc.config.api = api;
     pc.profile = data.id;
     pc.config.baseUrl = pc.baseUrl;
@@ -114,9 +120,9 @@ async function init() {
 
 window.init = init;
 loadDevTools(() => {
-  const serverEnabled = sessionStorage.getItem("wazi.localServer");
-  if(serverEnabled) {
-    import('./server').then(server => server.makeServer())
-  }
-  init();
+    const serverEnabled = sessionStorage.getItem("wazi.localServer");
+    if (serverEnabled) {
+        import('./server').then(server => server.makeServer())
+    }
+    init();
 })

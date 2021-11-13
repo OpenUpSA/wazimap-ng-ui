@@ -35,6 +35,8 @@ export function configureMiscElementEvents(application, controller) {
         'panel.data_mapper.closed', 'panel.data_mapper.opened',
     ]);
 
-    sidePanels.togglePanel(defaultPanel);
+    setTimeout(() => {
+        sidePanels.togglePanel(defaultPanel);
+    }, 0)
 
 }

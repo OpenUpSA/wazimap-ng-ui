@@ -149,7 +149,7 @@ export class SubindicatorFilter extends Component {
 
     populateDropdown = (dropdown, itemList, callback) => {
         if ($(dropdown).hasClass('disabled')) {
-            $(dropdown).removeClass('disabled');
+            $(dropdown).removeClass('disabled')
         }
 
         if ($(dropdown).hasClass('is--disabled')) {

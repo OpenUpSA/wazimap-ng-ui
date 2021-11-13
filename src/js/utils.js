@@ -67,6 +67,7 @@ export function setPopupStyle(clsName) {
     $('.map__tooltip_value').css('white-space', 'nowrap');
     $('.leaflet-popup-content-wrapper').css('padding', 0);
     $('.leaflet-popup-content').css('margin', 'unset');
+    $('.leaflet-popup-content p').css('margin', 'unset');
     $('.leaflet-container').css('font', 'unset');
 
     let popupWidth = 0;
@@ -163,10 +164,10 @@ export class Component extends Observable {
         super()
 
         this._parent = parent;
-        this._children = [];    
+        this._children = [];
 
         if (parent != null) {
-            this._parent.registerChild(this);    
+            this._parent.registerChild(this);
         }
     }
 
@@ -335,7 +336,7 @@ export function checkIfCategoryHasChildren(category, detail) {
 export function checkIfSubCategoryHasChildren(subcategory, detail) {
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
-        if (!hasChildren && typeof data.child_data !== 'undefined') {
+        if (!hasChildren && data.child_data !== undefined && !isIndicatorExcluded(data, 'data mapper')) {
             for (const [geo, arr] of Object.entries(data.child_data)) {
                 hasChildren = hasChildren || arr.length > 0;
             }
@@ -343,6 +344,20 @@ export function checkIfSubCategoryHasChildren(subcategory, detail) {
     }
 
     return hasChildren;
+}
+
+export function isIndicatorExcluded(indicatorData, excludeType) {
+    let isExcluded = false;
+
+    if (indicatorData.chartConfiguration === undefined || indicatorData.chartConfiguration.exclude === undefined) {
+        isExcluded = false;
+    } else {
+        if (indicatorData.chartConfiguration.exclude.indexOf(excludeType) >= 0) {
+            isExcluded = true;
+        }
+    }
+
+    return isExcluded;
 }
 
 export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator) {
@@ -414,16 +429,32 @@ export function getSheetName(name) {
     return sheetName;
 }
 
-export function appendFilterArrays(arr1, arr2, primaryGroup){
+export function appendFilterArrays(arr1, arr2, primaryGroup) {
     let filterArr = arr1.concat(arr2).filter((f) => {
         return f.group !== primaryGroup
     });
 
     filterArr = filterArr.filter((f, index, self) =>
-        index === self.findIndex((t) => (
-            t.group === f.group
-        ))
+            index === self.findIndex((t) => (
+                t.group === f.group
+            ))
     )
 
     return filterArr;
+}
+
+export function assertNTemplates(n, $templateSelection) {
+    console.assert(
+        $templateSelection.length === n,
+        `Should be exactly ${n} template(s) but found ${$templateSelection.length}`
+    );
+}
+
+export function trimValue(val) {
+    let result = val;
+    if (typeof val === 'string' || val instanceof String) {
+        result = val.trim();
+    }
+
+    return result;
 }

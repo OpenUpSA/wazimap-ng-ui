@@ -29,6 +29,7 @@ export class Theme extends Component {
         $(this.element).find('.point-mapper__h1_checkbox input[type=checkbox]').on('click', () => self.toggle());
         $('.point-data__h1_name .truncate', this.element).text(this.name);
         $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName).addClass('theme-' + this.themeIndex);
+        $('.point-mapper__h1_checkbox', this.element).addClass('is--shown');
 
         $(categoryWrapperClsName, this.element).html('');
     }
@@ -73,7 +74,9 @@ export class Theme extends Component {
     toggleOn() {
         this.active = true;
         this.categories.forEach(category => {
-            category.toggleOn();
+            if (!category.active) {
+                category.toggleOn();
+            }
         })
 
         this.highlight(true);

@@ -301,7 +301,7 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
             },
             {
                 name: "Units",
-                value: graphValueTypes[defaultType]
+                value: graphValueTypes[annotations.graphValueType]
             },
             {
                 name: "applyFilter",

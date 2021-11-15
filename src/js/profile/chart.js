@@ -263,7 +263,8 @@ export class Chart extends Component {
             "title": this.title,
             "geography": `Selected area : ${titleEle.slice(-1).text().trim()}`,
             "filters": filters,
-            "attribution": this.profileAttribution
+            "attribution": this.profileAttribution,
+            "graphValueType": this.graphValueType
         }
 
         let specDownload = configureBarchartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);

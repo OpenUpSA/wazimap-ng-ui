@@ -363,7 +363,7 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
             },
             {
                 name: "source",
-                value: metadata.source
+                value: `Source : ${metadata.source}`
             },
             {
                 name: "geography",
@@ -375,8 +375,7 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
             },
             {
                 name: "attribution",
-                value: "",
-                update: [annotations.attribution]
+                value: annotations.attribution
             },
             {
                 name: "chart_bottom",
@@ -469,7 +468,10 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
                 encode: {
                     enter: {
                         y: {signal: "chart_bottom"},
-                        text: {"signal": "[filters + geography + '. ' + attribution, source]"},
+                        text: {"signal":
+                                (annotations.attribution !== undefined && annotations.attribution.length > 0) ?
+                                    "[filters + geography, attribution, source]" :
+                                    "[filters + geography, source]"},
                         baseline: {value: "bottom"},
                         fontSize: {value: 14},
                         fontWeight: {value: 500},

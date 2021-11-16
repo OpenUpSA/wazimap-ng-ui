@@ -363,7 +363,7 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
             },
             {
                 name: "source",
-                value: `Source : ${metadata.source}`
+                value: metadata.source !== undefined && metadata.source.length > 0 ? `Source : ${metadata.source}` : ''
             },
             {
                 name: "geography",

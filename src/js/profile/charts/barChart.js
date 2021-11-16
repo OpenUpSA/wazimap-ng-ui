@@ -59,7 +59,7 @@ export const configureBarchart = (data, metadata, config) => {
                     },
                     {
                         type: "formula",
-                        expr: "datum.count/datum.TotalCount",
+                        expr: "datum.TotalCount > 0.001 ? datum.count/datum.TotalCount : 0",
                         as: "percentage"
                     },
                     {
@@ -274,7 +274,7 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
                     },
                     {
                         type: "formula",
-                        expr: "datum.count/datum.TotalCount",
+                        expr: "datum.TotalCount > 0.001 ? datum.count/datum.TotalCount : 0",
                         as: "percentage"
                     },
                     {
@@ -468,10 +468,12 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
                 encode: {
                     enter: {
                         y: {signal: "chart_bottom"},
-                        text: {"signal":
+                        text: {
+                            "signal":
                                 (annotations.attribution !== undefined && annotations.attribution.length > 0) ?
                                     "[filters + geography, attribution, source]" :
-                                    "[filters + geography, source]"},
+                                    "[filters + geography, source]"
+                        },
                         baseline: {value: "bottom"},
                         fontSize: {value: 14},
                         fontWeight: {value: 500},

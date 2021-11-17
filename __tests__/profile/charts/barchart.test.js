@@ -202,13 +202,13 @@ describe('Test downloadable barchart', () => {
   });
 
   test('Configure spec for downloadable Vega chart', async () => {
-    let annotations = {'title':'Population', 'geography':'South Africa', 'filters':'Gender: female', 'attribution':'Profile config attribution'}
+    let annotations = {'title':'Population', 'geography':'South Africa', 'filters':'Gender: female', 'attribution':'Profile config attribution', 'graphValueType':'Percentage'}
     let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
     let view = renderVegaHeadless(vegaDownloadSpec);
     await view.runAsync()
 
     expect(view.signal('title')).toBe('Population');
-    expect(view.signal('source')).toBe('Census 2021');
+    expect(view.signal('source')).toBe('Source : Census 2021');
     expect(view.signal('geography')).toBe('South Africa');
     expect(view.signal('filters')).toBe('Gender: female');
     expect(view.signal('attribution').toString()).toBe('Profile config attribution');

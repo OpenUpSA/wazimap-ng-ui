@@ -35,7 +35,7 @@ export default class ProfileLoader extends Component {
         this.updateGeography(profile);
 
         this.profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config, activeVersion);
-        profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
+        this.profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
 
         this.prepareEvents()
     }
@@ -112,19 +112,19 @@ export default class ProfileLoader extends Component {
 
         $(navWrapperClass).append(navItem);
     }
-  
+
     bindPageScroll = () => {
         let lastId;
         let topMenuHeight = $('.nav').outerHeight();
         let menuItems = $(navWrapperClass).find(navItemClass);
-        let scrollItems = menuItems.map(function() {
+        let scrollItems = menuItems.map(function () {
             let item = $($(this).attr('href'));
             if (item.length) {
                 return item;
             }
         });
 
-        $(window).on('scroll', function() {
+        $(window).on('scroll', function () {
             let fromTop = $(this).scrollTop() + topMenuHeight;
 
             let currentItem = scrollItems.map(function () {
@@ -142,7 +142,8 @@ export default class ProfileLoader extends Component {
                 menuItems.filter("[href='#" + id + "']").addClass(activeNavClass);
             }
         })
-      
+    }
+
     updateActiveVersion = (activeVersion) => {
         this.triggerEvent('version.updated', activeVersion);
     }

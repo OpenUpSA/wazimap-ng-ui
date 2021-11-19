@@ -65,4 +65,22 @@ describe('Data explorer', () => {
         let descriptionElement = document.querySelector(".data-category__h3");
         expect(descriptionElement).toBeVisible();
     })
+
+    test('Excluded indicators are not shown', () => {
+        let config = new SAConfig();
+
+        const controller = new Controller(this, null, config, 1);
+        const dataMapperMenu = new DataMapperMenu(this);
+
+        configureDataExplorerEvents(controller, dataMapperMenu);
+        const payload = JSON.parse(JSON.stringify(quantQualBasePayload));
+        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].chart_configuration = {
+            "exclude": ["data mapper"]
+        }
+
+        controller.triggerEvent("versions.all.loaded", payload);
+
+        let descriptionElement = document.querySelector(".data-category__h3");
+        expect(descriptionElement).not.toBeVisible();
+    })
 })

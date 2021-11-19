@@ -267,7 +267,7 @@ export class PointData extends Component {
     }
 
     showPointLegend = (category) => {
-        pointLegend.removeClass('hidden');
+        pointLegend.addClass('visible-in-download');
         let color = $(`.theme-${category.themeIndex}`).css('color');
         let item = pointLegendItem.cloneNode(true);
         $('.point-legend__text', item).text(category.data.name);

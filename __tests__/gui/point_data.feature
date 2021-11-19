@@ -7,6 +7,7 @@ Feature: Point Data
       Then I click on TVET colleges category
     And I check if the marker color is rgb(58, 112, 255)
       Then I check if the filter pane is displayed
+      Then I check if the point category legend is hidden
     And I click on the first filter dropdown
       Then I check if the filter options are "All values, campus, institution type, numerical"
     And I expand Labour theme

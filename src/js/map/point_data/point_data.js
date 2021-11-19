@@ -33,7 +33,8 @@ let facilityRowItem = null;
 
 let activeMarkers = [];
 
-const POPUP_OFFSET = [20, 0];
+const POPUP_OFFSET = [20, -20];
+const CIRCLE_MARKER_POPUP_OFFSET = [20, 0];
 
 /**
  * this class creates the point data dialog
@@ -343,7 +344,9 @@ export class PointData extends Component {
             let divIcon = L.divIcon({
                 html: html,
                 className: "leaflet-data-marker",
-                iconSize: L.point(25, 25)
+                iconSize: [21, 33],
+                iconAnchor: [10.5, 29] // 10.5 => icon width / 2
+                                       // 29 => icon height - icon shadow
             });
 
             marker = L.marker([point.y, point.x],
@@ -406,7 +409,7 @@ export class PointData extends Component {
         let popup = L.popup({
             autoPan: false,
             autoClose: !isClicked,
-            offset: POPUP_OFFSET,
+            offset: this.enableClustering ? POPUP_OFFSET : CIRCLE_MARKER_POPUP_OFFSET,
             closeButton: isClicked
         })
 

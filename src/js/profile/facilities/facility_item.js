@@ -1,6 +1,5 @@
 import {Component, extractSheetData, Observable} from "../../utils";
 import XLSX from "xlsx";
-import {FacilityControllerModel} from "./facility_controller";
 
 export class FacilityItemModel extends Component {
     constructor(parent, label) {

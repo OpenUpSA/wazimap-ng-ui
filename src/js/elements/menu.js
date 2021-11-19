@@ -1,5 +1,5 @@
 import {SubIndicator} from '../dataobjects'
-import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
+import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component, isIndicatorExcluded} from '../utils'
 
 const hideondeployClsName = 'hideondeploy';
 let parentContainer = null;
@@ -10,6 +10,7 @@ let indicatorItemTemplate = null;
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 const DATASET_TYPES = {Quantitative: 'quantitative', Qualitative: 'qualitative'};
+const EXCLUDE_TYPES = {DataMapper: 'data mapper'};
 
 function subindicatorsInSubCategory(subcategory) {
 
@@ -38,7 +39,6 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
 
     function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, indicatorDetail) {
-
         $(".data-category__h3", wrapper).remove();
         $(".data-category__h4", wrapper).remove();
 
@@ -91,7 +91,8 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
         $(".data-category__h3", h3Wrapper).remove();
 
         for (const [indicator, detail] of Object.entries(indicators)) {
-            if (detail.dataset_content_type != DATASET_TYPES.Qualitative) {
+            const isExcluded = isIndicatorExcluded(detail, EXCLUDE_TYPES.DataMapper);
+            if (detail.dataset_content_type !== DATASET_TYPES.Qualitative && !isExcluded) {
                 let newIndicator = indicatorClone.cloneNode(true);
                 $('.truncate', newIndicator).text(indicator);
                 $(h3Wrapper).append(newIndicator);

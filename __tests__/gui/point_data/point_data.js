@@ -127,7 +127,8 @@ When(/^I filter by "([^"]*)"$/, (filter) => {
     let orderedList = {
         0: 'Alice',
         1: 'Hiddingh Campus',
-        2: 'Nongoma'
+        2: 'Nongoma',
+        3: 'TestCampus'
     }
     const filters = filter.split(':');
     cy.get('.point-filters__filter-menu:visible').first().click();

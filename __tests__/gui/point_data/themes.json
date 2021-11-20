@@ -89,7 +89,8 @@
         "visible_tooltip_attributes": [],
         "configuration": {
           "filterable_fields": [
-            "website"
+            "website",
+            "campus"
           ]
         }
       },

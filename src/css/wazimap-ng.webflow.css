@@ -6415,6 +6415,14 @@ label {
   align-items: flex-start;
 }
 
+.location__facilities_content.is--hidden {
+  height: 0px;
+}
+
+.location__facilities_content.is--shown {
+  height: auto;
+}
+
 .location__facilities_icon {
   margin-right: 8px;
 }

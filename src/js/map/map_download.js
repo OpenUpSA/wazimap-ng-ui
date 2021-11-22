@@ -43,6 +43,10 @@ export class MapDownload extends Component {
                     $(clonedElement).find(self.titleClass).show();
                 }
 
+                $(clonedElement).find('.visible-in-download').each(function () {
+                    $(this).removeClass('hidden');
+                })
+
                 $(clonedElement).find(self.legendClass).removeClass('hidden');
             }
         };

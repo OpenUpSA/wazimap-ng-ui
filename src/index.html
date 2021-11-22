@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Tue Oct 26 2021 05:03:05 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Thu Nov 04 2021 06:49:24 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="60ed4accb8a175783a8133c8" data-wf-site="5fd05e808ba6609d12285571">
 <head>
   <meta charset="utf-8">
@@ -49,7 +49,7 @@
       </div>
       <div id="w-node-_5c3e6bec-baae-1fe9-3f2a-222d0aaebade-3a8133c8" class="login__form">
         <div class="form-block w-form">
-          <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form"><label for="Email">Username</label><input type="email" class="text-field w-input" maxlength="256" name="Email" data-name="Email" placeholder="" id="Email" required=""><label for="Password">Password</label><input type="password" class="text-field w-input" maxlength="256" name="Password" data-name="Password" id="Password" required="">
+          <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form"><label for="Email">Username</label><input type="email" class="text-field w-input" maxlength="256" name="Email" data-name="Email" placeholder="" id="Email" required=""><label for="Password">Password</label><input type="password" class="text-field w-input" maxlength="256" name="Password" data-name="Password" placeholder="" id="Password" required="">
             <div class="login-form__actions"><label id="w-node-_80c1d4e4-3db7-9834-435b-fefcf113a3cc-3a8133c8" class="w-checkbox login-form__checkbox">
                 <div class="w-checkbox-input w-checkbox-input--inputType-custom custom-checkbox"></div><input type="checkbox" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" style="opacity:0;position:absolute;z-index:-1"><span class="checkbox-label w-form-label">Remember me</span>
               </label><input type="submit" value="Login" data-wait="Please wait..." id="w-node-_2c610f29-c711-7689-3c43-fceb1157e41b-3a8133c8" class="button w-button">
@@ -784,17 +784,17 @@
               </div>
             </div>
             <div class="location__facilities_trigger hidden">
-              <div data-w-id="043d7c6f-c1d6-89bf-425b-062a1bf20e63" class="location-facilities__trigger--loading bg-primary hidden">
+              <div class="location-facilities__trigger--loading bg-primary hidden">
                 <div>Loading...</div>
               </div>
-              <div data-w-id="1c617a23-f429-ea74-6a83-776d50dcbc04" class="location__facilities_expand bg-primary">
+              <div class="location__facilities_expand bg-primary">
                 <div>Show <span data-i18n="locations" class="i18n">locations</span></div>
               </div>
-              <div data-w-id="043d7c6f-c1d6-89bf-425b-062a1bf20e66" class="location__facilities_contract bg-primary">
+              <div class="location__facilities_contract bg-primary">
                 <div>Hide <span data-i18n="locations" class="i18n">locations</span></div>
               </div>
             </div>
-            <div style="height:0PX" class="location__facilities_content">
+            <div class="location__facilities_content">
               <div class="location__facilities_content-wrapper"></div>
               <div class="location__facilities_download-all location__facilities_download-all--footer">
                 <div>Download all facilities</div>
@@ -2290,14 +2290,14 @@
               </div>
             </div>
             <div class="location__facilities_trigger hidden">
-              <div data-w-id="4213bb89-7d31-f409-202f-ae0837f612d4" style="display:flex" class="location__facilities_expand">
+              <div class="location__facilities_expand">
                 <div>Show facilities</div>
               </div>
-              <div data-w-id="4213bb89-7d31-f409-202f-ae0837f612d7" style="display:none" class="location__facilities_contract">
+              <div class="location__facilities_contract">
                 <div>Hide facilities</div>
               </div>
             </div>
-            <div style="height:0PX" class="location__facilities_content">
+            <div class="location__facilities_content is--hidden">
               <div class="location__facilities_content-wrapper">
                 <div class="location__facilities_loading hidden">
                   <div class="loading">
@@ -3392,7 +3392,7 @@ setTimeout(function(){
 /*------------------------------------- Hide webflow items on deploy */
 .disabled {
   pointer-events: none;
-}
+}  
 /*------------------------------------- Hide scrollbar for Chrome, Safari and Opera */
 .no-scroll::-webkit-scrollbar {
   display: none;
@@ -3417,14 +3417,14 @@ setTimeout(function(){
   border-color:rgb(51, 51, 51);
   border-radius:2px;
 }
-/*-------- Custom slider checkbox */
+/*-------- Custom slider checkbox */  
 .switch {
   position: relative;
   display: inline-block;
   width: 32px;
   height: 20px;
 }
-.switch input {
+.switch input { 
   opacity: 0;
   width: 0;
   height: 0;
@@ -3466,7 +3466,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-/*-------- Fixing Chart Lines */
+/*-------- Fixing Chart Lines */  
 .bar-tooltip {
   z-index: 100;
 }

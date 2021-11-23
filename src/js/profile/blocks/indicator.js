@@ -37,19 +37,17 @@ export class Indicator extends ContentBlock {
 
     orderChartData() {
         let primaryGroup = this.indicator.metadata.primary_group;
-        let groupsOrder = this.indicator.metadata.groups.filter((g) => {
+        let groupsOrder = this.indicator.metadata.groups.find((g) => {
             return g.name === primaryGroup
-        })[0];
-        let orderedGroups = [];
+        });
+        let subindicators = groupsOrder.subindicators;
+        let data  = this.indicator.data;
 
-        groupsOrder.subindicators.forEach((g) => {
-            let d = this.indicator.data.filter((x) => {
-                return x[primaryGroup] === g
-            })[0];
-            orderedGroups.push(d);
+        // Sort data by subindicators
+        data.sort(function(obj1, obj2){
+            return subindicators.indexOf(obj1[primaryGroup]) - subindicators.indexOf(obj2[primaryGroup]);
         })
-
-        this.indicator.data = orderedGroups;
+        this.indicator.data = data;
 
         return this.indicator;
     }

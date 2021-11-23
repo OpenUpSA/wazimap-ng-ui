@@ -20,6 +20,7 @@ function ensureRdpPort (args) {
 }
 
 const cucumber = require('cypress-cucumber-preprocessor').default
+const { isFileExist } = require('cy-verify-downloads');
 module.exports = (on, config) => {
     on('file:preprocessor', cucumber())
     on('before:browser:launch', (browser, launchOptionsOrArgs) => {
@@ -38,4 +39,5 @@ module.exports = (on, config) => {
             return client.send('Emulation.setEmulatedMedia', {media: 'print'})
         },
     });
+    on('task', { isFileExist });
 }

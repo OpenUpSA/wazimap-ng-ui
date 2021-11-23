@@ -41,6 +41,11 @@ const CHART_DATA = {
                 "Male"
             ]
         }]
+    },
+    version_data: {
+        model: {
+            isActive: true
+        }
     }
 }
 

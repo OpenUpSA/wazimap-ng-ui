@@ -69,4 +69,55 @@ describe('Rich data panel tests', () => {
         expect(descriptionElement.innerHTML).toContain("<strong>");
         expect(htmlTag).toBe(description)
     }
-});
+})
+
+describe('Rich data panel', () => {
+    let component;
+    let profileWrapper;
+    let id;
+    let removePrevCategories;
+    let isFirst;
+    let categoryDetail;
+    beforeEach(() => {
+        document.body.innerHTML = html;
+        categoryDetail = {
+            "description": "",
+            "subcategories": {
+                "Mock subcategory": {
+                    "description": "",
+                    "indicators": {
+                        "Mock indicator": {}
+                    }
+                }
+            }
+        }
+
+        component = new Component();
+        profileWrapper = $('.rich-data-content');
+        id = "category-1";
+        removePrevCategories = true;
+        isFirst = true;
+    })
+
+    test('Empty descriptions are hidden and empty', () => {
+        new Category(component, {}, 'Test category', categoryDetail, profileWrapper, id, removePrevCategories, isFirst);
+
+        let descEle = document.querySelector('.sub-category-header__description');
+        let descText = document.querySelector('.sub-category-header__description p');
+
+        expect(descEle).toHaveClass('hidden');
+        expect(descText).toBeEmptyDOMElement();
+    })
+
+    test('Descriptions are displayed correctly', () => {
+        categoryDetail.subcategories['Mock subcategory'].description= 'test description';
+
+        new Category(component, {}, 'Test category', categoryDetail, profileWrapper, id, removePrevCategories, isFirst);
+
+        let descEle = document.querySelector('.sub-category-header__description');
+        let descText = document.querySelector('.sub-category-header__description p');
+
+        expect(descEle).not.toHaveClass('hidden');
+        expect(descText).toContainHTML('test description');
+    })
+})

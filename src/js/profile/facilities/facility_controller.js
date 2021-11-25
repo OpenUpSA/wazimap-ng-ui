@@ -50,6 +50,7 @@ export class FacilityController extends Component {
 
         this._model = new FacilityControllerModel(this, parent);
         this._isLoading = false;
+        this._isExpanded = false;
         this.facilityItems = [];
         this.prepareDomElements();
         this.prepareEvents();
@@ -73,14 +74,42 @@ export class FacilityController extends Component {
         this._isLoading = value;
     }
 
+    get isExpanded() {
+        return this._isExpanded;
+    }
+
+    set isExpanded(value) {
+        if (value) {
+            this.expandButton.addClass('hidden');
+            this.collapseButton.removeClass('hidden');
+            this.facilityContent.removeClass('is--hidden').addClass('is--shown');
+        } else {
+            this.expandButton.removeClass('hidden');
+            this.collapseButton.addClass('hidden');
+            this.facilityContent.addClass('is--hidden').removeClass('is--shown');
+        }
+
+        this._isExpanded = value;
+    }
+
     prepareDomElements() {
+        this.facilityContent = $('.rich-data-content .location__facilities .location__facilities_content');
         this.facilityWrapper = $('.rich-data-content .location__facilities .location__facilities_content-wrapper');
         this.facilityTemplate = typeof $('.location-facility')[0] === 'undefined' ? null : $('.location-facility')[0].cloneNode(true);
         this.facilityRowClone = this.facilityTemplate === null ? null : $(this.facilityTemplate).find('.location-facility__list_item')[0].cloneNode(true);
+
+        this.expandButton = $('.location__facilities_expand');
+        this.collapseButton = $('.location__facilities_contract');
+        this.isExpanded = false;
     }
 
     prepareEvents() {
-
+        this.expandButton.on('click', () => {
+            this.isExpanded = true;
+        })
+        this.collapseButton.on('click', () => {
+            this.isExpanded = false;
+        })
     }
 
     getAndAddFacilities(activeVersion) {
@@ -167,8 +196,7 @@ export class FacilityController extends Component {
         $('.location__facilities_title').removeClass('hidden');
 
         $('.location-facilities__trigger--loading').addClass('hidden');
-        $('.location__facilities_expand').removeClass('hidden');
-        $('.location__facilities_contract').removeClass('hidden');
+        this.expandButton.removeClass('hidden');
 
         $('.location__facilities_download-all').removeClass('disabled');
     }
@@ -178,11 +206,8 @@ export class FacilityController extends Component {
         $('.location__facilities_title').addClass('hidden');
 
         $('.location-facilities__trigger--loading').removeClass('hidden');
-        $('.location__facilities_expand').addClass('hidden');
-        $('.location__facilities_contract').addClass('hidden');
-        if ($('.location__facilities_content').height() > 0) {
-            $('.location__facilities_contract').trigger('click');
-        }
+        this.isExpanded = false;
+        this.expandButton.addClass('hidden');
 
         $('.location__facilities_download-all').addClass('disabled');
     }

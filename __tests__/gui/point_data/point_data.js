@@ -103,6 +103,11 @@ Then('I check if the filter pane is displayed', () => {
     cy.get('.point-filters .point-filters__title .filters__header_name div div').should('have.text', 'Point Filter')
 })
 
+Then('I check if the point category legend is hidden', () => {
+    cy.get('.map-point-legend').should('not.be.visible');
+    cy.get('.map-point-legend').should('have.class', 'visible-in-download');
+})
+
 When('I click on the first filter dropdown', () => {
     cy.get('.point-filters__filter-menu:visible').first().click();
 })
@@ -152,7 +157,7 @@ Then('I click on the close button', () => {
     cy.get('.point-filters').should('not.be.visible')
 })
 
-Then('I filter by a numerical value',()=>{
+Then('I filter by a numerical value', () => {
     cy.get('.point-filters__filter-menu:visible').first().click();
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("numerical")`).click();
 

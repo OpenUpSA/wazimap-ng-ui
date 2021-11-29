@@ -126,9 +126,8 @@ export default class ProfileLoader extends Component {
 
         $(window).on('scroll', function () {
             let fromTop = $(this).scrollTop() + topMenuHeight;
-
             let currentItem = scrollItems.map(function () {
-                if ($(this).offset().top < fromTop)
+                if ($(this).offset().top < fromTop && $(this).offset().top > 0)
                     return this;
             });
 

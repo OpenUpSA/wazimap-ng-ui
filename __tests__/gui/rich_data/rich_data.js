@@ -31,7 +31,7 @@ Then('the hamburger menu should show', () => {
 })
 
 When('I click on Save As Image in Rich Data', () => {
-    cy.get('.hover-menu__content_item').first().click();
+    cy.get('.hover-menu__content_item').first().click({force: true});
     cy.verifyDownload('Youth status.png');
 })
 

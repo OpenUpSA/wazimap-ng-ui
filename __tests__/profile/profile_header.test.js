@@ -3,7 +3,7 @@ import {extractSheetsData} from "../../src/js/utils";
 import {screen} from "@testing-library/dom";
 import {Component} from '../../src/js/utils';
 import {API} from '../../src/js/api';
-import {FacilityItem} from "../../src/js/profile/facilities/facilityItem";
+import {FacilityItem} from "../../src/js/profile/facilities/facility_item";
 
 const FACILITIES = {
     count: 2,

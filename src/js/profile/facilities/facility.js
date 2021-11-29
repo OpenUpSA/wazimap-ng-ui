@@ -1,5 +1,5 @@
 import {Component, ThemeStyle} from "../../utils";
-import {FacilityItem} from "./facilityItem";
+import {FacilityItem} from "./facility_item";
 
 export class Facility extends Component {
     constructor(parent, facilityTemplate, facilityRowClone, theme, categoryArr) {

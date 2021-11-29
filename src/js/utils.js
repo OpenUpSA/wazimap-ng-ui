@@ -336,7 +336,7 @@ export function checkIfCategoryHasChildren(category, detail) {
 export function checkIfSubCategoryHasChildren(subcategory, detail) {
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
-        if (!hasChildren && data.child_data !== undefined && data.dataset_content_type !== 'qualitative') {
+        if (!hasChildren && data.child_data !== undefined && data.dataset_content_type !== 'qualitative' && !isIndicatorExcluded(data, 'data mapper')) {
             for (const [geo, arr] of Object.entries(data.child_data)) {
                 hasChildren = hasChildren || arr.length > 0;
             }
@@ -367,6 +367,20 @@ export function checkIfSubIndicatorHasChildren(subindicator, detail) {
         })
     }
     return hasData;
+}
+
+export function isIndicatorExcluded(indicatorData, excludeType) {
+    let isExcluded = false;
+
+    if (indicatorData.chartConfiguration === undefined || indicatorData.chartConfiguration.exclude === undefined) {
+        isExcluded = false;
+    } else {
+        if (indicatorData.chartConfiguration.exclude.indexOf(excludeType) >= 0) {
+            isExcluded = true;
+        }
+    }
+
+    return isExcluded;
 }
 
 export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator) {

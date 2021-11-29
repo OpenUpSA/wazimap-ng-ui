@@ -31,7 +31,7 @@ Then('the hamburger menu should show', () => {
 })
 
 When('I click on Save As Image in Rich Data', () => {
-    cy.get('.hover-menu__content_item').first().click();
+    cy.get('.hover-menu__content_item').first().click({force: true});
     cy.verifyDownload('chart.png');
 })
 
@@ -42,3 +42,11 @@ When('I scroll to bottom of the page', () => {
 Then(/^I check if "([^"]*)" is active$/, function (word) {
     cy.get(`.rich-data-nav__item.w-inline-block[title="${word}"]`).should('have.class', 'w--current');
 });
+
+Then('None of the menu items should be active', () => {
+    cy.get('.rich-data-nav__item.w--current').should('have.length', 0);
+})
+
+When('I close the Rich Data', ()=>{
+    cy.get('.rich-data-toggles .point-mapper-panel__open').click();
+})

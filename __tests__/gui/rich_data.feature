@@ -7,6 +7,7 @@ Feature: Rich data menu
 
     And I expand Rich Data
     Then Rich Data should be displayed
+    Then None of the menu items should be active
 
     And I mouseover the hamburger menu
     Then the hamburger menu should show
@@ -15,3 +16,8 @@ Feature: Rich data menu
 
     And I scroll to bottom of the page
     Then I check if "Test Category 3" is active
+
+    And I close the Rich Data
+    Then I expand Rich Data
+    Then Rich Data should be displayed
+    Then None of the menu items should be active

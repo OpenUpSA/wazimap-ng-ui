@@ -346,6 +346,29 @@ export function checkIfSubCategoryHasChildren(subcategory, detail) {
     return hasChildren;
 }
 
+export function checkIfIndicatorHasChildren(indicator, detail) {
+    let hasChildren = false;
+    if (detail.child_data !== undefined && Object.entries(detail.child_data).length > 0) {
+        hasChildren = true;
+    }
+
+    return hasChildren;
+}
+
+export function checkIfSubIndicatorHasChildren(subindicator, detail) {
+    let hasData = false;
+    for (const [geography, data] of Object.entries(detail.child_data)) {
+        data.forEach((indicatorDataPoint) => {
+            for (const [title, value] of Object.entries(indicatorDataPoint)) {
+                if (subindicator == value) {
+                    hasData = true;
+                }
+            }
+        })
+    }
+    return hasData;
+}
+
 export function filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator) {
     let sumData = {};
     Object.entries(childData).map(([code, data]) => {

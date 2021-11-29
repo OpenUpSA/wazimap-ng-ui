@@ -1,5 +1,10 @@
 import {SubIndicator} from '../dataobjects'
-import {checkIfSubCategoryHasChildren, checkIfCategoryHasChildren, Component} from '../utils'
+import {
+    checkIfSubCategoryHasChildren,
+    checkIfCategoryHasChildren,
+    checkIfSubIndicatorHasChildren,
+    Component, checkIfIndicatorHasChildren
+} from '../utils'
 
 const hideondeployClsName = 'hideondeploy';
 let parentContainer = null;
@@ -44,7 +49,7 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
 
         if (groups !== null && typeof groups.subindicators !== 'undefined') {
             groups.subindicators.forEach((subindicator) => {
-                let display = subindicatorHasData(subindicator, indicatorDetail);
+                let display = checkIfSubIndicatorHasChildren(subindicator, indicatorDetail);
 
                 if (display) {
                     const newSubIndicatorElement = indicatorItemTemplate.cloneNode(true);
@@ -91,7 +96,7 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
         $(".data-category__h3", h3Wrapper).remove();
 
         for (const [indicator, detail] of Object.entries(indicators)) {
-            if (detail.dataset_content_type != DATASET_TYPES.Qualitative) {
+            if (detail.dataset_content_type !== DATASET_TYPES.Qualitative && checkIfIndicatorHasChildren(indicator,detail)) {
                 let newIndicator = indicatorClone.cloneNode(true);
                 $('.truncate', newIndicator).text(indicator);
                 $(h3Wrapper).append(newIndicator);
@@ -132,20 +137,6 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
 
     function resetActive() {
         $(".menu__link_h4--active", parentContainer).removeClass("menu__link_h4--active");
-    }
-
-    function subindicatorHasData(subindicator, detail) {
-        let hasData = false;
-        for (const [geography, data] of Object.entries(detail.child_data)) {
-            data.forEach((indicatorDataPoint) => {
-                for (const [title, value] of Object.entries(indicatorDataPoint)) {
-                    if (subindicator == value) {
-                        hasData = true;
-                    }
-                }
-            })
-        }
-        return hasData;
     }
 
     $(".data-menu__category").remove();

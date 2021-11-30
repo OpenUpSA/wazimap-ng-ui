@@ -82,8 +82,9 @@ class FilterRowModel extends Component {
         let prevIndicator = this._currentIndicatorValue;
         this._currentIndicatorValue = value;
 
-        if (prevIndicator != null && prevIndicator != FilterRowModel.ALL_VALUES)
+        if (prevIndicator != null && prevIndicator != FilterRowModel.ALL_VALUES) {
             this.dataFilterModel.removeFilter(prevIndicator);
+        }
 
         if (value != null && value != FilterRowModel.ALL_VALUES) {
             this.dataFilterModel.addFilter(value);
@@ -228,7 +229,8 @@ export class FilterRow extends Component {
 
     onIndicatorSelected(selectedItem) {
         this.subIndicatorDropdown.setText(FilterRow.SELECT_VALUE);
-        if (selectedItem == FilterRowModel.ALL_VALUES) {
+        this.subIndicatorDropdown.model.currentIndex = -1;
+        if (selectedItem === FilterRowModel.ALL_VALUES) {
             this.subIndicatorDropdown.disable();
         } else {
             this.subIndicatorDropdown.enable();

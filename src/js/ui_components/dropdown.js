@@ -76,7 +76,6 @@ export class DropdownModel extends Observable {
     }
 }
 
-
 export class Dropdown extends Component {
     /**
      * A class representing a dropdown widget
@@ -91,14 +90,12 @@ export class Dropdown extends Component {
         this._defaultText = defaultText;
         this._listItemElements = [];
 
-
         this.prepareDomElements();
         this.prepareEvents();
 
         this.redrawItems(this.model.items);
         this.model.isDisabled = disabled;
-        this.setText(defaultText)
-
+        this.setText(defaultText);
     }
 
     get container() {

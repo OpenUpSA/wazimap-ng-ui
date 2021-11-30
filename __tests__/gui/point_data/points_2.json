@@ -34,6 +34,39 @@
         "url": null,
         "image": null
       }
+    },{
+      "id": 441633,
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.093833387362697,
+          -25.995409163308832
+        ]
+      },
+      "properties": {
+        "data": [
+          {
+            "key": "campus",
+            "value": "TestCampus"
+          },
+          {
+            "key": "opening hours",
+            "value": "7.30am - 4pm, Monday to Friday"
+          },
+          {
+            "key": "services offered",
+            "value": "Career guidance, Assistance with job search, Job application assistance, Help with writing a CV, Job interview preparation, Job matching, Work-based training, Skills development and training based at your facility, Psycho-social support, Mental health care"
+          },
+          {
+            "key": "other services and information",
+            "value": "Registration on the  ESSA database"
+          }
+        ],
+        "name": "Mthashana FET College (A)",
+        "url": null,
+        "image": null
+      }
     }
   ]
 }

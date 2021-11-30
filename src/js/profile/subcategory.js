@@ -3,6 +3,7 @@ import {Component, formatNumericalValue} from "../utils";
 import {ContentBlock} from "./blocks/content_block";
 import {HTMLBlock} from "./blocks/html_block";
 import {assertNTemplates} from "../utils";
+import {KeyMetric} from "./key_metric";
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -25,7 +26,6 @@ export class Subcategory extends Component {
         this._formattingConfig = formattingConfig;
         this._geography = geography;
 
-        this.addKeyMetrics($(scHeaderClone), detail);
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
         this.addIndicators(wrapper, detail);
 
@@ -52,6 +52,8 @@ export class Subcategory extends Component {
 
     addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
         let scHeader = scHeaderClone.cloneNode(true);
+
+        this.addKeyMetrics($(scHeader), detail);
 
         if (isFirst) {
             $(wrapper).find(subcategoryHeaderClass).remove();
@@ -120,6 +122,7 @@ export class Subcategory extends Component {
     }
 
     addKeyMetrics = (wrapper, detail) => {
+        let self = this;
         let key_metrics = detail.key_metrics;
 
         let metricWrapper = $(wrapper).find(keyMetricWrapperClass);
@@ -136,16 +139,7 @@ export class Subcategory extends Component {
         let metricTemplate = $(keyMetricClass)[0].cloneNode(true);
 
         key_metrics.forEach((km) => {
-            let item = metricTemplate.cloneNode(true);
-            $('.key-metric__value div', item).text(formatNumericalValue(km.value, this.formattingConfig, km.method));
-            $('.key-metric__title', item).text(km.label);
-            if(detail.version_data.model.isActive){
-                $('.key-metric__description', item).addClass('hidden');
-            }
-            else {
-                $('.key-metric__description div', item).text(`(${detail.version_data.model.name})`);
-            }
-            metricWrapper.append(item);
+            new KeyMetric(self, km, metricTemplate, metricWrapper);
         })
     }
 }

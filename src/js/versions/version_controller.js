@@ -110,7 +110,7 @@ export class VersionController extends Component {
             }
         }
 
-        if(allTriggered){
+        if (allTriggered) {
             Webflow.require('ix2').init();
         }
     }
@@ -191,6 +191,12 @@ export class VersionController extends Component {
         for (const [category, categoryDetail] of Object.entries(dataBundle.profile.profileData)) {
             for (const [subcategory, subcategoryDetail] of Object.entries(categoryDetail.subcategories)) {
                 subcategoryDetail.version_data = version;
+                subcategoryDetail.key_metrics.forEach((km) => {
+                    //if version_data is not undefined, it means it has already been set in appendProfileData
+                    if (km.version_data === undefined) {
+                        km.version_data = version;
+                    }
+                })
                 for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {
                     indicatorDetail.version_data = version;
                 }
@@ -209,6 +215,11 @@ export class VersionController extends Component {
                 let allVersionsBundleSubcategory = this.allVersionsBundle.profile.profileData[category].subcategories[subcategory];
                 if (allVersionsBundleSubcategory === undefined || $.isEmptyObject(allVersionsBundleSubcategory)) {
                     this.allVersionsBundle.profile.profileData[category].subcategories[subcategory] = subcategoryDetail;
+                } else {
+                    subcategoryDetail.key_metrics.forEach((km) => {
+                        km.version_data = version;
+                    })
+                    allVersionsBundleSubcategory.key_metrics = allVersionsBundleSubcategory.key_metrics.concat(subcategoryDetail.key_metrics);
                 }
 
                 for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {

@@ -1,5 +1,11 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
-import {gotoHomepage, setupInterceptions, waitUntilGeographyIsLoaded} from "../common_cy_functions/general";
+import {
+    expandPointMapper,
+    expandRichDataPanel,
+    gotoHomepage,
+    setupInterceptions,
+    waitUntilGeographyIsLoaded
+} from "../common_cy_functions/general";
 import profiles from "../multi_boundary_versions/profiles.json";
 import all_details_2011 from "../multi_boundary_versions/all_details_2011.json";
 import all_details_2016 from "../multi_boundary_versions/all_details_2016.json";
@@ -147,4 +153,23 @@ Then('I check if the profile highlight is hidden', () => {
 Then('I check if the profile highlight is displayed correctly', () => {
     cy.get('.map-location__info .location-highlight .location-highlight__title').should('have.text', 'Youth');
     cy.get('.map-location__info .location-highlight .location-highlight__value').should('have.text', '34.9%');
+})
+
+When('I expand Rich Data Panel', () => {
+    expandRichDataPanel();
+})
+
+Then('I check if the key metric is shown with the version notification', () => {
+    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__title').should('have.text', 'test-key-metrics');
+    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description').should('be.visible');
+    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description div').should('have.text', '(2016 with wards)');
+})
+
+Then('I check if the key metric is shown without the version notification', () => {
+    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__title').should('have.text', 'test-key-metrics');
+    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description').should('not.be.visible');
+})
+
+Then('I expand Point Mapper', ()=>{
+    expandPointMapper();
 })

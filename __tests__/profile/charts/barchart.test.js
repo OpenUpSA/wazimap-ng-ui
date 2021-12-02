@@ -230,16 +230,27 @@ describe('Test downloadable barchart', () => {
 
         let parent = new Component();
         let newdata = {
-            "data": data,
-            "metadata": metadata,
+            data: data,
+            metadata: metadata,
+            chartConfiguration: {
+                filter: {
+                    defaults: []
+                }
+            }
         }
 
         const node = document.querySelector('.profile-indicator');
-        $(node).find(".hover-menu__content_list a[data-id='Value'] div").text('Value test')
+        $(node).find(".hover-menu__content_list a[data-id='Value'] div")
+            .text('Value test')
+            .closest('a')
+            .attr('data-testid', 'value-btn');
         let chart = new Chart(parent, config, newdata, [], node, "TEST", "this is chart attribution");
-        let valueLink = node.querySelector(".hover-menu__content_list a[data-id='Value']");
-        console.log({'valueLink': valueLink.outerHTML})
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        let valueLink = screen.getByTestId('value-btn'); // node.querySelector(".hover-menu__content_list a[data-id='Value']");
+        console.log({'valueLink':valueLink.outerHTML})
         fireEvent.click(valueLink);
+
+
         //expect(view.signal('Units')).toBe('value');
 
     });

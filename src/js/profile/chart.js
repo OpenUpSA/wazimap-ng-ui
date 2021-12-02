@@ -38,7 +38,8 @@ export class Chart extends Component {
         data,
         groups,
         _subCategoryNode,
-        title
+        title,
+        chartAttribution
     ) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
@@ -52,7 +53,7 @@ export class Chart extends Component {
         this.filter = null;
         this.groups = data.metadata.groups;
 
-        this.profileAttribution = parent.parent.parent.parent.config.chart_attribution;
+        this.profileAttribution = chartAttribution;
         this.subCategoryNode = _subCategoryNode;
 
         const chartContainer = $(chartContainerClass, this.subCategoryNode);
@@ -296,8 +297,10 @@ export class Chart extends Component {
         })
 
         $(this.containerParent).find('.hover-menu__content_list a').each(function () {
+            console.log('each =====================')
             $(this).off('click');
             $(this).on('click', () => {
+                console.log('click ==========================')
                 let displayType = $(this).data('id');
                 self.selectedGraphValueTypeChanged(self.containerParent, displayType);
                 self.vegaView.signal("Units", graphValueTypes[displayType]).run();

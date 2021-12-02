@@ -58,6 +58,7 @@ export class Chart extends Component {
 
         const chartContainer = $(chartContainerClass, this.subCategoryNode);
         this.container = chartContainer[0];
+
         this.containerParent = $(this.container).closest('.profile-indicator');
 
         this._filtersContainer = $(this.containerParent).find(filterWrapperClass);
@@ -297,7 +298,7 @@ export class Chart extends Component {
         })
 
         $(this.containerParent).find('.hover-menu__content_list a').each(function () {
-            console.log('each =====================')
+            console.log({'text': $(this).text()})
             $(this).off('click');
             $(this).on('click', () => {
                 console.log('click ==========================')

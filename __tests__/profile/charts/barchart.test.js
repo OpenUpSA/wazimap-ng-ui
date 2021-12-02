@@ -225,30 +225,20 @@ describe('Test downloadable barchart', () => {
         expect(view.signal('attribution').toString()).toBe('Profile config attribution');
     });
 
-    // his.profileAttribution = parent.parent.parent.parent.config.chart_attribution;
     test('Check change in bar chart scale', async () => {
         let annotations = {'graphValueType': 'Percentage'}
 
         let parent = new Component();
-        let testconfig = {
-            "parent": {
-                "parent": {
-                    "parent": {
-                        "parent": parent
-                    }
-                }
-            }
-        }
         let newdata = {
             "data": data,
             "metadata": metadata,
         }
 
-        let chart = new Chart(parent, config, newdata, [], null, "TEST", "this is chart attribution");
-        let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
-        let view = renderVegaHeadless(vegaDownloadSpec);
-        await view.runAsync()
-        let valueLink = document.querySelector(".hover-menu__content_list a[data-id='Value']");
+        const node = document.querySelector('.profile-indicator');
+        $(node).find(".hover-menu__content_list a[data-id='Value'] div").text('Value test')
+        let chart = new Chart(parent, config, newdata, [], node, "TEST", "this is chart attribution");
+        let valueLink = node.querySelector(".hover-menu__content_list a[data-id='Value']");
+        console.log({'valueLink': valueLink.outerHTML})
         fireEvent.click(valueLink);
         //expect(view.signal('Units')).toBe('value');
 

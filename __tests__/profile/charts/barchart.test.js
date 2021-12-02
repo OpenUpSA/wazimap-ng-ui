@@ -1,6 +1,9 @@
 import { configureBarchart, configureBarchartDownload } from '../../../src/js/profile/charts/barChart.js';
 import { screen, fireEvent, getByText } from '@testing-library/dom'
 import { parse, View }from 'vega';
+import html from '../../../src/index.html';
+import {Chart} from '../../../src/js/profile/chart.js';
+import {Component} from '../../../src/js/utils.js'
 
 function renderVegaHeadless(spec) {
   const runtime = parse(spec)
@@ -9,6 +12,8 @@ function renderVegaHeadless(spec) {
 }
 
 describe('configureBarchart', () => {
+  document.body.innerHTML = html;
+
   let data, metadata, config;
   beforeEach(() => {
     metadata = {
@@ -212,5 +217,37 @@ describe('Test downloadable barchart', () => {
     expect(view.signal('geography')).toBe('South Africa');
     expect(view.signal('filters')).toBe('Gender: female');
     expect(view.signal('attribution').toString()).toBe('Profile config attribution');
-  })
+  });
+
+  // his.profileAttribution = parent.parent.parent.parent.config.chart_attribution;
+  test('Check change in bar chart scale', async () => {
+    let annotations = {'graphValueType':'Percentage'}
+
+    let testconfig = {
+      "parent": {
+          "parent": {
+            "parent": {
+              "parent": {
+                "config" : {"chart_attribution": {}}
+              }
+            }
+          }
+      }
+    }
+    let parent = new Component();
+    let newdata = {
+        "data": data,
+        "metadata": metadata,
+    }
+    console.log(newdata);
+    let chart = new Chart(testconfig, config, newdata, [], null, "TEST");
+    let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
+    let view = renderVegaHeadless(vegaDownloadSpec);
+    await view.runAsync()
+    let valueLink = document.querySelector(".hover-menu__content_list a[data-id='Value']");
+    console.log(valueLink.getAttribute("data-id"));
+    valueLink.click();
+    expect(view.signal('Units')).toBe('value');
+
+  });
 });

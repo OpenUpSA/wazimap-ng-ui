@@ -241,7 +241,13 @@ describe('Test downloadable barchart', () => {
     });
 
     test('Check change in bar chart scale', async () => {
-        let annotations = {'graphValueType': 'Percentage'}
+      let annotations = {
+          'title': 'Population',
+          'geography': 'South Africa',
+          'filters': 'Gender: female',
+          'attribution': 'Profile config attribution',
+          'graphValueType': 'Percentage'
+      }
 
         let parent = new Component();
         let newdata = {
@@ -259,10 +265,15 @@ describe('Test downloadable barchart', () => {
             .closest('a')
             .attr('data-testid', 'value-btn');
         let chart = new Chart(parent, config, newdata, [], node, "TEST", "this is chart attribution");
+        let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
+        let view = renderVegaHeadless(vegaDownloadSpec);
+        await view.runAsync()
         await new Promise(resolve => setTimeout(resolve, 1000))
         let valueLink = screen.getByTestId('value-btn'); // node.querySelector(".hover-menu__content_list a[data-id='Value']");
         console.log({'valueLink':valueLink.outerHTML})
         fireEvent.click(valueLink);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        expect(view.signal('Units')).toBe('value');
 
     });
 });

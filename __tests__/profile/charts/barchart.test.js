@@ -225,6 +225,21 @@ describe('Test downloadable barchart', () => {
         expect(view.signal('attribution').toString()).toBe('Profile config attribution');
     });
 
+    test('Check spec for source if value does not exists', async () => {
+        let annotations = {
+            'title': 'Population',
+            'geography': 'South Africa',
+            'filters': 'Gender: female',
+            'attribution': 'Profile config attribution',
+            'graphValueType': 'Percentage'
+        }
+        metadata["source"] = '';
+        let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
+        let view = renderVegaHeadless(vegaDownloadSpec);
+        await view.runAsync()
+        expect(view.signal('source').toString()).toBe('');
+    });
+
     test('Check change in bar chart scale', async () => {
         let annotations = {'graphValueType': 'Percentage'}
 
@@ -238,7 +253,6 @@ describe('Test downloadable barchart', () => {
                 }
             }
         }
-
         const node = document.querySelector('.profile-indicator');
         $(node).find(".hover-menu__content_list a[data-id='Value'] div")
             .text('Value test')
@@ -249,9 +263,6 @@ describe('Test downloadable barchart', () => {
         let valueLink = screen.getByTestId('value-btn'); // node.querySelector(".hover-menu__content_list a[data-id='Value']");
         console.log({'valueLink':valueLink.outerHTML})
         fireEvent.click(valueLink);
-
-
-        //expect(view.signal('Units')).toBe('value');
 
     });
 });

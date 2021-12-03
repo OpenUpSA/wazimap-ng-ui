@@ -241,14 +241,6 @@ describe('Test downloadable barchart', () => {
     });
 
     test('Check change in bar chart scale', async () => {
-      let annotations = {
-          'title': 'Population',
-          'geography': 'South Africa',
-          'filters': 'Gender: female',
-          'attribution': 'Profile config attribution',
-          'graphValueType': 'Percentage'
-      }
-
         let parent = new Component();
         let newdata = {
             data: data,
@@ -260,20 +252,20 @@ describe('Test downloadable barchart', () => {
             }
         }
         const node = document.querySelector('.profile-indicator');
-        $(node).find(".hover-menu__content_list a[data-id='Value'] div")
-            .text('Value test')
+        $(node).find(".hover-menu__content_list a[data-id='Percentage'] div")
+            .text('Percentage test')
             .closest('a')
-            .attr('data-testid', 'value-btn');
-        let chart = new Chart(parent, config, newdata, [], node, "TEST", "this is chart attribution");
-        let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
-        let view = renderVegaHeadless(vegaDownloadSpec);
-        await view.runAsync()
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        let valueLink = screen.getByTestId('value-btn'); // node.querySelector(".hover-menu__content_list a[data-id='Value']");
-        console.log({'valueLink':valueLink.outerHTML})
-        fireEvent.click(valueLink);
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        expect(view.signal('Units')).toBe('value');
+            .attr('data-testid', 'percentage-btn');
 
+        let chart = new Chart(parent, config, newdata, [], node, "TEST", "this is chart attribution");
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        expect(chart.vegaView.signal('Units')).toBe('value');
+
+        let valueLink = screen.getByTestId('percentage-btn');
+        fireEvent.click(valueLink);
+
+        expect(chart.vegaView.signal('Units')).toBe('percentage');
     });
 });

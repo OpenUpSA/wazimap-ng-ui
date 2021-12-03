@@ -298,10 +298,8 @@ export class Chart extends Component {
         })
 
         $(this.containerParent).find('.hover-menu__content_list a').each(function () {
-            console.log({'text': $(this).text()})
             $(this).off('click');
             $(this).on('click', () => {
-                console.log('click ==========================')
                 let displayType = $(this).data('id');
                 self.selectedGraphValueTypeChanged(self.containerParent, displayType);
                 self.vegaView.signal("Units", graphValueTypes[displayType]).run();

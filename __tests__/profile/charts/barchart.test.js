@@ -268,4 +268,45 @@ describe('Test downloadable barchart', () => {
 
         expect(chart.vegaView.signal('Units')).toBe('percentage');
     });
+
+    test('Check change in bar chart filters', async () => {
+        let parent = new Component();
+        let metadata = {
+            source: "Census 2021",
+            primary_group: "gender",
+            groups: [
+              {name: "gender", subindicators: ["male", "female"]},
+              {name: "age", subindicators: [12, 14, 15]}
+          ]
+        }
+        let newdata = {
+            data: data,
+            child_data: {"ZA": data},
+            metadata: metadata,
+            chartConfiguration: {
+                filter: {
+                    defaults: []
+                }
+            }
+        }
+        const node = document.querySelector('.profile-indicator');
+        let chart = new Chart(parent, config, newdata, [], node, "TEST", "this is chart attribution");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        // set up filter for gender
+        chart.applyFilter({"ZA": data}, {"gender": "male"});
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        expect(chart.vegaView.signal('genderFilter')).toBe(true);
+        expect(chart.vegaView.signal('genderFilterValue')).toBe("male");
+        expect(chart.vegaView.signal('ageFilter')).toBe(false);
+        // expect(chart.vegaView.signal('filters')).toBe('Gender: male, ');
+
+        // change filter from gender to age to check if spec change
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        chart.applyFilter({"ZA": data}, {"age": 15});
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        expect(chart.vegaView.signal('ageFilter')).toBe(true);
+        expect(chart.vegaView.signal('ageFilterValue')).toBe(15);
+        expect(chart.vegaView.signal('genderFilter')).toBe(false);
+        // expect(chart.vegaView.signal('filters')).toBe('Age: 15, ');
+    });
 });

@@ -261,12 +261,12 @@ describe('Test downloadable barchart', () => {
 
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        expect(chart.vegaView.signal('Units')).toBe('value');
+        expect(chart.vegaDownloadView.signal('Units')).toBe('value');
 
         let valueLink = screen.getByTestId('percentage-btn');
         fireEvent.click(valueLink);
 
-        expect(chart.vegaView.signal('Units')).toBe('percentage');
+        expect(chart.vegaDownloadView.signal('Units')).toBe('percentage');
     });
 
     test('Check change in bar chart filters', async () => {
@@ -298,7 +298,7 @@ describe('Test downloadable barchart', () => {
         expect(chart.vegaView.signal('genderFilter')).toBe(true);
         expect(chart.vegaView.signal('genderFilterValue')).toBe("male");
         expect(chart.vegaView.signal('ageFilter')).toBe(false);
-        // expect(chart.vegaView.signal('filters')).toBe('Gender: male, ');
+        expect(chart.vegaDownloadView.signal('filters')).toBe('Gender: male, ');
 
         // change filter from gender to age to check if spec change
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -307,7 +307,7 @@ describe('Test downloadable barchart', () => {
         expect(chart.vegaView.signal('ageFilter')).toBe(true);
         expect(chart.vegaView.signal('ageFilterValue')).toBe(15);
         expect(chart.vegaView.signal('genderFilter')).toBe(false);
-        // expect(chart.vegaView.signal('filters')).toBe('Age: 15, ');
+        expect(chart.vegaDownloadView.signal('filters')).toBe('Age: 15, ');
     });
 
     test('Test to check if empty chart can be downloaded', async () => {

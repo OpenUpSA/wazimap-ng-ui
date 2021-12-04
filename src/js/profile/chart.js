@@ -143,6 +143,7 @@ export class Chart extends Component {
 
             .then(async (result) => {
                 this.vegaView = result.view;
+                this.vegaDownloadView = null;
                 this.setChartMenu();
                 this.showChartDataTable();
                 this.setDownloadUrl();
@@ -270,9 +271,10 @@ export class Chart extends Component {
         }
 
         let specDownload = configureBarchartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
-        let vegaViewDownload = new vega.View(vega.parse(specDownload));
 
-        const pngDownloadUrl = await vegaViewDownload.toImageURL('png', 1);
+        this.vegaDownloadView = new vega.View(vega.parse(specDownload));
+
+        const pngDownloadUrl = await this.vegaDownloadView.toImageURL('png', 1);
         const saveImgButton = $(containerParent).find(
             ".hover-menu__content a.hover-menu__content_item:nth-child(1)"
         );

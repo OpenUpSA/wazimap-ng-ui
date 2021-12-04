@@ -309,4 +309,21 @@ describe('Test downloadable barchart', () => {
         expect(chart.vegaView.signal('genderFilter')).toBe(false);
         // expect(chart.vegaView.signal('filters')).toBe('Age: 15, ');
     });
+
+    test('Test to check if empty chart can be downloaded', async () => {
+      let annotations = {
+          'title': 'Population',
+          'geography': 'South Africa',
+          'attribution': 'Profile config attribution',
+          'graphValueType': 'Percentage'
+      }
+      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+      let view = renderVegaHeadless(vegaDownloadSpec);
+      await view.runAsync()
+
+      expect(view.signal('title')).toBe('Population');
+      expect(view.signal('source')).toBe('Source : Census 2021');
+      expect(view.signal('geography')).toBe('South Africa');
+      expect(view.signal('attribution').toString()).toBe('Profile config attribution');
+    });
 });

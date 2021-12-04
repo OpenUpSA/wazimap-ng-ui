@@ -3923,6 +3923,10 @@ label {
   padding: 10px;
 }
 
+.map-options__legend.is--hidden {
+  display: none;
+}
+
 .map-options__filters {
   width: 100%;
   border-bottom: 1px solid #ebebeb;
@@ -5752,7 +5756,7 @@ label {
   display: -ms-flexbox;
   display: flex;
   height: 32px;
-  margin-bottom: 10px;
+  margin-bottom: 36px;
   margin-left: 10px;
   padding-right: 8px;
   padding-left: 6px;
@@ -6011,6 +6015,10 @@ label {
   align-items: stretch;
   border-top: 1px dashed rgba(0, 0, 0, 0.1);
   font-size: 0.8em;
+}
+
+.map-options__context.is--hidden {
+  display: none;
 }
 
 .map-option__context_text {
@@ -7462,7 +7470,7 @@ label {
   left: auto;
   top: auto;
   right: auto;
-  bottom: 20px;
+  bottom: 30px;
   z-index: 999;
   display: -webkit-box;
   display: -webkit-flex;
@@ -7833,6 +7841,10 @@ label {
   padding-left: 10px;
 }
 
+.map-options__filter-row.is--hidden {
+  display: none;
+}
+
 .mapping-options__remove-filter {
   position: absolute;
   left: auto;
@@ -7892,6 +7904,10 @@ label {
   padding-left: 10px;
 }
 
+.map-options__filter-labels.is--hidden {
+  display: none;
+}
+
 .mapping-options__add-filter {
   display: -webkit-box;
   display: -webkit-flex;
@@ -7926,6 +7942,10 @@ label {
 
 .mapping-options__add-filter:active {
   background-color: rgba(0, 0, 0, 0.06);
+}
+
+.mapping-options__add-filter.is--hidden {
+  display: none;
 }
 
 .profile-indicator__filters-wrapper {
@@ -8585,7 +8605,6 @@ label {
   display: -ms-flexbox;
   display: flex;
   height: 36px;
-  padding-right: 72px;
 }
 
 .point-filters__title {
@@ -8610,7 +8629,7 @@ label {
   position: absolute;
   left: auto;
   top: 0%;
-  right: 36px;
+  right: 0px;
   bottom: 0%;
   display: -webkit-box;
   display: -webkit-flex;
@@ -8646,10 +8665,7 @@ label {
   top: 0%;
   right: 0%;
   bottom: 0%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   overflow: hidden;
   width: 36px;
   height: 36px;
@@ -8689,6 +8705,10 @@ label {
   padding-left: 10px;
 }
 
+.point-filters__labels.is--hidden {
+  display: none;
+}
+
 .point-filters_content {
   display: -webkit-box;
   display: -webkit-flex;
@@ -8703,6 +8723,15 @@ label {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.point-filters_content.is--shown {
+  overflow: visible;
+  height: auto;
+}
+
+.point-filters_content.is--hidden {
+  display: none;
+}
+
 .point-filters__filter-row {
   position: relative;
   display: -webkit-box;
@@ -8713,6 +8742,10 @@ label {
   padding-top: 5px;
   padding-right: 46px;
   padding-left: 10px;
+}
+
+.point-filters__filter-row.is--hidden {
+  display: none;
 }
 
 .point-filters__add-filter {
@@ -8749,6 +8782,10 @@ label {
 
 .point-filters__add-filter:active {
   background-color: rgba(0, 0, 0, 0.06);
+}
+
+.point-filters__add-filter.is--hidden {
+  display: none;
 }
 
 .point-filters__filter {
@@ -9320,6 +9357,60 @@ label {
   width: 100%;
   height: 100%;
   padding: 8px;
+}
+
+.point-filters__no-data {
+  margin-top: 5px;
+  margin-bottom: 0px;
+  padding: 0px 10px 0px 15px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  color: #707070;
+}
+
+.point-filters__no-data.is--hidden {
+  display: none;
+}
+
+.map-credit {
+  position: absolute;
+  left: 0%;
+  top: auto;
+  right: auto;
+  bottom: 0%;
+  z-index: 1000;
+  margin-bottom: 0px;
+  padding: 5px 8px;
+  background-color: hsla(0, 0%, 100%, 0.5);
+  font-size: 0.9em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.map-about__credit {
+  margin-bottom: 0px;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  -ms-grid-row-align: center;
+  align-self: center;
+  line-height: 1;
+}
+
+.map-options__no-data {
+  margin-top: 5px;
+  margin-bottom: 0px;
+  padding: 0px 10px 0px 15px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  color: #707070;
+}
+
+.map-options__no-data.is--hidden {
+  display: none;
 }
 
 @media screen and (max-width: 991px) {

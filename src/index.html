@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Thu Nov 04 2021 06:49:24 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Fri Dec 03 2021 09:24:44 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="60ed4accb8a175783a8133c8" data-wf-site="5fd05e808ba6609d12285571">
 <head>
   <meta charset="utf-8">
@@ -51,7 +51,7 @@
         <div class="form-block w-form">
           <form id="wf-form-Login-Form" name="wf-form-Login-Form" data-name="Login Form"><label for="Email">Username</label><input type="email" class="text-field w-input" maxlength="256" name="Email" data-name="Email" placeholder="" id="Email" required=""><label for="Password">Password</label><input type="password" class="text-field w-input" maxlength="256" name="Password" data-name="Password" placeholder="" id="Password" required="">
             <div class="login-form__actions"><label id="w-node-_80c1d4e4-3db7-9834-435b-fefcf113a3cc-3a8133c8" class="w-checkbox login-form__checkbox">
-                <div class="w-checkbox-input w-checkbox-input--inputType-custom custom-checkbox"></div><input type="checkbox" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" style="opacity:0;position:absolute;z-index:-1"><span class="checkbox-label w-form-label">Remember me</span>
+                <div class="w-checkbox-input w-checkbox-input--inputType-custom custom-checkbox"></div><input type="checkbox" id="checkbox-2" name="checkbox-2" data-name="Checkbox 2" style="opacity:0;position:absolute;z-index:-1"><span class="checkbox-label w-form-label" for="checkbox-2">Remember me</span>
               </label><input type="submit" value="Login" data-wait="Please wait..." id="w-node-_2c610f29-c711-7689-3c43-fceb1157e41b-3a8133c8" class="button w-button">
               <a id="w-node-_4cdd59b0-8837-5a43-7847-25fe1e234621-3a8133c8" href="#">Forgot your password?</a>
             </div>
@@ -380,24 +380,19 @@
                 </div>
               </div>
               <div data-w-id="86654d00-b063-c2ad-61db-f5ff0f0a4611" class="point-filters__header-toggle">
-                <div style="-webkit-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="toggle-icon-v--first w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
-                    <path d="M0 0h24v24H0z" fill="none"></path>
-                    <path fill="currentColor" d="M7 10l5 5 5-5z"></path>
-                  </svg></div>
-                <div style="-webkit-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0PX, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="toggle-icon-v--last w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                <div class="toggle-icon-v--last w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none"></path>
                     <path fill="currentColor" d="M17,14l-5-5l-5,5H17z"></path>
                   </svg></div>
-              </div>
-              <div data-w-id="86654d00-b063-c2ad-61db-f5ff0f0a4614" class="point-filters__header-close">
-                <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
+                <div class="toggle-icon-v--first w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none"></path>
-                    <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                    <path fill="currentColor" d="M7 10l5 5 5-5z"></path>
                   </svg></div>
               </div>
             </div>
             <div style="display:flex" class="point-filters_content">
-              <div class="point-filters__labels">
+              <p class="point-filters__no-data">No filters available for the selected data.</p>
+              <div class="point-filters__labels is--hidden">
                 <div class="point-filters__filter">
                   <div class="point-filters__filter-label">
                     <div>Filter by attribute</div>
@@ -409,7 +404,7 @@
                   </div>
                 </div>
               </div>
-              <div class="point-filters__filter-row">
+              <div class="point-filters__filter-row is--hidden">
                 <div class="point-filters__filter">
                   <div data-w-id="12072a39-b6dc-5a3c-8bd9-809d5d0a98c7" class="point-filters__filter-menu">
                     <div class="dropdown-menu__trigger">
@@ -463,7 +458,7 @@
                     </svg></div>
                 </a>
               </div>
-              <a title="Add new filter" href="#" class="point-filters__add-filter w-inline-block">
+              <a title="Add new filter" href="#" class="point-filters__add-filter is--hidden w-inline-block">
                 <div class="text-block-3">Add new filter</div>
                 <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none"></path>
@@ -505,7 +500,8 @@
               </div>
             </div>
             <div style="display:flex" class="map-options__filters_content">
-              <div class="map-options__filter-labels">
+              <p class="map-options__no-data">No filters available for the selected data.</p>
+              <div class="map-options__filter-labels is--hidden">
                 <div class="mapping-options__filter">
                   <div class="mapping-options__filter_label">
                     <div>Filter by attribute</div>
@@ -517,7 +513,7 @@
                   </div>
                 </div>
               </div>
-              <div class="map-options__filter-row">
+              <div class="map-options__filter-row is--hidden">
                 <div class="mapping-options__filter">
                   <div data-w-id="46b0d887-b73b-cd82-11fe-f3172a31a483" class="mapping-options__filter_menu">
                     <div class="dropdown-menu__trigger">
@@ -571,7 +567,7 @@
                     </svg></div>
                 </a>
               </div>
-              <a title="Add new filter" href="#" class="mapping-options__add-filter w-inline-block">
+              <a title="Add new filter" href="#" class="mapping-options__add-filter is--hidden w-inline-block">
                 <div class="text-block-3">Add new filter</div>
                 <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
                     <path d="M0 0h24v24H0z" fill="none"></path>
@@ -580,7 +576,7 @@
               </a>
             </div>
           </div>
-          <div class="map-options__legend">
+          <div class="map-options__legend is--hidden">
             <div class="map-options__legend_label">
               <div>LEGEND:</div>
             </div>
@@ -591,7 +587,7 @@
               </div>
             </div>
           </div>
-          <div style="display:flex" class="map-options__context">
+          <div class="map-options__context is--hidden">
             <div class="map-option__context_text">
               <div>Indicator context</div>
             </div>
@@ -651,6 +647,8 @@
           </div>
         </div>
       </div>
+      <p class="map-credit">Powered by <a href="https://www.openup.org.za/products/wazimap-ng" target="_blank">Wazimap</a>
+      </p>
       <div title="Download map" class="map-download hover-text-primary disabled">
         <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24">
             <path d="M0 0h24v24H0z" fill="none"></path>

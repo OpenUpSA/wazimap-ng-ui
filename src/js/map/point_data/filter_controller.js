@@ -104,7 +104,6 @@ export class FilterController extends Component {
     }
 
     addEmptyFilter(isDefault = false, isExtra = true) {
-        console.log('here')
         if (this.model.dataFilterModel.availableFilters.length > 0 || isDefault) {
             const self = this;
 

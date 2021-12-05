@@ -36,6 +36,7 @@ export class FilterController extends Component {
         this._model = new FilterControllerModel();
         this._addFilterButton = new AddFilterButton(this, this.elements);
         this._filterCallback = null;
+        this._noFiltersAvailable = true;
 
         this.prepareDomElements();
         this.prepareEvents();
@@ -70,6 +71,22 @@ export class FilterController extends Component {
         this._filterCallback = filterCallback;
     }
 
+    get noFiltersAvailable() {
+        return this._noFiltersAvailable;
+    }
+
+    set noFiltersAvailable(value) {
+        if (value) {
+            this.addFilterButton.hide();
+            $('.point-filters__no-data').removeClass('hidden');
+        } else {
+            this.addFilterButton.show();
+            $('.point-filters__no-data').addClass('hidden');
+        }
+
+        this._noFiltersAvailable = value;
+    }
+
     prepareDomElements() {
         this._rowContainer = $('.point-filters').find(this.elements.filterRowClass)[0];
         $(this._rowContainer).hide();
@@ -87,11 +104,12 @@ export class FilterController extends Component {
     }
 
     addEmptyFilter(isDefault = false, isExtra = true) {
+        console.log('here')
         if (this.model.dataFilterModel.availableFilters.length > 0 || isDefault) {
             const self = this;
 
             let filterRowContainer = self._rowContainer.cloneNode(true);
-            $(filterRowContainer).show();
+            $(filterRowContainer).show().removeClass('is--hidden');
 
             let filterRow = new FilterRow(self, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, self.elements);
             this.model.addFilterRow(filterRow);
@@ -136,7 +154,10 @@ export class FilterController extends Component {
             this.setAddFilterButton();
         })
 
-        this.addEmptyFilter(true, false);
+        this.noFiltersAvailable = this.model.dataFilterModel.availableFilters.length <= 0;
+        if (!this.noFiltersAvailable) {
+            this.addEmptyFilter(true, false);
+        }
     }
 
     updateDataFilterModel(dataFilterModel) {
@@ -145,6 +166,21 @@ export class FilterController extends Component {
 
         this.updateAvailableFiltersOfRows();
         this.model.dataFilterModel.updateFilteredData();
+
+        const addFilterRow = this.noFiltersAvailable && this.model.dataFilterModel.availableFilters.length > 0;   //no filters were available but now there are filterable fields
+        const removeFilterRow = !this.noFiltersAvailable && this.model.dataFilterModel.availableFilters.length <= 0;    //there were filterable fields but now there are none
+
+        this.noFiltersAvailable = this.model.dataFilterModel.availableFilters.length <= 0;
+
+        if (addFilterRow) {
+            this.addEmptyFilter(true, false);
+        }
+
+        if (removeFilterRow) {
+            this.model.filterRows.forEach((fr) => {
+                fr.removeRow();
+            })
+        }
     }
 
     updateAvailableFiltersOfRows() {

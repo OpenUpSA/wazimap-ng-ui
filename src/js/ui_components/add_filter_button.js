@@ -30,4 +30,12 @@ export class AddFilterButton extends Component {
     enable() {
         this.button.removeClass('disabled');
     }
+
+    show() {
+        this.button.removeClass('is--hidden');
+    }
+
+    hide() {
+        this.button.addClass('is--hidden');
+    }
 }

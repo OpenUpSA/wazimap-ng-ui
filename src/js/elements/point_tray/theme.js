@@ -54,7 +54,7 @@ export class Theme extends Component {
             this.categories.push(category);
 
             $(self.element).find(categoryWrapperClsName).append(category.element);
-            $(categorySourceClsName, category.element).text(category.metadata.source);
+            $(categorySourceClsName, category.element).text(category.metadata.source).attr('title', category.metadata.source);
         })
     }
 

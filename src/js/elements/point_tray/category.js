@@ -35,6 +35,7 @@ export class Category extends Component {
 
         $(this.element).on('click', () => this.toggle())
         $(this.element).find(categoryItemLoadingClsName).addClass('hidden');
+        $(this.element).find('.point-mapper__h2_source div').removeAttr('title');
         this.showLoading(false);
         this.showDone(false);
         $(this.element).removeClass(activeClsName);

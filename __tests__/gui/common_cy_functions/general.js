@@ -93,3 +93,7 @@ export function getMapCenter() {
 export function expandRichDataPanel() {
     cy.get('.point-mapper-toggles .rich-data-panel__open').click();
 }
+
+export function expandPointMapper() {
+    cy.get('.rich-data-toggles .point-mapper-panel__open').click();
+}

@@ -6,10 +6,18 @@ Feature: Multiple geographic boundary versions
     Then I check if "2011 Boundaries" is the selected version
     Then I check if the profile highlight is hidden
 
+    And I expand Rich Data Panel
+    Then I check if the key metric is shown with the version notification
+    Then I expand Point Mapper
+
     And I switch to "2016 with wards" version
     Then I click on the Proceed button in confirmation modal
     Then I check if "2016 with wards" is the selected version
     Then I check if the profile highlight is displayed correctly
+
+    And I expand Rich Data Panel
+    Then I check if the key metric is shown without the version notification
+    Then I expand Point Mapper
 
     And I expand Data Mapper
     Then I check if there are 2 categories

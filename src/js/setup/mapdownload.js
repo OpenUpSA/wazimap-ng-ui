@@ -1,8 +1,10 @@
-export function configureMapDownloadEvents(mapDownload) {
+export function configureMapDownloadEvents(controller, mapDownload) {
     let initialHtml = $('.map-download').html();
     let loadState = $('.location-tag__loading-icon')[0].cloneNode(true);
 
     mapDownload.on('mapdownload.started', payload => $('.map-download').html(loadState))
     mapDownload.on('mapdownload.completed', payload => $('.map-download').html(initialHtml))
+
+    controller.bubbleEvents(mapDownload, ['mapdownload.started']);
 }
 

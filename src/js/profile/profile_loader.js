@@ -36,15 +36,19 @@ export default class ProfileLoader extends Component {
 
         this.profileHeader = new Profile_header(this, profile.parents, geometries, this.api, this.profileId, geography, this.config, activeVersion);
         this.profileHeader.on('profile.breadcrumbs.selected', parent => this.triggerEvent('profile.breadcrumbs.selected', parent));
+
+        this.prepareEvents()
     }
 
     prepareDomElements = () => {
-        //get the objects first, them remove defaults
         indicatorTemplate = $(indicatorClass)[0].cloneNode(true);
         profileWrapper = $(profileWrapperClass);
 
-        //remove
         $(navWrapperClass).find(navItemClass).remove();
+    }
+
+    prepareEvents = () => {
+        this.bindPageScroll();
     }
 
     updateGeography = (profile) => {
@@ -107,6 +111,36 @@ export default class ProfileLoader extends Component {
         })
 
         $(navWrapperClass).append(navItem);
+    }
+
+    bindPageScroll = () => {
+        let lastId;
+        let topMenuHeight = $('.nav').outerHeight();
+        let menuItems = $(navWrapperClass).find(navItemClass);
+        let scrollItems = menuItems.map(function () {
+            let item = $($(this).attr('href'));
+            if (item.length) {
+                return item;
+            }
+        });
+
+        $(window).on('scroll', function () {
+            let fromTop = $(this).scrollTop() + topMenuHeight;
+            let currentItem = scrollItems.map(function () {
+                if ($(this).offset().top < fromTop && $(this).offset().top > 0)
+                    return this;
+            });
+
+            currentItem = currentItem[currentItem.length - 1];
+            let id = currentItem && currentItem.length ? currentItem[0].id : ''
+
+            if (lastId !== id) {
+                lastId = id;
+                // Set/remove active class
+                menuItems.removeClass(activeNavClass);
+                menuItems.filter("[href='#" + id + "']").addClass(activeNavClass);
+            }
+        })
     }
 
     updateActiveVersion = (activeVersion) => {

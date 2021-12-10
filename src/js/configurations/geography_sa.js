@@ -1,6 +1,6 @@
 import {schemeBlues as d3schemeBlues} from 'd3-scale-chromatic';
-import {RICH_DATA_PANEL, POINT_DATA_PANEL, DATA_EXPLORER_PANEL, NO_PANELS} from '../elements/side_panels';
 import {Version} from "../versions/version";
+import {SidePanels} from "../elements/side_panels";
 
 export class Config {
 
@@ -39,7 +39,7 @@ export class Config {
     get defaultPanel() {
         if (this.config["default_panel"] != undefined)
             return this.config["default_panel"];
-        return NO_PANELS;
+        return SidePanels.PANELS.noPanels;
     }
 
     panelEnabled(panel) {

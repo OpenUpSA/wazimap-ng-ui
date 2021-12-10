@@ -43,7 +43,7 @@ describe('SidePanels', () => {
     })
     describe('click interactions', () => {
         describe('just close the panel', () => {
-            test('calls close event', () => {
+            test('map download button does not have title attribute', () => {
                 configureMiscElementEvents(this, controller);
                 configureMapDownloadEvents(controller, mapDownload);
                 let component = new Component();
@@ -56,7 +56,7 @@ describe('SidePanels', () => {
                 expect(triggerEvent).toHaveBeenNthCalledWith(1, 'panel.rich_data.closed');
 
                 let mapDownloadButton = document.querySelector(".map-download");
-                expect(mapDownloadButton).not.toHaveClass('disabled');
+                expect(mapDownloadButton).not.toHaveAttribute('title');
             });
         })
         describe('open a new panel', () => {
@@ -70,6 +70,9 @@ describe('SidePanels', () => {
                 expect(triggerEvent).toBeCalledTimes(3);
                 expect(triggerEvent).toHaveBeenNthCalledWith(1, 'panel.rich_data.closed');
                 expect(triggerEvent).toHaveBeenNthCalledWith(2, 'panel.point_mapper.opened');
+
+                let mapDownloadButton = document.querySelector(".map-download");
+                expect(mapDownloadButton).toHaveAttribute('title','The panes on the left will be closed to download the full-screen map');
             });
         });
 

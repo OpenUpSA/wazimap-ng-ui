@@ -1,21 +1,26 @@
 import {Component} from '../utils';
 
-export const RICH_DATA_PANEL = "rich_data";
-export const POINT_DATA_PANEL = "point_data";
-export const DATA_EXPLORER_PANEL = "data_explorer";
-export const NO_PANELS = "no_panels";
 const MAP_DOWNLOAD_BTN = ".map-download";
 
 export class SidePanels extends Component {
+    static PANELS = {
+        richData: 'rich_data',
+        pointData: 'point_data',
+        dataMapper: 'data_explorer',
+        noPanels: 'no_panels'
+    }
+
     constructor(parent, showPanels) {
         super(parent);
 
         this.prepareDomElements();
         this.initialiseTriggers();
 
-        if (!showPanels[RICH_DATA_PANEL]) this.hidePanel("richData")
-        if (!showPanels[POINT_DATA_PANEL]) this.hidePanel("pointData")
-        if (!showPanels[DATA_EXPLORER_PANEL]) this.hidePanel("mapExplorer")
+        this.currentPanel = null;
+
+        if (!showPanels[SidePanels.PANELS.richData]) this.hidePanel(SidePanels.PANELS.richData)
+        if (!showPanels[SidePanels.PANELS.pointData]) this.hidePanel(SidePanels.PANELS.pointData)
+        if (!showPanels[SidePanels.PANELS.dataMapper]) this.hidePanel(SidePanels.PANELS.dataMapper)
     }
 
     prepareDomElements = () => {
@@ -41,7 +46,7 @@ export class SidePanels extends Component {
             richData: $('.panel-toggles .panel-toggle:nth-child(1)'),
             pointData: $('.panel-toggles .panel-toggle:nth-child(2)'),
             mapExplorer: $('.panel-toggles .panel-toggle:nth-child(3)'),
-        } 
+        }
     }
 
     initialiseTriggers = () => {
@@ -127,14 +132,14 @@ export class SidePanels extends Component {
     }
 
     togglePanel = panel => {
-        switch(panel) {
-            case RICH_DATA_PANEL:
+        switch (panel) {
+            case SidePanels.PANELS.richData:
                 this.toggleRichData()
                 break;
-            case POINT_DATA_PANEL:
+            case SidePanels.PANELS.pointData:
                 this.togglePointData()
                 break;
-            case DATA_EXPLORER_PANEL:
+            case SidePanels.PANELS.dataMapper:
                 this.toggleMapExplorer()
                 break;
             default:
@@ -142,25 +147,55 @@ export class SidePanels extends Component {
         }
     }
 
+    closePanel = panel => {
+        switch (panel) {
+            case SidePanels.PANELS.richData:
+                this.richDataPanel.richData.click();
+                break;
+            case SidePanels.PANELS.pointData:
+                this.pointDataPanel.pointData.click();
+                break;
+            case SidePanels.PANELS.dataMapper:
+                this.mapExplorerPanel.mapExplorer.click();
+                break;
+            default:
+                break;
+        }
+    }
+
     setPanels = (isRichDataOpen, isPointMapperOpen, isDataMapperOpen) => {
-        if (isRichDataOpen)
+        if (isRichDataOpen) {
+            this.currentPanel = SidePanels.PANELS.richData;
             this.triggerEvent('panel.rich_data.opened');
-        else
+        } else
             this.triggerEvent('panel.rich_data.closed');
 
-        if (isPointMapperOpen)
+        if (isPointMapperOpen) {
+            this.currentPanel = SidePanels.PANELS.pointData;
             this.triggerEvent('panel.point_mapper.opened');
-        else
+        } else
             this.triggerEvent('panel.point_mapper.closed');
 
-        if (isDataMapperOpen)
+        if (isDataMapperOpen) {
+            this.currentPanel = SidePanels.PANELS.dataMapper;
             this.triggerEvent('panel.data_mapper.opened');
-        else
+        } else
             this.triggerEvent('panel.data_mapper.closed');
 
         if (isRichDataOpen || isPointMapperOpen || isDataMapperOpen)
-            $(MAP_DOWNLOAD_BTN).addClass('disabled');
-        else
-            $(MAP_DOWNLOAD_BTN).removeClass('disabled');
+            $(MAP_DOWNLOAD_BTN).attr('title', 'The panes on the left will be closed to download the full-screen map');
+        else {
+            $(MAP_DOWNLOAD_BTN).removeAttr('title');
+            this.currentPanel = null;
+        }
+    }
+
+    closeAllPanels = () => {
+        if (this.currentPanel === null) {
+            return;
+        }
+
+        this.closePanel(this.currentPanel);
+        this.currentPanel = null;
     }
 }

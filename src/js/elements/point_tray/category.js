@@ -46,9 +46,10 @@ export class Category extends Component {
         $(this.element).attr('data-id', this.data.id);
         $(this.element).attr('data-themeIndex', this.themeIndex);
 
-        $('.point-mapper__h2_name .truncate', this.element).text(this.name);
+        $('.point-mapper__h2_name .truncate', this.element)
+            .text(this.name)
+            .attr('title', this.name);
         $('.point-data__label_source .truncate', this.element).text(this.data.metadata.source);
-        $('.point-data__label_source .truncate', this.element).attr('title', this.data.metadata.source);
         $('.point-data__h2_link', this.element).removeClass('point-data__h2_link').addClass('point-data__h2_link--disabled');
     }
 

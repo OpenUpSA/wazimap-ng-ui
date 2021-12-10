@@ -1,6 +1,6 @@
 import {ProfileLayout} from "../elements/profile_layout";
 import PDFPrinter from '../print';
-import {SidePanels, RICH_DATA_PANEL, POINT_DATA_PANEL, DATA_EXPLORER_PANEL} from '../elements/side_panels';
+import {SidePanels} from '../elements/side_panels';
 
 export let profileLayout = new ProfileLayout();
 export let pdfprinter = new PDFPrinter();
@@ -12,9 +12,9 @@ export function configureMiscElementEvents(application, controller) {
 
     let showPanels = {}
 
-    showPanels[RICH_DATA_PANEL] = controller.config.panelEnabled(RICH_DATA_PANEL)
-    showPanels[POINT_DATA_PANEL] = controller.config.panelEnabled(POINT_DATA_PANEL)
-    showPanels[DATA_EXPLORER_PANEL] = controller.config.panelEnabled(DATA_EXPLORER_PANEL)
+    showPanels[SidePanels.PANELS.richData] = controller.config.panelEnabled(SidePanels.PANELS.richData)
+    showPanels[SidePanels.PANELS.pointData] = controller.config.panelEnabled(SidePanels.PANELS.pointData)
+    showPanels[SidePanels.PANELS.dataMapper] = controller.config.panelEnabled(SidePanels.PANELS.dataMapper)
 
     const sidePanels = new SidePanels(application, showPanels);
     const defaultPanel = controller.config.defaultPanel;
@@ -27,7 +27,7 @@ export function configureMiscElementEvents(application, controller) {
     // Choropleth filter toggle
     $('.filters__header_toggle').click(() => {
         controller.triggerEvent('mapchip.toggle');
-    }) 
+    })
 
     controller.bubbleEvents(sidePanels, [
         'panel.rich_data.closed', 'panel.rich_data.opened',
@@ -39,4 +39,7 @@ export function configureMiscElementEvents(application, controller) {
         sidePanels.togglePanel(defaultPanel);
     }, 0)
 
+    controller.on('mapdownload.started', () => {
+        sidePanels.closeAllPanels();
+    });
 }

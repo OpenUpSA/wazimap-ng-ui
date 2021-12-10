@@ -92,18 +92,18 @@ export class Profile {
     }
 
     _fixCategory(category) {
-        if (category.subcategories == undefined)
+        if (category.subcategories === undefined)
             category.subcategories = {}
 
         return category
     }
 
     _fixSubcategory(subcategory) {
-        if (subcategory.indicators == undefined)
+        if (subcategory.indicators === undefined)
             subcategory.indicators = {}
 
-        if (subcategory.keyMetrics == undefined)
-            subcategory.keyMetrics = {}
+        if (subcategory.key_metrics === undefined)
+            subcategory.key_metrics = [];
 
         return subcategory
     }
@@ -122,10 +122,6 @@ export class Profile {
 
     get profileData() {
         return this._profileData;
-    }
-
-    get keyMetrics() {
-        return this._keyMetrics;
     }
 }
 

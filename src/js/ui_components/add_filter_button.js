@@ -32,10 +32,10 @@ export class AddFilterButton extends Component {
     }
 
     show() {
-        this.button.removeClass('is--hidden');
+        this.button.removeClass('hidden');
     }
 
     hide() {
-        this.button.addClass('is--hidden');
+        this.button.addClass('hidden');
     }
 }

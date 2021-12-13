@@ -11,9 +11,10 @@ export class PointFilter extends Component {
         this._filterCallback = null;
         this._filterController = null;
 
-        this._upArrow = '.toggle-icon-v--last';
-        this._downArrow = '.toggle-icon-v--first';
-        this._filterContent = '.point-filters_content';
+        this._mapBottomItems = '.map-bottom-items--v2';
+        this._upArrow = `${this._mapBottomItems} .toggle-icon-v--last`;
+        this._downArrow = `${this._mapBottomItems} .toggle-icon-v--first`;
+        this._filterContent = `.point-filters_content`;
 
         this.prepareEvents();
         this.prepareDomElements();
@@ -86,9 +87,10 @@ export class PointFilter extends Component {
             }
             this._filterController.setDataFilterModel(dataFilterModel);
 
-            $('.point-filters').removeClass('hidden');
+            $(`${this._mapBottomItems} .point-filters`).removeClass('hidden');
+            this.hideFilterContent();
         } else if (!value) {
-            $('.point-filters').addClass('hidden');
+            $(`${this._mapBottomItems} .point-filters`).addClass('hidden');
         }
         this._isVisible = value;
     }

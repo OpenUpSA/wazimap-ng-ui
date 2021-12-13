@@ -34,11 +34,16 @@ export class FilterController extends Component {
         super(parent);
 
         this._model = new FilterControllerModel();
-        this._addFilterButton = new AddFilterButton(this, this.elements);
         this._filterCallback = null;
+        this._container = null;
         this._noFiltersAvailable = true;
+        this._isLoading = true;
+        this._mapBottomItems = '.map-bottom-items--v2';
 
         this.prepareDomElements();
+
+        this._addFilterButton = new AddFilterButton(this, this.elements);
+
         this.prepareEvents();
     }
 
@@ -47,7 +52,7 @@ export class FilterController extends Component {
     }
 
     get container() {
-        return $('.point-filters:first').find('.point-filters_content');
+        return this._container;
     }
 
     get addFilterButton() {
@@ -87,12 +92,27 @@ export class FilterController extends Component {
         this._noFiltersAvailable = value;
     }
 
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    set isLoading(value) {
+        if (value) {
+            $('.point-filters__loading').removeClass('hidden');
+        } else {
+            $('.point-filters__loading').addClass('hidden');
+        }
+
+        this._isLoading = value;
+    }
+
     prepareDomElements() {
-        this._rowContainer = $('.point-filters').find(this.elements.filterRowClass)[0];
+        this._container = $(`${this._mapBottomItems} .point-filters .point-filters_content`);
+        this._rowContainer = $(`${this._mapBottomItems} .point-filters`).find(this.elements.filterRowClass)[0];
         $(this._rowContainer).hide();
 
-        while ($(this.container).find(this.elements.filterRowClass).length > 1) {
-            $(this.container).find(this.elements.filterRowClass)[1].remove();
+        while ($(this._container).find(this.elements.filterRowClass).length > 1) {
+            $(this._container).find(this.elements.filterRowClass)[1].remove();
         }
     }
 
@@ -108,7 +128,7 @@ export class FilterController extends Component {
             const self = this;
 
             let filterRowContainer = self._rowContainer.cloneNode(true);
-            $(filterRowContainer).show().removeClass('is--hidden');
+            $(filterRowContainer).removeClass('hidden').show();
 
             let filterRow = new FilterRow(self, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, self.elements);
             this.model.addFilterRow(filterRow);
@@ -157,6 +177,7 @@ export class FilterController extends Component {
         if (!this.noFiltersAvailable) {
             this.addEmptyFilter(true, false);
         }
+        this.isLoading = false;
     }
 
     updateDataFilterModel(dataFilterModel) {

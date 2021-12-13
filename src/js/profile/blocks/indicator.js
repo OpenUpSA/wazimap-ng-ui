@@ -25,7 +25,7 @@ export class Indicator extends ContentBlock {
 
         if (this.hasData) {
             let chartData = this.orderChartData();
-            let c = new Chart(this, configuration, chartData, groups, this.container, this.title);
+            let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.parent.parent.parent.config.chart_attribution);
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

@@ -32,7 +32,7 @@ Then('the hamburger menu should show', () => {
 
 When('I click on Save As Image in Rich Data', () => {
     cy.get('.hover-menu__content_item').first().click({force: true});
-    cy.verifyDownload('chart.png');
+    cy.verifyDownload('Youth status.png');
 })
 
 When('I scroll to bottom of the page', () => {

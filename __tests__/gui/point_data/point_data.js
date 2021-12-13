@@ -98,9 +98,10 @@ When('I check if the cluster is created correctly', () => {
     cy.get('body').trigger('click', {clientX: 0, clientY: 0})
 })
 
-Then('I check if the filter pane is displayed', () => {
-    cy.get('.point-filters').should('be.visible')
-    cy.get('.point-filters .point-filters__title .filters__header_name div div').should('have.text', 'Point Filter')
+Then('I check if the filter dialog is displayed', () => {
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .point-filters`).should('be.visible')
+    cy.get(`${mapBottomItems} .point-filters .point-filters__title .filters__header_name div div`).should('have.text', 'Point Filter')
 })
 
 Then('I check if the point category legend is hidden', () => {
@@ -153,15 +154,27 @@ Then('I hide Point Mapper', () => {
     cy.get('.point-mapper-toggles .point-mapper-panel__close', {timeout: 20000}).click();
 })
 
-Then('I click on the close button', () => {
-    cy.get('.point-filters__header-close').click();
-    cy.get('.point-filters').should('not.be.visible')
-})
-
 Then('I filter by a numerical value', () => {
     cy.get('.point-filters__filter-menu:visible').first().click();
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("numerical")`).click();
 
     cy.get('.point-filters__filter-menu:visible').last().click();
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("14")`).click();
+})
+
+Then('I check if the filter dialog is collapsed', () => {
+    cy.get('.toggle-icon-v--first').should('not.be.visible');    //down arrow
+    cy.get('.toggle-icon-v--last').should('be.visible');    //up arrow
+    cy.get('.point-filters_content').should('not.be.visible');
+})
+
+When('I expand the filter dialog', () => {
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .point-filters .toggle-icon-v--last`).click();
+})
+
+Then('I check if the filter dialog is expanded', () => {
+    cy.get('.toggle-icon-v--first').should('be.visible');    //down arrow
+    cy.get('.toggle-icon-v--last').should('not.be.visible');    //up arrow
+    cy.get('.point-filters_content').should('be.visible');
 })

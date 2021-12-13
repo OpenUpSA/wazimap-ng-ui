@@ -77,7 +77,7 @@ class Application extends Component {
         const boundaryTypeBox = new BoundaryTypeBox(this, config.config.preferred_children);
         const mapDownload = new MapDownload(this, mapchip);
         const tutorial = new Tutorial(this);
-		const styleConfig = new StyleConfig(config.style);
+        const styleConfig = new StyleConfig(config.style);
         const tabNotice = new TabNotice(this, config.config.feedback);
         const translations = new Translations(this, config.config.translations);
         const dataMapperMenu = new DataMapperMenu(this);
@@ -93,12 +93,12 @@ class Application extends Component {
         configureProfileEvents(controller, {profileLoader: profileLoader});
         configureMiscElementEvents(this, controller);
         configureBoundaryEvents(controller, boundaryTypeBox);
-        configureMapDownloadEvents(mapDownload);
+        configureMapDownloadEvents(controller, mapDownload);
         configureTutorialEvents(controller, tutorial, config.config.tutorial);
         configureTabNoticeEvents(controller, tabNotice);
         configureTranslationEvents(controller, translations);
         configurePage(controller, config);
-		configureStyleConfigEvents(controller, styleConfig);
+        configureStyleConfigEvents(controller, styleConfig);
 
         controller.on('profile.loaded', payload => {
             // there seems to be a bug where menu items close if this is not set

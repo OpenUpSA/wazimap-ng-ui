@@ -66,6 +66,24 @@ describe('Data explorer', () => {
         expect(descriptionElement).toBeVisible();
     })
 
+    test('Subcategory is not shown if all the indicators are qualitative', () => {
+        let config = new SAConfig();
+
+        const controller = new Controller(this, null, config, 1);
+        const dataMapperMenu = new DataMapperMenu(this);
+
+        configureDataExplorerEvents(controller, dataMapperMenu);
+
+        const payload = JSON.parse(JSON.stringify(quantQualBasePayload));
+        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "html";
+        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "qualitative";
+
+        controller.triggerEvent("versions.all.loaded", payload);
+
+        let subcategoryElement = document.querySelector(".data-category__h2");
+        expect(subcategoryElement).not.toBeVisible();
+    })
+
     test('Excluded indicators are not shown', () => {
         let config = new SAConfig();
 

@@ -30,7 +30,7 @@ Given('I am on the Wazimap Homepage', () => {
             body: all_details_2016,
             forceNetworkError: false // default
         })
-    })
+    }).as('all_details')
 
     cy.intercept('api/v1/profile/8/geography/VT/themes_count/?version=2011%20Boundaries&format=json', (req) => {
         req.reply({
@@ -38,7 +38,7 @@ Given('I am on the Wazimap Homepage', () => {
             body: [],
             forceNetworkError: false // default
         })
-    })
+    }).as('themes_count')
 
     cy.intercept('api/v1/profile/8/geography/VT/themes_count/?version=2016%20with%20wards&format=json', (req) => {
         req.reply({

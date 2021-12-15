@@ -20,7 +20,7 @@ Given('I am on the Wazimap Homepage', () => {
             body: themes_count,
             forceNetworkError: false // default
         });
-    });
+    }).as('themes_count');
 
     gotoHomepage();
 })

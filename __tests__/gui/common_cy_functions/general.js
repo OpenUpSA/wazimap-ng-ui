@@ -1,11 +1,11 @@
-export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count=[]) {
+export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = []) {
     cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?version=test&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: all_details,
             forceNetworkError: false // default
         })
-    })
+    }).as('all_details')
 
     cy.intercept('/api/v1/profiles', (req) => {
         req.reply({
@@ -13,7 +13,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: profiles,
             forceNetworkError: false // default
         })
-    })
+    }).as('profiles')
 
     cy.intercept('/api/v1/profile_by_url?format=json', (req) => {
         req.reply({
@@ -21,7 +21,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: profile,
             forceNetworkError: false // default
         })
-    })
+    }).as('profile_by_url')
 
     cy.intercept('/api/v1/profile/8/points/themes/?format=json', (req) => {
         req.reply({
@@ -29,7 +29,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: themes,
             forceNetworkError: false // default
         })
-    })
+    }).as('themes')
 
     cy.intercept('/api/v1/profile/8/points/category/379/points/?format=json', (req) => {
         req.reply({
@@ -37,7 +37,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: points,
             forceNetworkError: false // default
         })
-    })
+    }).as('points')
 
     cy.intercept('/api/v1/profile/8/geography/ZA/themes_count/?version=test&format=json', (request) => {
         request.reply({
@@ -45,8 +45,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: themes_count,
             forceNetworkError: false // default
         });
-    });
-
+    }).as('themes_count');
 }
 
 export function gotoHomepage() {
@@ -54,6 +53,8 @@ export function gotoHomepage() {
 }
 
 export function waitUntilGeographyIsLoaded(geoName) {
+    cy.wait(['@all_details', '@profiles', '@profile_by_url', '@themes_count']);
+
     cy.get('.map-location .location-tag .location-tag__name .truncate', {timeout: 20000}).should('contain', geoName);
 }
 

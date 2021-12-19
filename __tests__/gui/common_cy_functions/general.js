@@ -92,9 +92,94 @@ export function getMapCenter() {
 }
 
 export function expandRichDataPanel() {
-    cy.get('.point-mapper-toggles .rich-data-panel__open').click();
+    const richData = '.rich-data';
+    cy.get(richData).then($ele => {
+        if ($ele.is(':visible')) {
+            return;
+        } else {
+            const dataMapper = '.data-mapper';
+            const pointMapper = '.point-mapper';
+
+            cy.get(dataMapper).then($dm => {
+                if ($dm.is(':visible')) {
+                    //data mapper is expanded
+                    cy.get('.data-mapper-toggles .rich-data-panel__open').click();
+                } else {
+                    cy.get(pointMapper).then($rd => {
+                        if ($rd.is(':visible')) {
+                            //rich data is expanded
+                            cy.get('.point-mapper-toggles .rich-data-panel__open').click();
+                        } else {
+                            //nothing is expanded
+                            cy.get('.panel-toggles .rich-data-panel__open').click();
+                        }
+                    })
+                }
+            })
+        }
+    })
+
+    cy.get(richData, {timeout: 20000}).should('be.visible');
 }
 
 export function expandPointMapper() {
-    cy.get('.rich-data-toggles .point-mapper-panel__open').click();
+    const pointMapper = '.point-mapper';
+    cy.get(pointMapper).then($ele => {
+        if ($ele.is(':visible')) {
+            return;
+        } else {
+            const dataMapper = '.data-mapper';
+            const richData = '.rich-data';
+
+            cy.get(dataMapper).then($dm => {
+                if ($dm.is(':visible')) {
+                    //data mapper is expanded
+                    cy.get('.data-mapper-toggles .point-mapper-panel__open').click();
+                } else {
+                    cy.get(richData).then($rd => {
+                        if ($rd.is(':visible')) {
+                            //rich data is expanded
+                            cy.get('.rich-data-toggles .point-mapper-panel__open').click();
+                        } else {
+                            //nothing is expanded
+                            cy.get('.panel-toggles .point-mapper-panel__open').click();
+                        }
+                    })
+                }
+            })
+        }
+    })
+
+    cy.get(pointMapper, {timeout: 20000}).should('be.visible');
+}
+
+export function expandDataMapper() {
+    const dataMapper = '.data-mapper';
+    cy.get(dataMapper).then($ele => {
+        if ($ele.is(':visible')) {
+            return;
+        } else {
+            const richData = '.rich-data';
+            const pointMapper = '.point-mapper';
+
+            cy.get(pointMapper).then($dm => {
+                if ($dm.is(':visible')) {
+                    //data mapper is expanded
+                    cy.get('.point-mapper-toggles .data-mapper-panel__open').click();
+                } else {
+                    cy.get(richData).then($rd => {
+                        if ($rd.is(':visible')) {
+                            //rich data is expanded
+                            cy.get('.rich-data-toggles .data-mapper-panel__open').click();
+                        } else {
+                            //nothing is expanded
+                            cy.get('.panel-toggles .data-mapper-panel__open').click();
+                        }
+                    })
+                }
+            })
+        }
+    })
+
+    cy.get(dataMapper, {timeout: 20000}).should('be.visible');
 }

@@ -1,5 +1,7 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
+    expandDataMapper,
+    expandPointMapper, expandRichDataPanel,
     gotoHomepage,
     setupInterceptions,
     waitUntilGeographyIsLoaded
@@ -25,8 +27,8 @@ Then('I check if an image of the map is downloaded', () => {
     cy.verifyDownload('map.png');
 })
 
-Then('I open Point Mapper', () => {
-    cy.get('.panel-toggles .point-mapper-panel__open').click();
+Then('I expand Point Mapper', () => {
+    expandPointMapper();
 })
 
 Then('Point Mapper should be open', () => {
@@ -37,8 +39,8 @@ Then('Point Mapper should be closed', () => {
     cy.get('.point-mapper').should('not.be.visible');
 })
 
-Then('I open Data Mapper', () => {
-    cy.get('.panel-toggles .data-mapper-panel__open').click();
+Then('I expand Data Mapper', () => {
+    expandDataMapper();
 })
 
 Then('Data Mapper should be open', () => {
@@ -49,8 +51,8 @@ Then('Data Mapper should be closed', () => {
     cy.get('.data-mapper').should('not.be.visible');
 })
 
-Then('I open Rich Data Panel', () => {
-    cy.get('.panel-toggles .rich-data-panel__open').click();
+Then('I expand Rich Data Panel', () => {
+    expandRichDataPanel();
 })
 
 Then('Rich Data Panel should be open', () => {

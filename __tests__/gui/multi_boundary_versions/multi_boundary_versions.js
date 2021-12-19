@@ -1,5 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
+    expandDataMapper,
     expandPointMapper,
     expandRichDataPanel,
     gotoHomepage,
@@ -73,7 +74,7 @@ Then('I click on the Proceed button in confirmation modal', () => {
 })
 
 When('I expand Data Mapper', () => {
-    cy.get('.point-mapper-toggles .data-mapper-panel__open').click();
+    expandDataMapper();
 })
 
 Then('I check if there are 2 categories', () => {
@@ -170,6 +171,6 @@ Then('I check if the key metric is shown without the version notification', () =
     cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description').should('not.be.visible');
 })
 
-Then('I expand Point Mapper', ()=>{
+Then('I expand Point Mapper', () => {
     expandPointMapper();
 })

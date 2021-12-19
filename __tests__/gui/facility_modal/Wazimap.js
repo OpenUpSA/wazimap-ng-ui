@@ -1,7 +1,7 @@
 import {When, Given, Then} from "cypress-cucumber-preprocessor/steps";
 import {
     checkIfCategoriesAreDisplayed, clickOnTheFirstCategory,
-    clickOnTheFirstTheme,
+    clickOnTheFirstTheme, expandPointMapper,
     gotoHomepage, hoverOverTheMapCenter,
     setupInterceptions,
     waitUntilGeographyIsLoaded
@@ -59,4 +59,8 @@ When('I switch to print view', () => {
 Then('I check if the print view is as expected', () => {
     cy.get('.facility-info').should('be.visible');
     cy.get('.rich-data').should('not.be.visible');
+})
+
+Then('I expand Point Mapper', ()=>{
+    expandPointMapper();
 })

@@ -336,7 +336,7 @@ export function checkIfCategoryHasChildren(category, detail) {
 export function checkIfSubCategoryHasChildren(subcategory, detail) {
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
-        if (!hasChildren && data.child_data !== undefined && !isIndicatorExcluded(data, 'data mapper')) {
+        if (!hasChildren && data.child_data !== undefined && data.dataset_content_type !== 'qualitative' && !isIndicatorExcluded(data, 'data mapper')) {
             for (const [geo, arr] of Object.entries(data.child_data)) {
                 hasChildren = hasChildren || arr.length > 0;
             }
@@ -344,6 +344,29 @@ export function checkIfSubCategoryHasChildren(subcategory, detail) {
     }
 
     return hasChildren;
+}
+
+export function checkIfIndicatorHasChildren(indicator, detail) {
+    let hasChildren = false;
+    if (detail.child_data !== undefined && Object.entries(detail.child_data).length > 0) {
+        hasChildren = true;
+    }
+
+    return hasChildren;
+}
+
+export function checkIfSubIndicatorHasChildren(subindicator, detail) {
+    let hasData = false;
+    for (const [geography, data] of Object.entries(detail.child_data)) {
+        data.forEach((indicatorDataPoint) => {
+            for (const [title, value] of Object.entries(indicatorDataPoint)) {
+                if (subindicator == value) {
+                    hasData = true;
+                }
+            }
+        })
+    }
+    return hasData;
 }
 
 export function isIndicatorExcluded(indicatorData, excludeType) {

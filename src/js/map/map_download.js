@@ -11,12 +11,18 @@ export class MapDownload extends Component {
     }
 
     prepareDomElements = () => {
+        $('.map-download').removeClass('disabled');
+
         $('.map-download').on('click', () => {
-            this.triggerEvent('mapdownload.started');
-            this.titleClass = '.map-title';
-            this.legendClass = '.map-bottom-items';
-            this.downloadMap();
+            this.startMapDownload();
         });
+    }
+
+    startMapDownload = () => {
+        this.triggerEvent('mapdownload.started');
+        this.titleClass = '.map-title';
+        this.legendClass = '.map-bottom-items';
+        this.downloadMap();
     }
 
     downloadMap = () => {

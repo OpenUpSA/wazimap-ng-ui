@@ -18,9 +18,9 @@ export class SidePanels extends Component {
 
         this.currentPanel = null;
 
-        if (!showPanels[SidePanels.PANELS.richData]) this.hidePanel(SidePanels.PANELS.richData)
-        if (!showPanels[SidePanels.PANELS.pointData]) this.hidePanel(SidePanels.PANELS.pointData)
-        if (!showPanels[SidePanels.PANELS.dataMapper]) this.hidePanel(SidePanels.PANELS.dataMapper)
+        if (!showPanels[SidePanels.PANELS.richData]) this.hidePanel('richData')
+        if (!showPanels[SidePanels.PANELS.pointData]) this.hidePanel('pointData')
+        if (!showPanels[SidePanels.PANELS.dataMapper]) this.hidePanel('mapExplorer')
     }
 
     prepareDomElements = () => {

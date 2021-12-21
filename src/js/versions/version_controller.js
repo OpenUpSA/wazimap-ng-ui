@@ -206,8 +206,10 @@ export class VersionController extends Component {
 
     appendProfileData(dataBundle, version) {
         for (const [category, categoryDetail] of Object.entries(dataBundle.profile.profileData)) {
+            let categoryAdded = false;
             let allVersionsBundleCategory = this.allVersionsBundle.profile.profileData[category];
             if (allVersionsBundleCategory === undefined || $.isEmptyObject(allVersionsBundleCategory)) {
+                categoryAdded = true;
                 this.allVersionsBundle.profile.profileData[category] = categoryDetail;
             }
 
@@ -216,10 +218,13 @@ export class VersionController extends Component {
                 if (allVersionsBundleSubcategory === undefined || $.isEmptyObject(allVersionsBundleSubcategory)) {
                     this.allVersionsBundle.profile.profileData[category].subcategories[subcategory] = subcategoryDetail;
                 } else {
-                    subcategoryDetail.key_metrics.forEach((km) => {
-                        km.version_data = version;
-                    })
-                    allVersionsBundleSubcategory.key_metrics = allVersionsBundleSubcategory.key_metrics.concat(subcategoryDetail.key_metrics);
+                    if (!categoryAdded) {
+                        //key metrics are already added when category is added into allVersionsBundleCategory
+                        subcategoryDetail.key_metrics.forEach((km) => {
+                            km.version_data = version;
+                        })
+                        allVersionsBundleSubcategory.key_metrics = allVersionsBundleSubcategory.key_metrics.concat(subcategoryDetail.key_metrics);
+                    }
                 }
 
                 for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {

@@ -99,8 +99,8 @@ When('I check if the cluster is created correctly', () => {
 })
 
 Then('I check if the filter pane is displayed', () => {
-    cy.get('.point-filters').should('be.visible')
-    cy.get('.point-filters .point-filters__title .filters__header_name div div').should('have.text', 'Point Filter')
+    cy.get('.map-bottom-items .point-filters').should('be.visible')
+    cy.get('.map-bottom-items .point-filters .point-filters__title .filters__header_name div div').should('have.text', 'Point Filter')
 })
 
 Then('I check if the point category legend is hidden', () => {

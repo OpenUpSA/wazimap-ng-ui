@@ -29,8 +29,8 @@ describe('Dropdowns', () => {
 
         expect(JSON.stringify(mc._filterController.model.filterRows[0].indicatorDropdown.model.items)).toBe(JSON.stringify(groups));
 
-        let rowLength = $('.map-options__filters_content .map-options__filter-row').length;
-        let indicatorDd = $($('.map-options__filters_content .map-options__filter-row')[rowLength - 1]).find('.mapping-options__filter_menu')[0];
+        let rowLength = $('.map-bottom-items .map-options__filters_content .map-options__filter-row').length;
+        let indicatorDd = $($('.map-bottom-items .map-options__filters_content .map-options__filter-row')[rowLength - 1]).find('.mapping-options__filter_menu')[0];
         let listItems = $(indicatorDd).find('.dropdown__list_item');
         let ddItems = [];
         for (let i = 0; i < listItems.length; i++) {
@@ -49,8 +49,8 @@ describe('Dropdowns', () => {
 
         mc.onSubIndicatorChange(params);
 
-        let rowLength = $('.map-options__filters_content .map-options__filter-row').length;
-        let subindicatorDd = $($('.map-options__filters_content .map-options__filter-row')[rowLength - 1]).find('.mapping-options__filter')[1];
+        let rowLength = $('.map-bottom-items .map-options__filters_content .map-options__filter-row').length;
+        let subindicatorDd = $($('.map-bottom-items .map-options__filters_content .map-options__filter-row')[rowLength - 1]).find('.mapping-options__filter')[1];
 
         expect(subindicatorDd).toHaveClass('disabled');
     })

@@ -34,13 +34,13 @@ const CHART_DATA = {
                 "R 153601 - R 307200",
             ]
         },
-        {
-            name: "gender",
-            subindicators: [
-                "Female",
-                "Male"
-            ]
-        }]
+            {
+                name: "gender",
+                subindicators: [
+                    "Female",
+                    "Male"
+                ]
+            }]
     },
     version_data: {
         model: {
@@ -56,7 +56,7 @@ describe('Indicator', () => {
 
     test('Handles chart data order correctly', () => {
         const component = new Component();
-        const indicator = new Indicator(component, null, CHART_DATA, 'some title', false);
+        const indicator = new Indicator(component, null, CHART_DATA, 'some title', false, null, 'this is the chart attribution');
         indicator.orderChartData();
         let order = [
             "No income",

@@ -2,8 +2,10 @@ import {Chart} from '../chart';
 import {ContentBlock} from './content_block';
 
 export class Indicator extends ContentBlock {
-    constructor(parent, container, indicator, title, isLast, geography) {
+    constructor(parent, container, indicator, title, isLast, geography, chartAttribution) {
         super(parent, container, indicator, title, isLast, geography);
+
+        this.chartAttribution = chartAttribution;
 
         this.prepareDomElements();
         this.addIndicatorChart();
@@ -25,7 +27,7 @@ export class Indicator extends ContentBlock {
 
         if (this.hasData) {
             let chartData = this.orderChartData();
-            let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.parent.parent.parent.config.chart_attribution);
+            let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution);
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
@@ -41,10 +43,10 @@ export class Indicator extends ContentBlock {
             return g.name === primaryGroup
         });
         let subindicators = groupsOrder.subindicators;
-        let data  = this.indicator.data;
+        let data = this.indicator.data;
 
         // Sort data by subindicators
-        data.sort(function(obj1, obj2){
+        data.sort(function (obj1, obj2) {
             return subindicators.indexOf(obj1[primaryGroup]) - subindicators.indexOf(obj2[primaryGroup]);
         })
         this.indicator.data = data;

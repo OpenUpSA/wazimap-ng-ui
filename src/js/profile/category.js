@@ -14,7 +14,7 @@ const descriptionClass = '.category-header__description';
 //category > subcategory > indicator > chart
 
 export class Category extends Component {
-    constructor(parent, formattingConfig, category, detail, _profileWrapper, _id, _removePrevCategories, isFirst, geography) {
+    constructor(parent, formattingConfig, category, detail, _profileWrapper, _id, _removePrevCategories, isFirst, geography, profileConfig) {
         super(parent);
 
         categoryTemplate = $(categoryClass)[0].cloneNode(true);
@@ -24,6 +24,7 @@ export class Category extends Component {
         this.id = _id;
         this.formattingConfig = formattingConfig;
         this.geography = geography;
+        this.profileConfig = profileConfig;
 
         this.prepareDomElements();
         this.prepareEvents();
@@ -83,7 +84,7 @@ export class Category extends Component {
         for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
             let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
             let isFirst = index === 0;
-            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, detail, isFirst, this.geography);
+            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, detail, isFirst, this.geography, this.profileConfig);
             this.bubbleEvents(sc, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

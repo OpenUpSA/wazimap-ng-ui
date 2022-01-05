@@ -50,7 +50,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
 export function gotoHomepage() {
     cy.visit("/");
-    cy.wait(['@all_details', '@profiles', '@profile_by_url', '@themes_count']);
+    cy.wait(['@all_details', '@profiles', '@profile_by_url', '@themes_count'], {timeout: 10000});
 }
 
 export function waitUntilGeographyIsLoaded(geoName) {

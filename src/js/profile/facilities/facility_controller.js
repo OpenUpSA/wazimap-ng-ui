@@ -167,6 +167,7 @@ export class FacilityController extends Component {
 
             self.model.triggerEvent(FacilityControllerModel.EVENTS.facilitiesCreated);
             self.isLoading = false;
+            $('.location__facilities').removeClass('hidden');
         } else {
             $('.location__facilities').addClass('hidden');
         }

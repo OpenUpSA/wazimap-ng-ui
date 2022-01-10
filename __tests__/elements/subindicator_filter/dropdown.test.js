@@ -32,6 +32,7 @@ describe('Dropdowns', () => {
 
         let rowLength = $(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`).length;
         let indicatorDd = $($(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`)[rowLength - 1]).find('.mapping-options__filter_menu')[0];
+
         let listItems = $(indicatorDd).find('.dropdown__list_item');
         let ddItems = [];
         for (let i = 0; i < listItems.length; i++) {

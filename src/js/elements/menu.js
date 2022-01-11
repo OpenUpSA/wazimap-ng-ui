@@ -98,7 +98,7 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
 
         for (const [indicator, detail] of Object.entries(indicators)) {
             const isExcluded = isIndicatorExcluded(detail, EXCLUDE_TYPES.DataMapper);
-            if (detail.dataset_content_type !== DATASET_TYPES.Qualitative && checkIfIndicatorHasChildren(indicator,detail) && !isExcluded) {
+            if (detail.dataset_content_type !== DATASET_TYPES.Qualitative && checkIfIndicatorHasChildren(indicator, detail) && !isExcluded) {
                 let newIndicator = indicatorClone.cloneNode(true);
                 $('.truncate', newIndicator).text(indicator);
                 $(h3Wrapper).append(newIndicator);

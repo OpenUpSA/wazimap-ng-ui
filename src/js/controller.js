@@ -42,7 +42,6 @@ export default class Controller extends Component {
                 payload = self.changeGeography(areaCode)
             }
 
-            self.triggerEvent("hashChange", payload);
             self.onHashChange(payload);
         });
     };

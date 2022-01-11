@@ -334,10 +334,11 @@ export function checkIfCategoryHasChildren(category, detail) {
 }
 
 export function checkIfSubCategoryHasChildren(subcategory, detail) {
+    console.log({subcategory, detail})
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
-        if (!hasChildren && data.child_data !== undefined && data.dataset_content_type !== 'qualitative' && !isIndicatorExcluded(data, 'data mapper')) {
-            for (const [geo, arr] of Object.entries(data.child_data)) {
+        if (!hasChildren && data.data !== undefined && data.dataset_content_type !== 'qualitative' && !isIndicatorExcluded(data, 'data mapper')) {
+            for (const [geo, arr] of Object.entries(data.data)) {
                 hasChildren = hasChildren || arr.length > 0;
             }
         }

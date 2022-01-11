@@ -28,7 +28,7 @@ export class API extends Observable {
     }
 
     getProfile(profileId, areaCode, version) {
-        const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?version=${version}&format=json`;
+        const url = `${this.baseUrl}/all_details2/profile/${profileId}/geography/${areaCode}/?version=${version}&format=json`;
         return this.loadUrl(url);
     }
 
@@ -167,6 +167,10 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
+    async getChildrenIndicators(profileId, areaCode){
+        const url = `${this.baseUrl}/children-indicators/profile/${profileId}/geography/${areaCode}/?format=json`;
+        return this.loadUrl(url);
+    }
 }
 
 async function postJSON(url, data = {}, headers = {}) {

@@ -9,8 +9,9 @@ import XLSX from 'xlsx';
 import Papa from 'papaparse';
 
 import embed from "vega-embed";
+import * as vega from "vega";
 
-import {configureBarchart} from './charts/barChart';
+import {configureBarchart, configureBarchartDownload} from './charts/barChart';
 import {slugify} from './charts/utils';
 import DropdownMenu from "../elements/dropdown_menu";
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
@@ -37,7 +38,8 @@ export class Chart extends Component {
         data,
         groups,
         _subCategoryNode,
-        title
+        title,
+        chartAttribution
     ) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
@@ -51,10 +53,12 @@ export class Chart extends Component {
         this.filter = null;
         this.groups = data.metadata.groups;
 
+        this.profileAttribution = chartAttribution;
         this.subCategoryNode = _subCategoryNode;
 
         const chartContainer = $(chartContainerClass, this.subCategoryNode);
         this.container = chartContainer[0];
+
         this.containerParent = $(this.container).closest('.profile-indicator');
 
         this._filtersContainer = $(this.containerParent).find(filterWrapperClass);
@@ -139,6 +143,7 @@ export class Chart extends Component {
 
             .then(async (result) => {
                 this.vegaView = result.view;
+                this.vegaDownloadView = null;
                 this.setChartMenu();
                 this.showChartDataTable();
                 this.setDownloadUrl();
@@ -248,12 +253,34 @@ export class Chart extends Component {
 
     setDownloadUrl = async () => {
         const containerParent = $(this.container).closest(".profile-indicator");
-        const pngDownloadUrl = await this.vegaView.toImageURL('png', 1);
+
+        let titleEle = $(".map-location__tags").find('.location-tag__name');
+        let filters = "";
+        if (this.selectedFilter) {
+            for (const [group, attribute] of Object.entries(this.selectedFilter)) {
+                filters += group.replace(/^\w/, g => g.toUpperCase()) + ": " + attribute + ", ";
+            }
+        }
+
+        let annotations = {
+            "title": this.title,
+            "geography": `Selected area : ${titleEle.slice(-1).text().trim()}`,
+            "filters": filters,
+            "attribution": this.profileAttribution,
+            "graphValueType": this.graphValueType
+        }
+
+        let specDownload = configureBarchartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
+
+        this.vegaDownloadView = new vega.View(vega.parse(specDownload));
+
+        const pngDownloadUrl = await this.vegaDownloadView.toImageURL('png', 1);
         const saveImgButton = $(containerParent).find(
             ".hover-menu__content a.hover-menu__content_item:nth-child(1)"
         );
         saveImgButton.attr('href', pngDownloadUrl);
-        saveImgButton.attr('download', 'chart.png');
+        const chartTitle = this.title;
+        saveImgButton.attr('download', `${chartTitle ? chartTitle : 'chart'}.png`);
     }
 
     disableChartTypeToggle = (disable) => {
@@ -269,8 +296,6 @@ export class Chart extends Component {
 
         $(saveImgButton).off('click');
         $(saveImgButton).on('click', () => {
-            let chartTitle = self.getChartTitle(':');
-            let fileName = 'chart.png';
             this.triggerEvent('profile.chart.saveAsPng', this);
         })
 
@@ -359,14 +384,15 @@ export class Chart extends Component {
             if (value !== "All values") {
                 let filterName = group;
                 filterName = slugify(filterName)
-                this.setDownloadUrl();
                 this.vegaView.signal(`${filterName}Filter`, true)
                 this.vegaView.signal(`${filterName}FilterValue`, value)
             }
         }
+        this.selectedFilter = selectedFilter;
 
         this.vegaView.run();
         this.appendDataToTable();
+        this.setDownloadUrl();
     };
 
     exportAsCsv = () => {

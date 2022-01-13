@@ -90,94 +90,56 @@ export function getMapCenter() {
 }
 
 export function expandRichDataPanel() {
-    const richData = '.rich-data';
-    cy.get(richData).then($ele => {
-        if ($ele.is(':visible')) {
-            return;
-        } else {
-            const dataMapper = '.data-mapper';
-            const pointMapper = '.point-mapper';
-
-            cy.get(dataMapper).then($dm => {
-                if ($dm.is(':visible')) {
-                    //data mapper is expanded
-                    cy.get('.data-mapper-toggles .rich-data-panel__open').click({force: true});
-                } else {
-                    cy.get(pointMapper).then($rd => {
-                        if ($rd.is(':visible')) {
-                            //rich data is expanded
-                            cy.get('.point-mapper-toggles .rich-data-panel__open').click({force: true});
-                        } else {
-                            //nothing is expanded
-                            cy.get('.panel-toggles .rich-data-panel__open').click({force: true});
-                        }
-                    })
-                }
-            })
-        }
-    })
-
-    cy.get(richData, {timeout: 20000}).should('be.visible');
+    expandPanel('.rich-data');
 }
 
 export function expandPointMapper() {
-    const pointMapper = '.point-mapper';
-    cy.get(pointMapper).then($ele => {
-        if ($ele.is(':visible')) {
-            return;
-        } else {
-            const dataMapper = '.data-mapper';
-            const richData = '.rich-data';
-
-            cy.get(dataMapper).then($dm => {
-                if ($dm.is(':visible')) {
-                    //data mapper is expanded
-                    cy.get('.data-mapper-toggles .point-mapper-panel__open').click({force: true});
-                } else {
-                    cy.get(richData).then($rd => {
-                        if ($rd.is(':visible')) {
-                            //rich data is expanded
-                            cy.get('.rich-data-toggles .point-mapper-panel__open').click({force: true});
-                        } else {
-                            //nothing is expanded
-                            cy.get('.panel-toggles .point-mapper-panel__open').click({force: true});
-                        }
-                    })
-                }
-            })
-        }
-    })
-
-    cy.get(pointMapper, {timeout: 20000}).should('be.visible');
+    expandPanel('.point-mapper');
 }
 
 export function expandDataMapper() {
-    const dataMapper = '.data-mapper';
-    cy.get(dataMapper).then($ele => {
-        if ($ele.is(':visible')) {
-            return;
-        } else {
-            const richData = '.rich-data';
-            const pointMapper = '.point-mapper';
+    expandPanel('.data-mapper');
+}
 
-            cy.get(pointMapper).then($dm => {
-                if ($dm.is(':visible')) {
-                    //data mapper is expanded
-                    cy.get('.point-mapper-toggles .data-mapper-panel__open').click({force: true});
-                } else {
-                    cy.get(richData).then($rd => {
-                        if ($rd.is(':visible')) {
-                            //rich data is expanded
-                            cy.get('.rich-data-toggles .data-mapper-panel__open').click({force: true});
-                        } else {
-                            //nothing is expanded
-                            cy.get('.panel-toggles .data-mapper-panel__open').click({force: true});
-                        }
-                    })
-                }
-            })
+function expandPanel(panel) {
+    const allPanels = [
+        {
+            panel: '.data-mapper',
+            wrapper: '.data-mapper-toggles',
+            button: '.data-mapper-panel__open'
+        }, {
+            panel: '.point-mapper',
+            wrapper: '.point-mapper-toggles',
+            button: '.point-mapper-panel__open'
+        }, {
+            panel: '.rich-data',
+            wrapper: '.rich-data-toggles',
+            button: '.rich-data-panel__open'
         }
-    })
+    ];
 
-    cy.get(dataMapper, {timeout: 20000}).should('be.visible');
+    const panelToBeExpanded = allPanels.filter((p) => {
+        return p.panel === panel
+    })[0];
+    const nonSelectedPanels = allPanels.splice(allPanels.indexOf(panelToBeExpanded.panel), 1);
+
+    let closedNoPanels = true;
+    nonSelectedPanels.forEach(nsp => {
+            if (closedNoPanels) {
+                cy.get(nsp.panel).then($p => {
+                    if ($p.is(':visible')) {
+                        cy.get(`${nsp.wrapper} ${panelToBeExpanded.button}`).click({force: true});
+                        closedNoPanels = false;
+                    }
+                })
+            }
+        }
+    )
+
+    if (closedNoPanels) {
+        //nothing was expanded
+        cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click({force: true});
+    }
+
+    cy.get(panel, {timeout: 20000}).should('be.visible');
 }

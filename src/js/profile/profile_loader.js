@@ -72,7 +72,7 @@ export default class ProfileLoader extends Component {
         for (const [category, detail] of Object.entries(categories)) {
             const id = this.getNewId();
             this.createNavItem(id, category);
-            let c = new Category(this, this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories, isFirst, profile.geography)
+            let c = new Category(this, this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories, isFirst, profile.geography, this.config)
             isFirst = false;
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',

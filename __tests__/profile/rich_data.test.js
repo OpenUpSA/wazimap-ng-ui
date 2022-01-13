@@ -43,7 +43,7 @@ describe('Rich data panel tests', () => {
     const isFirst = true;
 
     let component = new Component();
-    let category = new Category(component, formattingConfig, categoryName, categoryDetail, profileWrapper, id, removePrevCategories, isFirst)
+    let category = new Category(component, formattingConfig, categoryName, categoryDetail, profileWrapper, id, removePrevCategories, isFirst, null, {'chart_attribution': 'test attribution'})
 
     test('Category description is visible and renders HTML tags', () => {
         checkHTMLIsRendered('.category-header__description', 'A category description');
@@ -55,6 +55,11 @@ describe('Rich data panel tests', () => {
 
     test('Indicator description is visible and renders HTML tags', () => {
         checkHTMLIsRendered('.profile-indicator__chart_description', 'An indicator description');
+    })
+
+    test('Chart download is visible', () => {
+        let chartDownload = document.querySelector('.content__item_title');
+        expect(chartDownload).toBeVisible();
     })
 
     function checkHTMLIsRendered(elementClass, description) {
@@ -95,7 +100,7 @@ describe('Rich data panel', () => {
     })
 
     test('Empty descriptions are hidden and empty', () => {
-        new Category(component, {}, 'Test category', categoryDetail, profileWrapper, id, removePrevCategories, isFirst);
+        new Category(component, {}, 'Test category', categoryDetail, profileWrapper, id, removePrevCategories, isFirst, null, {'chart_attribution': 'test attribution'});
 
         let descEle = document.querySelector('.sub-category-header__description');
         let descText = document.querySelector('.sub-category-header__description p');
@@ -105,9 +110,9 @@ describe('Rich data panel', () => {
     })
 
     test('Descriptions are displayed correctly', () => {
-        categoryDetail.subcategories['Mock subcategory'].description= 'test description';
+        categoryDetail.subcategories['Mock subcategory'].description = 'test description';
 
-        new Category(component, {}, 'Test category', categoryDetail, profileWrapper, id, removePrevCategories, isFirst);
+        new Category(component, {}, 'Test category', categoryDetail, profileWrapper, id, removePrevCategories, isFirst, null, {'chart_attribution': 'test attribution'});
 
         let descEle = document.querySelector('.sub-category-header__description');
         let descText = document.querySelector('.sub-category-header__description p');

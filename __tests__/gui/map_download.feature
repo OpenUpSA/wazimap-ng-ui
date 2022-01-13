@@ -15,7 +15,7 @@ Feature: Point Data
     Then Map download button should not have title attribute
     Then I check if an image of the map is downloaded
 
-    And I open Point Mapper
+    And I expand Point Mapper
     Then Point Mapper should be open
     Then Data Mapper should be closed
     Then Rich Data Panel should be closed
@@ -27,7 +27,7 @@ Feature: Point Data
     Then Map download button should not have title attribute
     Then I check if an image of the map is downloaded
 
-    And I open Data Mapper
+    And I expand Data Mapper
     Then Data Mapper should be open
     Then Point Mapper should be closed
     Then Rich Data Panel should be closed
@@ -39,7 +39,7 @@ Feature: Point Data
     Then Map download button should not have title attribute
     Then I check if an image of the map is downloaded
 
-    And I open Rich Data Panel
+    And I expand Rich Data Panel
     Then Rich Data Panel should be open
     Then Point Mapper should be closed
     Then Data Mapper should be closed

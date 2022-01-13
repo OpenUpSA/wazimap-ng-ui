@@ -1,11 +1,11 @@
-export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count=[]) {
+export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = []) {
     cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?version=test&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: all_details,
             forceNetworkError: false // default
         })
-    })
+    }).as('all_details')
 
     cy.intercept('/api/v1/profiles', (req) => {
         req.reply({
@@ -13,7 +13,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: profiles,
             forceNetworkError: false // default
         })
-    })
+    }).as('profiles')
 
     cy.intercept('/api/v1/profile_by_url?format=json', (req) => {
         req.reply({
@@ -21,7 +21,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: profile,
             forceNetworkError: false // default
         })
-    })
+    }).as('profile_by_url')
 
     cy.intercept('/api/v1/profile/8/points/themes/?format=json', (req) => {
         req.reply({
@@ -29,7 +29,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: themes,
             forceNetworkError: false // default
         })
-    })
+    }).as('themes')
 
     cy.intercept('/api/v1/profile/8/points/category/379/points/?format=json', (req) => {
         req.reply({
@@ -37,7 +37,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: points,
             forceNetworkError: false // default
         })
-    })
+    }).as('points')
 
     cy.intercept('/api/v1/profile/8/geography/ZA/themes_count/?version=test&format=json', (request) => {
         request.reply({
@@ -45,8 +45,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             body: themes_count,
             forceNetworkError: false // default
         });
-    });
-
+    }).as('themes_count');
 }
 
 export function gotoHomepage() {
@@ -91,9 +90,56 @@ export function getMapCenter() {
 }
 
 export function expandRichDataPanel() {
-    cy.get('.point-mapper-toggles .rich-data-panel__open').click();
+    expandPanel('.rich-data');
 }
 
 export function expandPointMapper() {
-    cy.get('.rich-data-toggles .point-mapper-panel__open').click();
+    expandPanel('.point-mapper');
+}
+
+export function expandDataMapper() {
+    expandPanel('.data-mapper');
+}
+
+function expandPanel(panel) {
+    const allPanels = [
+        {
+            panel: '.data-mapper',
+            wrapper: '.data-mapper-toggles',
+            button: '.data-mapper-panel__open'
+        }, {
+            panel: '.point-mapper',
+            wrapper: '.point-mapper-toggles',
+            button: '.point-mapper-panel__open'
+        }, {
+            panel: '.rich-data',
+            wrapper: '.rich-data-toggles',
+            button: '.rich-data-panel__open'
+        }
+    ];
+
+    const panelToBeExpanded = allPanels.filter((p) => {
+        return p.panel === panel
+    })[0];
+    const nonSelectedPanels = allPanels.splice(allPanels.indexOf(panelToBeExpanded.panel), 1);
+
+    let closedNoPanels = true;
+    nonSelectedPanels.forEach(nsp => {
+            if (closedNoPanels) {
+                cy.get(nsp.panel).then($p => {
+                    if ($p.is(':visible')) {
+                        cy.get(`${nsp.wrapper} ${panelToBeExpanded.button}`).click({force: true});
+                        closedNoPanels = false;
+                    }
+                })
+            }
+        }
+    )
+
+    if (closedNoPanels) {
+        //nothing was expanded
+        cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click({force: true});
+    }
+
+    cy.get(panel, {timeout: 20000}).should('be.visible');
 }

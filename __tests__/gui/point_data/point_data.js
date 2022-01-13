@@ -1,6 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    clickOnText,
+    clickOnText, expandPointMapper,
     gotoHomepage,
     hoverOverTheMapCenter,
     setupInterceptions,
@@ -164,4 +164,8 @@ Then('I filter by a numerical value', () => {
 
     cy.get('.point-filters__filter-menu:visible').last().click();
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("14")`).click();
+})
+
+When('I expand Point Mapper', () => {
+    expandPointMapper();
 })

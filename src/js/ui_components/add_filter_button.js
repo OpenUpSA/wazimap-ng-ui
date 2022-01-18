@@ -36,6 +36,6 @@ export class AddFilterButton extends Component {
     }
 
     hide() {
-        this.button.addClass('hidden');
+        this.button.addClass('hidden')
     }
 }

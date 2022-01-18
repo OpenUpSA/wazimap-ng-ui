@@ -101,7 +101,7 @@ When('I check if the cluster is created correctly', () => {
 Then('I check if the filter dialog is displayed', () => {
     let mapBottomItems = '.map-bottom-items--v2';
     cy.get(`${mapBottomItems} .point-filters`).should('be.visible')
-    cy.get(`${mapBottomItems} .point-filters .point-filters__title .filters__header_name div div`).should('have.text', 'Point Filter')
+    cy.get(`${mapBottomItems} .point-filters .point-filters__title .filters__header_name div div`).should('have.text', 'Point Filters')
 })
 
 Then('I check if the point category legend is hidden', () => {

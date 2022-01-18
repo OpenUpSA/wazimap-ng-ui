@@ -895,9 +895,6 @@ textarea.w-select {
 .w-widget-twitter-count-shim.w--vertical.w--large {
   width: 76px;
 }
-.w-widget-gplus {
-  overflow: hidden;
-}
 .w-background-video {
   position: relative;
   overflow: hidden;

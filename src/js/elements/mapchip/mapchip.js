@@ -4,7 +4,7 @@ import {DataFilterModel} from "../../models/data_filter_model";
 import {Component} from "../../utils";
 
 const filterContentClass = '.map-options__filters_content';
-const mapChipBlockClass = '.map-options';
+const mapChipBlockClass = '.map-bottom-items--v2 .map-options';
 const legendContainerClass = '.map-options__legend_wrap';
 
 /**
@@ -41,14 +41,14 @@ export class MapChip extends Component {
         $(this._descriptionArea).html(text)
     }
 
-    get filterController(){
+    get filterController() {
         return this._filterController;
     }
 
     prepareDomElements() {
         this._container = $(mapChipBlockClass)[0];
         this._closeButton = $(this.container).find('.filters__header_close')
-        this._descriptionArea = $('.map-options__context .map-option__context_text div');
+        this._descriptionArea = $(this.container).find('.map-options__context--v2 .map-option__context_text div');
         this._titleArea = $(this.container).find('.filters__header_name div');
         this._filtersContainer = $(this.container).find(filterContentClass);
         this._legendContainer = $(this.container).find(legendContainerClass);

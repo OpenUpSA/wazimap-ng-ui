@@ -1,5 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
+    expandDataMapper,
     expandPointMapper,
     expandRichDataPanel,
     gotoHomepage,
@@ -30,7 +31,7 @@ Given('I am on the Wazimap Homepage', () => {
             body: all_details_2016,
             forceNetworkError: false // default
         })
-    })
+    }).as('all_details')
 
     cy.intercept('api/v1/profile/8/geography/VT/themes_count/?version=2011%20Boundaries&format=json', (req) => {
         req.reply({
@@ -38,7 +39,7 @@ Given('I am on the Wazimap Homepage', () => {
             body: [],
             forceNetworkError: false // default
         })
-    })
+    }).as('themes_count')
 
     cy.intercept('api/v1/profile/8/geography/VT/themes_count/?version=2016%20with%20wards&format=json', (req) => {
         req.reply({
@@ -73,7 +74,7 @@ Then('I click on the Proceed button in confirmation modal', () => {
 })
 
 When('I expand Data Mapper', () => {
-    cy.get('.point-mapper-toggles .data-mapper-panel__open').click();
+    expandDataMapper();
 })
 
 Then('I check if there are 2 categories', () => {
@@ -170,6 +171,6 @@ Then('I check if the key metric is shown without the version notification', () =
     cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description').should('not.be.visible');
 })
 
-Then('I expand Point Mapper', ()=>{
+Then('I expand Point Mapper', () => {
     expandPointMapper();
 })

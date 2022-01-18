@@ -18,13 +18,14 @@ const descriptionClass = '.sub-category-header__description';
 const indicatorClass = '.styles .profile-indicator';
 
 export class Subcategory extends Component {
-    constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst, geography) {
+    constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst, geography, profileConfig) {
         super(parent);
 
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
         this._indicators = [];
         this._formattingConfig = formattingConfig;
         this._geography = geography;
+        this._profileConfig = profileConfig;
 
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
         this.addIndicators(wrapper, detail);
@@ -75,7 +76,7 @@ export class Subcategory extends Component {
     }
 
     addIndicatorBlock(container, indicator, title, isLast) {
-        let block = new Indicator(this, container, indicator, title, isLast, this.geography);
+        let block = new Indicator(this, container, indicator, title, isLast, this.geography, this._profileConfig.chart_attribution);
         this.bubbleEvents(block, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

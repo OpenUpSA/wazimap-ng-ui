@@ -1,6 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    clickOnText,
+    clickOnText, expandPointMapper,
     gotoHomepage,
     hoverOverTheMapCenter,
     setupInterceptions,
@@ -177,4 +177,8 @@ Then('I check if the filter dialog is expanded', () => {
     cy.get('.toggle-icon-v--first').should('be.visible');    //down arrow
     cy.get('.toggle-icon-v--last').should('not.be.visible');    //up arrow
     cy.get('.point-filters_content').should('be.visible');
+})
+
+When('I expand Point Mapper', () => {
+    expandPointMapper();
 })

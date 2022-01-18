@@ -2,8 +2,9 @@ Feature: Point Data
 
   Scenario: Verify the markers and clusters are working correctly
     Given I am on the Wazimap Homepage
-    Then I wait until map is ready
-
+      Then I wait until map is ready
+    And I expand Point Mapper
+    
     And I expand Higher Education theme
     Then I click on TVET colleges category
     Then I check if the marker color is rgb(58, 112, 255)

@@ -4,7 +4,7 @@ import {Component} from "../../../src/js/utils";
 import {MapChip} from "../../../src/js/elements/mapchip/mapchip";
 
 const mapchip_colors = {"colors": []};
-const mapBottomItems = '.map-bottom-items';
+const mapBottomItems = '.map-bottom-items--v2';
 let params;
 
 describe('Dropdowns', () => {

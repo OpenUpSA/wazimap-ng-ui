@@ -38,7 +38,12 @@ export class MapChip extends Component {
     }
 
     set description(text) {
-        $(this._descriptionArea).html(text)
+        if (text.trim().length > 0) {
+            $(this._descriptionArea).closest('.map-options__context--v2').removeClass('hidden');
+        } else {
+            $(this._descriptionArea).closest('.map-options__context--v2').addClass('hidden');
+        }
+        $(this._descriptionArea).html(text);
     }
 
     get filterController() {

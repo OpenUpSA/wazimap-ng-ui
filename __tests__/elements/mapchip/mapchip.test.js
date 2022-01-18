@@ -8,6 +8,7 @@ import {TestData} from "../../../src/js/test_data";
 
 
 const mapchip_colors = {"colors": []}
+let mapBottomItems = '.map-bottom-items--v2';
 
 describe('Check mapchip HTML description', () => {
     document.body.innerHTML = html;
@@ -33,7 +34,7 @@ describe('Check mapchip HTML description', () => {
         mc.show();
         mc.description = mapchip_args.data.description;
 
-        let descriptionField = document.querySelector('.map-option__context_text');
+        let descriptionField = document.querySelector(`${mapBottomItems} .map-option__context_text`);
         let htmlTag = descriptionField.textContent.trim();
 
         expect(descriptionField).toBeVisible();
@@ -55,7 +56,7 @@ describe('Selecting a subindicator', () => {
 
         mc.onSubIndicatorChange(params);
 
-        let mapOptions = document.querySelector('.map-options');
+        let mapOptions = document.querySelector(`${mapBottomItems} .map-options`);
         expect(mapOptions).not.toHaveClass('hidden');
     })
 })

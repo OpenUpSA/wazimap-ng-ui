@@ -47,7 +47,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             groups: metadata.groups,
             indicatorTitle: args.indicatorTitle,
             selectedSubindicator: args.selectedSubindicator,
-            childData: args.data.child_data,
+            childData: args.data.data,
             description: args.data.description,
             chartConfiguration: args.data.chartConfiguration,
             filter: args.filter,
@@ -72,8 +72,8 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
     const filter = ps.subindicator.filter;
     let data = ps.subindicator.data
     if (childData) {
-        data.originalChildData = (data.originalChildData !== undefined) ? data.originalChildData : data.child_data;
-        data.child_data = childData;
+        data.originalChildData = (data.originalChildData !== undefined) ? data.originalChildData : data.data;
+        data.data = childData;
     }
     mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter);
 }

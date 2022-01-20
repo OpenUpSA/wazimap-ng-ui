@@ -1,7 +1,14 @@
 import {loadMenu} from '../elements/menu';
 
 export function configureDataExplorerEvents(controller, dataMapperMenu, profileId, api) {
+    //todo:come back to this
     controller.bubbleEvent(dataMapperMenu, 'data_mapper_menu.nodata')
+    controller.on('versions.indicators.ready', (versionData) => {
+        loadMenu(dataMapperMenu, versionData.payload, payload => {
+            controller.onSubIndicatorClick(payload)
+        })
+    })
+    /*
     controller.on('hashChange', payload => {
         const profileId = payload.state.profileId;
         const areaCode = payload.payload.areaCode;
@@ -13,6 +20,7 @@ export function configureDataExplorerEvents(controller, dataMapperMenu, profileI
                 })
             })
     })
+    */
 
     return;
 

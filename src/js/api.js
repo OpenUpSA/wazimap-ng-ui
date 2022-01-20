@@ -167,8 +167,8 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
-    async getChildrenIndicators(profileId, areaCode){
-        const url = `${this.baseUrl}/children-indicators/profile/${profileId}/geography/${areaCode}/?format=json`;
+    async getChildrenIndicators(profileId, areaCode, version){
+        const url = `${this.baseUrl}/children-indicators/profile/${profileId}/geography/${areaCode}/?version=${version}&format=json`;
         return this.loadUrl(url);
     }
 }

@@ -334,7 +334,6 @@ export function checkIfCategoryHasChildren(category, detail) {
 }
 
 export function checkIfSubCategoryHasChildren(subcategory, detail) {
-    console.log({subcategory, detail})
     let hasChildren = false;
     for (const [title, data] of Object.entries(detail.indicators)) {
         if (!hasChildren && data.data !== undefined && data.dataset_content_type !== 'qualitative' && !isIndicatorExcluded(data, 'data mapper')) {
@@ -349,7 +348,7 @@ export function checkIfSubCategoryHasChildren(subcategory, detail) {
 
 export function checkIfIndicatorHasChildren(indicator, detail) {
     let hasChildren = false;
-    if (detail.child_data !== undefined && Object.entries(detail.child_data).length > 0) {
+    if (detail.data !== undefined && Object.entries(detail.data).length > 0) {
         hasChildren = true;
     }
 
@@ -358,7 +357,7 @@ export function checkIfIndicatorHasChildren(indicator, detail) {
 
 export function checkIfSubIndicatorHasChildren(subindicator, detail) {
     let hasData = false;
-    for (const [geography, data] of Object.entries(detail.child_data)) {
+    for (const [geography, data] of Object.entries(detail.data)) {
         data.forEach((indicatorDataPoint) => {
             for (const [title, value] of Object.entries(indicatorDataPoint)) {
                 if (subindicator == value) {

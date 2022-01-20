@@ -139,7 +139,7 @@ export class MapControl extends Component {
 
         this.triggerEvent("map.choropleth.loaded", args);
 
-        this.displayChoropleth(data.child_data, data.metadata.primary_group, method, selectedSubindicator);
+        this.displayChoropleth(data.data, data.metadata.primary_group, method, selectedSubindicator);
     };
 
     displayChoropleth(childData, primaryGroup, method, selectedSubindicator) {

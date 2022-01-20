@@ -1,12 +1,14 @@
 import {Component} from "../utils";
-import {DataBundle} from "../dataobjects";
+import {ChildrenIndicator, ChildrenIndicators, DataBundle} from "../dataobjects";
 import {Version} from "./version";
+import {loadMenu} from "../elements/menu";
 
 export class VersionController extends Component {
     static EVENTS = {
         updated: 'version.active.updated',
         ready: 'versions.all.loaded',
-        profileLoaded: 'profile.loaded'
+        profileLoaded: 'profile.loaded',
+        indicatorsReady: 'versions.indicators.ready'
     }
 
     constructor(parent, areaCode, callRegisterFunction) {
@@ -17,6 +19,7 @@ export class VersionController extends Component {
 
         this._versions = [];
         this._allVersionsBundle = null;
+        this._allVersionsIndicatorData = null;
         this._versionGeometries = {};
         this._versionBundles = {};
         this._activeVersion = null;
@@ -43,6 +46,10 @@ export class VersionController extends Component {
 
     get allVersionsBundle() {
         return this._allVersionsBundle;
+    }
+
+    get allVersionsIndicatorData() {
+        return this._allVersionsIndicatorData;
     }
 
     get versions() {
@@ -100,6 +107,9 @@ export class VersionController extends Component {
             this._initEvents['point_tray.tray.themes_loaded'] = true;
             this.checkAndInitWebflow();
         })
+        this.parent.on('hashChange', (payload) => {
+            this.getChildrenIndicators(payload);
+        })
     }
 
     checkAndInitWebflow() {
@@ -113,6 +123,29 @@ export class VersionController extends Component {
         if (allTriggered) {
             Webflow.require('ix2').init();
         }
+    }
+
+    getChildrenIndicators(payload) {
+        const profileId = payload.state.profileId;
+        const areaCode = payload.payload.areaCode;
+
+        this.versions.forEach((version, index) => {
+            this.api.getChildrenIndicators(profileId, areaCode, version.model.name)
+                .then((data) => {
+                    const childrenIndicators = new ChildrenIndicators(data);
+
+                    this.setVersionData(childrenIndicators.data, version);
+                    if (this._allVersionsIndicatorData === null) {
+                        this._allVersionsIndicatorData = childrenIndicators.data;
+                    } else {
+                        this.appendProfileData(childrenIndicators.data, version, this.allVersionsIndicatorData);
+                    }
+
+                    if (index === this.versions.length - 1) {
+                        this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, this.allVersionsIndicatorData);
+                    }
+                })
+        })
     }
 
     reInit(areaCode) {
@@ -179,16 +212,16 @@ export class VersionController extends Component {
         this.addVersionGeometry(version, dataBundle.geometries);
         this.addVersionBundle(version, dataBundle);
 
-        this.setVersionData(dataBundle, version);
+        this.setVersionData(dataBundle.profile.profileData, version);
         if (this._allVersionsBundle === null) {
             this._allVersionsBundle = dataBundle;
         } else {
-            this.appendProfileData(dataBundle, version);
+            this.appendProfileData(dataBundle.profile.profileData, version, this.allVersionsBundle.profile.profileData);
         }
     }
 
     setVersionData(dataBundle, version) {
-        for (const [category, categoryDetail] of Object.entries(dataBundle.profile.profileData)) {
+        for (const [category, categoryDetail] of Object.entries(dataBundle)) {
             for (const [subcategory, subcategoryDetail] of Object.entries(categoryDetail.subcategories)) {
                 subcategoryDetail.version_data = version;
                 subcategoryDetail.key_metrics.forEach((km) => {
@@ -204,17 +237,17 @@ export class VersionController extends Component {
         }
     }
 
-    appendProfileData(dataBundle, version) {
-        for (const [category, categoryDetail] of Object.entries(dataBundle.profile.profileData)) {
-            let allVersionsBundleCategory = this.allVersionsBundle.profile.profileData[category];
+    appendProfileData(dataBundle, version, appendObj) {
+        for (const [category, categoryDetail] of Object.entries(dataBundle)) {
+            let allVersionsBundleCategory = appendObj[category];
             if (allVersionsBundleCategory === undefined || $.isEmptyObject(allVersionsBundleCategory)) {
-                this.allVersionsBundle.profile.profileData[category] = categoryDetail;
+                appendObj[category] = categoryDetail;
             }
 
             for (const [subcategory, subcategoryDetail] of Object.entries(categoryDetail.subcategories)) {
-                let allVersionsBundleSubcategory = this.allVersionsBundle.profile.profileData[category].subcategories[subcategory];
+                let allVersionsBundleSubcategory = appendObj[category].subcategories[subcategory];
                 if (allVersionsBundleSubcategory === undefined || $.isEmptyObject(allVersionsBundleSubcategory)) {
-                    this.allVersionsBundle.profile.profileData[category].subcategories[subcategory] = subcategoryDetail;
+                    appendObj[category].subcategories[subcategory] = subcategoryDetail;
                 } else {
                     subcategoryDetail.key_metrics.forEach((km) => {
                         km.version_data = version;
@@ -223,9 +256,9 @@ export class VersionController extends Component {
                 }
 
                 for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {
-                    let allVersionsBundleIndicator = this.allVersionsBundle.profile.profileData[category].subcategories[subcategory].indicators[indicator];
+                    let allVersionsBundleIndicator = appendObj[category].subcategories[subcategory].indicators[indicator];
                     if (allVersionsBundleIndicator === undefined || $.isEmptyObject(allVersionsBundleIndicator) || version.model.isActive) {
-                        this.allVersionsBundle.profile.profileData[category].subcategories[subcategory].indicators[indicator] = indicatorDetail;
+                        appendObj[category].subcategories[subcategory].indicators[indicator] = indicatorDetail;
                     }
                 }
             }

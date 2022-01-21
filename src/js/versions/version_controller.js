@@ -249,13 +249,10 @@ export class VersionController extends Component {
                 if (allVersionsBundleSubcategory === undefined || $.isEmptyObject(allVersionsBundleSubcategory)) {
                     appendObj[category].subcategories[subcategory] = subcategoryDetail;
                 } else {
-                    if (!categoryAdded) {
-                        //key metrics are already added when category is added into allVersionsBundleCategory
-                        subcategoryDetail.key_metrics.forEach((km) => {
-                            km.version_data = version;
-                        })
-                        allVersionsBundleSubcategory.key_metrics = allVersionsBundleSubcategory.key_metrics.concat(subcategoryDetail.key_metrics);
-                    }
+                    subcategoryDetail.key_metrics.forEach((km) => {
+                        km.version_data = version;
+                    })
+                    allVersionsBundleSubcategory.key_metrics = allVersionsBundleSubcategory.key_metrics.concat(subcategoryDetail.key_metrics);
                 }
 
                 for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {

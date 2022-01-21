@@ -5,6 +5,7 @@ import {TestData} from "../../../src/js/test_data";
 
 const mapchip_colors = {"colors": []};
 let params;
+let mapBottomItems = '.map-bottom-items--v2';
 
 describe('Filter controller', () => {
     beforeEach(() => {
@@ -145,7 +146,7 @@ describe('Visibility of the filter area', () => {
 
         mc.onSubIndicatorChange(params);
         const isVisible = mc.filterController.shouldFiltersBeVisible();
-        let filterArea = document.querySelector('.map-options__filters_content');
+        let filterArea = document.querySelector(`${mapBottomItems} .map-options__filters_content`);
 
         expect(isVisible).toBe(false);
         expect(filterArea).toHaveClass('hidden');

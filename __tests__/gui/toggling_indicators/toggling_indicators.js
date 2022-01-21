@@ -1,5 +1,10 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
-import {gotoHomepage, setupInterceptions, waitUntilGeographyIsLoaded} from "../common_cy_functions/general";
+import {
+    expandDataMapper,
+    gotoHomepage,
+    setupInterceptions,
+    waitUntilGeographyIsLoaded
+} from "../common_cy_functions/general";
 import all_details from "../toggling_indicators/all_details.json";
 import profiles from "./profiles.json";
 import profile from '../toggling_indicators/profile.json';
@@ -14,8 +19,7 @@ Then('I wait until map is ready', () => {
 })
 
 When('I expand Data Mapper', () => {
-    cy.wait(1000);
-    cy.get('.point-mapper-toggles .data-mapper-panel__open').click();
+    expandDataMapper();
 })
 
 Then('Data Mapper should be displayed', () => {
@@ -44,7 +48,7 @@ Then('I check if everything is zero', () => {
     })
 })
 
-When('I navigate to EC and check if the loading state is displayed correctly', ()=>{
+When('I navigate to EC and check if the loading state is displayed correctly', () => {
     //intercepting the request and testing the loading state
     //for more info : https://blog.dai.codes/cypress-loading-state-tests/
     let sendResponse;

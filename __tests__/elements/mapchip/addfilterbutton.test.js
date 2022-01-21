@@ -5,6 +5,7 @@ import {MapChip} from "../../../src/js/elements/mapchip/mapchip";
 
 const mapchip_colors = {"colors": []};
 let params;
+let mapBottomItems = '.map-bottom-items--v2';
 
 describe('Add filter button', () => {
     beforeEach(() => {
@@ -81,7 +82,7 @@ describe('Add filter button', () => {
 
         mc.onSubIndicatorChange(params);
 
-        let btn = document.querySelector('.mapping-options__add-filter');
+        let btn = document.querySelector(`${mapBottomItems} .mapping-options__add-filter`);
         expect(btn).toHaveClass('disabled');
     })
 })

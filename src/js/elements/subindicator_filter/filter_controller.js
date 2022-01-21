@@ -69,6 +69,7 @@ export class FilterController extends Component {
         this._dataFilterModel = null;
         this._filterCallback = null;
         this._elements = elements;
+        this._isLoading = true;
 
         this.prepareDomElements();
         this.prepareEvents();
@@ -92,6 +93,20 @@ export class FilterController extends Component {
 
     set filterCallback(filterCallback) {
         this._filterCallback = filterCallback;
+    }
+
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    set isLoading(value) {
+        if (value) {
+            $('.map-options__loading').removeClass('hidden');
+        } else {
+            $('.map-options__loading').addClass('hidden');
+        }
+
+        this._isLoading = value;
     }
 
     prepareDomElements() {
@@ -142,11 +157,12 @@ export class FilterController extends Component {
             const self = this;
 
             let filterRowContainer = this._rowContainer.cloneNode(true);
-            $(filterRowContainer).show();
+            $(filterRowContainer).removeClass('hidden').show();
 
             let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, this._elements);
             this.model.addFilterRow(filterRow);
 
+            this.addFilterButton.show();
             $(filterRow.container).insertBefore($(this.container).find(this._elements.addButton));
 
             filterRow.on(FilterRow.EVENTS.removed, filterRow => {
@@ -245,6 +261,8 @@ export class FilterController extends Component {
         this.checkAndAddDefaultFilterGroups();
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
+
+        this.isLoading = false;
     }
 
     updateAvailableFiltersOfRows() {

@@ -163,9 +163,10 @@ Then('I filter by a numerical value', () => {
 })
 
 Then('I check if the filter dialog is collapsed', () => {
-    cy.get('.toggle-icon-v--first').should('not.be.visible');    //down arrow
-    cy.get('.toggle-icon-v--last').should('be.visible');    //up arrow
-    cy.get('.point-filters_content').should('not.be.visible');
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .point-filters .toggle-icon-v--first`).should('not.be.visible');    //down arrow
+    cy.get(`${mapBottomItems} .point-filters .toggle-icon-v--last`).should('be.visible');    //up arrow
+    cy.get(`${mapBottomItems} .point-filters .point-filters_content`).should('not.be.visible');
 })
 
 When('I expand the filter dialog', () => {
@@ -174,9 +175,15 @@ When('I expand the filter dialog', () => {
 })
 
 Then('I check if the filter dialog is expanded', () => {
-    cy.get('.toggle-icon-v--first').should('be.visible');    //down arrow
-    cy.get('.toggle-icon-v--last').should('not.be.visible');    //up arrow
-    cy.get('.point-filters_content').should('be.visible');
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .point-filters .toggle-icon-v--first`).should('be.visible');    //down arrow
+    cy.get(`${mapBottomItems} .point-filters .toggle-icon-v--last`).should('not.be.visible');    //up arrow
+    cy.get(`${mapBottomItems} .point-filters .point-filters_content`).should('be.visible');
+})
+
+When('I collapse the filter dialog', () => {
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .point-filters .toggle-icon-v--first`).click();
 })
 
 When('I expand Point Mapper', () => {

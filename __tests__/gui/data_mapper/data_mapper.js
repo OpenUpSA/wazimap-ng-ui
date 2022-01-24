@@ -5,9 +5,9 @@ import {
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
-import all_details from "../toggling_indicators/all_details.json";
+import all_details from ".//all_details.json";
 import profiles from "./profiles.json";
-import profile from '../toggling_indicators/profile.json';
+import profile from './/profile.json';
 
 Given('I am on the Wazimap Homepage', () => {
     setupInterceptions(profiles, all_details, profile, null, null);
@@ -42,6 +42,11 @@ When('I select another indicator', () => {
     cy.get('.data-category__h3_content').contains('Indian or Asian').click();
 })
 
+Then('I check if choropleth legend is displayed', () =>{
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .map-options .map-options__legend`).should('be.visible');
+})
+
 Then('I check if everything is zero', () => {
     cy.get('.map-options__legend_wrap .map_legend-block .truncate').each(($div) => {
         expect($div.text()).not.equal('0.0%');
@@ -74,4 +79,28 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         cy.get('.data-mapper-content__loading').should('not.be.visible');
         cy.get('.data-mapper-content__list').should('be.visible');
     });
+})
+
+When('I collapse the filter dialog', () => {
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--first`).click();
+})
+
+Then('I check if the filter dialog is collapsed', () => {
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--first`).should('not.be.visible');    //down arrow
+    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--last`).should('be.visible');    //up arrow
+    cy.get(`${mapBottomItems} .map-options .map-options__filters_content`).should('not.be.visible');
+})
+
+When('I expand the filter dialog', () => {
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--last`).click();
+})
+
+Then('I check if the filter dialog is expanded', ()=>{
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--first`).should('be.visible');    //down arrow
+    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--last`).should('not.be.visible');    //up arrow
+    cy.get(`${mapBottomItems} .map-options .map-options__filters_content`).should('be.visible');
 })

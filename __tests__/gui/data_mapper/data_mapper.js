@@ -1,16 +1,25 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    expandDataMapper,
+    checkIfChoroplethFilterDialogIsCollapsed,
+    checkIfChoroplethFilterDialogIsExpanded,
+    checkIfPointFilterDialogIsCollapsed, checkIfPointFilterDialogIsExpanded,
+    clickOnText,
+    collapseChoroplethFilterDialog,
+    expandChoroplethFilterDialog,
+    expandDataMapper, expandPointFilterDialog,
+    expandPointMapper,
     gotoHomepage,
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
-import all_details from ".//all_details.json";
+import all_details from "./all_details.json";
 import profiles from "./profiles.json";
-import profile from './/profile.json';
+import profile from './profile.json';
+import themes from "./themes.json";
+import points from "./points.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, null, null);
+    setupInterceptions(profiles, all_details, profile, themes, points);
     gotoHomepage();
 })
 
@@ -42,7 +51,7 @@ When('I select another indicator', () => {
     cy.get('.data-category__h3_content').contains('Indian or Asian').click();
 })
 
-Then('I check if choropleth legend is displayed', () =>{
+Then('I check if choropleth legend is displayed', () => {
     let mapBottomItems = '.map-bottom-items--v2';
     cy.get(`${mapBottomItems} .map-options .map-options__legend`).should('be.visible');
 })
@@ -81,26 +90,42 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
     });
 })
 
-When('I collapse the filter dialog', () => {
-    let mapBottomItems = '.map-bottom-items--v2';
-    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--first`).click();
+When('I collapse the choropleth filter dialog', () => {
+    collapseChoroplethFilterDialog();
 })
 
-Then('I check if the filter dialog is collapsed', () => {
-    let mapBottomItems = '.map-bottom-items--v2';
-    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--first`).should('not.be.visible');    //down arrow
-    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--last`).should('be.visible');    //up arrow
-    cy.get(`${mapBottomItems} .map-options .map-options__filters_content`).should('not.be.visible');
+Then('I check if the choropleth filter dialog is collapsed', () => {
+    checkIfChoroplethFilterDialogIsCollapsed();
 })
 
-When('I expand the filter dialog', () => {
-    let mapBottomItems = '.map-bottom-items--v2';
-    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--last`).click();
+When('I expand the choropleth filter dialog', () => {
+    expandChoroplethFilterDialog();
 })
 
-Then('I check if the filter dialog is expanded', ()=>{
-    let mapBottomItems = '.map-bottom-items--v2';
-    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--first`).should('be.visible');    //down arrow
-    cy.get(`${mapBottomItems} .map-options .toggle-icon-v--last`).should('not.be.visible');    //up arrow
-    cy.get(`${mapBottomItems} .map-options .map-options__filters_content`).should('be.visible');
+Then('I check if the choropleth filter dialog is expanded', () => {
+    checkIfChoroplethFilterDialogIsExpanded();
+})
+
+When('I expand Point Mapper', () => {
+    expandPointMapper();
+})
+
+When('I expand Higher Education theme', () => {
+    clickOnText('Higher Education');
+})
+
+Then('I click on TVET colleges category', () => {
+    cy.get('.point-mapper__h2:contains("TVET colleges")').click();
+})
+
+Then('I check if the point filter dialog is collapsed', () => {
+    checkIfPointFilterDialogIsCollapsed();
+})
+
+When('I expand the point filter dialog', () =>{
+    expandPointFilterDialog();
+})
+
+Then('I check if the point filter dialog is expanded', () =>{
+    checkIfPointFilterDialogIsExpanded();
 })

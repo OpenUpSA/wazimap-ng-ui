@@ -12,9 +12,9 @@ export class PointFilter extends Component {
         this._filterController = null;
 
         this._mapBottomItems = '.map-bottom-items--v2';
-        this._upArrow = `${this._mapBottomItems} .toggle-icon-v--last`;
-        this._downArrow = `${this._mapBottomItems} .toggle-icon-v--first`;
-        this._filterContent = `.point-filters_content`;
+        this._upArrow = `${this._mapBottomItems} .point-filters .toggle-icon-v--last`;
+        this._downArrow = `${this._mapBottomItems} .point-filters .toggle-icon-v--first`;
+        this._filterContent = `${this._mapBottomItems} .point-filters_content`;
 
         this.prepareEvents();
         this.prepareDomElements();

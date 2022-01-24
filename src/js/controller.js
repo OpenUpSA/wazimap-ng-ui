@@ -130,9 +130,11 @@ export default class Controller extends Component {
             chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,
             indicatorId: payload.indicatorId
         }
+
         if (subindicator.data.originalChildData !== undefined) {
-            subindicator.data.child_data = subindicator.data.originalChildData;
+            subindicator.data.data = subindicator.data.originalChildData;
         }
+
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.selectedSubindicator;
 
@@ -174,11 +176,9 @@ export default class Controller extends Component {
             return;
         }
 
-        let childData = selectedIndicator.child_data;
-        let data = selectedIndicator.data;
+        let childData = selectedIndicator.data;
 
-        this.state.subindicator.data.data = data;
-        this.state.subindicator.data.child_data = childData;
+        this.state.subindicator.data.data = childData;
 
         let args = {
             indicatorTitle: this.state.subindicator.indicatorTitle

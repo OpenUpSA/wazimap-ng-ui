@@ -80,6 +80,7 @@ export class MapChip extends Component {
     show() {
         $(this.container).removeClass('hidden');
         $(this.container).show();  //webflow.js adds display:none when clicked on x
+        $(this.container).find('.map-options__legend').removeClass('hidden');
     }
 
     removeMapChip() {

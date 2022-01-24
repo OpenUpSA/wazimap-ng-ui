@@ -71,6 +71,11 @@ export class FilterController extends Component {
         this._elements = elements;
         this._isLoading = true;
 
+        this._mapBottomItems = '.map-bottom-items--v2';
+        this._upArrow = `${this._mapBottomItems} .map-options .toggle-icon-v--last`;
+        this._downArrow = `${this._mapBottomItems} .map-options .toggle-icon-v--first`;
+        this._filterContent = `${this._mapBottomItems} .map-options__filters_content`;
+
         this.prepareDomElements();
         this.prepareEvents();
     }
@@ -116,6 +121,7 @@ export class FilterController extends Component {
         while ($(this.container).find(this._elements.filterRowClass).length > 1) {
             $(this.container).find(this._elements.filterRowClass)[1].remove();
         }
+        this.setContentVisibility();
     }
 
     prepareEvents() {
@@ -300,5 +306,29 @@ export class FilterController extends Component {
     checkAndAddPreviouslySelectedFilters() {
         const self = this;
         let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilters;
+    }
+
+    setContentVisibility() {
+        $(this._upArrow).on('click', () => {
+            this.showFilterContent()
+        });
+
+        $(this._downArrow).on('click', () => {
+            this.hideFilterContent()
+        });
+
+        this.showFilterContent();
+    }
+
+    showFilterContent() {
+        $(this._upArrow).addClass('hidden');
+        $(this._downArrow).removeClass('hidden');
+        $(this._filterContent).removeClass('hidden');
+    }
+
+    hideFilterContent() {
+        $(this._upArrow).removeClass('hidden');
+        $(this._downArrow).addClass('hidden');
+        $(this._filterContent).addClass('hidden');
     }
 }

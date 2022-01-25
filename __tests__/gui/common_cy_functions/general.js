@@ -1,3 +1,5 @@
+const mapBottomItems = '.map-bottom-items--v2';
+
 export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = []) {
     cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?version=test&format=json', (req) => {
         req.reply({
@@ -142,4 +144,58 @@ function expandPanel(panel) {
     }
 
     cy.get(panel, {timeout: 20000}).should('be.visible');
+}
+
+export function collapsePointFilterDialog() {
+    collapseFilterDialog('.point-filters');
+}
+
+export function checkIfPointFilterDialogIsCollapsed() {
+    checkIfFilterDialogIsCollapsed('.point-filters', '.point-filters_content');
+}
+
+export function expandPointFilterDialog() {
+    expandFilterDialog('.point-filters');
+}
+
+export function checkIfPointFilterDialogIsExpanded() {
+    checkIfFilterDialogIsExpanded('.point-filters', '.point-filters_content');
+}
+
+export function collapseChoroplethFilterDialog() {
+    collapseFilterDialog('.map-options');
+}
+
+export function checkIfChoroplethFilterDialogIsCollapsed() {
+    checkIfFilterDialogIsCollapsed('.map-options', '.map-options__filters_content');
+}
+
+export function expandChoroplethFilterDialog() {
+    expandFilterDialog('.map-options');
+}
+
+export function checkIfChoroplethFilterDialogIsExpanded() {
+    checkIfFilterDialogIsExpanded('.map-options', '.map-options__filters_content');
+}
+
+function expandFilterDialog(parentDiv) {
+    cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--last`).click();
+}
+
+function collapseFilterDialog(parentDiv) {
+    cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--first`).click();
+}
+
+function checkIfFilterDialogIsExpanded(parentDiv, contentDiv) {
+    cy.get(`${mapBottomItems} ${parentDiv}`).should('be.visible');
+    cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--first`).should('be.visible');    //down arrow
+    cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--last`).should('not.be.visible');    //up arrow
+    cy.get(`${mapBottomItems} ${parentDiv} ${contentDiv}`).should('be.visible');
+}
+
+function checkIfFilterDialogIsCollapsed(parentDiv, contentDiv) {
+    cy.get(`${mapBottomItems} ${parentDiv}`).should('be.visible');
+    cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--first`).should('not.be.visible');    //down arrow
+    cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--last`).should('be.visible');    //up arrow
+    cy.get(`${mapBottomItems} ${parentDiv} ${contentDiv}`).should('not.be.visible');
 }

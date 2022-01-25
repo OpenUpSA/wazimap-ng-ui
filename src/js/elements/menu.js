@@ -172,7 +172,7 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     let hasNoItems = true;
     let hiddenClass = hideondeployClsName;
     hiddenClass = 'hidden';
-    $(parentContainer).find('.data-category').remove();
+    $(parentContainer).find('.data-category--v2').remove();
 
     for (const [category, detail] of Object.entries(data)) {
         let hasChildren = checkIfCategoryHasChildren(category, detail)

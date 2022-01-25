@@ -158,8 +158,7 @@ export default class Controller extends Component {
             return;
         }
 
-        let profileData = this.state.profile.profile
-            .profileData[this.state.subindicator.parents.category];
+        let profileData = this.versionController.allVersionsIndicatorData[this.state.subindicator.parents.category];
 
         if (profileData === undefined) {
             this.triggerEvent('data_mapper_menu.nodata');

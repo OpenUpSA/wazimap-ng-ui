@@ -10,7 +10,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     })
 
     //let the choropleth persist
-    controller.on('profile.loaded', payload => controller.handleNewProfileChoropleth())
+    controller.on('versions.indicators.ready', payload => controller.handleNewProfileChoropleth())
     controller.on('mapchip.removed', payload => mapcontrol.choropleth.reset(true));
     controller.on('data_mapper_menu.nodata', payload => mapchip.removeMapChip())
     controller.on(VersionController.EVENTS.updated, () => mapchip.removeMapChip())

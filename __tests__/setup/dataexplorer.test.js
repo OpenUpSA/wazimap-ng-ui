@@ -19,13 +19,14 @@ describe('Data explorer', () => {
 
         configureDataExplorerEvents(controller, dataMapperMenu);
 
-        const payload = {
-            geometries: {
-                children: {}
+        controller.state = {
+            profile: {
+                geometries: {
+                    children: {}
+                }
             }
         }
-
-        controller.triggerEvent("versions.all.loaded", payload);
+        controller.triggerEvent("versions.indicators.ready", {});
 
         let noDataChip = document.querySelector('.data-mapper-content__no-data');
         expect(noDataChip).not.toHaveClass('hidden');
@@ -60,7 +61,7 @@ describe('Data explorer', () => {
         payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "indicator";
         payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "quantitative";
 
-        controller.triggerEvent("versions.all.loaded", payload);
+        controller.triggerEvent("versions.indicators.ready", payload);
 
         let descriptionElement = document.querySelector(".data-category__h3");
         expect(descriptionElement).toBeVisible();

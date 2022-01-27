@@ -1,6 +1,7 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    clickOnText, expandPointMapper,
+    checkIfPointFilterDialogIsCollapsed, checkIfPointFilterDialogIsExpanded,
+    clickOnText, collapsePointFilterDialog, expandPointFilterDialog, expandPointMapper,
     gotoHomepage,
     hoverOverTheMapCenter,
     setupInterceptions,
@@ -163,20 +164,19 @@ Then('I filter by a numerical value', () => {
 })
 
 Then('I check if the filter dialog is collapsed', () => {
-    cy.get('.toggle-icon-v--first').should('not.be.visible');    //down arrow
-    cy.get('.toggle-icon-v--last').should('be.visible');    //up arrow
-    cy.get('.point-filters_content').should('not.be.visible');
+   checkIfPointFilterDialogIsCollapsed();
 })
 
 When('I expand the filter dialog', () => {
-    let mapBottomItems = '.map-bottom-items--v2';
-    cy.get(`${mapBottomItems} .point-filters .toggle-icon-v--last`).click();
+    expandPointFilterDialog();
 })
 
 Then('I check if the filter dialog is expanded', () => {
-    cy.get('.toggle-icon-v--first').should('be.visible');    //down arrow
-    cy.get('.toggle-icon-v--last').should('not.be.visible');    //up arrow
-    cy.get('.point-filters_content').should('be.visible');
+    checkIfPointFilterDialogIsExpanded();
+})
+
+When('I collapse the filter dialog', () => {
+    collapsePointFilterDialog();
 })
 
 When('I expand Point Mapper', () => {

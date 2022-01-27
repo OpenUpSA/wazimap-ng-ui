@@ -47,3 +47,6 @@ Feature: Point Data
     Then I check if the marker color is rgb(153, 58, 255)
     Then I filter by "campus:TestCampus"
     Then I check if the marker color is rgb(153, 58, 255)
+
+    And I collapse the filter dialog
+    Then I check if the filter dialog is collapsed

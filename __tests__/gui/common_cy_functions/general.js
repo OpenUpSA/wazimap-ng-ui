@@ -1,7 +1,8 @@
-const mapBottomItems = '.map-bottom-items--v2';
+export const mapBottomItems = '.map-bottom-items--v2';
+export const allDetailsEndpoint = 'all_details2';
 
-export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = []) {
-    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?version=test&format=json', (req) => {
+export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [], children_indicators = {}) {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=test&format=json`, (req) => {
         req.reply({
             statusCode: 201,
             body: all_details,
@@ -43,8 +44,16 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profile/8/geography/ZA/themes_count/?version=test&format=json', (request) => {
         request.reply({
-            statusCode: 200,
+            statusCode: 201,
             body: themes_count,
+            forceNetworkError: false // default
+        });
+    }).as('themes_count');
+
+    cy.intercept('/api/v1/children-indicators/profile/8/geography/ZA/?version=test&format=json', (request) => {
+        request.reply({
+            statusCode: 201,
+            body: children_indicators,
             forceNetworkError: false // default
         });
     }).as('themes_count');

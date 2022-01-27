@@ -1,5 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
+    allDetailsEndpoint,
     checkIfChoroplethFilterDialogIsCollapsed,
     checkIfChoroplethFilterDialogIsExpanded,
     checkIfPointFilterDialogIsCollapsed, checkIfPointFilterDialogIsExpanded,
@@ -8,7 +9,7 @@ import {
     expandChoroplethFilterDialog,
     expandDataMapper, expandPointFilterDialog,
     expandPointMapper,
-    gotoHomepage,
+    gotoHomepage, mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
@@ -17,9 +18,10 @@ import profiles from "./profiles.json";
 import profile from './profile.json';
 import themes from "./themes.json";
 import points from "./points.json";
+import children_indicators from './children_indicators.json';
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, themes, points);
+    setupInterceptions(profiles, all_details, profile, themes, points, [], children_indicators);
     gotoHomepage();
 })
 
@@ -40,19 +42,18 @@ When('I click on {word} in Data Mapper', () => {
 })
 
 Then('I select an indicator', () => {
-    cy.get('.data-category__h1_content').contains('Population (2016 Community Survey)').click();
-    cy.get('.data-category__h2_content').contains('Population group').click();
-    cy.get('.data-category__h3_content').contains('Black african').click();
+    cy.get('.data-category__h1_content--v2').contains('Population (2016 Community Survey)').click();
+    cy.get('.data-category__h2_content--v2').contains('Population group').click();
+    cy.get('.data-category__h3_content--v2').contains('Black african').click();
 })
 
 When('I select another indicator', () => {
-    cy.get('.data-category__h1_content').contains('Population (2011 Census)').click();
-    cy.get('.data-category__h2_content').contains('Population group 2').click();
-    cy.get('.data-category__h3_content').contains('Indian or Asian').click();
+    cy.get('.data-category__h1_content--v2').contains('Population (2011 Census)').click();
+    cy.get('.data-category__h2_content--v2').contains('Population group 2').click();
+    cy.get('.data-category__h3_content--v2').contains('Indian or Asian').click();
 })
 
 Then('I check if choropleth legend is displayed', () => {
-    let mapBottomItems = '.map-bottom-items--v2';
     cy.get(`${mapBottomItems} .map-options .map-options__legend`).should('be.visible');
 })
 
@@ -70,7 +71,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         sendResponse = resolve;
     });
 
-    cy.intercept('/api/v1/all_details/profile/8/geography/EC/?version=test&format=json', (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/EC/?version=test&format=json`, (request) => {
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,
@@ -80,13 +81,33 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         });
     });
 
+    cy.intercept(`/api/v1/children-indicators/profile/8/geography/EC/?version=test&format=json`, (request) => {
+        return trigger.then(() => {
+            request.reply({
+                statusCode: 201,
+                body: children_indicators,
+                forceNetworkError: false // default
+            })
+        });
+    });
+
     cy.visit('/#geo:EC');
 
     cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
+        //loading = true
         cy.get('.data-mapper-content__list').should('not.be.visible');
+        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('contain.text','Loading');
+        cy.get(`${mapBottomItems} .map-options  .map-options__loading`).should('be.visible');
+        cy.get(`${mapBottomItems} .map-options  .map-options__legend_loading`).should('be.visible');
+
         sendResponse();
+
+        //loading = false
         cy.get('.data-mapper-content__loading').should('not.be.visible');
         cy.get('.data-mapper-content__list').should('be.visible');
+        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('not.contain.text','Loading');
+        cy.get(`${mapBottomItems} .map-options  .map-options__loading`).should('not.be.visible');
+        cy.get(`${mapBottomItems} .map-options  .map-options__legend_loading`).should('not.be.visible');
     });
 })
 
@@ -122,10 +143,10 @@ Then('I check if the point filter dialog is collapsed', () => {
     checkIfPointFilterDialogIsCollapsed();
 })
 
-When('I expand the point filter dialog', () =>{
+When('I expand the point filter dialog', () => {
     expandPointFilterDialog();
 })
 
-Then('I check if the point filter dialog is expanded', () =>{
+Then('I check if the point filter dialog is expanded', () => {
     checkIfPointFilterDialogIsExpanded();
 })

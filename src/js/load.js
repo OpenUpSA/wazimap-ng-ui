@@ -89,7 +89,7 @@ class Application extends Component {
         configurePointDataEvents(controller, {pointData: pointData, pointDataTray: pointDataTray});
         configureChoroplethEvents(controller, {mapcontrol: mapcontrol, mapchip: mapchip});
         configureBreadcrumbsEvents(controller, {profileLoader: profileLoader, locationInfoBox: locationInfoBox});
-        configureDataExplorerEvents(controller, dataMapperMenu, profileId, api);
+        configureDataExplorerEvents(controller, dataMapperMenu);
         configureProfileEvents(controller, {profileLoader: profileLoader});
         configureMiscElementEvents(this, controller);
         configureBoundaryEvents(controller, boundaryTypeBox);

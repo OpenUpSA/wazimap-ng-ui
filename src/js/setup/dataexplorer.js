@@ -1,7 +1,6 @@
 import {loadMenu} from '../elements/menu';
 
 export function configureDataExplorerEvents(controller, dataMapperMenu) {
-    //todo:come back to this
     controller.bubbleEvent(dataMapperMenu, 'data_mapper_menu.nodata')
     controller.on('versions.indicators.ready', (versionData) => {
         let children = versionData.state.profile.geometries.children;

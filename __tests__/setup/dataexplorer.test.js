@@ -40,8 +40,8 @@ describe('Data explorer', () => {
 
         configureDataExplorerEvents(controller, dataMapperMenu);
         const payload = JSON.parse(JSON.stringify(quantQualBasePayload));
-        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "html";
-        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "qualitative";
+        payload["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "html";
+        payload["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "qualitative";
 
         controller.triggerEvent("versions.all.loaded", payload);
 
@@ -58,8 +58,21 @@ describe('Data explorer', () => {
         configureDataExplorerEvents(controller, dataMapperMenu);
 
         const payload = JSON.parse(JSON.stringify(quantQualBasePayload));
-        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "indicator";
-        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "quantitative";
+        payload["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "indicator";
+        payload["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "quantitative";
+
+        controller.state = {
+            profile: {
+                geometries: {
+                    children: {
+                        "province": {
+                            "type": "FeatureCollection",
+                            "features": []
+                        }
+                    }
+                }
+            }
+        }
 
         controller.triggerEvent("versions.indicators.ready", payload);
 
@@ -76,10 +89,23 @@ describe('Data explorer', () => {
         configureDataExplorerEvents(controller, dataMapperMenu);
 
         const payload = JSON.parse(JSON.stringify(quantQualBasePayload));
-        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "html";
-        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "qualitative";
+        payload["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].content_type = "html";
+        payload["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].dataset_content_type = "qualitative";
 
-        controller.triggerEvent("versions.all.loaded", payload);
+        controller.state = {
+            profile: {
+                geometries: {
+                    children: {
+                        "province": {
+                            "type": "FeatureCollection",
+                            "features": []
+                        }
+                    }
+                }
+            }
+        }
+
+        controller.triggerEvent("versions.indicators.ready", payload);
 
         let subcategoryElement = document.querySelector(".data-category__h2");
         expect(subcategoryElement).not.toBeVisible();
@@ -93,11 +119,24 @@ describe('Data explorer', () => {
 
         configureDataExplorerEvents(controller, dataMapperMenu);
         const payload = JSON.parse(JSON.stringify(quantQualBasePayload));
-        payload.profile.profileData["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].chart_configuration = {
+        payload["Demo category"].subcategories["Demo subcategory"].indicators["Qualitative indicator"].chart_configuration = {
             "exclude": ["data mapper"]
         }
 
-        controller.triggerEvent("versions.all.loaded", payload);
+        controller.state = {
+            profile: {
+                geometries: {
+                    children: {
+                        "province": {
+                            "type": "FeatureCollection",
+                            "features": []
+                        }
+                    }
+                }
+            }
+        }
+
+        controller.triggerEvent("versions.indicators.ready", payload);
 
         let descriptionElement = document.querySelector(".data-category__h3");
         expect(descriptionElement).not.toBeVisible();

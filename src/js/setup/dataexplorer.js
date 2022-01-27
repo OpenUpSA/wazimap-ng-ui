@@ -5,7 +5,6 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
     controller.bubbleEvent(dataMapperMenu, 'data_mapper_menu.nodata')
     controller.on('versions.indicators.ready', (versionData) => {
         let children = versionData.state.profile.geometries.children;
-        console.log({children, versionData})
         if ($.isEmptyObject(children)) {
             //no children -- show no-data chip
             dataMapperMenu.showNoData();

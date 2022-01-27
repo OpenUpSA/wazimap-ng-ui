@@ -128,9 +128,10 @@ export class VersionController extends Component {
     getChildrenIndicators(payload) {
         const profileId = payload.state.profileId;
         const areaCode = payload.payload.areaCode;
+        let indicatorPromises = [];
 
         this.versions.forEach((version, index) => {
-            this.api.getChildrenIndicators(profileId, areaCode, version.model.name)
+            const promise = this.api.getChildrenIndicators(profileId, areaCode, version.model.name)
                 .then((data) => {
                     const childrenIndicators = new ChildrenIndicators(data);
 
@@ -140,12 +141,14 @@ export class VersionController extends Component {
                     } else {
                         this.appendProfileData(childrenIndicators.data, version, this.allVersionsIndicatorData);
                     }
-
-                    if (index === this.versions.length - 1) {
-                        this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, this.allVersionsIndicatorData);
-                    }
                 })
+
+            indicatorPromises.push(promise);
         })
+
+        Promise.all(indicatorPromises).then(() => {
+            this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, this.allVersionsIndicatorData);
+        });
     }
 
     reInit(areaCode) {

@@ -21,7 +21,7 @@ export class MapDownload extends Component {
     startMapDownload = () => {
         this.triggerEvent('mapdownload.started');
         this.titleClass = '.map-title';
-        this.legendClass = '.map-bottom-items';
+        this.legendClass = '.map-bottom-items--v2';
         this.downloadMap();
     }
 

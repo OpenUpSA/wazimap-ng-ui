@@ -4,7 +4,7 @@ export const allDetailsEndpoint = 'all_details2';
 export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [], children_indicators = {}) {
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=test&format=json`, (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: all_details,
             forceNetworkError: false // default
         })
@@ -12,7 +12,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profiles', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: profiles,
             forceNetworkError: false // default
         })
@@ -20,7 +20,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profile_by_url?format=json', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: profile,
             forceNetworkError: false // default
         })
@@ -28,7 +28,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profile/8/points/themes/?format=json', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: themes,
             forceNetworkError: false // default
         })
@@ -36,7 +36,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profile/8/points/category/379/points/?format=json', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: points,
             forceNetworkError: false // default
         })
@@ -44,7 +44,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profile/8/geography/ZA/themes_count/?version=test&format=json', (request) => {
         request.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: themes_count,
             forceNetworkError: false // default
         });
@@ -52,7 +52,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/children-indicators/profile/8/geography/ZA/?version=test&format=json', (request) => {
         request.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: children_indicators,
             forceNetworkError: false // default
         });

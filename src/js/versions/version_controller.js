@@ -24,10 +24,15 @@ export class VersionController extends Component {
         this._versionBundles = {};
         this._activeVersion = null;
         this._promises = [];
+        this._indicatorPromises = [];
         this._initEvents = {
             'versions.all.loaded': false,
             'point_tray.tray.themes_loaded': false
         };
+        this._initIndicatorEvents = {
+            'profile.loaded': false
+        }
+        this._indicatorsInitialized = false;
 
         this.prepareEvents();
     }
@@ -98,6 +103,18 @@ export class VersionController extends Component {
         return this._initEvents;
     }
 
+    get initIndicatorEvents() {
+        return this._initIndicatorEvents;
+    }
+
+    get indicatorsInitialized() {
+        return this._indicatorsInitialized;
+    }
+
+    set indicatorsInitialized(value) {
+        this._indicatorsInitialized = value;
+    }
+
     prepareEvents() {
         this.parent.on('versions.all.loaded', () => {
             this._initEvents['versions.all.loaded'] = true;
@@ -110,6 +127,10 @@ export class VersionController extends Component {
         this.parent.on('hashChange', (payload) => {
             this.getChildrenIndicators(payload);
         })
+        this.parent.on('profile.loaded', () => {
+            this._initIndicatorEvents['profile.loaded'] = true;
+            this.checkAndInitIndicators();
+        });
     }
 
     checkAndInitWebflow() {
@@ -125,10 +146,29 @@ export class VersionController extends Component {
         }
     }
 
+    checkAndInitIndicators() {
+        if (this.indicatorsInitialized) {
+            return;
+        }
+
+        let allTriggered = true;
+        for (const key in this.initIndicatorEvents) {
+            if (!this.initIndicatorEvents[key]) {
+                allTriggered = false;
+            }
+        }
+
+        if (allTriggered) {
+            Promise.all(this._indicatorPromises).then(() => {
+                this.indicatorsInitialized = true;
+                this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, this.allVersionsIndicatorData);
+            });
+        }
+    }
+
     getChildrenIndicators(payload) {
         const profileId = payload.state.profileId;
         const areaCode = payload.payload.areaCode;
-        let indicatorPromises = [];
 
         this.versions.forEach((version, index) => {
             const promise = this.api.getChildrenIndicators(profileId, areaCode, version.model.name)
@@ -141,13 +181,19 @@ export class VersionController extends Component {
                     } else {
                         this.appendProfileData(childrenIndicators.data, version, this.allVersionsIndicatorData);
                     }
+                }).catch((response) => {
+                    if (response.status === 404) {
+                        //version does not exist for this geo
+                    } else {
+                        throw(response);
+                    }
                 })
 
-            indicatorPromises.push(promise);
+            this._indicatorPromises.push(promise);
         })
 
-        Promise.all(indicatorPromises).then(() => {
-            this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, this.allVersionsIndicatorData);
+        Promise.all(this._indicatorPromises).then(() => {
+            this.checkAndInitIndicators();
         });
     }
 
@@ -156,6 +202,11 @@ export class VersionController extends Component {
         this._allVersionsBundle = null;
         this._versionGeometries = {};
         this._versionBundles = {};
+        this._allVersionsIndicatorData = null;
+        this._initIndicatorEvents = {
+            'profile.loaded': false
+        }
+        this._indicatorsInitialized = false;
     }
 
     loadAllVersions(versions) {

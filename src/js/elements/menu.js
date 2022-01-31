@@ -120,11 +120,8 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
                 let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
                 maxHeight += triggerHeight;
                 addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
-                //$(newIndicator).find('.data-category__h3_content--v2').css('max-height', 1000);
             }
         }
-
-        //$(newSubCategory).find('.data-category__h2_content--v2').css('max-height', maxHeight);
     }
 
     function addSubcategories(wrapper, category, subcategories) {

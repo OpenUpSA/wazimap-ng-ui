@@ -158,7 +158,9 @@ export default class Controller extends Component {
             return;
         }
 
-        let profileData = this.versionController.allVersionsIndicatorData[this.state.subindicator.parents.category];
+        const geo = this.state.profile.profile.geography.code;
+        const allVersionsIndicatorData = this.versionController.getIndicatorDataByGeo(geo);
+        let profileData = allVersionsIndicatorData.indicatorData[this.state.subindicator.parents.category];
 
         if (profileData === undefined) {
             this.triggerEvent('data_mapper_menu.nodata');

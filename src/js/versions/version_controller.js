@@ -19,7 +19,7 @@ export class VersionController extends Component {
 
         this._versions = [];
         this._allVersionsBundle = null;
-        this._allVersionsIndicatorData = null;
+        this._allVersionsIndicatorDataByGeography = [];
         this._versionGeometries = {};
         this._versionBundles = {};
         this._activeVersion = null;
@@ -53,8 +53,8 @@ export class VersionController extends Component {
         return this._allVersionsBundle;
     }
 
-    get allVersionsIndicatorData() {
-        return this._allVersionsIndicatorData;
+    get allVersionsIndicatorDataByGeography() {
+        return this._allVersionsIndicatorDataByGeography;
     }
 
     get versions() {
@@ -161,12 +161,17 @@ export class VersionController extends Component {
         if (allTriggered) {
             Promise.all(this._indicatorPromises).then(() => {
                 this.indicatorsInitialized = true;
-                this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, this.allVersionsIndicatorData);
+
+                const currentGeo = this.parent.state.profile.profile.geography.code;
+                const indicators = this.getIndicatorDataByGeo(currentGeo);
+                this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, indicators.indicatorData);
             });
         }
     }
 
     getChildrenIndicators(payload) {
+        this.reInitIndicators();
+
         const profileId = payload.state.profileId;
         const areaCode = payload.payload.areaCode;
 
@@ -175,12 +180,23 @@ export class VersionController extends Component {
                 .then((data) => {
                     const childrenIndicators = new ChildrenIndicators(data);
 
-                    this.setVersionData(childrenIndicators.data, version);
-                    if (this._allVersionsIndicatorData === null) {
-                        this._allVersionsIndicatorData = childrenIndicators.data;
-                    } else {
-                        this.appendProfileData(childrenIndicators.data, version, this.allVersionsIndicatorData);
+                    let indicatorDataByCode = {
+                        indicatorData: childrenIndicators.data,
+                        areaCode
                     }
+
+                    this.setVersionData(childrenIndicators.data, version);
+                    let versionIndicatorData = this.getIndicatorDataByGeo(areaCode);
+
+                    if (versionIndicatorData === null || versionIndicatorData === undefined) {
+                        versionIndicatorData = indicatorDataByCode;
+                    } else {
+                        this.allVersionsIndicatorDataByGeography.splice(this.allVersionsIndicatorDataByGeography.indexOf(versionIndicatorData), 1);
+
+                        this.appendProfileData(indicatorDataByCode.indicatorData, version, versionIndicatorData.indicatorData);
+                    }
+
+                    this.allVersionsIndicatorDataByGeography.push(versionIndicatorData);
                 }).catch((response) => {
                     if (response.status === 404) {
                         //version does not exist for this geo
@@ -197,12 +213,23 @@ export class VersionController extends Component {
         });
     }
 
+    getIndicatorDataByGeo(geo) {
+        let versionIndicatorData = this.allVersionsIndicatorDataByGeography.filter((d) => {
+            return d.areaCode === geo;
+        })[0];
+
+        return versionIndicatorData;
+    }
+
     reInit(areaCode) {
         this.areaCode = areaCode;
         this._allVersionsBundle = null;
         this._versionGeometries = {};
         this._versionBundles = {};
-        this._allVersionsIndicatorData = null;
+    }
+
+    reInitIndicators() {
+        this._allVersionsIndicatorDataByGeography = [];
         this._initIndicatorEvents = {
             'profile.loaded': false
         }

@@ -1,6 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    allDetailsEndpoint,
+    allDetailsEndpoint, checkDataMapperCategoryCount,
     expandDataMapper,
     expandPointMapper,
     expandRichDataPanel,
@@ -99,7 +99,7 @@ When('I expand Data Mapper', () => {
 })
 
 Then('I check if there are 2 categories', () => {
-    cy.get('.data-mapper-content__list .data-category--v2').should('have.length', 2);
+    checkDataMapperCategoryCount(2);
 })
 
 When('I select an indicator from Elections category', () => {

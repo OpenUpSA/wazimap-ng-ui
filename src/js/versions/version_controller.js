@@ -164,7 +164,10 @@ export class VersionController extends Component {
 
                 const currentGeo = this.parent.state.profile.profile.geography.code;
                 const indicators = this.getIndicatorDataByGeo(currentGeo);
-                this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, indicators.indicatorData);
+
+                if (indicators !== undefined){
+                    this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, indicators.indicatorData);
+                }
             });
         }
     }

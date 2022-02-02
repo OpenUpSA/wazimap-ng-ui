@@ -1,6 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    allDetailsEndpoint,
+    allDetailsEndpoint, checkDataMapperCategoryCount,
     checkIfChoroplethFilterDialogIsCollapsed,
     checkIfChoroplethFilterDialogIsExpanded,
     checkIfPointFilterDialogIsCollapsed, checkIfPointFilterDialogIsExpanded,
@@ -72,10 +72,14 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
     });
 
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/EC/?version=test&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(all_details));
+        tempObj.boundary.properties.code = 'EC';
+        tempObj.profile.geography.code = 'EC';
+
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,
-                body: all_details,
+                body: tempObj,
                 forceNetworkError: false // default
             })
         });
@@ -96,7 +100,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
     cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
         //loading = true
         cy.get('.data-mapper-content__list').should('not.be.visible');
-        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('contain.text','Loading');
+        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('contain.text', 'Loading');
         cy.get(`${mapBottomItems} .map-options  .map-options__loading`).should('be.visible');
         cy.get(`${mapBottomItems} .map-options  .map-options__legend_loading`).should('be.visible');
 
@@ -105,7 +109,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         //loading = false
         cy.get('.data-mapper-content__loading').should('not.be.visible');
         cy.get('.data-mapper-content__list').should('be.visible');
-        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('not.contain.text','Loading');
+        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('not.contain.text', 'Loading');
         cy.get(`${mapBottomItems} .map-options  .map-options__loading`).should('not.be.visible');
         cy.get(`${mapBottomItems} .map-options  .map-options__legend_loading`).should('not.be.visible');
     });
@@ -149,4 +153,45 @@ When('I expand the point filter dialog', () => {
 
 Then('I check if the point filter dialog is expanded', () => {
     checkIfPointFilterDialogIsExpanded();
+})
+
+When('I navigate to WC', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(all_details));
+        tempObj.boundary.properties.code = 'WC';
+        tempObj.profile.geography.code = 'WC';
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept(`/api/v1/children-indicators/profile/8/geography/WC/?version=test&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(children_indicators));
+        delete tempObj['Demographics'];
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.visit('/#geo:WC');
+})
+
+Then(/^I check if there are (\d+) categories$/, function (count) {
+    checkDataMapperCategoryCount(count);
+});
+
+Then('I navigate to ZA', () => {
+    cy.visit('/#geo:ZA');
+})
+
+When('I navigate to WC and back to ZA quickly', () => {
+    cy.visit('/#geo:WC');
+    cy.wait(500);   //without this controller ignores the first request  - to be able to navigate between 2 geographies we need a small delay
+    cy.visit('/#geo:ZA');
 })

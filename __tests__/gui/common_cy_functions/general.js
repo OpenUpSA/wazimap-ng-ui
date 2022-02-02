@@ -208,3 +208,7 @@ function checkIfFilterDialogIsCollapsed(parentDiv, contentDiv) {
     cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--last`).should('be.visible');    //up arrow
     cy.get(`${mapBottomItems} ${parentDiv} ${contentDiv}`).should('not.be.visible');
 }
+
+export function checkDataMapperCategoryCount(count){
+    cy.get('.data-mapper-content__list .data-category--v2').should('have.length', count);
+}

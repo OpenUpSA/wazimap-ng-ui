@@ -20,6 +20,18 @@ export class VersionController extends Component {
         this._versions = [];
         this._allVersionsBundle = null;
         this._allVersionsIndicatorDataByGeography = [];
+        /**
+         * _allVersionsIndicatorDataByGeography is an array of object
+         * {
+                indicatorData: data,
+                areaCode : 'XYZ'
+            }
+         * we store the children indicator data by their parent geography code
+         * this lets us filter the result by the currently selected geography
+         * and not use the data of previously selected geography if it responds later
+         * than the currently selected geography
+         * */
+
         this._versionGeometries = {};
         this._versionBundles = {};
         this._activeVersion = null;
@@ -164,6 +176,10 @@ export class VersionController extends Component {
 
                 const currentGeo = this.parent.state.profile.profile.geography.code;
                 const indicators = this.getIndicatorDataByGeo(currentGeo);
+                /**
+                 * filter by the currently selected geography to eliminate the previously selected geography's data
+                 * in case it responds later than the currently selected geography
+                 */
 
                 if (indicators !== undefined){
                     this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, indicators.indicatorData);

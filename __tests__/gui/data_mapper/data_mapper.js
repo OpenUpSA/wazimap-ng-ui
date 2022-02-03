@@ -78,7 +78,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
 
         return trigger.then(() => {
             request.reply({
-                statusCode: 201,
+                statusCode: 200,
                 body: tempObj,
                 forceNetworkError: false // default
             })
@@ -88,7 +88,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
     cy.intercept(`/api/v1/children-indicators/profile/8/geography/EC/?version=test&format=json`, (request) => {
         return trigger.then(() => {
             request.reply({
-                statusCode: 201,
+                statusCode: 200,
                 body: children_indicators,
                 forceNetworkError: false // default
             })
@@ -97,7 +97,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
 
     cy.intercept('api/v1/profile/8/geography/EC/themes_count/?version=test&format=json', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: [],
             forceNetworkError: false // default
         })
@@ -189,7 +189,7 @@ When('I navigate to WC', () => {
 
     cy.intercept('api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: [],
             forceNetworkError: false // default
         })

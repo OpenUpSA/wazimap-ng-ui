@@ -95,6 +95,14 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         });
     });
 
+    cy.intercept('api/v1/profile/8/geography/EC/themes_count/?version=test&format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: [],
+            forceNetworkError: false // default
+        })
+    })
+
     cy.visit('/#geo:EC');
 
     cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
@@ -178,6 +186,14 @@ When('I navigate to WC', () => {
             forceNetworkError: false // default
         })
     });
+
+    cy.intercept('api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: [],
+            forceNetworkError: false // default
+        })
+    })
 
     cy.visit('/#geo:WC');
 })

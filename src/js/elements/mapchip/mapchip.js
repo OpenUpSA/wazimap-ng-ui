@@ -17,6 +17,8 @@ export class MapChip extends Component {
         this.prepareDomElements();
 
         this._legend = new Legend(this, this._legendContainer, legendColors);
+        this._isLoading = false;
+        this._filterController = null;
 
         this.prepareUIEvents();
     }
@@ -35,6 +37,22 @@ export class MapChip extends Component {
 
     set title(text) {
         $(this._titleArea).text(text);
+    }
+
+    get legend(){
+        return this._legend;
+    }
+
+    set isLoading(value) {
+        if (value) {
+            this.title = 'Loading...';
+            if (this.filterController !== null) {
+                this.filterController.isLoading = true;
+            }
+            this.legend.isLoading = true;
+        }
+
+        this._isLoading = value;
     }
 
     set description(text) {

@@ -19,7 +19,7 @@ import children_indicators_2011 from "./children_indicators_2011.json";
 import children_indicators_2016 from "./children_indicators_2016.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    cy.intercept(`api/v1/${allDetailsEndpoint}/profile/8/geography/VT/?version=2011%20Boundaries&format=json`, (req) => {
+    cy.intercept(`api/v1/${allDetailsEndpoint}/profile/8/geography/VT/?version=2011%20Boundaries&skip-children=true&format=json`, (req) => {
         req.reply({
             statusCode: 201,
             body: all_details_2011,
@@ -37,7 +37,7 @@ Given('I am on the Wazimap Homepage', () => {
         })
     })
 
-    cy.intercept(`api/v1/${allDetailsEndpoint}/profile/8/geography/VT/?version=2016%20with%20wards&format=json`, (req) => {
+    cy.intercept(`api/v1/${allDetailsEndpoint}/profile/8/geography/VT/?version=2016%20with%20wards&skip-children=true&format=json`, (req) => {
         req.reply({
             statusCode: 201,
             body: all_details_2016,
@@ -110,7 +110,7 @@ When('I select an indicator from Elections category', () => {
 })
 
 Then('I navigate to a geography with no children', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/41804004/?version=2011%20Boundaries&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/41804004/?version=2011%20Boundaries&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 200,
             body: all_details_2011_41804004,
@@ -118,7 +118,7 @@ Then('I navigate to a geography with no children', () => {
         });
     });
 
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/41804004/?version=2016%20with%20wards&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/41804004/?version=2016%20with%20wards&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 200,
             body: all_details_2016_41804004,
@@ -146,14 +146,14 @@ Then('I navigate to a geography with no children', () => {
 })
 
 When('I navigate to a geography with multiple child type', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC085/?version=2016%20with%20wards&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC085/?version=2016%20with%20wards&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 404,
             forceNetworkError: false // default
         });
     });
 
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC085/?version=2011%20Boundaries&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC085/?version=2011%20Boundaries&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 200,
             body: all_details_2011_NC085,

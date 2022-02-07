@@ -71,7 +71,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         sendResponse = resolve;
     });
 
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/EC/?version=test&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/EC/?version=test&skip-children=true&format=json`, (request) => {
         let tempObj = JSON.parse(JSON.stringify(all_details));
         tempObj.boundary.properties.code = 'EC';
         tempObj.profile.geography.code = 'EC';
@@ -164,7 +164,7 @@ Then('I check if the point filter dialog is expanded', () => {
 })
 
 When('I navigate to WC', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
         let tempObj = JSON.parse(JSON.stringify(all_details));
         tempObj.boundary.properties.code = 'WC';
         tempObj.profile.geography.code = 'WC';

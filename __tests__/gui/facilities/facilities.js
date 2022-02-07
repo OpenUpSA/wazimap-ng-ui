@@ -65,7 +65,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         sendResponse = resolve;
     });
 
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/EC/?version=test&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/EC/?version=test&skip-children=true&format=json`, (request) => {
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,
@@ -94,7 +94,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
 })
 
 When('I navigate to a geography with no points', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/CPT/?version=test&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/CPT/?version=test&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 200,
             body: all_details_CPT,

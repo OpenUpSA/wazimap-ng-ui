@@ -365,7 +365,7 @@ export class Chart extends Component {
     };
 
     handleChartFilter = (indicators, groups) => {
-        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, [], indicators.metadata.primary_group, this.data.child_data);
+        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, [], indicators.metadata.primary_group, {});
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }

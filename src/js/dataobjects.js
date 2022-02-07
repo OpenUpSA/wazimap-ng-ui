@@ -44,9 +44,6 @@ export class IndicatorHelper {
     static fixIndicator(title, indicator) {
         indicator.metadata = this.getMetadata(indicator)
         indicator.chartConfiguration = this.getChartConfiguration(indicator.chart_configuration)
-        if (indicator.child_data == undefined)
-            indicator.child_data = []
-
 
         if (indicator.type == undefined) {
             console.warn(`Indicator ${title} does not have a type`)
@@ -73,9 +70,9 @@ export class Profile {
         this._profileData = js.profile_data;
 
         Object.values(this._profileData).forEach(category => {
-            category = self._fixCategory(category)
+            category = Profile.fixCategory(category)
             Object.values(category.subcategories).forEach(subcategory => {
-                subcategory = self._fixSubcategory(subcategory)
+                subcategory = Profile.fixSubcategory(subcategory)
                 for (const [title, indicator] of Object.entries(subcategory.indicators)) {
                     indicator = IndicatorHelper.fixIndicator(title, indicator)
                 }
@@ -91,14 +88,14 @@ export class Profile {
         return profile
     }
 
-    _fixCategory(category) {
+    static fixCategory(category) {
         if (category.subcategories === undefined)
             category.subcategories = {}
 
         return category
     }
 
-    _fixSubcategory(subcategory) {
+    static fixSubcategory(subcategory) {
         if (subcategory.indicators === undefined)
             subcategory.indicators = {}
 
@@ -169,6 +166,26 @@ export class DataBundle {
     //         return feature.properties.code;
     //     })
     // }
+}
+
+export class ChildrenIndicators {
+    constructor(data) {
+        this._data = data;
+
+        Object.values(this._data).forEach(category => {
+            category = Profile.fixCategory(category)
+            Object.values(category.subcategories).forEach(subcategory => {
+                subcategory = Profile.fixSubcategory(subcategory)
+                for (const [title, indicator] of Object.entries(subcategory.indicators)) {
+                    indicator = IndicatorHelper.fixIndicator(title, indicator)
+                }
+            })
+        })
+    }
+
+    get data() {
+        return this._data;
+    }
 }
 
 export const MISSING_VALUE = 0;

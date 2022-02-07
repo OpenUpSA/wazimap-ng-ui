@@ -2,13 +2,13 @@ import {loadMenu} from '../elements/menu';
 
 export function configureDataExplorerEvents(controller, dataMapperMenu) {
     controller.bubbleEvent(dataMapperMenu, 'data_mapper_menu.nodata')
-    controller.on('versions.all.loaded', payload => {
-        if ($.isEmptyObject(payload.payload.geometries.children)) {
+    controller.on('versions.indicators.ready', (versionData) => {
+        let children = versionData.state.profile.geometries.children;
+        if ($.isEmptyObject(children)) {
             //no children -- show no-data chip
             dataMapperMenu.showNoData();
         } else {
-            const profileData = payload.payload.profile.profileData;
-            loadMenu(dataMapperMenu, profileData, payload => {
+            loadMenu(dataMapperMenu, versionData.payload, payload => {
                 controller.onSubIndicatorClick(payload)
             })
         }

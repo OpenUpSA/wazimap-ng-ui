@@ -1,9 +1,10 @@
-const mapBottomItems = '.map-bottom-items--v2';
+export const mapBottomItems = '.map-bottom-items--v2';
+export const allDetailsEndpoint = 'all_details';
 
-export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = []) {
-    cy.intercept('/api/v1/all_details/profile/8/geography/ZA/?version=test&format=json', (req) => {
+export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [], children_indicators = {}) {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=test&skip-children=true&format=json`, (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: all_details,
             forceNetworkError: false // default
         })
@@ -11,7 +12,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profiles', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: profiles,
             forceNetworkError: false // default
         })
@@ -19,7 +20,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profile_by_url?format=json', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: profile,
             forceNetworkError: false // default
         })
@@ -27,7 +28,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profile/8/points/themes/?format=json', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: themes,
             forceNetworkError: false // default
         })
@@ -35,7 +36,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 
     cy.intercept('/api/v1/profile/8/points/category/379/points/?format=json', (req) => {
         req.reply({
-            statusCode: 201,
+            statusCode: 200,
             body: points,
             forceNetworkError: false // default
         })
@@ -45,6 +46,14 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
         request.reply({
             statusCode: 200,
             body: themes_count,
+            forceNetworkError: false // default
+        });
+    }).as('themes_count');
+
+    cy.intercept('/api/v1/children-indicators/profile/8/geography/ZA/?version=test&format=json', (request) => {
+        request.reply({
+            statusCode: 200,
+            body: children_indicators,
             forceNetworkError: false // default
         });
     }).as('themes_count');
@@ -198,4 +207,8 @@ function checkIfFilterDialogIsCollapsed(parentDiv, contentDiv) {
     cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--first`).should('not.be.visible');    //down arrow
     cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--last`).should('be.visible');    //up arrow
     cy.get(`${mapBottomItems} ${parentDiv} ${contentDiv}`).should('not.be.visible');
+}
+
+export function checkDataMapperCategoryCount(count){
+    cy.get('.data-mapper-content__list .data-category--v2').should('have.length', count);
 }

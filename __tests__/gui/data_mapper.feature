@@ -33,3 +33,16 @@ Feature: Facility Modal
     And I expand the choropleth filter dialog
     Then I check if the point filter dialog is expanded
     Then I check if the choropleth filter dialog is expanded
+
+    # confirm that navigating between geographies does not break the data mapper & choropleth
+    And I navigate to WC
+    And I expand Data Mapper
+    Then I check if there are 1 categories
+
+    And I navigate to ZA
+    And I expand Data Mapper
+    Then I check if there are 2 categories
+
+    And I navigate to WC and back to ZA quickly
+    And I expand Data Mapper
+    Then I check if there are 2 categories

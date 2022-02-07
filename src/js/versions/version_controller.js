@@ -1,12 +1,14 @@
 import {Component} from "../utils";
-import {DataBundle} from "../dataobjects";
+import {ChildrenIndicator, ChildrenIndicators, DataBundle} from "../dataobjects";
 import {Version} from "./version";
+import {loadMenu} from "../elements/menu";
 
 export class VersionController extends Component {
     static EVENTS = {
         updated: 'version.active.updated',
         ready: 'versions.all.loaded',
-        profileLoaded: 'profile.loaded'
+        profileLoaded: 'profile.loaded',
+        indicatorsReady: 'versions.indicators.ready'
     }
 
     constructor(parent, areaCode, callRegisterFunction) {
@@ -17,14 +19,32 @@ export class VersionController extends Component {
 
         this._versions = [];
         this._allVersionsBundle = null;
+        this._allVersionsIndicatorDataByGeography = [];
+        /**
+         * _allVersionsIndicatorDataByGeography is an array of object
+         * {
+                indicatorData: data,
+                areaCode : 'XYZ'
+            }
+         * we store the children indicator data by their parent geography code
+         * this lets us filter the result by the currently selected geography
+         * and not use the data of previously selected geography if it responds later
+         * than the currently selected geography
+         * */
+
         this._versionGeometries = {};
         this._versionBundles = {};
         this._activeVersion = null;
         this._promises = [];
+        this._indicatorPromises = [];
         this._initEvents = {
             'versions.all.loaded': false,
             'point_tray.tray.themes_loaded': false
         };
+        this._initIndicatorEvents = {
+            'profile.loaded': false
+        }
+        this._indicatorsInitialized = false;
 
         this.prepareEvents();
     }
@@ -43,6 +63,10 @@ export class VersionController extends Component {
 
     get allVersionsBundle() {
         return this._allVersionsBundle;
+    }
+
+    get allVersionsIndicatorDataByGeography() {
+        return this._allVersionsIndicatorDataByGeography;
     }
 
     get versions() {
@@ -91,6 +115,18 @@ export class VersionController extends Component {
         return this._initEvents;
     }
 
+    get initIndicatorEvents() {
+        return this._initIndicatorEvents;
+    }
+
+    get indicatorsInitialized() {
+        return this._indicatorsInitialized;
+    }
+
+    set indicatorsInitialized(value) {
+        this._indicatorsInitialized = value;
+    }
+
     prepareEvents() {
         this.parent.on('versions.all.loaded', () => {
             this._initEvents['versions.all.loaded'] = true;
@@ -100,6 +136,13 @@ export class VersionController extends Component {
             this._initEvents['point_tray.tray.themes_loaded'] = true;
             this.checkAndInitWebflow();
         })
+        this.parent.on('hashChange', (payload) => {
+            this.getChildrenIndicators(payload);
+        })
+        this.parent.on('profile.loaded', () => {
+            this._initIndicatorEvents['profile.loaded'] = true;
+            this.checkAndInitIndicators();
+        });
     }
 
     checkAndInitWebflow() {
@@ -115,11 +158,101 @@ export class VersionController extends Component {
         }
     }
 
+    checkAndInitIndicators() {
+        if (this.indicatorsInitialized) {
+            return;
+        }
+
+        let allTriggered = true;
+        for (const key in this.initIndicatorEvents) {
+            if (!this.initIndicatorEvents[key]) {
+                allTriggered = false;
+            }
+        }
+
+        if (allTriggered) {
+            Promise.all(this._indicatorPromises).then(() => {
+                this.indicatorsInitialized = true;
+
+                const currentGeo = this.parent.state.profile.profile.geography.code;
+                const indicators = this.getIndicatorDataByGeo(currentGeo);
+                /**
+                 * filter by the currently selected geography to eliminate the previously selected geography's data
+                 * in case it responds later than the currently selected geography
+                 */
+
+                if (indicators !== undefined){
+                    this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, indicators.indicatorData);
+                }
+            });
+        }
+    }
+
+    getChildrenIndicators(payload) {
+        this.reInitIndicators();
+
+        const profileId = payload.state.profileId;
+        const areaCode = payload.payload.areaCode;
+
+        this.versions.forEach((version, index) => {
+            const promise = this.api.getChildrenIndicators(profileId, areaCode, version.model.name)
+                .then((data) => {
+                    const childrenIndicators = new ChildrenIndicators(data);
+
+                    let indicatorDataByCode = {
+                        indicatorData: childrenIndicators.data,
+                        areaCode
+                    }
+
+                    this.setVersionData(childrenIndicators.data, version);
+                    let versionIndicatorData = this.getIndicatorDataByGeo(areaCode);
+
+                    if (versionIndicatorData === null || versionIndicatorData === undefined) {
+                        versionIndicatorData = indicatorDataByCode;
+                    } else {
+                        this.allVersionsIndicatorDataByGeography.splice(this.allVersionsIndicatorDataByGeography.indexOf(versionIndicatorData), 1);
+
+                        this.appendProfileData(indicatorDataByCode.indicatorData, version, versionIndicatorData.indicatorData);
+                    }
+
+                    this.allVersionsIndicatorDataByGeography.push(versionIndicatorData);
+                }).catch((response) => {
+                    if (response.status === 404) {
+                        //version does not exist for this geo
+                    } else {
+                        throw(response);
+                    }
+                })
+
+            this._indicatorPromises.push(promise);
+        })
+
+        Promise.all(this._indicatorPromises).then(() => {
+            this.checkAndInitIndicators();
+        });
+    }
+
+    getIndicatorDataByGeo(geo) {
+        let versionIndicatorData = this.allVersionsIndicatorDataByGeography.filter((d) => {
+            return d.areaCode === geo;
+        })[0];
+
+        return versionIndicatorData;
+    }
+
     reInit(areaCode) {
         this.areaCode = areaCode;
         this._allVersionsBundle = null;
         this._versionGeometries = {};
         this._versionBundles = {};
+    }
+
+    reInitIndicators() {
+        this._allVersionsIndicatorDataByGeography = [];
+        this._initIndicatorEvents = {
+            'profile.loaded': false
+        }
+        this._indicatorsInitialized = false;
     }
 
     loadAllVersions(versions) {
@@ -179,16 +312,16 @@ export class VersionController extends Component {
         this.addVersionGeometry(version, dataBundle.geometries);
         this.addVersionBundle(version, dataBundle);
 
-        this.setVersionData(dataBundle, version);
+        this.setVersionData(dataBundle.profile.profileData, version);
         if (this._allVersionsBundle === null) {
             this._allVersionsBundle = dataBundle;
         } else {
-            this.appendProfileData(dataBundle, version);
+            this.appendProfileData(dataBundle.profile.profileData, version, this.allVersionsBundle.profile.profileData);
         }
     }
 
     setVersionData(dataBundle, version) {
-        for (const [category, categoryDetail] of Object.entries(dataBundle.profile.profileData)) {
+        for (const [category, categoryDetail] of Object.entries(dataBundle)) {
             for (const [subcategory, subcategoryDetail] of Object.entries(categoryDetail.subcategories)) {
                 subcategoryDetail.version_data = version;
                 subcategoryDetail.key_metrics.forEach((km) => {
@@ -204,33 +337,28 @@ export class VersionController extends Component {
         }
     }
 
-    appendProfileData(dataBundle, version) {
-        for (const [category, categoryDetail] of Object.entries(dataBundle.profile.profileData)) {
-            let categoryAdded = false;
-            let allVersionsBundleCategory = this.allVersionsBundle.profile.profileData[category];
+    appendProfileData(dataBundle, version, appendObj) {
+        for (const [category, categoryDetail] of Object.entries(dataBundle)) {
+            let allVersionsBundleCategory = appendObj[category];
             if (allVersionsBundleCategory === undefined || $.isEmptyObject(allVersionsBundleCategory)) {
-                categoryAdded = true;
-                this.allVersionsBundle.profile.profileData[category] = categoryDetail;
+                appendObj[category] = categoryDetail;
             }
 
             for (const [subcategory, subcategoryDetail] of Object.entries(categoryDetail.subcategories)) {
-                let allVersionsBundleSubcategory = this.allVersionsBundle.profile.profileData[category].subcategories[subcategory];
+                let allVersionsBundleSubcategory = appendObj[category].subcategories[subcategory];
                 if (allVersionsBundleSubcategory === undefined || $.isEmptyObject(allVersionsBundleSubcategory)) {
-                    this.allVersionsBundle.profile.profileData[category].subcategories[subcategory] = subcategoryDetail;
+                    appendObj[category].subcategories[subcategory] = subcategoryDetail;
                 } else {
-                    if (!categoryAdded) {
-                        //key metrics are already added when category is added into allVersionsBundleCategory
-                        subcategoryDetail.key_metrics.forEach((km) => {
-                            km.version_data = version;
-                        })
-                        allVersionsBundleSubcategory.key_metrics = allVersionsBundleSubcategory.key_metrics.concat(subcategoryDetail.key_metrics);
-                    }
+                    subcategoryDetail.key_metrics.forEach((km) => {
+                        km.version_data = version;
+                    })
+                    allVersionsBundleSubcategory.key_metrics = allVersionsBundleSubcategory.key_metrics.concat(subcategoryDetail.key_metrics);
                 }
 
                 for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {
-                    let allVersionsBundleIndicator = this.allVersionsBundle.profile.profileData[category].subcategories[subcategory].indicators[indicator];
+                    let allVersionsBundleIndicator = appendObj[category].subcategories[subcategory].indicators[indicator];
                     if (allVersionsBundleIndicator === undefined || $.isEmptyObject(allVersionsBundleIndicator) || version.model.isActive) {
-                        this.allVersionsBundle.profile.profileData[category].subcategories[subcategory].indicators[indicator] = indicatorDetail;
+                        appendObj[category].subcategories[subcategory].indicators[indicator] = indicatorDetail;
                     }
                 }
             }

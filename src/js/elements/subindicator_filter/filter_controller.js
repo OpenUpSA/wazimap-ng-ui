@@ -107,6 +107,8 @@ export class FilterController extends Component {
     set isLoading(value) {
         if (value) {
             $('.map-options__loading').removeClass('hidden');
+            $('.mapping-options__add-filter').addClass('hidden');
+            $('.map-options__filter-row').addClass('hidden')
         } else {
             $('.map-options__loading').addClass('hidden');
         }
@@ -156,6 +158,8 @@ export class FilterController extends Component {
         let isExtra = false;
 
         this.addEmptyFilter(isDefault, isExtra);
+
+        this.isLoading = false;
     }
 
     addEmptyFilter(isDefault = false, isExtra = true) {
@@ -267,8 +271,6 @@ export class FilterController extends Component {
         this.checkAndAddDefaultFilterGroups();
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
-
-        this.isLoading = false;
     }
 
     updateAvailableFiltersOfRows() {

@@ -1,3 +1,5 @@
+import pixelmatch from "pixelmatch";
+
 export const mapBottomItems = '.map-bottom-items--v2';
 export const allDetailsEndpoint = 'all_details';
 
@@ -209,6 +211,27 @@ function checkIfFilterDialogIsCollapsed(parentDiv, contentDiv) {
     cy.get(`${mapBottomItems} ${parentDiv} ${contentDiv}`).should('not.be.visible');
 }
 
-export function checkDataMapperCategoryCount(count){
+export function checkDataMapperCategoryCount(count) {
     cy.get('.data-mapper-content__list .data-category--v2').should('have.length', count);
+}
+
+export function compareImages(image1, image2) {
+    let width = image1.width;
+    let height = image1.height;
+
+    let canvas1 = document.createElement('canvas');
+    canvas1.getContext("2d").drawImage(image1, 0, 0);
+
+    let canvas2 = document.createElement('canvas');
+    canvas2.getContext("2d").drawImage(image2, 0, 0);
+
+    let context1 = canvas1.getContext("2d");
+    let context2 = canvas2.getContext("2d");
+
+    const img1 = context1.getImageData(0, 0, width, height);
+    const img2 = context2.getImageData(0, 0, width, height);
+
+    let pixelDiff = pixelmatch(img1.data, img2.data, null, width, height, {threshold: 0.1});
+
+    expect(pixelDiff).to.equal(0);
 }

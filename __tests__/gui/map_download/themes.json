@@ -1,0 +1,139 @@
+[
+  {
+    "id": 53,
+    "categories": [
+      {
+        "id": 379,
+        "name": "TVET colleges",
+        "description": "Description field for id 379",
+        "theme": {
+          "id": 53,
+          "name": "Higher Education",
+          "icon": "account_balance"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 379",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": [],
+        "configuration": {
+          "filterable_fields": [
+            "campus",
+            "institution type",
+            "numerical"
+          ]
+        }
+      },
+      {
+        "id": 380,
+        "name": "Universities of technology",
+        "description": "Description field for id 380",
+        "theme": {
+          "id": 53,
+          "name": "Higher Education",
+          "icon": "account_balance"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 380",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": []
+      },
+      {
+        "id": 382,
+        "name": "Universities",
+        "description": "Description field for id 382",
+        "theme": {
+          "id": 53,
+          "name": "Higher Education",
+          "icon": "account_balance"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 382",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": []
+      }
+    ],
+    "created": "2020-09-17T15:33:48+0000",
+    "updated": "2021-06-01T15:35:14+0000",
+    "name": "Higher Education",
+    "icon": "account_balance",
+    "order": 10,
+    "profile": 8
+  },
+  {
+    "id": 7,
+    "categories": [
+      {
+        "id": 394,
+        "name": "Additional DEL facilities (unverified)",
+        "description": "Description field for id 394",
+        "theme": {
+          "id": 7,
+          "name": "Labour",
+          "icon": "work"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 394",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": [],
+        "configuration": {
+          "filterable_fields": [
+            "website",
+            "campus"
+          ]
+        }
+      },
+      {
+        "id": 384,
+        "name": "Thusong centres (unverified)",
+        "description": "Description field for id 384",
+        "theme": {
+          "id": 7,
+          "name": "Labour",
+          "icon": "work"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 384",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": []
+      },
+      {
+        "id": 566,
+        "name": "Labour centres",
+        "description": "Description field for id 566",
+        "theme": {
+          "id": 7,
+          "name": "Labour",
+          "icon": "work"
+        },
+        "metadata": {
+          "source": "",
+          "description": "Metadata description field for id 566",
+          "licence": null
+        },
+        "color": "",
+        "visible_tooltip_attributes": []
+      }
+    ],
+    "created": "2020-07-16T06:47:40+0000",
+    "updated": "2021-06-01T15:35:14+0000",
+    "name": "Labour",
+    "icon": "work",
+    "order": 14,
+    "profile": 8
+  }
+]

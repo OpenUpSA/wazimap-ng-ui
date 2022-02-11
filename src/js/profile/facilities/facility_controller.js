@@ -80,6 +80,8 @@ export class FacilityController extends Component {
 
     set isFailed(value) {
         if (value) {
+            $('.rich-data-content .location__facilities .location__facilities_header').addClass('hidden');
+            $('.rich-data-content .location__facilities .location__facilities_trigger').addClass('hidden');
             $('.rich-data-content .location__facilities .location__facilities_error').removeClass('hidden');
         } else {
             $('.rich-data-content .location__facilities .location__facilities_error').addClass('hidden');
@@ -130,6 +132,10 @@ export class FacilityController extends Component {
     }
 
     prepareFailMessage() {
+        if ($('.rich-data-content .location__facilities .location__facilities_error').length > 0) {
+            return;
+        }
+
         let failMsg = document.createElement('div');
         $(failMsg).addClass('location__facilities_error').addClass('hidden');
         $(failMsg).html('Failed to load this data');
@@ -206,6 +212,7 @@ export class FacilityController extends Component {
 
             self.model.triggerEvent(FacilityControllerModel.EVENTS.facilitiesCreated);
             self.isLoading = false;
+            self.isFailed = false;
             $('.location__facilities').removeClass('hidden');
         } else {
             $('.location__facilities').addClass('hidden');

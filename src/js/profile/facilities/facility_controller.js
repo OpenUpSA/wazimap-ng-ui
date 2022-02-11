@@ -1,7 +1,6 @@
 import {Facility} from "./facility";
 import XLSX from "xlsx";
-import {Component, extractSheetsData, Observable} from "../../utils";
-import {TestData} from "../../test_data";
+import {Component, extractSheetsData} from "../../utils";
 
 export class FacilityControllerModel extends Component {
     static EVENTS = {
@@ -50,6 +49,7 @@ export class FacilityController extends Component {
 
         this._model = new FacilityControllerModel(this, parent);
         this._isLoading = false;
+        this._isFailed = false;
         this._isExpanded = false;
         this.facilityItems = [];
         this.prepareDomElements();
@@ -72,6 +72,20 @@ export class FacilityController extends Component {
         }
 
         this._isLoading = value;
+    }
+
+    get isFailed() {
+        return this._isFailed;
+    }
+
+    set isFailed(value) {
+        if (value) {
+            $('.rich-data-content .location__facilities .location__facilities_error').removeClass('hidden');
+        } else {
+            $('.rich-data-content .location__facilities .location__facilities_error').addClass('hidden');
+        }
+
+        this._isFailed = value;
     }
 
     get isExpanded() {
@@ -100,6 +114,9 @@ export class FacilityController extends Component {
 
         this.expandButton = $('.location__facilities_expand');
         this.collapseButton = $('.location__facilities_contract');
+
+        this.prepareFailMessage();
+
         this.isExpanded = false;
     }
 
@@ -112,12 +129,34 @@ export class FacilityController extends Component {
         })
     }
 
+    prepareFailMessage() {
+        let failMsg = document.createElement('div');
+        $(failMsg).addClass('location__facilities_error').addClass('hidden');
+        $(failMsg).html('Failed to load this data');
+
+        $(failMsg).css('display', 'block');
+        $(failMsg).css('color', '#666');
+        $(failMsg).css('width', '100%');
+        $(failMsg).css('background-color', '#f0f0f0');
+        $(failMsg).css('padding', '4px 6px');
+        $(failMsg).css('font-size', '0.9em');
+        $(failMsg).css('border-radius', '2px');
+        $(failMsg).css('margin-right', '6px');
+        $(failMsg).css('margin-left', '6px');
+
+        $('.rich-data-content .location__facilities').append(failMsg);
+    }
+
     getAndAddFacilities(activeVersion) {
         if (this.model.api !== null) {
             this.model.api.getThemesCount(this.model.profileId, this.model.geography.code, activeVersion.model.name)
                 .then((data) => {
                     this.model.themes = data;
                     this.addFacilities();
+                })
+                .catch(() => {
+                    this.isLoading = false;
+                    this.isFailed = true;
                 })
         }
     }
@@ -193,6 +232,7 @@ export class FacilityController extends Component {
     }
 
     hideLoadingState() {
+        $('.location__facilities_loading').addClass('hidden');
         $('.location__facilities_title--loading').addClass('hidden');
         $('.location__facilities_title').removeClass('hidden');
 

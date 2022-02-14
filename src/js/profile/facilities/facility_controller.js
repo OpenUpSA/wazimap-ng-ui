@@ -1,6 +1,7 @@
 import {Facility} from "./facility";
 import XLSX from "xlsx";
 import {Component, extractSheetsData} from "../../utils";
+import * as Sentry from "@sentry/browser";
 
 export class FacilityControllerModel extends Component {
     static EVENTS = {
@@ -160,9 +161,11 @@ export class FacilityController extends Component {
                     this.model.themes = data;
                     this.addFacilities();
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.error({err})
                     this.isLoading = false;
                     this.isFailed = true;
+                    Sentry.captureException(err);
                 })
         }
     }

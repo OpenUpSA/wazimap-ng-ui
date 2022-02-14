@@ -139,7 +139,7 @@ export class FacilityController extends Component {
 
         let failMsg = document.createElement('div');
         $(failMsg).addClass('location__facilities_error').addClass('hidden');
-        $(failMsg).html('Failed to load this data');
+        $(failMsg).html('Failed to load summary of available point data. Please reload or try again later.');
 
         $(failMsg).css('display', 'block');
         $(failMsg).css('color', '#666');

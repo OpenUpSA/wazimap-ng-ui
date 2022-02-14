@@ -182,13 +182,13 @@ When('I expand Rich Data Panel', () => {
 })
 
 Then('I check if the key metric is shown with the version notification', () => {
-    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__title').should('have.text', 'test-key-metrics');
+    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__title').should('contain.text', 'test-key-metrics');
     cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description').should('be.visible');
-    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description div').should('have.text', '(2016 with wards)');
+    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description div').should('contain.text', '(2016 with wards)');
 })
 
 Then('I check if the key metric is shown without the version notification', () => {
-    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__title').should('have.text', 'test-key-metrics');
+    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__title').should('contain.text', 'test-key-metrics');
     cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description').should('not.be.visible');
 })
 

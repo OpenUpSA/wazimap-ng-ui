@@ -139,7 +139,7 @@ When(/^I filter by "([^"]*)"$/, (filter) => {
     }
     const filters = filter.split(':');
     cy.get('.point-filters__filter-menu:visible').first().click();
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[0]}")`).click();
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[0]}")`).click({force: true});
 
     cy.get('.point-filters__filter-menu:visible').last().click();
 
@@ -148,7 +148,7 @@ When(/^I filter by "([^"]*)"$/, (filter) => {
         const text = $el.text().trim();
         expect(text).to.equal(orderedList[index]);
     })
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[1]}")`).click();
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[1]}")`).click({force: true});
 });
 
 Then('I hide Point Mapper', () => {
@@ -164,7 +164,7 @@ Then('I filter by a numerical value', () => {
 })
 
 Then('I check if the filter dialog is collapsed', () => {
-   checkIfPointFilterDialogIsCollapsed();
+    checkIfPointFilterDialogIsCollapsed();
 })
 
 When('I expand the filter dialog', () => {

@@ -58,7 +58,8 @@ Feature: Map Download
     And I click on "Voter turnout" in Data Mapper
     And I click on "Voted" in Data Mapper
     And I expand Point Mapper
-    And I select a theme in Point Mapper
+    And I click on "Higher Education" in Point Mapper
+    And I click on "TVET colleges" in Point Mapper
     And I click on map download
     Then I wait until the image of the map is downloaded
     Then I compare the downloaded image with the reference

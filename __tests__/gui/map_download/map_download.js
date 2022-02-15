@@ -81,11 +81,6 @@ When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
     cy.get('.data-mapper').findByText(word).click();
 });
 
-When('I select a theme in Point Mapper', () => {
-    cy.get('.point-mapper .point-mapper__h1_checkbox').first().click();
-    cy.get('.point-filters').should('be.visible');
-})
-
 Then('I wait until the image of the map is downloaded', () => {
     cy.get('.location-tag__loading-icon').should('not.be.visible');
 })
@@ -121,3 +116,7 @@ Then('I compare the downloaded image with the reference', () => {
         })
     })
 })
+
+Given(/^I click on "([^"]*)" in Point Mapper$/, function (word) {
+    cy.get('.point-mapper').findByText(word).click();
+});

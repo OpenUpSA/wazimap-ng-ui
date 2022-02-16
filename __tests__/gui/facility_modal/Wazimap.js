@@ -64,3 +64,7 @@ Then('I check if the print view is as expected', () => {
 Then('I expand Point Mapper', ()=>{
     expandPointMapper();
 })
+
+When('I exit print view', () =>{
+    cy.task('resetCRI')
+})

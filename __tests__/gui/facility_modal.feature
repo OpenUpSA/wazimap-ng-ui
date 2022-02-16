@@ -15,3 +15,5 @@ Feature: Facility Modal
 
     And I switch to print view
     Then I check if the print view is as expected
+
+    And I exit print view

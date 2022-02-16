@@ -36,7 +36,12 @@ When('I expand Higher Education theme', () => {
     clickOnText('Higher Education');
 })
 
-Then('I click on TVET colleges category', () => {
+Then('I select TVET colleges category', () => {
+    cy.get('.point-mapper__h2:contains("TVET colleges")').click();
+    cy.get('.point-mapper__h2:contains("TVET colleges") .point-mapper__h2_load-complete').should('be.visible');
+})
+
+Then('I deselect TVET colleges category', () => {
     cy.get('.point-mapper__h2:contains("TVET colleges")').click();
 })
 
@@ -55,7 +60,12 @@ When('I expand Labour theme', () => {
     clickOnText('Labour');
 })
 
-Then('I click on Additional DEL facilities category', () => {
+Then('I select Additional DEL facilities category', () => {
+    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")').click();
+    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)") .point-mapper__h2_load-complete').should('be.visible');
+})
+
+Then('I deselect Additional DEL facilities category', () => {
     cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")').click();
 })
 
@@ -139,7 +149,7 @@ When(/^I filter by "([^"]*)"$/, (filter) => {
     }
     const filters = filter.split(':');
     cy.get('.point-filters__filter-menu:visible').first().click();
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[0]}")`).click();
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[0]}")`).click({force: true});
 
     cy.get('.point-filters__filter-menu:visible').last().click();
 
@@ -148,7 +158,7 @@ When(/^I filter by "([^"]*)"$/, (filter) => {
         const text = $el.text().trim();
         expect(text).to.equal(orderedList[index]);
     })
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[1]}")`).click();
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[1]}")`).click({force: true});
 });
 
 Then('I hide Point Mapper', () => {
@@ -164,7 +174,7 @@ Then('I filter by a numerical value', () => {
 })
 
 Then('I check if the filter dialog is collapsed', () => {
-   checkIfPointFilterDialogIsCollapsed();
+    checkIfPointFilterDialogIsCollapsed();
 })
 
 When('I expand the filter dialog', () => {

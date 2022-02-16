@@ -1,4 +1,4 @@
-Feature: Facility Modal
+Feature: Data Mapper
 
   Scenario: Verify the data mapper is working correctly
     Given I am on the Wazimap Homepage

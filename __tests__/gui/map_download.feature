@@ -1,4 +1,4 @@
-Feature: Point Data
+Feature: Map Download
 
   Scenario: Verify the map download button closes the left panels
     Given I am on the Wazimap Homepage

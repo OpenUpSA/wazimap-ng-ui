@@ -10,6 +10,7 @@ import all_details from "../facilities/all_details.json";
 import all_details_CPT from "../facilities/all_details_CPT.json";
 import themes_count from "./themes_count.json";
 import themes_count_EC from "./themes_count_EC.json";
+import all_details_WC from "./all_details_WC.json";
 import profile from "../facilities/profile.json";
 import profiles from "./profiles.json";
 
@@ -129,3 +130,27 @@ When(/^I wait until "([^"]*)" is ready$/, function (word) {
     cy.wait(1000);  //creating the point summary is async
     cy.get('.location__title h1').should('have.text', word);
 });
+
+When('I navigate to a geography where themes-count endpoint fails', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
+        request.reply({
+            statusCode: 201,
+            body: all_details_WC,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept('/api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (request) => {
+        request.reply({
+            statusCode: 201,
+            body: null,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.visit('/#geo:WC');
+})
+
+Then('I check if error message is displayed on the theme count section', () => {
+    cy.get('.location__facilities_error').should('be.visible');
+})

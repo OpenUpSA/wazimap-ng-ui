@@ -112,7 +112,6 @@ Then('I compare the downloaded image with the reference', () => {
             image1.src = prefix + img1Base;
             image2.src = prefix + img2Base;
 
-            console.log({'1': prefix + img1Base, '2': prefix + img2Base})
         })
     })
 })

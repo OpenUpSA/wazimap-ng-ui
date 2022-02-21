@@ -11,6 +11,11 @@ export class PointFilter extends Component {
         this._filterCallback = null;
         this._filterController = null;
 
+        this._mapBottomItems = '.map-bottom-items--v2';
+        this._upArrow = `${this._mapBottomItems} .point-filters .toggle-icon-v--last`;
+        this._downArrow = `${this._mapBottomItems} .point-filters .toggle-icon-v--first`;
+        this._filterContent = `${this._mapBottomItems} .point-filters_content`;
+
         this.prepareEvents();
         this.prepareDomElements();
     }
@@ -41,13 +46,13 @@ export class PointFilter extends Component {
 
     get groups() {
         let groups = [];
-        let categories =  [...new Set(this.activePoints.map(x => x.category))];
+        let categories = [...new Set(this.activePoints.map(x => x.category))];
         let isFilterable = categories.some(x => x.filterableFields.length > 0);
 
-        if (isFilterable){
+        if (isFilterable) {
             this.activePoints.forEach((ap) => {
                 const filterableFields = ap.category.filterableFields;
-                if (filterableFields.length > 0){
+                if (filterableFields.length > 0) {
                     ap.point.data.forEach((d) => {
                         const dVal = trimValue(d.value);
                         if (groups.filter(g => g.name === d.key).length <= 0) {
@@ -82,9 +87,10 @@ export class PointFilter extends Component {
             }
             this._filterController.setDataFilterModel(dataFilterModel);
 
-            $('.point-filters').removeClass('hidden');
+            $(`${this._mapBottomItems} .point-filters`).removeClass('hidden');
+            this.hideFilterContent();
         } else if (!value) {
-            $('.point-filters').addClass('hidden');
+            $(`${this._mapBottomItems} .point-filters`).addClass('hidden');
         }
         this._isVisible = value;
     }
@@ -100,12 +106,13 @@ export class PointFilter extends Component {
     prepareDomElements() {
         this.setTitleElement();
         this.setCloseButton();
+        this.setContentVisibility();
     }
 
     setTitleElement() {
         let titleEle = document.createElement('div');
-        $(titleEle).attr('data-i18n', 'Point Filter');
-        $(titleEle).text('Point Filter');
+        $(titleEle).attr('data-i18n', 'Point Filters');
+        $(titleEle).text('Point Filters');
         $(titleEle).addClass('i18n');
 
         $('.filters__header_name .truncate').html(titleEle);
@@ -115,5 +122,29 @@ export class PointFilter extends Component {
         $('.point-filters__header-close').on('click', () => {
             this.parent.unSelectAllCategories();
         })
+    }
+
+    setContentVisibility() {
+        $(this._upArrow).on('click', () => {
+            this.showFilterContent()
+        });
+
+        $(this._downArrow).on('click', () => {
+            this.hideFilterContent()
+        });
+
+        this.showFilterContent();
+    }
+
+    showFilterContent() {
+        $(this._upArrow).addClass('hidden');
+        $(this._downArrow).removeClass('hidden');
+        $(this._filterContent).removeClass('hidden');
+    }
+
+    hideFilterContent() {
+        $(this._upArrow).removeClass('hidden');
+        $(this._downArrow).addClass('hidden');
+        $(this._filterContent).addClass('hidden');
     }
 }

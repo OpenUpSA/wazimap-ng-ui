@@ -5,11 +5,24 @@ export class Legend extends Component {
         super(parent);
 
         this._legendColors = legendColors;
+        this._isLoading = false;
+
         this.prepareDomElements(container);
     }
 
     get container() {
         return this._container;
+    }
+
+    set isLoading(value) {
+        if (value) {
+            $(this.container).find('.map-options__legend_loading').removeClass('hidden');
+        } else {
+            $(this.container).find('.map-options__legend_loading').addClass('hidden');
+        }
+        $(this.container).find('.map_legend-block').remove();
+
+        this._isLoading = value;
     }
 
     prepareDomElements(container) {
@@ -23,13 +36,13 @@ export class Legend extends Component {
         if (colors.length != intervalLabels.length)
             throw 'Expected the number of intervals to be the same as the number of colours.'
 
-        this.container.html('');
+        this.isLoading = false;
 
         for (let i = 0; i < intervalLabels.length; i++) {
             const interval = intervalLabels[i];
             const item = this._clonedLegendBlock.cloneNode(true);
             const label = interval;
-          
+
             if (i >= lightStart) {
                 $(item).addClass('light');
             }

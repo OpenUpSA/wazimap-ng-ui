@@ -69,6 +69,12 @@ export class FilterController extends Component {
         this._dataFilterModel = null;
         this._filterCallback = null;
         this._elements = elements;
+        this._isLoading = true;
+
+        this._mapBottomItems = '.map-bottom-items--v2';
+        this._upArrow = `${this._mapBottomItems} .map-options .toggle-icon-v--last`;
+        this._downArrow = `${this._mapBottomItems} .map-options .toggle-icon-v--first`;
+        this._filterContent = `${this._mapBottomItems} .map-options__filters_content`;
 
         this.prepareDomElements();
         this.prepareEvents();
@@ -94,6 +100,22 @@ export class FilterController extends Component {
         this._filterCallback = filterCallback;
     }
 
+    get isLoading() {
+        return this._isLoading;
+    }
+
+    set isLoading(value) {
+        if (value) {
+            $('.map-options__loading').removeClass('hidden');
+            $('.mapping-options__add-filter').addClass('hidden');
+            $('.map-options__filter-row').addClass('hidden')
+        } else {
+            $('.map-options__loading').addClass('hidden');
+        }
+
+        this._isLoading = value;
+    }
+
     prepareDomElements() {
         this._rowContainer = $(this.container).find(this._elements.filterRowClass)[0];
         $(this._rowContainer).hide();
@@ -101,6 +123,7 @@ export class FilterController extends Component {
         while ($(this.container).find(this._elements.filterRowClass).length > 1) {
             $(this.container).find(this._elements.filterRowClass)[1].remove();
         }
+        this.setContentVisibility();
     }
 
     prepareEvents() {
@@ -135,6 +158,8 @@ export class FilterController extends Component {
         let isExtra = false;
 
         this.addEmptyFilter(isDefault, isExtra);
+
+        this.isLoading = false;
     }
 
     addEmptyFilter(isDefault = false, isExtra = true) {
@@ -142,11 +167,12 @@ export class FilterController extends Component {
             const self = this;
 
             let filterRowContainer = this._rowContainer.cloneNode(true);
-            $(filterRowContainer).show();
+            $(filterRowContainer).removeClass('hidden').show();
 
             let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, this._elements);
             this.model.addFilterRow(filterRow);
 
+            this.addFilterButton.show();
             $(filterRow.container).insertBefore($(this.container).find(this._elements.addButton));
 
             filterRow.on(FilterRow.EVENTS.removed, filterRow => {
@@ -282,5 +308,29 @@ export class FilterController extends Component {
     checkAndAddPreviouslySelectedFilters() {
         const self = this;
         let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilters;
+    }
+
+    setContentVisibility() {
+        $(this._upArrow).on('click', () => {
+            this.showFilterContent()
+        });
+
+        $(this._downArrow).on('click', () => {
+            this.hideFilterContent()
+        });
+
+        this.showFilterContent();
+    }
+
+    showFilterContent() {
+        $(this._upArrow).addClass('hidden');
+        $(this._downArrow).removeClass('hidden');
+        $(this._filterContent).removeClass('hidden');
+    }
+
+    hideFilterContent() {
+        $(this._upArrow).removeClass('hidden');
+        $(this._downArrow).addClass('hidden');
+        $(this._filterContent).addClass('hidden');
     }
 }

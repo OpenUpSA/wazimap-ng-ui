@@ -326,4 +326,50 @@ describe('Test downloadable barchart', () => {
       expect(view.signal('geography')).toBe('South Africa');
       expect(view.signal('attribution').toString()).toBe('Profile config attribution');
     });
+
+    test('Test to check null metadata source', async () => {
+      let annotations = {
+          'title': 'Population',
+          'geography': 'South Africa',
+          'attribution': 'Profile config attribution',
+          'graphValueType': 'Percentage'
+      }
+      metadata["source"] = null;
+      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+      let view = renderVegaHeadless(vegaDownloadSpec);
+      await view.runAsync()
+      expect(view.signal('source')).toBe('');
+    });
+
+    test('Test to check undefined metadata source', async () => {
+      let annotations = {
+          'title': 'Population',
+          'geography': 'South Africa',
+          'attribution': 'Profile config attribution',
+          'graphValueType': 'Percentage'
+      }
+      metadata["source"] = undefined;
+      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+      let view = renderVegaHeadless(vegaDownloadSpec);
+      await view.runAsync()
+      expect(view.signal('source')).toBe('');
+    });
+
+    test('Test to check valid metadata source', async () => {
+      let annotations = {
+          'title': 'Population',
+          'geography': 'South Africa',
+          'attribution': 'Profile config attribution',
+          'graphValueType': 'Percentage'
+      }
+      let metadata = {
+        source: "test",
+        primary_group: 'age',
+        groups: [ { name: 'age' } ]
+      }
+      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+      let view = renderVegaHeadless(vegaDownloadSpec);
+      await view.runAsync()
+      expect(view.signal('source')).toBe('Source : test');
+    });
 });

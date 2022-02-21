@@ -60,10 +60,11 @@ export class MapControl extends Component {
 
     // Leaflet
     configureMap(coords, mapOptions) {
-
-        const map = L
+        let map = L
             .map('main-map', mapOptions.leafletOptions)
             .setView([coords["lat"], coords["long"]], coords["zoom"])
+
+        map.attributionControl.addAttribution('&copy; <a href="https://www.openstreetmap.org/#map=6/-28.676/24.677" target="_blank">OpenStreetMap</a> contributors, <a href="https://carto.com/help/working-with-data/attribution/#basemaps" target="_blank">Carto</a>. Powered by <a href="https://openup.org.za/products/wazimap-ng" target="_blank">Wazimap</a>');
 
         mapOptions.tileLayers.forEach(layer => {
             const pane = layer.pane;
@@ -138,7 +139,7 @@ export class MapControl extends Component {
 
         this.triggerEvent("map.choropleth.loaded", args);
 
-        this.displayChoropleth(data.child_data, data.metadata.primary_group, method, selectedSubindicator);
+        this.displayChoropleth(data.data, data.metadata.primary_group, method, selectedSubindicator);
     };
 
     displayChoropleth(childData, primaryGroup, method, selectedSubindicator) {

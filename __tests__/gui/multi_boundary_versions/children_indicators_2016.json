@@ -1,0 +1,76 @@
+{
+  "Demographics":{
+    "description":"",
+    "subcategories":{
+      "2021 Municipal elections":{
+        "description":""
+      },
+      "2016 Municipal elections":{
+        "description":"",
+        "indicators":{
+          "2016 Voter turnout":{
+            "id":836,
+            "description":"The 2016 Municipal Election \"Voter turnout\" indicator shows the larger of the Ward and Proportional Representation ballots in each voting district. Elections in local municipalities that fall in district municipalities actually have a third ballot (DC40), because the district council is elected partly by the councils of the costituent local municipalities, and partly by this third ballot. The Ward and PR ballots are used to ensure a proper comparison between ward, municipality and provincial regions.",
+            "choropleth_method":"subindicator",
+            "last_updated_at":"2021-07-01T09:13:47.019771Z",
+            "metadata":{
+              "source":"IEC",
+              "description":"The 2016 Municipal Election \"Voter turnout\" indicator shows the larger of the Ward and Proportional Representation ballots in each voting district. Elections in local municipalities that fall in district municipalities actually have a third ballot (DC40), because the district council is elected partly by the councils of the constituent local municipalities, and partly by this third ballot. The Ward and PR ballots are used to ensure a proper comparison between ward, municipality and provincial regions.",
+              "url":"http://www.elections.org.za/",
+              "licence":{
+                "name":"other",
+                "url":null
+              },
+              "primary_group":"categories",
+              "groups":[
+                {
+                  "subindicators":[
+                    "Didn't vote",
+                    "Voted"
+                  ],
+                  "dataset":1034,
+                  "name":"categories",
+                  "can_aggregate":true,
+                  "can_filter":true
+                }
+              ]
+            },
+            "content_type":"indicator",
+            "dataset_content_type":"quantitative",
+            "version":"2016 with wards",
+            "chart_configuration":{
+              "types":{
+                "Value":{
+                  "formatting":","
+                }
+              },
+              "disableToggle":false
+            },
+            "data":{
+              "CPT":[
+                {
+                  "count":"1271923",
+                  "categories":"Voted"
+                },
+                {
+                  "count":"708998",
+                  "categories":"Didn't vote"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Municipal leadership":{
+        "description":"",
+        "key_metrics": [
+          {
+            "label": "test-key-metrics",
+            "method": "absolute_value",
+            "value": 4383173
+          }
+        ]
+      }
+    }
+  }
+}

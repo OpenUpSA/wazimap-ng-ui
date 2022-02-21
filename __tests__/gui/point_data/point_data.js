@@ -1,6 +1,7 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    clickOnText,
+    checkIfPointFilterDialogIsCollapsed, checkIfPointFilterDialogIsExpanded,
+    clickOnText, collapsePointFilterDialog, expandPointFilterDialog, expandPointMapper,
     gotoHomepage,
     hoverOverTheMapCenter,
     setupInterceptions,
@@ -35,7 +36,12 @@ When('I expand Higher Education theme', () => {
     clickOnText('Higher Education');
 })
 
-Then('I click on TVET colleges category', () => {
+Then('I select TVET colleges category', () => {
+    cy.get('.point-mapper__h2:contains("TVET colleges")').click();
+    cy.get('.point-mapper__h2:contains("TVET colleges") .point-mapper__h2_load-complete').should('be.visible');
+})
+
+Then('I deselect TVET colleges category', () => {
     cy.get('.point-mapper__h2:contains("TVET colleges")').click();
 })
 
@@ -54,7 +60,12 @@ When('I expand Labour theme', () => {
     clickOnText('Labour');
 })
 
-Then('I click on Additional DEL facilities category', () => {
+Then('I select Additional DEL facilities category', () => {
+    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")').click();
+    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)") .point-mapper__h2_load-complete').should('be.visible');
+})
+
+Then('I deselect Additional DEL facilities category', () => {
     cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")').click();
 })
 
@@ -98,9 +109,10 @@ When('I check if the cluster is created correctly', () => {
     cy.get('body').trigger('click', {clientX: 0, clientY: 0})
 })
 
-Then('I check if the filter pane is displayed', () => {
-    cy.get('.point-filters').should('be.visible')
-    cy.get('.point-filters .point-filters__title .filters__header_name div div').should('have.text', 'Point Filter')
+Then('I check if the filter dialog is displayed', () => {
+    let mapBottomItems = '.map-bottom-items--v2';
+    cy.get(`${mapBottomItems} .point-filters`).should('be.visible')
+    cy.get(`${mapBottomItems} .point-filters .point-filters__title .filters__header_name div div`).should('have.text', 'Point Filters')
 })
 
 Then('I check if the point category legend is hidden', () => {
@@ -137,7 +149,7 @@ When(/^I filter by "([^"]*)"$/, (filter) => {
     }
     const filters = filter.split(':');
     cy.get('.point-filters__filter-menu:visible').first().click();
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[0]}")`).click();
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[0]}")`).click({force: true});
 
     cy.get('.point-filters__filter-menu:visible').last().click();
 
@@ -146,16 +158,11 @@ When(/^I filter by "([^"]*)"$/, (filter) => {
         const text = $el.text().trim();
         expect(text).to.equal(orderedList[index]);
     })
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[1]}")`).click();
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[1]}")`).click({force: true});
 });
 
 Then('I hide Point Mapper', () => {
     cy.get('.point-mapper-toggles .point-mapper-panel__close', {timeout: 20000}).click();
-})
-
-Then('I click on the close button', () => {
-    cy.get('.point-filters__header-close').click();
-    cy.get('.point-filters').should('not.be.visible')
 })
 
 Then('I filter by a numerical value', () => {
@@ -164,4 +171,24 @@ Then('I filter by a numerical value', () => {
 
     cy.get('.point-filters__filter-menu:visible').last().click();
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("14")`).click();
+})
+
+Then('I check if the filter dialog is collapsed', () => {
+    checkIfPointFilterDialogIsCollapsed();
+})
+
+When('I expand the filter dialog', () => {
+    expandPointFilterDialog();
+})
+
+Then('I check if the filter dialog is expanded', () => {
+    checkIfPointFilterDialogIsExpanded();
+})
+
+When('I collapse the filter dialog', () => {
+    collapsePointFilterDialog();
+})
+
+When('I expand Point Mapper', () => {
+    expandPointMapper();
 })

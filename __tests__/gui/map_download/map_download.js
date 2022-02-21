@@ -1,5 +1,8 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
+    compareImages,
+    expandDataMapper,
+    expandPointMapper, expandRichDataPanel,
     gotoHomepage,
     setupInterceptions,
     waitUntilGeographyIsLoaded
@@ -7,9 +10,12 @@ import {
 import all_details from "../map_download/all_details.json";
 import profile from "../map_download/profile.json";
 import profiles from "../map_download/profiles.json";
+import children_indicators from './children_indicators.json';
+import points from './points.json';
+import themes from './themes.json';
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, null, null);
+    setupInterceptions(profiles, all_details, profile, themes, points, [], children_indicators);
     gotoHomepage();
 })
 
@@ -25,8 +31,8 @@ Then('I check if an image of the map is downloaded', () => {
     cy.verifyDownload('map.png');
 })
 
-Then('I open Point Mapper', () => {
-    cy.get('.panel-toggles .point-mapper-panel__open').click();
+Then('I expand Point Mapper', () => {
+    expandPointMapper();
 })
 
 Then('Point Mapper should be open', () => {
@@ -37,8 +43,8 @@ Then('Point Mapper should be closed', () => {
     cy.get('.point-mapper').should('not.be.visible');
 })
 
-Then('I open Data Mapper', () => {
-    cy.get('.panel-toggles .data-mapper-panel__open').click();
+Then('I expand Data Mapper', () => {
+    expandDataMapper();
 })
 
 Then('Data Mapper should be open', () => {
@@ -49,8 +55,8 @@ Then('Data Mapper should be closed', () => {
     cy.get('.data-mapper').should('not.be.visible');
 })
 
-Then('I open Rich Data Panel', () => {
-    cy.get('.panel-toggles .rich-data-panel__open').click();
+Then('I expand Rich Data Panel', () => {
+    expandRichDataPanel();
 })
 
 Then('Rich Data Panel should be open', () => {
@@ -70,3 +76,46 @@ Then('Map download button should have title attribute', () => {
 Then('Map download button should not have title attribute', () => {
     cy.get('.map-download').should('not.have.attr', 'title');
 })
+
+When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
+    cy.get('.data-mapper').findByText(word).click();
+});
+
+Then('I wait until the image of the map is downloaded', () => {
+    cy.get('.location-tag__loading-icon').should('not.be.visible');
+})
+
+Then('I compare the downloaded image with the reference', () => {
+    let downloadUrl = './cypress/downloads/map.png';
+    let referenceUrl = './__tests__/gui/map_download/reference.png';
+
+    cy.readFile(downloadUrl, 'base64').then((img1Base) => {
+        cy.readFile(referenceUrl, 'base64').then((img2Base) => {
+            let prefix = 'data:image/png;base64,';
+            let image1Loaded = false;
+            let image2Loaded = false;
+
+            let image1 = new Image();
+            let image2 = new Image();
+            image1.onload = function () {
+                image1Loaded = true;
+                if (image2Loaded) {
+                    compareImages(image1, image2);
+                }
+            }
+            image2.onload = function () {
+                image2Loaded = true;
+                if (image1Loaded) {
+                    compareImages(image1, image2);
+                }
+            }
+            image1.src = prefix + img1Base;
+            image2.src = prefix + img2Base;
+
+        })
+    })
+})
+
+Given(/^I click on "([^"]*)" in Point Mapper$/, function (word) {
+    cy.get('.point-mapper').findByText(word).click();
+});

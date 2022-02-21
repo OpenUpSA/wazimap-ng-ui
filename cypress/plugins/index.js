@@ -32,6 +32,15 @@ module.exports = (on, config) => {
         debug('Chrome arguments %o', args)
     })
     on('task', {
+        resetCRI: async () => {
+            if (client) {
+                debug('resetting CRI client')
+                await client.close()
+                client = null
+            }
+
+            return Promise.resolve(true)
+        },
         activatePrintMediaQuery: async () => {
             debug('activatePrintMediaQuery')
             client = client || await CDP({port})

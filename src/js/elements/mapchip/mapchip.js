@@ -4,7 +4,7 @@ import {DataFilterModel} from "../../models/data_filter_model";
 import {Component} from "../../utils";
 
 const filterContentClass = '.map-options__filters_content';
-const mapChipBlockClass = '.map-options';
+const mapChipBlockClass = '.map-bottom-items--v2 .map-options';
 const legendContainerClass = '.map-options__legend_wrap';
 
 /**
@@ -17,6 +17,8 @@ export class MapChip extends Component {
         this.prepareDomElements();
 
         this._legend = new Legend(this, this._legendContainer, legendColors);
+        this._isLoading = false;
+        this._filterController = null;
 
         this.prepareUIEvents();
     }
@@ -37,18 +39,39 @@ export class MapChip extends Component {
         $(this._titleArea).text(text);
     }
 
-    set description(text) {
-        $(this._descriptionArea).html(text)
+    get legend(){
+        return this._legend;
     }
 
-    get filterController(){
+    set isLoading(value) {
+        if (value) {
+            this.title = 'Loading...';
+            if (this.filterController !== null) {
+                this.filterController.isLoading = true;
+            }
+            this.legend.isLoading = true;
+        }
+
+        this._isLoading = value;
+    }
+
+    set description(text) {
+        if (text.trim().length > 0) {
+            $(this._descriptionArea).closest('.map-options__context--v2').removeClass('hidden');
+        } else {
+            $(this._descriptionArea).closest('.map-options__context--v2').addClass('hidden');
+        }
+        $(this._descriptionArea).html(text);
+    }
+
+    get filterController() {
         return this._filterController;
     }
 
     prepareDomElements() {
         this._container = $(mapChipBlockClass)[0];
         this._closeButton = $(this.container).find('.filters__header_close')
-        this._descriptionArea = $('.map-options__context .map-option__context_text div');
+        this._descriptionArea = $(this.container).find('.map-options__context--v2 .map-option__context_text div');
         this._titleArea = $(this.container).find('.filters__header_name div');
         this._filtersContainer = $(this.container).find(filterContentClass);
         this._legendContainer = $(this.container).find(legendContainerClass);
@@ -75,6 +98,7 @@ export class MapChip extends Component {
     show() {
         $(this.container).removeClass('hidden');
         $(this.container).show();  //webflow.js adds display:none when clicked on x
+        $(this.container).find('.map-options__legend').removeClass('hidden');
     }
 
     removeMapChip() {

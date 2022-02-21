@@ -4,6 +4,7 @@ import {Component} from "../../../src/js/utils";
 import {MapChip} from "../../../src/js/elements/mapchip/mapchip";
 
 const mapchip_colors = {"colors": []};
+const mapBottomItems = '.map-bottom-items--v2';
 let params;
 
 describe('Dropdowns', () => {
@@ -29,8 +30,9 @@ describe('Dropdowns', () => {
 
         expect(JSON.stringify(mc._filterController.model.filterRows[0].indicatorDropdown.model.items)).toBe(JSON.stringify(groups));
 
-        let rowLength = $('.map-options__filters_content .map-options__filter-row').length;
-        let indicatorDd = $($('.map-options__filters_content .map-options__filter-row')[rowLength - 1]).find('.mapping-options__filter_menu')[0];
+        let rowLength = $(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`).length;
+        let indicatorDd = $($(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`)[rowLength - 1]).find('.mapping-options__filter_menu')[0];
+
         let listItems = $(indicatorDd).find('.dropdown__list_item');
         let ddItems = [];
         for (let i = 0; i < listItems.length; i++) {
@@ -49,8 +51,8 @@ describe('Dropdowns', () => {
 
         mc.onSubIndicatorChange(params);
 
-        let rowLength = $('.map-options__filters_content .map-options__filter-row').length;
-        let subindicatorDd = $($('.map-options__filters_content .map-options__filter-row')[rowLength - 1]).find('.mapping-options__filter')[1];
+        let rowLength = $(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`).length;
+        let subindicatorDd = $($(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`)[rowLength - 1]).find('.mapping-options__filter')[1];
 
         expect(subindicatorDd).toHaveClass('disabled');
     })

@@ -1,13 +1,16 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
+    allDetailsEndpoint,
     expandRichDataPanel,
     gotoHomepage,
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
 import all_details from "../facilities/all_details.json";
+import all_details_CPT from "../facilities/all_details_CPT.json";
 import themes_count from "./themes_count.json";
 import themes_count_EC from "./themes_count_EC.json";
+import all_details_WC from "./all_details_WC.json";
 import profile from "../facilities/profile.json";
 import profiles from "./profiles.json";
 
@@ -20,7 +23,7 @@ Given('I am on the Wazimap Homepage', () => {
             body: themes_count,
             forceNetworkError: false // default
         });
-    });
+    }).as('themes_count');
 
     gotoHomepage();
 })
@@ -63,7 +66,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         sendResponse = resolve;
     });
 
-    cy.intercept('/api/v1/all_details/profile/8/geography/EC/?version=test&format=json', (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/EC/?version=test&skip-children=true&format=json`, (request) => {
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,
@@ -73,7 +76,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         });
     });
 
-    cy.intercept('/api/v1/profile/8/geography/EC/themes_count/?format=json', (request) => {
+    cy.intercept('/api/v1/profile/8/geography/EC/themes_count/?version=test&format=json', (request) => {
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,
@@ -89,4 +92,65 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         sendResponse();
         cy.get('.location-facilities__trigger--loading').should('not.be.visible');
     });
+})
+
+When('I navigate to a geography with no points', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/CPT/?version=test&skip-children=true&format=json`, (request) => {
+        request.reply({
+            statusCode: 200,
+            body: all_details_CPT,
+            forceNetworkError: false // default
+        });
+    });
+
+    cy.intercept('/api/v1/profile/8/geography/CPT/themes_count/?version=test&format=json', (request) => {
+        request.reply({
+            statusCode: 200,
+            body: [],
+            forceNetworkError: false // default
+        });
+    });
+
+    cy.visit('/#geo:CPT');
+})
+
+Then('Facilities should not be visible', () => {
+    cy.get('.location__facilities').should('not.be.visible')
+})
+
+When('I navigate back to ZA', () => {
+    cy.visit('/#geo:ZA');
+})
+
+Then('Facilities should be visible', () => {
+    cy.get('.location__facilities').should('be.visible')
+})
+
+When(/^I wait until "([^"]*)" is ready$/, function (word) {
+    cy.wait(1000);  //creating the point summary is async
+    cy.get('.location__title h1').should('have.text', word);
+});
+
+When('I navigate to a geography where themes-count endpoint fails', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
+        request.reply({
+            statusCode: 201,
+            body: all_details_WC,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept('/api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (request) => {
+        request.reply({
+            statusCode: 201,
+            body: null,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.visit('/#geo:WC');
+})
+
+Then('I check if error message is displayed on the theme count section', () => {
+    cy.get('.location__facilities_error').should('be.visible');
 })

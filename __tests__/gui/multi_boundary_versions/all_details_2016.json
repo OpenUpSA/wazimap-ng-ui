@@ -68,19 +68,7 @@
                     "count":"1122106",
                     "categories":"Didn't vote"
                   }
-                ],
-                "child_data":{
-                  "CPT":[
-                    {
-                      "count":"1271923",
-                      "categories":"Voted"
-                    },
-                    {
-                      "count":"708998",
-                      "categories":"Didn't vote"
-                    }
-                  ]
-                }
+                ]
               }
             }
           },

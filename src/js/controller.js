@@ -42,7 +42,6 @@ export default class Controller extends Component {
                 payload = self.changeGeography(areaCode)
             }
 
-            self.triggerEvent("hashChange", payload);
             self.onHashChange(payload);
         });
     };
@@ -131,9 +130,11 @@ export default class Controller extends Component {
             chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,
             indicatorId: payload.indicatorId
         }
+
         if (subindicator.data.originalChildData !== undefined) {
-            subindicator.data.child_data = subindicator.data.originalChildData;
+            subindicator.data.data = subindicator.data.originalChildData;
         }
+
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.selectedSubindicator;
 
@@ -157,8 +158,9 @@ export default class Controller extends Component {
             return;
         }
 
-        let profileData = this.state.profile.profile
-            .profileData[this.state.subindicator.parents.category];
+        const geo = this.state.profile.profile.geography.code;
+        const allVersionsIndicatorData = this.versionController.getIndicatorDataByGeo(geo);
+        let profileData = allVersionsIndicatorData.indicatorData[this.state.subindicator.parents.category];
 
         if (profileData === undefined) {
             this.triggerEvent('data_mapper_menu.nodata');
@@ -175,11 +177,9 @@ export default class Controller extends Component {
             return;
         }
 
-        let childData = selectedIndicator.child_data;
-        let data = selectedIndicator.data;
+        let childData = selectedIndicator.data;
 
-        this.state.subindicator.data.data = data;
-        this.state.subindicator.data.child_data = childData;
+        this.state.subindicator.data.data = childData;
 
         let args = {
             indicatorTitle: this.state.subindicator.indicatorTitle

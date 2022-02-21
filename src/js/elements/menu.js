@@ -39,9 +39,9 @@ function subindicatorsInIndicator(indicator) {
 
 export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     parentContainer = $(".data-mapper-content__list");
-    categoryTemplate = $(".styles .data-category")[0].cloneNode(true);
+    categoryTemplate = $(".styles .data-category--v2")[0].cloneNode(true);
     subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
-    indicatorTemplate = $(".data-category__h2_content", subCategoryTemplate)[0].cloneNode(true);
+    indicatorTemplate = $(".data-category__h2_content--v2", subCategoryTemplate)[0].cloneNode(true);
     indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
 
     function addSubIndicators(wrapper, category, subcategory, indicator, groups, indicators, indicatorDetail) {
@@ -86,39 +86,60 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     }
 
     function addIndicators(wrapper, category, subcategory, indicators) {
-        var newSubCategory = subCategoryTemplate.cloneNode(true);
+        let newSubCategory = subCategoryTemplate.cloneNode(true);
 
-        $(".data-category__h2_trigger div", newSubCategory).text(subcategory);
+        $(".data-category__h2_trigger--v2 div", newSubCategory).text(subcategory);
+        $(newSubCategory).find('.data-category__h2_content--v2').addClass('is--closed');
+        $(newSubCategory).find('.data-category__h2_trigger--v2').on('click', () => {
+            $(newSubCategory).find('.data-category__h2_content--v2').toggleClass('is--closed');
+        })
         wrapper.append(newSubCategory);
 
-        var h3Wrapper = $(".data-category__h2_wrapper", newSubCategory);
+        let h3Wrapper = $(".data-category__h2_wrapper", newSubCategory);
 
         let indicatorClone = $(h3Wrapper).find('.data-category__h3')[0].cloneNode(true);
         $(".data-category__h3", h3Wrapper).remove();
 
+        const triggerHeight = $('.data-category__h3_trigger--v2').height() + parseInt($('.data-category__h3_trigger--v2').css('margin-bottom'));
+        let maxHeight = 0;
+
         for (const [indicator, detail] of Object.entries(indicators)) {
             const isExcluded = isIndicatorExcluded(detail, EXCLUDE_TYPES.DataMapper);
-            if (detail.dataset_content_type !== DATASET_TYPES.Qualitative && checkIfIndicatorHasChildren(indicator,detail) && !isExcluded) {
+            if (detail.dataset_content_type !== DATASET_TYPES.Qualitative && checkIfIndicatorHasChildren(indicator, detail) && !isExcluded) {
                 let newIndicator = indicatorClone.cloneNode(true);
                 $('.truncate', newIndicator).text(indicator);
+
+                $(newIndicator).find('.data-category__h3_content--v2').addClass('is--closed');
+                $(newIndicator).find('.data-category__h3_trigger--v2').on('click', () => {
+                    $(newIndicator).find('.data-category__h3_content--v2').toggleClass('is--closed');
+                })
+
                 $(h3Wrapper).append(newIndicator);
                 const childWrapper = $(newIndicator).find('.data-category__h3_wrapper');
 
                 let subindicators = detail.metadata.groups.filter((group) => group.name === detail.metadata.primary_group)[0];
+                maxHeight += triggerHeight;
                 addSubIndicators(childWrapper, category, subcategory, indicator, subindicators, indicators, detail);
             }
         }
     }
 
     function addSubcategories(wrapper, category, subcategories) {
-        var newCategory = categoryTemplate.cloneNode(true)
+        let newCategory = categoryTemplate.cloneNode(true)
         $(newCategory).removeClass(hideondeployClsName);
+        $(newCategory).find('.data-category__h1_content--v2').addClass('is--closed');
+        $(newCategory).find('.data-category__h1_trigger--v2').on('click', () => {
+            $(newCategory).find('.data-category__h1_content--v2').toggleClass('is--closed');
+        })
         $(".data-category__h1_title div", newCategory).text(category);
         $('.' + loadingClsName).addClass('hidden');
         $('.' + noDataWrapperClsName).addClass('hidden');
         parentContainer.append(newCategory);
-        var h2Wrapper = $(".data-category__h1_wrapper", newCategory);
+        let h2Wrapper = $(".data-category__h1_wrapper", newCategory);
         $(".data-category__h2", h2Wrapper).remove();
+
+        const triggerHeight = $('.data-category__h2_trigger--v2').height() + parseInt($('.data-category__h2_trigger--v2').css('margin-bottom'));
+        let maxHeight = 0;
 
         for (const [subcategory, detail] of Object.entries(subcategories)) {
             let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
@@ -126,10 +147,13 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
             if (hasChildren) {
                 let count = subindicatorsInSubCategory(detail);
                 if (count > 0) {
+                    maxHeight += triggerHeight;
                     addIndicators(h2Wrapper, category, subcategory, detail.indicators);
                 }
             }
         }
+
+        //$(newCategory).find('.data-category__h1_content--v2').css('max-height', maxHeight);
     }
 
     function setActive(el) {
@@ -145,7 +169,7 @@ export function loadMenu(dataMapperMenu, data, subindicatorCallback) {
     let hasNoItems = true;
     let hiddenClass = hideondeployClsName;
     hiddenClass = 'hidden';
-    $(parentContainer).find('.data-category').remove();
+    $(parentContainer).find('.data-category--v2').remove();
 
     for (const [category, detail] of Object.entries(data)) {
         let hasChildren = checkIfCategoryHasChildren(category, detail)

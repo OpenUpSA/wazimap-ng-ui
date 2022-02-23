@@ -270,7 +270,7 @@ export class Chart extends Component {
             "graphValueType": this.graphValueType
         }
 
-        let specDownload = configureBarchartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
+        let specDownload = configureBarchartDownload(this.vegaView.data('table'), this.vegaView.data('filteredTable'), this.data.metadata, this.config, annotations);
 
         this.vegaDownloadView = new vega.View(vega.parse(specDownload));
 

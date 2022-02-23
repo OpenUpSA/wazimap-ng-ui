@@ -36,13 +36,17 @@ export const configureBarchart = (data, metadata, config) => {
             {
                 name: "table",
                 values: data,
+            },
+            {
+                name: "filteredTable",
+                source: "table",
                 transform: [
                     ...filters
                 ]
             },
             {
                 name: "data_formatted",
-                source: "table",
+                source: "filteredTable",
                 transform: [
                     {
                         type: "aggregate",
@@ -148,7 +152,7 @@ export const configureBarchart = (data, metadata, config) => {
             {
                 name: "yscale",
                 type: "band",
-                domain: {data: "data_formatted", field: {signal: "mainGroup"}},
+                domain: {data: "table", field: {signal: "mainGroup"}},
                 range: {step: {signal: "y_step"}},
                 padding: 0.1,
             },
@@ -223,7 +227,7 @@ export const configureBarchart = (data, metadata, config) => {
     };
 };
 
-export const configureBarchartDownload = (data, metadata, config, annotations) => {
+export const configureBarchartDownload = (data, filteredData,metadata, config, annotations) => {
     const {
         xTicks,
         defaultType,
@@ -251,13 +255,17 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
             {
                 name: "table",
                 values: data,
-                transform: [
-                    ...filters
-                ]
+            },
+            {
+              name: "filteredTable",
+              values: filteredData,
+              transform: [
+                  ...filters
+              ]
             },
             {
                 name: "data_formatted",
-                source: "table",
+                source: "filteredTable",
                 transform: [
                     {
                         type: "aggregate",
@@ -393,7 +401,7 @@ export const configureBarchartDownload = (data, metadata, config, annotations) =
             {
                 name: "yscale",
                 type: "band",
-                domain: {data: "data_formatted", field: {signal: "mainGroup"}},
+                domain: {data: "table", field: {signal: "mainGroup"}},
                 range: {step: {signal: "y_step"}},
                 padding: 0.1,
             },

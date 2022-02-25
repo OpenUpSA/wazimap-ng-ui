@@ -70,6 +70,7 @@ export class FilterController extends Component {
         this._filterCallback = null;
         this._elements = elements;
         this._isLoading = true;
+        this._noFiltersAvailable = true;
 
         this._mapBottomItems = '.map-bottom-items--v2';
         this._upArrow = `${this._mapBottomItems} .map-options .toggle-icon-v--last`;
@@ -116,6 +117,22 @@ export class FilterController extends Component {
         this._isLoading = value;
     }
 
+    get noFiltersAvailable() {
+        return this._noFiltersAvailable;
+    }
+
+    set noFiltersAvailable(value) {
+        if (value) {
+            this.addFilterButton.hide();
+            $('.map-options__no-data').removeClass('hidden');
+        } else {
+            this.addFilterButton.show();
+            $('.map-options__no-data').addClass('hidden');
+        }
+
+        this._noFiltersAvailable = value;
+    }
+
     prepareDomElements() {
         this._rowContainer = $(this.container).find(this._elements.filterRowClass)[0];
         $(this._rowContainer).hide();
@@ -135,12 +152,7 @@ export class FilterController extends Component {
 
     setFilterVisibility() {
         const isVisible = this.shouldFiltersBeVisible();
-
-        if (isVisible) {
-            $(this.container).removeClass('hidden');
-        } else {
-            $(this.container).addClass('hidden');
-        }
+        this.noFiltersAvailable = !isVisible;
     }
 
     shouldFiltersBeVisible() {
@@ -154,6 +166,10 @@ export class FilterController extends Component {
     }
 
     addInitialFilterRow(dataFilterModel) {
+        if (this.noFiltersAvailable){
+            return;
+        }
+
         let isDefault = true;
         let isExtra = false;
 
@@ -312,11 +328,13 @@ export class FilterController extends Component {
 
     setContentVisibility() {
         $(this._upArrow).on('click', () => {
-            this.showFilterContent()
+            this.showFilterContent();
+            this.showDescription();
         });
 
         $(this._downArrow).on('click', () => {
-            this.hideFilterContent()
+            this.hideFilterContent();
+            this.hideDescription();
         });
 
         this.showFilterContent();
@@ -332,5 +350,13 @@ export class FilterController extends Component {
         $(this._upArrow).removeClass('hidden');
         $(this._downArrow).addClass('hidden');
         $(this._filterContent).addClass('hidden');
+    }
+
+    showDescription() {
+        $('.map-options__context--v2').removeClass('hidden');
+    }
+
+    hideDescription() {
+        $('.map-options__context--v2').addClass('hidden');
     }
 }

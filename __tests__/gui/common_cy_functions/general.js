@@ -178,7 +178,11 @@ export function collapseChoroplethFilterDialog() {
 }
 
 export function checkIfChoroplethFilterDialogIsCollapsed() {
+    const descriptionArea = '.map-options__context--v2';
+    const legendArea = '.map-options__legend';
     checkIfFilterDialogIsCollapsed('.map-options', '.map-options__filters_content');
+    cy.get(`${mapBottomItems} .map-options ${descriptionArea}`).should('not.be.visible');
+    cy.get(`${mapBottomItems} .map-options ${legendArea}`).should('be.visible');
 }
 
 export function expandChoroplethFilterDialog() {
@@ -186,7 +190,11 @@ export function expandChoroplethFilterDialog() {
 }
 
 export function checkIfChoroplethFilterDialogIsExpanded() {
+    const descriptionArea = '.map-options__context--v2';
+    const legendArea = '.map-options__legend';
     checkIfFilterDialogIsExpanded('.map-options', '.map-options__filters_content');
+    cy.get(`${mapBottomItems} .map-options ${descriptionArea}`).should('be.visible');
+    cy.get(`${mapBottomItems} .map-options ${legendArea}`).should('be.visible');
 }
 
 function expandFilterDialog(parentDiv) {

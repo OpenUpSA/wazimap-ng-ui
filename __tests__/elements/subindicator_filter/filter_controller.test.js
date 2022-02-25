@@ -134,22 +134,24 @@ describe('Visibility of the filter area', () => {
         mc.onSubIndicatorChange(params);
         const isVisible = mc.filterController.shouldFiltersBeVisible();
         let filterArea = document.querySelector('.map-options__filters_content');
+        let message = document.querySelector(`${mapBottomItems} .map-options__filters_content .map-options__no-data`);
 
         expect(isVisible).toBe(true);
         expect(filterArea).not.toHaveClass('hidden');
+        expect(message).toHaveClass('hidden');
     })
 
-    test('Filters are hidden when there are no groups to filter by', () => {
+    test('Warning message is shown when there are no groups to filter by', () => {
         params.groups = [];
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
         mc.onSubIndicatorChange(params);
         const isVisible = mc.filterController.shouldFiltersBeVisible();
-        let filterArea = document.querySelector(`${mapBottomItems} .map-options__filters_content`);
+        let message = document.querySelector(`${mapBottomItems} .map-options__filters_content .map-options__no-data`);
 
         expect(isVisible).toBe(false);
-        expect(filterArea).toHaveClass('hidden');
+        expect(message).not.toHaveClass('hidden');
     })
 
     test('Filters are visible when all the groups are non-aggregatable', () => {

@@ -384,11 +384,11 @@ describe('configureBarchart for missing data', () => {
             primary_group: "education_level",
             groups: [{name: "education_level"}, {name: "gender"}]
         },
-            data = [
-                {age: 15, gender: 'male', count: 1, education_level: "Grade9"},
-                {age: 12, gender: 'female', count: 3, education_level: "Grade10"},
-                {age: 14, gender: 'male', count: 2, education_level: "Grade9"}
-            ]
+        data = [
+            {age: 15, gender: 'male', count: 1, education_level: "Grade9"},
+            {age: 12, gender: 'female', count: 3, education_level: "Grade10"},
+            {age: 14, gender: 'male', count: 2, education_level: "Grade9"}
+        ]
         config = {
             types: {
                 Value: {

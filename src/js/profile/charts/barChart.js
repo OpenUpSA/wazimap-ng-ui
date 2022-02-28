@@ -227,7 +227,7 @@ export const configureBarchart = (data, metadata, config) => {
     };
 };
 
-export const configureBarchartDownload = (data, filteredData,metadata, config, annotations) => {
+export const configureBarchartDownload = (data, filteredData, metadata, config, annotations) => {
     const {
         xTicks,
         defaultType,

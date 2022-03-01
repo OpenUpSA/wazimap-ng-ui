@@ -124,6 +124,7 @@ export class FilterController extends Component {
     set noFiltersAvailable(value) {
         if (value) {
             this.addFilterButton.hide();
+            this.isLoading = false;
             $('.map-options__no-data').removeClass('hidden');
         } else {
             this.addFilterButton.show();
@@ -166,7 +167,7 @@ export class FilterController extends Component {
     }
 
     addInitialFilterRow(dataFilterModel) {
-        if (this.noFiltersAvailable){
+        if (this.noFiltersAvailable) {
             return;
         }
 

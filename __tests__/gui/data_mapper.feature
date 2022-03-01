@@ -7,7 +7,7 @@ Feature: Data Mapper
     And I expand Data Mapper
     Then Data Mapper should be displayed
 
-    And I click on Demographics in Data Mapper
+    And I click on "Demographics" in Data Mapper
     And I select an indicator
     And I select another indicator
     Then I check if choropleth legend is displayed
@@ -46,3 +46,11 @@ Feature: Data Mapper
     And I navigate to WC and back to ZA quickly
     And I expand Data Mapper
     Then I check if there are 2 categories
+
+    # confirm that no filters available message is displayed correctly
+    When I expand Data Mapper
+    And I click on "Elections" in Data Mapper
+    And I click on "2016 Municipal elections" in Data Mapper
+    And I click on "Number of hung and majority councils" in Data Mapper
+    And I click on "Hung" in Data Mapper
+    Then I check if the message is displayed correctly

@@ -107,11 +107,12 @@ export class FilterController extends Component {
 
     set isLoading(value) {
         if (value) {
-            $('.map-options__loading').removeClass('hidden');
-            $('.mapping-options__add-filter').addClass('hidden');
-            $('.map-options__filter-row').addClass('hidden')
+            $(this.container).find('.map-options__loading').removeClass('hidden');
+            $(this.container).find('.mapping-options__add-filter').addClass('hidden');
+            $(this.container).find('.map-options__filter-row').addClass('hidden')
+            $(this.container).find('.map-options__no-data').addClass('hidden');
         } else {
-            $('.map-options__loading').addClass('hidden');
+            $(this.container).find('.map-options__loading').addClass('hidden');
         }
 
         this._isLoading = value;
@@ -125,10 +126,10 @@ export class FilterController extends Component {
         if (value) {
             this.addFilterButton.hide();
             this.isLoading = false;
-            $('.map-options__no-data').removeClass('hidden');
+            $(this.container).find('.map-options__no-data').removeClass('hidden');
         } else {
             this.addFilterButton.show();
-            $('.map-options__no-data').addClass('hidden');
+            $(this.container).find('.map-options__no-data').addClass('hidden');
         }
 
         this._noFiltersAvailable = value;

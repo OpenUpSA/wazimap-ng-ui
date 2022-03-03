@@ -37,9 +37,9 @@ Then('Data Mapper should be displayed', () => {
     cy.get('.data-mapper-content__list').should('be.visible');
 })
 
-When('I click on {word} in Data Mapper', () => {
-    cy.get('.data-category__h1_title').contains('Demographics').click();
-})
+When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
+    cy.get('.data-mapper').findByText(word).click();
+});
 
 Then('I select an indicator', () => {
     cy.get('.data-category__h1_content--v2').contains('Population (2016 Community Survey)').click();
@@ -210,4 +210,10 @@ When('I navigate to WC and back to ZA quickly', () => {
     cy.visit('/#geo:WC');
     cy.wait(500);   //without this controller ignores the first request  - to be able to navigate between 2 geographies we need a small delay
     cy.visit('/#geo:ZA');
+})
+
+Then('I check if the message is displayed correctly', () => {
+    cy.get(`${mapBottomItems} .map-options  .map-options__loading`).should('not.be.visible');
+    cy.get(`${mapBottomItems} .map-options  .map-options__no-data`).should('be.visible');
+    cy.get(`${mapBottomItems} .map-options  .map-options__no-data`).should('contain.text', 'No filters available for the selected data.');
 })

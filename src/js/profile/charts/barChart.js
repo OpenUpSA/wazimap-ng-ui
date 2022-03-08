@@ -1,5 +1,5 @@
 import {xAxis, xScale} from "./properties";
-import {createFiltersForGroups} from "./utils";
+import {createFiltersForGroups, getSubindicatorsOfGroup} from "./utils";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -17,8 +17,8 @@ export const configureBarchart = (data, metadata, config) => {
             Percentage: {formatting: percentageFormatting, minX: percentageMinX, maxX: percentageMaxX}
         }
     } = config;
-
     const {primary_group: primaryGroup} = metadata;
+    const subindicators = getSubindicatorsOfGroup(metadata.groups, primaryGroup)
 
     if (xTicks) {
         xAxis.tickCount = xTicks;
@@ -33,13 +33,9 @@ export const configureBarchart = (data, metadata, config) => {
         background: "white",
         padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
         data: [
-            {
-                name: "table",
-                values: data,
-            },
-            {
+          {
                 name: "filteredTable",
-                source: "table",
+                values: data,
                 transform: [
                     ...filters
                 ]
@@ -107,6 +103,10 @@ export const configureBarchart = (data, metadata, config) => {
                 value: primaryGroup,
             },
             {
+              name: "yAxisDomain",
+              value: subindicators,
+            },
+            {
                 name: "numberFormat",
                 value: {percentage: percentageFormatting, value: valueFormatting},
             },
@@ -152,7 +152,7 @@ export const configureBarchart = (data, metadata, config) => {
             {
                 name: "yscale",
                 type: "band",
-                domain: {data: "table", field: {signal: "mainGroup"}},
+                domain: {signal: "yAxisDomain"},
                 range: {step: {signal: "y_step"}},
                 padding: 0.1,
             },
@@ -227,7 +227,7 @@ export const configureBarchart = (data, metadata, config) => {
     };
 };
 
-export const configureBarchartDownload = (data, filteredData, metadata, config, annotations) => {
+export const configureBarchartDownload = (filteredData, metadata, config, annotations) => {
     const {
         xTicks,
         defaultType,
@@ -238,6 +238,11 @@ export const configureBarchartDownload = (data, filteredData, metadata, config, 
     } = config;
 
     const {primary_group: primaryGroup} = metadata;
+    const subindicators = getSubindicatorsOfGroup(metadata.groups, primaryGroup)
+
+    if (xTicks) {
+        xAxis.tickCount = xTicks;
+    }
 
     if (xTicks) {
         xAxis.tickCount = xTicks;
@@ -253,15 +258,8 @@ export const configureBarchartDownload = (data, filteredData, metadata, config, 
         padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
         data: [
             {
-                name: "table",
-                values: data,
-            },
-            {
               name: "filteredTable",
               values: filteredData,
-              transform: [
-                  ...filters
-              ]
             },
             {
                 name: "data_formatted",
@@ -389,6 +387,10 @@ export const configureBarchartDownload = (data, filteredData, metadata, config, 
                 name: "chart_bottom",
                 update: "height + 40"
             },
+            {
+              name: "yAxisDomain",
+              value: subindicators,
+            },
             ...filterSignals
         ],
         title: {
@@ -401,7 +403,7 @@ export const configureBarchartDownload = (data, filteredData, metadata, config, 
             {
                 name: "yscale",
                 type: "band",
-                domain: {data: "table", field: {signal: "mainGroup"}},
+                domain: {signal: "yAxisDomain"},
                 range: {step: {signal: "y_step"}},
                 padding: 0.1,
             },

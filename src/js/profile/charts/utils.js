@@ -4,7 +4,7 @@ export const slugify = (string) => {
 }
 /**
  * createFiltersForGroups
- * this method creates the filter for the data transformations as well as the signals that drive the filter. we can set signals from outside to set the filter. we use two signals, one to indicate if the filter is active (we can have multiple filters) the second is the value we filter for. 
+ * this method creates the filter for the data transformations as well as the signals that drive the filter. we can set signals from outside to set the filter. we use two signals, one to indicate if the filter is active (we can have multiple filters) the second is the value we filter for.
  *
 **/
 export const createFiltersForGroups = (groups) => {
@@ -25,4 +25,25 @@ export const createFiltersForGroups = (groups) => {
     signals: Array.from(signals.values()),
     filters: Array.from(filters.values()),
   }
+}
+
+export function getSubindicatorsOfGroup(groups, groupName) {
+    let subindicators = [];
+    let filteredGroup = groups.find(function(group){
+        return group["name"] === groupName;
+    });
+    if (filteredGroup){
+      subindicators = filteredGroup.subindicators;
+    }
+    return subindicators;
+}
+
+export function sortDataForSubindicatorGroup(dataArr, subindicators, group) {
+    if (dataArr && subindicators){
+      dataArr.sort(function (obj1, obj2) {
+        return subindicators.indexOf(obj1[group]) - subindicators.indexOf(obj2[group]);
+      });
+    }
+    return dataArr;
+
 }

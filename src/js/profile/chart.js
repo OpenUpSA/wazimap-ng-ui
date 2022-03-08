@@ -12,7 +12,7 @@ import embed from "vega-embed";
 import * as vega from "vega";
 
 import {configureBarchart, configureBarchartDownload} from './charts/barChart';
-import {slugify} from './charts/utils';
+import {slugify, sortDataForSubindicatorGroup} from './charts/utils';
 import DropdownMenu from "../elements/dropdown_menu";
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
 import {DataFilterModel} from "../models/data_filter_model";
@@ -76,7 +76,6 @@ export class Chart extends Component {
     addChart = (data) => {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();
-
         let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
 
         const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
@@ -196,10 +195,12 @@ export class Chart extends Component {
 
         let tbody = document.createElement('tbody');
 
-        const dataArr = this.vegaView.data('data_formatted');
+        let dataArr = this.vegaView.data('data_formatted');
         const primaryGroup = this.vegaView.signal('mainGroup');
+        const subindicators = this.vegaView.signal('yAxisDomain');
         const formatting = this.vegaView.signal('numberFormat');
 
+        dataArr = sortDataForSubindicatorGroup(dataArr, subindicators, primaryGroup)
         dataArr.forEach((d) => {
             let absoluteVal = d.count;
             let percentageVal = d.percentage;
@@ -269,8 +270,7 @@ export class Chart extends Component {
             "attribution": this.profileAttribution,
             "graphValueType": this.graphValueType
         }
-
-        let specDownload = configureBarchartDownload(this.vegaView.data('table'), this.vegaView.data('filteredTable'), this.data.metadata, this.config, annotations);
+        let specDownload = configureBarchartDownload(this.vegaView.data('filteredTable'), this.data.metadata, this.config, annotations);
 
         this.vegaDownloadView = new vega.View(vega.parse(specDownload));
 

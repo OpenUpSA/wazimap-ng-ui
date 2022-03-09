@@ -27,13 +27,18 @@ export const createFiltersForGroups = (groups) => {
   }
 }
 
-export function getSubindicatorsOfGroup(groups, groupName) {
+export function getSubindicatorsOfGroup(data, groups, groupName) {
     let subindicators = [];
+    let requiredSubindicators = data.map(function(value) {
+      return value[groupName];
+    });
     let filteredGroup = groups.find(function(group){
         return group["name"] === groupName;
     });
-    if (filteredGroup){
-      subindicators = filteredGroup.subindicators;
+    if (filteredGroup && filteredGroup.subindicators){
+      subindicators = filteredGroup.subindicators.filter(function(value){
+        return requiredSubindicators.includes(value);
+      });
     }
     return subindicators;
 }

@@ -270,7 +270,12 @@ export class Chart extends Component {
             "attribution": this.profileAttribution,
             "graphValueType": this.graphValueType
         }
-        let specDownload = configureBarchartDownload(this.vegaView.data('filteredTable'), this.data.metadata, this.config, annotations);
+
+        let specDownload = configureBarchartDownload(
+          this.vegaView.data('filteredTable'),
+          this.vegaView.signal('yAxisDomain'),
+          this.data.metadata, this.config, annotations
+        );
 
         this.vegaDownloadView = new vega.View(vega.parse(specDownload));
 

@@ -18,7 +18,7 @@ export const configureBarchart = (data, metadata, config) => {
         }
     } = config;
     const {primary_group: primaryGroup} = metadata;
-    const subindicators = getSubindicatorsOfGroup(metadata.groups, primaryGroup)
+    const subindicators = getSubindicatorsOfGroup(data, metadata.groups, primaryGroup)
 
     if (xTicks) {
         xAxis.tickCount = xTicks;
@@ -227,7 +227,7 @@ export const configureBarchart = (data, metadata, config) => {
     };
 };
 
-export const configureBarchartDownload = (filteredData, metadata, config, annotations) => {
+export const configureBarchartDownload = (filteredData, subindicators, metadata, config, annotations) => {
     const {
         xTicks,
         defaultType,
@@ -238,7 +238,6 @@ export const configureBarchartDownload = (filteredData, metadata, config, annota
     } = config;
 
     const {primary_group: primaryGroup} = metadata;
-    const subindicators = getSubindicatorsOfGroup(metadata.groups, primaryGroup)
 
     if (xTicks) {
         xAxis.tickCount = xTicks;

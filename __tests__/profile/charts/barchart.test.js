@@ -214,7 +214,7 @@ describe('Test downloadable barchart', () => {
             'attribution': 'Profile config attribution',
             'graphValueType': 'Percentage'
         }
-        let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
+        let vegaDownloadSpec = configureBarchartDownload(data, [], metadata, config, annotations);
         let view = renderVegaHeadless(vegaDownloadSpec);
         await view.runAsync()
 
@@ -234,7 +234,7 @@ describe('Test downloadable barchart', () => {
             'graphValueType': 'Percentage'
         }
         metadata["source"] = '';
-        let vegaDownloadSpec = configureBarchartDownload(data, metadata, config, annotations);
+        let vegaDownloadSpec = configureBarchartDownload(data, [], metadata, config, annotations);
         let view = renderVegaHeadless(vegaDownloadSpec);
         await view.runAsync()
         expect(view.signal('source').toString()).toBe('');
@@ -317,7 +317,7 @@ describe('Test downloadable barchart', () => {
           'attribution': 'Profile config attribution',
           'graphValueType': 'Percentage'
       }
-      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+      let vegaDownloadSpec = configureBarchartDownload([], [], metadata, config, annotations);
       let view = renderVegaHeadless(vegaDownloadSpec);
       await view.runAsync()
 
@@ -335,7 +335,7 @@ describe('Test downloadable barchart', () => {
           'graphValueType': 'Percentage'
       }
       metadata["source"] = null;
-      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+      let vegaDownloadSpec = configureBarchartDownload([], [], metadata, config, annotations);
       let view = renderVegaHeadless(vegaDownloadSpec);
       await view.runAsync()
       expect(view.signal('source')).toBe('');
@@ -349,7 +349,7 @@ describe('Test downloadable barchart', () => {
           'graphValueType': 'Percentage'
       }
       metadata["source"] = undefined;
-      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+      let vegaDownloadSpec = configureBarchartDownload([], [], metadata, config, annotations);
       let view = renderVegaHeadless(vegaDownloadSpec);
       await view.runAsync()
       expect(view.signal('source')).toBe('');
@@ -367,7 +367,7 @@ describe('Test downloadable barchart', () => {
         primary_group: 'age',
         groups: [ { name: 'age' } ]
       }
-      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+      let vegaDownloadSpec = configureBarchartDownload([], [], metadata, config, annotations);
       let view = renderVegaHeadless(vegaDownloadSpec);
       await view.runAsync()
       expect(view.signal('source')).toBe('Source : test');

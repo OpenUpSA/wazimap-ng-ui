@@ -181,6 +181,7 @@ export const configureBarchart = (data, metadata, config) => {
                     },
                     update: {
                         fill: {value: "rgb(57, 173, 132)"},
+                        y: {scale: "yscale", field: {signal: "mainGroup"}},
                         x: {scale: "xscale", field: {signal: "datatype[Units]"}},
                         x2: {scale: "xscale", value: 0},
                         tooltip: {

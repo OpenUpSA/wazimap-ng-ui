@@ -373,3 +373,76 @@ describe('Test downloadable barchart', () => {
       expect(view.signal('source')).toBe('Source : test');
     });
 });
+
+describe('configureBarchart for missing data', () => {
+    document.body.innerHTML = html;
+
+    let data, metadata, config;
+    beforeEach(() => {
+        metadata = {
+            primary_group: "education_level",
+            groups: [{
+                name: "education_level",
+                subindicators: ["Grade9", "Grade10"]
+            }, {
+                name: "gender",
+                subindicators: ["male", "female"]
+            }]
+        },
+        data = [
+            {age: 15, gender: 'male', count: 1, education_level: "Grade9"},
+            {age: 12, gender: 'female', count: 3, education_level: "Grade10"},
+            {age: 14, gender: 'male', count: 2, education_level: "Grade9"}
+        ]
+        config = {
+            types: {
+                Value: {
+                    formatting: ",.0f",
+                    minX: "default",
+                    maxX: "default"
+                },
+                Percentage: {
+                    formatting: ".0%",
+                    minX: "default",
+                    maxX: "default"
+                }
+            },
+            disableToggle: false,
+            defaultType: "Value",
+            xTicks: null
+        }
+    });
+
+    test('Test missing data after apply filters', async () => {
+      let vegaSpec = configureBarchart(data, metadata, config);
+      let view = renderVegaHeadless(vegaSpec);
+      await view.runAsync()
+
+      let yscaleDomain = view._runtime.scales.yscale._argval.domain;
+      // assert there will be 2 domains - Grade9 & Grade10
+      expect(yscaleDomain.length).toEqual(2);
+      expect(yscaleDomain).toEqual(["Grade9", "Grade10"]);
+
+      // Assert there will be 2 bars for 2 domains
+      let bars = view._runtime.data.bars.values.value;
+      expect(bars.length).toEqual(2);
+      expect(bars[0].datum.education_level).toEqual("Grade9");
+      expect(bars[1].datum.education_level).toEqual("Grade10");
+
+      // Call Filter Signal
+      view.signal('genderFilter', true).run();
+      view.signal('genderFilterValue', "male").run();
+
+      await view.runAsync();
+      yscaleDomain = view._runtime.scales.yscale._argval.domain;
+
+      // assert there will be 1 domains - Grade9
+      expect(yscaleDomain.length).toEqual(1);
+      expect(yscaleDomain).toEqual(["Grade9"]);
+
+      // Assert there will be 1 bar for 1 domain
+      bars = view._runtime.data.bars.values.value;
+      expect(bars.length).toEqual(1);
+      expect(bars[0].datum.education_level).toEqual("Grade9");
+    });
+});

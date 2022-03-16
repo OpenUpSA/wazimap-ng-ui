@@ -19,10 +19,40 @@ describe('Rich data panel tests', () => {
                 "indicators": {
                     "Mock indicator": {
                         "data": [{
-                            "age": "1"
+                            "age": "1",
+                            "count": "50"
                         }],
                         "content_type": "indicator",
-                        "metadata": {},
+                        "metadata": {
+                            "groups": [{
+                                "subindicators":[
+                                    "30-35",
+                                    "20-24",
+                                    "15-24 (Intl)",
+                                    "15-35 (ZA)",
+                                    "15-19",
+                                    "25-29"
+                                ],
+                                "dataset":96,
+                                "name":"age",
+                                "can_aggregate":true,
+                                "can_filter":true
+                            },],
+                            "primary_group":"age",
+                        },
+                        "dataset_content_type":"quantitative",
+                        "chartConfiguration": {
+                            "types":{
+                                "Value":{
+                                    "formatting":",.0f"
+                                },
+                                "Percentage":{
+                                    "maxX":1,
+                                    "minX":0
+                                }
+                            },
+                            "xTicks":6
+                        },
                         "groups": [],
                         "description": "<p>An <strong>indicator</strong> description</p>",
                         "type": "indicator",

@@ -54,3 +54,7 @@ Then('None of the menu items should be active', () => {
 When('I close the Rich Data', () => {
     cy.get('.rich-data-toggles .point-mapper-panel__open').click();
 })
+
+Then('I check if the indicator with only zero counts is hidden', () => {
+    cy.get('.profile-indicator__title:contains("Indicator with only zero counts")').should('not.exist');
+})

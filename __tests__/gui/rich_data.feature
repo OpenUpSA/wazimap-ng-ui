@@ -21,3 +21,4 @@ Feature: Rich data menu
     Then I expand Rich Data
     Then Rich Data should be displayed
     Then None of the menu items should be active
+    Then I check if the indicator with only zero counts is hidden

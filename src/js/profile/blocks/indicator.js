@@ -33,7 +33,8 @@ export class Indicator extends ContentBlock {
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
                 'point_tray.subindicator_filter.filter'
             ]);
-
+        } else {
+            this.container.remove();
         }
     }
 

@@ -1,0 +1,47 @@
+# Production context: all deploys from the Production branch set in your site's deploy contexts will inherit these settings.
+[context.production.environment]
+    GOOGLE_TAG_MANAGER_ID = "GTM-NP4BJ8C"
+    SENTRY_DSN = ""
+    SENTRY_PERF_SAMPLE_RATE = "1"
+    DEFAULT_API_URL = "https://muni-portal-backend.openup.org.za"
+    ENVIRONMENT = "production"
+
+# Specific branch context: all deploys from this specific branch will inherit these settings.
+[context.staging.environment] # 'staging' is a branch
+    GOOGLE_TAG_MANAGER_ID = ""
+    SENTRY_DSN = ""
+    SENTRY_PERF_SAMPLE_RATE = "0"
+    DEFAULT_API_URL = "https://staging.muni-portal-backend.openup.org.za"
+    ENVIRONMENT = "staging"
+
+# Specific branch context: all deploys from this specific branch will inherit these settings.
+[context.sentry-changes.environment] # 'sentry-changes' is a branch
+    GOOGLE_TAG_MANAGER_ID = ""
+    SENTRY_DSN = ""
+    SENTRY_PERF_SAMPLE_RATE = "0"
+    DEFAULT_API_URL = "https://staging.muni-portal-backend.openup.org.za"
+    ENVIRONMENT = "sentry-changes"
+
+# Specific branch context: all deploys from this specific branch will inherit these settings.
+[context.sandbox.environment] # 'sandbox' is a branch
+    GOOGLE_TAG_MANAGER_ID = ""
+    SENTRY_DSN = ""
+    SENTRY_PERF_SAMPLE_RATE = "0"
+    DEFAULT_API_URL = "https://sandbox.muni-portal-backend.openup.org.za"
+    ENVIRONMENT = "sandbox"
+
+# Deploy preview context: all deploys generated from a pull/merge request will inherit these settings.
+[context.deploy-preview.environment]
+    GOOGLE_TAG_MANAGER_ID = ""
+    SENTRY_DSN = ""
+    SENTRY_PERF_SAMPLE_RATE = "0"
+    DEFAULT_API_URL = "https://muni-portal-backend.openup.org.za"
+    ENVIRONMENT = "deploy-preview"
+
+# Branch deploy context: all deploys that are not from a pull/merge request or from the Production branch will inherit these settings.
+[context.branch-deploy.environment]
+    GOOGLE_TAG_MANAGER_ID = ""
+    SENTRY_DSN = ""
+    SENTRY_PERF_SAMPLE_RATE = "0"
+    DEFAULT_API_BASE_URL = "https://muni-portal-backend.openup.org.za"
+    ENVIRONMENT = "branch-deploy"

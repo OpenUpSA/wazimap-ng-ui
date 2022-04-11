@@ -22,6 +22,8 @@ const isLocalhost = (hostname.indexOf("localhost") >= 0)
 if (!isLocalhost)
     Sentry.init({dsn: 'https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787'});
 
+const ENVIRONMENT = `${process.env.ENVIRONMENT}`;
+console.log({ENVIRONMENT})
 
 const profiles = {
     'wazi.webflow.io': {

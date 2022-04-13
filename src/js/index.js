@@ -21,8 +21,6 @@ const ENVIRONMENT = `${process.env.ENVIRONMENT}`;
 const GOOGLE_ANALYTICS_ID = `${process.env.GOOGLE_ANALYTICS_ID}`;
 const SENTRY_DSN = `${process.env.SENTRY_DSN}`;
 
-console.log({ENVIRONMENT})
-
 if (SENTRY_DSN !== "undefined" && SENTRY_DSN !== "") {
     Sentry.init({
         dsn: SENTRY_DSN,

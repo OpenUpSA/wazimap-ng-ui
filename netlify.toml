@@ -2,30 +2,22 @@
 [context.production.environment]
     GOOGLE_ANALYTICS_ID = "UA-93649482-25"
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
-    SENTRY_PERF_SAMPLE_RATE = "1"
-    DEFAULT_API_URL = "https://muni-portal-backend.openup.org.za"
     ENVIRONMENT = "FE_Production"
 
 # Specific branch context: all deploys from this specific branch will inherit these settings.
 [context.staging.environment] # 'staging' is a branch
-    GOOGLE_ANALYTICS_ID = "UA-93649482-25"
+    GOOGLE_ANALYTICS_ID = ""
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
-    SENTRY_PERF_SAMPLE_RATE = "0"
-    DEFAULT_API_URL = "https://staging.muni-portal-backend.openup.org.za"
     ENVIRONMENT = "FE_Staging"
 
 # Deploy preview context: all deploys generated from a pull/merge request will inherit these settings.
 [context.deploy-preview.environment]
-    GOOGLE_ANALYTICS_ID = "UA-93649482-25"
+    GOOGLE_ANALYTICS_ID = ""
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
-    SENTRY_PERF_SAMPLE_RATE = "0"
-    DEFAULT_API_URL = "https://muni-portal-backend.openup.org.za"
     ENVIRONMENT = "FE_Deploy-preview"
 
 # Branch deploy context: all deploys that are not from a pull/merge request or from the Production branch will inherit these settings.
 [context.branch-deploy.environment]
-    GOOGLE_ANALYTICS_ID = "UA-93649482-25"
+    GOOGLE_ANALYTICS_ID = ""
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
-    SENTRY_PERF_SAMPLE_RATE = "0"
-    DEFAULT_API_BASE_URL = "https://muni-portal-backend.openup.org.za"
     ENVIRONMENT = "FE_Branch-deploy"

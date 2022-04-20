@@ -119,6 +119,28 @@ async function init() {
     pc.profile = data.id;
     pc.config.baseUrl = pc.baseUrl;
     if (GOOGLE_ANALYTICS_ID !== "undefined" && GOOGLE_ANALYTICS_ID !== "") {
+        const head = document.getElementsByTagName('head')[0];
+
+        const analyticsScript = document.createElement('script');
+        analyticsScript.src = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`;
+        head.appendChild(analyticsScript);
+
+        const configScript = document.createElement('script');
+        configScript.text = `
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        const analyticsId = '${GOOGLE_ANALYTICS_ID}';
+        gtag('js', new Date());
+        gtag('config', analyticsId, { 'send_page_view': false });
+        gtag('config', analyticsId, {
+            'custom_map': {'dimension1': 'profile'}
+        });
+        window.gtag = gtag;
+        `;
+        head.appendChild(configScript);
+
         pc.config.analytics = new Analytics(`${GOOGLE_ANALYTICS_ID}`, pc.profile);
     } else {
         console.warn("Not initialising Google Analytics because GOOGLE_ANALYTICS_ID is not set");

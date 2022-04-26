@@ -17,11 +17,18 @@ const defaultProfile = 8;
 const defaultUrl = productionUrl;
 const defaultConfig = new SAConfig();
 
-const isLocalhost = (hostname.indexOf("localhost") >= 0)
+const ENVIRONMENT = `${process.env.ENVIRONMENT}`;
+const GOOGLE_ANALYTICS_ID = `${process.env.GOOGLE_ANALYTICS_ID}`;
+const SENTRY_DSN = `${process.env.SENTRY_DSN}`;
 
-if (!isLocalhost)
-    Sentry.init({dsn: 'https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787'});
-
+if (SENTRY_DSN !== "undefined" && SENTRY_DSN !== "") {
+    Sentry.init({
+        dsn: SENTRY_DSN,
+        environment: ENVIRONMENT
+    });
+} else {
+    console.warn("Not initialising Sentry because SENTRY_DSN is not set");
+}
 
 const profiles = {
     'wazi.webflow.io': {
@@ -111,8 +118,33 @@ async function init() {
     pc.config.api = api;
     pc.profile = data.id;
     pc.config.baseUrl = pc.baseUrl;
-    // TODO add this to config - check the <script> tag in the HTML which hardcodes this value
-    pc.config.analytics = new Analytics('UA-93649482-25', pc.profile);
+    if (GOOGLE_ANALYTICS_ID !== "undefined" && GOOGLE_ANALYTICS_ID !== "") {
+        const head = document.getElementsByTagName('head')[0];
+
+        const analyticsScript = document.createElement('script');
+        analyticsScript.src = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`;
+        head.appendChild(analyticsScript);
+
+        const configScript = document.createElement('script');
+        configScript.text = `
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        const analyticsId = '${GOOGLE_ANALYTICS_ID}';
+        gtag('js', new Date());
+        gtag('config', analyticsId, { 'send_page_view': false });
+        gtag('config', analyticsId, {
+            'custom_map': {'dimension1': 'profile'}
+        });
+        window.gtag = gtag;
+        `;
+        head.appendChild(configScript);
+
+        pc.config.analytics = new Analytics(`${GOOGLE_ANALYTICS_ID}`, pc.profile);
+    } else {
+        console.warn("Not initialising Google Analytics because GOOGLE_ANALYTICS_ID is not set");
+    }
     pc.config.profile = data.id;
 
     configureApplication(data.id, pc.config);

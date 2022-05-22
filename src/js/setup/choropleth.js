@@ -26,6 +26,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 
     controller.on('newProfileWithChoropleth', args => {
         setTimeout(() => {
+            args.state.subindicator.data.originalChildData = undefined;
             loadAndDisplayChoropleth(args, mapcontrol, true, null);
         }, 0);
     })

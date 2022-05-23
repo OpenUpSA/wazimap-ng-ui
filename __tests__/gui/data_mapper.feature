@@ -34,18 +34,22 @@ Feature: Data Mapper
     Then I check if the point filter dialog is expanded
     Then I check if the choropleth filter dialog is expanded
 
+    # deselect point category
+    And I expand Point Mapper
+    And I click on TVET colleges category
+
     # confirm that navigating between geographies does not break the data mapper & choropleth
     And I navigate to WC
     And I expand Data Mapper
-    Then I check if there are 1 categories
+    Then I check if there are 2 categories
 
     And I navigate to ZA
     And I expand Data Mapper
-    Then I check if there are 2 categories
+    Then I check if there are 3 categories
 
     And I navigate to WC and back to ZA quickly
     And I expand Data Mapper
-    Then I check if there are 2 categories
+    Then I check if there are 3 categories
 
     # confirm that no filters available message is displayed correctly
     When I expand Data Mapper
@@ -54,3 +58,17 @@ Feature: Data Mapper
     And I click on "Number of hung and majority councils" in Data Mapper
     And I click on "Hung" in Data Mapper
     Then I check if the message is displayed correctly
+
+    # confirm that default filters do not break navigating
+    When I expand Data Mapper
+    And I click on "Economic Opportunities" in Data Mapper
+    And I click on "NEET Status" in Data Mapper
+    And I click on "Not in Employment" in Data Mapper
+    And I click on "NEET" in Data Mapper
+    Then I check if the non-aggregatable group filter is applied
+
+    And I navigate to FS
+    Then I check if the non-aggregatable group filter is applied
+
+    And I filter by "25-29"
+    Then I check if the legend values are correct

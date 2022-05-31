@@ -14,11 +14,13 @@ import {
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
+import all_details_FS from "./all_details_FS.json";
 import profiles from "./profiles.json";
 import profile from './profile.json';
 import themes from "./themes.json";
 import points from "./points.json";
 import children_indicators from './children_indicators.json';
+import children_indicators_FS from './children_indicators_FS.json';
 
 Given('I am on the Wazimap Homepage', () => {
     setupInterceptions(profiles, all_details, profile, themes, points, [], children_indicators);
@@ -198,6 +200,34 @@ When('I navigate to WC', () => {
     cy.visit('/#geo:WC');
 })
 
+When('I navigate to FS', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/FS/?version=test&skip-children=true&format=json`, (request) => {
+        request.reply({
+            statusCode: 200,
+            body: all_details_FS,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept(`/api/v1/children-indicators/profile/8/geography/FS/?version=test&format=json`, (request) => {
+        request.reply({
+            statusCode: 200,
+            body: children_indicators_FS,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept('api/v1/profile/8/geography/FS/themes_count/?version=test&format=json', (req) => {
+        req.reply({
+            statusCode: 200,
+            body: [],
+            forceNetworkError: false // default
+        })
+    })
+
+    cy.visit('/#geo:FS');
+})
+
 Then(/^I check if there are (\d+) categories$/, function (count) {
     checkDataMapperCategoryCount(count);
 });
@@ -213,7 +243,35 @@ When('I navigate to WC and back to ZA quickly', () => {
 })
 
 Then('I check if the message is displayed correctly', () => {
-    cy.get(`${mapBottomItems} .map-options  .map-options__loading`).should('not.be.visible');
-    cy.get(`${mapBottomItems} .map-options  .map-options__no-data`).should('be.visible');
-    cy.get(`${mapBottomItems} .map-options  .map-options__no-data`).should('contain.text', 'No filters available for the selected data.');
+    cy.get(`${mapBottomItems} .map-options .map-options__loading`).should('not.be.visible');
+    cy.get(`${mapBottomItems} .map-options .map-options__no-data`).should('be.visible');
+    cy.get(`${mapBottomItems} .map-options .map-options__no-data`).should('contain.text', 'No filters available for the selected data.');
+})
+
+Then('I check if the non\-aggregatable group filter is applied', () => {
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(0).should('have.class', 'disabled');
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+        .eq(0)
+        .should('contain.text', 'age group');
+
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('not.have.class', 'disabled');
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+        .eq(1)
+        .should('contain.text', '15-35 (ZA)');
+})
+
+When(/^I filter by "([^"]*)"$/, function (filter) {
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('not.have.class', 'disabled');
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+        .eq(1)
+        .click();
+
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filter}")`).click({force: true});
+});
+
+Then('I check if the legend values are correct', () => {
+    let values = ['42.6%', '46.6%', '50.7%', '54.7%', '58.7%'];
+    cy.get('.map-options__legend_wrap .map_legend-block .truncate').each(($div, index) => {
+        expect($div.text()).equal(values[index]);
+    })
 })

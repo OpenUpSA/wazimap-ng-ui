@@ -159,10 +159,6 @@ export class VersionController extends Component {
     }
 
     checkAndInitIndicators() {
-        if (this.indicatorsInitialized) {
-            return;
-        }
-
         let allTriggered = true;
         for (const key in this.initIndicatorEvents) {
             if (!this.initIndicatorEvents[key]) {
@@ -172,6 +168,9 @@ export class VersionController extends Component {
 
         if (allTriggered) {
             Promise.all(this._indicatorPromises).then(() => {
+                if (this.indicatorsInitialized) {
+                    return;
+                }
                 this.indicatorsInitialized = true;
 
                 const currentGeo = this.parent.state.profile.profile.geography.code;
@@ -181,7 +180,7 @@ export class VersionController extends Component {
                  * in case it responds later than the currently selected geography
                  */
 
-                if (indicators !== undefined){
+                if (indicators !== undefined) {
                     this.parent.triggerEvent(VersionController.EVENTS.indicatorsReady, indicators.indicatorData);
                 }
             });

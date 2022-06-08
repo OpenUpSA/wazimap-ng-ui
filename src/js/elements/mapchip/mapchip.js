@@ -2,12 +2,15 @@ import {FilterController} from "../subindicator_filter/filter_controller";
 import {Legend} from "./legend";
 import {DataFilterModel} from "../../models/data_filter_model";
 import {Component} from "../../utils";
+import {Tooltip} from "../../ui_components/tooltip";
+import {FilterLabel} from "./components/filterLabel";
+import {DescriptionInfoIcon} from "./components/descriptionInfoIcon";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockClass = '.map-bottom-items--v2 .map-options';
 const legendContainerClass = '.map-options__legend_wrap';
 const filterHeaderClass = '.filter__header_sub-indicator';
-const filterHeaderToggleClass = ".filters__header_toggle"
+const filterHeaderToggleClass = ".filters__header_toggle";
 
 /**
  * Represent the map chip at the bottom of the map
@@ -16,9 +19,9 @@ export class MapChip extends Component {
     constructor(parent, legendColors) {
         super(parent);
 
+        this._tooltip = new Tooltip();
         this.prepareDomElements();
         this.updateDomElements();
-
 
         this._legend = new Legend(this, this._legendContainer, legendColors);
         this._isLoading = false;
@@ -26,15 +29,27 @@ export class MapChip extends Component {
         this._isContentVisible = false;
         this._appliedFilters = {};
         this.prepareUIEvents();
+
+        // Load components
+        this._filterLabel = new FilterLabel(this);
+        this._descriptionIcon = new DescriptionInfoIcon(this);
     }
 
     get isContentVisible() {
       return this._isContentVisible;
     }
 
+    get filterLabel(){
+      return this._filterLabel;
+    }
+
+    get descriptionIcon(){
+      return this._descriptionIcon;
+    }
+
     set isContentVisible(value) {
       this._isContentVisible = value;
-      this.setFilterLabelContainerVisibility(!value);
+      this.filterLabel.setFilterLabelContainerVisibility(!value);
     }
 
     get container() {
@@ -80,7 +95,7 @@ export class MapChip extends Component {
                 this.filterController.isLoading = true;
             }
             this.legend.isLoading = true;
-            this.setFilterLabelContainerVisibility(false);
+            this.filterLabel.setFilterLabelContainerVisibility(false);
         }
 
         this._isLoading = value;
@@ -105,60 +120,14 @@ export class MapChip extends Component {
         this._filterHeaderToggleContainer = $(this.container).find(filterHeaderToggleClass);
     }
 
-    getFilterLabelHTML (){
-      let html = "<div class='filters__header_label' title='Show Applied Filters'>";
-      html += "<span id='selected_filter_count'>0</span>"
-      html += " of "
-      html += "<span id='total_filter_count'></span>"
-      html += " filters applied"
-      html += "</div>"
-
-      return html;
-    }
-
     updateDomElements() {
-        const filterLabelHTML = this.getFilterLabelHTML();
         this._filterHeaderTitleContainer.find(".filters__header_name").css("width", "auto");
-        this._filterHeaderTitleContainer.append(filterLabelHTML);
-        this._filterHeaderLabelContainer = this._filterHeaderTitleContainer.find(".filters__header_label");
-        this._selectedFilterCountContainer = this._filterHeaderLabelContainer.find("#selected_filter_count");
-        this._totalFilterCountContainer = this._filterHeaderLabelContainer.find("#total_filter_count");
         this._toggleIconDownContainer = this._filterHeaderToggleContainer.find(".toggle-icon-v--first");
         this._toggleIconUpContainer = this._filterHeaderToggleContainer.find(".toggle-icon-v--last");
-
-        // Update right side menu
         this.updateToggleIcon();
-        this.addInfoIcon();
-
-        this._descriptionInfoIconContainer = $(this._container).find(".filters__header_info");
-        this._descriptionInfoIconContainer.tooltip({
-          position: {
-            my: "center bottom-20",
-            at: "center top",
-            using: function( position, feedback ) {
-              $( this ).css( position );
-              $( "<div>" )
-                .addClass( "arrow" )
-                .addClass( feedback.vertical )
-                .addClass( feedback.horizontal )
-                .appendTo( this );
-            }
-          }
-        });
-        this._filterHeaderLabelContainer.tooltip({
-          position: {
-            my: "center bottom-20",
-            at: "center top",
-            using: function( position, feedback ) {
-              $( this ).css( position );
-              $( "<div>" )
-                .addClass( "arrow" )
-                .addClass( feedback.vertical )
-                .addClass( feedback.horizontal )
-                .appendTo( this );
-            }
-          }
-        });
+        // Tooltip
+        this._tooltip.enableTooltip(this._toggleIconDownContainer, "Collapse Details");
+        this._tooltip.enableTooltip(this._toggleIconUpContainer.parent(), "Expand Details");
     }
 
     prepareUIEvents() {
@@ -173,48 +142,12 @@ export class MapChip extends Component {
       this._toggleIconUpContainer.append("<i class='fas fa-chevron-up'></i>");
     }
 
-    addInfoIcon() {
-      let html = "<div class='filters__header_info' title='Show Description'>";
-      html += "<i class='fa fa-info-circle'></i>";
-      html += "</div>";
-
-      this._filterHeaderToggleContainer.before(html)
-    }
-
     setTitle(indicatorTitle, selectedSubindicator) {
         let label = `${indicatorTitle} (${selectedSubindicator})`;
         if (indicatorTitle === selectedSubindicator) {
             label = indicatorTitle;
         }
-
         this.title = label;
-    }
-
-    setFilterLabelTotalCount(groups) {
-        const total_group_length = groups.length - 1;
-        this._totalFilterCountContainer.html(total_group_length);
-    }
-
-    setFilterLabelSelectedCount(selectedFilter) {
-        const selected_filter_length = Object.keys(selectedFilter).length;
-        this._selectedFilterCountContainer.html(selected_filter_length);
-    }
-
-    setFilterLabelContainerVisibility(is_visible=!this.isContentVisible) {
-      if (is_visible){
-        $(this._filterHeaderLabelContainer).removeClass('hidden');
-      } else {
-        $(this._filterHeaderLabelContainer).addClass('hidden');
-        $(this._filterHeaderLabelContainer).removeClass('notification-badges');
-      }
-    }
-
-    setDescriptionInfoIconVisibility(is_visible) {
-      if (is_visible){
-        $(this._descriptionInfoIconContainer).removeClass('hidden');
-      } else {
-        $(this._descriptionInfoIconContainer).addClass('hidden');
-      }
     }
 
     hide() {
@@ -241,32 +174,11 @@ export class MapChip extends Component {
             this.triggerEvent("mapchip.choropleth.filtered", payload)
         }
         this.appliedFilters = selectedFilter;
-        this.setFilterLabelSelectedCount(selectedFilter);
+        this.filterLabel.setFilterLabelSelectedCount(selectedFilter);
     }
 
     onChoropleth(payload) {
         this._legend.show(payload.colors, payload.intervals);
-    }
-
-    isEqualsJson(obj1, obj2){
-      let keys1 = Object.keys(obj1);
-      let keys2 = Object.keys(obj2);
-      return keys1.length === keys2.length && Object.keys(obj1).every(key=>obj1[key]==obj2[key]);
-    }
-
-    compareFilters(defaultFilters, oldFilters){
-      let flattenFilterObject = {}
-      defaultFilters.forEach((item, idx) => {
-          flattenFilterObject[item.name] = item.value
-      });
-
-      const showBadge = this.isEqualsJson(flattenFilterObject, oldFilters);
-      if (!showBadge){
-        this._filterHeaderLabelContainer.addClass("notification-badges");
-        if (defaultFilters.length === 0){
-          this.appliedFilters = {};
-        }
-      }
     }
 
     onSubIndicatorChange(params) {
@@ -277,15 +189,19 @@ export class MapChip extends Component {
         const previouslySelectedFilters = params.filter;
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);
 
-        const defaultFilters = dataFilterModel.configFilters?.defaults || [];
-        this.compareFilters(defaultFilters, this.appliedFilters);
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
-        this.setFilterLabelTotalCount(params.groups);
-        this.setFilterLabelSelectedCount({});
-        this.description = params.description;
 
-        this.setFilterLabelContainerVisibility();
-        this.setDescriptionInfoIconVisibility(this.description.length > 0);
+        // Filter Label
+        const defaultFilters = dataFilterModel.configFilters?.defaults || [];
+        this.filterLabel.compareFilters(defaultFilters, this.appliedFilters);
+        this.filterLabel.setFilterLabelTotalCount(params.groups);
+        this.filterLabel.setFilterLabelSelectedCount({});
+        this.filterLabel.setFilterLabelContainerVisibility();
+
+        // Description Icon
+        this.description = params.description;
+        this.descriptionIcon.setDescriptionInfoIconVisibility(this.description.length > 0);
+
         this.show();
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;

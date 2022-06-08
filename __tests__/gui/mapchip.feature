@@ -1,6 +1,6 @@
-Feature: Data Mapper
+Feature: Mapchip
 
-  Scenario: Verify the data mapper is working correctly
+  Scenario: Verify the mapchip is working correctly
     Given I am on the Wazimap Homepage
     Then I wait until map is ready
 

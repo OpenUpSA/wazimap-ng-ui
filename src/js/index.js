@@ -154,7 +154,7 @@ window.init = init;
 loadDevTools(() => {
     const serverEnabled = sessionStorage.getItem("wazi.localServer");
     if (serverEnabled) {
-        import('./server').then(server => server.makeServer())
+        import('./devLocalServer').then(devLocalServer => devLocalServer.makeServer())
     }
     init();
 })

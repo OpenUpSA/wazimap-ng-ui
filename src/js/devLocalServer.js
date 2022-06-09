@@ -124,7 +124,7 @@ export function makeServer({environment = "development"} = {}) {
                                    "choropleth_method": "subindicator",
                                    "data": data.data,
                                    "metadata": {
-                                     "source": "StatsSA Census 2011", 
+                                     "source": "StatsSA Census 2011",
                                      "description": "", "url": null,
                                      "licence": { "name": null, "url": null },
                                      "primary_group": "gender",

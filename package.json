@@ -8,6 +8,7 @@
     "@sentry/browser": "^5.20.1",
     "babel-polyfill": "^6.26.0",
     "category": "^0.1.2",
+    "concurrently": "^7.2.1",
     "controller": "^1.0.0",
     "css": "^2.2.4",
     "d3-array": "^2.12.1",
@@ -65,7 +66,8 @@
     "parcel-bundler": "1.12.5"
   },
   "scripts": {
-    "start": "parcel ./src/index.html",
+    "start": "parcel build src/index.html &&  node src/js/server.js",
+    "dev": "concurrently --kill-others 'parcel watch src/index.html' 'node src/js/server.js'",
     "cypress:gui": "cypress run --browser chrome --spec __tests__/gui/*.feature --record --key e45f872b-81b5-4f63-ad26-1dff310fb348",
     "cypress:gui-local": "cypress run --browser chrome --spec __tests__/gui/*.feature",
     "cypress": "cypress run --spec __tests__/e2e/*.feature",
@@ -121,10 +123,6 @@
         "glob": "index.html",
         "destDir": "src",
         "transforms": "./src/js/webflow/import.js"
-      },
-      {
-        "glob": "{401,about}.html",
-        "destDir": "src"
       }
     ]
   }

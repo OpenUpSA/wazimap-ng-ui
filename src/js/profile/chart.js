@@ -12,6 +12,7 @@ import embed from "vega-embed";
 import * as vega from "vega";
 
 import {configureBarchart, configureBarchartDownload} from './charts/barChart';
+import {configureLinechart, configureLinechartDownload} from './charts/lineChart';
 import {slugify} from './charts/utils';
 import DropdownMenu from "../elements/dropdown_menu";
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
@@ -23,6 +24,10 @@ const graphValueTypes = {
     'Percentage': PERCENTAGE_TYPE,
     'Value': VALUE_TYPE
 };
+const chartTypes = {
+    LineChart: 'line',
+    BarChart: 'bar'
+}
 const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
 const filterRowClass = '.profile-indicator__filter-row';
@@ -77,7 +82,7 @@ export class Chart extends Component {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();
 
-        let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
+        let vegaSpec = this.configureChart(data.data, data.metadata, this.config);
 
         const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
             let x = event.pageX + offsetX;
@@ -156,6 +161,24 @@ export class Chart extends Component {
                 this.handleChartFilter(data, data.metadata.groups);
             });
     };
+
+    configureChart = (data, metadata, config) => {
+        const type = config.chartType;
+        if (type === chartTypes.LineChart) {
+            return configureLinechart(data, metadata, config);
+        } else {
+            return configureBarchart(data, metadata, config);
+        }
+    }
+
+    configureChartDownload = (data, metadata, config, annotations) => {
+        const type = config.chartType;
+        if (type === chartTypes.LineChart) {
+            return configureLinechartDownload(data, metadata, config, annotations);
+        } else {
+            return configureBarchartDownload(data, metadata, config, annotations);
+        }
+    }
 
     showChartDataTable = () => {
         this.createDataTable();
@@ -270,7 +293,7 @@ export class Chart extends Component {
             "graphValueType": this.graphValueType
         }
 
-        let specDownload = configureBarchartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
+        let specDownload = this.configureChartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
 
         this.vegaDownloadView = new vega.View(vega.parse(specDownload));
 

@@ -89,11 +89,12 @@ Then('I check filters applied label is hidden', () => {
 })
 
 Then('I check if there is description', () => {
-    cy.get(`${mapBottomItems} .map-options .map-option__context_text div p`).should('exist');
+    cy.get(`${mapBottomItems} .map-options .map-option__context_text div`).invoke('text').then((text) => {
+      expect(text.length).to.be.at.least(1)
+    })
 })
 
 Then('I select a filter', () => {
-    // cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:first`).click();
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:first`).click();
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:first .dropdown__list_item:last`).click();
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:last`).click();
@@ -150,7 +151,9 @@ Then('I check filters applied label is hidden', () => {
 })
 
 Then('I check if there is no description', () => {
-    cy.get(`${mapBottomItems} .map-options .map-option__context_text div p`).should('not.exist');
+    cy.get(`${mapBottomItems} .map-options .map-option__context_text div`).invoke('text').then((text) => {
+      expect(text.length).to.be.equal(0)
+    })
 })
 
 

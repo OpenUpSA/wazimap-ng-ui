@@ -3,8 +3,8 @@ import {Legend} from "./legend";
 import {DataFilterModel} from "../../models/data_filter_model";
 import {Component} from "../../utils";
 import {Tooltip} from "../../ui_components/tooltip";
-import {FilterLabel} from "./components/filterLabel";
-import {DescriptionInfoIcon} from "./components/descriptionInfoIcon";
+import {FilterLabel} from "./components/filter_label";
+import {DescriptionInfoIcon} from "./components/description_info_icon";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockClass = '.map-bottom-items--v2 .map-options';

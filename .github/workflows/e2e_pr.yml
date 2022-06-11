@@ -1,4 +1,4 @@
-name: E2E
+name: E2E on deploy preview
 on: pull_request
 jobs:
   e2e_tests:

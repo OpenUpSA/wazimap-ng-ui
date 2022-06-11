@@ -21,4 +21,4 @@ jobs:
           browser: chrome
           headless: true
         env:
-          CYPRESS_BASE_URL: https://staging-wazimap-production.netlify.app
+          CYPRESS_BASE_URL: https://staging--wazimap-production.netlify.app

@@ -9,15 +9,18 @@
     GOOGLE_ANALYTICS_ID = ""
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
     ENVIRONMENT = "FE_Staging"
+    OVERRIDE_PROFILE_HOSTNAME = "wazimap-ng.africa"
 
 # Deploy preview context: all deploys generated from a pull/merge request will inherit these settings.
 [context.deploy-preview.environment]
     GOOGLE_ANALYTICS_ID = ""
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
     ENVIRONMENT = "FE_Deploy-preview"
+    OVERRIDE_PROFILE_HOSTNAME = "wazimap-ng.africa"
 
 # Branch deploy context: all deploys that are not from a pull/merge request or from the Production branch will inherit these settings.
 [context.branch-deploy.environment]
     GOOGLE_ANALYTICS_ID = ""
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
     ENVIRONMENT = "FE_Branch-deploy"
+    OVERRIDE_PROFILE_HOSTNAME = "wazimap-ng.africa"

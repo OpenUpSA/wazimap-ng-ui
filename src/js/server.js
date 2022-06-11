@@ -1,11 +1,14 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
 const axios = require('axios');
+var morgan = require('morgan');
 
 const port = process.env.PORT || 1234;
 
 const app = express();
 app.disable('x-powered-by');
+
+app.use(morgan('short'));
 
 app.engine('.html', handlebars.engine({extname: '.html'}));
 app.set('view engine', '.html');
@@ -39,4 +42,4 @@ app.use(express.static('dist'));
 
 app.listen(port);
 
-console.log(`\nLisening on http://0.0.0.0:${port}\n`);
+console.log(`\nListening on http://0.0.0.0:${port}\n`);

@@ -18,5 +18,10 @@ Then('An alert message should be shown', () => {
 })
 
 Then('I check if the default title is correct', () => {
-    cy.title().should('eq', 'Wazimap NG');
-})
+  cy.title().should(title => {
+    expect(title).to.be.oneOf([
+      '{{ title }}',    // e2e against deploy preview or staging branch deploy
+      'Youth Explorer', // CI GUI test and local dev
+    ]);
+  });
+});

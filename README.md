@@ -43,13 +43,18 @@ Version 0.8 is due soon and will fix bugs that currently don't have workarounds.
 
 ```bash
 yarn install
-yarn start
+yarn start   # builds and serves the site for production
 ```
 
-# Other commands
+## Other commands
+
 ```bash
-yarn build # compile the relevant bundles for production
-yarn push-gh-pages # pushes to github for hosting
+yarn build  # compile the relevant bundles for production and deploy previews
+yarn dev    # builds and serves the site without server-side javascript for rapid development
+yarn dev-server-side  # builds and serves the site with server-side javascript and templating
+yarn watch  # builds and rebuilds changes for development
+yarn test   # unit andintegration tests
+yarn test:gui         # GUI tests
 ```
 
 ## Configuration

@@ -1,4 +1,4 @@
-name: Unit tests
+name: "Unit & GUI tests"
 on: [ push, pull_request ]
 jobs:
   unit_tests:

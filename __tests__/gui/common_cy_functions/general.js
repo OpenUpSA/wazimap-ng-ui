@@ -20,7 +20,7 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
         })
     }).as('profiles')
 
-    cy.intercept('/api/v1/profile_by_url?format=json', (req) => {
+    cy.intercept('/api/v1/profile_by_url/?format=json', (req) => {
         req.reply({
             statusCode: 200,
             body: profile,

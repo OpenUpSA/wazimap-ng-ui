@@ -38,3 +38,5 @@ app.get('/', index);
 app.use(express.static('dist'));
 
 app.listen(port);
+
+console.log(`\nLisening on http://0.0.0.0:${port}\n`);

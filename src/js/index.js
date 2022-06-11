@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+import '@babel/polyfill';
 
 import configureApplication from './load';
 import {Config as SAConfig} from './configurations/geography_sa';
@@ -152,9 +152,5 @@ async function init() {
 
 window.init = init;
 loadDevTools(() => {
-    const serverEnabled = sessionStorage.getItem("wazi.localServer");
-    if (serverEnabled) {
-        import('./server').then(server => server.makeServer())
-    }
     init();
 })

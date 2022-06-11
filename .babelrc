@@ -1,7 +1,4 @@
 {
-  "presets": [
-		"@babel/preset-env"
- ],
  env: {
     test: {
       plugins: [
@@ -10,6 +7,6 @@
     }
  },
   "plugins": [
-    "transform-regenerator",
+
   ]
 }

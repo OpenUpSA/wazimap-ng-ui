@@ -81,10 +81,10 @@ export class Category extends Component {
     loadSubcategories = (wrapper, detail) => {
         let index = 0;
         let lastIndex = Object.entries(detail.subcategories).length - 1;
-        for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-            let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
+        for (const [subcategory, subdetail] of Object.entries(detail.subcategories)) {
+            let hasChildren = checkIfSubCategoryHasChildren(subcategory, subdetail);
             let isFirst = index === 0;
-            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, detail, isFirst, this.geography, this.profileConfig);
+            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, subdetail, isFirst, this.geography, this.profileConfig);
             this.bubbleEvents(sc, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

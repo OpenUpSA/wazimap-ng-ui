@@ -68,8 +68,9 @@
     "parcel-bundler": "1.12.5"
   },
   "scripts": {
-    "start": "parcel build src/index.html &&  node src/js/server.js",
-    "dev": "concurrently --kill-others 'parcel watch src/index.html' 'nodemon src/js/server.js'",
+    "watch": "parcel watch src/index.html src/layouts/main.html",
+    "start": "yarn build &&  node src/js/server.js",
+    "dev": "concurrently --kill-others 'yarn watch' 'nodemon --watch src/js src/js/server.js'",
     "cypress:gui": "cypress run --browser chrome --spec '__tests__/gui/*.feature' --record --key e45f872b-81b5-4f63-ad26-1dff310fb348",
     "cypress:gui-local": "cypress run --browser chrome --spec '__tests__/gui/*.feature'",
     "cypress": "cypress run --spec '__tests__/e2e/*.feature'",
@@ -81,7 +82,7 @@
     "prebuild-dev": "shx rm -rf dist/*",
     "build-dev": "parcel build ./src/index.html --no-minify --public-url ./",
     "prebuild": "shx rm -rf dist/*",
-    "build": "parcel build ./src/index.html --public-url ./ ",
+    "build": "parcel build ./src/index.html src/layouts/main.html --public-url ./ ",
     "push-prod": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose",
     "push-staging": "push-dir --remote=staging --dir=dist --branch=gh-pages --cleanup --verbose",
     "clean-files": "cp dist/js*.js dist/wazimap-ng.js; cp dist/js*.js.map dist/wazimap-ng.js.map; cp dist/js*.css dist/wazimap-ng.css"

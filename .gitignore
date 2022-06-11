@@ -1,5 +1,8 @@
 \.*.sw[op]
 node_modules
+cypress/videos
+cypress/screenshots
+cypress/downloads
 dist
 .cache
 yarn-error.log

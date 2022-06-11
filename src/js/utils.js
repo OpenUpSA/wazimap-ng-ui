@@ -257,16 +257,10 @@ export const validation = {
 
 
 export function getHostname() {
-    let hostname = process.env.HOSTNAME || window.location.hostname;
-    const isNetlifyStaging = (hostname.indexOf('wazimap-staging.netlify.app') >= 0)
-    const isNetlifyProduction = (hostname.indexOf('wazimap-production.netlify.app') >= 0)
+    let hostname = process.env.OVERRIDE_PROFILE_HOSTNAME || window.location.hostname;
 
-    if (isNetlifyStaging)
-        hostname = "wazimap-ng.africa"
-    else if (isNetlifyProduction)
-        hostname = "beta.youthexplorer.org.za"
-
-    hostname = sessionStorage.getItem("wazi-hostname") || hostname;
+    // Let dev-tools override the profile hostname
+    hostname = sessionStorage.getItem("dev-tools-hostname") || hostname;
     return hostname;
 }
 

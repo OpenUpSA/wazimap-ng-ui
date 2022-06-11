@@ -65,12 +65,12 @@ The build is configured using environment variables.
 These could be defined in a .env file in the root directory, or on the command line, e.g. for development
 
 ```
-HOSTNAME=youthexplorer.org.za yarn start`
+OVERRIDE_PROFILE_HOSTNAME=youthexplorer.org.za yarn start`
 ```
 
 | Variable                | Default                              | Description                                                                                                       |
 | ----------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| HOSTNAME                | unset                                | If set, overrides using the hostname in the address bar to determine the profile being requested. e.g. `youthexplorer.org.za` |
+| OVERRIDE_PROFILE_HOSTNAME | unset                              | If set, overrides using the hostname in the address bar to determine the profile being requested. e.g. `youthexplorer.org.za` |
 | API_URL                 | unset                                | If set, overrides the default production and staging backend URLs. e.g. `https://production.wazimap-ng.openup.org.za`|
 | ENVIRONMENT             | unset                                | E.g. `production`, `staging`, `sandbox`|
 | SENTRY_DSN              | unset                                | Required in production, staging and sandbox environment                                                           |

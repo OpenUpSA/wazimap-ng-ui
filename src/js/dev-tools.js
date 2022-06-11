@@ -1,7 +1,7 @@
 import DevTools from 'svelte-dev-tools';
 
 function changeHost(value) {
-  sessionStorage.setItem('wazi-hostname', value);
+  sessionStorage.setItem('dev-tools-hostname', value);
   window.location.reload(false);
 }
 

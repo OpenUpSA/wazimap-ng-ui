@@ -43,6 +43,7 @@ Version 0.8 is due soon and will fix bugs that currently don't have workarounds.
 
 ```bash
 yarn install
+yarn build
 yarn start   # builds and serves the site for production
 ```
 

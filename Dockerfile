@@ -1,10 +1,14 @@
-FROM node:10
-WORKDIR usr/src/app
-COPY package.json ./
-RUN npm install
+FROM node:14
+ENV NODE_ENV=production
+
+WORKDIR /app
+
+COPY ["package.json", "yarn.lock", "./"]
+
+RUN yarn install --production
+
 COPY . .
-EXPOSE 1234
-CMD ["yarn","start"]
 
+RUN yarn build
 
-
+CMD [ "yarn", "start" ]

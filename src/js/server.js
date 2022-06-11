@@ -15,8 +15,10 @@ app.set('view engine', '.html');
 app.set('views', './dist');
 
 
+const apiUrl = process.env.API_URL || "https://production.wazimap-ng.openup.org.za";
+
 function index(req, res, next) {
-  axios.get("https://production.wazimap-ng.openup.org.za/api/v1/profile_by_url/?format=json", {
+  axios.get(`${apiUrl}/api/v1/profile_by_url/?format=json`, {
     headers: {
       'wm-hostname': req.hostname,
     }

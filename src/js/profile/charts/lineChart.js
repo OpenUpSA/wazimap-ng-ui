@@ -106,6 +106,10 @@ export const configureLinechart = (data, metadata, config) => {
                 name: "numberFormat",
                 value: {percentage: percentageFormatting, value: valueFormatting},
             },
+            {
+                name: "labelColor",
+                value: "grey"
+            },
             ...filterSignals
         ],
 
@@ -131,12 +135,18 @@ export const configureLinechart = (data, metadata, config) => {
                 orient: "bottom",
                 scale: "xscale",
                 grid: true,
+                labelColor: {
+                    signal: "labelColor"
+                },
                 gridOpacity: 0.5
             },
             {
                 orient: "left",
                 scale: "yscale",
                 labelPadding: 6,
+                labelColor: {
+                    signal: "labelColor"
+                },
                 format: {
                     signal: "numberFormat[Units]"
                 }
@@ -169,5 +179,53 @@ export const configureLinechart = (data, metadata, config) => {
 };
 
 export const configureLinechartDownload = (data, metadata, config, annotations) => {
-    return configureLinechart(data, metadata, config);
+    let spec = configureLinechart(data, metadata, config);
+    spec.signals.push({
+        name: "title",
+        value: annotations.title
+    }, {
+        name: "geography",
+        value: annotations.geography
+    }, {
+        name: "chart_bottom",
+        update: "height + 40"
+    }, {
+        name: "filters",
+        value: annotations.filters
+    }, {
+        name: "attribution",
+        value: annotations.attribution
+    }, {
+        name: "source",
+        value: metadata.source !== undefined && metadata.source !== null && metadata.source.length > 0 ? `Source : ${metadata.source}` : ''
+    });
+
+    spec.title = {
+        text: {signal: "title"},
+        subtitleFontStyle: "italic",
+        anchor: "start",
+        frame: "group"
+    };
+
+    spec.marks.push({
+        type: "text",
+        interactive: false,
+        encode: {
+            enter: {
+                y: {signal: "chart_bottom"},
+                text: {
+                    "signal":
+                        (annotations.attribution !== undefined && annotations.attribution.length > 0) ?
+                            "[filters + geography, attribution, source]" :
+                            "[filters + geography, source]"
+                },
+                baseline: {value: "bottom"},
+                fontSize: {value: 14},
+                fontWeight: {value: 500},
+                fill: {value: "black"}
+            }
+        }
+    })
+
+    return spec;
 }

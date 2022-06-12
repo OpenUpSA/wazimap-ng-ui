@@ -98,5 +98,35 @@ export class TestData {
             primaryGroup: 'age',
             selectedSubindicator: '30-35'
         };
+
+        this.chartMetadata = {
+            source: "Census 2021",
+            primary_group: "age",
+            groups: [{name: "age"}]
+        };
+
+        this.chartConfig = {
+            types: {
+                Value: {
+                    formatting: ",.0f",
+                    minX: "default",
+                    maxX: "default"
+                },
+                Percentage: {
+                    formatting: ".0%",
+                    minX: "default",
+                    maxX: "default"
+                }
+            },
+            disableToggle: false,
+            defaultType: "Value",
+            xTicks: null
+        };
+
+        this.chartData = [
+            {age: 15, gender: 'male', count: 1},
+            {age: 12, gender: 'female', count: 3},
+            {age: 14, gender: 'male', count: 2}
+        ];
     }
 }

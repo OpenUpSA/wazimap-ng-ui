@@ -1,6 +1,7 @@
 import {Component} from "../../src/js/utils";
 import {Chart} from "../../src/js/profile/chart";
 import {TestData} from "../../src/js/test_data";
+import html from "../../src/index.html";
 
 let configureLinechart = require("../../src/js/profile/charts/lineChart");
 let configureBarchart = require("../../src/js/profile/charts/barChart");
@@ -8,6 +9,8 @@ let configureBarchart = require("../../src/js/profile/charts/barChart");
 describe('displaying a chart', () => {
     let data, metadata, config;
     beforeEach(() => {
+        document.body.innerHTML = html;
+
         const td = new TestData();
         metadata = td.chartMetadata,
             data = td.chartData,
@@ -26,10 +29,6 @@ describe('displaying a chart', () => {
             }
         }
         const node = document.querySelector('.profile-indicator');
-        $(node).find(".hover-menu__content_list a[data-id='Percentage'] div")
-            .text('Percentage test')
-            .closest('a')
-            .attr('data-testid', 'percentage-btn');
 
         config.chartType = 'line';
         let spy = jest.spyOn(configureLinechart, 'configureLinechart');
@@ -50,10 +49,6 @@ describe('displaying a chart', () => {
             }
         }
         const node = document.querySelector('.profile-indicator');
-        $(node).find(".hover-menu__content_list a[data-id='Percentage'] div")
-            .text('Percentage test')
-            .closest('a')
-            .attr('data-testid', 'percentage-btn');
 
         config.chartType = 'bar';
         let spy = jest.spyOn(configureBarchart, 'configureBarchart');
@@ -74,10 +69,6 @@ describe('displaying a chart', () => {
             }
         }
         const node = document.querySelector('.profile-indicator');
-        $(node).find(".hover-menu__content_list a[data-id='Percentage'] div")
-            .text('Percentage test')
-            .closest('a')
-            .attr('data-testid', 'percentage-btn');
 
         let spy = jest.spyOn(configureBarchart, 'configureBarchart');
 

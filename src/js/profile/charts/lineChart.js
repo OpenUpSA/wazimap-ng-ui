@@ -200,6 +200,8 @@ export const configureLinechartDownload = (data, metadata, config, annotations) 
         value: metadata.source !== undefined && metadata.source !== null && metadata.source.length > 0 ? `Source : ${metadata.source}` : ''
     });
 
+    updateSignalValue(spec, 'Units', graphValueTypes[annotations.graphValueType]);
+
     spec.title = {
         text: {signal: "title"},
         subtitleFontStyle: "italic",
@@ -228,4 +230,12 @@ export const configureLinechartDownload = (data, metadata, config, annotations) 
     })
 
     return spec;
+}
+
+function updateSignalValue(spec, name, value) {
+    let ele = spec.signals.filter((s) => {
+        return s.name === name
+    })[0];
+
+    ele.value = value;
 }

@@ -174,6 +174,7 @@ export class Chart extends Component {
     configureChartDownload = (data, metadata, config, annotations) => {
         const type = config.chartType;
         if (type === chartTypes.LineChart) {
+            console.log('here')
             return configureLinechartDownload(data, metadata, config, annotations);
         } else {
             return configureBarchartDownload(data, metadata, config, annotations);
@@ -294,6 +295,7 @@ export class Chart extends Component {
         }
 
         let specDownload = this.configureChartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
+        console.log({specDownload})
 
         this.vegaDownloadView = new vega.View(vega.parse(specDownload));
 

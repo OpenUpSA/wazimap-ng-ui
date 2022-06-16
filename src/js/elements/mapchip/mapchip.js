@@ -18,7 +18,6 @@ const filterHeaderToggleClass = ".filters__header_toggle";
 export class MapChip extends Component {
     constructor(parent, legendColors) {
         super(parent);
-
         this._tooltip = new Tooltip();
         this.prepareDomElements();
         this.updateDomElements();
@@ -162,6 +161,7 @@ export class MapChip extends Component {
 
     removeMapChip() {
         this.hide();
+        this.isContentVisible = false;
         this.triggerEvent('mapchip.removed', this.container);
     }
 
@@ -196,7 +196,7 @@ export class MapChip extends Component {
         this.filterLabel.compareFilters(defaultFilters, this.appliedFilters);
         this.filterLabel.setFilterLabelTotalCount(params.groups);
         this.filterLabel.setFilterLabelSelectedCount({});
-        this.filterLabel.setFilterLabelContainerVisibility();
+        this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);
 
         // Description Icon
         this.description = params.description;

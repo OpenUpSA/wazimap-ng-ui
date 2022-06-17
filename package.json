@@ -32,7 +32,6 @@
     "main.js": "0.0.1",
     "papaparse": "^5.3.0",
     "pixelmatch": "^5.2.1",
-    "sanitize-html": "^2.7.0",
     "save-svg-as-png": "^1.4.17",
     "sheetjs": "^2.0.0",
     "shx": "^0.3.2",
@@ -41,7 +40,8 @@
     "vega": "^5.17.0",
     "vega-embed": "^6.13.0",
     "vega-lite": "^4.17.0",
-    "xlsx": "^0.17.0"
+    "xlsx": "^0.17.0",
+    "xss": "^1.0.13"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",

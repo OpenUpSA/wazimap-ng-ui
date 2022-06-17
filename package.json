@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "Adi Eyal <adi@openup.org.za>",
   "license": "MIT",
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "@sentry/browser": "^5.20.1",
     "babel-polyfill": "^6.26.0",
@@ -29,6 +32,7 @@
     "main.js": "0.0.1",
     "papaparse": "^5.3.0",
     "pixelmatch": "^5.2.1",
+    "sanitize-html": "^2.7.0",
     "save-svg-as-png": "^1.4.17",
     "sheetjs": "^2.0.0",
     "shx": "^0.3.2",
@@ -55,7 +59,6 @@
     "cy-verify-downloads": "^0.0.5",
     "cypress": "^8.2.0",
     "cypress-cucumber-preprocessor": "^2.5.5",
-    "cy-verify-downloads":"^0.0.5",
     "html-loader-jest": "0.2.1",
     "jest": "^26.4.2",
     "jest-transform-stub": "2.0.0",

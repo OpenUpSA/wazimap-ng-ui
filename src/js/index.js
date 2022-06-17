@@ -8,6 +8,10 @@ import * as Sentry from '@sentry/browser';
 import {getHostname, getAPIUrl, loadDevTools} from './utils';
 import {ErrorNotifier} from "./error-notifier";
 
+import sanitizeHtml from 'sanitize-html';
+const dirtyhtml = '<script>alert("haxxored")</script><div onclick="alert(\'more haxxored\')"></div>';
+console.log(sanitizeHtml(dirtyhtml));
+
 const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
 const productionUrl = getAPIUrl('https://production.wazimap-ng.openup.org.za');
 let config = new SAConfig();

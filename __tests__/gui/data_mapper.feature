@@ -59,6 +59,7 @@ Feature: Data Mapper
     And I click on "2016 Municipal elections" in Data Mapper
     And I click on "Number of hung and majority councils" in Data Mapper
     And I click on "Hung" in Data Mapper
+    Then I expand filter dialog
     Then I check if the message is displayed correctly
 
     # confirm that default filters do not break navigating

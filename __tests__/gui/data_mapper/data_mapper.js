@@ -252,6 +252,10 @@ When('I navigate to WC and back to ZA quickly', () => {
     cy.visit('/#geo:ZA');
 })
 
+Then('I expand filter dialog', () => {
+    expandChoroplethFilterDialog();
+})
+
 Then('I check if the message is displayed correctly', () => {
     cy.get(`${mapBottomItems} .map-options .map-options__loading`).should('not.be.visible');
     cy.get(`${mapBottomItems} .map-options .map-options__no-data`).should('be.visible');

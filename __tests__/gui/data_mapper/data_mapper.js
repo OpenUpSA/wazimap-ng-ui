@@ -47,6 +47,8 @@ Then('I select an indicator', () => {
     cy.get('.data-category__h1_content--v2').contains('Population (2016 Community Survey)').click();
     cy.get('.data-category__h2_content--v2').contains('Population group').click();
     cy.get('.data-category__h3_content--v2').contains('Black african').click();
+
+    cy.get(`${mapBottomItems} .map-options .map-options__legend`).should('be.visible');
 })
 
 When('I select another indicator', () => {
@@ -55,8 +57,16 @@ When('I select another indicator', () => {
     cy.get('.data-category__h3_content--v2').contains('Indian or Asian').click();
 })
 
+Then('I check if the choropleth filter dialog is collapsed', () => {
+    checkIfChoroplethFilterDialogIsCollapsed();
+})
+
 Then('I check if choropleth legend is displayed', () => {
     cy.get(`${mapBottomItems} .map-options .map-options__legend`).should('be.visible');
+})
+
+Then('I expand filter dialog', () => {
+    expandChoroplethFilterDialog();
 })
 
 Then('I check if everything is zero', () => {
@@ -250,6 +260,10 @@ Then(/^I navigate to WC and back to ZA in (\d+) ms$/, function (ms) {
         }
     })
 });
+
+Then('I expand filter dialog', () => {
+    expandChoroplethFilterDialog();
+})
 
 Then('I check if the message is displayed correctly', () => {
     cy.get(`${mapBottomItems} .map-options .map-options__loading`).should('not.be.visible');

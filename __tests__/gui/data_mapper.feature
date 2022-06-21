@@ -10,7 +10,9 @@ Feature: Data Mapper
     And I click on "Demographics" in Data Mapper
     And I select an indicator
     And I select another indicator
+    Then I check if the choropleth filter dialog is collapsed
     Then I check if choropleth legend is displayed
+    Then I expand filter dialog
     Then I check if everything is zero
 
     And I navigate to EC and check if the loading state is displayed correctly
@@ -72,6 +74,7 @@ Feature: Data Mapper
     And I click on "2016 Municipal elections" in Data Mapper
     And I click on "Number of hung and majority councils" in Data Mapper
     And I click on "Hung" in Data Mapper
+    Then I expand filter dialog
     Then I check if the message is displayed correctly
 
     # confirm that default filters do not break navigating

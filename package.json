@@ -37,7 +37,9 @@
     "vega": "^5.17.0",
     "vega-embed": "^6.13.0",
     "vega-lite": "^4.17.0",
-    "xlsx": "^0.17.0"
+    "xlsx": "^0.17.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
@@ -55,13 +57,13 @@
     "cy-verify-downloads": "^0.0.5",
     "cypress": "^8.2.0",
     "cypress-cucumber-preprocessor": "^2.5.5",
-    "cy-verify-downloads":"^0.0.5",
     "html-loader-jest": "0.2.1",
     "jest": "^26.4.2",
     "jest-transform-stub": "2.0.0",
     "miragejs": "^0.1.41",
     "parcel": "1.12.4",
-    "parcel-bundler": "1.12.5"
+    "parcel-bundler": "1.12.5",
+    "sass": "^1.52.3"
   },
   "scripts": {
     "start": "parcel ./src/index.html",

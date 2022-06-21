@@ -6,6 +6,10 @@ import {Tooltip} from "../../ui_components/tooltip";
 import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
 
+import React, {useState} from 'react';
+import ReactDOM from 'react-dom';
+import ReactTest from "../../react-test/react-test";
+
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockClass = '.map-bottom-items--v2 .map-options';
 const legendContainerClass = '.map-options__legend_wrap';
@@ -80,7 +84,11 @@ export class MapChip extends Component {
     }
 
     set title(text) {
-        $(this._titleArea).text(text);
+        //$(this._titleArea).text(text);
+        ReactDOM.render(
+            <ReactTest />,
+            document.querySelector('.map-bottom-items--v2 .map-options .filters__header_name .truncate')
+        );
     }
 
     get legend(){

@@ -62,7 +62,6 @@ export class FilterController extends Component {
         removeFilterButton: '.mapping-options__remove-filter'
     }) {
         super(parent);
-
         this._container = container;
         this._model = new FilterControllerModel();
         this._addFilterButton = new AddFilterButton(this, elements);
@@ -75,10 +74,22 @@ export class FilterController extends Component {
         this._mapBottomItems = '.map-bottom-items--v2';
         this._upArrow = `${this._mapBottomItems} .map-options .toggle-icon-v--last`;
         this._downArrow = `${this._mapBottomItems} .map-options .toggle-icon-v--first`;
+        this._descriptionIcon = `${this._mapBottomItems} .map-options .filters__header_info`;
+        this._filterCountContainer = `${this._mapBottomItems} .map-options .filters__header_label`;
         this._filterContent = `${this._mapBottomItems} .map-options__filters_content`;
-
+        this._isContentVisible = parent.isContentVisible;
         this.prepareDomElements();
         this.prepareEvents();
+    }
+
+    get isContentVisible() {
+      return this._isContentVisible;
+    }
+
+    set isContentVisible(value) {
+      this._isContentVisible = value;
+      this.parent.isContentVisible = value;
+      this.toggleContentVisibility();
     }
 
     get container() {
@@ -143,6 +154,7 @@ export class FilterController extends Component {
             $(this.container).find(this._elements.filterRowClass)[1].remove();
         }
         this.setContentVisibility();
+        this.toggleContentVisibility();
     }
 
     prepareEvents() {
@@ -328,24 +340,38 @@ export class FilterController extends Component {
         let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilters;
     }
 
+    toggleContentVisibility() {
+      if (this.isContentVisible){
+        this.showFilterContent();
+        this.showDescription();
+      } else {
+        this.hideFilterContent();
+        this.hideDescription();
+      }
+    }
+
     setContentVisibility() {
         $(this._upArrow).on('click', () => {
-            this.showFilterContent();
-            this.showDescription();
+          this.isContentVisible = true;
         });
 
         $(this._downArrow).on('click', () => {
-            this.hideFilterContent();
-            this.hideDescription();
+          this.isContentVisible = false;
         });
 
-        this.showFilterContent();
+        $(this._descriptionIcon).on('click', () => {
+          this.isContentVisible = true;
+        });
+
+        $(this._filterCountContainer).on('click', () => {
+          this.isContentVisible = true;
+        });
     }
 
     showFilterContent() {
         $(this._upArrow).addClass('hidden');
         $(this._downArrow).removeClass('hidden');
-        $(this._filterContent).removeClass('hidden');
+        $(this._filterContent).removeClass('hidden')
     }
 
     hideFilterContent() {

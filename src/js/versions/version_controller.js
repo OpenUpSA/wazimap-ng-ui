@@ -244,6 +244,7 @@ export class VersionController extends Component {
         this._allVersionsBundle = null;
         this._versionGeometries = {};
         this._versionBundles = {};
+        this._promises = [];
     }
 
     reInitIndicators() {
@@ -252,6 +253,7 @@ export class VersionController extends Component {
             'profile.loaded': false
         }
         this._indicatorsInitialized = false;
+        this._indicatorPromises = [];
     }
 
     loadAllVersions(versions) {

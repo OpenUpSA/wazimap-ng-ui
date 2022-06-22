@@ -1,17 +1,33 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import ChildTest from "./child-test";
 
-const ReactTest = () => {
-    const someRenderTitle = () => {
+const ParentTest = (props) => {
+    const [time, setTime] = useState(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime(new Date());
+        }, 1000);
+        return () => {
+            clearInterval(interval);
+        };
+    }, []);
+
+    const renderTitle = () => {
         return (
-            <a href={'#'} className={'test-btn'}>Did it work?</a>
+            <div className={'test-btn'}>Child last updated :
+                <ChildTest
+                    time={time}
+                />
+            </div>
         )
     }
 
     return (
         <div>
-            {someRenderTitle()}
+            {renderTitle()}
         </div>
     )
 }
 
-export default ReactTest;
+export default ParentTest;

@@ -8,7 +8,7 @@ import {DescriptionInfoIcon} from "./components/description_info_icon";
 
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
-import ReactTest from "../../react-test/react-test";
+import ParentTest from "../../react-test/react-test";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockClass = '.map-bottom-items--v2 .map-options';
@@ -84,11 +84,7 @@ export class MapChip extends Component {
     }
 
     set title(text) {
-        //$(this._titleArea).text(text);
-        ReactDOM.render(
-            <ReactTest />,
-            document.querySelector('.map-bottom-items--v2 .map-options .filters__header_name .truncate')
-        );
+        $(this._titleArea).text(text);
     }
 
     get legend(){
@@ -109,7 +105,11 @@ export class MapChip extends Component {
     }
 
     set description(text) {
-        $(this._descriptionArea).html(text);
+        //$(this._descriptionArea).html(text);
+        ReactDOM.render(
+            <ParentTest />,
+            document.querySelector('.map-bottom-items--v2 .map-options .map-options__context--v2 .map-option__context_text div')
+        );
     }
 
     get filterController() {

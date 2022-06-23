@@ -5,6 +5,9 @@
   "author": "Adi Eyal <adi@openup.org.za>",
   "license": "MIT",
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/material": "^5.8.5",
     "@sentry/browser": "^5.20.1",
     "babel-polyfill": "^6.26.0",
     "category": "^0.1.2",
@@ -29,6 +32,8 @@
     "main.js": "0.0.1",
     "papaparse": "^5.3.0",
     "pixelmatch": "^5.2.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "save-svg-as-png": "^1.4.17",
     "sheetjs": "^2.0.0",
     "shx": "^0.3.2",
@@ -37,9 +42,7 @@
     "vega": "^5.17.0",
     "vega-embed": "^6.13.0",
     "vega-lite": "^4.17.0",
-    "xlsx": "^0.17.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",

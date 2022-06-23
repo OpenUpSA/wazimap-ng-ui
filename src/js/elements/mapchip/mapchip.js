@@ -9,6 +9,7 @@ import {DescriptionInfoIcon} from "./components/description_info_icon";
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import ParentTest from "../../react-test/react-test";
+import Row from "../../react-test/row";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockClass = '.map-bottom-items--v2 .map-options';
@@ -25,6 +26,7 @@ export class MapChip extends Component {
         this._tooltip = new Tooltip();
         this.prepareDomElements();
         this.updateDomElements();
+        this.prepareReactComponents();
 
         this._legend = new Legend(this, this._legendContainer, legendColors);
         this._isLoading = false;
@@ -135,6 +137,23 @@ export class MapChip extends Component {
         // Tooltip
         this._tooltip.enableTooltip(this._toggleIconDownContainer, "Collapse Details");
         this._tooltip.enableTooltip(this._toggleIconUpContainer.parent(), "Expand Details");
+    }
+
+    prepareReactComponents() {
+       let ele = document.createElement('div');
+        $(ele).addClass('map-options__filters_content_react');
+        $('.map-bottom-items--v2 .map-options .map-options__filters_content').prepend($(ele));
+
+        ReactDOM.render(
+            <Row
+                handleChange={(selected) => this.handleChange(selected)}
+            />,
+            document.querySelector('.map-options__filters_content_react')
+        );
+    }
+
+    handleChange(selected){
+        alert(selected)
     }
 
     prepareUIEvents() {

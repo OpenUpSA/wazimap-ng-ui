@@ -55,13 +55,13 @@
     "cy-verify-downloads": "^0.0.5",
     "cypress": "^8.2.0",
     "cypress-cucumber-preprocessor": "^2.5.5",
-    "cy-verify-downloads":"^0.0.5",
     "html-loader-jest": "0.2.1",
     "jest": "^26.4.2",
     "jest-transform-stub": "2.0.0",
     "miragejs": "^0.1.41",
     "parcel": "1.12.4",
-    "parcel-bundler": "1.12.5"
+    "parcel-bundler": "1.12.5",
+    "sass": "^1.53.0"
   },
   "scripts": {
     "start": "parcel ./src/index.html",

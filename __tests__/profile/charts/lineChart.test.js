@@ -1,10 +1,15 @@
 import {configureLinechart} from "../../../src/js/profile/charts/lineChart";
 import {TestData} from "../../../src/js/test_data";
 import {parse, View} from 'vega';
+import {Chart} from "../../../src/js/profile/chart";
+import {Component} from "../../../src/js/utils";
+import html from "../../../src/index.html";
 
 describe('creating specs', () => {
     let data, metadata, config;
     beforeEach(() => {
+        document.body.innerHTML = html;
+
         const td = new TestData();
         metadata = td.chartMetadata,
             data = td.chartData,
@@ -58,5 +63,35 @@ describe('creating specs', () => {
                 }
             ])
         );
+    })
+
+    test('chart value type toggle is hidden and the chart is displayed in Value', async () => {
+        let parent = new Component();
+        let newdata = {
+            data: data,
+            metadata: metadata,
+            chartConfiguration: config
+        }
+
+        config.chartType = 'line';
+        config.disableToggle = false;
+        config.defaultType = 'Percentage';
+
+        const node = document.querySelector('.profile-indicator');
+
+        let chart = new Chart(parent, config, newdata, [], node, "TEST", "this is chart attribution");
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        const percentageBtn = $(node).find(".hover-menu__content_list a[data-id='Percentage'] div").closest('.hover-menu__content_list');
+        const valueBtn = $(node).find(".hover-menu__content_list a[data-id='Value'] div").closest('.hover-menu__content_list');
+
+        const percentageBtnField = $(percentageBtn)[0];
+        const valueBtnField = $(valueBtn)[0];
+
+        expect(percentageBtnField).toHaveStyle('display: none')
+        expect(valueBtnField).toHaveStyle('display: none')
+
+        expect(chart.vegaView.signal('Units')).toBe('value');
     })
 })

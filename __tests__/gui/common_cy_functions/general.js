@@ -2,6 +2,7 @@ import pixelmatch from "pixelmatch";
 
 export const mapBottomItems = '.map-bottom-items--v2';
 export const allDetailsEndpoint = 'all_details';
+const recursiveResult = {PANEL_ALREADY_EXPANDED: false, ALL_PANELS_CLOSED: true};
 
 export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [], children_indicators = {}) {
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=test&skip-children=true&format=json`, (req) => {
@@ -134,28 +135,49 @@ function expandPanel(panel) {
     const panelToBeExpanded = allPanels.filter((p) => {
         return p.panel === panel
     })[0];
-    const nonSelectedPanels = allPanels.splice(allPanels.indexOf(panelToBeExpanded.panel), 1);
 
-    let closedNoPanels = true;
-    nonSelectedPanels.forEach(nsp => {
-            if (closedNoPanels) {
-                cy.get(nsp.panel).then($p => {
-                    if ($p.is(':visible')) {
-                        cy.get(`${nsp.wrapper} ${panelToBeExpanded.button}`).click({force: true});
-                        closedNoPanels = false;
-                    }
-                })
-            }
+    const nonSelectedPanels = allPanels.filter((p) => {
+        return p.panel !== panel
+    });
+
+    recTogglePanel(panelToBeExpanded, nonSelectedPanels, 0).then(function (result) {
+        if (result) {
+            //nothing was expanded
+            cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click();
         }
-    )
 
-    if (closedNoPanels) {
-        //nothing was expanded
-        cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click({force: true});
-    }
-
-    cy.get(panel, {timeout: 20000}).should('be.visible');
+        cy.get(panel, {timeout: 20000}).should('be.visible');
+    });
 }
+
+const recTogglePanel = (panelToBeExpanded, nonSelectedPanels, index) => new Promise(function (resolve) {
+    cy.get(panelToBeExpanded.panel).then($p => {
+        if ($p.is(':visible')) {
+            // the panelToBeExpanded is already expanded
+            resolve(recursiveResult.PANEL_ALREADY_EXPANDED);
+        } else {
+            // the panelToBeExpanded is not expanded
+            // check the other panels to see which toggle class needs to be used
+            const nsp = nonSelectedPanels[index];
+            cy.get(nsp.panel).then($p => {
+                if ($p.is(':visible')) {
+                    cy.get(`${nsp.wrapper} ${panelToBeExpanded.button}`).click();
+                    resolve(recursiveResult.PANEL_ALREADY_EXPANDED);
+                } else {
+                    let newIndex = ++index;
+                    if (nonSelectedPanels.length <= newIndex) {
+                        // none of the panels are visible
+                        resolve(recursiveResult.ALL_PANELS_CLOSED);
+                    } else {
+                        recTogglePanel(panelToBeExpanded, nonSelectedPanels, newIndex).then(function (recursiveResult) {
+                            resolve(recursiveResult);
+                        });
+                    }
+                }
+            })
+        }
+    })
+})
 
 export function collapsePointFilterDialog() {
     collapseFilterDialog('.point-filters');

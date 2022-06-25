@@ -32,9 +32,9 @@
     "main.js": "0.0.1",
     "papaparse": "^5.3.0",
     "pixelmatch": "^5.2.1",
-    "save-svg-as-png": "^1.4.17",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "save-svg-as-png": "^1.4.17",
     "sheetjs": "^2.0.0",
     "shx": "^0.3.2",
     "start-server-and-test": "^1.13.1",
@@ -105,7 +105,9 @@
       "/node_modules/",
       ".data.js"
     ],
-    "transformIgnorePatterns": ["node_modules/(?!(leaflet|leaflet.markercluster)/)"],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(leaflet|leaflet.markercluster)/)"
+    ],
     "moduleFileExtensions": [
       "js",
       "html"

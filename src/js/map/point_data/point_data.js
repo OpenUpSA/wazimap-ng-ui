@@ -7,6 +7,7 @@ import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import {PointFilter} from "./point_filter";
+import xss from 'xss';
 
 const url = 'points/themes';
 const pointsByThemeUrl = 'points/themes';
@@ -35,6 +36,29 @@ let activeMarkers = [];
 
 const POPUP_OFFSET = [20, -20];
 const CIRCLE_MARKER_POPUP_OFFSET = [20, 0];
+
+const allowedTags = ['a', 'b', 'em', 'span', 'i', 'div', 'p', 'ul', 'li', 'ol', 'table', 'tr', 'td', 'th'];
+const allowedAttributes = ["class", "target", "style", "href"];
+const xssOptions = {
+  stripIgnoreTag: true,
+  onTag: function (tag, html, options) {
+    if (allowedTags.indexOf(tag) === -1){
+      return '';
+    }
+  },
+  onTagAttr : function(tag, name, value, isWhiteAttr) {
+    if (allowedAttributes.indexOf(name) >= 0){
+      return name + '="' + xss.escapeAttrValue(value) + '"';
+    }
+  },
+  onIgnoreTagAttr: function (tag, name, value, isWhiteAttr) {
+    if (name.substr(0, 5) === "data-") {
+      return name + '="' + xss.escapeAttrValue(value) + '"';
+    }
+  }
+};
+
+const xssFilter = new xss.FilterXSS(xssOptions);
 
 /**
  * this class creates the point data dialog
@@ -488,12 +512,20 @@ export class PointData extends Component {
 
     appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName, visibleAttributes = null) => {
         $('.' + itemsClsName, item).empty();
+        const htmlFields = point.category.data.configuration?.field_type || {};
         point.data.forEach((a, i) => {
             if (Object.prototype.toString.call(a.value) !== '[object Object]' && (visibleAttributes === null || visibleAttributes.indexOf(a.key) >= 0)) {
                 let itemRow = rowItem.cloneNode(true);
                 $(itemRow).removeClass('last');
                 $('.' + labelClsName, itemRow).text(a.key);
-                $('.' + valueClsName, itemRow).text(a.value);
+                const isKeyHtmlType = htmlFields.hasOwnProperty(a.key) ? htmlFields[a.key] === "html" : false;
+
+                if (isKeyHtmlType){
+                  let htmlText = xssFilter.process(a.value);
+                  $('.' + valueClsName, itemRow).html(htmlText);
+                } else {
+                  $('.' + valueClsName, itemRow).text(a.value);
+                }
                 if (i === point.data.length - 1) {
                     $(itemRow).addClass('last')
                 }

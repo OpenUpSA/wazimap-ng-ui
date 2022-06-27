@@ -100,3 +100,110 @@ export class TestData {
         };
     }
 }
+
+
+export class TestPointData {
+    constructor() {
+        this.pointData = {
+          x: 23.06241,
+          y: -28.33792,
+          name: "Test Point",
+          data: [
+            {
+                "key": "Test allowed Tag",
+                "value": "<b>Bold Text</b>"
+            },
+            {
+                "key": "Test unallowed Tag",
+                "value": "<strong>Strong Text</strong>"
+            },
+            {
+                "key": "Test Unordered List",
+                "value": "<ul><li>First Point</li> <li>Second Point</li></ul>"
+            },
+            {
+                "key": "Test Custom Style Attr",
+                "value": "<p style='color: red'>Red Text</p>"
+            },
+            {
+                "key": "Test Class Attr",
+                "value": "<div class='test-class'>test</div>"
+            },
+            {
+                "key": "Test Link",
+                "value": "<a href='#'>This is Link to some Report</a>"
+            },
+            {
+                "key": "Test Script",
+                "value": "<script>console.log('testing')</script>"
+            },
+            {
+                "key": "Test link with onclick",
+                "value": "<a href='#' onclick='alert(\"test\")'>click me</a>"
+            },
+            {
+                "key": "Test Links but field_type text",
+                "value": "<a href='#'>This is Link to some Report</a>"
+            }
+        ],
+          category: {
+            name: "Test Category",
+            data: {
+              configuration: {
+                field_type: {
+                    "Test allowed Tag": "html",
+                    "Test unallowed Tag": "html",
+                    "Test Unordered List": "html",
+                    "Test Custom Style Attr": "html",
+                    "Test Class Attr": "html",
+                    "Test Link": "html",
+                    "Test Script": "html",
+                    "Test link with onclick": "html"
+                }
+              }
+            }
+          },
+          theme: {
+            name: "Test Theme",
+          }
+        };
+    }
+}
+
+
+export class TestMapControlConfigData {
+    constructor() {
+        this.mapControlConfig = {
+          map: {
+            choropleth: {
+              colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
+              opacity: 0.7,
+              opacity_over: 0.8
+            },
+            defaultCoordinates: {
+              lat: 23.06241,
+              long: -28.33792,
+              zoom: 6
+            },
+            tileLayers: [
+              {
+                url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png",
+                pane: "tilePane",
+                zIndex: 200
+              },
+              {
+                url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}.png",
+                pane: "labelsPanel",
+                zIndex: 350
+              }
+            ],
+            zoomEnabled: false,
+            zoomPosition: "bottomright",
+            leafletOptions: {
+              preferCanvas: true,
+              zoomControl: false
+            }
+          }
+        };
+    }
+}

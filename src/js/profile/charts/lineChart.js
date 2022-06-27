@@ -135,6 +135,8 @@ export const configureLinechart = (data, metadata, config) => {
                 orient: "bottom",
                 scale: "xscale",
                 grid: true,
+                labelFlush: true,
+                labelOverlap: true,
                 labelColor: {
                     signal: "labelColor"
                 },

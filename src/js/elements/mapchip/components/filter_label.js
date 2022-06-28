@@ -1,4 +1,9 @@
 import {Component} from "../../../utils";
+import React from 'react';
+import SnackbarContent from './snackbar_content';
+import toast from "../../../ui_components/snackbar";
+
+
 
 
 export class FilterLabel extends Component {
@@ -68,6 +73,10 @@ export class FilterLabel extends Component {
       this._filterHeaderLabelContainer.addClass("notification-badges");
     }
 
+    showSnackbar(){
+      toast.mapchipFilterChange(<SnackbarContent />);
+    }
+
     hideNotificationBadge(){
       this._filterHeaderLabelContainer.removeClass("notification-badges");
     }
@@ -81,6 +90,7 @@ export class FilterLabel extends Component {
       const showBadge = this.isEqualsJson(flattenFilterObject, oldFilters);
       if (!showBadge){
         this.showNotificationBadge();
+        this.showSnackbar();
         if (defaultFilters.length === 0){
           this.parent.appliedFilters = {};
         }

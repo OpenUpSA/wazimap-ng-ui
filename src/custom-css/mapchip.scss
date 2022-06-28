@@ -101,3 +101,20 @@
       border: solid 1px #2185d0;
     }
 }
+
+.notification-badges1 {
+    position:relative;
+    &:after {
+      min-width: 5px;
+      min-height: 5px;
+      line-height: 8px;
+      padding: 6px;
+      color: #fff;
+      background-color: #2185d0;
+      font-size: 12px;
+      border-radius: 20px;
+      font-family: FontAwesome;
+      content: "\f01e";
+      border: solid 1px #2185d0;
+    }
+}

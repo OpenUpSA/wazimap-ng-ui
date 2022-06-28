@@ -12,6 +12,7 @@ import embed from "vega-embed";
 import * as vega from "vega";
 
 import {configureBarchart, configureBarchartDownload} from './charts/barChart';
+import {configureLinechart, configureLinechartDownload} from './charts/lineChart';
 import {slugify} from './charts/utils';
 import DropdownMenu from "../elements/dropdown_menu";
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
@@ -23,6 +24,10 @@ const graphValueTypes = {
     'Percentage': PERCENTAGE_TYPE,
     'Value': VALUE_TYPE
 };
+const chartTypes = {
+    LineChart: 'line',
+    BarChart: 'bar'
+}
 const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
 const filterRowClass = '.profile-indicator__filter-row';
@@ -44,9 +49,11 @@ export class Chart extends Component {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
 
+        this._isToggleDisabled = false;
+
         this.data = data;
         this.title = title;
-        this.config = config;
+        this._config = config;
         this.selectedFilter = null;
         this.selectedGroup = null;
         this.table = null;
@@ -73,11 +80,36 @@ export class Chart extends Component {
         this.addChart(data);
     }
 
+    get chartType() {
+        const type = this._config.chartType;
+        if (type === chartTypes.LineChart) {
+            return chartTypes.LineChart;
+        } else {
+            return chartTypes.BarChart;
+        }
+    }
+
+    get isToggleDisabled() {
+        return this._isToggleDisabled;
+    }
+
+    set isToggleDisabled(value) {
+        this._isToggleDisabled = value;
+    }
+
+    get config() {
+        if (this.chartType === chartTypes.LineChart) {
+            this._config.defaultType = 'Value';
+        }
+
+        return this._config;
+    }
+
     addChart = (data) => {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();
 
-        let vegaSpec = configureBarchart(data.data, data.metadata, this.config);
+        let vegaSpec = this.configureChart(data.data, data.metadata, this.config);
 
         const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
             let x = event.pageX + offsetX;
@@ -111,7 +143,7 @@ export class Chart extends Component {
             }
             // set the tooltip content
             let tooltipPercentageType = ''
-            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
+            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.isToggleDisabled) {
                 tooltipPercentageType = `
           <div class="bar-chart__tooltip_value">
               <div>${value.percentage}</div>
@@ -157,6 +189,23 @@ export class Chart extends Component {
             });
     };
 
+    configureChart = (data, metadata, config) => {
+        if (this.chartType === chartTypes.LineChart) {
+            return configureLinechart(data, metadata, config);
+        } else {
+            return configureBarchart(data, metadata, config);
+        }
+    }
+
+    configureChartDownload = (data, metadata, config, annotations) => {
+        const type = config.chartType;
+        if (type === chartTypes.LineChart) {
+            return configureLinechartDownload(data, metadata, config, annotations);
+        } else {
+            return configureBarchartDownload(data, metadata, config, annotations);
+        }
+    }
+
     showChartDataTable = () => {
         this.createDataTable();
         this.appendDataToTable();
@@ -179,7 +228,7 @@ export class Chart extends Component {
         $(headCol2).addClass('profile-indicator__table_cell');
         $(headCol2).text('Value');
         $(headRow).append(headCol2);
-        if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
+        if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.isToggleDisabled) {
             let headCol3 = document.createElement('th');
             $(headCol3).addClass('profile-indicator__table_cell');
             $(headCol3).text('Percentage');
@@ -213,7 +262,7 @@ export class Chart extends Component {
             $(col2).text(d3format(formatting[VALUE_TYPE])(absoluteVal));
             $(col2).addClass('profile-indicator__table_cell');
             $(row).append(col2);
-            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.config.disableToggle) {
+            if (this.config.defaultType.toLowerCase() == PERCENTAGE_TYPE || !this.isToggleDisabled) {
                 let col3 = document.createElement('td');
                 $(col3).addClass('profile-indicator__table_cell');
                 $(col3).text(d3format(formatting[PERCENTAGE_TYPE])(percentageVal));
@@ -270,7 +319,7 @@ export class Chart extends Component {
             "graphValueType": this.graphValueType
         }
 
-        let specDownload = configureBarchartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
+        let specDownload = this.configureChartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
 
         this.vegaDownloadView = new vega.View(vega.parse(specDownload));
 
@@ -283,11 +332,11 @@ export class Chart extends Component {
         saveImgButton.attr('download', `${chartTitle ? chartTitle : 'chart'}.png`);
     }
 
-    disableChartTypeToggle = (disable) => {
-        if (disable) {
-            $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide()
-            $(this.containerParent).find('.hover-menu__content_list').hide()
-        }
+    disableChartTypeToggle = () => {
+        $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide();
+        $(this.containerParent).find('.hover-menu__content_list').hide();
+
+        this.isToggleDisabled = true;
     }
 
     setChartMenu = (barChart) => {
@@ -310,8 +359,10 @@ export class Chart extends Component {
         });
 
         self.selectedGraphValueTypeChanged(self.containerParent, this.config.defaultType);
-        this.disableChartTypeToggle(this.config.disableToggle);
 
+        if (this.chartType === chartTypes.LineChart || this.isToggleDisabled) {
+            this.disableChartTypeToggle();
+        }
 
         $(this.containerParent).find('.hover-menu__content_list--last a').each(function () {
             $(this).off('click');

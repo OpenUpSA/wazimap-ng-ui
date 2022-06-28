@@ -4,6 +4,7 @@ import {parse, View} from 'vega';
 import html from '../../../src/index.html';
 import {Chart} from '../../../src/js/profile/chart.js';
 import {Component} from '../../../src/js/utils.js'
+import {TestData} from "../../../src/js/test_data";
 
 function renderVegaHeadless(spec) {
     const runtime = parse(spec)
@@ -177,33 +178,10 @@ describe('configureBarchart', () => {
 describe('Test downloadable barchart', () => {
     let data, metadata, config;
     beforeEach(() => {
-        metadata = {
-            source: "Census 2021",
-            primary_group: "age",
-            groups: [{name: "age"}]
-        },
-            data = [
-                {age: 15, gender: 'male', count: 1},
-                {age: 12, gender: 'female', count: 3},
-                {age: 14, gender: 'male', count: 2}
-            ]
-        config = {
-            types: {
-                Value: {
-                    formatting: ",.0f",
-                    minX: "default",
-                    maxX: "default"
-                },
-                Percentage: {
-                    formatting: ".0%",
-                    minX: "default",
-                    maxX: "default"
-                }
-            },
-            disableToggle: false,
-            defaultType: "Value",
-            xTicks: null
-        }
+        const td = new TestData();
+        metadata = td.chartMetadata,
+            data = td.chartData,
+            config = td.chartConfig
     });
 
     test('Configure spec for downloadable Vega chart', async () => {
@@ -275,9 +253,9 @@ describe('Test downloadable barchart', () => {
             source: "Census 2021",
             primary_group: "gender",
             groups: [
-              {name: "gender", subindicators: ["male", "female"]},
-              {name: "age", subindicators: [12, 14, 15]}
-          ]
+                {name: "gender", subindicators: ["male", "female"]},
+                {name: "age", subindicators: [12, 14, 15]}
+            ]
         }
         let newdata = {
             data: data,
@@ -311,66 +289,66 @@ describe('Test downloadable barchart', () => {
     });
 
     test('Test to check if empty chart can be downloaded', async () => {
-      let annotations = {
-          'title': 'Population',
-          'geography': 'South Africa',
-          'attribution': 'Profile config attribution',
-          'graphValueType': 'Percentage'
-      }
-      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
-      let view = renderVegaHeadless(vegaDownloadSpec);
-      await view.runAsync()
+        let annotations = {
+            'title': 'Population',
+            'geography': 'South Africa',
+            'attribution': 'Profile config attribution',
+            'graphValueType': 'Percentage'
+        }
+        let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+        let view = renderVegaHeadless(vegaDownloadSpec);
+        await view.runAsync()
 
-      expect(view.signal('title')).toBe('Population');
-      expect(view.signal('source')).toBe('Source : Census 2021');
-      expect(view.signal('geography')).toBe('South Africa');
-      expect(view.signal('attribution').toString()).toBe('Profile config attribution');
+        expect(view.signal('title')).toBe('Population');
+        expect(view.signal('source')).toBe('Source : Census 2021');
+        expect(view.signal('geography')).toBe('South Africa');
+        expect(view.signal('attribution').toString()).toBe('Profile config attribution');
     });
 
     test('Test to check null metadata source', async () => {
-      let annotations = {
-          'title': 'Population',
-          'geography': 'South Africa',
-          'attribution': 'Profile config attribution',
-          'graphValueType': 'Percentage'
-      }
-      metadata["source"] = null;
-      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
-      let view = renderVegaHeadless(vegaDownloadSpec);
-      await view.runAsync()
-      expect(view.signal('source')).toBe('');
+        let annotations = {
+            'title': 'Population',
+            'geography': 'South Africa',
+            'attribution': 'Profile config attribution',
+            'graphValueType': 'Percentage'
+        }
+        metadata["source"] = null;
+        let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+        let view = renderVegaHeadless(vegaDownloadSpec);
+        await view.runAsync()
+        expect(view.signal('source')).toBe('');
     });
 
     test('Test to check undefined metadata source', async () => {
-      let annotations = {
-          'title': 'Population',
-          'geography': 'South Africa',
-          'attribution': 'Profile config attribution',
-          'graphValueType': 'Percentage'
-      }
-      metadata["source"] = undefined;
-      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
-      let view = renderVegaHeadless(vegaDownloadSpec);
-      await view.runAsync()
-      expect(view.signal('source')).toBe('');
+        let annotations = {
+            'title': 'Population',
+            'geography': 'South Africa',
+            'attribution': 'Profile config attribution',
+            'graphValueType': 'Percentage'
+        }
+        metadata["source"] = undefined;
+        let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+        let view = renderVegaHeadless(vegaDownloadSpec);
+        await view.runAsync()
+        expect(view.signal('source')).toBe('');
     });
 
     test('Test to check valid metadata source', async () => {
-      let annotations = {
-          'title': 'Population',
-          'geography': 'South Africa',
-          'attribution': 'Profile config attribution',
-          'graphValueType': 'Percentage'
-      }
-      let metadata = {
-        source: "test",
-        primary_group: 'age',
-        groups: [ { name: 'age' } ]
-      }
-      let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
-      let view = renderVegaHeadless(vegaDownloadSpec);
-      await view.runAsync()
-      expect(view.signal('source')).toBe('Source : test');
+        let annotations = {
+            'title': 'Population',
+            'geography': 'South Africa',
+            'attribution': 'Profile config attribution',
+            'graphValueType': 'Percentage'
+        }
+        let metadata = {
+            source: "test",
+            primary_group: 'age',
+            groups: [{name: 'age'}]
+        }
+        let vegaDownloadSpec = configureBarchartDownload([], metadata, config, annotations);
+        let view = renderVegaHeadless(vegaDownloadSpec);
+        await view.runAsync()
+        expect(view.signal('source')).toBe('Source : test');
     });
 });
 
@@ -389,11 +367,11 @@ describe('configureBarchart for missing data', () => {
                 subindicators: ["male", "female"]
             }]
         },
-        data = [
-            {age: 15, gender: 'male', count: 1, education_level: "Grade9"},
-            {age: 12, gender: 'female', count: 3, education_level: "Grade10"},
-            {age: 14, gender: 'male', count: 2, education_level: "Grade9"}
-        ]
+            data = [
+                {age: 15, gender: 'male', count: 1, education_level: "Grade9"},
+                {age: 12, gender: 'female', count: 3, education_level: "Grade10"},
+                {age: 14, gender: 'male', count: 2, education_level: "Grade9"}
+            ]
         config = {
             types: {
                 Value: {
@@ -414,35 +392,35 @@ describe('configureBarchart for missing data', () => {
     });
 
     test('Test missing data after apply filters', async () => {
-      let vegaSpec = configureBarchart(data, metadata, config);
-      let view = renderVegaHeadless(vegaSpec);
-      await view.runAsync()
+        let vegaSpec = configureBarchart(data, metadata, config);
+        let view = renderVegaHeadless(vegaSpec);
+        await view.runAsync()
 
-      let yscaleDomain = view._runtime.scales.yscale._argval.domain;
-      // assert there will be 2 domains - Grade9 & Grade10
-      expect(yscaleDomain.length).toEqual(2);
-      expect(yscaleDomain).toEqual(["Grade9", "Grade10"]);
+        let yscaleDomain = view._runtime.scales.yscale._argval.domain;
+        // assert there will be 2 domains - Grade9 & Grade10
+        expect(yscaleDomain.length).toEqual(2);
+        expect(yscaleDomain).toEqual(["Grade9", "Grade10"]);
 
-      // Assert there will be 2 bars for 2 domains
-      let bars = view._runtime.data.bars.values.value;
-      expect(bars.length).toEqual(2);
-      expect(bars[0].datum.education_level).toEqual("Grade9");
-      expect(bars[1].datum.education_level).toEqual("Grade10");
+        // Assert there will be 2 bars for 2 domains
+        let bars = view._runtime.data.bars.values.value;
+        expect(bars.length).toEqual(2);
+        expect(bars[0].datum.education_level).toEqual("Grade9");
+        expect(bars[1].datum.education_level).toEqual("Grade10");
 
-      // Call Filter Signal
-      view.signal('genderFilter', true).run();
-      view.signal('genderFilterValue', "male").run();
+        // Call Filter Signal
+        view.signal('genderFilter', true).run();
+        view.signal('genderFilterValue', "male").run();
 
-      await view.runAsync();
-      yscaleDomain = view._runtime.scales.yscale._argval.domain;
+        await view.runAsync();
+        yscaleDomain = view._runtime.scales.yscale._argval.domain;
 
-      // assert there will be 1 domains - Grade9
-      expect(yscaleDomain.length).toEqual(1);
-      expect(yscaleDomain).toEqual(["Grade9"]);
+        // assert there will be 1 domains - Grade9
+        expect(yscaleDomain.length).toEqual(1);
+        expect(yscaleDomain).toEqual(["Grade9"]);
 
-      // Assert there will be 1 bar for 1 domain
-      bars = view._runtime.data.bars.values.value;
-      expect(bars.length).toEqual(1);
-      expect(bars[0].datum.education_level).toEqual("Grade9");
+        // Assert there will be 1 bar for 1 domain
+        bars = view._runtime.data.bars.values.value;
+        expect(bars.length).toEqual(1);
+        expect(bars[0].datum.education_level).toEqual("Grade9");
     });
 });

@@ -150,7 +150,7 @@ function expandPanel(panel) {
     });
 }
 
-const recTogglePanel = (panelToBeExpanded, nonSelectedPanels, index) => new Promise(function (resolve) {
+const recTogglePanel = (panelToBeExpanded, nonSelectedPanels, index) => new Cypress.Promise(function (resolve) {
     cy.get(panelToBeExpanded.panel).then($p => {
         if ($p.is(':visible')) {
             // the panelToBeExpanded is already expanded

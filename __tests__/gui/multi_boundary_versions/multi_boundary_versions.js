@@ -142,6 +142,22 @@ Then('I navigate to a geography with no children', () => {
         })
     })
 
+    cy.intercept('api/v1/children-indicators/profile/8/geography/41804004/?version=2011%20Boundaries&format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: {},
+            forceNetworkError: false // default
+        })
+    })
+
+    cy.intercept('api/v1/children-indicators/profile/8/geography/41804004/?version=2016%20with%20wards&format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: {},
+            forceNetworkError: false // default
+        })
+    })
+
     cy.visit('/#geo:41804004');
 })
 

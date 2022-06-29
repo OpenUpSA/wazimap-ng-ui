@@ -8,7 +8,7 @@ import {
     collapseChoroplethFilterDialog,
     expandChoroplethFilterDialog,
     expandDataMapper, expandPointFilterDialog,
-    expandPointMapper,
+    expandPointMapper, expandRichDataPanel,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded
@@ -40,7 +40,7 @@ Then('Data Mapper should be displayed', () => {
 })
 
 When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
-    cy.get('.data-mapper').findByText(word).click();
+    cy.get('.data-mapper').findByText(word).click({force: true});
 });
 
 Then('I select an indicator', () => {
@@ -246,11 +246,20 @@ Then('I navigate to ZA', () => {
     cy.visit('/#geo:ZA');
 })
 
-When('I navigate to WC and back to ZA quickly', () => {
+Then(/^I navigate to WC and back to ZA in (\d+) ms$/, function (ms) {
     cy.visit('/#geo:WC');
-    cy.wait(500);   //without this controller ignores the first request  - to be able to navigate between 2 geographies we need a small delay
+    cy.wait(ms);   //without this controller ignores the first request  - to be able to navigate between 2 geographies we need a small delay
     cy.visit('/#geo:ZA');
-})
+
+    cy.on('uncaught:exception', (err, runnable) => {
+        // returning false here prevents Cypress from
+        // failing the test
+        console.log({'this err': err})
+        if (err.name === "AbortError") {
+            return false
+        }
+    })
+});
 
 Then('I expand filter dialog', () => {
     expandChoroplethFilterDialog();
@@ -289,3 +298,11 @@ Then('I check if the legend values are correct', () => {
         expect($div.text()).equal(values[index]);
     })
 })
+
+Then('I expand Rich Data Panel', () => {
+    expandRichDataPanel();
+})
+
+Then(/^I check if the geography name is "([^"]*)"$/, function (name) {
+    cy.get('.location__title h1').should('have.text', name);
+});

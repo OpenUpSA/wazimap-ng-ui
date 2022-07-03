@@ -143,11 +143,13 @@ function expandPanel(panel) {
     recTogglePanel(panelToBeExpanded, nonSelectedPanels, 0).then(function (result) {
         if (result) {
             //nothing was expanded
-            cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click();
+            cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click().then(() => {
+                cy.get(panel, {timeout: 20000}).should('be.visible');
+            });
+        } else {
+            cy.get(panel, {timeout: 20000}).should('be.visible');
         }
-
-        cy.get(panel, {timeout: 20000}).should('be.visible');
-    });
+    })
 }
 
 const recTogglePanel = (panelToBeExpanded, nonSelectedPanels, index) => new Cypress.Promise(function (resolve) {

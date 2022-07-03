@@ -25,7 +25,6 @@ export default class ProfileLoader extends Component {
     }
 
     loadProfile = (dataBundle, activeVersion) => {
-        //todo - make this constructor
         const profile = dataBundle.profile;
         const geometries = dataBundle.geometries;
         const geography = profile.geography;

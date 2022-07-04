@@ -116,6 +116,9 @@ export function expandDataMapper() {
 }
 
 function expandPanel(panel) {
+    cy.wait(1000);
+    // cy.wait is necessary because closing a panel and opening another takes some time.
+    // if a test is too quickly closing and opening panels, it creates problems
     const allPanels = [
         {
             panel: '.data-mapper',

@@ -74,7 +74,23 @@ export class FilterLabel extends Component {
     }
 
     showSnackbar(){
-      toast.mapchipFilterChange(<SnackbarContent />);
+      let config = {
+        autoHideDuration: 2000,
+        sx: {
+          "& .SnackbarContainer-root": {
+            position: "relative !important",
+          },
+          "& .SnackbarContent-root": {
+            color: "black",
+            backgroundColor: "white",
+            minWidth: "auto !important",
+            padding: "3px 10px 3px 10px"
+          }
+        },
+        rootClasses: ["mapchip-filter-class"]
+      }
+      let el = document.getElementById("mapchip-snackbar")
+      toast.default(<SnackbarContent />, config, el);
     }
 
     hideNotificationBadge(){

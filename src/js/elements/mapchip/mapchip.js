@@ -5,6 +5,9 @@ import {Component} from "../../utils";
 import {Tooltip} from "../../ui_components/tooltip";
 import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
+// import React, {useState} from 'react';
+// import ReactDOM from 'react-dom';
+// import FilterSnackbar from './components/snackbar';
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockClass = '.map-bottom-items--v2 .map-options';
@@ -127,6 +130,9 @@ export class MapChip extends Component {
         // Tooltip
         this._tooltip.enableTooltip(this._toggleIconDownContainer, "Collapse Details");
         this._tooltip.enableTooltip(this._toggleIconUpContainer.parent(), "Expand Details");
+
+        // Snackbar
+        $("<div id='mapchip-snackbar'></div>").insertBefore(".map-bottom-items--v2 .map-point-legend");
     }
 
     prepareUIEvents() {

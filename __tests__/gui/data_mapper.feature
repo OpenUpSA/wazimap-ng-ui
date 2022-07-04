@@ -70,6 +70,7 @@ Feature: Data Mapper
 
     # confirm that no filters available message is displayed correctly
     When I expand Data Mapper
+    Then Data Mapper should be displayed
     And I click on "Elections" in Data Mapper
     And I click on "2016 Municipal elections" in Data Mapper
     And I click on "Number of hung and majority councils" in Data Mapper

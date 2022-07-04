@@ -52,7 +52,7 @@ Then('None of the menu items should be active', () => {
 })
 
 When('I close the Rich Data', () => {
-    cy.get('.rich-data-toggles .point-mapper-panel__open').click();
+    cy.get('.rich-data-toggles .rich-data-panel__close').click();
 })
 
 Then('I check if the indicator with only zero counts is hidden', () => {

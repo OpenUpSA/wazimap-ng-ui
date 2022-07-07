@@ -163,6 +163,7 @@ export const configureLinechart = (data, metadata, config) => {
             {
                 marks: [
                     {
+                        // creates the line
                         encode: {
                             update: {
                                 stroke: {value: 1, scale: "color"},
@@ -176,6 +177,7 @@ export const configureLinechart = (data, metadata, config) => {
                         type: "line"
                     },
                     {
+                        // creates the points on the line
                         name: "points_on_line",
                         from: {data: "data_formatted"},
                         type: "symbol",
@@ -191,6 +193,7 @@ export const configureLinechart = (data, metadata, config) => {
                         }
                     },
                     {
+                        // creates a path in the background to decide which point is the closest to the cursor
                         name: "points_voronoi",
                         type: "path",
                         from: {data: "points_on_line"},
@@ -216,6 +219,7 @@ export const configureLinechart = (data, metadata, config) => {
                         ]
                     },
                     {
+                        // makes the closes point on the line visible
                         from: {data: "highlightedPoint"},
                         type: "symbol",
                         interactive: false,

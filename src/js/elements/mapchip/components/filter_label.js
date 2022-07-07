@@ -4,8 +4,6 @@ import SnackbarContent from './snackbar_content';
 import toast from "../../../ui_components/snackbar";
 
 
-
-
 export class FilterLabel extends Component {
     constructor(parent) {
         super(parent);
@@ -77,9 +75,6 @@ export class FilterLabel extends Component {
       let config = {
         autoHideDuration: 2000,
         sx: {
-          "& .SnackbarContainer-root": {
-            position: "relative !important",
-          },
           "& .SnackbarContent-root": {
             color: "black",
             backgroundColor: "white",
@@ -87,7 +82,7 @@ export class FilterLabel extends Component {
             padding: "3px 10px 3px 10px"
           }
         },
-        rootClasses: ["mapchip-filter-class"]
+        rootcomponentclass: 'snackbar-position'
       }
       let el = document.getElementById("mapchip-snackbar")
       toast.default(<SnackbarContent />, config, el);

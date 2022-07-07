@@ -1,10 +1,27 @@
 import React from 'react';
+import Box from '@mui/material/Box';
+import { SnackbarFilterLableAvatar } from '../../../styled_components/mapchip/snackbar';
+
+import './mapchip.module.css';
 
 
 const SnackbarContent = (props) => {
   return (
     <div>
-      <span className="notification-badges1"></span> Filter selections have been reset
+      <Box
+        component="div"
+        sx={{ display: 'inline'}}
+      >
+        <SnackbarFilterLableAvatar>
+          <i className="fa fa-repeat repeat-icon" />
+        </SnackbarFilterLableAvatar>
+      </Box>
+      <Box
+        component="div"
+        sx={{display: 'inline'}}
+      >
+          Filter selections have been reset
+      </Box>
     </div>
   );
 }

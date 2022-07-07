@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 
+import './snackbar.modules.css';
 
 const mountPoint = document.createElement('div');
 document.body.appendChild(mountPoint);
@@ -53,7 +54,7 @@ export default {
       <SnackbarProvider
         maxSnack={3}
         classes={{
-          containerRoot: config.rootClasses || []
+          containerRoot: config.rootcomponentclass
         }}
       >
         <ShowSnackbar message={msg} variant={config.variant} />

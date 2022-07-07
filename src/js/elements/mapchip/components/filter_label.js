@@ -74,6 +74,10 @@ export class FilterLabel extends Component {
     showSnackbar(){
       let config = {
         autoHideDuration: 2000,
+        anchorOrigin: {
+            horizontal: "center",
+            vertical: "bottom"
+        },
         sx: {
           "& .SnackbarContent-root": {
             color: "black",
@@ -82,7 +86,7 @@ export class FilterLabel extends Component {
             padding: "3px 10px 3px 10px"
           }
         },
-        rootcomponentclass: 'snackbar-position'
+        rootcomponentclass: "snackbar-position"
       }
       let el = document.getElementById("mapchip-snackbar")
       toast.default(<SnackbarContent />, config, el);

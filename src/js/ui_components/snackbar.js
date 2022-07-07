@@ -9,42 +9,25 @@ document.body.appendChild(mountPoint);
 
 export default {
   default: function(msg, config = {}, el = mountPoint) {
-    config = {
-      variant: 'default',
-      anchorOrigin: { horizontal: 'center', vertical: 'bottom' },
-      ...config,
-    }
-    this.toast(msg, config, el);
+    this.toast(msg, 'default', config, el, );
   },
   success: function(msg, config = {}, el = mountPoint) {
-    config = {
-      variant: 'success',
-      ...config,
-    }
-    this.toast(msg, config, el);
+    this.toast(msg, 'success', config, el);
   },
   warning: function(msg) {
-    config = {
-      variant: 'warning',
-      ...config,
-    }
-    this.toast(msg, config, el);
+    this.toast(msg, 'warning', config, el);
   },
   info: function(msg) {
-    config = {
-      variant: 'info',
-      ...config,
-    }
-    this.toast(msg, config, el);
+    this.toast(msg, 'info', config, el);
   },
   error: function(msg) {
+    this.toast(msg, 'error', config, el);
+  },
+  toast: function(msg, variant, config = {}, el = mountPoint) {
     config = {
-      variant: 'error',
+      variant: variant,
       ...config,
     }
-    this.toast(msg, config, el);
-  },
-  toast: function(msg, config = {}, el = mountPoint) {
     const ShowSnackbar = ({ message }) => {
       const { enqueueSnackbar } = useSnackbar();
       enqueueSnackbar(message, config);
@@ -54,7 +37,7 @@ export default {
       <SnackbarProvider
         maxSnack={3}
         classes={{
-          containerRoot: config.rootcomponentclass
+          containerRoot: config.rootcomponentclass || []
         }}
       >
         <ShowSnackbar message={msg} variant={config.variant} />

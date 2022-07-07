@@ -5,9 +5,6 @@ import {Component} from "../../utils";
 import {Tooltip} from "../../ui_components/tooltip";
 import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
-// import React, {useState} from 'react';
-// import ReactDOM from 'react-dom';
-// import FilterSnackbar from './components/snackbar';
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockClass = '.map-bottom-items--v2 .map-options';

@@ -25,6 +25,7 @@ export default class Controller extends Component {
         $(window).on('hashchange', () => {
             // On every hash change the render function is called with the new hash.
             // This is how the navigation of our app happens.
+            this.api.cancelAndInitAbortController();
             const hash = decodeURI(window.location.hash);
             let parts = hash.split(':')
             let payload = null;
@@ -65,7 +66,6 @@ export default class Controller extends Component {
         this.triggerEvent("loggingOut");
         this.api.logout().then(e => {
             window.location.hash = '';
-            console.log(e);
             this.triggerEvent("loggedOut");
         })
     }

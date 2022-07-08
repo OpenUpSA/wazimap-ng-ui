@@ -1,7 +1,7 @@
 import {Component} from "../../../utils";
 import React from 'react';
 import SnackbarContent from './snackbar_content';
-import toast from "../../../ui_components/snackbar";
+import toast from "../../../ui_components/snackbar/snackbar";
 
 
 export class FilterLabel extends Component {
@@ -73,7 +73,7 @@ export class FilterLabel extends Component {
 
     showSnackbar(){
       let config = {
-        autoHideDuration: 2000,
+        autoHideDuration: 10000,
         anchorOrigin: {
             horizontal: "center",
             vertical: "bottom"

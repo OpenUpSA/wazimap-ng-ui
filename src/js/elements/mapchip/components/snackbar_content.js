@@ -1,8 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { SnackbarFilterLableAvatar } from '../../../styled_components/mapchip/snackbar';
+import { SnackbarFilterLabelAvatar } from '../../../styled_components/mapchip/snackbar';
 
-import './mapchip.module.css';
+import './snackbar_content.module.css';
 
 
 const SnackbarContent = (props) => {
@@ -12,9 +12,9 @@ const SnackbarContent = (props) => {
         component="div"
         sx={{ display: 'inline'}}
       >
-        <SnackbarFilterLableAvatar>
+        <SnackbarFilterLabelAvatar>
           <i className="fa fa-repeat repeat-icon" />
-        </SnackbarFilterLableAvatar>
+        </SnackbarFilterLabelAvatar>
       </Box>
       <Box
         component="div"

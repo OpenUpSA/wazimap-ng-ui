@@ -129,7 +129,7 @@ export class MapChip extends Component {
         this._tooltip.enableTooltip(this._toggleIconUpContainer.parent(), "Expand Details");
 
         // Snackbar
-        $("<div id='mapchip-snackbar'></div>").insertBefore(".map-bottom-items--v2 .map-point-legend");
+        $("<div id='mapchip-snackbar'></div>").insertBefore(`${mapChipBlockClass} .map-point-legend`);
     }
 
     prepareUIEvents() {

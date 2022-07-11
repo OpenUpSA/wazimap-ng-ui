@@ -7,7 +7,8 @@ import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
 
 const filterContentClass = '.map-options__filters_content';
-const mapChipBlockClass = '.map-bottom-items--v2 .map-options';
+const mapChipBlockParentClass = '.map-bottom-items--v2';
+const mapChipBlockClass = `${mapChipBlockParentClass} .map-options`;
 const legendContainerClass = '.map-options__legend_wrap';
 const filterHeaderClass = '.filter__header_sub-indicator';
 const filterHeaderToggleClass = ".filters__header_toggle";
@@ -129,7 +130,7 @@ export class MapChip extends Component {
         this._tooltip.enableTooltip(this._toggleIconUpContainer.parent(), "Expand Details");
 
         // Snackbar
-        $("<div id='mapchip-snackbar'></div>").insertBefore(`${mapChipBlockClass} .map-point-legend`);
+        $("<div id='mapchip-snackbar'></div>").insertBefore(`${mapChipBlockParentClass} .map-point-legend`);
     }
 
     prepareUIEvents() {

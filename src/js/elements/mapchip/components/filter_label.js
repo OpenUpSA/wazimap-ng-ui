@@ -88,7 +88,7 @@ export class FilterLabel extends Component {
         },
         rootcomponentclass: "snackbar-position"
       }
-      let el = document.getElementById("mapchip-snackbar")
+      let el = document.getElementById("mapchip-snackbar");
       toast.default(<SnackbarContent />, config, el);
     }
 

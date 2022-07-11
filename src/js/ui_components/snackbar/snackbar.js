@@ -1,17 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 
 import './snackbar.modules.css';
 
 const mountPoint = document.createElement('div');
-document.body.appendChild(mountPoint);
+const root = createRoot(mountPoint);
 
 export default {
-  default: function(msg, config = {}, el = mountPoint) {
+  default: function(msg, config = {}, el) {
     this.toast(msg, 'default', config, el, );
   },
-  success: function(msg, config = {}, el = mountPoint) {
+  success: function(msg, config = {}, el) {
     this.toast(msg, 'success', config, el);
   },
   warning: function(msg) {
@@ -23,7 +23,7 @@ export default {
   error: function(msg) {
     this.toast(msg, 'error', config, el);
   },
-  toast: function(msg, variant, config = {}, el = mountPoint) {
+  toast: function(msg, variant, config = {}, el) {
     config = {
       variant: variant,
       ...config,
@@ -33,7 +33,13 @@ export default {
       enqueueSnackbar(message, config);
       return null;
     };
-    ReactDOM.render(
+
+    if (el !== undefined){
+      el.appendChild(mountPoint);
+    } else {
+      document.body.appendChild(mountPoint);
+    }
+    root.render(
       <SnackbarProvider
         maxSnack={3}
         classes={{
@@ -41,8 +47,7 @@ export default {
         }}
       >
         <ShowSnackbar message={msg} variant={config.variant} />
-      </SnackbarProvider>,
-      el
+      </SnackbarProvider>
     );
   }
 };

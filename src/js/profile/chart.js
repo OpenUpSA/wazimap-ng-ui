@@ -111,18 +111,32 @@ export class Chart extends Component {
 
         let vegaSpec = this.configureChart(data.data, data.metadata, this.config);
 
-        const calculatePosition = (event, tooltipBox, offsetX, offsetY) => {
-            let x = event.pageX + offsetX;
-            if (x + tooltipBox.width > window.innerWidth) {
-                x = +event.pageX - offsetX - tooltipBox.width;
+        const calculatePosition = (item, event, tooltipBox,) => {
+            let x, y, offsetX, offsetY;
+            if (this.chartType === chartTypes.BarChart) {
+                offsetX = 0;
+                offsetY = 10;
+                x = event.pageX + offsetX;
+                y = event.pageY + offsetY;
+
+                if (x + tooltipBox.width > window.innerWidth) {
+                    x = +event.pageX - offsetX - tooltipBox.width;
+                }
+
+                if (y < window.innerHeight) {
+                    y = window.innerHeight + offsetY;
+                }
+                if (y + tooltipBox.height > window.innerHeight) {
+                    y = +event.pageY - offsetY - tooltipBox.height;
+                }
+            } else {
+                const selector = 'g.mark-symbol.role-mark path[fill="white"]';
+                offsetX = 5;
+                offsetY = -5;
+                x = $(selector).offset().left + offsetX;
+                y = $(selector).offset().top - tooltipBox.height + offsetY;
             }
-            let y = event.pageY + offsetY;
-            if (y < window.innerHeight) {
-                y = window.innerHeight + offsetY;
-            }
-            if (y + tooltipBox.height > window.innerHeight) {
-                y = +event.pageY - offsetY - tooltipBox.height;
-            }
+
             return {x, y};
         }
 
@@ -164,9 +178,9 @@ export class Chart extends Component {
             // make the tooltip visible
             this.el.classList.add('visible', tooltipClassSubstr);
             const {x, y} = calculatePosition(
+                item,
                 event,
-                this.el.getBoundingClientRect(),
-                0, 10
+                this.el.getBoundingClientRect()
             );
             this.el.setAttribute('style', `top: ${y}px; left: ${x}px; z-index: 999;`);
         }

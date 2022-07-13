@@ -1,4 +1,3 @@
-import {xAxis, xScale} from "./properties";
 import {createFiltersForGroups} from "./utils";
 
 const PERCENTAGE_TYPE = "percentage";
@@ -19,10 +18,6 @@ export const configureLinechart = (data, metadata, config) => {
     } = config;
 
     const {primary_group: primaryGroup} = metadata;
-
-    if (xTicks) {
-        xAxis.tickCount = xTicks;
-    }
 
     const {signals: filterSignals, filters} = createFiltersForGroups(metadata.groups);
 
@@ -50,7 +45,7 @@ export const configureLinechart = (data, metadata, config) => {
                         ops: ["sum"],
                         as: ["count"],
                         fields: ["count"],
-                        groupby: {signal: "groups"}
+                        groupby: [primaryGroup]
                     },
                     {
                         type: "joinaggregate",
@@ -74,22 +69,20 @@ export const configureLinechart = (data, metadata, config) => {
                         signal: "value_extent"
                     }
                 ]
+            },
+            {
+                name: "highlightedPoint",
+                source: "data_formatted",
+                transform: [
+                    {
+                        type: "filter",
+                        expr: "hover && hover.datum.age === datum.age && hover.datum.count === datum.count"
+                    }
+                ]
             }
         ],
 
         signals: [
-            {
-                name: "groups",
-                value: [primaryGroup],
-            },
-            {
-                name: "tooltip",
-                value: {},
-                on: [
-                    {events: "rect:mouseover", update: "datum"},
-                    {events: "rect:mouseout", update: "{}"}
-                ]
-            },
             {
                 name: "mainGroup",
                 value: primaryGroup,
@@ -110,73 +103,142 @@ export const configureLinechart = (data, metadata, config) => {
                 name: "labelColor",
                 value: "grey"
             },
+            {
+                name: "hover",
+                value: null,
+                on: [
+                    {"events": "@points_voronoi:mouseover", "update": "datum"},
+                    {"events": "@points_voronoi:mouseout", "update": "null"}
+                ]
+            },
             ...filterSignals
         ],
 
         scales: [
             {
-                name: "xscale",
-                type: "band",
                 domain: {data: "data_formatted", field: {signal: "mainGroup"}},
+                name: "xscale",
                 range: "width",
-                padding: 1.5,
-                round: true
+                type: "point"
             },
             {
-                name: "yscale",
                 domain: {data: "data_formatted", field: {signal: "datatype[Units]"}},
+                name: "yscale",
                 nice: true,
                 range: "height",
+                type: "linear",
+                zero: false
+            },
+            {
+                name: "color",
+                range: "category",
+                type: "ordinal"
             }
         ],
 
         axes: [
             {
+                grid: true,
                 orient: "bottom",
                 scale: "xscale",
-                grid: true,
                 labelFlush: true,
                 labelOverlap: true,
                 labelColor: {
                     signal: "labelColor"
                 },
-                gridOpacity: 0.5
+                gridOpacity: 0.5,
             },
             {
+                grid: false,
                 orient: "left",
                 scale: "yscale",
                 labelPadding: 6,
                 labelColor: {
                     signal: "labelColor"
-                },
-                format: {
-                    signal: "numberFormat[Units]"
                 }
             }
         ],
 
         marks: [
             {
-                type: "line",
-                from: {data: "data_formatted"},
-                encode: {
-                    enter: {
-                        x: {scale: "xscale", field: {signal: "mainGroup"}},
-                        width: {scale: "xscale", band: 1},
-                        y: {scale: "yscale", field: {signal: "datatype[Units]"}},
-                        y2: {scale: "yscale", value: 0}
+                marks: [
+                    {
+                        // creates the line
+                        encode: {
+                            update: {
+                                stroke: {value: 1, scale: "color"},
+                                strokeWidth: {value: 2},
+                                x: {field: {signal: "mainGroup"}, scale: "xscale"},
+                                y: {field: {signal: "datatype[Units]"}, scale: "yscale"},
+                                fillOpacity: {value: 1}
+                            }
+                        },
+                        from: {data: "data_formatted"},
+                        type: "line"
                     },
-                    update: {
-                        x: {scale: "xscale", field: {signal: "mainGroup"}},
-                        y: {scale: "yscale", field: {signal: "datatype[Units]"}},
-                        y2: {scale: "yscale", value: 0},
-                        tooltip: {
-                            signal: "{'percentage': format(datum.percentage, numberFormat.percentage), 'group': datum[mainGroup], 'count': format(datum.count, numberFormat.value)}"
+                    {
+                        // creates the points on the line
+                        name: "points_on_line",
+                        from: {data: "data_formatted"},
+                        type: "symbol",
+                        encode: {
+                            update: {
+                                fill: {value: "transparent"},
+                                size: {value: 10},
+                                stroke: {value: "transparent"},
+                                strokeWidth: {value: 0.5},
+                                x: {field: {signal: "mainGroup"}, scale: "xscale"},
+                                y: {field: {signal: "datatype[Units]"}, scale: "yscale"}
+                            }
                         }
                     },
-                }
+                    {
+                        // creates a path in the background to decide which point is the closest to the cursor
+                        name: "points_voronoi",
+                        type: "path",
+                        from: {data: "points_on_line"},
+                        encode: {
+                            update: {
+                                fill: {value: "transparent"},
+                                strokeWidth: {value: 0.35},
+                                stroke: {value: "red"},
+                                strokeOpacity: {value: 0},  //we need this for the tooltip but we don't need it to be visible
+                                isVoronoi: {value: true},
+                                tooltip: {
+                                    signal: "{'percentage': format(datum.datum.percentage, numberFormat.percentage), 'group': datum.datum[mainGroup], 'count': format(datum.datum.count, numberFormat.value)}"
+                                }
+                            }
+                        },
+                        transform: [
+                            {
+                                type: "voronoi",
+                                x: "datum.x",
+                                y: "datum.y",
+                                size: [{signal: "width"}, {signal: "height"}]
+                            }
+                        ]
+                    },
+                    {
+                        // makes the closes point on the line visible
+                        from: {data: "highlightedPoint"},
+                        type: "symbol",
+                        interactive: false,
+                        encode: {
+                            update: {
+                                x: {scale: "xscale", field: {signal: "mainGroup"}},
+                                y: {scale: "yscale", field: {signal: "datatype[Units]"}},
+                                stroke: {value: "green"},
+                                strokeWidth: {value: 4},
+                                fill: {value: "white"},
+                                size: {value: 150},
+                                strokeOpacity: {value: 0.3}
+                            }
+                        }
+                    }
+                ],
+                type: "group"
             }
-        ]
+        ],
     }
 };
 

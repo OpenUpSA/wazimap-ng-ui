@@ -18,6 +18,20 @@ const ShowSnackbar = ({ message, config }) => {
   return null;
 };
 
+const RenderSnackbar = (props) => {
+  const {maxSnack, config, msg} = props;
+  return (
+    <SnackbarProvider
+      maxSnack={maxSnack || 3}
+      classes={{
+        containerRoot: config.rootcomponentclass || []
+      }}
+    >
+      <ShowSnackbar message={msg} config={config} />
+    </SnackbarProvider>
+  );
+}
+
 export default {
   default: function(msg, config = {}, el) {
     this.toast(msg, 'default', config, el, );
@@ -45,14 +59,13 @@ export default {
     }
 
     root.render(
-      <SnackbarProvider
-        maxSnack={maxSnack || 3}
-        classes={{
-          containerRoot: config.rootcomponentclass || []
-        }}
-      >
-        <ShowSnackbar message={msg} config={config} />
-      </SnackbarProvider>
+      <RenderSnackbar
+        maxSnack={maxSnack}
+        config={config}
+        msg={msg}
+      />
     );
+
+    return [];
   }
 };

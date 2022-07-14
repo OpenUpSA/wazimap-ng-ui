@@ -128,7 +128,14 @@ Then('I select another indicator', () => {
 
 Then('I check snackbar is visible', () => {
     cy.get(`.SnackbarContainer-root`).should('be.visible');
+})
+
+Then('I wait for snackbar to disappear', () => {
     cy.wait(10000);
+})
+
+Then('I check snackbar is not visible', () => {
+    cy.get(`.SnackbarContainer-root`).should('not.be.visible');
 })
 
 Then('I recheck if the choropleth filter dialog is collapsed', () => {

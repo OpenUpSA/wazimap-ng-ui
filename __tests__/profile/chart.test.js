@@ -50,7 +50,7 @@ describe('displaying a chart', () => {
         }
         const node = document.querySelector('.profile-indicator');
 
-        config.chartType = 'bar';
+        newdata.chart_type = 'bar';
         let spy = jest.spyOn(configureBarchart, 'configureBarchart');
 
         let chart = new Chart(parent, config, newdata, [], node, "TEST", "this is chart attribution");

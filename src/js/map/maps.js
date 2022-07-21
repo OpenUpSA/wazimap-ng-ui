@@ -41,8 +41,6 @@ export class MapControl extends Component {
 
         this.registerEvents();
 
-        console.log({config})
-
         this.choropleth = new Choropleth(this, this.layerCache, this.layerStyler, config.map.choropleth);
     };
 

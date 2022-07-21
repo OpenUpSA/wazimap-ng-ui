@@ -81,7 +81,7 @@ export class Chart extends Component {
     }
 
     get chartType() {
-        const type = this._config.chartType;
+        const type = this.data.chart_type;
         if (type === chartTypes.LineChart) {
             return chartTypes.LineChart;
         } else {

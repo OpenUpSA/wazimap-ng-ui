@@ -73,7 +73,7 @@ describe('creating specs', () => {
             chartConfiguration: config
         }
 
-        config.chartType = 'line';
+        newdata.chart_type = 'line';
         config.disableToggle = false;
         config.defaultType = 'Percentage';
 

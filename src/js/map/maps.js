@@ -106,7 +106,7 @@ export class MapControl extends Component {
 
         let response;
         let savedObj = this.choroplethData.filter((x) => {
-            return x.geography === geo && x.indicatorId == indicatorId
+            return x.geography === geo && x.indicatorId === indicatorId
         })[0];
 
         if (savedObj !== null && typeof savedObj !== 'undefined') {
@@ -137,20 +137,30 @@ export class MapControl extends Component {
             filter: filter
         }
 
+        let allSubindicators = args.data.metadata.groups.filter(x => {
+            return x.name === data.metadata.primary_group
+        })[0].subindicators;
+
         this.triggerEvent("map.choropleth.loaded", args);
 
-        this.displayChoropleth(data.data, data.metadata.primary_group, method, selectedSubindicator);
+        this.displayChoropleth(data, data.metadata.primary_group, method, selectedSubindicator, allSubindicators);
     };
 
-    displayChoropleth(childData, primaryGroup, method, selectedSubindicator) {
+    displayChoropleth(data, primaryGroup, method, selectedSubindicator, allSubindicators) {
+        const childData = data.data;
+
+        this.choropleth.choroplethRangeType = data.choropleth_range;
+
         const calculator = this.choropleth.getCalculator(method);
 
-        const calculation = calculator.calculate(childData, primaryGroup, selectedSubindicator);
+        const {
+            values,
+            calculation
+        } = this.choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
-        const values = calculation.map(el => el.val);
-
-        this.choropleth.showChoropleth(calculation, false);
+        this.choropleth.showChoropleth(calculation, values);
         const intervals = this.choropleth.getIntervals(values);
+
         const formattedIntervals = intervals.map(el => calculator.format(el))
 
         this.triggerEvent("map.choropleth.display", {

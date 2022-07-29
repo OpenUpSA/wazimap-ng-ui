@@ -81,7 +81,7 @@ export class Chart extends Component {
     }
 
     get chartType() {
-        const type = this._config.chartType;
+        const type = this.data.chart_type;
         if (type === chartTypes.LineChart) {
             return chartTypes.LineChart;
         } else {
@@ -94,6 +94,10 @@ export class Chart extends Component {
     }
 
     set isToggleDisabled(value) {
+        if  (value){
+            this.disableChartTypeToggle();
+        }
+
         this._isToggleDisabled = value;
     }
 
@@ -349,8 +353,6 @@ export class Chart extends Component {
     disableChartTypeToggle = () => {
         $(this.containerParent).find('.hover-menu__content_item--no-link:first').hide();
         $(this.containerParent).find('.hover-menu__content_list').hide();
-
-        this.isToggleDisabled = true;
     }
 
     setChartMenu = (barChart) => {
@@ -374,8 +376,8 @@ export class Chart extends Component {
 
         self.selectedGraphValueTypeChanged(self.containerParent, this.config.defaultType);
 
-        if (this.chartType === chartTypes.LineChart || this.isToggleDisabled) {
-            this.disableChartTypeToggle();
+        if (this.chartType === chartTypes.LineChart || this.config.disableToggle) {
+            this.isToggleDisabled = true;
         }
 
         $(this.containerParent).find('.hover-menu__content_list--last a').each(function () {

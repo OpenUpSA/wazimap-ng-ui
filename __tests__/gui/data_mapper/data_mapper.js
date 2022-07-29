@@ -254,7 +254,6 @@ Then(/^I navigate to WC and back to ZA in (\d+) ms$/, function (ms) {
     cy.on('uncaught:exception', (err, runnable) => {
         // returning false here prevents Cypress from
         // failing the test
-        console.log({'this err': err})
         if (err.name === "AbortError") {
             return false
         }

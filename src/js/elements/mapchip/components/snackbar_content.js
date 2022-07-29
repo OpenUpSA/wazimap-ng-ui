@@ -20,7 +20,7 @@ const SnackbarContent = (props) => {
         component="div"
         sx={{display: 'inline'}}
       >
-          Filter has reset, new sub-indicator selected
+          The selected filters have changed
       </Box>
     </div>
   );

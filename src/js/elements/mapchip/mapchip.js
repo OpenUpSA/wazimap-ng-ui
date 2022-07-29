@@ -36,20 +36,20 @@ export class MapChip extends Component {
     }
 
     get isContentVisible() {
-      return this._isContentVisible;
+        return this._isContentVisible;
     }
 
-    get filterLabel(){
-      return this._filterLabel;
+    get filterLabel() {
+        return this._filterLabel;
     }
 
-    get descriptionIcon(){
-      return this._descriptionIcon;
+    get descriptionIcon() {
+        return this._descriptionIcon;
     }
 
     set isContentVisible(value) {
-      this._isContentVisible = value;
-      this.filterLabel.setFilterLabelContainerVisibility(!value);
+        this._isContentVisible = value;
+        this.filterLabel.setFilterLabelContainerVisibility(!value);
     }
 
     get container() {
@@ -58,14 +58,6 @@ export class MapChip extends Component {
 
     get description() {
         return $(this._descriptionArea).text();
-    }
-
-    get title() {
-        return $(this._titleArea).text();
-    }
-
-    set title(text) {
-        $(this._titleArea).text(text);
     }
 
     get appliedFilters() {
@@ -84,7 +76,7 @@ export class MapChip extends Component {
         $(this._titleArea).text(text);
     }
 
-    get legend(){
+    get legend() {
         return this._legend;
     }
 
@@ -139,10 +131,10 @@ export class MapChip extends Component {
 
 
     updateToggleIcon() {
-      this._toggleIconDownContainer.find("svg").remove();
-      this._toggleIconDownContainer.append("<i class='fas fa-chevron-down'></i>");
-      this._toggleIconUpContainer.find("svg").remove();
-      this._toggleIconUpContainer.append("<i class='fas fa-chevron-up'></i>");
+        this._toggleIconDownContainer.find("svg").remove();
+        this._toggleIconDownContainer.append("<i class='fas fa-chevron-down'></i>");
+        this._toggleIconUpContainer.find("svg").remove();
+        this._toggleIconUpContainer.append("<i class='fas fa-chevron-up'></i>");
     }
 
     setTitle(indicatorTitle, selectedSubindicator) {
@@ -189,24 +181,38 @@ export class MapChip extends Component {
         if (params.childData === undefined) {
             return;
         }
-        this._filterController = new FilterController(this, this._filtersContainer);
         const previouslySelectedFilters = params.filter;
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);   //***
 
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
 
         // Filter Label
-        const defaultFilters = dataFilterModel.configFilters?.defaults || [];
-        this.filterLabel.compareFilters(defaultFilters, this.appliedFilters);
-        this.filterLabel.setFilterLabelTotalCount(params.groups);
-        this.filterLabel.setFilterLabelSelectedCount({});
-        this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);
+        this.setFilterLabel(dataFilterModel, params.groups);
 
         // Description Icon
-        this.description = params.description;
-        this.descriptionIcon.setDescriptionInfoIconVisibility(this.description.length > 0);
+        this.setDescriptionIcon(params.description);
 
         this.show();
+
+        // Filter controller
+        this.setFilterController(dataFilterModel);  //***
+    }
+
+    setFilterLabel(dataFilterModel, groups) {
+        const defaultFilters = dataFilterModel.configFilters?.defaults || [];
+        this.filterLabel.compareFilters(defaultFilters, this.appliedFilters);
+        this.filterLabel.setFilterLabelTotalCount(groups);
+        this.filterLabel.setFilterLabelSelectedCount({});
+        this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);
+    }
+
+    setDescriptionIcon(description) {
+        this.description = description;
+        this.descriptionIcon.setDescriptionInfoIconVisibility(this.description.length > 0);
+    }
+
+    setFilterController(dataFilterModel) {
+        this._filterController = new FilterController(this, this._filtersContainer);
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }

@@ -283,6 +283,11 @@ Then('I check if the non\-aggregatable group filter is applied', () => {
 })
 
 When(/^I filter by "([^"]*)"$/, function (filter) {
+    cy.get(`.SnackbarContainer-root`).then($p => {
+        if ($p.is(':visible')) {
+            cy.get(`.SnackbarItem-wrappedRoot`).click();
+        }
+    });
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('not.have.class', 'disabled');
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
         .eq(1)

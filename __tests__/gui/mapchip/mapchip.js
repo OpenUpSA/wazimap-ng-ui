@@ -126,7 +126,7 @@ Then('I select another indicator', () => {
     cy.get('.data-category__h3_content--v2').contains('Employed').click();
 })
 
-Then('I check snackbar is visible', () => {
+Then('I check if snackbar is visible', () => {
     cy.get(`.SnackbarContainer-root`).should('be.visible');
 })
 
@@ -134,8 +134,8 @@ Then('I wait for snackbar to disappear', () => {
     cy.wait(10000);
 })
 
-Then('I check snackbar is not visible', () => {
-    cy.get(`.SnackbarContainer-root`).should('not.be.visible');
+Then('I check if snackbar is not visible', () => {
+    cy.get(`.SnackbarContainer-root`).should('not.exist');
 })
 
 Then('I recheck if the choropleth filter dialog is collapsed', () => {

@@ -102,6 +102,7 @@ Then('I select a filter', () => {
 
 })
 
+
 When('I collapse the choropleth filter dialog', () => {
     collapseChoroplethFilterDialog();
 })
@@ -123,6 +124,18 @@ Then('I select another indicator', () => {
     cy.get('.data-category__h1_content--v2').contains('NEET Status').click();
     cy.get('.data-category__h2_content--v2').contains('Not in Employment').click();
     cy.get('.data-category__h3_content--v2').contains('Employed').click();
+})
+
+Then('I check if snackbar is visible', () => {
+    cy.get(`.SnackbarContainer-root`).should('be.visible');
+})
+
+Then('I wait for snackbar to disappear', () => {
+    cy.wait(10000);
+})
+
+Then('I check if snackbar is not visible', () => {
+    cy.get(`.SnackbarContainer-root`).should('not.exist');
 })
 
 Then('I recheck if the choropleth filter dialog is collapsed', () => {

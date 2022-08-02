@@ -1,0 +1,11 @@
+.snackbar-avatar{
+  background-color: #2185d0;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  margin-right: 5px;
+}
+
+.repeat-icon{
+  font-size: 14px;
+}

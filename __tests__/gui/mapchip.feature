@@ -30,6 +30,9 @@ Feature: Mapchip
 
     And I click on Economic Opportunities in Data Mapper
     Then I select another indicator
+    Then I check if snackbar is visible
+    Then I wait for snackbar to disappear
+    Then I check if snackbar is not visible
     Then I recheck if the choropleth filter dialog is collapsed
     Then I recheck filters applied label is visible
     Then I recheck again applied filter label text

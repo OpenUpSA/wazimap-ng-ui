@@ -1,4 +1,7 @@
 import {Component} from "../../../utils";
+import React from 'react';
+import SnackbarContent from './snackbar_content';
+import toast from "../../../ui_components/snackbar/snackbar";
 
 
 export class FilterLabel extends Component {
@@ -12,22 +15,22 @@ export class FilterLabel extends Component {
     }
 
     get isContentVisible() {
-      return this._isContentVisible;
+        return this._isContentVisible;
     }
 
     set isContentVisible(value) {
-      this._isContentVisible = value;
-      this.setFilterLabelContainerVisibility(value);
+        this._isContentVisible = value;
+        this.setFilterLabelContainerVisibility(value);
     }
 
-    getFilterLabelHTML (){
-      let html = "<div class='filters__header_label' title='Show Applied Filters'>";
-      html += "<span id='selected_filter_count'>0</span>";
-      html += " of ";
-      html += "<span id='total_filter_count'></span>";
-      html += " filters applied";
-      html += "</div>";
-      return html;
+    getFilterLabelHTML() {
+        let html = "<div class='filters__header_label' title='Show Applied Filters'>";
+        html += "<span id='selected_filter_count'>0</span>";
+        html += " of ";
+        html += "<span id='total_filter_count'></span>";
+        html += " filters applied";
+        html += "</div>";
+        return html;
     }
 
     prepareDomElements() {
@@ -49,41 +52,63 @@ export class FilterLabel extends Component {
         this._selectedFilterCountContainer.html(selectedFilterLength);
     }
 
-    setFilterLabelContainerVisibility(isVisible=this.isContentVisible) {
-      if (isVisible){
-        $(this._filterHeaderLabelContainer).removeClass('hidden');
-      } else {
-        $(this._filterHeaderLabelContainer).addClass('hidden');
-        this.hideNotificationBadge();
-      }
-    }
-
-    isEqualsJson(obj1, obj2){
-      let keys1 = Object.keys(obj1);
-      let keys2 = Object.keys(obj2);
-      return keys1.length === keys2.length && Object.keys(obj1).every(key=>obj1[key]==obj2[key]);
-    }
-
-    showNotificationBadge(){
-      this._filterHeaderLabelContainer.addClass("notification-badges");
-    }
-
-    hideNotificationBadge(){
-      this._filterHeaderLabelContainer.removeClass("notification-badges");
-    }
-
-    compareFilters(defaultFilters, oldFilters){
-      let flattenFilterObject = {};
-      defaultFilters.forEach((item, idx) => {
-          flattenFilterObject[item.name] = item.value;
-      });
-
-      const showBadge = this.isEqualsJson(flattenFilterObject, oldFilters);
-      if (!showBadge){
-        this.showNotificationBadge();
-        if (defaultFilters.length === 0){
-          this.parent.appliedFilters = {};
+    setFilterLabelContainerVisibility(isVisible = this.isContentVisible) {
+        if (isVisible) {
+            $(this._filterHeaderLabelContainer).removeClass('hidden');
+        } else {
+            $(this._filterHeaderLabelContainer).addClass('hidden');
+            this.hideNotificationBadge();
         }
-      }
+    }
+
+    isEqualsJson(obj1, obj2) {
+        let keys1 = Object.keys(obj1);
+        let keys2 = Object.keys(obj2);
+        return keys1.length === keys2.length && Object.keys(obj1).every(key => obj1[key] == obj2[key]);
+    }
+
+    showNotificationBadge() {
+        this._filterHeaderLabelContainer.addClass("notification-badges");
+    }
+
+    showSnackbar() {
+        let config = {
+            autoHideDuration: 10000,
+            anchorOrigin: {
+                horizontal: "center",
+                vertical: "bottom"
+            },
+            sx: {
+                "& .SnackbarContent-root": {
+                    color: "black",
+                    backgroundColor: "white",
+                    minWidth: "auto !important",
+                    padding: "3px 10px 3px 10px"
+                }
+            },
+            rootcomponentclass: "snackbar-position"
+        }
+        let el = document.getElementById("mapchip-snackbar");
+        toast.default(<SnackbarContent/>, config, el);
+    }
+
+    hideNotificationBadge() {
+        this._filterHeaderLabelContainer.removeClass("notification-badges");
+    }
+
+    compareFilters(defaultFilters, oldFilters) {
+        let flattenFilterObject = {};
+        defaultFilters.forEach((item, idx) => {
+            flattenFilterObject[item.name] = item.value;
+        });
+
+        const showBadge = this.isEqualsJson(flattenFilterObject, oldFilters);
+        if (!showBadge) {
+            this.showNotificationBadge();
+            this.showSnackbar();
+            if (defaultFilters.length === 0) {
+                this.parent.appliedFilters = {};
+            }
+        }
     }
 }

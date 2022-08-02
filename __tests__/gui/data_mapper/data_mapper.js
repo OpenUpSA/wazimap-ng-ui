@@ -254,7 +254,6 @@ Then(/^I navigate to WC and back to ZA in (\d+) ms$/, function (ms) {
     cy.on('uncaught:exception', (err, runnable) => {
         // returning false here prevents Cypress from
         // failing the test
-        console.log({'this err': err})
         if (err.name === "AbortError") {
             return false
         }
@@ -284,6 +283,11 @@ Then('I check if the non\-aggregatable group filter is applied', () => {
 })
 
 When(/^I filter by "([^"]*)"$/, function (filter) {
+    cy.get(`.SnackbarContainer-root`).then($p => {
+        if ($p.is(':visible')) {
+            cy.get(`.SnackbarItem-wrappedRoot`).click();
+        }
+    });
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('not.have.class', 'disabled');
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
         .eq(1)

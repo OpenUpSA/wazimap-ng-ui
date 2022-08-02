@@ -3033,6 +3033,10 @@
       "Test Category 3": {
         "description": "",
         "subcategories": {
+          "Subcategory with no indicators": {
+            "description": "",
+            "indicators": {}
+          },
           "Subcategory with indicators": {
             "description": "",
             "indicators": {
@@ -3181,10 +3185,6 @@
                 }
               }
             }
-          },
-          "Subcategory with no indicators": {
-            "description": "",
-            "indicators": {}
           }
         }
       },
@@ -3195,10 +3195,6 @@
       "Category with no indicators": {
         "description": "",
         "subcategories": {
-          "Subcategory with indicators": {
-            "description": "",
-            "indicators": {}
-          },
           "Subcategory with no indicators": {
             "description": "",
             "indicators": {}

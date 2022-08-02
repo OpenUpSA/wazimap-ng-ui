@@ -110,13 +110,13 @@ export class Category extends Component {
     }
 
     loadSubcategories = (wrapper, detail) => {
-        let index = 0;
+        let isFirst = true;
         for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-            let isFirst = index === 0;
             let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, detail, isFirst, this.geography, this.profileConfig);
             sc.isVisible = sc.indicators.length > 0;
             if (sc.isVisible) {
                 this.subCategories.push(sc);
+                isFirst = false;    //set to false only when there is a visible item
             }
 
             this.bubbleEvents(sc, [
@@ -124,7 +124,6 @@ export class Category extends Component {
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
                 'point_tray.subindicator_filter.filter'
             ]);
-            index++;
         }
     }
 }

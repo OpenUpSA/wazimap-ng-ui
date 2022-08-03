@@ -2,6 +2,7 @@ import html from '../../../src/index.html';
 import {TestData} from "../../../src/js/test_data";
 import {Component} from "../../../src/js/utils";
 import {MapChip} from "../../../src/js/elements/mapchip/mapchip";
+import {DataFilterModel} from "../../../src/js/models/data_filter_model";
 
 const mapchip_colors = {"colors": []};
 let params;
@@ -19,7 +20,8 @@ describe('Add filter button', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
 
         let prevFilterRow = $('.map-options__filters_content .map-options__filter-row').length;
         $('.mapping-options__add-filter').trigger('click');
@@ -62,7 +64,8 @@ describe('Add filter button', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
 
         let btn = document.querySelector('.mapping-options__add-filter');
         expect(btn).not.toHaveClass('disabled');
@@ -80,7 +83,8 @@ describe('Add filter button', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
 
         let btn = document.querySelector(`${mapBottomItems} .mapping-options__add-filter`);
         expect(btn).toHaveClass('disabled');

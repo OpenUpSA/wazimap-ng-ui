@@ -51,6 +51,10 @@ export class MapChip extends Component {
         return this._descriptionIcon;
     }
 
+    get linearScrubber() {
+        return this._linearScrubber;
+    }
+
     set isContentVisible(value) {
         this._isContentVisible = value;
         this.filterLabel.setFilterLabelContainerVisibility(!value);
@@ -207,7 +211,7 @@ export class MapChip extends Component {
         this.setDescriptionIcon(params.description);
 
       	// Linear Scrubber
-        this.setLinearScrubberVisibility(params.enableLinearScrubber, params)
+        this.showLinearScrubber(params)
 
         this.show();
 
@@ -228,13 +232,8 @@ export class MapChip extends Component {
         this.descriptionIcon.setDescriptionInfoIconVisibility(this.description.length > 0);
     }
 
-    setLinearScrubberVisibility(isEnabled, params) {
-      if (isEnabled){
-        this._linearScrubber.render(params);
-        $(this._linearScrubberContainer).show();
-      } else {
-        $(this._linearScrubberContainer).hide();
-      }
+    showLinearScrubber(params) {
+      this.linearScrubber.render(params);
     }
 
     setFilterController(dataFilterModel) {

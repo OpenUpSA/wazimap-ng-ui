@@ -96,7 +96,8 @@ export class TestData {
                 }],
             indicatorTitle: "Population by age group",
             primaryGroup: 'age',
-            selectedSubindicator: '30-35'
+            selectedSubindicator: '30-35',
+            enable_linear_scrubber: false
         };
 
         this.chartMetadata = {

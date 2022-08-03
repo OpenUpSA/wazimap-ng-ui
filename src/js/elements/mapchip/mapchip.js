@@ -5,11 +5,14 @@ import {Component} from "../../utils";
 import {Tooltip} from "../../ui_components/tooltip";
 import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
+import {LinearScrubberRenderer} from "./components/linear_scrubber/rendrer";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockParentClass = '.map-bottom-items--v2';
 const mapChipBlockClass = `${mapChipBlockParentClass} .map-options`;
+const legendClass = ".map-options__legend";
 const legendContainerClass = '.map-options__legend_wrap';
+const linearScrubberContainerClass = '.map-options__linear_scrubber_wrap';
 const filterHeaderClass = '.filter__header_sub-indicator';
 const filterHeaderToggleClass = ".filters__header_toggle";
 
@@ -33,6 +36,7 @@ export class MapChip extends Component {
         // Load components
         this._filterLabel = new FilterLabel(this);
         this._descriptionIcon = new DescriptionInfoIcon(this);
+        this._linearScrubber = new LinearScrubberRenderer(this, this._linearScrubberContainer);
     }
 
     get isContentVisible() {
@@ -123,6 +127,11 @@ export class MapChip extends Component {
 
         // Snackbar
         $("<div id='mapchip-snackbar'></div>").insertBefore(`${mapChipBlockParentClass} .map-point-legend`);
+
+        // Linear Scrubber
+        this._linearScrubberContainer = document.createElement('div');
+        this._linearScrubberContainer.setAttribute("class", "map-options__linear_scrubber_wrap");
+        $(this._linearScrubberContainer).insertBefore(`${mapChipBlockClass} ${legendClass}`);
     }
 
     prepareUIEvents() {
@@ -173,6 +182,11 @@ export class MapChip extends Component {
         this.filterLabel.setFilterLabelSelectedCount(selectedFilter);
     }
 
+    changeSubindicator = (params) => {
+      this.setTitle(params.indicatorTitle, params.selectedSubindicator);
+      this.triggerEvent("mapchip.choropleth.selectSubindicator", params);
+    }
+
     onChoropleth(payload) {
         this._legend.show(payload.colors, payload.intervals);
     }
@@ -191,6 +205,9 @@ export class MapChip extends Component {
 
         // Description Icon
         this.setDescriptionIcon(params.description);
+
+      	// Linear Scrubber
+        this.setLinearScrubberVisibility(params.enableLinearScrubber, params)
 
         this.show();
 
@@ -211,8 +228,19 @@ export class MapChip extends Component {
         this.descriptionIcon.setDescriptionInfoIconVisibility(this.description.length > 0);
     }
 
+    setLinearScrubberVisibility(isEnabled, params) {
+      if (isEnabled){
+        this._linearScrubber.render(params);
+        $(this._linearScrubberContainer).show();
+      } else {
+        $(this._linearScrubberContainer).hide();
+      }
+    }
+
     setFilterController(dataFilterModel) {
         this._filterController = new FilterController(this, this._filtersContainer);
+
+        this.show();
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }

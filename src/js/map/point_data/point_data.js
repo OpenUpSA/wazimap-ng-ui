@@ -40,22 +40,22 @@ const CIRCLE_MARKER_POPUP_OFFSET = [20, 0];
 const allowedTags = ['a', 'b', 'em', 'span', 'i', 'div', 'p', 'ul', 'li', 'ol', 'table', 'tr', 'td', 'th'];
 const allowedAttributes = ["class", "target", "style", "href"];
 const xssOptions = {
-  stripIgnoreTag: true,
-  onTag: function (tag, html, options) {
-    if (allowedTags.indexOf(tag) === -1){
-      return '';
+    stripIgnoreTag: true,
+    onTag: function (tag, html, options) {
+        if (allowedTags.indexOf(tag) === -1) {
+            return '';
+        }
+    },
+    onTagAttr: function (tag, name, value, isWhiteAttr) {
+        if (allowedAttributes.indexOf(name) >= 0) {
+            return name + '="' + xss.escapeAttrValue(value) + '"';
+        }
+    },
+    onIgnoreTagAttr: function (tag, name, value, isWhiteAttr) {
+        if (name.substr(0, 5) === "data-") {
+            return name + '="' + xss.escapeAttrValue(value) + '"';
+        }
     }
-  },
-  onTagAttr : function(tag, name, value, isWhiteAttr) {
-    if (allowedAttributes.indexOf(name) >= 0){
-      return name + '="' + xss.escapeAttrValue(value) + '"';
-    }
-  },
-  onIgnoreTagAttr: function (tag, name, value, isWhiteAttr) {
-    if (name.substr(0, 5) === "data-") {
-      return name + '="' + xss.escapeAttrValue(value) + '"';
-    }
-  }
 };
 
 const xssFilter = new xss.FilterXSS(xssOptions);
@@ -514,17 +514,20 @@ export class PointData extends Component {
         $('.' + itemsClsName, item).empty();
         const htmlFields = point.category.data.configuration?.field_type || {};
         point.data.forEach((a, i) => {
-            if (Object.prototype.toString.call(a.value) !== '[object Object]' && (visibleAttributes === null || visibleAttributes.indexOf(a.key) >= 0)) {
+            if (a.value !== null
+                && (visibleAttributes === null || visibleAttributes.indexOf(a.key) >= 0)
+                && Object.prototype.toString.call(a.value) !== '[object Object]'
+                && a.value.toString().trim() !== '') {
                 let itemRow = rowItem.cloneNode(true);
                 $(itemRow).removeClass('last');
                 $('.' + labelClsName, itemRow).text(a.key);
                 const isKeyHtmlType = htmlFields.hasOwnProperty(a.key) ? htmlFields[a.key] === "html" : false;
 
-                if (isKeyHtmlType){
-                  let htmlText = xssFilter.process(a.value);
-                  $('.' + valueClsName, itemRow).html(htmlText);
+                if (isKeyHtmlType) {
+                    let htmlText = xssFilter.process(a.value);
+                    $('.' + valueClsName, itemRow).html(htmlText);
                 } else {
-                  $('.' + valueClsName, itemRow).text(a.value);
+                    $('.' + valueClsName, itemRow).text(a.value);
                 }
                 if (i === point.data.length - 1) {
                     $(itemRow).addClass('last')

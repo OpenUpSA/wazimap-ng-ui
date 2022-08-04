@@ -12,6 +12,7 @@ Feature: Facility Modal
     Then I click on a marker
     And I click on the More info button
     Then Facility modal and Google maps button should be visible
+    Then I confirm that empty values are not displayed in the facility modal
 
     And I switch to print view
     Then I check if the print view is as expected

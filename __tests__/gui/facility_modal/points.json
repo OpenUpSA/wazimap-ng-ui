@@ -1,42 +1,50 @@
 {
-  "type":"FeatureCollection",
-  "features":[
+  "type": "FeatureCollection",
+  "features": [
     {
-      "id":441633,
-      "type":"Feature",
-      "geometry":{
-        "type":"Point",
-        "coordinates":[
+      "id": 441633,
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           25.093833387362697,
           -28.995409163308832
         ]
       },
-      "properties":{
-        "data":[
+      "properties": {
+        "data": [
           {
-            "key":"campus",
-            "value":"Nongoma"
+            "key": "campus",
+            "value": "Nongoma"
           },
           {
-            "key":"phone number",
-            "value":"0358310358"
+            "key": "phone number",
+            "value": "0358310358"
           },
           {
-            "key":"email address",
-            "value":"campushead@nongoma.co.za"
+            "key": "email address",
+            "value": "campushead@nongoma.co.za"
           },
           {
-            "key":"institution type",
-            "value":"TVET"
+            "key": "institution type",
+            "value": "TVET"
           },
           {
-            "key":"physical address",
-            "value":"Nongoma Main Road Nongoma"
+            "key": "physical address",
+            "value": "Nongoma Main Road Nongoma"
+          },
+          {
+            "key": "empty value",
+            "value": ""
+          },
+          {
+            "key": "null value",
+            "value": null
           }
         ],
-        "name":"Mthashana FET College (A)",
-        "url":null,
-        "image":null
+        "name": "Mthashana FET College (A)",
+        "url": null,
+        "image": null
       }
     }
   ]

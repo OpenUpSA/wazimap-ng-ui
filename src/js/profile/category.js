@@ -25,10 +25,39 @@ export class Category extends Component {
         this.formattingConfig = formattingConfig;
         this.geography = geography;
         this.profileConfig = profileConfig;
+        this._subCategories = [];
+        this._isVisible = true;
+        this._uiElements = [];
 
         this.prepareDomElements();
         this.prepareEvents();
         this.addCategory(category, detail, isFirst);
+    }
+
+    get subCategories() {
+        return this._subCategories;
+    }
+
+    get isVisible() {
+        return this._isVisible;
+    }
+
+    set isVisible(value) {
+        if (value) {
+            this.uiElements.forEach((ele) => {
+                $(ele).show();
+            })
+        } else {
+            this.uiElements.forEach((ele) => {
+                $(ele).hide();
+            })
+        }
+
+        this._isVisible = value;
+    }
+
+    get uiElements() {
+        return this._uiElements;
     }
 
     prepareDomElements = () => {
@@ -68,6 +97,8 @@ export class Category extends Component {
 
         this.loadSubcategories(newCategorySection, detail);
 
+        this.uiElements.push(newCategorySection);
+
         profileWrapper.append(newCategorySection);
     }
 
@@ -79,18 +110,20 @@ export class Category extends Component {
     }
 
     loadSubcategories = (wrapper, detail) => {
-        let index = 0;
-        let lastIndex = Object.entries(detail.subcategories).length - 1;
+        let isFirst = true;
         for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-            let hasChildren = checkIfSubCategoryHasChildren(subcategory, detail);
-            let isFirst = index === 0;
             let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, detail, isFirst, this.geography, this.profileConfig);
+            sc.isVisible = sc.indicators.length > 0;
+            if (sc.isVisible) {
+                this.subCategories.push(sc);
+                isFirst = false;    //set to false only when there is a visible item
+            }
+
             this.bubbleEvents(sc, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
                 'point_tray.subindicator_filter.filter'
             ]);
-            index++;
         }
     }
 }

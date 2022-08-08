@@ -5,7 +5,7 @@ import {Component} from "../../utils";
 import {Tooltip} from "../../ui_components/tooltip";
 import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
-import {LinearScrubberRenderer} from "./components/linear_scrubber/rendrer";
+import {LinearScrubberRenderer} from "./components/linear_scrubber/renderer";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockParentClass = '.map-bottom-items--v2';

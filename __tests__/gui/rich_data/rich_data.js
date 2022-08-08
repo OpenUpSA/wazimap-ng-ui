@@ -58,3 +58,16 @@ When('I close the Rich Data', () => {
 Then('I check if the indicator with only zero counts is hidden', () => {
     cy.get('.profile-indicator__title:contains("Indicator with only zero counts")').should('not.exist');
 })
+
+Then(/^I confirm that the category "([^"]*)" is invisible$/, function (categoryName) {
+    cy.get(`.category-header h2:contains(${categoryName})`).should('not.be.visible');
+    cy.get(`.rich-data-nav__item:contains(${categoryName})`).should('not.exist');
+});
+
+Then(/^I confirm that the subcategory "([^"]*)" is invisible$/, function (categoryName) {
+    cy.get(`.sub-category-header h3:contains(${categoryName})`).should('not.be.visible');
+});
+
+Then(/^I confirm that the subcategory "([^"]*)" is visible$/, function (categoryName) {
+    cy.get(`.sub-category-header h3:contains(${categoryName})`).should('be.visible');
+});

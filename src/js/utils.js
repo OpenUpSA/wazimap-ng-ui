@@ -41,10 +41,10 @@ export function getJSON(url, skipCache = true) {
         req.open('GET', url);
 
         req.onload = () => {
-            if (req.status == 200) {
+            if (req.status === 200) {
                 const json = JSON.parse(req.response);
                 resolve(json);
-            } else if (req.status == 401 || request.status == 403) {
+            } else if (req.status === 401 || request.status === 403) {
                 alert("Not logged in")
             } else {
                 reject(Error(req.statusText));

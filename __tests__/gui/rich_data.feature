@@ -15,10 +15,16 @@ Feature: Rich data menu
     Then I check if "Test Category 1" is active
 
     And I scroll to bottom of the page
-    Then I check if "Test Category 3" is active
+    Then I check if "Test Category 4" is active
 
     And I close the Rich Data
     Then I expand Rich Data
     Then Rich Data should be displayed
     Then None of the menu items should be active
     Then I check if the indicator with only zero counts is hidden
+
+    # confirm the visibility of the categories & subcategories
+    Then I confirm that the category "Category with no subcategories" is invisible
+    Then I confirm that the category "Category with no indicators" is invisible
+    Then I confirm that the subcategory "Subcategory with no indicators" is invisible
+    Then I confirm that the subcategory "Subcategory with indicators" is visible

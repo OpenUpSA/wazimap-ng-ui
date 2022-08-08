@@ -26,6 +26,8 @@ export class Subcategory extends Component {
         this._formattingConfig = formattingConfig;
         this._geography = geography;
         this._profileConfig = profileConfig;
+        this._isVisible = true;
+        this._uiElements = [];
 
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
         this.addIndicators(wrapper, detail);
@@ -51,6 +53,28 @@ export class Subcategory extends Component {
         return this._geography;
     }
 
+    get isVisible() {
+        return this._isVisible;
+    }
+
+    set isVisible(value) {
+        if (value) {
+            this.uiElements.forEach((ele) => {
+                $(ele).show();
+            })
+        } else {
+            this.uiElements.forEach((ele) => {
+                $(ele).hide();
+            })
+        }
+
+        this._isVisible = value;
+    }
+
+    get uiElements() {
+        return this._uiElements;
+    }
+
     addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
         let scHeader = scHeaderClone.cloneNode(true);
 
@@ -71,6 +95,8 @@ export class Subcategory extends Component {
         } else {
             $(descriptionClass, scHeader).removeClass('hidden');
         }
+
+        this.uiElements.push(scHeader);
 
         wrapper.append(scHeader);
     }

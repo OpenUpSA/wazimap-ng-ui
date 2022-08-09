@@ -216,8 +216,7 @@ export class Chart extends Component {
     }
 
     configureChartDownload = (data, metadata, config, annotations) => {
-        const type = config.chartType;
-        if (type === chartTypes.LineChart) {
+        if (this.chartType === chartTypes.LineChart) {
             return configureLinechartDownload(data, metadata, config, annotations);
         } else {
             return configureBarchartDownload(data, metadata, config, annotations);

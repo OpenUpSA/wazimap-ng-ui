@@ -2,6 +2,7 @@ import html from '../../../src/index.html';
 import {TestData} from "../../../src/js/test_data";
 import {Component} from "../../../src/js/utils";
 import {MapChip} from "../../../src/js/elements/mapchip/mapchip";
+import {DataFilterModel} from "../../../src/js/models/data_filter_model";
 
 const mapchip_colors = {"colors": []};
 const mapBottomItems = '.map-bottom-items--v2';
@@ -19,7 +20,8 @@ describe('Dropdowns', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
 
         let groups = ['All values'];
         params.groups.forEach((g) => {
@@ -49,7 +51,8 @@ describe('Dropdowns', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
 
         let rowLength = $(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`).length;
         let subindicatorDd = $($(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`)[rowLength - 1]).find('.mapping-options__filter')[1];

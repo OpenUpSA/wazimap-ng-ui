@@ -94,4 +94,13 @@ describe('creating specs', () => {
 
         expect(chart.vegaView.signal('Units')).toBe('value');
     })
+
+    test('chart y-axis values start at zero', async () => {
+        let vegaSpec = configureLinechart(data, metadata, config);
+        const runtime = parse(vegaSpec)
+        const view = new View(runtime);
+        await view.runAsync();
+
+        expect(view.scale('yscale').domain()).toStrictEqual([0, 3]);
+    })
 })

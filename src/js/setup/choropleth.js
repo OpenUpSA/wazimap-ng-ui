@@ -9,6 +9,10 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         controller.onChoroplethFiltered(payload);
     })
 
+    mapchip.on('mapchip.choropleth.selectSubindicator', payload => {
+        controller.onSelectingSubindicator(payload);
+    })
+
     //let the choropleth persist
     controller.on('versions.indicators.ready', payload => {
         controller.handleNewProfileChoropleth()
@@ -18,11 +22,15 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on(VersionController.EVENTS.updated, () => mapchip.removeMapChip())
     controller.bubbleEvents(mapcontrol, ['map.choropleth.display', 'map.choropleth.reset']);
 
-    controller.on('mapchip.choropleth.filtered', payload => {
-        payload.payload.indicatorTitle = payload.state.subindicator.indicatorTitle;
 
+    controller.on('mapchip.choropleth.filtered', payload => {
+      payload.payload.indicatorTitle = payload.state.subindicator.indicatorTitle;
+      loadAndDisplayChoropleth(payload, mapcontrol, false, payload.payload.data);
+    });
+
+    controller.on('mapchip.choropleth.selectSubindicator', payload => {
         loadAndDisplayChoropleth(payload, mapcontrol, false, payload.payload.data);
-    })
+    });
 
     controller.on('newProfileWithChoropleth', args => {
         setTimeout(() => {
@@ -58,6 +66,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             description: args.data.description,
             chartConfiguration: args.data.chartConfiguration,
             filter: args.filter,
+            enableLinearScrubber: args.data.enable_linear_scrubber
         }
         mapchip.onSubIndicatorChange(params);
     });

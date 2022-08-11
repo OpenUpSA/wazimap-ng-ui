@@ -50,7 +50,7 @@ describe('Selecting a subindicator', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        mc.show()
 
         let mapOptions = document.querySelector(`${mapBottomItems} .map-options`);
         expect(mapOptions).not.toHaveClass('hidden');

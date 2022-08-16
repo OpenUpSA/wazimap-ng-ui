@@ -153,6 +153,11 @@ export default class Controller extends Component {
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
+    onSelectingSubindicator(payload) {
+        this.state.selectedSubindicator = payload.selectedSubindicator;
+        this.triggerEvent("mapchip.choropleth.selectSubindicator", payload);
+    }
+
     handleNewProfileChoropleth() {
         if (this.state.subindicator === null) {
             return;
@@ -225,7 +230,6 @@ export default class Controller extends Component {
     onLayerClick(payload) {
         const self = this;
         if (payload.maplocker.locked) {
-            console.log("ignoring click from onLayer click")
             return;
         }
 

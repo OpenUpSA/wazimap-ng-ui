@@ -127,7 +127,7 @@ export const configureLinechart = (data, metadata, config) => {
                 nice: true,
                 range: "height",
                 type: "linear",
-                zero: false
+                zero: true
             },
             {
                 name: "color",

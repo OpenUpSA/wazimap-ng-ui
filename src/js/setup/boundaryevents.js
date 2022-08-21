@@ -9,7 +9,7 @@ export function configureBoundaryEvents(controller, boundaryTypeBox) {
         boundaryTypeBox.populateBoundaryOptions(children, currentLevel, controller.versionController.versions);
     });
 
-    controller.on(VersionController.EVENTS.updated,() => boundaryTypeBox.activeVersionUpdated(controller.versionController.activeVersion));
+    controller.on(VersionController.EVENTS.updated, () => boundaryTypeBox.activeVersionUpdated(controller.versionController.activeVersion));
 
     boundaryTypeBox.on('boundary_types.option.selected', (payload) => {
         controller.onBoundaryTypeChange(payload);

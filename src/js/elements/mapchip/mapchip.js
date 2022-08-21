@@ -88,6 +88,22 @@ export class MapChip extends Component {
         return this._legend;
     }
 
+    get metadata() {
+        return this._metadata;
+    }
+
+    set metadata(value) {
+        this._metadata = value;
+    }
+
+    get config() {
+        return this._config;
+    }
+
+    set config(value) {
+        this._config = value;
+    }
+
     set isLoading(value) {
         if (value) {
             this.title = 'Loading...';
@@ -178,17 +194,21 @@ export class MapChip extends Component {
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,
-                selectedFilter: selectedFilter
+                selectedFilter: selectedFilter,
+                metadata: this.metadata,
+                config: this.config
             }
+            console.log('applyFilter.a')
             this.triggerEvent("mapchip.choropleth.filtered", payload)
+            console.log('applyFilter.b')
         }
         this.appliedFilters = selectedFilter;
         this.filterLabel.setFilterLabelSelectedCount(selectedFilter);
     }
 
     changeSubindicator = (params) => {
-      this.setTitle(params.indicatorTitle, params.selectedSubindicator);
-      this.triggerEvent("mapchip.choropleth.selectSubindicator", params);
+        this.setTitle(params.indicatorTitle, params.selectedSubindicator);
+        this.triggerEvent("mapchip.choropleth.selectSubindicator", params);
     }
 
     onChoropleth(payload) {
@@ -199,24 +219,27 @@ export class MapChip extends Component {
         if (params.childData === undefined) {
             return;
         }
+
+        this.metadata = params.metadata;
+        this.config = params.config;
         const previouslySelectedFilters = params.filter;
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);   //***
+        let dataFilterModel = new DataFilterModel(this.metadata.groups, this.config.chartConfiguration.filter, previouslySelectedFilters, this.metadata.primary_group, params.childData);
 
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
 
         // Filter Label
-        this.setFilterLabel(dataFilterModel, params.groups);
+        this.setFilterLabel(dataFilterModel, this.metadata.groups);
 
         // Description Icon
-        this.setDescriptionIcon(params.description);
+        this.setDescriptionIcon(this.metadata.description);
 
-      	// Linear Scrubber
+        // Linear Scrubber
         this.showLinearScrubber(params)
 
         this.show();
 
         // Filter controller
-        this.setFilterController(dataFilterModel);  //***
+        this.setFilterController(dataFilterModel);
     }
 
     setFilterLabel(dataFilterModel, groups) {
@@ -233,7 +256,7 @@ export class MapChip extends Component {
     }
 
     showLinearScrubber(params) {
-      this.linearScrubber.render(params);
+        this.linearScrubber.render(params);
     }
 
     setFilterController(dataFilterModel) {

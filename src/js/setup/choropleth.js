@@ -24,8 +24,9 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 
 
     controller.on('mapchip.choropleth.filtered', payload => {
-      payload.payload.indicatorTitle = payload.state.subindicator.indicatorTitle;
-      loadAndDisplayChoropleth(payload, mapcontrol, false, payload.payload.data);
+        console.log({'mapchip.choropleth.filtered': payload})
+        payload.payload.indicatorTitle = payload.state.subindicator.indicatorTitle;
+        loadAndDisplayChoropleth(payload, mapcontrol, false, payload.payload.data);
     });
 
     controller.on('mapchip.choropleth.selectSubindicator', payload => {
@@ -56,17 +57,14 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             return;
         }
 
-        const metadata = args.data.metadata;
+        const metadata = args.metadata;
         const params = {
-            primaryGroup: metadata.primary_group,
-            groups: metadata.groups,
+            metadata: metadata,
             indicatorTitle: args.indicatorTitle,
             selectedSubindicator: args.selectedSubindicator,
-            childData: args.data.data,
-            description: args.data.description,
-            chartConfiguration: args.data.chartConfiguration,
+            childData: args.data,
             filter: args.filter,
-            enableLinearScrubber: args.data.enable_linear_scrubber
+            config: args.config
         }
         mapchip.onSubIndicatorChange(params);
     });
@@ -77,8 +75,11 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 }
 
 function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, childData = null) {
+    console.log({'loadAndDisplayChoropleth': payload})
     const geo = payload.state.profile.geometries.boundary.properties.code;
     const ps = payload.state;
+    const metadata = payload.payload.metadata;
+    const config = payload.payload.config;
     if (ps.subindicator == null)
         return
 
@@ -92,5 +93,5 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
         data.data = childData;
     }
 
-    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter);
+    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter, metadata, config);
 }

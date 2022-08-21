@@ -1,9 +1,9 @@
 import html from '../../src/index.html';
 import Controller from "../../src/js/controller";
 import {Config as SAConfig} from "../../src/js/configurations/geography_sa";
-import {DataMapperMenu} from "../../src/js/elements/menu";
+import {DataMapperMenu} from "../../src/js/elements/data_mapper/menu";
 import {configureDataExplorerEvents} from "../../src/js/setup/dataexplorer";
-import {loadMenu} from '../../src/js/elements/menu';
+import {loadMenu} from '../../src/js/elements/data_mapper/menu';
 import quantQualBasePayload from './dataexplorer-quant-qual-base-payload.data.js';
 
 describe('Data explorer', () => {

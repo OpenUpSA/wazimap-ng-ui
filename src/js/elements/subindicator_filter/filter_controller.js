@@ -83,13 +83,13 @@ export class FilterController extends Component {
     }
 
     get isContentVisible() {
-      return this._isContentVisible;
+        return this._isContentVisible;
     }
 
     set isContentVisible(value) {
-      this._isContentVisible = value;
-      this.parent.isContentVisible = value;
-      this.toggleContentVisibility();
+        this._isContentVisible = value;
+        this.parent.isContentVisible = value;
+        this.toggleContentVisibility();
     }
 
     get container() {
@@ -172,6 +172,11 @@ export class FilterController extends Component {
     shouldFiltersBeVisible() {
         const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
         const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+        console.log({
+            nonAggregatableGroups,
+            defaultGroups,
+            'availableFilters': this.model.dataFilterModel.availableFilters
+        })
         if (nonAggregatableGroups.length <= 0 && defaultGroups.length <= 0 && this.model.dataFilterModel.availableFilters.length <= 0) {
             return false;
         } else {
@@ -193,6 +198,7 @@ export class FilterController extends Component {
     }
 
     addEmptyFilter(isDefault = false, isExtra = true) {
+        console.log({'availableFilters': this.model.dataFilterModel.availableFilters})
         if (this.model.dataFilterModel.availableFilters.length > 0) {
             const self = this;
 
@@ -341,30 +347,30 @@ export class FilterController extends Component {
     }
 
     toggleContentVisibility() {
-      if (this.isContentVisible){
-        this.showFilterContent();
-        this.showDescription();
-      } else {
-        this.hideFilterContent();
-        this.hideDescription();
-      }
+        if (this.isContentVisible) {
+            this.showFilterContent();
+            this.showDescription();
+        } else {
+            this.hideFilterContent();
+            this.hideDescription();
+        }
     }
 
     setContentVisibility() {
         $(this._upArrow).on('click', () => {
-          this.isContentVisible = true;
+            this.isContentVisible = true;
         });
 
         $(this._downArrow).on('click', () => {
-          this.isContentVisible = false;
+            this.isContentVisible = false;
         });
 
         $(this._descriptionIcon).on('click', () => {
-          this.isContentVisible = true;
+            this.isContentVisible = true;
         });
 
         $(this._filterCountContainer).on('click', () => {
-          this.isContentVisible = true;
+            this.isContentVisible = true;
         });
     }
 

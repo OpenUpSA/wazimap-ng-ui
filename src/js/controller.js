@@ -126,8 +126,7 @@ export default class Controller extends Component {
             selectedSubindicator: payload.selectedSubindicator,
             choropleth_method: payload.choropleth_method,
             parents: payload.parents,
-            data: payload.indicators[payload.indicatorTitle],
-            chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,
+            data: payload.indicatorData,
             indicatorId: payload.indicatorId
         }
 

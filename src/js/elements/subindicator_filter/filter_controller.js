@@ -172,11 +172,7 @@ export class FilterController extends Component {
     shouldFiltersBeVisible() {
         const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
         const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
-        console.log({
-            nonAggregatableGroups,
-            defaultGroups,
-            'availableFilters': this.model.dataFilterModel.availableFilters
-        })
+
         if (nonAggregatableGroups.length <= 0 && defaultGroups.length <= 0 && this.model.dataFilterModel.availableFilters.length <= 0) {
             return false;
         } else {
@@ -198,7 +194,6 @@ export class FilterController extends Component {
     }
 
     addEmptyFilter(isDefault = false, isExtra = true) {
-        console.log({'availableFilters': this.model.dataFilterModel.availableFilters})
         if (this.model.dataFilterModel.availableFilters.length > 0) {
             const self = this;
 

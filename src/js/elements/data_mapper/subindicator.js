@@ -67,7 +67,6 @@ export class SubIndicator extends Component {
             $(this.element).on("click", (el) => {
                 if (this.callback !== undefined) {
                     this.callback({
-                        el: el,
                         indicatorTitle: this.parentNames.indicator,
                         selectedSubindicator: this.text,
                         parents: this.parentNames,

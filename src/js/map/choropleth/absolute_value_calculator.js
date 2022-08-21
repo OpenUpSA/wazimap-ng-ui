@@ -3,9 +3,7 @@ import {numFmt, filterAndSumGeoCounts} from '../../utils'
 export default class AbsoluteValueCalculator {
     constructor() {}
     calculate(childData, primaryGroup, selectedSubindicator) {
-        console.log({'calculate.a':childData, primaryGroup, selectedSubindicator})
         let sumData = filterAndSumGeoCounts(childData, primaryGroup, selectedSubindicator);
-        console.log({'calculate.b':childData, primaryGroup, selectedSubindicator})
 
         const result = Object.entries(sumData).map(childGeography => {
             const code = childGeography[0];

@@ -198,9 +198,7 @@ export class MapChip extends Component {
                 metadata: this.metadata,
                 config: this.config
             }
-            console.log('applyFilter.a')
             this.triggerEvent("mapchip.choropleth.filtered", payload)
-            console.log('applyFilter.b')
         }
         this.appliedFilters = selectedFilter;
         this.filterLabel.setFilterLabelSelectedCount(selectedFilter);

@@ -24,7 +24,6 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 
 
     controller.on('mapchip.choropleth.filtered', payload => {
-        console.log({'mapchip.choropleth.filtered': payload})
         payload.payload.indicatorTitle = payload.state.subindicator.indicatorTitle;
         loadAndDisplayChoropleth(payload, mapcontrol, false, payload.payload.data);
     });
@@ -75,7 +74,6 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 }
 
 function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, childData = null) {
-    console.log({'loadAndDisplayChoropleth': payload})
     const geo = payload.state.profile.geometries.boundary.properties.code;
     const ps = payload.state;
     const metadata = payload.payload.metadata;
@@ -89,8 +87,8 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
     const filter = ps.subindicator.filter;
     let data = ps.subindicator.data;
     if (childData) {
-        data.originalChildData = (data.originalChildData !== undefined) ? data.originalChildData : data.data;
-        data.data = childData;
+        /* data.originalChildData = (data.originalChildData !== undefined) ? data.originalChildData : data.data;*/
+        data = childData;
     }
 
     mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter, metadata, config);

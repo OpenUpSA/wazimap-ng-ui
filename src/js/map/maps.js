@@ -154,20 +154,11 @@ export class MapControl extends Component {
 
         const calculator = this.choropleth.getCalculator(method);
 
-        console.log({
-            'displayChoropleth.a': calculator,
-            childData,
-            primaryGroup,
-            selectedSubindicator,
-            allSubindicators
-        })
-
         const {
             values,
             calculation
         } = this.choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
-        console.log('displayChoropleth.b')
         this.choropleth.showChoropleth(calculation, values);
         const intervals = this.choropleth.getIntervals(values);
 

@@ -127,7 +127,8 @@ export default class Controller extends Component {
             choropleth_method: payload.choropleth_method,
             parents: payload.parents,
             data: payload.indicatorData,
-            indicatorId: payload.indicatorId
+            indicatorId: payload.indicatorId,
+            config: payload.config
         }
 
         if (subindicator.data.originalChildData !== undefined) {

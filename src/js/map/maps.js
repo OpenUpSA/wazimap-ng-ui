@@ -150,7 +150,7 @@ export class MapControl extends Component {
     displayChoropleth(data, primaryGroup, method, selectedSubindicator, allSubindicators, config) {
         const childData = data;
 
-        this.choropleth.choroplethRangeType = config.choropleth_range;
+        this.choropleth.choroplethRangeType = config.choroplethRange;
 
         const calculator = this.choropleth.getCalculator(method);
 

@@ -29,7 +29,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     });
 
     controller.on('mapchip.choropleth.selectSubindicator', payload => {
-        loadAndDisplayChoropleth(payload, mapcontrol, false, payload.payload.data);
+        loadAndDisplayChoropleth(payload, mapcontrol, false, payload.state.subindicator.data);
     });
 
     controller.on('newProfileWithChoropleth', args => {

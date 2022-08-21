@@ -205,6 +205,8 @@ export class MapChip extends Component {
     }
 
     changeSubindicator = (params) => {
+        params.metadata = this.metadata;
+        params.config = this.config
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
         this.triggerEvent("mapchip.choropleth.selectSubindicator", params);
     }

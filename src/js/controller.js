@@ -128,7 +128,8 @@ export default class Controller extends Component {
             parents: payload.parents,
             data: payload.indicatorData,
             indicatorId: payload.indicatorId,
-            config: payload.config
+            config: payload.config,
+            metadata: payload.metadata
         }
 
         if (subindicator.data.originalChildData !== undefined) {
@@ -156,41 +157,6 @@ export default class Controller extends Component {
     onSelectingSubindicator(payload) {
         this.state.selectedSubindicator = payload.selectedSubindicator;
         this.triggerEvent("mapchip.choropleth.selectSubindicator", payload);
-    }
-
-    handleNewProfileChoropleth() {
-        if (this.state.subindicator === null) {
-            return;
-        }
-
-        const geo = this.state.profile.profile.geography.code;
-        const allVersionsIndicatorData = this.versionController.getIndicatorDataByGeo(geo);
-        let profileData = allVersionsIndicatorData.indicatorData[this.state.subindicator.parents.category];
-
-        if (profileData === undefined) {
-            this.triggerEvent('data_mapper_menu.nodata');
-            return;
-        }
-
-        let indicators = profileData.subcategories[this.state.subindicator.parents.subcategory]
-            .indicators;
-
-        let selectedIndicator = indicators[this.state.subindicator.parents.indicator];
-
-        if (selectedIndicator === undefined) {
-            this.triggerEvent('data_mapper_menu.nodata');
-            return;
-        }
-
-        let childData = selectedIndicator.data;
-
-        this.state.subindicator.data.data = childData;
-
-        let args = {
-            indicatorTitle: this.state.subindicator.indicatorTitle
-        }
-
-        this.triggerEvent("newProfileWithChoropleth", args);
     }
 
     /**

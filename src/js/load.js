@@ -87,7 +87,7 @@ class Application extends Component {
         configureSearchEvents(controller, search);
         configureInfoboxEvents(controller, locationInfoBox);
         configurePointDataEvents(controller, {pointData: pointData, pointDataTray: pointDataTray});
-        configureChoroplethEvents(controller, {mapcontrol: mapcontrol, mapchip: mapchip});
+        configureChoroplethEvents(controller, {mapcontrol: mapcontrol, mapchip: mapchip, api: api});
         configureBreadcrumbsEvents(controller, {profileLoader: profileLoader, locationInfoBox: locationInfoBox});
         configureDataExplorerEvents(controller, dataMapperMenu);
         configureProfileEvents(controller, {profileLoader: profileLoader});

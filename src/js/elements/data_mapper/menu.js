@@ -155,12 +155,6 @@ export class DataMapperMenu extends Component {
                     subindicatorName,
                     callBack,
                     parentNames);
-
-                console.log({
-                    'indicator': parent.text,
-                    'subindicator': subIndicator.text,
-                    'hasData': subIndicator.hasData
-                })
             });
         }
     }

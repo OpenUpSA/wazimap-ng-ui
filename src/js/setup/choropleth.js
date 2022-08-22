@@ -82,7 +82,7 @@ function handleNewProfileChoropleth(controller, api, mapcontrol) {
     api.getIndicatorChildData(profileId, geo, indicatorId)
         .then((childData) => {
             if (Object.keys(childData).length === 0) {
-                this.triggerEvent('data_mapper_menu.nodata');
+                controller.triggerEvent('data_mapper_menu.nodata');
                 return;
             }
 
@@ -95,7 +95,7 @@ function handleNewProfileChoropleth(controller, api, mapcontrol) {
                 }
             }
 
-            loadAndDisplayChoropleth(payload, mapcontrol, false, childData);
+            loadAndDisplayChoropleth(payload, mapcontrol, true, childData);
         })
 }
 

@@ -355,12 +355,12 @@ export function checkIfIndicatorHasChildren(indicator, detail) {
     return hasChildren;
 }
 
-export function checkIfSubIndicatorHasChildren(subindicator, detail) {
+export function checkIfSubIndicatorHasChildren(subindicator, childData) {
     let hasData = false;
-    for (const [geography, data] of Object.entries(detail.data)) {
+    for (const [geography, data] of Object.entries(childData)) {
         data.forEach((indicatorDataPoint) => {
             for (const [title, value] of Object.entries(indicatorDataPoint)) {
-                if (subindicator == value) {
+                if (subindicator === value) {
                     hasData = true;
                 }
             }

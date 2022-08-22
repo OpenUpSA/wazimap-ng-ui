@@ -1,4 +1,4 @@
-import {Component} from "../../utils";
+import {checkIfSubIndicatorHasChildren, Component} from "../../utils";
 
 export class SubIndicator extends Component {
     constructor(parent, isLoading, text, subIndicatorCallback, parentNames) {
@@ -59,6 +59,10 @@ export class SubIndicator extends Component {
         return this.parent.versionData;
     }
 
+    get hasData() {
+        return checkIfSubIndicatorHasChildren(this.text, this.parent.childData)
+    }
+
     prepareDomElements() {
         if (this.isLoading) {
             this.text = 'Loading...';
@@ -87,6 +91,8 @@ export class SubIndicator extends Component {
     }
 
     addElementToWrapper() {
-        $(this.wrapper).append($(this.element));
+        if (this.isLoading || this.hasData) {
+            $(this.wrapper).append($(this.element));
+        }
     }
 }

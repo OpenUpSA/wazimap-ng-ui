@@ -1,7 +1,5 @@
 import {
-    checkIfSubIndicatorHasChildren,
     Component,
-    checkIfIndicatorHasChildren,
     isIndicatorExcluded
 } from '../../utils'
 import {Category} from "./category";
@@ -46,7 +44,7 @@ export function loadMenu(dataMapperMenu, data) {
                     detail.choropleth_range,
                     detail.enable_linear_scrubber,
                     detail.chartConfiguration
-                    );
+                );
             }
         }
     }
@@ -157,6 +155,12 @@ export class DataMapperMenu extends Component {
                     subindicatorName,
                     callBack,
                     parentNames);
+
+                console.log({
+                    'indicator': parent.text,
+                    'subindicator': subIndicator.text,
+                    'hasData': subIndicator.hasData
+                })
             });
         }
     }

@@ -132,10 +132,6 @@ export default class Controller extends Component {
             metadata: payload.metadata
         }
 
-        if (subindicator.data.originalChildData !== undefined) {
-            subindicator.data.data = subindicator.data.originalChildData;
-        }
-
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.selectedSubindicator;
 

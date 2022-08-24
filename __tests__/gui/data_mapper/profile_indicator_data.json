@@ -1,0 +1,2316 @@
+[
+  {
+    "id": 927,
+    "data": {
+      "MP": [
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "650840.2512",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "797513.571",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "448378.6108",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "103091.4514",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "4186.027049",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "6512.251294",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "4855.550828",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "677.8201386",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "2503.544799",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "4572.63055",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "3272.271765",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "615.6969752",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "23157.95862",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "34085.35026",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "40548.92368",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "14375.57406",
+          "population group": "White"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "645397.6968",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "778710.1028",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "478775.6722",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "155052.3732",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "4655.420158",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "6093.079384",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "4518.573348",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "1360.650171",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "2457.087998",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "2866.807499",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "2596.554783",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "901.8593347",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "21544.4912",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "34304.01749",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "38167.04375",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "19374.96054",
+          "population group": "White"
+        }
+      ],
+      "GT": [
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "1425240.072",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "1947259.426",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "1782834.428",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "322231.9623",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "51777.06857",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "63696.15303",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "79976.94",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "14766.92536",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "42081.59805",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "58997.85156",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "63857.69457",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "16967.86156",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "149033.7799",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "231946.8726",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "325445.3016",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "177155.4316",
+          "population group": "White"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "1418096.258",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "1918173.612",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "1594546.875",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "361794.0818",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "48253.07548",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "70095.01683",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "90045.54877",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "24678.76797",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "39385.41977",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "59144.05232",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "57659.55191",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "19315.16099",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "142341.27",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "233835.4627",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "338933.6373",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "230157.3183",
+          "population group": "White"
+        }
+      ],
+      "FS": [
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "367174.4519",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "481114.1355",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "304391.5049",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "72499.74087",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "8530.224235",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "13127.81224",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "11438.86933",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "1945.474603",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "680.5536853",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "2403.048845",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "1445.150037",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "171.5119718",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "21117.08895",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "34097.77509",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "38402.21568",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "21425.38135",
+          "population group": "White"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "370535.2104",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "479127.2595",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "325989.5617",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "114157.6992",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "8373.628339",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "13585.49284",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "11798.05196",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "3295.192423",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "724.1358356",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "1099.818325",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "695.5649877",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "76.4230368",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "20129.81828",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "34392.19545",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "38701.96115",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "32066.95397",
+          "population group": "White"
+        }
+      ],
+      "EC": [
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "1114055.3",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "1145097.566",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "464213.1137",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "148504.5919",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "93852.86098",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "102270.5132",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "77477.12141",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "15226.69797",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "3265.442202",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "6640.459988",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "4651.319787",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "1030.010061",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "30708.62131",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "44023.60233",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "47517.02867",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "28960.67652",
+          "population group": "White"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "1088680.635",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "1174209.65",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "611677.0181",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "297474.8995",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "94312.47711",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "102710.469",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "90238.30636",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "27596.95794",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "3307.759739",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "5478.617175",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "3263.440823",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "1566.58841",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "31215.03254",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "44001.99157",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "50660.89128",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "43086.30595",
+          "population group": "White"
+        }
+      ],
+      "NW": [
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "525587.7998",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "642527.9283",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "472064.9925",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "109047.0048",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "7799.101269",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "11708.78972",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "9841.661657",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "1494.13426",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "1833.31179",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "5353.769344",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "3321.618139",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "427.2281998",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "24007.07791",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "36294.05286",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "40997.00477",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "17283.56918",
+          "population group": "White"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "524744.8225",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "606273.3538",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "408298.838",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "143834.4361",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "8163.843474",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "10732.53474",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "8594.606717",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "2675.288536",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "1697.207431",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "2053.490334",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "1466.013067",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "533.752222",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "22518.45989",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "34606.52297",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "37124.02134",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "25529.17445",
+          "population group": "White"
+        }
+      ],
+      "KZN": [
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "1794384.657",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "1782295.21",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "833651.843",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "195742.2617",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "17867.35761",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "20258.54924",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "20671.46166",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "3697.257718",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "89212.83153",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "138755.2344",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "154369.8566",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "49130.50784",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "37805.55847",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "49229.34951",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "71758.12624",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "47464.87645",
+          "population group": "White"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "1767840.389",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "1852206.991",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "1029986.718",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "369825.4872",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "17471.17404",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "21907.92776",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "24420.52139",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "7794.736526",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "87256.55274",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "133918.5608",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "151335.0029",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "69182.59514",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "37109.24792",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "50613.26106",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "74941.28664",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "63134.58847",
+          "population group": "White"
+        }
+      ],
+      "WC": [
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "338918.4341",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "445730.8365",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "315545.2595",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "33330.25613",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "392200.7056",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "491963.2792",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "454526.845",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "106734.7454",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "5140.052924",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "9964.406492",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "8797.158867",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "2148.702768",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "89238.57394",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "123140.6997",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "161693.154",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "117384.3815",
+          "population group": "White"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "327805.1",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "450455.6845",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "291632.8451",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "38623.64345",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "385514.3892",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "490015.113",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "509055.7963",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "154387.3846",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "5492.45558",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "7150.909209",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "7024.82239",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "3001.037883",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "90405.38123",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "112620.491",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "171432.0089",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "138655.8979",
+          "population group": "White"
+        }
+      ],
+      "LIM": [
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "952632.4574",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "1085130.419",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "482183.8187",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "133172.3",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "2347.575723",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "3501.925652",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "2200.115825",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "300.4266883",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "2123.665429",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "4114.651196",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "3197.976696",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "346.6093282",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "13347.30337",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "19924.37881",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "23943.60914",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "10079.33004",
+          "population group": "White"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "938866.7373",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "1108449.67",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "650812.4838",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "278915.3321",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "2382.783541",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "3124.2089",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "2207.277735",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "774.7722645",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "2311.695677",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "2571.991738",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "1722.360715",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "695.716792",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "12929.60334",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "19024.22497",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "21379.45944",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "14375.05949",
+          "population group": "White"
+        }
+      ],
+      "NC": [
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "87619.0867",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "110527.8015",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "71986.28711",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "20780.7301",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "69818.91037",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "97525.69411",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "69587.77993",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "17655.37712",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "868.7644148",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "2404.964828",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "1085.645193",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "244.0123969",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Male",
+          "count": "8845.701376",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Male",
+          "count": "13528.37482",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Male",
+          "count": "14821.36411",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Male",
+          "count": "9120.915635",
+          "population group": "White"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "85259.86223",
+          "population group": "Black african"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "101802.0492",
+          "population group": "Black african"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "68339.84858",
+          "population group": "Black african"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "27930.72083",
+          "population group": "Black african"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "69968.31071",
+          "population group": "Coloured"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "97192.72403",
+          "population group": "Coloured"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "73127.10117",
+          "population group": "Coloured"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "26385.02277",
+          "population group": "Coloured"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "722.4586963",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "611.8168133",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "291.671824",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "257.0596873",
+          "population group": "Indian/asian"
+        },
+        {
+          "age": "0-14 (Children)",
+          "sex": "Female",
+          "count": "8444.529452",
+          "population group": "White"
+        },
+        {
+          "age": "15-34 (Youth)",
+          "sex": "Female",
+          "count": "11610.74965",
+          "population group": "White"
+        },
+        {
+          "age": "35-64 (Adults)",
+          "sex": "Female",
+          "count": "13768.70317",
+          "population group": "White"
+        },
+        {
+          "age": "65+ (Elderly)",
+          "sex": "Female",
+          "count": "11646.34862",
+          "population group": "White"
+        }
+      ]
+    }
+  },
+  {
+    "id": 840,
+    "data": {
+      "FS": [
+        {
+          "sex": "Male",
+          "count": "1160852.726",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Male",
+          "count": "41154.90395",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Male",
+          "count": "6929.71155",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Male",
+          "count": "115275.2443",
+          "population group": "White"
+        },
+        {
+          "sex": "Male",
+          "count": "4754.37542",
+          "population group": "Other"
+        },
+        {
+          "sex": "Male",
+          "count": "0",
+          "population group": "Unspecified"
+        },
+        {
+          "sex": "Female",
+          "count": "1244680.283",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Female",
+          "count": "42688.61465",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Female",
+          "count": "3467.99499",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Female",
+          "count": "123750.7081",
+          "population group": "White"
+        },
+        {
+          "sex": "Female",
+          "count": "2035.22358",
+          "population group": "Other"
+        },
+        {
+          "sex": "Female",
+          "count": "0",
+          "population group": "Unspecified"
+        }
+      ],
+      "EC": [
+        {
+          "sex": "Male",
+          "count": "2649144.027",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Male",
+          "count": "260768.1355",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Male",
+          "count": "15233.27869",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Male",
+          "count": "150156.5597",
+          "population group": "White"
+        },
+        {
+          "sex": "Male",
+          "count": "14398.54729",
+          "population group": "Other"
+        },
+        {
+          "sex": "Male",
+          "count": "0",
+          "population group": "Unspecified"
+        },
+        {
+          "sex": "Female",
+          "count": "3011086.175",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Female",
+          "count": "281081.5501",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Female",
+          "count": "12695.43871",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Female",
+          "count": "160293.2708",
+          "population group": "White"
+        },
+        {
+          "sex": "Female",
+          "count": "7196.0701",
+          "population group": "Other"
+        },
+        {
+          "sex": "Female",
+          "count": "0",
+          "population group": "Unspecified"
+        }
+      ],
+      "NW": [
+        {
+          "sex": "Male",
+          "count": "1596997.585",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Male",
+          "count": "35434.85485",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Male",
+          "count": "12713.96127",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Male",
+          "count": "127627.8971",
+          "population group": "White"
+        },
+        {
+          "sex": "Male",
+          "count": "7128.74222",
+          "population group": "Other"
+        },
+        {
+          "sex": "Male",
+          "count": "0",
+          "population group": "Unspecified"
+        },
+        {
+          "sex": "Female",
+          "count": "1555065.635",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Female",
+          "count": "35973.80658",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Female",
+          "count": "7938.03862",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Female",
+          "count": "127756.8107",
+          "population group": "White"
+        },
+        {
+          "sex": "Female",
+          "count": "3315.18276",
+          "population group": "Other"
+        },
+        {
+          "sex": "Female",
+          "count": "0",
+          "population group": "Unspecified"
+        }
+      ],
+      "GT": [
+        {
+          "sex": "Male",
+          "count": "4823965.71",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Male",
+          "count": "203820.4481",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Male",
+          "count": "180916.0763",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Male",
+          "count": "930988.8536",
+          "population group": "White"
+        },
+        {
+          "sex": "Male",
+          "count": "50184.11779",
+          "population group": "Other"
+        },
+        {
+          "sex": "Male",
+          "count": "0",
+          "population group": "Unspecified"
+        },
+        {
+          "sex": "Female",
+          "count": "4669718.059",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Female",
+          "count": "219773.6434",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Female",
+          "count": "175657.8416",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Female",
+          "count": "982894.8721",
+          "population group": "White"
+        },
+        {
+          "sex": "Female",
+          "count": "34343.31689",
+          "population group": "Other"
+        },
+        {
+          "sex": "Female",
+          "count": "0",
+          "population group": "Unspecified"
+        }
+      ],
+      "KZN": [
+        {
+          "sex": "Male",
+          "count": "4220405.421",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Male",
+          "count": "67389.85615",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Male",
+          "count": "366963.5258",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Male",
+          "count": "207939.5724",
+          "population group": "White"
+        },
+        {
+          "sex": "Male",
+          "count": "15977.50811",
+          "population group": "Other"
+        },
+        {
+          "sex": "Male",
+          "count": "0",
+          "population group": "Unspecified"
+        },
+        {
+          "sex": "Female",
+          "count": "4692515.843",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Female",
+          "count": "73985.99909",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Female",
+          "count": "390027.391",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Female",
+          "count": "220902.3165",
+          "population group": "White"
+        },
+        {
+          "sex": "Female",
+          "count": "11192.98611",
+          "population group": "Other"
+        },
+        {
+          "sex": "Female",
+          "count": "0",
+          "population group": "Unspecified"
+        }
+      ],
+      "MP": [
+        {
+          "sex": "Male",
+          "count": "1781368.319",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Male",
+          "count": "18149.19382",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Male",
+          "count": "16164.50634",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Male",
+          "count": "151556.7903",
+          "population group": "White"
+        },
+        {
+          "sex": "Male",
+          "count": "6816.59946",
+          "population group": "Other"
+        },
+        {
+          "sex": "Male",
+          "count": "0",
+          "population group": "Unspecified"
+        },
+        {
+          "sex": "Female",
+          "count": "1880850.22",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Female",
+          "count": "18462.03981",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Female",
+          "count": "11752.84987",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Female",
+          "count": "152037.7837",
+          "population group": "White"
+        },
+        {
+          "sex": "Female",
+          "count": "2780.4263",
+          "population group": "Other"
+        },
+        {
+          "sex": "Female",
+          "count": "0",
+          "population group": "Unspecified"
+        }
+      ],
+      "WC": [
+        {
+          "sex": "Male",
+          "count": "966980.478",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Male",
+          "count": "1367076.103",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Male",
+          "count": "31052.08381",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Male",
+          "count": "437868.571",
+          "population group": "White"
+        },
+        {
+          "sex": "Male",
+          "count": "55529.04687",
+          "population group": "Other"
+        },
+        {
+          "sex": "Male",
+          "count": "0",
+          "population group": "Unspecified"
+        },
+        {
+          "sex": "Female",
+          "count": "945566.9833",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Female",
+          "count": "1473328.115",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Female",
+          "count": "29708.82484",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Female",
+          "count": "477184.2701",
+          "population group": "White"
+        },
+        {
+          "sex": "Female",
+          "count": "38439.85495",
+          "population group": "Other"
+        },
+        {
+          "sex": "Female",
+          "count": "0",
+          "population group": "Unspecified"
+        }
+      ],
+      "LIM": [
+        {
+          "sex": "Male",
+          "count": "2429273.131",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Male",
+          "count": "7522.5951",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Male",
+          "count": "10822.29831",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Male",
+          "count": "70534.23916",
+          "population group": "White"
+        },
+        {
+          "sex": "Male",
+          "count": "5983.81227",
+          "population group": "Other"
+        },
+        {
+          "sex": "Male",
+          "count": "0",
+          "population group": "Unspecified"
+        },
+        {
+          "sex": "Female",
+          "count": "2795480.587",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Female",
+          "count": "6892.2008",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Female",
+          "count": "7058.60327",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Female",
+          "count": "68824.66544",
+          "population group": "White"
+        },
+        {
+          "sex": "Female",
+          "count": "2475.57801",
+          "population group": "Other"
+        },
+        {
+          "sex": "Female",
+          "count": "0",
+          "population group": "Unspecified"
+        }
+      ],
+      "NC": [
+        {
+          "sex": "Male",
+          "count": "283730.038",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Male",
+          "count": "226791.4842",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Male",
+          "count": "4667.27112",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Male",
+          "count": "39734.7596",
+          "population group": "White"
+        },
+        {
+          "sex": "Male",
+          "count": "10047.98811",
+          "population group": "Other"
+        },
+        {
+          "sex": "Male",
+          "count": "0",
+          "population group": "Unspecified"
+        },
+        {
+          "sex": "Female",
+          "count": "293256.2801",
+          "population group": "Black African"
+        },
+        {
+          "sex": "Female",
+          "count": "235107.3763",
+          "population group": "Coloured"
+        },
+        {
+          "sex": "Female",
+          "count": "3159.82185",
+          "population group": "Indian or Asian"
+        },
+        {
+          "sex": "Female",
+          "count": "41511.12876",
+          "population group": "White"
+        },
+        {
+          "sex": "Female",
+          "count": "7854.59679",
+          "population group": "Other"
+        },
+        {
+          "sex": "Female",
+          "count": "0",
+          "population group": "Unspecified"
+        }
+      ]
+    }
+  }
+]

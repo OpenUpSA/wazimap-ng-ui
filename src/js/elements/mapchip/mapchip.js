@@ -231,7 +231,7 @@ export class MapChip extends Component {
         this.setFilterLabel(dataFilterModel, this.metadata.groups);
 
         // Description Icon
-        this.setDescriptionIcon(this.metadata.description);
+        this.setDescriptionIcon(this.metadata.indicatorDescription);
 
         // Linear Scrubber
         this.showLinearScrubber(params)

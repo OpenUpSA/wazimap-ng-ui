@@ -193,14 +193,14 @@ export class FilterController extends Component {
         this.isLoading = false;
     }
 
-    addEmptyFilter(isDefault = false, isExtra = true) {
+    addEmptyFilter(isDefault = false, isExtra = true, isRequired = false) {
         if (this.model.dataFilterModel.availableFilters.length > 0) {
             const self = this;
 
             let filterRowContainer = this._rowContainer.cloneNode(true);
             $(filterRowContainer).removeClass('hidden').show();
 
-            let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, this._elements);
+            let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, isRequired, this._elements);
             this.model.addFilterRow(filterRow);
 
             this.addFilterButton.show();
@@ -217,9 +217,10 @@ export class FilterController extends Component {
     addNonAggregatableFilter(group) {
         let isDefault = true;
         let isExtra = false;
+        let isRequired = true;
         let index = 0;
 
-        let filterRow = this.addEmptyFilter(isDefault, isExtra);
+        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
         filterRow.indicatorDropdown.disable();
 
         filterRow.setPrimaryIndexUsingValue(group.name);
@@ -229,8 +230,9 @@ export class FilterController extends Component {
     addDefaultFilter(group) {
         let isDefault = true;
         let isExtra = false;
+        let isRequired = true;
 
-        let filterRow = this.addEmptyFilter(isDefault, isExtra);
+        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
         filterRow.indicatorDropdown.disable();
 
         filterRow.setPrimaryIndexUsingValue(group.group);

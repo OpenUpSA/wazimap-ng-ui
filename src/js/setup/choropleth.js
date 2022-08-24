@@ -6,6 +6,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     const api = objs['api'];
 
     mapchip.on('mapchip.removed', payload => controller.onMapChipRemoved(payload));
+
     mapchip.on('mapchip.choropleth.filtered', payload => {
         controller.onChoroplethFiltered(payload);
     })
@@ -104,8 +105,8 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
     const ps = payload.state;
     const metadata = payload.payload.metadata;
     const config = payload.payload.config;
-    if (ps.subindicator == null)
-        return
+    if (ps.subindicator === null)
+        return;
 
     const method = ps.subindicator.choropleth_method;
     const indicatorTitle = payload.payload.indicatorTitle;

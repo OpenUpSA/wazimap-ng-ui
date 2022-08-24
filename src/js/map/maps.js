@@ -142,9 +142,8 @@ export class MapControl extends Component {
             return x.name === metadata.primary_group
         })[0].subindicators;
 
-        this.triggerEvent("map.choropleth.loaded", args);
-
         this.displayChoropleth(data, metadata.primary_group, method, selectedSubindicator, allSubindicators, config);
+        this.triggerEvent("map.choropleth.loaded", args);
     };
 
     displayChoropleth(data, primaryGroup, method, selectedSubindicator, allSubindicators, config) {

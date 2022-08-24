@@ -30,10 +30,20 @@ export function loadMenu(dataMapperMenu, data) {
         }
         for (const [indicatorName, detail] of Object.entries(indicators)) {
             const isExcluded = isIndicatorExcluded(detail, EXCLUDE_TYPES.DataMapper);
+            if (parent.text === 'Audit outcomes') {
+                console.log({
+                    indicatorName,
+                    detail,
+                    'added': detail.dataset_content_type !== DATASET_TYPES.Qualitative && !isExcluded
+                })
+            }
             if (detail.dataset_content_type !== DATASET_TYPES.Qualitative && !isExcluded) {
                 const primaryGroup = detail.metadata.groups.filter((g) => {
                     return g.name === detail.metadata.primary_group
                 })[0];
+
+                let metadata = detail.metadata;
+                metadata.indicatorDescription = detail.description;
                 let indicator = new Indicator(parent,
                     indicatorName,
                     detail.id,

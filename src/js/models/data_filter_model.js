@@ -170,7 +170,6 @@ export class DataFilterModel extends Observable {
         let dataFilter = this.groupLookup[indicatorName];
         if (dataFilter !== undefined) {
             this._selectedFilters.add(dataFilter);
-            this.triggerEvent(DataFilterModel.EVENTS.updated, this)
         } else {
             throw `addFilter: Can't find indicator: ${indicatorName}`
         }

@@ -5,8 +5,10 @@ export function configureBoundaryEvents(controller, boundaryTypeBox) {
         let children = payload.payload.geometries.children;
         let currentLevel = payload.payload.geometries.boundary.properties.level;
         boundaryTypeBox.activeVersion = controller.versionController.activeVersion;
-
-        boundaryTypeBox.populateBoundaryOptions(children, currentLevel, controller.versionController.versions);
+        boundaryTypeBox.populateBoundaryOptions(
+            children, currentLevel, controller.versionController.versions,
+            controller.versionController.versionGeometries
+          );
     });
 
     controller.on(VersionController.EVENTS.updated,() => boundaryTypeBox.activeVersionUpdated(controller.versionController.activeVersion));

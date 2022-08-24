@@ -42,7 +42,8 @@ export class BoundaryTypeBox extends Component {
         }
     }
 
-    populateBoundaryOptions = (children, currentLevel, versions) => {
+    populateBoundaryOptions = (children, currentLevel, versions, childBoundariesByVersion) => {
+
         if (typeof this.preferredChildren === 'undefined') {
             return;
         }
@@ -50,27 +51,41 @@ export class BoundaryTypeBox extends Component {
             return v.exists
         });
 
-        let boundaryTypes = Object.keys(children);
-        let options = this.getOptions(boundaryTypes, existingVersions);
-
+        let boundaryTypes = this.getBoundaryTypes(childBoundariesByVersion);
+        let activeVersionBoundaries = boundaryTypes[this.activeVersion.model.name] || [];
+        let options = this.getOptions(boundaryTypes, existingVersions, childBoundariesByVersion);
+        console.log(options);
         if (typeof this.preferredChildren[currentLevel] !== 'undefined' || (boundaryTypes.length === 0 && existingVersions.length > 0)) {
             //(boundaryTypes.length === 0 && existingVersions.length > 0) -> there are no children but there are multiple versions
-            const availableLevels = this.preferredChildren[currentLevel] !== undefined ? this.preferredChildren[currentLevel].filter(level => children[level] !== undefined) : [];
+            console.log(this.preferredChildren[currentLevel]);
+            const availableLevels = this.preferredChildren[currentLevel] !== undefined ? this.preferredChildren[currentLevel].filter(level => activeVersionBoundaries.includes(level) ) : [];
             const selectedOption = availableLevels.length > 0 ? `${this.activeVersion.model.name} / ${availableLevels[0]}` : this.activeVersion.model.name;
-
+            console.log(activeVersionBoundaries);
+            console.log(selectedOption);
+            console.log(availableLevels);
             this.setElements();
             this.setSelectedOption(selectedOption);
             this.populateOptions(options, currentLevel);
         }
     }
 
-    getOptions = (boundaryTypes, versions) => {
-        let options = [];
-        const boundaryTypeCounts = boundaryTypes.length;
+    getBoundaryTypes = (boundariesByVerision) => {
+      let options = {};
+      Object.keys(boundariesByVerision).forEach((version) => {
+        let children = Object.keys(boundariesByVerision[version].children);
+        if (children.length > 0){
+          options[version] = children;
+        }
+      });
+      return options;
+    }
 
+    getOptions = (boundaryTypes, versions, childBoundariesByVersion) => {
+        let options = [];
         versions.forEach((v) => {
-            if (boundaryTypeCounts > 0) {
-                boundaryTypes.forEach((bt) => {
+            const boundaries = boundaryTypes[v.model.name] || [];
+            if (boundaries.length > 0) {
+                boundaries.forEach((bt) => {
                     options.push(`${v.model.name} / ${bt}`);
                 })
             } else {

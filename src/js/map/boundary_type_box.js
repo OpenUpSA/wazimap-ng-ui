@@ -35,14 +35,14 @@ export class BoundaryTypeBox extends Component {
     }
 
     setVisibilityOfDropdown = (boundaryTypes) => {
-        if (boundaryTypes.length <= 1) {
-            $(selectElement).addClass('hidden');
-        } else {
+        if (boundaryTypes.length > 0) {
             $(selectElement).removeClass('hidden');
+        } else {
+          $(selectElement).removeClass('hidden');
         }
     }
 
-    populateBoundaryOptions = (children, currentLevel, versions, childBoundariesByVersion) => {
+    populateBoundaryOptions = (childBoundaries, currentLevel, versions) => {
 
         if (typeof this.preferredChildren === 'undefined') {
             return;
@@ -51,22 +51,21 @@ export class BoundaryTypeBox extends Component {
             return v.exists
         });
 
-        let boundaryTypes = this.getBoundaryTypes(childBoundariesByVersion);
+        let boundaryTypes = this.getBoundaryTypes(childBoundaries);
         let activeVersionBoundaries = boundaryTypes[this.activeVersion.model.name] || [];
-        let options = this.getOptions(boundaryTypes, existingVersions, childBoundariesByVersion);
-        console.log(options);
-        if (typeof this.preferredChildren[currentLevel] !== 'undefined' || (boundaryTypes.length === 0 && existingVersions.length > 0)) {
-            //(boundaryTypes.length === 0 && existingVersions.length > 0) -> there are no children but there are multiple versions
-            console.log(this.preferredChildren[currentLevel]);
-            const availableLevels = this.preferredChildren[currentLevel] !== undefined ? this.preferredChildren[currentLevel].filter(level => activeVersionBoundaries.includes(level) ) : [];
-            const selectedOption = availableLevels.length > 0 ? `${this.activeVersion.model.name} / ${availableLevels[0]}` : this.activeVersion.model.name;
-            console.log(activeVersionBoundaries);
-            console.log(selectedOption);
-            console.log(availableLevels);
-            this.setElements();
-            this.setSelectedOption(selectedOption);
-            this.populateOptions(options, currentLevel);
-        }
+        let options = this.getOptions(boundaryTypes, existingVersions);
+
+    }
+
+    getAvailableLevelsForVersion = (currentLevel, boundaryTypes) => {
+      let availableLevels = [];
+      let activeVersionBoundaries = boundaryTypes[this.activeVersion.model.name] || [];
+      if (this.preferredChildren[currentLevel] !== undefined && activeVersionBoundaries.length > 0){
+        this.preferredChildren[currentLevel].filter(
+          level => activeVersionBoundaries.includes(level)
+        )
+      }
+      return availableLevels;
     }
 
     getBoundaryTypes = (boundariesByVerision) => {
@@ -80,7 +79,7 @@ export class BoundaryTypeBox extends Component {
       return options;
     }
 
-    getOptions = (boundaryTypes, versions, childBoundariesByVersion) => {
+    getOptions = (boundaryTypes, versions) => {
         let options = [];
         versions.forEach((v) => {
             const boundaries = boundaryTypes[v.model.name] || [];
@@ -88,11 +87,8 @@ export class BoundaryTypeBox extends Component {
                 boundaries.forEach((bt) => {
                     options.push(`${v.model.name} / ${bt}`);
                 })
-            } else {
-                options.push(v.model.name);
             }
         })
-
         return options;
     }
 

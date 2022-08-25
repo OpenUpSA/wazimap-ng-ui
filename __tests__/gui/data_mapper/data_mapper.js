@@ -8,7 +8,7 @@ import {
     collapseChoroplethFilterDialog,
     expandChoroplethFilterDialog,
     expandDataMapper, expandPointFilterDialog,
-    expandPointMapper, expandRichDataPanel,
+    expandPointMapper, expandRichDataPanel, extractRequestedIndicatorData,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded
@@ -99,13 +99,23 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         });
     });
 
-    cy.intercept(`/api/v1/children-indicators/profile/8/geography/EC/?version=test&format=json`, (request) => {
+    cy.intercept(`/api/v1/profile/8/geography/EC/profile_indicator_summary/?version=test&format=json`, (request) => {
         return trigger.then(() => {
             request.reply({
                 statusCode: 200,
-                body: children_indicators,
+                body: profile_indicator_summary,
                 forceNetworkError: false // default
             })
+        });
+    });
+
+    cy.intercept('/api/v1/profile/8/geography/EC/indicator/**/child_data/', (request) => {
+        return trigger.then(() => {
+            request.reply({
+                statusCode: 200,
+                body: extractRequestedIndicatorData('EC', request.url, profile_indicator_data),
+                forceNetworkError: false // default
+            });
         });
     });
 

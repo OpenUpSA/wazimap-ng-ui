@@ -141,6 +141,7 @@ export class VersionController extends Component {
         })
         this.parent.on('profile.loaded', () => {
             this._initIndicatorEvents['profile.loaded'] = true;
+            this.checkAndInitIndicators();
         });
     }
 

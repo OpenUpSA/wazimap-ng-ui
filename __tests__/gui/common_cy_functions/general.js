@@ -74,14 +74,14 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
     cy.intercept('/api/v1/profile/8/geography/ZA/indicator/**/child_data/', (request) => {
         request.reply({
             statusCode: 200,
-            body: extractRequestedIndicatorData(request.url, indicator_data),
+            body: extractRequestedIndicatorData('ZA', request.url, indicator_data),
             forceNetworkError: false // default
         });
     }).as('indicator_data');
 }
 
-function extractRequestedIndicatorData(url, indicatorData) {
-    let indicatorId = url.replace('https://staging.wazimap-ng.openup.org.za/api/v1/profile/8/geography/ZA/indicator/', '');
+export function extractRequestedIndicatorData(geoCode, url, indicatorData) {
+    let indicatorId = url.replace(`https://staging.wazimap-ng.openup.org.za/api/v1/profile/8/geography/${geoCode}/indicator/`, '');
     indicatorId = indicatorId.replace('/child_data/', '');
     indicatorId = parseInt(indicatorId);
 

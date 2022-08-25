@@ -1,6 +1,5 @@
 import {
-    Component,
-    isIndicatorExcluded
+    Component
 } from '../../utils'
 import {Category} from "./category";
 import {SubCategory} from "./subcategory";
@@ -14,8 +13,6 @@ let indicatorTemplate = null;
 let indicatorItemTemplate = null;
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
-const DATASET_TYPES = {Quantitative: 'quantitative', Qualitative: 'qualitative'};
-const EXCLUDE_TYPES = {DataMapper: 'data mapper'};
 
 export function loadMenu(dataMapperMenu, data) {
     parentContainer = $(".data-mapper-content__list");
@@ -29,33 +26,23 @@ export function loadMenu(dataMapperMenu, data) {
             return;
         }
         for (const [indicatorName, detail] of Object.entries(indicators)) {
-            const isExcluded = isIndicatorExcluded(detail, EXCLUDE_TYPES.DataMapper);
-            if (parent.text === 'Audit outcomes') {
-                console.log({
-                    indicatorName,
-                    detail,
-                    'added': detail.dataset_content_type !== DATASET_TYPES.Qualitative && !isExcluded
-                })
-            }
-            if (detail.dataset_content_type !== DATASET_TYPES.Qualitative && !isExcluded) {
-                const primaryGroup = detail.metadata.groups.filter((g) => {
-                    return g.name === detail.metadata.primary_group
-                })[0];
+            const primaryGroup = detail.metadata.groups.filter((g) => {
+                return g.name === detail.metadata.primary_group
+            })[0];
 
-                let metadata = detail.metadata;
-                metadata.indicatorDescription = detail.description;
-                let indicator = new Indicator(parent,
-                    indicatorName,
-                    detail.id,
-                    detail.choropleth_method,
-                    primaryGroup,
-                    detail.version_data,
-                    detail.metadata,
-                    detail.choropleth_range,
-                    detail.enable_linear_scrubber,
-                    detail.chartConfiguration
-                );
-            }
+            let metadata = detail.metadata;
+            metadata.indicatorDescription = detail.description;
+            let indicator = new Indicator(parent,
+                indicatorName,
+                detail.id,
+                detail.choropleth_method,
+                primaryGroup,
+                detail.version_data,
+                detail.metadata,
+                detail.choropleth_range,
+                detail.enable_linear_scrubber,
+                detail.chartConfiguration
+            );
         }
     }
 

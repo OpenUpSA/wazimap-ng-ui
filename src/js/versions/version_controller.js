@@ -45,7 +45,7 @@ export class VersionController extends Component {
             'profile.loaded': false
         }
         this._indicatorsInitialized = false;
-
+        this._selectedLevel = null;
         this.prepareEvents();
     }
 
@@ -77,6 +77,14 @@ export class VersionController extends Component {
         this._versions = value;
     }
 
+    get selectedLevel() {
+        return this._selectedLevel;
+    }
+
+    set selectedLevel(value) {
+        this._selectedLevel = value;
+    }
+
     set activeVersion(version) {
         if (!version.model.isActive) {
             this.versions.forEach((v) => {
@@ -89,7 +97,8 @@ export class VersionController extends Component {
 
             const payload = {
                 profile: this.parent.state.profile.profile,
-                geometries: this.versionGeometries[version.model.name]
+                geometries: this.versionGeometries[version.model.name],
+                selectedLevel: this.selectedLevel
             }
 
             if (payload.geometries !== undefined) {
@@ -419,14 +428,16 @@ export class VersionController extends Component {
         this._versionBundles[version.model.name] = dataBundle;
     }
 
-    setActiveVersionByName(versionName) {
+    setActiveVersionByName(versionName, selectedLevel) {
         let version = this.versions.filter((v) => {
             return v.model.name === versionName
         })[0];
 
+
         if (version === null || version === undefined) {
             console.error(`Version does not exist : ${versionName}`)
         } else {
+            this.selectedLevel = selectedLevel;
             this.activeVersion = version;
         }
     }

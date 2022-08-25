@@ -8,7 +8,7 @@ import {
     collapseChoroplethFilterDialog,
     expandChoroplethFilterDialog,
     expandDataMapper, expandPointFilterDialog,
-    expandPointMapper, expandRichDataPanel, extractRequestedIndicatorData,
+    expandPointMapper, expandRichDataPanel,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded
@@ -23,6 +23,7 @@ import children_indicators from './children_indicators.json';
 import children_indicators_FS from './children_indicators_FS.json';
 import profile_indicator_summary from './profile_indicator_summary.json';
 import profile_indicator_data from './profile_indicator_data.json'
+import profile_indicator_summary_FS from './profile_indicator_summary_FS.json'
 
 Given('I am on the Wazimap Homepage', () => {
     setupInterceptions(profiles, all_details, profile, themes, points, [], children_indicators, profile_indicator_summary, profile_indicator_data);
@@ -109,16 +110,6 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         });
     });
 
-    cy.intercept('/api/v1/profile/8/geography/EC/indicator/**/child_data/', (request) => {
-        return trigger.then(() => {
-            request.reply({
-                statusCode: 200,
-                body: extractRequestedIndicatorData('EC', request.url, profile_indicator_data),
-                forceNetworkError: false // default
-            });
-        });
-    });
-
     cy.intercept('api/v1/profile/8/geography/EC/themes_count/?version=test&format=json', (req) => {
         req.reply({
             statusCode: 200,
@@ -200,8 +191,8 @@ When('I navigate to WC', () => {
         })
     });
 
-    cy.intercept(`/api/v1/children-indicators/profile/8/geography/WC/?version=test&format=json`, (request) => {
-        let tempObj = JSON.parse(JSON.stringify(children_indicators));
+    cy.intercept(`/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(profile_indicator_summary));
         delete tempObj['Demographics'];
 
         request.reply({
@@ -231,10 +222,10 @@ When('I navigate to FS', () => {
         })
     });
 
-    cy.intercept(`/api/v1/children-indicators/profile/8/geography/FS/?version=test&format=json`, (request) => {
+    cy.intercept(`/api/v1/profile/8/geography/FS/profile_indicator_summary/?version=test&format=json`, (request) => {
         request.reply({
             statusCode: 200,
-            body: children_indicators_FS,
+            body: profile_indicator_summary_FS,
             forceNetworkError: false // default
         })
     });

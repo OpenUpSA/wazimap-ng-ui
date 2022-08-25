@@ -71,17 +71,20 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
         });
     }).as('profile_indicator_summary');
 
-    cy.intercept('/api/v1/profile/8/geography/ZA/indicator/**/child_data/', (request) => {
+    cy.intercept('/api/v1/profile/8/geography/**/indicator/**/child_data/', (request) => {
         request.reply({
             statusCode: 200,
-            body: extractRequestedIndicatorData('ZA', request.url, indicator_data),
+            body: extractRequestedIndicatorData(request.url, indicator_data),
             forceNetworkError: false // default
         });
     }).as('indicator_data');
 }
 
-export function extractRequestedIndicatorData(geoCode, url, indicatorData) {
-    let indicatorId = url.replace(`https://staging.wazimap-ng.openup.org.za/api/v1/profile/8/geography/${geoCode}/indicator/`, '');
+export function extractRequestedIndicatorData(url, indicatorData) {
+    let geo = url.replace(`https://staging.wazimap-ng.openup.org.za/api/v1/profile/8/geography/`, '');
+    geo = geo.replace(geo.substring(geo.indexOf('/')), '');
+
+    let indicatorId = url.replace(`https://staging.wazimap-ng.openup.org.za/api/v1/profile/8/geography/${geo}/indicator/`, '');
     indicatorId = indicatorId.replace('/child_data/', '');
     indicatorId = parseInt(indicatorId);
 
@@ -89,7 +92,7 @@ export function extractRequestedIndicatorData(geoCode, url, indicatorData) {
         return x.id === indicatorId
     });
 
-    return result[0].data;
+    return result[0].data[geo];
 }
 
 export function gotoHomepage() {

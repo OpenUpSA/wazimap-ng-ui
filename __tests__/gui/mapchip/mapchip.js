@@ -4,7 +4,6 @@ import {
     collapseChoroplethFilterDialog,
     expandChoroplethFilterDialog,
     expandDataMapper,
-    expandPointMapper,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded

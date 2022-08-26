@@ -84,7 +84,11 @@ export function extractRequestedIndicatorData(url, indicatorData) {
         return x.id === indicatorId
     });
 
-    return result[0].data[geo];
+    if (result[0] !== undefined) {
+        return result[0].data[geo];
+    } else {
+        return {};
+    }
 }
 
 export function gotoHomepage() {

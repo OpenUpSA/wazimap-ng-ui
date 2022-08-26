@@ -19,14 +19,12 @@ import profiles from "./profiles.json";
 import profile from './profile.json';
 import themes from "./themes.json";
 import points from "./points.json";
-import children_indicators from './children_indicators.json';
-import children_indicators_FS from './children_indicators_FS.json';
 import profile_indicator_summary from './profile_indicator_summary.json';
 import profile_indicator_data from './profile_indicator_data.json'
 import profile_indicator_summary_FS from './profile_indicator_summary_FS.json'
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, themes, points, [], children_indicators, profile_indicator_summary, profile_indicator_data);
+    setupInterceptions(profiles, all_details, profile, themes, points, [], profile_indicator_summary, profile_indicator_data);
     gotoHomepage();
 })
 

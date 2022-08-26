@@ -1,0 +1,1686 @@
+[
+  {
+    "id": 836,
+    "data": {
+      "ZA": {
+        "GT": [
+          {
+            "count": "3618214",
+            "categories": "Voted"
+          },
+          {
+            "count": "2629892",
+            "categories": "Didn't vote"
+          }
+        ],
+        "FS": [
+          {
+            "count": "829349",
+            "categories": "Voted"
+          },
+          {
+            "count": "645385",
+            "categories": "Didn't vote"
+          }
+        ],
+        "EC": [
+          {
+            "count": "1888500",
+            "categories": "Voted"
+          },
+          {
+            "count": "1458211",
+            "categories": "Didn't vote"
+          }
+        ],
+        "NW": [
+          {
+            "count": "921519",
+            "categories": "Voted"
+          },
+          {
+            "count": "796892",
+            "categories": "Didn't vote"
+          }
+        ],
+        "KZN": [
+          {
+            "count": "3333298",
+            "categories": "Voted"
+          },
+          {
+            "count": "2088689",
+            "categories": "Didn't vote"
+          }
+        ],
+        "MP": [
+          {
+            "count": "1082665",
+            "categories": "Voted"
+          },
+          {
+            "count": "844222",
+            "categories": "Didn't vote"
+          }
+        ],
+        "WC": [
+          {
+            "count": "1948844",
+            "categories": "Voted"
+          },
+          {
+            "count": "1122106",
+            "categories": "Didn't vote"
+          }
+        ],
+        "LIM": [
+          {
+            "count": "1287713",
+            "categories": "Voted"
+          },
+          {
+            "count": "1266656",
+            "categories": "Didn't vote"
+          }
+        ],
+        "NC": [
+          {
+            "count": "380718",
+            "categories": "Voted"
+          },
+          {
+            "count": "241597",
+            "categories": "Didn't vote"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": 1010,
+    "data": {
+      "ZA": {
+        "NC": [
+          {
+            "count": "6383",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "69130",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "78310",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "66412",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "53070",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "33615",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "17380",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "8480",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "5296",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "59568",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "74817",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "61906",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "45792",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "26396",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "10973",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "3782",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "LIM": [
+          {
+            "count": "30117",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "318168",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "349826",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "276118",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "224338",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "149016",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "97158",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "76619",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "25543",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "254962",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "263525",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "189560",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "139244",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "95880",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "46928",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "19126",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "WC": [
+          {
+            "count": "26488",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "306215",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "394767",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "361837",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "280740",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "173528",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "90217",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "43101",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "19614",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "239035",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "345731",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "327333",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "238448",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "135903",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "62345",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "21347",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "MP": [
+          {
+            "count": "20715",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "250750",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "256880",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "199529",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "149900",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "92244",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "48263",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "29521",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "17349",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "213867",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "235106",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "171797",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "124983",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "70234",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "27654",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "10424",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "EC": [
+          {
+            "count": "38990",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "390451",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "391584",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "342237",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "314236",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "217501",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "129122",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "84454",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "34499",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "333078",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "331369",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "257147",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "215426",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "150111",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "73188",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "34139",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "FS": [
+          {
+            "count": "13218",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "170809",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "186105",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "154692",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "129801",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "86209",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "44328",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "23959",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "11237",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "145742",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "168624",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "136849",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "105018",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "60619",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "25107",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "8682",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "GT": [
+          {
+            "count": "46008",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "647092",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "801341",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "693981",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "523786",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "300270",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "139646",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "63710",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "37031",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "576738",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "814154",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "724809",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "485561",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "255318",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "94662",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "30715",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "NW": [
+          {
+            "count": "14615",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "184608",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "211872",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "175854",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "142185",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "92616",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "51397",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "27508",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "12442",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "164383",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "212327",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "172509",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "134225",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "74663",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "32566",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "11690",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "KZN": [
+          {
+            "count": "81738",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "785579",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "702396",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "528976",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "428910",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "285878",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "152355",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "87044",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "65278",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "666424",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "616601",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "426441",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "293929",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "186563",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "76835",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "26290",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": 1012,
+    "data": {
+      "ZA": {
+        "FS": [
+          {
+            "count": "13218",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "170809",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "186105",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "154692",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "129801",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "86209",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "44328",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "23959",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "11237",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "145742",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "168624",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "136849",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "105018",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "60619",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "25107",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "8682",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "GT": [
+          {
+            "count": "46008",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "647092",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "801341",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "693981",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "523786",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "300270",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "139646",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "63710",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "37031",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "576738",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "814154",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "724809",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "485561",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "255318",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "94662",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "30715",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "NC": [
+          {
+            "count": "6383",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "69130",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "78310",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "66412",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "53070",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "33615",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "17380",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "8480",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "5296",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "59568",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "74817",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "61906",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "45792",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "26396",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "10973",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "3782",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "LIM": [
+          {
+            "count": "30117",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "318168",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "349826",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "276118",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "224338",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "149016",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "97158",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "76619",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "25543",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "254962",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "263525",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "189560",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "139244",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "95880",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "46928",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "19126",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "WC": [
+          {
+            "count": "26488",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "306215",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "394767",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "361837",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "280740",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "173528",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "90217",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "43101",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "19614",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "239035",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "345731",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "327333",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "238448",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "135903",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "62345",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "21347",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "MP": [
+          {
+            "count": "20715",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "250750",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "256880",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "199529",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "149900",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "92244",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "48263",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "29521",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "17349",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "213867",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "235106",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "171797",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "124983",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "70234",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "27654",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "10424",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "KZN": [
+          {
+            "count": "81738",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "785579",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "702396",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "528976",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "428910",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "285878",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "152355",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "87044",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "65278",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "666424",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "616601",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "426441",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "293929",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "186563",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "76835",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "26290",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "NW": [
+          {
+            "count": "14615",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "184608",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "211872",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "175854",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "142185",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "92616",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "51397",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "27508",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "12442",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "164383",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "212327",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "172509",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "134225",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "74663",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "32566",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "11690",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ],
+        "EC": [
+          {
+            "count": "38990",
+            "gender": "Female",
+            "age category": "18-19"
+          },
+          {
+            "count": "390451",
+            "gender": "Female",
+            "age category": "20-29"
+          },
+          {
+            "count": "391584",
+            "gender": "Female",
+            "age category": "30-39"
+          },
+          {
+            "count": "342237",
+            "gender": "Female",
+            "age category": "40-49"
+          },
+          {
+            "count": "314236",
+            "gender": "Female",
+            "age category": "50-59"
+          },
+          {
+            "count": "217501",
+            "gender": "Female",
+            "age category": "60-69"
+          },
+          {
+            "count": "129122",
+            "gender": "Female",
+            "age category": "70-79"
+          },
+          {
+            "count": "84454",
+            "gender": "Female",
+            "age category": "80+"
+          },
+          {
+            "count": "34499",
+            "gender": "Male",
+            "age category": "18-19"
+          },
+          {
+            "count": "333078",
+            "gender": "Male",
+            "age category": "20-29"
+          },
+          {
+            "count": "331369",
+            "gender": "Male",
+            "age category": "30-39"
+          },
+          {
+            "count": "257147",
+            "gender": "Male",
+            "age category": "40-49"
+          },
+          {
+            "count": "215426",
+            "gender": "Male",
+            "age category": "50-59"
+          },
+          {
+            "count": "150111",
+            "gender": "Male",
+            "age category": "60-69"
+          },
+          {
+            "count": "73188",
+            "gender": "Male",
+            "age category": "70-79"
+          },
+          {
+            "count": "34139",
+            "gender": "Male",
+            "age category": "80+"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": 1255,
+    "data": {
+      "ZA": {
+        "LIM": [
+          {
+            "count": "2",
+            "councils": "Hung"
+          },
+          {
+            "count": "20",
+            "councils": "Outright Majority"
+          }
+        ],
+        "GT": [
+          {
+            "count": "4",
+            "councils": "Hung"
+          },
+          {
+            "count": "5",
+            "councils": "Outright Majority"
+          }
+        ],
+        "FS": [
+          {
+            "count": "1",
+            "councils": "Hung"
+          },
+          {
+            "count": "18",
+            "councils": "Outright Majority"
+          }
+        ],
+        "NC": [
+          {
+            "count": "3",
+            "councils": "Hung"
+          },
+          {
+            "count": "23",
+            "councils": "Outright Majority"
+          }
+        ],
+        "EC": [
+          {
+            "count": "1",
+            "councils": "Hung"
+          },
+          {
+            "count": "32",
+            "councils": "Outright Majority"
+          }
+        ],
+        "NW": [
+          {
+            "count": "1",
+            "councils": "Hung"
+          },
+          {
+            "count": "17",
+            "councils": "Outright Majority"
+          }
+        ],
+        "KZN": [
+          {
+            "count": "7",
+            "councils": "Hung"
+          },
+          {
+            "count": "37",
+            "councils": "Outright Majority"
+          }
+        ],
+        "MP": [
+          {
+            "count": "0",
+            "councils": "Hung"
+          },
+          {
+            "count": "17",
+            "councils": "Outright Majority"
+          }
+        ],
+        "WC": [
+          {
+            "count": "8",
+            "councils": "Hung"
+          },
+          {
+            "count": "17",
+            "councils": "Outright Majority"
+          }
+        ]
+      }
+    }
+  }
+]

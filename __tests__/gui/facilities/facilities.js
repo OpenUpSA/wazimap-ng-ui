@@ -86,7 +86,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         });
     });
 
-    cy.intercept(`/api/v1/children-indicators/profile/8/geography/EC/?version=test&format=json`, (request) => {
+    cy.intercept(`/api/v1/profile/8/geography/EC/profile_indicator_summary/?version=test&format=json`, (request) => {
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,
@@ -121,7 +121,7 @@ When('I navigate to a geography with no points', () => {
         });
     });
 
-    cy.intercept('/api/v1/children-indicators/profile/8/geography/CPT/?version=test&format=json', (request) => {
+    cy.intercept('/api/v1/profile/8/geography/CPT/profile_indicator_summary/?version=test&format=json', (request) => {
         request.reply({
             statusCode: 200,
             body: {},
@@ -166,7 +166,7 @@ When('I navigate to a geography where themes-count endpoint fails', () => {
         })
     });
 
-    cy.intercept('/api/v1/children-indicators/profile/8/geography/WC/?version=test&format=json', (request) => {
+    cy.intercept('/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json', (request) => {
         request.reply({
             statusCode: 201,
             body: {},

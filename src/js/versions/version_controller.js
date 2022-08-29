@@ -259,6 +259,13 @@ export class VersionController extends Component {
                     }
 
                     this.allVersionsIndicatorDataByGeography.push(versionIndicatorData);
+                }).catch((response) => {
+                    if (response.status === 404) {
+                        //version does not exist for this geo
+                        version.exists = false;
+                    } else {
+                        throw(response);
+                    }
                 });
 
             this._indicatorPromises.push(promise);

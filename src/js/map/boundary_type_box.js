@@ -82,6 +82,8 @@ export class BoundaryTypeBox extends Component {
                 versionLevels.forEach((level) => {
                     options.push(`${v.model.name} / ${level}`);
                 })
+            } else {
+              options.push(v.model.name);
             }
         })
         return options;

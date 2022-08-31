@@ -15,7 +15,7 @@ import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
 import {MapDownload} from "./map/map_download";
 import {Tutorial} from "./elements/tutorial";
-import {DataMapperMenu} from './elements/menu';
+import {DataMapperMenu} from './elements/data_mapper/menu';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
 import "../css/barchart.css";
@@ -80,14 +80,14 @@ class Application extends Component {
         const styleConfig = new StyleConfig(config.style);
         const tabNotice = new TabNotice(this, config.config.feedback);
         const translations = new Translations(this, config.config.translations);
-        const dataMapperMenu = new DataMapperMenu(this);
+        const dataMapperMenu = new DataMapperMenu(this, api);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);
         configureSearchEvents(controller, search);
         configureInfoboxEvents(controller, locationInfoBox);
         configurePointDataEvents(controller, {pointData: pointData, pointDataTray: pointDataTray});
-        configureChoroplethEvents(controller, {mapcontrol: mapcontrol, mapchip: mapchip});
+        configureChoroplethEvents(controller, {mapcontrol: mapcontrol, mapchip: mapchip, api: api});
         configureBreadcrumbsEvents(controller, {profileLoader: profileLoader, locationInfoBox: locationInfoBox});
         configureDataExplorerEvents(controller, dataMapperMenu);
         configureProfileEvents(controller, {profileLoader: profileLoader});

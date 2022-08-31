@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import {createRoot} from 'react-dom/client';
 import Scrubber from './scrubber';
 import {Component} from "../../../../utils";
 import {Tooltip} from "../../../../ui_components/tooltip";
@@ -12,22 +12,21 @@ export class LinearScrubberRenderer extends Component {
         this.tooltip = new Tooltip();
     }
 
-    render(props){
-
-      if (props.enableLinearScrubber){
-        this.root.render(
-          <Scrubber
-            primaryGroup={props.primaryGroup}
-            groups={props.groups}
-            indicatorTitle={props.indicatorTitle}
-            selectedSubindicator={props.selectedSubindicator}
-            onSubIndicatorChange={this.changeSubindicator}
-            tooltip={this.tooltip}
-          />
-        );
-      } else {
-        this.root.render(<div></div>);
-      }
+    render(props) {
+        if (props.config.enableLinearScrubber) {
+            this.root.render(
+                <Scrubber
+                    primaryGroup={props.metadata.primary_group}
+                    groups={props.metadata.groups}
+                    indicatorTitle={props.indicatorTitle}
+                    selectedSubindicator={props.selectedSubindicator}
+                    onSubIndicatorChange={this.changeSubindicator}
+                    tooltip={this.tooltip}
+                />
+            );
+        } else {
+            this.root.render(<div></div>);
+        }
 
     }
 }

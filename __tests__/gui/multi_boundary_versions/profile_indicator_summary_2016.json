@@ -45,18 +45,6 @@
                 }
               },
               "disableToggle":false
-            },
-            "data":{
-              "CPT":[
-                {
-                  "count":"1271923",
-                  "categories":"Voted"
-                },
-                {
-                  "count":"708998",
-                  "categories":"Didn't vote"
-                }
-              ]
             }
           }
         }

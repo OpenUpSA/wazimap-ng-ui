@@ -29,7 +29,7 @@ export class Choropleth extends Component {
     }
 
     set choroplethRangeType(value) {
-        if (value === undefined){
+        if (value === undefined) {
             return;
         }
         this._choroplethRangeType = value;

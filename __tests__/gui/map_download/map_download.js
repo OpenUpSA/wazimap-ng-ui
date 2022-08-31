@@ -10,12 +10,13 @@ import {
 import all_details from "../map_download/all_details.json";
 import profile from "../map_download/profile.json";
 import profiles from "../map_download/profiles.json";
-import children_indicators from './children_indicators.json';
+import profile_indicator_summary from './profile_indicator_summary.json';
 import points from './points.json';
 import themes from './themes.json';
+import profile_indicator_data from './profile_indicator_data.json'
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, themes, points, [], children_indicators);
+    setupInterceptions(profiles, all_details, profile, themes, points, [], profile_indicator_summary, profile_indicator_data);
     gotoHomepage();
 })
 

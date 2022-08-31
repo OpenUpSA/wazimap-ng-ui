@@ -37,7 +37,7 @@ export class DropdownModel extends Observable {
     set currentItem(value) {
         for (let idx in this.items) {
             let item = this.items[idx];
-            if (item == value) {
+            if (item === value) {
                 this.currentIndex = idx;
                 return;
             }

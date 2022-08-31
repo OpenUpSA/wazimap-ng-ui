@@ -126,13 +126,10 @@ export default class Controller extends Component {
             selectedSubindicator: payload.selectedSubindicator,
             choropleth_method: payload.choropleth_method,
             parents: payload.parents,
-            data: payload.indicators[payload.indicatorTitle],
-            chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,
-            indicatorId: payload.indicatorId
-        }
-
-        if (subindicator.data.originalChildData !== undefined) {
-            subindicator.data.data = subindicator.data.originalChildData;
+            data: payload.indicatorData,
+            indicatorId: payload.indicatorId,
+            config: payload.config,
+            metadata: payload.metadata
         }
 
         this.state.subindicator = subindicator;
@@ -156,41 +153,6 @@ export default class Controller extends Component {
     onSelectingSubindicator(payload) {
         this.state.selectedSubindicator = payload.selectedSubindicator;
         this.triggerEvent("mapchip.choropleth.selectSubindicator", payload);
-    }
-
-    handleNewProfileChoropleth() {
-        if (this.state.subindicator === null) {
-            return;
-        }
-
-        const geo = this.state.profile.profile.geography.code;
-        const allVersionsIndicatorData = this.versionController.getIndicatorDataByGeo(geo);
-        let profileData = allVersionsIndicatorData.indicatorData[this.state.subindicator.parents.category];
-
-        if (profileData === undefined) {
-            this.triggerEvent('data_mapper_menu.nodata');
-            return;
-        }
-
-        let indicators = profileData.subcategories[this.state.subindicator.parents.subcategory]
-            .indicators;
-
-        let selectedIndicator = indicators[this.state.subindicator.parents.indicator];
-
-        if (selectedIndicator === undefined) {
-            this.triggerEvent('data_mapper_menu.nodata');
-            return;
-        }
-
-        let childData = selectedIndicator.data;
-
-        this.state.subindicator.data.data = childData;
-
-        let args = {
-            indicatorTitle: this.state.subindicator.indicatorTitle
-        }
-
-        this.triggerEvent("newProfileWithChoropleth", args);
     }
 
     /**

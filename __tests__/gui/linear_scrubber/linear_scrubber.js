@@ -1,10 +1,7 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    checkIfChoroplethFilterDialogIsCollapsed,
-    collapseChoroplethFilterDialog,
     expandChoroplethFilterDialog,
     expandDataMapper,
-    expandPointMapper,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded
@@ -12,17 +9,12 @@ import {
 import all_details from "./all_details.json";
 import profiles from "./profiles.json";
 import profile from './profile.json';
-import children_indicators from './children_indicators.json';
-
-
+import profile_indicator_summary from './profile_indicator_summary.json';
+import profile_indicator_data from './profile_indicator_data.json'
 
 Given('I am on the Wazimap Homepage', () => {
-    console.log("Before set up iterception")
-    console.log(all_details)
-    setupInterceptions(profiles, all_details, profile, [], [], [], children_indicators);
+    setupInterceptions(profiles, all_details, profile, [], [], [], profile_indicator_summary, profile_indicator_data);
     gotoHomepage();
-    console.log("After set up iterception")
-    console.log(all_details)
 })
 
 Then('I wait until map is ready', () => {
@@ -72,7 +64,7 @@ Then('I check if White is selected on scrubber', () => {
 })
 
 Then('I check if mapchip title name is changed', () => {
-  cy.get(`${mapBottomItems} .map-options .filter__header_sub-indicator .filters__header_name div`).should('have.text', 'Population group (White)')
+    cy.get(`${mapBottomItems} .map-options .filter__header_sub-indicator .filters__header_name div`).should('have.text', 'Population group (White)')
 })
 
 When('I select next indicator', () => {
@@ -99,19 +91,19 @@ Then('I expand choropleth filter dialog', () => {
 })
 
 Then('I apply filters', () => {
-  cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(0).click()
-  cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter .dropdown__list_item`).contains('sex').click()
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(0).click()
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter .dropdown__list_item`).contains('sex').click()
 
-  cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).click()
-  cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter .dropdown__list_item`).contains('Male').click()
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).click()
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter .dropdown__list_item`).contains('Male').click()
 })
 
 Then('I check if filters are still applied', () => {
-  cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
-      .eq(0)
-      .should('contain.text', 'sex');
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+        .eq(0)
+        .should('contain.text', 'sex');
 
-  cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
-      .eq(1)
-      .should('contain.text', 'Male');
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+        .eq(1)
+        .should('contain.text', 'Male');
 })

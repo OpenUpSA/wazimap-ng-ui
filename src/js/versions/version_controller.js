@@ -1,7 +1,7 @@
 import {Component} from "../utils";
 import {ChildrenIndicator, ChildrenIndicators, DataBundle} from "../dataobjects";
 import {Version} from "./version";
-import {loadMenu} from "../elements/menu";
+import {loadMenu} from "../elements/data_mapper/menu";
 
 export class VersionController extends Component {
     static EVENTS = {
@@ -137,7 +137,7 @@ export class VersionController extends Component {
             this.checkAndInitWebflow();
         })
         this.parent.on('hashChange', (payload) => {
-            this.getChildrenIndicators(payload);
+            this.getIndicatorSummary(payload);
         })
         this.parent.on('profile.loaded', () => {
             this._initIndicatorEvents['profile.loaded'] = true;
@@ -225,6 +225,51 @@ export class VersionController extends Component {
 
             this._indicatorPromises.push(promise);
         })
+
+        Promise.all(this._indicatorPromises).then(() => {
+            this.checkAndInitIndicators();
+        });
+    }
+
+    getIndicatorSummary(payload) {
+        this.reInitIndicators();
+
+        const profileId = payload.state.profileId;
+        const areaCode = payload.payload.areaCode;
+
+        this.versions.forEach((version) => {
+            const promise = this.api.getIndicatorSummary(profileId, areaCode, version.model.name)
+                .then((data) => {
+                    const childrenIndicators = new ChildrenIndicators(data);
+
+                    let indicatorDataByCode = {
+                        indicatorData: childrenIndicators.data,
+                        areaCode
+                    }
+
+                    this.setVersionData(childrenIndicators.data, version);
+                    let versionIndicatorData = this.getIndicatorDataByGeo(areaCode);
+
+                    if (versionIndicatorData === null || versionIndicatorData === undefined) {
+                        versionIndicatorData = indicatorDataByCode;
+                    } else {
+                        this.allVersionsIndicatorDataByGeography.splice(this.allVersionsIndicatorDataByGeography.indexOf(versionIndicatorData), 1);
+
+                        this.appendProfileData(indicatorDataByCode.indicatorData, version, versionIndicatorData.indicatorData);
+                    }
+
+                    this.allVersionsIndicatorDataByGeography.push(versionIndicatorData);
+                }).catch((response) => {
+                    if (response.status === 404) {
+                        //version does not exist for this geo
+                        version.exists = false;
+                    } else {
+                        throw(response);
+                    }
+                });
+
+            this._indicatorPromises.push(promise);
+        });
 
         Promise.all(this._indicatorPromises).then(() => {
             this.checkAndInitIndicators();

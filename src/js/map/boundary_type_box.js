@@ -1,7 +1,5 @@
 import {Component} from "../utils";
 import {ConfirmationModal} from "../ui_components/confirmation_modal";
-
-let selectElement = $('.map-geo-select')[0];
 let selectedOption = null;
 let optionWrapper = null;
 let optionItem = null;
@@ -9,6 +7,8 @@ let optionItem = null;
 export class BoundaryTypeBox extends Component {
     constructor(parent, preferredChildren) {
         super(parent);
+
+        this.selectElement = $('.map-geo-select')[0];
 
         this.preferredChildren = preferredChildren;
         this.confirmationModal = new ConfirmationModal(this, ConfirmationModal.COOKIE_NAMES.BOUNDARY_TYPE_SELECTION);
@@ -35,9 +35,9 @@ export class BoundaryTypeBox extends Component {
 
     setVisibilityOfDropdown = (versionOptions) => {
         if (versionOptions.length === 0) {
-            $(selectElement).addClass('hidden');
+            $(this.selectElement).addClass('hidden');
         } else {
-            $(selectElement).removeClass('hidden');
+            $(this.selectElement).removeClass('hidden');
         }
     }
 
@@ -89,9 +89,10 @@ export class BoundaryTypeBox extends Component {
     }
 
     setElements = () => {
-        selectedOption = $(selectElement).find('.dropdown-menu__trigger');
-        optionWrapper = $(selectElement).find('.dropdown-menu__content');
-        let optionItems = $(selectElement).find('.dropdown__list_item');
+        console.log({'select':this.selectElement})
+        selectedOption = $(this.selectElement).find('.dropdown-menu__trigger');
+        optionWrapper = $(this.selectElement).find('.dropdown-menu__content');
+        let optionItems = $(this.selectElement).find('.dropdown__list_item');
         if (optionItems.length === 0 ){
           let listItem = document.createElement('div');
           $(listItem).addClass("dropdown__list_item");
@@ -123,7 +124,6 @@ export class BoundaryTypeBox extends Component {
                         }
                     })
             });
-            console.log({"test": item.outerHTML});
             $(optionWrapper).append(item);
         })
         this.setVisibilityOfDropdown(boundaryTypes);

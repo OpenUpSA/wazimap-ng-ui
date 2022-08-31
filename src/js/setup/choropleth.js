@@ -114,7 +114,6 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
     const filter = ps.subindicator.filter;
     let data = ps.subindicator.data;
     if (childData) {
-        /* data.originalChildData = (data.originalChildData !== undefined) ? data.originalChildData : data.data;*/
         ps.subindicator.data = childData;
         data = childData;
     }

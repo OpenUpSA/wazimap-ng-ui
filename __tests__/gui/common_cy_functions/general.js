@@ -73,10 +73,11 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
 }
 
 export function extractRequestedIndicatorData(url, indicatorData) {
-    let geo = url.replace(`https://staging.wazimap-ng.openup.org.za/api/v1/profile/8/geography/`, '');
+    let domain = url.match(/^https:\/\/[^/]+/);
+    let geo = url.replace(`${domain}/api/v1/profile/8/geography/`, '');
     geo = geo.replace(geo.substring(geo.indexOf('/')), '');
 
-    let indicatorId = url.replace(`https://staging.wazimap-ng.openup.org.za/api/v1/profile/8/geography/${geo}/indicator/`, '');
+    let indicatorId = url.replace(`${domain}/api/v1/profile/8/geography/${geo}/indicator/`, '');
     indicatorId = indicatorId.replace('/child_data/', '');
     indicatorId = parseInt(indicatorId);
 

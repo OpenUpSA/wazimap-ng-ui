@@ -127,29 +127,29 @@ export class MapControl extends Component {
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter) {
+    handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter, metadata, config) {
         const args = {
             data: data,
+            metadata: metadata,
             selectedSubindicator: selectedSubindicator,
             indicatorTitle: indicatorTitle,
             showMapchip: showMapchip,
-            description: data.metadata.description,
-            filter: filter
+            filter: filter,
+            config: config
         }
 
-        let allSubindicators = args.data.metadata.groups.filter(x => {
-            return x.name === data.metadata.primary_group
+        let allSubindicators = metadata.groups.filter(x => {
+            return x.name === metadata.primary_group
         })[0].subindicators;
 
+        this.displayChoropleth(data, metadata.primary_group, method, selectedSubindicator, allSubindicators, config);
         this.triggerEvent("map.choropleth.loaded", args);
-
-        this.displayChoropleth(data, data.metadata.primary_group, method, selectedSubindicator, allSubindicators);
     };
 
-    displayChoropleth(data, primaryGroup, method, selectedSubindicator, allSubindicators) {
-        const childData = data.data;
+    displayChoropleth(data, primaryGroup, method, selectedSubindicator, allSubindicators, config) {
+        const childData = data;
 
-        this.choropleth.choroplethRangeType = data.choropleth_range;
+        this.choropleth.choroplethRangeType = config.choroplethRange;
 
         const calculator = this.choropleth.getCalculator(method);
 

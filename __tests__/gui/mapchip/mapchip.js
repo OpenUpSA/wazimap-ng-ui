@@ -4,7 +4,6 @@ import {
     collapseChoroplethFilterDialog,
     expandChoroplethFilterDialog,
     expandDataMapper,
-    expandPointMapper,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded
@@ -12,10 +11,11 @@ import {
 import all_details from "./all_details.json";
 import profiles from "./profiles.json";
 import profile from './profile.json';
-import children_indicators from './children_indicators.json';
+import profile_indicator_summary from './profile_indicator_summary.json';
+import profile_indicator_data from './profile_indicator_data.json'
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, [], [], [], children_indicators);
+    setupInterceptions(profiles, all_details, profile, [], [], [], profile_indicator_summary, profile_indicator_data);
     gotoHomepage();
 })
 
@@ -90,7 +90,7 @@ Then('I check filters applied label is hidden', () => {
 
 Then('I check if there is description', () => {
     cy.get(`${mapBottomItems} .map-options .map-option__context_text div`).invoke('text').then((text) => {
-      expect(text.length).to.be.at.least(1)
+        expect(text.length).to.be.at.least(1)
     })
 })
 
@@ -165,7 +165,7 @@ Then('I check filters applied label is hidden', () => {
 
 Then('I check if there is no description', () => {
     cy.get(`${mapBottomItems} .map-options .map-option__context_text div`).invoke('text').then((text) => {
-      expect(text.length).to.be.equal(0)
+        expect(text.length).to.be.equal(0)
     })
 })
 

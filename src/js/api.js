@@ -43,6 +43,11 @@ export class API extends Observable {
         return this.loadUrl(url, this.abortController);
     }
 
+    getIndicatorChildData(profileId, areaCode, indicatorId) {
+        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/child_data/`;
+        return this.loadUrl(url, this.abortController);
+    }
+
     loadThemes(profileId) {
         const url = `${this.baseUrl}/profile/${profileId}/points/themes/?format=json`;
         return this.loadUrl(url);
@@ -170,6 +175,11 @@ export class API extends Observable {
 
     async getChildrenIndicators(profileId, areaCode, version) {
         const url = `${this.baseUrl}/children-indicators/profile/${profileId}/geography/${areaCode}/?version=${version}&format=json`;
+        return this.loadUrl(url, this.abortController);
+    }
+
+    async getIndicatorSummary(profileId, areaCode, version) {
+        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/profile_indicator_summary/?version=${version}&format=json`;
         return this.loadUrl(url, this.abortController);
     }
 

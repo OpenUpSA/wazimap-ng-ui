@@ -1,10 +1,12 @@
 import pixelmatch from "pixelmatch";
+import profile_indicator_summary from "../data_mapper/profile_indicator_summary.json";
 
 export const mapBottomItems = '.map-bottom-items--v2';
 export const allDetailsEndpoint = 'all_details';
 const recursiveResult = {PANEL_ALREADY_EXPANDED: false, ALL_PANELS_CLOSED: true};
 
-export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [], children_indicators = {}) {
+export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [],
+                                   profile_indicator_summary = {}, indicator_data = {}) {
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=test&skip-children=true&format=json`, (req) => {
         req.reply({
             statusCode: 200,
@@ -53,13 +55,41 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
         });
     }).as('themes_count');
 
-    cy.intercept('/api/v1/children-indicators/profile/8/geography/ZA/?version=test&format=json', (request) => {
+    cy.intercept('/api/v1/profile/8/geography/ZA/profile_indicator_summary/?version=test&format=json', (request) => {
         request.reply({
             statusCode: 200,
-            body: children_indicators,
+            body: profile_indicator_summary,
             forceNetworkError: false // default
         });
-    }).as('themes_count');
+    }).as('profile_indicator_summary');
+
+    cy.intercept('/api/v1/profile/8/geography/**/indicator/**/child_data/', (request) => {
+        request.reply({
+            statusCode: 200,
+            body: extractRequestedIndicatorData(request.url, indicator_data),
+            forceNetworkError: false // default
+        });
+    }).as('indicator_data');
+}
+
+export function extractRequestedIndicatorData(url, indicatorData) {
+    let domain = url.match(/^https:\/\/[^/]+/);
+    let geo = url.replace(`${domain}/api/v1/profile/8/geography/`, '');
+    geo = geo.replace(geo.substring(geo.indexOf('/')), '');
+
+    let indicatorId = url.replace(`${domain}/api/v1/profile/8/geography/${geo}/indicator/`, '');
+    indicatorId = indicatorId.replace('/child_data/', '');
+    indicatorId = parseInt(indicatorId);
+
+    let result = indicatorData.filter(x => {
+        return x.id === indicatorId
+    });
+
+    if (result[0] !== undefined) {
+        return result[0].data[geo];
+    } else {
+        return {};
+    }
 }
 
 export function gotoHomepage() {

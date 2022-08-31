@@ -13,10 +13,11 @@ class FilterRowModel extends Component {
     static ALL_VALUES = 'All values';
     static ALL_INDICATORS = 'All indicators';
 
-    constructor(parent, dataFilterModel, isDefault, isExtra, defaultIndicatorText = FilterRowModel.ALL_INDICATORS, defaultSubindicatorText = FilterRowModel.ALL_VALUES) {
+    constructor(parent, dataFilterModel, isDefault, isExtra, isRequired, defaultIndicatorText = FilterRowModel.ALL_INDICATORS, defaultSubindicatorText = FilterRowModel.ALL_VALUES) {
         super(parent)
         this._isDefault = isDefault;
         this._isExtra = isExtra;
+        this._isRequired = isRequired;
         this._currentIndicatorValue = null;
         this._currentSubindicatorValue = null;
         this._defaultIndicatorText = defaultIndicatorText;
@@ -64,6 +65,10 @@ class FilterRowModel extends Component {
         return this._isExtra;
     }
 
+    get isRequired() {
+        return this._isRequired;
+    }
+
     get currentIndicatorValue() {
         /**
          * Return the currently selected indicatorValue or defaultText if none is selected
@@ -82,14 +87,17 @@ class FilterRowModel extends Component {
         let prevIndicator = this._currentIndicatorValue;
         this._currentIndicatorValue = value;
 
-        if (prevIndicator != null && prevIndicator != FilterRowModel.ALL_VALUES) {
+        if (prevIndicator != null && prevIndicator !== FilterRowModel.ALL_VALUES) {
             this.dataFilterModel.removeFilter(prevIndicator);
         }
 
-        if (value != null && value != FilterRowModel.ALL_VALUES) {
+        if (value != null && value !== FilterRowModel.ALL_VALUES) {
             this.dataFilterModel.addFilter(value);
         }
-        this.dataFilterModel.updateFilteredData();
+        if (!this.isRequired) {
+            // no need to filter data before the subIndicator value is selected if isRequired = true
+            this.dataFilterModel.updateFilteredData();
+        }
 
         this.triggerEvent(FilterRowModel.EVENTS.indicatorSelected, this);
     }
@@ -137,14 +145,14 @@ export class FilterRow extends Component {
     static SELECT_ATTRIBUTE = 'Select an attribute';
     static SELECT_VALUE = 'Select a value';
 
-    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true, elements) {
+    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true, isRequired = false, elements) {
         super(parent);
         this._container = container;
         this._elements = elements;
 
         this.prepareDomElements();
 
-        this._model = new FilterRowModel(this, dataFilterModel, isDefault, isExtra);
+        this._model = new FilterRowModel(this, dataFilterModel, isDefault, isExtra, isRequired);
 
         if (this.model.isDefault)
             this.hideRemoveButton();

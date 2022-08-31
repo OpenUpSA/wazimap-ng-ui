@@ -83,22 +83,22 @@ export class Popup extends Component {
             for (let i = 0; i < state.choroplethData.length; i++) {
                 if (state.choroplethData[i].code === areaCode) {
                     isChild = true;
-                    if(state.subindicator && state.subindicator.chartConfiguration) {
-                      let chartConfig = state.subindicator.chartConfiguration;
-                      let percentageFormatting = chartConfig.types[PERCENTAGE_TYPE].formatting;
-                      let absoluteFormatting = chartConfig.types[VALUE_TYPE].formatting;
+                    if (state.subindicator && state.subindicator.config.chartConfiguration) {
+                        let chartConfig = state.subindicator.config.chartConfiguration;
+                        let percentageFormatting = chartConfig.types[PERCENTAGE_TYPE].formatting;
+                        let absoluteFormatting = chartConfig.types[VALUE_TYPE].formatting;
 
-                      const countFmt = d3format(absoluteFormatting)(state.choroplethData[i].total);
-                      const perc = d3format(percentageFormatting)(state.choroplethData[i].val);
+                        const countFmt = d3format(absoluteFormatting)(state.choroplethData[i].total);
+                        const perc = d3format(percentageFormatting)(state.choroplethData[i].val);
 
-                      $('.map-tooltip__value', item).removeClass('hidden');
-                      $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);
-                      $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
-                      if (state.subindicator.choropleth_method != 'absolute_value') {
-                          $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc})`);
-                      } else {
-                          $('.map-tooltip__value .tooltip__value_detail div', item).text('');
-                      }
+                        $('.map-tooltip__value', item).removeClass('hidden');
+                        $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);
+                        $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
+                        if (state.subindicator.choropleth_method != 'absolute_value') {
+                            $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc})`);
+                        } else {
+                            $('.map-tooltip__value .tooltip__value_detail div', item).text('');
+                        }
                     }
                 }
             }

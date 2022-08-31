@@ -52,7 +52,6 @@ export class BoundaryTypeBox extends Component {
         let boundaryTypes = this.getBoundaryLevelsByVersion(versionGeometries);
         let options = this.getOptions(boundaryTypes, existingVersions);
         let currentVersionLevels = boundaryTypes[this.activeVersion.model.name] || [];
-
         if (typeof this.preferredChildren[currentLevel] !== 'undefined' || (currentVersionLevels.length === 0 && existingVersions.length > 0)) {
             //(currentVersionLevels.length === 0 && existingVersions.length > 0) -> there are no children but there are multiple versions
             const availableLevels = this.preferredChildren[currentLevel] !== undefined ? this.preferredChildren[currentLevel].filter(level => currentVersionLevels.includes(level)) : [];
@@ -94,11 +93,15 @@ export class BoundaryTypeBox extends Component {
         optionWrapper = $(selectElement).find('.dropdown-menu__content');
         let optionItems = $(selectElement).find('.dropdown__list_item');
         if (optionItems.length === 0 ){
-          let optionItem = $("<div class='dropdown__list_item'><div class='truncate'></div></div>");
+          let listItem = document.createElement('div');
+          $(listItem).addClass("dropdown__list_item");
+          let childlistItem = document.createElement('div');
+          $(childlistItem).addClass("truncate");
+          $(listItem).append(childlistItem);
+          optionItem = listItem;
         } else {
           optionItem = optionItems[0].cloneNode(true);
         }
-
         $(optionWrapper).empty();
     }
 
@@ -109,6 +112,7 @@ export class BoundaryTypeBox extends Component {
     populateOptions = (boundaryTypes, currentLevel) => {
         boundaryTypes.forEach((bt) => {
             let item = optionItem.cloneNode(true);
+
             $(item).removeClass('selected');
             $('.truncate', item).text(bt);
             $(item).on('click', () => {
@@ -119,10 +123,9 @@ export class BoundaryTypeBox extends Component {
                         }
                     })
             });
-
+            console.log({"test": item.outerHTML});
             $(optionWrapper).append(item);
         })
-
         this.setVisibilityOfDropdown(boundaryTypes);
     }
 

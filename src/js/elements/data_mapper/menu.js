@@ -1,6 +1,7 @@
 import {
     Component
 } from '../../utils'
+import {sortBy} from 'lodash';
 import {Category} from "./category";
 import {SubCategory} from "./subcategory";
 import {Indicator} from "./indicator";
@@ -25,32 +26,31 @@ export function loadMenu(dataMapperMenu, data) {
         if (indicators === undefined) {
             return;
         }
-        for (const [indicatorName, detail] of Object.entries(indicators)) {
-            const primaryGroup = detail.metadata.groups.filter((g) => {
-                return g.name === detail.metadata.primary_group
+        for (const indicatorDetail of sortBy(indicators, "order")) {
+            const primaryGroup = indicatorDetail.metadata.groups.filter((g) => {
+                return g.name === indicatorDetail.metadata.primary_group
             })[0];
 
-            let metadata = detail.metadata;
-            metadata.indicatorDescription = detail.description;
+            let metadata = indicatorDetail.metadata;
+            metadata.indicatorDescription = indicatorDetail.description;
             let indicator = new Indicator(parent,
-                indicatorName,
-                detail.id,
-                detail.choropleth_method,
+                indicatorDetail.label,
+                indicatorDetail.id,
+                indicatorDetail.choropleth_method,
                 primaryGroup,
-                detail.version_data,
-                detail.metadata,
-                detail.choropleth_range,
-                detail.enable_linear_scrubber,
-                detail.chartConfiguration
+                indicatorDetail.version_data,
+                indicatorDetail.metadata,
+                indicatorDetail.choropleth_range,
+                indicatorDetail.enable_linear_scrubber,
+                indicatorDetail.chartConfiguration
             );
         }
     }
 
     function addSubcategories(parent, subcategories) {
-        for (const [subCategoryName, detail] of Object.entries(subcategories)) {
-            let subCategory = new SubCategory(parent, subCategoryName, detail, dataMapperMenu);
-
-            addIndicators(subCategory, detail.indicators);
+        for (const subcategoryDetail of sortBy(subcategories, "order")) {
+            let subCategory = new SubCategory(parent, subcategoryDetail.name, subcategoryDetail, dataMapperMenu);
+            addIndicators(subCategory, subcategoryDetail.indicators);
         }
     }
 
@@ -59,13 +59,14 @@ export function loadMenu(dataMapperMenu, data) {
     let hiddenClass = 'hidden';
     $(parentContainer).find('.data-category--v2').remove();
 
-    for (const [categoryName, detail] of Object.entries(data)) {
-        let category = new Category(this, categoryName, detail);
+    for (const categoryDetail of sortBy(data, "order")) {
+        const categoryName = categoryDetail.name;
+        let category = new Category(this, categoryName, categoryDetail);
 
         $('.' + noDataWrapperClsName).addClass(hiddenClass);
         hasNoItems = false;
 
-        addSubcategories(category, detail.subcategories);
+        addSubcategories(category, categoryDetail.subcategories);
     }
 
     if (hasNoItems) {

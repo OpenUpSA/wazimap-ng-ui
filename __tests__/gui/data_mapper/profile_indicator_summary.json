@@ -1,15 +1,20 @@
 {
   "Elections": {
-    "description": "",
+    "order": 1,
+    "name": "Elections",
     "subcategories": {
       "2021 Municipal elections": {
-        "description": ""
+        "order": 1,
+        "name": "2021 Municipal elections",
       },
       "2016 Municipal elections": {
-        "description": "",
+        "order": 2,
+        "name": "2016 Municipal elections",
         "indicators": {
           "Voter turnout": {
             "id": 836,
+            "order": 1,
+            "label": "Voter turnout",
             "description": "<p>The 2016 Municipal Election \"Voter turnout\" indicator shows the larger of the Ward and Proportional Representation ballots in each voting district. Elections in local municipalities that fall in district municipalities actually have a third ballot (DC40), because the district council is elected partly by the councils of the costituent local municipalities, and partly by this third ballot. The Ward and PR ballots are used to ensure a proper comparison between ward, municipality and provincial regions.</p>",
             "choropleth_method": "subindicator",
             "last_updated_at": "2021-11-02T15:26:25.518843Z",
@@ -49,6 +54,8 @@
           },
           "Number of registered voters  by age": {
             "id": 1010,
+            "order": 2,
+            "label": "Number of registered voters  by age",
             "description": "<p>Number of people registered to vote with the IEC at the time of the 2016 Municipal Elections.</p>",
             "choropleth_method": "subindicator",
             "last_updated_at": "2021-08-31T13:00:17.775184Z",
@@ -103,6 +110,8 @@
           },
           "Number of registered voters by gender": {
             "id": 1012,
+            "order": 2,
+            "label": "Number of registered voters by gender",
             "description": "<p>Number of people registered to vote with the IEC at the time of the 2016 Municipal Elections.</p>",
             "choropleth_method": "absolute_value",
             "last_updated_at": "2021-08-31T13:04:41.110516Z",
@@ -157,6 +166,8 @@
           },
           "Number of hung and majority councils": {
             "id": 1255,
+            "order": 2,
+            "label": "Number of hung and majority councils",
             "description": "<p>This indicator shows the number of candidates who obtain over a half of the votes or seats, or 50% plus 1 votes and those who did not obtain a majority of seats(&lt; 50% of seats).</p>\r\n<p>District councils are not included because their council is elected partially by a subsequent vote of the councillors of the local municipalities making up this district.</p>",
             "choropleth_method": "subindicator",
             "last_updated_at": "2021-11-24T10:58:57.824941Z",
@@ -205,13 +216,17 @@
     }
   },
   "Demographics": {
-    "description": "",
+    "order": 2,
+    "name": "Demographics",
     "subcategories": {
       "Population (2016 Community Survey)": {
-        "description": "",
+        "order": 1,
+        "name": "Population (2016 Community Survey)",
         "indicators": {
           "Population group": {
             "id": 927,
+            "order": 1,
+            "label": "Population group",
             "description": "<p>This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified population groupings at the time that the 2016 Community Survey was conducted</p>",
             "choropleth_method": "subindicator",
             "last_updated_at": "2021-10-12T10:56:22.849621Z",
@@ -276,10 +291,13 @@
         }
       },
       "Population (2011 Census)": {
-        "description": "",
+        "order": 2,
+        "name": "Population (2011 Census)",
         "indicators": {
           "Population group 2": {
             "id": 840,
+            "order": 1,
+            "label": "Population group 2",
             "description": "This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified population group and sex at the time that the 2011 census was conducted. The data is represented using the 2016 boundaries with wards.",
             "choropleth_method": "subindicator",
             "last_updated_at": "2021-07-01T09:12:54.010737Z",
@@ -336,13 +354,17 @@
     }
   },
   "Economic Opportunities": {
-    "description": "",
+    "order": 3,
+    "name": "Economic Opportunities",
     "subcategories": {
       "NEET Status": {
-        "description": "",
+        "order": 1,
+        "name": "NEET Status",
         "indicators": {
           "Not in Employment": {
             "id": 1134,
+            "order": 1,
+            "label": "Not in Employment",
             "description": "",
             "choropleth_method": "subindicator",
             "last_updated_at": "2021-10-13T15:43:22.928664Z",

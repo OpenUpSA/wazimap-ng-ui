@@ -36,8 +36,13 @@ export class BoundaryTypeBox extends Component {
     setVisibilityOfDropdown = (versionOptions) => {
         if (versionOptions.length === 0) {
             $(this.selectElement).addClass('hidden');
+        } else if (versionOptions.length === 1) {
+          $(this.selectElement).find(".dropdown-menu").css('pointer-events', 'none');
+          $(this.selectElement).find(".dropdown-menu__icon").addClass("hidden");
         } else {
             $(this.selectElement).removeClass('hidden');
+            $(this.selectElement).find(".dropdown-menu").css('pointer-events', 'auto');
+            $(this.selectElement).find(".dropdown-menu__icon").removeClass("hidden");
         }
     }
 

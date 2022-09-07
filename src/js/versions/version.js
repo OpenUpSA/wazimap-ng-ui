@@ -8,6 +8,7 @@ export class VersionModel extends Observable {
         this._isDefault = isDefault;
         this._isActive = isDefault;
         this._exists = true;
+        this._selectedLevel = null;
     }
 
     get name() {
@@ -32,6 +33,14 @@ export class VersionModel extends Observable {
 
     set exists(value){
         this._exists = value;
+    }
+
+    get selectedLevel(){
+        return this._selectedLevel;
+    }
+
+    set selectedLevel(value){
+        this._selectedLevel = value;
     }
 }
 

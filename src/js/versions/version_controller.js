@@ -86,14 +86,12 @@ export class VersionController extends Component {
     }
 
     set activeVersion(version) {
-        if (!version.model.isActive || version.model.selectedLevel !== this.selectedLevel ) {
+        if (!version.model.isActive) {
             this.versions.forEach((v) => {
                 v.model.isActive = false;
             })
 
             version.model.isActive = true;
-            version.model.selectedLevel = this.selectedLevel;
-
             this._activeVersion = version;
 
             const payload = {

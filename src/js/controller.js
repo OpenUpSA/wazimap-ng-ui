@@ -318,9 +318,10 @@ export default class Controller extends Component {
     }
 
     reDrawChildren() {
+        const versionName = this.versionController.activeVersion.model.name;
         const payload = {
             profile: this.state.profile.profile,
-            geometries: this.state.profile.geometries
+            geometries: this.versionController.versionGeometries[versionName],
         }
 
         this.triggerEvent('redraw', payload);

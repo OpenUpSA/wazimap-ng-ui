@@ -8,7 +8,7 @@ import html from '../../../src/index.html';
 import {Config as SAConfig} from "../../../src/js/configurations/geography_sa";
 
 
-describe('Selecting a subindicator', () => {
+describe('Check Boundary type box options', () => {
     beforeEach(() => {
         document.body.innerHTML = html;
     });
@@ -37,7 +37,7 @@ describe('Selecting a subindicator', () => {
     let selectElement = '.map-geo-select';
 
     let preferredChildren = {
-        "disctrict" : ["mainplace", "ward", "equal area hexagon"]
+        "district" : ["mainplace", "ward", "equal area hexagon"]
     }
 
     // version - 2011
@@ -58,7 +58,7 @@ describe('Selecting a subindicator', () => {
         let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
 
         boundaryTypeBox.activeVersion = version1;
-        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "disctrict", [version1])
+        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version1])
 
         // assert options
         let options = document.querySelectorAll(`${selectElement} .dropdown__list_item`);
@@ -82,7 +82,7 @@ describe('Selecting a subindicator', () => {
         let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
 
         boundaryTypeBox.activeVersion = version2;
-        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "disctrict", [version1, version2])
+        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version1, version2])
 
         // assert options
         let options = document.querySelectorAll(`${selectElement} .dropdown__list_item`);
@@ -107,7 +107,7 @@ describe('Selecting a subindicator', () => {
         let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
 
         boundaryTypeBox.activeVersion = version2;
-        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "disctrict", [version2, version1])
+        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version2, version1])
 
         // assert options
         let options = document.querySelectorAll(`${selectElement} .dropdown__list_item`);
@@ -132,7 +132,7 @@ describe('Selecting a subindicator', () => {
         let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
 
         boundaryTypeBox.activeVersion = version1;
-        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "disctrict", [version1])
+        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version1])
 
         // assert options
         let options = document.querySelectorAll(`${selectElement} .dropdown__list_item`);
@@ -146,13 +146,13 @@ describe('Selecting a subindicator', () => {
         expect($(selectedOptions[0]).text().trim()).toBe("2011 Boundaries / mainplace");
 
         let preferredChildrenUpdatedOrder = {
-            "disctrict" : ["ward", "mainplace", "equal area hexagon"]
+            "district" : ["ward", "mainplace", "equal area hexagon"]
         }
 
         boundaryTypeBox = new BoundaryTypeBox(component, preferredChildrenUpdatedOrder);
 
         boundaryTypeBox.activeVersion = version1;
-        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "disctrict", [version1]);
+        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version1]);
 
         options = document.querySelectorAll(`${selectElement} .dropdown__list_item`);
         expect(options.length).toBe(2);
@@ -177,7 +177,7 @@ describe('Selecting a subindicator', () => {
         let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
 
         boundaryTypeBox.activeVersion = version2;
-        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "disctrict", [version2])
+        boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version2])
 
         // assert options
         let options = document.querySelectorAll(`${selectElement} .dropdown__list_item`);

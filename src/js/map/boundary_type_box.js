@@ -23,12 +23,12 @@ export class BoundaryTypeBox extends Component {
         this._activeVersion = value;
     }
 
-    activeVersionUpdated = (geometries, activeVersion, selectedLevel) => {
+    activeVersionUpdated = (geometries, activeVersion, selectedGeoType) => {
         this.activeVersion = activeVersion;
         let levels = Object.keys(geometries.children) || [];
 
         if(levels.length > 0){
-          const selectedText = `${activeVersion.model.name} / ${levels.includes(selectedLevel) ? selectedLevel : levels[0]}`;
+          const selectedText = `${activeVersion.model.name} / ${levels.includes(selectedGeoType) ? selectedGeoType : levels[0]}`;
           this.setSelectedOption(selectedText);
         }
     }
@@ -37,8 +37,8 @@ export class BoundaryTypeBox extends Component {
         if (versionOptions.length === 0) {
             $(this.selectElement).addClass('hidden');
         } else if (versionOptions.length === 1) {
-          $(this.selectElement).find(".dropdown-menu").css('pointer-events', 'none');
-          $(this.selectElement).find(".dropdown-menu__icon").addClass("hidden");
+            $(this.selectElement).find(".dropdown-menu").css('pointer-events', 'none');
+            $(this.selectElement).find(".dropdown-menu__icon").addClass("hidden");
         } else {
             $(this.selectElement).removeClass('hidden');
             $(this.selectElement).find(".dropdown-menu").css('pointer-events', 'auto');

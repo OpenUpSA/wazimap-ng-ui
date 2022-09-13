@@ -9,54 +9,55 @@ import {Config as SAConfig} from "../../../src/js/configurations/geography_sa";
 
 
 describe('Check Boundary type box options', () => {
+
+    let version1, version2, versionGeometries, controller, versionController, boundaryTypeBox;
+    const selectElement = '.map-geo-select';
+
     beforeEach(() => {
         document.body.innerHTML = html;
-    });
-    let config = new SAConfig();
+        let config = new SAConfig();
 
-    let versionGeometries = {
-        "2011 Boundaries": {
-            "children": {
-                "mainplace": {
-                    "type": "FeatureCollection",
+        versionGeometries = {
+            "2011 Boundaries": {
+                "children": {
+                    "mainplace": {
+                        "type": "FeatureCollection",
+                    },
+                    "ward": {
+                        "type": "FeatureCollection",
+                    }
                 },
-                "ward": {
-                    "type": "FeatureCollection",
-                }
             },
-        },
-        "2016 Boundaries": {
-            "children": {
-                "equal area hexagon": {
-                    "type": "FeatureCollection",
+            "2016 Boundaries": {
+                "children": {
+                    "equal area hexagon": {
+                        "type": "FeatureCollection",
+                    }
                 }
             }
+        };
+
+        let preferredChildren = {
+            "district" : ["mainplace", "ward", "equal area hexagon"]
         }
-    };
 
-    let selectElement = '.map-geo-select';
+        // version - 2011
+        version1 = new Version("2011 Boundaries", true);
+        version1.exists = true;
 
-    let preferredChildren = {
-        "district" : ["mainplace", "ward", "equal area hexagon"]
-    }
+        // verison - 2016
+        version2 = new Version("2016 Boundaries", true);
+        version2.exists = true;
 
-    // version - 2011
-    let version1 = new Version("2011 Boundaries", true);
-    version1.exists = true;
-
-    // verison - 2016
-    let version2 = new Version("2016 Boundaries", true);
-    version2.exists = true;
-
-    test('Check Boundary type options for single version', () => {
-
-        const controller = new Controller(this, null, config, 1);
-        let versionController = new VersionController(controller, "ZA", true);
-        versionController.activeVersion = version1;
+        controller = new Controller(this, null, config, 1);
+        versionController = new VersionController(controller, "ZA", true);
 
         let component = new Component();
-        let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
+        boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
+    });
 
+    test('Check Boundary type options for single version', () => {
+        versionController.activeVersion = version1;
         boundaryTypeBox.activeVersion = version1;
         boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version1])
 
@@ -73,13 +74,7 @@ describe('Check Boundary type box options', () => {
     });
 
     test('Check Boundary type options for multiple version', () => {
-        const controller = new Controller(this, null, config, 1);
-
-        let versionController = new VersionController(controller, "ZA", true);
         versionController.activeVersion = version2;
-
-        let component = new Component();
-        let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
 
         boundaryTypeBox.activeVersion = version2;
         boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version1, version2])
@@ -98,13 +93,7 @@ describe('Check Boundary type box options', () => {
     });
 
     test('Check Boundary options order depend upon order of version', () => {
-        const controller = new Controller(this, null, config, 1);
-
-        let versionController = new VersionController(controller, "ZA", true);
         versionController.activeVersion = version2;
-
-        let component = new Component();
-        let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
 
         boundaryTypeBox.activeVersion = version2;
         boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version2, version1])
@@ -123,13 +112,7 @@ describe('Check Boundary type box options', () => {
     });
 
     test('Check Boundary option selection depends upon preferred children order', () => {
-        const controller = new Controller(this, null, config, 1);
-
-        let versionController = new VersionController(controller, "ZA", true);
         versionController.activeVersion = version1;
-
-        let component = new Component();
-        let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
 
         boundaryTypeBox.activeVersion = version1;
         boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version1])
@@ -149,6 +132,7 @@ describe('Check Boundary type box options', () => {
             "district" : ["ward", "mainplace", "equal area hexagon"]
         }
 
+        let component = new Component();
         boundaryTypeBox = new BoundaryTypeBox(component, preferredChildrenUpdatedOrder);
 
         boundaryTypeBox.activeVersion = version1;
@@ -168,13 +152,7 @@ describe('Check Boundary type box options', () => {
     test('Check Boundary type box is shown when no children', () => {
         // set version2 children
         versionGeometries["2016 Boundaries"]["children"] = {};
-
-        const controller = new Controller(this, null, config, 1);
-        let versionController = new VersionController(controller, "ZA", true);
         versionController.activeVersion = version2;
-
-        let component = new Component();
-        let boundaryTypeBox = new BoundaryTypeBox(component, preferredChildren);
 
         boundaryTypeBox.activeVersion = version2;
         boundaryTypeBox.populateBoundaryOptions(versionGeometries, "district", [version2])

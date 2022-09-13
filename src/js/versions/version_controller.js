@@ -45,7 +45,7 @@ export class VersionController extends Component {
             'profile.loaded': false
         }
         this._indicatorsInitialized = false;
-        this._selectedGeoType = null;
+
         this.prepareEvents();
     }
 
@@ -77,14 +77,6 @@ export class VersionController extends Component {
         this._versions = value;
     }
 
-    get selectedGeoType() {
-        return this._selectedGeoType;
-    }
-
-    set selectedGeoType(value) {
-        this._selectedGeoType = value;
-    }
-
     set activeVersion(version) {
         if (!version.model.isActive) {
             this.versions.forEach((v) => {
@@ -92,12 +84,12 @@ export class VersionController extends Component {
             })
 
             version.model.isActive = true;
+
             this._activeVersion = version;
 
             const payload = {
                 profile: this.parent.state.profile.profile,
-                geometries: this.versionGeometries[version.model.name],
-                selectedGeoType: this.selectedGeoType
+                geometries: this.versionGeometries[version.model.name]
             }
 
             if (payload.geometries !== undefined) {
@@ -427,7 +419,7 @@ export class VersionController extends Component {
         this._versionBundles[version.model.name] = dataBundle;
     }
 
-    setActiveVersionByName(versionName, selectedGeoType) {
+    setActiveVersionByName(versionName) {
         let version = this.versions.filter((v) => {
             return v.model.name === versionName
         })[0];
@@ -435,7 +427,6 @@ export class VersionController extends Component {
         if (version === null || version === undefined) {
             console.error(`Version does not exist : ${versionName}`)
         } else {
-            this.selectedGeoType = selectedGeoType;
             this.activeVersion = version;
         }
     }

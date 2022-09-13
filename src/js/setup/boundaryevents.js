@@ -16,7 +16,7 @@ export function configureBoundaryEvents(controller, boundaryTypeBox) {
         boundaryTypeBox.activeVersionUpdated(
           payload.payload.geometries,
           controller.versionController.activeVersion,
-          payload.payload.selectedLevel
+          controller.state.preferredChild
         )
     }
 
@@ -25,8 +25,7 @@ export function configureBoundaryEvents(controller, boundaryTypeBox) {
     boundaryTypeBox.on('boundary_types.option.selected', (payload) => {
         controller.onBoundaryTypeChange(payload);
         controller.versionController.setActiveVersionByName(
-            payload.selected_version_name,
-            payload.selected_type
+            payload.selected_version_name
         );
     })
 }

@@ -57,7 +57,7 @@ describe('Check event calls while redrawing child boundaries on version selectio
         });
     });
 
-    test("Check reDraw for active version", () => {
+    test("redraw event handler is called with the active version's geometries", () => {
       controller.reDrawChildren();
       expect(version1.model.isActive).toBe(true);
       expect(version1.model.name).toBe("2011 Boundaries");
@@ -65,7 +65,7 @@ describe('Check event calls while redrawing child boundaries on version selectio
       expect(assertValues[0].geometries).toMatchObject(versionGeometries[version1.model.name])
     });
 
-    test("Check reDraw for inactive version", () => {
+    test("Assert that if active version changes, redraw after that change will use the new version", () => {
       controller.reDrawChildren();
       expect(assertValues.length).toBe(1);
       expect(assertValues[0].geometries).toMatchObject(versionGeometries[version1.model.name]);

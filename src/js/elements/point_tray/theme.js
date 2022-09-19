@@ -114,6 +114,7 @@ export class Theme extends Component {
     }
 
     get backgroundColor() {
+        console.log({'theme': this.data})
         return calculateMidColor('#ffffff', this.color);
     }
 }

@@ -146,6 +146,7 @@ export class Category extends Component {
     }
 
     get backgroundColor() {
+        console.log({'category': this.data})
         return calculateMidColor('#ffffff', this.color);
     }
 }

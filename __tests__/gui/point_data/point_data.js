@@ -52,6 +52,13 @@ When(/^I check if the marker color is rgb\((\d+), (\d+), (\d+)\)$/, (color1, col
     })
 })
 
+Then(/^I check if the marker color is "([^"]*)"$/, function (color) {
+    cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg circle').then(($el) => {
+        const fill = $el.attr('fill');
+        expect(fill).equal(color);
+    })
+});
+
 Then('I remove TVET colleges from map', () => {
     cy.get('.point-legend[data-id=379] .point-legend__remove').click();
 })
@@ -73,17 +80,19 @@ When('I check if the cluster is created correctly', () => {
     const categories = [{
         name: 'Additional DEL facilities (unverified)',
         color: 'rgb(153, 58, 255)',
-        circleVal: '100 100'
+        circleVal: '100 100',
+        hex: "#993aff"
     }, {
         name: 'TVET colleges',
         color: 'rgb(58, 112, 255)',
-        circleVal: '50 100'
+        circleVal: '50 100',
+        hex: "#3a70ff"
     }]
 
     cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg text', {timeout: 20000}).should('have.text', 2);
 
     cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg circle[fill=none]').each(($el, index) => {
-        expect($el.attr('stroke')).to.contain(categories[index].color);
+        expect($el.attr('stroke')).to.contain(categories[index].hex);
         expect($el.attr('stroke-dasharray')).equal(categories[index].circleVal);
     })
 

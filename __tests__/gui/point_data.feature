@@ -7,7 +7,7 @@ Feature: Point Data
     
     And I expand Higher Education theme
     Then I select TVET colleges category
-    Then I check if the marker color is rgb(58, 112, 255)
+    Then I check if the marker color is "#3a70ff"
 
     And I check if the filter dialog is displayed
     Then I check if the filter dialog is collapsed
@@ -27,12 +27,12 @@ Feature: Point Data
     Then I check if the filter options are "All values, campus, institution type, numerical, website"
 
     And I filter by "campus:Nongoma"
-    Then I check if the marker color is rgb(58, 112, 255)
+    Then I check if the marker color is "#3a70ff"
 
     And I deselect TVET colleges category
     And I click on the first filter dropdown
     Then I check if the filter options are "All values, website, campus"
-    Then I check if the marker color is rgb(153, 58, 255)
+    Then I check if the marker color is "#993aff"
 
     # to make sure filter pane is visible when a category is unchecked and checked again
     And I deselect Additional DEL facilities category
@@ -44,9 +44,9 @@ Feature: Point Data
     # test that re-selecting the current filter does not break filtering
     And I select Additional DEL facilities category
     Then I filter by "campus:TestCampus"
-    Then I check if the marker color is rgb(153, 58, 255)
+    Then I check if the marker color is "#993aff"
     Then I filter by "campus:TestCampus"
-    Then I check if the marker color is rgb(153, 58, 255)
+    Then I check if the marker color is "#993aff"
 
     And I collapse the filter dialog
     Then I check if the filter dialog is collapsed

@@ -64,7 +64,7 @@
     "icon": "account_balance",
     "order": 10,
     "profile": 8,
-    "color": "#3a70ff"
+    "color": "#22a6b3"
   },
   {
     "id": 7,
@@ -130,6 +130,6 @@
     "icon": "work",
     "order": 14,
     "profile": 8,
-    "color": "#993aff"
+    "color": "#eb4d4b"
   }
 ]

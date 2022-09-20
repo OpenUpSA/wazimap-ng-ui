@@ -40,7 +40,7 @@ export class Category extends Component {
             $(this.element).addClass('last');
         }
 
-        $(this.element).removeClass('theme-1').addClass('theme-' + this.themeIndex);
+        $(this.element).removeClass('theme-1');
         $(this.element).attr('data-id', this.data.id);
         $(this.element).attr('data-themeIndex', this.themeIndex);
 
@@ -146,7 +146,6 @@ export class Category extends Component {
     }
 
     get backgroundColor() {
-        console.log({'category': this.data})
         return calculateMidColor('#ffffff', this.color);
     }
 }

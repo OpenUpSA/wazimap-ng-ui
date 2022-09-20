@@ -29,7 +29,6 @@ export class Theme extends Component {
         $('.point-data__h1_name .truncate', this.element).text(this.name);
         $('.point-mapper__h1_trigger', this.element)
             .removeClass('active')
-            .addClass('theme-' + this.themeIndex)   //remove this line
             .addClass('is--toggle-all')
             .attr('title', this.name)
             .css('color', this.color);
@@ -114,7 +113,6 @@ export class Theme extends Component {
     }
 
     get backgroundColor() {
-        console.log({'theme': this.data})
         return calculateMidColor('#ffffff', this.color);
     }
 }

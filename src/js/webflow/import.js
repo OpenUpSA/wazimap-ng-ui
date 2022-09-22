@@ -33,9 +33,23 @@ function setupTranslation(window) {
     }
 }
 
-function setupPointMapperTranslations(window){
-    window.document.querySelector('.point-mapper .point-mapper-content .point-mapper-content__description div').classList.add('i18n');
-    window.document.querySelector('.map-bottom-items--v2 p.point-filters__no-data').classList.add('i18n');
+function setupPointMapperTranslations(window) {
+    let selectors = [
+        '.point-mapper .point-mapper-content .point-mapper-content__description div',
+        '.map-bottom-items--v2 p.point-filters__no-data',
+        '.rich-data-content .location__facilities .no-data__text div',
+        '.facility-info .facility-info__google-map-text',
+        '.point-mapper-content__no-data .no-data__text div'
+    ];
+
+    selectors.forEach((selector) => {
+        let element = window.document.querySelector(selector);
+        if (element === null) {
+            throw `Cannot find element : ${selector}`
+        }
+
+        element.classList.add('i18n');
+    })
 }
 
 exports.transformDOM = function (window, $) {

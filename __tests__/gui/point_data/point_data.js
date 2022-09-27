@@ -37,8 +37,16 @@ When('I expand Higher Education theme', () => {
 })
 
 Then('I select TVET colleges category', () => {
+    cy.get('.point-mapper__h2:contains("TVET colleges")')
+        .closest('.point-mapper__h1')
+        .find('.point-mapper__h1_trigger')
+        .should('have.css', 'color')
+        .and('eq', 'rgb(34, 166, 179)');
     cy.get('.point-mapper__h2:contains("TVET colleges")').click();
     cy.get('.point-mapper__h2:contains("TVET colleges") .point-mapper__h2_load-complete').should('be.visible');
+    cy.get('.point-mapper__h2:contains("TVET colleges")')
+        .should('have.css', 'background-image')
+        .and('eq', 'linear-gradient(rgb(144, 210, 217), rgb(144, 210, 217))');
 })
 
 Then('I deselect TVET colleges category', () => {
@@ -52,6 +60,13 @@ When(/^I check if the marker color is rgb\((\d+), (\d+), (\d+)\)$/, (color1, col
     })
 })
 
+Then(/^I check if the marker color is "([^"]*)"$/, function (color) {
+    cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg circle').then(($el) => {
+        const fill = $el.attr('fill');
+        expect(fill).equal(color);
+    })
+});
+
 Then('I remove TVET colleges from map', () => {
     cy.get('.point-legend[data-id=379] .point-legend__remove').click();
 })
@@ -61,8 +76,16 @@ When('I expand Labour theme', () => {
 })
 
 Then('I select Additional DEL facilities category', () => {
+    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")')
+        .closest('.point-mapper__h1')
+        .find('.point-mapper__h1_trigger')
+        .should('have.css', 'color')
+        .and('eq', 'rgb(235, 77, 75)');
     cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")').click();
     cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)") .point-mapper__h2_load-complete').should('be.visible');
+    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")')
+        .should('have.css', 'background-image')
+        .and('eq', 'linear-gradient(rgb(245, 166, 165), rgb(245, 166, 165))');
 })
 
 Then('I deselect Additional DEL facilities category', () => {
@@ -72,18 +95,20 @@ Then('I deselect Additional DEL facilities category', () => {
 When('I check if the cluster is created correctly', () => {
     const categories = [{
         name: 'Additional DEL facilities (unverified)',
-        color: 'rgb(153, 58, 255)',
-        circleVal: '100 100'
+        color: 'rgb(235, 77, 75)',
+        circleVal: '100 100',
+        hex: "#eb4d4b"
     }, {
         name: 'TVET colleges',
-        color: 'rgb(58, 112, 255)',
-        circleVal: '50 100'
+        color: 'rgb(34, 166, 179)',
+        circleVal: '50 100',
+        hex: "#22a6b3"
     }]
 
     cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg text', {timeout: 20000}).should('have.text', 2);
 
     cy.get('.leaflet-clusters-pane .leaflet-zoom-animated svg circle[fill=none]').each(($el, index) => {
-        expect($el.attr('stroke')).to.contain(categories[index].color);
+        expect($el.attr('stroke')).to.contain(categories[index].hex);
         expect($el.attr('stroke-dasharray')).equal(categories[index].circleVal);
     })
 

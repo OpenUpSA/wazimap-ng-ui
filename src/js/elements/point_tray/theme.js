@@ -1,8 +1,7 @@
-import {Component, checkIterate} from '../../utils';
+import {Component, checkIterate, calculateMidColor} from '../../utils';
 import {API} from '../../api';
 import {Category} from './category';
 
-const activeClsName = 'active';
 const hideondeployClsName = 'hideondeploy';
 const categoryWrapperClsName = '.point-mapper__h2_wrapper';
 const categorySourceClsName = '.point-mapper__h2_source .truncate';
@@ -29,11 +28,13 @@ export class Theme extends Component {
         $(this.element).find('.point-mapper__h1_checkbox input[type=checkbox]').on('click', () => self.toggle());
         $('.point-data__h1_name .truncate', this.element).text(this.name);
         $('.point-mapper__h1_trigger', this.element)
-            .removeClass(activeClsName)
-            .addClass('theme-' + this.themeIndex)
+            .removeClass('active')
             .addClass('is--toggle-all')
-            .attr('title', this.name);
+            .attr('title', this.name)
+            .css('color', this.color);
         $('.point-mapper__h1_checkbox', this.element).addClass('is--shown');
+
+        self.defaultBackgroundImage = $('.point-mapper__h1_trigger', this.element).css('background-image');
 
         $(categoryWrapperClsName, this.element).html('');
     }
@@ -57,7 +58,6 @@ export class Theme extends Component {
             $(categorySourceClsName, category.element).text(category.metadata.source).attr('title', category.metadata.source);
         })
     }
-
 
     toggle() {
         if (this.active)
@@ -89,9 +89,13 @@ export class Theme extends Component {
 
     highlight(flag) {
         if (flag) {
-            $('.point-mapper__h1_trigger', this.element).addClass(activeClsName);
+            $('.point-mapper__h1_trigger', this.element).addClass('active');
+            $('.point-mapper__h1_trigger', this.element)
+                .css('background-image', `linear-gradient(180deg, ${this.backgroundColor}, ${this.backgroundColor})`);
         } else {
-            $('.point-mapper__h1_trigger', this.element).removeClass(activeClsName);
+            $('.point-mapper__h1_trigger', this.element).removeClass('active');
+            $('.point-mapper__h1_trigger', this.element)
+                .css('background-image', this.defaultBackgroundImage);
         }
 
     }
@@ -102,5 +106,13 @@ export class Theme extends Component {
 
     get id() {
         return this.data.id;
+    }
+
+    get color() {
+        return this.data.color;
+    }
+
+    get backgroundColor() {
+        return calculateMidColor('#ffffff', this.color);
     }
 }

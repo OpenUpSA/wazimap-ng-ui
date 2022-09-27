@@ -1,0 +1,140 @@
+{
+  "Demographics": {
+    "order": 2,
+    "name": "Demographics",
+    "subcategories": {
+      "Population (2016 Community Survey)": {
+        "order": 1,
+        "name": "Population (2016 Community Survey)",
+        "indicators": {
+          "Population group": {
+            "id": 927,
+            "order": 1,
+            "label": "Population group",
+            "description": "<p>This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified population groupings at the time that the 2016 Community Survey was conducted</p>",
+            "choropleth_method": "subindicator",
+            "last_updated_at": "2021-10-12T10:56:22.849621Z",
+            "metadata": {
+              "source": "2016 Community Survey - StatsSA",
+              "description": "This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified age groupings at the time that the 2016 Community Survey was conducted.",
+              "url": "http://superweb.statssa.gov.za/webapi/jsf/login.xhtml",
+              "licence": {
+                "name": "other",
+                "url": null
+              },
+              "primary_group": "population group",
+              "groups": [
+                {
+                  "subindicators": [
+                    "0-14 (Children)",
+                    "15-34 (Youth)",
+                    "35-64 (Adults)",
+                    "65+ (Elderly)"
+                  ],
+                  "dataset": 1018,
+                  "name": "age",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Indian/asian",
+                    "Coloured",
+                    "Black african",
+                    "White"
+                  ],
+                  "dataset": 1018,
+                  "name": "population group",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Female",
+                    "Male"
+                  ],
+                  "dataset": 1018,
+                  "name": "sex",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2016 demarcation",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "formatting": ",.0f"
+                }
+              },
+              "disableToggle": false
+            }
+          }
+        }
+      },
+      "Population (2011 Census)": {
+        "order": 2,
+        "name": "Population (2011 Census)",
+        "indicators": {
+          "Population group 2": {
+            "id": 840,
+            "order": 1,
+            "label": "Population group 2",
+            "description": "This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified population group and sex at the time that the 2011 census was conducted. The data is represented using the 2016 boundaries with wards.",
+            "choropleth_method": "subindicator",
+            "last_updated_at": "2021-07-01T09:12:54.010737Z",
+            "metadata": {
+              "source": "StatsSA",
+              "description": "This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified age groupings at the time that the 2011 Census was conducted.",
+              "url": "http://superweb.statssa.gov.za/webapi/jsf/login.xhtml",
+              "licence": {
+                "name": "other",
+                "url": null
+              },
+              "primary_group": "population group",
+              "groups": [
+                {
+                  "subindicators": [
+                    "Black African",
+                    "Indian or Asian",
+                    "Unspecified",
+                    "Other",
+                    "Coloured",
+                    "White"
+                  ],
+                  "dataset": 1037,
+                  "name": "population group",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Female",
+                    "Male"
+                  ],
+                  "dataset": 1037,
+                  "name": "sex",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2016 demarcation",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "formatting": ",.0f"
+                }
+              },
+              "disableToggle": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

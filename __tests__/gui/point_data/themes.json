@@ -63,7 +63,8 @@
     "name": "Higher Education",
     "icon": "account_balance",
     "order": 10,
-    "profile": 8
+    "profile": 8,
+    "color": "#22a6b3"
   },
   {
     "id": 7,
@@ -128,6 +129,7 @@
     "name": "Labour",
     "icon": "work",
     "order": 14,
-    "profile": 8
+    "profile": 8,
+    "color": "#eb4d4b"
   }
 ]

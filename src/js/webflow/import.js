@@ -6,13 +6,6 @@ function addStylesheet(window, path) {
     headContent.appendChild(tag);
 }
 
-function add_js(window, path) {
-    const tag = window.document.createElement("script");
-    tag.setAttribute("src", path);
-    let headContent = window.document.getElementsByTagName('head')[0];
-    headContent.appendChild(tag);
-}
-
 function updateScriptSource(window) {
     let scripts = window.document.getElementsByTagName('script')
     for (let i = 0; i < scripts.length; ++i) {

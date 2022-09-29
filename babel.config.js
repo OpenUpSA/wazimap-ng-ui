@@ -1,16 +1,11 @@
 module.exports = {
-  "presets": [
-		"@babel/preset-env",
-    "@babel/preset-react"
- ],
- env: {
+  presets: [],
+  env: {
     test: {
       plugins: [
         '@babel/plugin-proposal-class-properties',
       ]
     }
- },
-  "plugins": [
-    "transform-regenerator",
-  ]
+  },
+  plugins: []
 };

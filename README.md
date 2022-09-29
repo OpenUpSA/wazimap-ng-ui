@@ -9,6 +9,11 @@ See a link to the beta site here: [https://beta.youthexplorer.org.za](https://be
 
 You can find the frontend code in this repository. The backend is available here: [https://github.com/openupsa/wazimap-ng](https://github.com/openupsa/wazimap-ng).
 
+# Development
+
+Import Webflow exports using [import-webflow-export](https://www.npmjs.com/package/import-webflow-export)
+
+
 # New features
 
 The main new features are:

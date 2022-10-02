@@ -19,6 +19,7 @@ export class VersionController extends Component {
 
         this._versions = [];
         this._allVersionsBundle = null;
+        this._versionsRawData = [];
         this._allVersionsIndicatorDataByGeography = [];
         /**
          * _allVersionsIndicatorDataByGeography is an array of object
@@ -127,6 +128,14 @@ export class VersionController extends Component {
         this._indicatorsInitialized = value;
     }
 
+    get versionsRawData() {
+        return this._versionsRawData;
+    }
+
+    set versionsRawData(value) {
+        this._versionsRawData = value;
+    }
+
     prepareEvents() {
         this.parent.on('versions.all.loaded', () => {
             this._initEvents['versions.all.loaded'] = true;
@@ -146,19 +155,6 @@ export class VersionController extends Component {
     }
 
     checkAndInitWebflow() {
-        let allTriggered = true;
-        for (const key in this.initEvents) {
-            if (!this.initEvents[key]) {
-                allTriggered = false;
-            }
-        }
-
-        if (allTriggered) {
-            Webflow.require('ix2').init();
-        }
-    }
-
-    checkAndInitWebflowTest() {
         let allTriggered = true;
         for (const key in this.initEvents) {
             if (!this.initEvents[key]) {
@@ -275,7 +271,7 @@ export class VersionController extends Component {
                 }).catch((response) => {
                     if (response.status === 404) {
                         //version does not exist for this geo
-                        version.exists = false;
+                        version.model.exists = false;
                     } else {
                         throw(response);
                     }
@@ -301,6 +297,7 @@ export class VersionController extends Component {
         this.areaCode = areaCode;
         this._allVersionsBundle = null;
         this._versionGeometries = {};
+        this._versionsRawData = [];
         this._versionBundles = {};
         this._promises = [];
     }
@@ -317,13 +314,6 @@ export class VersionController extends Component {
     loadAllVersions(versions) {
         let self = this;
         self.versions = versions;
-        if (self._activeVersion !== null) {
-            this.setActiveVersionByName(self._activeVersion.model.name);
-        } else {
-            self._activeVersion = self.versions.filter((v) => {
-                return v.model.isDefault
-            })[0];
-        }
 
         self.versions.forEach((version) => {
             self.getAllDetails(version);
@@ -331,23 +321,51 @@ export class VersionController extends Component {
 
         Promise.all(this._promises).then(() => {
             //populate rich data, data mapper..
+            self.checkAndSwitchVersion();
             this._promises = [];
             this.parent.triggerEvent(VersionController.EVENTS.ready, this.allVersionsBundle);
         });
     }
 
+    checkAndSwitchVersion() {
+        // if the geography does not exist in the default version, switch to another version
+        const self = this;
+
+        if (self._activeVersion === null) {
+            self._activeVersion = self.versions.filter((v) => {
+                return v.model.isDefault && v.model.exists
+            })[0];
+        }
+        if (self._activeVersion === null || self._activeVersion === undefined || !self._activeVersion.model.exists) {
+            self._activeVersion = self.versions.filter((v) => {
+                return v.model.exists
+            })[0];
+        }
+
+        if (self._activeVersion === null || self._activeVersion === undefined) {
+            throw 'Selected geography does not exist in any of the versions'
+        }
+
+        let versionRawData = this.versionsRawData.filter((x) => {
+            return x.version === self._activeVersion
+        })[0];
+
+        self.setUpMainVersion(versionRawData.rawData);
+    }
+
     getAllDetails(version) {
         const promise = this.api.getProfile(this.profileId, this.areaCode, version.model.name).then(js => {
-            version.exists = true;
-            if (version.model.isActive) {
-                this.setUpMainVersion(js);
-            }
+            version.model.exists = true;
+            this.versionsRawData.push({
+                'version': version,
+                'rawData': js
+            })
 
             this.appendAllBundles(js, version);
         }).catch((response) => {
             if (response.status === 404) {
                 //version does not exist for this geo
-                version.exists = false;
+                version.model.exists = false;
             } else {
                 throw(response);
             }

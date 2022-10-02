@@ -158,6 +158,19 @@ export class VersionController extends Component {
         }
     }
 
+    checkAndInitWebflowTest() {
+        let allTriggered = true;
+        for (const key in this.initEvents) {
+            if (!this.initEvents[key]) {
+                allTriggered = false;
+            }
+        }
+
+        if (allTriggered) {
+            Webflow.require('ix2').init();
+        }
+    }
+
     checkAndInitIndicators() {
         let allTriggered = true;
         for (const key in this.initIndicatorEvents) {

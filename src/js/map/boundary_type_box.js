@@ -1,5 +1,6 @@
 import {Component} from "../utils";
 import {ConfirmationModal} from "../ui_components/confirmation_modal";
+
 let selectedOption = null;
 let optionWrapper = null;
 let optionItem = null;
@@ -27,9 +28,9 @@ export class BoundaryTypeBox extends Component {
         this.activeVersion = activeVersion;
         let levels = Object.keys(geometries.children) || [];
 
-        if(levels.length > 0){
-          const selectedText = `${activeVersion.model.name} / ${levels.includes(selectedGeoType) ? selectedGeoType : levels[0]}`;
-          this.setSelectedOption(selectedText);
+        if (levels.length > 0) {
+            const selectedText = `${activeVersion.model.name} / ${levels.includes(selectedGeoType) ? selectedGeoType : levels[0]}`;
+            this.setSelectedOption(selectedText);
         }
     }
 
@@ -51,7 +52,7 @@ export class BoundaryTypeBox extends Component {
             return;
         }
         let existingVersions = [...versions].filter((v) => {
-            return v.exists
+            return v.model.exists
         });
 
         let boundaryTypes = this.getBoundaryLevelsByVersion(versionGeometries);
@@ -68,26 +69,26 @@ export class BoundaryTypeBox extends Component {
     }
 
     getBoundaryLevelsByVersion = (versionGeometries) => {
-      let options = {};
-      Object.keys(versionGeometries).forEach((version) => {
-        let children = Object.keys(versionGeometries[version].children);
-        if (children.length > 0){
-          options[version] = children;
-        }
-      });
-      return options;
+        let options = {};
+        Object.keys(versionGeometries).forEach((version) => {
+            let children = Object.keys(versionGeometries[version].children);
+            if (children.length > 0) {
+                options[version] = children;
+            }
+        });
+        return options;
     }
 
     getOptions = (boundaryTypes, versions) => {
         let options = [];
         versions.forEach((v) => {
-            let versionLevels =  boundaryTypes[v.model.name] || [];
+            let versionLevels = boundaryTypes[v.model.name] || [];
             if (versionLevels.length > 0) {
                 versionLevels.forEach((level) => {
                     options.push(`${v.model.name} / ${level}`);
                 })
             } else {
-              options.push(v.model.name);
+                options.push(v.model.name);
             }
         })
         return options;
@@ -97,15 +98,15 @@ export class BoundaryTypeBox extends Component {
         selectedOption = $(this.selectElement).find('.dropdown-menu__trigger');
         optionWrapper = $(this.selectElement).find('.dropdown-menu__content');
         let optionItems = $(this.selectElement).find('.dropdown__list_item');
-        if (optionItems.length === 0 ){
-          let listItem = document.createElement('div');
-          $(listItem).addClass("dropdown__list_item");
-          let childlistItem = document.createElement('div');
-          $(childlistItem).addClass("truncate");
-          $(listItem).append(childlistItem);
-          optionItem = listItem;
+        if (optionItems.length === 0) {
+            let listItem = document.createElement('div');
+            $(listItem).addClass("dropdown__list_item");
+            let childlistItem = document.createElement('div');
+            $(childlistItem).addClass("truncate");
+            $(listItem).append(childlistItem);
+            optionItem = listItem;
         } else {
-          optionItem = optionItems[0].cloneNode(true);
+            optionItem = optionItems[0].cloneNode(true);
         }
         $(optionWrapper).empty();
     }

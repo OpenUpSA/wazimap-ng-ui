@@ -1,4 +1,4 @@
-import {Component, checkIterate, calculateMidColor} from '../../utils';
+import {Component, checkIterate, calculateMidColor, rgba2hex, hexToRgb} from '../../utils';
 import {API} from '../../api';
 import {Category} from './category';
 
@@ -91,7 +91,8 @@ export class Theme extends Component {
         if (flag) {
             $('.point-mapper__h1_trigger', this.element).addClass('active');
             $('.point-mapper__h1_trigger', this.element)
-                .css('background-image', `linear-gradient(180deg, ${this.backgroundColor}, ${this.backgroundColor})`);
+                .css('background-image', `linear-gradient(180deg, #${this.backgroundColor}, #${this.backgroundColor})`);
+            console.log({'this.element 2': this.element})
         } else {
             $('.point-mapper__h1_trigger', this.element).removeClass('active');
             $('.point-mapper__h1_trigger', this.element)
@@ -113,6 +114,9 @@ export class Theme extends Component {
     }
 
     get backgroundColor() {
-        return calculateMidColor('#ffffff', this.color);
+        let colorRgb = hexToRgb(this.color);
+        const bgColor = rgba2hex(`rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b}, 0.2)`);
+
+        return bgColor;
     }
 }

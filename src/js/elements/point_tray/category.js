@@ -1,4 +1,4 @@
-import {calculateMidColor, Component} from '../../utils';
+import {calculateMidColor, Component, rgba2hex, hexToRgb} from '../../utils';
 
 const categoryItemDoneClsName = '.point-mapper__h2_load-complete';
 const categoryItemLoadingClsName = '.point-mapper__h2_loading';
@@ -106,7 +106,7 @@ export class Category extends Component {
         if (flag) {
             $(this.element).addClass('active');
             $(this.element)
-                .css('background-image', `linear-gradient(180deg, ${this.backgroundColor}, ${this.backgroundColor})`);
+                .css('background-image', `linear-gradient(180deg, #${this.backgroundColor}, #${this.backgroundColor})`);
         } else {
             $(this.element).removeClass('active');
             $(this.element)
@@ -146,6 +146,9 @@ export class Category extends Component {
     }
 
     get backgroundColor() {
-        return calculateMidColor('#ffffff', this.color);
+        let colorRgb = hexToRgb(this.color);
+        const bgColor = rgba2hex(`rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b}, 0.2)`);
+
+        return bgColor;
     }
 }

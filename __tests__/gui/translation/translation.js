@@ -1,5 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
+    allDetailsEndpoint,
     expandPointFilterDialog,
     expandPointMapper,
     gotoHomepage, hoverOverTheMapCenter, mapBottomItems,
@@ -57,4 +58,39 @@ When('I click on the More info button', () => {
 
 Then('I check if the facility dialog is translated correctly', () => {
     cy.get(`.facility-info .facility-info__google-map-text`).should('have.text', 'Translated | View location in Google Maps');
+})
+
+When('I navigate to WC', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(all_details));
+        tempObj.boundary.properties.code = 'WC';
+        tempObj.profile.geography.code = 'WC';
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept(`/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(profile_indicator_summary));
+        delete tempObj['Demographics'];
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept('api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (req) => {
+        req.reply({
+            statusCode: 200,
+            body: [],
+            forceNetworkError: false // default
+        })
+    })
+
+    cy.visit('/#geo:WC');
 })

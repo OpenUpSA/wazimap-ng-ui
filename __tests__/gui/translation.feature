@@ -15,3 +15,7 @@ Feature: Data Mapper
     And I click on a marker
     And I click on the More info button
     Then I check if the facility dialog is translated correctly
+
+    And I navigate to WC
+    And I expand Point Mapper
+    Then I check if the Point Mapper is translated correctly

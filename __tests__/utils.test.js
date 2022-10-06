@@ -1,4 +1,4 @@
-import {validation, defaultIfMissing, fillMissingKeys, calculateMidColor} from '../src/js/utils';
+import {validation, defaultIfMissing, fillMissingKeys, calculateThemeBackgroundColor} from '../src/js/utils';
 
 describe('Testing validation functions', () => {
 
@@ -118,7 +118,7 @@ describe('Test missing keys', () => {
     })
 
     test('check that theme background color is calculated correctly', () => {
-        let bgColor = calculateMidColor('#EB4034');
+        let bgColor = calculateThemeBackgroundColor('#EB4034');
 
         expect(bgColor).toBe('#ff39e833');
     })

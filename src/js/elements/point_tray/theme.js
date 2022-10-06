@@ -1,9 +1,6 @@
 import {
     Component,
     checkIterate,
-    calculateMidColor,
-    rgba2hex,
-    hexToRgb,
     calculateThemeBackgroundColor
 } from '../../utils';
 import {API} from '../../api';

@@ -1,4 +1,4 @@
-import {calculateMidColor, Component, rgba2hex, hexToRgb, calculateThemeBackgroundColor} from '../../utils';
+import {Component, calculateThemeBackgroundColor} from '../../utils';
 
 const categoryItemDoneClsName = '.point-mapper__h2_load-complete';
 const categoryItemLoadingClsName = '.point-mapper__h2_loading';

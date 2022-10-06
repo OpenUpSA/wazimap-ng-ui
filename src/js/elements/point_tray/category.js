@@ -1,4 +1,4 @@
-import {calculateMidColor, Component, rgba2hex, hexToRgb} from '../../utils';
+import {calculateMidColor, Component, rgba2hex, hexToRgb, calculateThemeBackgroundColor} from '../../utils';
 
 const categoryItemDoneClsName = '.point-mapper__h2_load-complete';
 const categoryItemLoadingClsName = '.point-mapper__h2_loading';
@@ -146,9 +146,6 @@ export class Category extends Component {
     }
 
     get backgroundColor() {
-        let colorRgb = hexToRgb(this.color);
-        const bgColor = rgba2hex(`rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b}, 0.2)`);
-
-        return bgColor;
+        return calculateThemeBackgroundColor(this.color);
     }
 }

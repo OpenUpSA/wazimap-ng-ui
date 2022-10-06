@@ -1,4 +1,11 @@
-import {Component, checkIterate, calculateMidColor, rgba2hex, hexToRgb} from '../../utils';
+import {
+    Component,
+    checkIterate,
+    calculateMidColor,
+    rgba2hex,
+    hexToRgb,
+    calculateThemeBackgroundColor
+} from '../../utils';
 import {API} from '../../api';
 import {Category} from './category';
 
@@ -92,7 +99,6 @@ export class Theme extends Component {
             $('.point-mapper__h1_trigger', this.element).addClass('active');
             $('.point-mapper__h1_trigger', this.element)
                 .css('background-image', `linear-gradient(180deg, #${this.backgroundColor}, #${this.backgroundColor})`);
-            console.log({'this.element 2': this.element})
         } else {
             $('.point-mapper__h1_trigger', this.element).removeClass('active');
             $('.point-mapper__h1_trigger', this.element)
@@ -114,9 +120,6 @@ export class Theme extends Component {
     }
 
     get backgroundColor() {
-        let colorRgb = hexToRgb(this.color);
-        const bgColor = rgba2hex(`rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b}, 0.2)`);
-
-        return bgColor;
+        return calculateThemeBackgroundColor(this.color);
     }
 }

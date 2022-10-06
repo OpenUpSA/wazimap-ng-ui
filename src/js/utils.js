@@ -482,20 +482,11 @@ export function trimValue(val) {
     return result;
 }
 
-export function calculateMidColor(c1, c2) {
-    let c = "#";
-    for (let i = 0; i < 3; i++) {
-        let sub1 = c1.substring(1 + 2 * i, 3 + 2 * i);
-        let sub2 = c2.substring(1 + 2 * i, 3 + 2 * i);
-        let v1 = parseInt(sub1, 16);
-        let v2 = parseInt(sub2, 16);
-        let v = Math.floor((v1 + v2) / 2);
-        let sub = v.toString(16).toUpperCase();
-        let padsub = ('0' + sub).slice(-2);
-        c += padsub;
-    }
+export function calculateThemeBackgroundColor(iconColor){
+    const opacity = '0.2';
+    let colorRgb = hexToRgb(iconColor);
 
-    return c;
+    return rgba2hex(`rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b}, ${opacity})`);
 }
 
 export function hexToRgb(hex) {

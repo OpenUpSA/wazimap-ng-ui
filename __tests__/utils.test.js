@@ -120,7 +120,7 @@ describe('Test missing keys', () => {
     test('check that theme background color is calculated correctly', () => {
         let bgColor = calculateThemeBackgroundColor('#EB4034');
 
-        expect(bgColor).toBe('eb403433');
+        expect(bgColor).toBe('#eb403433');
     })
 })
 

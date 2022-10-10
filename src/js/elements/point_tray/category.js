@@ -18,10 +18,10 @@ export class Category extends Component {
     fixData(data) {
         data = {...data}
 
-        if (data.metadata == undefined)
+        if (data.metadata === undefined)
             data.metadata = {}
 
-        if (data.metadata.source == undefined)
+        if (data.metadata.source === undefined)
             data.metadata.source = ""
 
         return data
@@ -106,7 +106,7 @@ export class Category extends Component {
         if (flag) {
             $(this.element).addClass('active');
             $(this.element)
-                .css('background-image', `linear-gradient(180deg, #${this.backgroundColor}, #${this.backgroundColor})`);
+                .css('background-image', `linear-gradient(180deg, ${this.backgroundColor}, ${this.backgroundColor})`);
         } else {
             $(this.element).removeClass('active');
             $(this.element)

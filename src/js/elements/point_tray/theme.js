@@ -95,7 +95,7 @@ export class Theme extends Component {
         if (flag) {
             $('.point-mapper__h1_trigger', this.element).addClass('active');
             $('.point-mapper__h1_trigger', this.element)
-                .css('background-image', `linear-gradient(180deg, #${this.backgroundColor}, #${this.backgroundColor})`);
+                .css('background-image', `linear-gradient(180deg, ${this.backgroundColor}, ${this.backgroundColor})`);
         } else {
             $('.point-mapper__h1_trigger', this.element).removeClass('active');
             $('.point-mapper__h1_trigger', this.element)

@@ -486,7 +486,7 @@ export function calculateThemeBackgroundColor(iconColor){
     const opacity = '0.2';
     let colorRgb = hexToRgb(iconColor);
 
-    return rgba2hex(`rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b}, ${opacity})`);
+    return `#${rgba2hex(`rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b}, ${opacity})`)}`;
 }
 
 export function hexToRgb(hex) {

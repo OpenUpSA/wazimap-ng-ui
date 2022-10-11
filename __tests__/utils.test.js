@@ -1,4 +1,4 @@
-import {validation, defaultIfMissing, fillMissingKeys, calculateMidColor} from '../src/js/utils';
+import {validation, defaultIfMissing, fillMissingKeys, calculateThemeBackgroundColor} from '../src/js/utils';
 
 describe('Testing validation functions', () => {
 
@@ -117,10 +117,10 @@ describe('Test missing keys', () => {
         expect(filledObject.second.second_2.second_2_1).toBe(5)
     })
 
-    test('check that mid-color is calculated correctly', () => {
-        let midColor = calculateMidColor('#ffffff', '#22a6b3');
+    test('check that theme background color is calculated correctly', () => {
+        let bgColor = calculateThemeBackgroundColor('#EB4034');
 
-        expect(midColor).toBe('#90D2D9');
+        expect(bgColor).toBe('#eb403433');
     })
 })
 

@@ -6,29 +6,49 @@ export class Translations extends Component {
         super(parent);
 
         this.translations = translations;
+        this._t = null;
+    }
+
+    get t() {
+        return this._t;
+    }
+
+    set t(value) {
+        this._t = value;
     }
 
     translate() {
-        if (typeof this.translations === 'undefined') {
+        if (this.translations === undefined) {
             return;
         }
 
-        Object.keys(this.translations).forEach((key) => {
-            this.translations[key] = {translation: this.translations[key]}
+        const self = this;
+
+        Object.keys(self.translations).forEach((key) => {
+            self.translations[key] = {translation: self.translations[key]}
         })
 
-        i18next
-            .init({
-                lng: 'en',
-                resources: this.translations
-            })
-            .then(
-                function (t) {
-                    $('.i18n').each(function () {
-                        $(this).html(t($(this).attr('data-i18n')));
+        // if t is initialized it means all the translations are done already
+        // no need to run this code more than once
+        if (self.t === null) {
+            i18next
+                .init({
+                    lng: 'en',
+                    resources: self.translations,
+                    initImmediate: true
+                })
+                .then(
+                    function (t) {
+                        self.t = t;
+                        self.modifyElements();
                     });
-                }
-            )
-        ;
+        }
+    }
+
+    modifyElements() {
+        const self = this;
+        $('.i18n').each(function () {
+            $(this).html(self.t($(this).attr('data-i18n')));
+        });
     }
 }

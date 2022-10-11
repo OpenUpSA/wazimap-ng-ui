@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  --><!--  Last Published: Sun Oct 02 2022 19:57:14 GMT+0000 (Coordinated Universal Time)  --><html data-wf-page="61adcab3ab671b5d2ab2da33" data-wf-site="5fd05e808ba6609d12285571"><head>
+<!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  --><!--  Last Published: Mon Oct 03 2022 08:12:24 GMT+0000 (Coordinated Universal Time)  --><html data-wf-page="61adcab3ab671b5d2ab2da33" data-wf-site="5fd05e808ba6609d12285571"><head>
   <meta charset="utf-8">
   <title>Wazimap NG</title>
   <meta content="Discover the human stories in population data. Wazimap is a tool that helps map and visualise data used for population-based decision making." name="description">
@@ -179,7 +179,7 @@
   /*------------------------------------- Hide webflow items on deploy */
   .disabled {
       pointer-events: none;
-  }
+  }  
   /*------------------------------------- Hide scrollbar for Chrome, Safari and Opera */
   .no-scroll::-webkit-scrollbar {
       display: none;
@@ -204,14 +204,14 @@
       border-color:rgb(51, 51, 51);
       border-radius:2px;
   }
-  /*-------- Custom slider checkbox */
+  /*-------- Custom slider checkbox */  
   .switch {
       position: relative;
       display: inline-block;
       width: 32px;
       height: 20px;
   }
-  .switch input {
+  .switch input { 
       opacity: 0;
       width: 0;
       height: 0;
@@ -253,7 +253,7 @@
   .slider.round:before {
       border-radius: 50%;
   }
-  /*-------- Fixing Chart Lines */
+  /*-------- Fixing Chart Lines */  
   .bar-tooltip {
       z-index: 100;
   }
@@ -276,7 +276,7 @@
 /*------------------------------------- Hide webflow items on deploy */
 .disabled {
   pointer-events: none;
-}
+}  
 /*------------------------------------- Hide scrollbar for Chrome, Safari and Opera */
 .no-scroll::-webkit-scrollbar {
   display: none;
@@ -301,14 +301,14 @@
   border-color:rgb(51, 51, 51);
   border-radius:2px;
 }
-/*-------- Custom slider checkbox */
+/*-------- Custom slider checkbox */  
 .switch {
   position: relative;
   display: inline-block;
   width: 32px;
   height: 20px;
 }
-.switch input {
+.switch input { 
   opacity: 0;
   width: 0;
   height: 0;
@@ -350,7 +350,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-/*-------- Fixing Chart Lines */
+/*-------- Fixing Chart Lines */  
 .bar-tooltip {
   z-index: 100;
 }
@@ -973,7 +973,7 @@ line, .grid {
                   </div>
                 </div>
               </div>
-              <p class="point-filters__no-data hidden">No filters available for the selected data.</p>
+              <p class="point-filters__no-data hidden i18n" data-i18n="No filters available for the selected data.">No filters available for the selected data.</p>
               <div class="point-filters__labels hidden">
                 <div class="point-filters__filter">
                   <div class="point-filters__filter-label">
@@ -1335,7 +1335,7 @@ line, .grid {
                     </svg></div>
                 </div>
                 <div class="no-data__text">
-                  <div>No facilities for this location</div>
+                  <div class="i18n" data-i18n="No facilities for this location">No facilities for this location</div>
                 </div>
               </div>
             </div>
@@ -1460,7 +1460,7 @@ line, .grid {
               <path fill="#34a853" d="M88.63,117.37c15.39-24.07,33.34-35,33.34-62.98c0-7.67-1.88-14.9-5.19-21.26l-61.55,73.18   c2.61,3.42,5.24,7.06,7.81,11.07c9.36,14.46,6.76,23.13,12.8,23.13C81.86,140.51,79.27,131.83,88.63,117.37"></path>
             </svg></div>
         </div>
-        <div class="facility-info__google-map-text">View location in Google Maps</div>
+        <div class="facility-info__google-map-text i18n" data-i18n="View location in Google Maps">View location in Google Maps</div>
       </a>
       <div class="facility-info__content">
         <div class="facility-info__items">
@@ -1484,7 +1484,7 @@ line, .grid {
           <div data-i18n="Point Mapper" class="point-data__header_title i18n">Point Mapper </div>
         </div>
         <div class="point-mapper-content__description">
-          <div>Select the category, or specific type of point data you would like to overlay onto the map.<strong><br></strong></div>
+          <div class="i18n" data-i18n="Select the category, or specific type of point data you would like to overlay onto the map.">Select the category, or specific type of point data you would like to overlay onto the map.<strong><br></strong></div>
         </div>
         <div class="point-mapper-content__loading">
           <div class="loading">
@@ -1503,7 +1503,7 @@ line, .grid {
                 </svg></div>
             </div>
             <div class="no-data__text">
-              <div>No points available for this location</div>
+              <div class="i18n" data-i18n="No points available for this location">No points available for this location</div>
             </div>
           </div>
         </div>
@@ -3889,7 +3889,7 @@ line, .grid {
   }
 });
 </script>
-  <script src="js/index.js" ></script>
+  <script src="js/index.js"></script>
   <script>
 setTimeout(function(){
 		$('.w-webflow-badge').css({'display':'none !important'});

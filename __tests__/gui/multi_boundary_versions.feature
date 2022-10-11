@@ -41,3 +41,9 @@ Feature: Multiple geographic boundary versions
     Then I switch to "2011 Boundaries / ward" version
     Then I click on the Proceed button in confirmation modal
     Then I check if "2011 Boundaries / ward" is the selected version
+
+    # navigating to a geography that does not exist in the current version
+    And I navigate to NC
+    And I expand Data Mapper
+    Then I check if "2016 with wards / district" is the selected version
+    Then I confirm that the data mapper is not stuck in the loading state

@@ -46,7 +46,7 @@ Then('I select TVET colleges category', () => {
     cy.get('.point-mapper__h2:contains("TVET colleges") .point-mapper__h2_load-complete').should('be.visible');
     cy.get('.point-mapper__h2:contains("TVET colleges")')
         .should('have.css', 'background-image')
-        .and('eq', 'linear-gradient(rgb(144, 210, 217), rgb(144, 210, 217))');
+        .and('eq', 'linear-gradient(rgba(34, 166, 179, 0.2), rgba(34, 166, 179, 0.2))');
 })
 
 Then('I deselect TVET colleges category', () => {
@@ -85,7 +85,7 @@ Then('I select Additional DEL facilities category', () => {
     cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)") .point-mapper__h2_load-complete').should('be.visible');
     cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")')
         .should('have.css', 'background-image')
-        .and('eq', 'linear-gradient(rgb(245, 166, 165), rgb(245, 166, 165))');
+        .and('eq', 'linear-gradient(rgba(235, 77, 75, 0.2), rgba(235, 77, 75, 0.2))');
 })
 
 Then('I deselect Additional DEL facilities category', () => {

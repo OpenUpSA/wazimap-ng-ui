@@ -111,8 +111,8 @@ export class Category extends Component {
 
     loadSubcategories = (wrapper, detail) => {
         let isFirst = true;
-        for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, detail, isFirst, this.geography, this.profileConfig);
+        for (const [subcategory, subdetail] of Object.entries(detail.subcategories)) {
+            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, subdetail, isFirst, this.geography, this.profileConfig);
             sc.isVisible = sc.indicators.length > 0;
             if (sc.isVisible) {
                 this.subCategories.push(sc);

@@ -73,7 +73,7 @@ export class Profile {
             category = Profile.fixCategory(category)
             Object.values(category.subcategories).forEach(subcategory => {
                 subcategory = Profile.fixSubcategory(subcategory)
-                for (const [title, indicator] of Object.entries(subcategory.indicators)) {
+                for (let [title, indicator] of Object.entries(subcategory.indicators)) {
                     indicator = IndicatorHelper.fixIndicator(title, indicator)
                 }
             })
@@ -176,7 +176,7 @@ export class ChildrenIndicators {
             category = Profile.fixCategory(category)
             Object.values(category.subcategories).forEach(subcategory => {
                 subcategory = Profile.fixSubcategory(subcategory)
-                for (const [title, indicator] of Object.entries(subcategory.indicators)) {
+                for (let [title, indicator] of Object.entries(subcategory.indicators)) {
                     indicator = IndicatorHelper.fixIndicator(title, indicator)
                 }
             })

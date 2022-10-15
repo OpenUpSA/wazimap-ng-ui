@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {createRoot} from 'react-dom/client';
 import {SnackbarProvider, useSnackbar} from 'notistack';
 
-import './snackbar.modules.css';
+// import './snackbar.modules.css';
 
 const mountPoint = document.createElement('div');
 const root = createRoot(mountPoint);

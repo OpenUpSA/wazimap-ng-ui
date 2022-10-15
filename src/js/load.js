@@ -17,8 +17,8 @@ import {MapDownload} from "./map/map_download";
 import {Tutorial} from "./elements/tutorial";
 import {DataMapperMenu} from './elements/data_mapper/menu';
 
-import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
-import "../css/barchart.css";
+//import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
+//import "../css/barchart.css";
 import {Popup} from "./map/popup";
 import {TabNotice} from "./elements/tab_notice";
 

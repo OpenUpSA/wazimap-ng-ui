@@ -2,10 +2,19 @@ import {FilterController} from "../subindicator_filter/filter_controller";
 import {Legend} from "./legend";
 import {DataFilterModel} from "../../models/data_filter_model";
 import {Component} from "../../utils";
+import {Tooltip} from "../../ui_components/tooltip";
+import {FilterLabel} from "./components/filter_label";
+import {DescriptionInfoIcon} from "./components/description_info_icon";
+import {LinearScrubberRenderer} from "./components/linear_scrubber/renderer";
 
 const filterContentClass = '.map-options__filters_content';
-const mapChipBlockClass = '.map-bottom-items--v2 .map-options';
+const mapChipBlockParentClass = '.map-bottom-items--v2';
+const mapChipBlockClass = `${mapChipBlockParentClass} .map-options`;
+const legendClass = ".map-options__legend";
 const legendContainerClass = '.map-options__legend_wrap';
+const linearScrubberContainerClass = '.map-options__linear_scrubber_wrap';
+const filterHeaderClass = '.filter__header_sub-indicator';
+const filterHeaderToggleClass = ".filters__header_toggle";
 
 /**
  * Represent the map chip at the bottom of the map
@@ -13,14 +22,42 @@ const legendContainerClass = '.map-options__legend_wrap';
 export class MapChip extends Component {
     constructor(parent, legendColors) {
         super(parent);
-
+        this._tooltip = new Tooltip();
         this.prepareDomElements();
+        this.updateDomElements();
 
         this._legend = new Legend(this, this._legendContainer, legendColors);
         this._isLoading = false;
         this._filterController = null;
-
+        this._isContentVisible = false;
+        this._appliedFilters = {};
         this.prepareUIEvents();
+
+        // Load components
+        this._filterLabel = new FilterLabel(this);
+        this._descriptionIcon = new DescriptionInfoIcon(this);
+        this._linearScrubber = new LinearScrubberRenderer(this, this._linearScrubberContainer);
+    }
+
+    get isContentVisible() {
+        return this._isContentVisible;
+    }
+
+    get filterLabel() {
+        return this._filterLabel;
+    }
+
+    get descriptionIcon() {
+        return this._descriptionIcon;
+    }
+
+    get linearScrubber() {
+        return this._linearScrubber;
+    }
+
+    set isContentVisible(value) {
+        this._isContentVisible = value;
+        this.filterLabel.setFilterLabelContainerVisibility(!value);
     }
 
     get container() {
@@ -31,6 +68,14 @@ export class MapChip extends Component {
         return $(this._descriptionArea).text();
     }
 
+    get appliedFilters() {
+        return this._appliedFilters;
+    }
+
+    set appliedFilters(value) {
+        this._appliedFilters = value;
+    }
+
     get title() {
         return $(this._titleArea).text();
     }
@@ -39,8 +84,24 @@ export class MapChip extends Component {
         $(this._titleArea).text(text);
     }
 
-    get legend(){
+    get legend() {
         return this._legend;
+    }
+
+    get metadata() {
+        return this._metadata;
+    }
+
+    set metadata(value) {
+        this._metadata = value;
+    }
+
+    get config() {
+        return this._config;
+    }
+
+    set config(value) {
+        this._config = value;
     }
 
     set isLoading(value) {
@@ -50,17 +111,13 @@ export class MapChip extends Component {
                 this.filterController.isLoading = true;
             }
             this.legend.isLoading = true;
+            this.filterLabel.setFilterLabelContainerVisibility(false);
         }
 
         this._isLoading = value;
     }
 
     set description(text) {
-        if (text.trim().length > 0) {
-            $(this._descriptionArea).closest('.map-options__context--v2').removeClass('hidden');
-        } else {
-            $(this._descriptionArea).closest('.map-options__context--v2').addClass('hidden');
-        }
         $(this._descriptionArea).html(text);
     }
 
@@ -75,19 +132,45 @@ export class MapChip extends Component {
         this._titleArea = $(this.container).find('.filters__header_name div');
         this._filtersContainer = $(this.container).find(filterContentClass);
         this._legendContainer = $(this.container).find(legendContainerClass);
+        this._filterHeaderTitleContainer = $(this.container).find(filterHeaderClass);
+        this._filterHeaderToggleContainer = $(this.container).find(filterHeaderToggleClass);
+    }
+
+    updateDomElements() {
+        this._filterHeaderTitleContainer.find(".filters__header_name").css("width", "auto");
+        this._toggleIconDownContainer = this._filterHeaderToggleContainer.find(".toggle-icon-v--first");
+        this._toggleIconUpContainer = this._filterHeaderToggleContainer.find(".toggle-icon-v--last");
+        this.updateToggleIcon();
+        // Tooltip
+        this._tooltip.enableTooltip(this._toggleIconDownContainer, "Collapse Details");
+        this._tooltip.enableTooltip(this._toggleIconUpContainer.parent(), "Expand Details");
+
+        // Snackbar
+        $("<div id='mapchip-snackbar'></div>").insertBefore(`${mapChipBlockParentClass} .map-point-legend`);
+
+        // Linear Scrubber
+        this._linearScrubberContainer = document.createElement('div');
+        this._linearScrubberContainer.setAttribute("class", "map-options__linear_scrubber_wrap");
+        $(this._linearScrubberContainer).insertBefore(`${mapChipBlockClass} ${legendClass}`);
     }
 
     prepareUIEvents() {
         this._closeButton.on('click', () => this.removeMapChip());
     }
 
-    setTitle(indicatorTitle, selectedSubindicator) {
 
+    updateToggleIcon() {
+        this._toggleIconDownContainer.find("svg").remove();
+        this._toggleIconDownContainer.append("<i class='fas fa-chevron-down'></i>");
+        this._toggleIconUpContainer.find("svg").remove();
+        this._toggleIconUpContainer.append("<i class='fas fa-chevron-up'></i>");
+    }
+
+    setTitle(indicatorTitle, selectedSubindicator) {
         let label = `${indicatorTitle} (${selectedSubindicator})`;
         if (indicatorTitle === selectedSubindicator) {
             label = indicatorTitle;
         }
-
         this.title = label;
     }
 
@@ -103,6 +186,7 @@ export class MapChip extends Component {
 
     removeMapChip() {
         this.hide();
+        this.isContentVisible = false;
         this.triggerEvent('mapchip.removed', this.container);
     }
 
@@ -110,11 +194,21 @@ export class MapChip extends Component {
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,
-                selectedFilter: selectedFilter
+                selectedFilter: selectedFilter,
+                metadata: this.metadata,
+                config: this.config
             }
-
             this.triggerEvent("mapchip.choropleth.filtered", payload)
         }
+        this.appliedFilters = selectedFilter;
+        this.filterLabel.setFilterLabelSelectedCount(selectedFilter);
+    }
+
+    changeSubindicator = (params) => {
+        params.metadata = this.metadata;
+        params.config = this.config
+        this.setTitle(params.indicatorTitle, params.selectedSubindicator);
+        this.triggerEvent("mapchip.choropleth.selectSubindicator", params);
     }
 
     onChoropleth(payload) {
@@ -126,12 +220,47 @@ export class MapChip extends Component {
             return;
         }
 
-        this._filterController = new FilterController(this, this._filtersContainer);
+        this.metadata = params.metadata;
+        this.config = params.config;
         const previouslySelectedFilters = params.filter;
+        let dataFilterModel = new DataFilterModel(this.metadata.groups, this.config.chartConfiguration.filter, previouslySelectedFilters, this.metadata.primary_group, params.childData);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, previouslySelectedFilters, params.primaryGroup, params.childData);
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
-        this.description = params.description;
+
+        // Filter Label
+        this.setFilterLabel(dataFilterModel, this.metadata.groups);
+
+        // Description Icon
+        this.setDescriptionIcon(this.metadata.indicatorDescription);
+
+        // Linear Scrubber
+        this.showLinearScrubber(params)
+
+        this.show();
+
+        // Filter controller
+        this.setFilterController(dataFilterModel);
+    }
+
+    setFilterLabel(dataFilterModel, groups) {
+        const defaultFilters = dataFilterModel.configFilters?.defaults || [];
+        this.filterLabel.compareFilters(defaultFilters, this.appliedFilters);
+        this.filterLabel.setFilterLabelTotalCount(groups);
+        this.filterLabel.setFilterLabelSelectedCount({});
+        this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);
+    }
+
+    setDescriptionIcon(description) {
+        this.description = description;
+        this.descriptionIcon.setDescriptionInfoIconVisibility(this.description.length > 0);
+    }
+
+    showLinearScrubber(params) {
+        this.linearScrubber.render(params);
+    }
+
+    setFilterController(dataFilterModel) {
+        this._filterController = new FilterController(this, this._filtersContainer);
 
         this.show();
         if (this._filterController.filterCallback === null) {

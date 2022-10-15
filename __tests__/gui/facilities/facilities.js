@@ -86,6 +86,16 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         });
     });
 
+    cy.intercept(`/api/v1/profile/8/geography/EC/profile_indicator_summary/?version=test&format=json`, (request) => {
+        return trigger.then(() => {
+            request.reply({
+                statusCode: 201,
+                body: {},
+                forceNetworkError: false // default
+            })
+        });
+    });
+
     cy.visit('/#geo:EC');
 
     cy.get('.location-facilities__trigger--loading').should('be.visible').then(() => {
@@ -107,6 +117,14 @@ When('I navigate to a geography with no points', () => {
         request.reply({
             statusCode: 200,
             body: [],
+            forceNetworkError: false // default
+        });
+    });
+
+    cy.intercept('/api/v1/profile/8/geography/CPT/profile_indicator_summary/?version=test&format=json', (request) => {
+        request.reply({
+            statusCode: 200,
+            body: {},
             forceNetworkError: false // default
         });
     });
@@ -144,6 +162,14 @@ When('I navigate to a geography where themes-count endpoint fails', () => {
         request.reply({
             statusCode: 201,
             body: null,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept('/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json', (request) => {
+        request.reply({
+            statusCode: 201,
+            body: {},
             forceNetworkError: false // default
         })
     });

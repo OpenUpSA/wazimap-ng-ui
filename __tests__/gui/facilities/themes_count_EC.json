@@ -9,7 +9,7 @@
         "label": "TVET colleges",
         "id": 379,
         "count": 292,
-        "color": "",
+
         "order": 81,
         "metadata": {
           "source": "",
@@ -21,7 +21,7 @@
         "label": "Universities of technology",
         "id": 380,
         "count": 28,
-        "color": "",
+
         "order": 82,
         "metadata": {
           "source": "",
@@ -33,7 +33,7 @@
         "label": "Universities",
         "id": 382,
         "count": 69,
-        "color": "",
+
         "order": 84,
         "metadata": {
           "source": "",
@@ -45,7 +45,7 @@
         "label": "phone test",
         "id": 569,
         "count": 12,
-        "color": "",
+
         "order": 188,
         "metadata": {
           "source": "",

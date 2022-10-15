@@ -1,4 +1,12 @@
 export class ErrorNotifier {
+    constructor() {
+        this._ignoreMessages = ["The user aborted a request."];
+    }
+
+    get ignoreMessages() {
+        return this._ignoreMessages;
+    }
+
     registerErrorHandler() {
         let self = this;
         window.addEventListener("error", function (errorEvent) {
@@ -7,7 +15,10 @@ export class ErrorNotifier {
 
         window.addEventListener("unhandledrejection", function (promiseRejectionEvent) {
             // handle promise errors
-            self.showNotification();
+            let reason = promiseRejectionEvent.reason.message;
+            if (self.ignoreMessages.indexOf(reason) < 0) {
+                self.showNotification();
+            }
         });
     }
 

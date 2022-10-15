@@ -1,17 +1,21 @@
-import {loadMenu} from '../elements/menu';
+import {loadMenu} from '../elements/data_mapper/menu';
 
 export function configureDataExplorerEvents(controller, dataMapperMenu) {
-    controller.bubbleEvent(dataMapperMenu, 'data_mapper_menu.nodata')
+    controller.bubbleEvents(dataMapperMenu, ['data_mapper_menu.nodata', 'data_mapper_menu.subcategory.expanded'])
     controller.on('versions.indicators.ready', (versionData) => {
-        let children = versionData.state.profile.geometries.children;
-        if ($.isEmptyObject(children)) {
+        let data = versionData.payload;
+        if (JSON.stringify(data) === JSON.stringify({})) {
             //no children -- show no-data chip
             dataMapperMenu.showNoData();
         } else {
-            loadMenu(dataMapperMenu, versionData.payload, payload => {
-                controller.onSubIndicatorClick(payload)
-            })
+            loadMenu(dataMapperMenu, data)
         }
+    })
+
+    controller.on('data_mapper_menu.subcategory.expanded', (payload) => {
+        dataMapperMenu.loadAndAddSubIndicators(payload.payload, payload.state.profileId, payload.state.profile.profile.geography.code, callBack => {
+            controller.onSubIndicatorClick(callBack)
+        });
     })
 
     controller.on('hashChange', () => {

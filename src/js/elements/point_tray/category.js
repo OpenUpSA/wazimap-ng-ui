@@ -1,6 +1,5 @@
-import {Component} from '../../utils';
+import {Component, calculateThemeBackgroundColor} from '../../utils';
 
-let activeClsName = 'active';
 const categoryItemDoneClsName = '.point-mapper__h2_load-complete';
 const categoryItemLoadingClsName = '.point-mapper__h2_loading';
 
@@ -19,10 +18,10 @@ export class Category extends Component {
     fixData(data) {
         data = {...data}
 
-        if (data.metadata == undefined)
+        if (data.metadata === undefined)
             data.metadata = {}
 
-        if (data.metadata.source == undefined)
+        if (data.metadata.source === undefined)
             data.metadata.source = ""
 
         return data
@@ -30,21 +29,22 @@ export class Category extends Component {
     }
 
     prepareDomElements() {
-        this.activeClassName = activeClsName;
         this.element = this.categoryItem.cloneNode(true);
 
         $(this.element).on('click', () => this.toggle())
         $(this.element).find(categoryItemLoadingClsName).addClass('hidden');
         this.showLoading(false);
         this.showDone(false);
-        $(this.element).removeClass(activeClsName);
+        $(this.element).removeClass('active');
         if (this.isLast) {
             $(this.element).addClass('last');
         }
 
-        $(this.element).removeClass('theme-1').addClass('theme-' + this.themeIndex);
+        $(this.element).removeClass('theme-1');
         $(this.element).attr('data-id', this.data.id);
         $(this.element).attr('data-themeIndex', this.themeIndex);
+
+        this.defaultBackgroundImage = $(this.element).css('background-image');
 
         $('.point-mapper__h2_name .truncate', this.element)
             .text(this.name)
@@ -103,10 +103,15 @@ export class Category extends Component {
     }
 
     highlight(flag) {
-        if (flag)
-            $(this.element).addClass(this.activeClassName);
-        else
-            $(this.element).removeClass(this.activeClassName);
+        if (flag) {
+            $(this.element).addClass('active');
+            $(this.element)
+                .css('background-image', `linear-gradient(180deg, ${this.backgroundColor}, ${this.backgroundColor})`);
+        } else {
+            $(this.element).removeClass('active');
+            $(this.element)
+                .css('background-image', this.defaultBackgroundImage);
+        }
     }
 
     showLoading(flag) {
@@ -134,5 +139,13 @@ export class Category extends Component {
 
     get theme() {
         return this.data.theme;
+    }
+
+    get color() {
+        return this.data.theme.color;
+    }
+
+    get backgroundColor() {
+        return calculateThemeBackgroundColor(this.color);
     }
 }

@@ -2,6 +2,7 @@ import html from '../../../src/index.html';
 import {Component} from "../../../src/js/utils";
 import {MapChip} from "../../../src/js/elements/mapchip/mapchip";
 import {TestData} from "../../../src/js/test_data";
+import {DataFilterModel} from "../../../src/js/models/data_filter_model";
 
 const mapchip_colors = {"colors": []};
 let params;
@@ -24,7 +25,9 @@ describe('Filter controller', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
+
         let indicator = params.chartConfiguration.filter.defaults[0].name;
         let subindicator = params.chartConfiguration.filter.defaults[0].value;
 
@@ -43,7 +46,8 @@ describe('Filter controller', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
         let indicator = params.groups[2].name;
         let subindicator = params.groups[2].subindicators[0];
 
@@ -67,7 +71,8 @@ describe('Filter controller', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
 
         let indicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("language")`);
         expect(indicatorDd.length).toBe(1);
@@ -83,7 +88,8 @@ describe('Filter controller', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
 
         let indicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("age")`);
         expect(indicatorDd.length).toBe(0);
@@ -131,7 +137,8 @@ describe('Visibility of the filter area', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
         const isVisible = mc.filterController.shouldFiltersBeVisible();
         let filterArea = document.querySelector('.map-options__filters_content');
         let message = document.querySelector(`${mapBottomItems} .map-options__filters_content .map-options__no-data`);
@@ -146,7 +153,8 @@ describe('Visibility of the filter area', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
         const isVisible = mc.filterController.shouldFiltersBeVisible();
         let message = document.querySelector(`${mapBottomItems} .map-options__filters_content .map-options__no-data`);
 
@@ -165,7 +173,8 @@ describe('Visibility of the filter area', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
         const isVisible = mc.filterController.shouldFiltersBeVisible();
         const currentIndicatorValue = mc.filterController.model.filterRows[0].model.currentIndicatorValue;
         let filterArea = document.querySelector('.map-options__filters_content');
@@ -194,7 +203,9 @@ describe('Visibility of the filter area', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        mc.setFilterController(dataFilterModel);
+
         const isVisible = mc.filterController.shouldFiltersBeVisible();
         const currentIndicatorValue = mc.filterController.model.filterRows[0].model.currentIndicatorValue;
         const currentSubindicatorValue = mc.filterController.model.filterRows[0].model.currentSubindicatorValue;

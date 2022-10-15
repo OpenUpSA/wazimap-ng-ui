@@ -41,10 +41,10 @@ export function getJSON(url, skipCache = true) {
         req.open('GET', url);
 
         req.onload = () => {
-            if (req.status == 200) {
+            if (req.status === 200) {
                 const json = JSON.parse(req.response);
                 resolve(json);
-            } else if (req.status == 401 || request.status == 403) {
+            } else if (req.status === 401 || request.status === 403) {
                 alert("Not logged in")
             } else {
                 reject(Error(req.statusText));
@@ -349,12 +349,12 @@ export function checkIfIndicatorHasChildren(indicator, detail) {
     return hasChildren;
 }
 
-export function checkIfSubIndicatorHasChildren(subindicator, detail) {
+export function checkIfSubIndicatorHasChildren(subindicator, childData) {
     let hasData = false;
-    for (const [geography, data] of Object.entries(detail.data)) {
+    for (const [geography, data] of Object.entries(childData)) {
         data.forEach((indicatorDataPoint) => {
             for (const [title, value] of Object.entries(indicatorDataPoint)) {
-                if (subindicator == value) {
+                if (subindicator === value) {
                     hasData = true;
                 }
             }
@@ -474,4 +474,41 @@ export function trimValue(val) {
     }
 
     return result;
+}
+
+export function calculateThemeBackgroundColor(iconColor){
+    const opacity = '0.2';
+    let colorRgb = hexToRgb(iconColor);
+
+    return `#${rgba2hex(`rgb(${colorRgb.r}, ${colorRgb.g}, ${colorRgb.b}, ${opacity})`)}`;
+}
+
+export function hexToRgb(hex) {
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+export function rgba2hex(orig) {
+    let a,
+        rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+        alpha = (rgb && rgb[4] || "").trim(),
+        hex = rgb ?
+            (rgb[1] | 1 << 8).toString(16).slice(1) +
+            (rgb[2] | 1 << 8).toString(16).slice(1) +
+            (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
+
+    if (alpha !== "") {
+        a = alpha;
+    } else {
+        a = '01';
+    }
+    // multiply before convert to HEX
+    a = ((a * 255) | 1 << 8).toString(16).slice(1)
+    hex = hex + a;
+
+    return hex;
 }

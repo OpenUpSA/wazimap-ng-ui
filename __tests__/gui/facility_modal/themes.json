@@ -16,7 +16,7 @@
           "description": "Voluptatem dolorem eius voluptatem dolore dolorem numquam numquam. Dolor est ut non. Est porro voluptatem dolore. Numquam quaerat magnam dolor. Quaerat tempora dolore quisquam.",
           "licence": null
         },
-        "color": "",
+        
         "visible_tooltip_attributes": []
       },
       {
@@ -33,7 +33,7 @@
           "description": "Ut adipisci adipisci neque consectetur porro. Amet etincidunt quaerat dolor sed porro. Neque consectetur neque modi amet modi. Tempora neque aliquam etincidunt. Tempora amet ut dolor. Quaerat aliquam magnam sit dolor. Sed tempora amet dolor est. Non ipsum modi quaerat eius.",
           "licence": null
         },
-        "color": "",
+        
         "visible_tooltip_attributes": []
       },
       {
@@ -50,7 +50,7 @@
           "description": "Dolore sit etincidunt eius adipisci voluptatem. Quaerat adipisci voluptatem sed non consectetur. Neque modi labore quaerat magnam. Ipsum amet sed etincidunt dolorem sed magnam numquam. Dolor consectetur dolor adipisci sit sit magnam sed. Modi non quaerat dolore modi dolor neque.",
           "licence": null
         },
-        "color": "",
+        
         "visible_tooltip_attributes": []
       }
     ],
@@ -59,7 +59,8 @@
     "name": "Higher Education",
     "icon": "account_balance",
     "order": 10,
-    "profile": 8
+    "profile": 8,
+    "color": "#3a70ff"
   },
   {
     "id": 7,
@@ -78,7 +79,7 @@
           "description": "Neque amet non quiquia dolorem aliquam. Labore dolor dolor labore. Dolor sit etincidunt sed neque magnam non porro. Quaerat modi voluptatem etincidunt. Eius dolore tempora dolorem etincidunt modi porro dolore. Quaerat dolorem sed quiquia non aliquam. Etincidunt dolor amet ipsum quiquia modi porro. Porro dolorem sit magnam. Neque consectetur neque sit sed sit magnam velit.",
           "licence": null
         },
-        "color": "",
+        
         "visible_tooltip_attributes": []
       },
       {
@@ -95,7 +96,7 @@
           "description": "Neque eius porro tempora etincidunt magnam etincidunt. Velit dolor dolorem etincidunt eius quiquia magnam quisquam. Ut sit dolor dolor. Quaerat sed amet eius est velit amet neque. Ut est dolore labore dolor tempora. Porro etincidunt quisquam etincidunt dolorem dolorem magnam. Est quisquam adipisci modi non tempora. Est amet velit quaerat. Sed ipsum neque labore non. Dolor tempora numquam consectetur velit neque.",
           "licence": null
         },
-        "color": "",
+        
         "visible_tooltip_attributes": []
       },
       {
@@ -112,7 +113,7 @@
           "description": "",
           "licence": null
         },
-        "color": "",
+        
         "visible_tooltip_attributes": []
       }
     ],
@@ -121,6 +122,7 @@
     "name": "Labour",
     "icon": "work",
     "order": 14,
-    "profile": 8
+    "profile": 8,
+    "color": "#993aff"
   },
 ]

@@ -1,15 +1,20 @@
 {
   "Elections":{
-    "description":"",
+    "order": 1,
+    "name": "Elections",
     "subcategories":{
       "2021 Municipal elections":{
-        "description":""
+        "order": 1,
+        "name": "2021 Municipal elections"
       },
       "2011 Municipal elections":{
-        "description":"",
+        "order": 2,
+        "name": "2011 Municipal elections",
         "indicators":{
           "2011 Voter turnout":{
             "id":836,
+            "order": 1,
+            "label": "2011 Voter turnout",
             "description":"The 2016 Municipal Election \"Voter turnout\" indicator shows the larger of the Ward and Proportional Representation ballots in each voting district. Elections in local municipalities that fall in district municipalities actually have a third ballot (DC40), because the district council is elected partly by the councils of the costituent local municipalities, and partly by this third ballot. The Ward and PR ballots are used to ensure a proper comparison between ward, municipality and provincial regions.",
             "choropleth_method":"subindicator",
             "last_updated_at":"2021-07-01T09:13:47.019771Z",
@@ -45,18 +50,6 @@
                 }
               },
               "disableToggle":false
-            },
-            "data":{
-              "CPT":[
-                {
-                  "count":"1271923",
-                  "categories":"2011 Voted"
-                },
-                {
-                  "count":"708998",
-                  "categories":"2011 Didn't vote"
-                }
-              ]
             }
           }
         }

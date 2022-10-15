@@ -8,7 +8,7 @@ import {
     collapseChoroplethFilterDialog,
     expandChoroplethFilterDialog,
     expandDataMapper, expandPointFilterDialog,
-    expandPointMapper,
+    expandPointMapper, expandRichDataPanel,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded
@@ -19,11 +19,12 @@ import profiles from "./profiles.json";
 import profile from './profile.json';
 import themes from "./themes.json";
 import points from "./points.json";
-import children_indicators from './children_indicators.json';
-import children_indicators_FS from './children_indicators_FS.json';
+import profile_indicator_summary from './profile_indicator_summary.json';
+import profile_indicator_data from './profile_indicator_data.json'
+import profile_indicator_summary_FS from './profile_indicator_summary_FS.json'
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, themes, points, [], children_indicators);
+    setupInterceptions(profiles, all_details, profile, themes, points, [], profile_indicator_summary, profile_indicator_data);
     gotoHomepage();
 })
 
@@ -40,13 +41,15 @@ Then('Data Mapper should be displayed', () => {
 })
 
 When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
-    cy.get('.data-mapper').findByText(word).click();
+    cy.get('.data-mapper').findByText(word).click({force: true});
 });
 
 Then('I select an indicator', () => {
     cy.get('.data-category__h1_content--v2').contains('Population (2016 Community Survey)').click();
     cy.get('.data-category__h2_content--v2').contains('Population group').click();
     cy.get('.data-category__h3_content--v2').contains('Black african').click();
+
+    cy.get(`${mapBottomItems} .map-options .map-options__legend`).should('be.visible');
 })
 
 When('I select another indicator', () => {
@@ -55,8 +58,16 @@ When('I select another indicator', () => {
     cy.get('.data-category__h3_content--v2').contains('Indian or Asian').click();
 })
 
+Then('I check if the choropleth filter dialog is collapsed', () => {
+    checkIfChoroplethFilterDialogIsCollapsed();
+})
+
 Then('I check if choropleth legend is displayed', () => {
     cy.get(`${mapBottomItems} .map-options .map-options__legend`).should('be.visible');
+})
+
+Then('I expand filter dialog', () => {
+    expandChoroplethFilterDialog();
 })
 
 Then('I check if everything is zero', () => {
@@ -87,11 +98,11 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         });
     });
 
-    cy.intercept(`/api/v1/children-indicators/profile/8/geography/EC/?version=test&format=json`, (request) => {
+    cy.intercept(`/api/v1/profile/8/geography/EC/profile_indicator_summary/?version=test&format=json`, (request) => {
         return trigger.then(() => {
             request.reply({
                 statusCode: 200,
-                body: children_indicators,
+                body: profile_indicator_summary,
                 forceNetworkError: false // default
             })
         });
@@ -178,8 +189,8 @@ When('I navigate to WC', () => {
         })
     });
 
-    cy.intercept(`/api/v1/children-indicators/profile/8/geography/WC/?version=test&format=json`, (request) => {
-        let tempObj = JSON.parse(JSON.stringify(children_indicators));
+    cy.intercept(`/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(profile_indicator_summary));
         delete tempObj['Demographics'];
 
         request.reply({
@@ -209,10 +220,10 @@ When('I navigate to FS', () => {
         })
     });
 
-    cy.intercept(`/api/v1/children-indicators/profile/8/geography/FS/?version=test&format=json`, (request) => {
+    cy.intercept(`/api/v1/profile/8/geography/FS/profile_indicator_summary/?version=test&format=json`, (request) => {
         request.reply({
             statusCode: 200,
-            body: children_indicators_FS,
+            body: profile_indicator_summary_FS,
             forceNetworkError: false // default
         })
     });
@@ -236,10 +247,22 @@ Then('I navigate to ZA', () => {
     cy.visit('/#geo:ZA');
 })
 
-When('I navigate to WC and back to ZA quickly', () => {
+Then(/^I navigate to WC and back to ZA in (\d+) ms$/, function (ms) {
     cy.visit('/#geo:WC');
-    cy.wait(500);   //without this controller ignores the first request  - to be able to navigate between 2 geographies we need a small delay
+    cy.wait(ms);   //without this controller ignores the first request  - to be able to navigate between 2 geographies we need a small delay
     cy.visit('/#geo:ZA');
+
+    cy.on('uncaught:exception', (err, runnable) => {
+        // returning false here prevents Cypress from
+        // failing the test
+        if (err.name === "AbortError") {
+            return false
+        }
+    })
+});
+
+Then('I expand filter dialog', () => {
+    expandChoroplethFilterDialog();
 })
 
 Then('I check if the message is displayed correctly', () => {
@@ -261,6 +284,11 @@ Then('I check if the non\-aggregatable group filter is applied', () => {
 })
 
 When(/^I filter by "([^"]*)"$/, function (filter) {
+    cy.get(`.SnackbarContainer-root`).then($p => {
+        if ($p.is(':visible')) {
+            cy.get(`.SnackbarItem-wrappedRoot`).click();
+        }
+    });
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('not.have.class', 'disabled');
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
         .eq(1)
@@ -275,3 +303,11 @@ Then('I check if the legend values are correct', () => {
         expect($div.text()).equal(values[index]);
     })
 })
+
+Then('I expand Rich Data Panel', () => {
+    expandRichDataPanel();
+})
+
+Then(/^I check if the geography name is "([^"]*)"$/, function (name) {
+    cy.get('.location__title h1').should('have.text', name);
+});

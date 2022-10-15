@@ -3,6 +3,9 @@ Feature: Map Download
   Scenario: Verify the map download button closes the left panels
     Given I am on the Wazimap Homepage
     Then I wait until map is ready
+    Then I click on map download
+    Then I check if an image of the map is downloaded
+    Then I expand Point Mapper
     Then Point Mapper should be open
     Then Data Mapper should be closed
     Then Rich Data Panel should be closed

@@ -1,0 +1,458 @@
+{
+  "Elections": {
+    "order": 1,
+    "name": "Elections",
+    "subcategories": {
+      "2021 Municipal elections": {
+        "order": 1,
+        "name": "2021 Municipal elections",
+      },
+      "2016 Municipal elections": {
+        "order": 2,
+        "name": "2016 Municipal elections",
+        "indicators": {
+          "Voter turnout": {
+            "id": 836,
+            "order": 1,
+            "label": "Voter turnout",
+            "description": "<p>The 2016 Municipal Election \"Voter turnout\" indicator shows the larger of the Ward and Proportional Representation ballots in each voting district. Elections in local municipalities that fall in district municipalities actually have a third ballot (DC40), because the district council is elected partly by the councils of the costituent local municipalities, and partly by this third ballot. The Ward and PR ballots are used to ensure a proper comparison between ward, municipality and provincial regions.</p>",
+            "choropleth_method": "subindicator",
+            "last_updated_at": "2021-11-02T15:26:25.518843Z",
+            "metadata": {
+              "source": "IEC",
+              "description": "The 2016 Municipal Election \"Voter turnout\" indicator shows the larger of the Ward and Proportional Representation ballots in each voting district. Elections in local municipalities that fall in district municipalities actually have a third ballot (DC40), because the district council is elected partly by the councils of the constituent local municipalities, and partly by this third ballot. The Ward and PR ballots are used to ensure a proper comparison between ward, municipality and provincial regions.",
+              "url": "http://www.elections.org.za/",
+              "licence": {
+                "name": "other",
+                "url": null
+              },
+              "primary_group": "categories",
+              "groups": [
+                {
+                  "subindicators": [
+                    "Didn't vote",
+                    "Voted"
+                  ],
+                  "dataset": 1034,
+                  "name": "categories",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2016 demarcation",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "formatting": ","
+                }
+              },
+              "disableToggle": false
+            }
+          },
+          "Number of registered voters  by age": {
+            "id": 1010,
+            "order": 2,
+            "label": "Number of registered voters  by age",
+            "description": "<p>Number of people registered to vote with the IEC at the time of the 2016 Municipal Elections.</p>",
+            "choropleth_method": "subindicator",
+            "last_updated_at": "2021-08-31T13:00:17.775184Z",
+            "metadata": {
+              "source": "IEC",
+              "description": "",
+              "url": "https://www.elections.org.za/pw/",
+              "licence": {
+                "name": "other",
+                "url": null
+              },
+              "primary_group": "age category",
+              "groups": [
+                {
+                  "subindicators": [
+                    "18-19",
+                    "20-29",
+                    "30-39",
+                    "40-49",
+                    "50-59",
+                    "60-69",
+                    "70-79",
+                    "80+"
+                  ],
+                  "dataset": 1209,
+                  "name": "age category",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Female",
+                    "Male"
+                  ],
+                  "dataset": 1209,
+                  "name": "gender",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2016 demarcation",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "formatting": ","
+                }
+              }
+            }
+          },
+          "Number of registered voters by gender": {
+            "id": 1012,
+            "order": 3,
+            "label": "Number of registered voters by gender",
+            "description": "<p>Number of people registered to vote with the IEC at the time of the 2016 Municipal Elections.</p>",
+            "choropleth_method": "absolute_value",
+            "last_updated_at": "2021-08-31T13:04:41.110516Z",
+            "metadata": {
+              "source": "IEC",
+              "description": "",
+              "url": "https://www.elections.org.za/pw/",
+              "licence": {
+                "name": "other",
+                "url": null
+              },
+              "primary_group": "gender",
+              "groups": [
+                {
+                  "subindicators": [
+                    "18-19",
+                    "20-29",
+                    "30-39",
+                    "40-49",
+                    "50-59",
+                    "60-69",
+                    "70-79",
+                    "80+"
+                  ],
+                  "dataset": 1209,
+                  "name": "age category",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Female",
+                    "Male"
+                  ],
+                  "dataset": 1209,
+                  "name": "gender",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2016 demarcation",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "formatting": ","
+                }
+              }
+            }
+          },
+          "Number of hung and majority councils": {
+            "id": 1255,
+            "order": 4,
+            "label": "Number of hung and majority councils",
+            "description": "<p>This indicator shows the number of candidates who obtain over a half of the votes or seats, or 50% plus 1 votes and those who did not obtain a majority of seats(&lt; 50% of seats).</p>\r\n<p>District councils are not included because their council is elected partially by a subsequent vote of the councillors of the local municipalities making up this district.</p>",
+            "choropleth_method": "subindicator",
+            "last_updated_at": "2021-11-24T10:58:57.824941Z",
+            "metadata": {
+              "source": "IEC",
+              "description": "",
+              "url": "https://www.elections.org.za/pw/",
+              "licence": {
+                "name": "other",
+                "url": null
+              },
+              "primary_group": "councils",
+              "groups": [
+                {
+                  "subindicators": [
+                    "Hung",
+                    "Outright Majority"
+                  ],
+                  "dataset": 1461,
+                  "name": "councils",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2016 demarcation",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "minX": 0,
+                  "formatting": ","
+                },
+                "Percentage": {
+                  "minX": 0,
+                  "formatting": ".0%"
+                }
+              },
+              "defaultType": "Value",
+              "disableToggle": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "Demographics": {
+    "order": 2,
+    "name": "Demographics",
+    "subcategories": {
+      "Population (2016 Community Survey)": {
+        "order": 1,
+        "name": "Population (2016 Community Survey)",
+        "indicators": {
+          "Population group": {
+            "id": 927,
+            "order": 1,
+            "label": "Population group",
+            "description": "<p>This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified population groupings at the time that the 2016 Community Survey was conducted</p>",
+            "choropleth_method": "subindicator",
+            "last_updated_at": "2021-10-12T10:56:22.849621Z",
+            "metadata": {
+              "source": "2016 Community Survey - StatsSA",
+              "description": "This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified age groupings at the time that the 2016 Community Survey was conducted.",
+              "url": "http://superweb.statssa.gov.za/webapi/jsf/login.xhtml",
+              "licence": {
+                "name": "other",
+                "url": null
+              },
+              "primary_group": "population group",
+              "groups": [
+                {
+                  "subindicators": [
+                    "0-14 (Children)",
+                    "15-34 (Youth)",
+                    "35-64 (Adults)",
+                    "65+ (Elderly)"
+                  ],
+                  "dataset": 1018,
+                  "name": "age",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Indian/asian",
+                    "Coloured",
+                    "Black african",
+                    "White"
+                  ],
+                  "dataset": 1018,
+                  "name": "population group",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Female",
+                    "Male"
+                  ],
+                  "dataset": 1018,
+                  "name": "sex",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2016 demarcation",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "formatting": ",.0f"
+                }
+              },
+              "disableToggle": false
+            }
+          }
+        }
+      },
+      "Population (2011 Census)": {
+        "order": 2,
+        "name": "Population (2011 Census)",
+        "indicators": {
+          "Population group 2": {
+            "id": 840,
+            "order": 1,
+            "name": "Population group 2",
+            "description": "This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified population group and sex at the time that the 2011 census was conducted. The data is represented using the 2016 boundaries with wards.",
+            "choropleth_method": "subindicator",
+            "last_updated_at": "2021-07-01T09:12:54.010737Z",
+            "metadata": {
+              "source": "StatsSA",
+              "description": "This indicator shows the percentage of inhabitants of the selected geographical area that fell within each of the specified age groupings at the time that the 2011 Census was conducted.",
+              "url": "http://superweb.statssa.gov.za/webapi/jsf/login.xhtml",
+              "licence": {
+                "name": "other",
+                "url": null
+              },
+              "primary_group": "population group",
+              "groups": [
+                {
+                  "subindicators": [
+                    "Black African",
+                    "Indian or Asian",
+                    "Unspecified",
+                    "Other",
+                    "Coloured",
+                    "White"
+                  ],
+                  "dataset": 1037,
+                  "name": "population group",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Female",
+                    "Male"
+                  ],
+                  "dataset": 1037,
+                  "name": "sex",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2016 demarcation",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "formatting": ",.0f"
+                }
+              },
+              "disableToggle": false
+            }
+          }
+        }
+      }
+    }
+  },
+  "Economic Opportunities": {
+    "order": 3,
+    "name": "Economic Opportunities",
+    "subcategories": {
+      "NEET Status": {
+        "order": 1,
+        "name": "NEET Status",
+        "indicators": {
+          "Not in Employment": {
+            "id": 1134,
+            "order": 1,
+            "label": "Not in Employment",
+            "description": "",
+            "choropleth_method": "subindicator",
+            "last_updated_at": "2021-10-13T15:43:22.928664Z",
+            "metadata": {
+              "source": "Stats SA Census 2011",
+              "description": "",
+              "url": null,
+              "licence": {
+                "name": null,
+                "url": null
+              },
+              "primary_group": "neet status",
+              "groups": [
+                {
+                  "subindicators": [
+                    "20-24",
+                    "15-19",
+                    "25-29",
+                    "15-35 (ZA)",
+                    "30-35",
+                    "15-24 (Intl)"
+                  ],
+                  "dataset": 1306,
+                  "name": "age group",
+                  "can_aggregate": false,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Female",
+                    "Male"
+                  ],
+                  "dataset": 1306,
+                  "name": "gender",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "School/post-school",
+                    "NEET",
+                    "Employed"
+                  ],
+                  "dataset": 1306,
+                  "name": "neet status",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Coloured",
+                    "Other",
+                    "Indian or Asian",
+                    "White",
+                    "Black African"
+                  ],
+                  "dataset": 1306,
+                  "name": "race",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2011 Boundaries",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "formatting": ",.0f"
+                },
+                "Percentage": {
+                  "maxX": 1,
+                  "minX": 0
+                }
+              },
+              "filter": {
+                "defaults": [
+                  {
+                    "name": "age group",
+                    "value": "15-35 (ZA)"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

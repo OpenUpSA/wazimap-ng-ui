@@ -10,7 +10,9 @@ Feature: Data Mapper
     And I click on "Demographics" in Data Mapper
     And I select an indicator
     And I select another indicator
+    Then I check if the choropleth filter dialog is collapsed
     Then I check if choropleth legend is displayed
+    Then I expand filter dialog
     Then I check if everything is zero
 
     And I navigate to EC and check if the loading state is displayed correctly
@@ -47,12 +49,28 @@ Feature: Data Mapper
     And I expand Data Mapper
     Then I check if there are 3 categories
 
-    And I navigate to WC and back to ZA quickly
+    And I navigate to WC and back to ZA in 100 ms
     And I expand Data Mapper
     Then I check if there are 3 categories
+    And I expand Rich Data Panel
+    Then I check if the geography name is "South Africa Test"
+
+    And I navigate to WC and back to ZA in 500 ms
+    And I expand Data Mapper
+    Then I check if there are 3 categories
+    And I expand Rich Data Panel
+    Then I check if the geography name is "South Africa Test"
+
+    And I navigate to WC and back to ZA in 2000 ms
+    And I expand Data Mapper
+    Then I check if there are 3 categories
+    And I expand Rich Data Panel
+    Then I check if the geography name is "South Africa Test"
+
 
     # confirm that no filters available message is displayed correctly
     When I expand Data Mapper
+    Then Data Mapper should be displayed
     And I click on "Elections" in Data Mapper
     And I click on "2016 Municipal elections" in Data Mapper
     And I click on "Number of hung and majority councils" in Data Mapper

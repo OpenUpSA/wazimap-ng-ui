@@ -25,6 +25,7 @@ export default class Controller extends Component {
         $(window).on('hashchange', () => {
             // On every hash change the render function is called with the new hash.
             // This is how the navigation of our app happens.
+            this.api.cancelAndInitAbortController();
             const hash = decodeURI(window.location.hash);
             let parts = hash.split(':')
             let payload = null;
@@ -65,7 +66,6 @@ export default class Controller extends Component {
         this.triggerEvent("loggingOut");
         this.api.logout().then(e => {
             window.location.hash = '';
-            console.log(e);
             this.triggerEvent("loggedOut");
         })
     }
@@ -126,13 +126,10 @@ export default class Controller extends Component {
             selectedSubindicator: payload.selectedSubindicator,
             choropleth_method: payload.choropleth_method,
             parents: payload.parents,
-            data: payload.indicators[payload.indicatorTitle],
-            chartConfiguration: payload.indicators[payload.indicatorTitle].chartConfiguration,
-            indicatorId: payload.indicatorId
-        }
-
-        if (subindicator.data.originalChildData !== undefined) {
-            subindicator.data.data = subindicator.data.originalChildData;
+            data: payload.indicatorData,
+            indicatorId: payload.indicatorId,
+            config: payload.config,
+            metadata: payload.metadata
         }
 
         this.state.subindicator = subindicator;
@@ -153,39 +150,9 @@ export default class Controller extends Component {
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
-    handleNewProfileChoropleth() {
-        if (this.state.subindicator === null) {
-            return;
-        }
-
-        const geo = this.state.profile.profile.geography.code;
-        const allVersionsIndicatorData = this.versionController.getIndicatorDataByGeo(geo);
-        let profileData = allVersionsIndicatorData.indicatorData[this.state.subindicator.parents.category];
-
-        if (profileData === undefined) {
-            this.triggerEvent('data_mapper_menu.nodata');
-            return;
-        }
-
-        let indicators = profileData.subcategories[this.state.subindicator.parents.subcategory]
-            .indicators;
-
-        let selectedIndicator = indicators[this.state.subindicator.parents.indicator];
-
-        if (selectedIndicator === undefined) {
-            this.triggerEvent('data_mapper_menu.nodata');
-            return;
-        }
-
-        let childData = selectedIndicator.data;
-
-        this.state.subindicator.data.data = childData;
-
-        let args = {
-            indicatorTitle: this.state.subindicator.indicatorTitle
-        }
-
-        this.triggerEvent("newProfileWithChoropleth", args);
+    onSelectingSubindicator(payload) {
+        this.state.selectedSubindicator = payload.selectedSubindicator;
+        this.triggerEvent("mapchip.choropleth.selectSubindicator", payload);
     }
 
     /**
@@ -225,7 +192,6 @@ export default class Controller extends Component {
     onLayerClick(payload) {
         const self = this;
         if (payload.maplocker.locked) {
-            console.log("ignoring click from onLayer click")
             return;
         }
 
@@ -352,9 +318,10 @@ export default class Controller extends Component {
     }
 
     reDrawChildren() {
+        let activeVersionName = this.versionController.activeVersion.model.name;
         const payload = {
             profile: this.state.profile.profile,
-            geometries: this.state.profile.geometries
+            geometries: this.versionController.versionGeometries[activeVersionName]
         }
 
         this.triggerEvent('redraw', payload);

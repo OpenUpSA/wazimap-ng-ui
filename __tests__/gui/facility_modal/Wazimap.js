@@ -61,10 +61,17 @@ Then('I check if the print view is as expected', () => {
     cy.get('.rich-data').should('not.be.visible');
 })
 
-Then('I expand Point Mapper', ()=>{
+Then('I expand Point Mapper', () => {
     expandPointMapper();
 })
 
-When('I exit print view', () =>{
+When('I exit print view', () => {
     cy.task('resetCRI')
+})
+
+Then('I confirm that empty values are not displayed in the facility modal', () => {
+    cy.get('.facility-info .facility-info__items .facility-info__item_label').each($label => {
+        cy.wrap($label).should('not.have.text', 'empty value');
+        cy.wrap($label).should('not.have.text', 'null value');
+    })
 })

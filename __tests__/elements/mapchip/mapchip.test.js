@@ -28,18 +28,14 @@ describe('Check mapchip HTML description', () => {
         }
     }
 
-    test('Description is visible and renders HTML tags', () => {
+    test('Description is hidden on intial load', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors)
         mc.show();
         mc.description = mapchip_args.data.description;
 
         let descriptionField = document.querySelector(`${mapBottomItems} .map-option__context_text`);
-        let htmlTag = descriptionField.textContent.trim();
-
-        expect(descriptionField).toBeVisible();
-        expect(descriptionField.innerHTML).toContain("<strong>");
-        expect(htmlTag).toBe('An HTML description')
+        expect(descriptionField).not.toBeVisible();
     })
 })
 
@@ -54,7 +50,7 @@ describe('Selecting a subindicator', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        mc.onSubIndicatorChange(params);
+        mc.show()
 
         let mapOptions = document.querySelector(`${mapBottomItems} .map-options`);
         expect(mapOptions).not.toHaveClass('hidden');

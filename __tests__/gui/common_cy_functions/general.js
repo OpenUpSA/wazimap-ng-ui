@@ -1,9 +1,12 @@
 import pixelmatch from "pixelmatch";
+import profile_indicator_summary from "../data_mapper/profile_indicator_summary.json";
 
 export const mapBottomItems = '.map-bottom-items--v2';
 export const allDetailsEndpoint = 'all_details';
+const recursiveResult = {PANEL_ALREADY_EXPANDED: false, ALL_PANELS_CLOSED: true};
 
-export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [], children_indicators = {}) {
+export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [],
+                                   profile_indicator_summary = {}, indicator_data = {}) {
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=test&skip-children=true&format=json`, (req) => {
         req.reply({
             statusCode: 200,
@@ -52,13 +55,41 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
         });
     }).as('themes_count');
 
-    cy.intercept('/api/v1/children-indicators/profile/8/geography/ZA/?version=test&format=json', (request) => {
+    cy.intercept('/api/v1/profile/8/geography/ZA/profile_indicator_summary/?version=test&format=json', (request) => {
         request.reply({
             statusCode: 200,
-            body: children_indicators,
+            body: profile_indicator_summary,
             forceNetworkError: false // default
         });
-    }).as('themes_count');
+    }).as('profile_indicator_summary');
+
+    cy.intercept('/api/v1/profile/8/geography/**/indicator/**/child_data/', (request) => {
+        request.reply({
+            statusCode: 200,
+            body: extractRequestedIndicatorData(request.url, indicator_data),
+            forceNetworkError: false // default
+        });
+    }).as('indicator_data');
+}
+
+export function extractRequestedIndicatorData(url, indicatorData) {
+    let domain = url.match(/^https:\/\/[^/]+/);
+    let geo = url.replace(`${domain}/api/v1/profile/8/geography/`, '');
+    geo = geo.replace(geo.substring(geo.indexOf('/')), '');
+
+    let indicatorId = url.replace(`${domain}/api/v1/profile/8/geography/${geo}/indicator/`, '');
+    indicatorId = indicatorId.replace('/child_data/', '');
+    indicatorId = parseInt(indicatorId);
+
+    let result = indicatorData.filter(x => {
+        return x.id === indicatorId
+    });
+
+    if (result[0] !== undefined) {
+        return result[0].data[geo];
+    } else {
+        return {};
+    }
 }
 
 export function gotoHomepage() {
@@ -115,6 +146,9 @@ export function expandDataMapper() {
 }
 
 function expandPanel(panel) {
+    cy.wait(1000);
+    // cy.wait is necessary because closing a panel and opening another takes some time.
+    // if a test is too quickly closing and opening panels, it creates problems
     const allPanels = [
         {
             panel: '.data-mapper',
@@ -134,28 +168,51 @@ function expandPanel(panel) {
     const panelToBeExpanded = allPanels.filter((p) => {
         return p.panel === panel
     })[0];
-    const nonSelectedPanels = allPanels.splice(allPanels.indexOf(panelToBeExpanded.panel), 1);
 
-    let closedNoPanels = true;
-    nonSelectedPanels.forEach(nsp => {
-            if (closedNoPanels) {
-                cy.get(nsp.panel).then($p => {
-                    if ($p.is(':visible')) {
-                        cy.get(`${nsp.wrapper} ${panelToBeExpanded.button}`).click({force: true});
-                        closedNoPanels = false;
-                    }
-                })
-            }
+    const nonSelectedPanels = allPanels.filter((p) => {
+        return p.panel !== panel
+    });
+
+    recTogglePanel(panelToBeExpanded, nonSelectedPanels, 0).then(function (result) {
+        if (result) {
+            //nothing was expanded
+            cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click().then(() => {
+                cy.get(panel, {timeout: 20000}).should('be.visible');
+            });
+        } else {
+            cy.get(panel, {timeout: 20000}).should('be.visible');
         }
-    )
-
-    if (closedNoPanels) {
-        //nothing was expanded
-        cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click({force: true});
-    }
-
-    cy.get(panel, {timeout: 20000}).should('be.visible');
+    })
 }
+
+const recTogglePanel = (panelToBeExpanded, nonSelectedPanels, index) => new Cypress.Promise(function (resolve) {
+    cy.get(panelToBeExpanded.panel).then($p => {
+        if ($p.is(':visible')) {
+            // the panelToBeExpanded is already expanded
+            resolve(recursiveResult.PANEL_ALREADY_EXPANDED);
+        } else {
+            // the panelToBeExpanded is not expanded
+            // check the other panels to see which toggle class needs to be used
+            const nsp = nonSelectedPanels[index];
+            cy.get(nsp.panel).then($p => {
+                if ($p.is(':visible')) {
+                    cy.get(`${nsp.wrapper} ${panelToBeExpanded.button}`).click();
+                    resolve(recursiveResult.PANEL_ALREADY_EXPANDED);
+                } else {
+                    let newIndex = ++index;
+                    if (nonSelectedPanels.length <= newIndex) {
+                        // none of the panels are visible
+                        resolve(recursiveResult.ALL_PANELS_CLOSED);
+                    } else {
+                        recTogglePanel(panelToBeExpanded, nonSelectedPanels, newIndex).then(function (recursiveResult) {
+                            resolve(recursiveResult);
+                        });
+                    }
+                }
+            })
+        }
+    })
+})
 
 export function collapsePointFilterDialog() {
     collapseFilterDialog('.point-filters');

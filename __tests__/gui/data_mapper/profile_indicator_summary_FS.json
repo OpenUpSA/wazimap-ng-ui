@@ -1,0 +1,104 @@
+{
+  "Economic Opportunities": {
+    "order": 1,
+    "name": "Economic Opportunities",
+    "subcategories": {
+      "NEET Status": {
+        "order": 1,
+        "name": "NEET Status",
+        "indicators": {
+          "Not in Employment": {
+            "id": 1134,
+            "order": 1,
+            "label": "Not in Employment",
+            "description": "",
+            "choropleth_method": "subindicator",
+            "last_updated_at": "2021-10-13T15:43:22.928664Z",
+            "metadata": {
+              "source": "Stats SA Census 2011",
+              "description": "",
+              "url": null,
+              "licence": {
+                "name": null,
+                "url": null
+              },
+              "primary_group": "neet status",
+              "groups": [
+                {
+                  "subindicators": [
+                    "20-24",
+                    "15-19",
+                    "25-29",
+                    "15-35 (ZA)",
+                    "30-35",
+                    "15-24 (Intl)"
+                  ],
+                  "dataset": 1306,
+                  "name": "age group",
+                  "can_aggregate": false,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Female",
+                    "Male"
+                  ],
+                  "dataset": 1306,
+                  "name": "gender",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "School/post-school",
+                    "NEET",
+                    "Employed"
+                  ],
+                  "dataset": 1306,
+                  "name": "neet status",
+                  "can_aggregate": true,
+                  "can_filter": true
+                },
+                {
+                  "subindicators": [
+                    "Coloured",
+                    "Other",
+                    "Indian or Asian",
+                    "White",
+                    "Black African"
+                  ],
+                  "dataset": 1306,
+                  "name": "race",
+                  "can_aggregate": true,
+                  "can_filter": true
+                }
+              ]
+            },
+            "content_type": "indicator",
+            "dataset_content_type": "quantitative",
+            "version": "2011 Boundaries",
+            "chart_configuration": {
+              "types": {
+                "Value": {
+                  "formatting": ",.0f"
+                },
+                "Percentage": {
+                  "maxX": 1,
+                  "minX": 0
+                }
+              },
+              "filter": {
+                "defaults": [
+                  {
+                    "name": "age group",
+                    "value": "15-35 (ZA)"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

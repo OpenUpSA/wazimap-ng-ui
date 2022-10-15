@@ -13,6 +13,7 @@ export class API extends Observable {
         this.baseUrl = `${serverUrl}/api/v1`;
         this.busyLoggingIn = false;
         this.failedLogins = 0;
+        this.abortController = null;
     }
 
     getToken() {
@@ -29,17 +30,22 @@ export class API extends Observable {
 
     getProfile(profileId, areaCode, version) {
         const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?version=${version}&skip-children=true&format=json`;
-        return this.loadUrl(url);
+        return this.loadUrl(url, this.abortController);
     }
 
     getProfileConfiguration(hostname) {
-        const url = `${this.baseUrl}/profile_by_url/?format=json`;
-        return this.loadUrl(url, {'wm-hostname': hostname});
+        const url = `${this.baseUrl}/profile_by_url?format=json`;
+        return this.loadUrl(url, null, {'wm-hostname': hostname});
     }
 
     loadChoroplethData(profileId, areaCode, indicatorId) {
         const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/`;
-        return this.loadUrl(url);
+        return this.loadUrl(url, this.abortController);
+    }
+
+    getIndicatorChildData(profileId, areaCode, indicatorId) {
+        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/child_data/`;
+        return this.loadUrl(url, this.abortController);
     }
 
     loadThemes(profileId) {
@@ -82,15 +88,15 @@ export class API extends Observable {
         }
     }
 
-    async loadUrl(url, headers = {}) {
+    async loadUrl(url, abortController, headers = {}) {
         let response;
         const self = this;
-        response = await this.getTokenJSON(url, headers)
+        response = await this.getTokenJSON(url, abortController, headers)
         if (response.status === 401 || response.status === 403) {
             await this.waitToLogIn();
             try {
                 await self.authenticate(url);
-                response = await this.getTokenJSON(url, headers);
+                response = await this.getTokenJSON(url, abortController, headers);
             } finally {
                 console.log("stopped logging in")
 
@@ -154,22 +160,36 @@ export class API extends Observable {
         }
     }
 
-    async getTokenJSON(url, headers = {}) {
+    async getTokenJSON(url, abortController = null, headers = {}) {
         const token = this.getToken();
         if (token != '' && token != null)
             headers['Authorization'] = `Token ${token}`;
 
-        return getJSON(url, headers)
+        return getJSON(url, abortController, headers)
     }
 
     async getThemesCount(profileId, areaCode, version) {
         const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/themes_count/?version=${version}&format=json`;
-        return this.loadUrl(url);
+        return this.loadUrl(url, this.abortController);
     }
 
     async getChildrenIndicators(profileId, areaCode, version) {
         const url = `${this.baseUrl}/children-indicators/profile/${profileId}/geography/${areaCode}/?version=${version}&format=json`;
-        return this.loadUrl(url);
+        return this.loadUrl(url, this.abortController);
+    }
+
+    async getIndicatorSummary(profileId, areaCode, version) {
+        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/profile_indicator_summary/?version=${version}&format=json`;
+        return this.loadUrl(url, this.abortController);
+    }
+
+    cancelAndInitAbortController() {
+        if (this.abortController !== null) {
+            //on first request this.abortController is null
+            this.abortController.abort();
+        }
+
+        this.abortController = new AbortController();
     }
 }
 
@@ -190,7 +210,11 @@ async function postJSON(url, data = {}, headers = {}) {
     return response;
 }
 
-async function getJSON(url, headers = {}) {
-    const response = await fetch(url, {headers: headers})
+async function getJSON(url, abortController, headers = {}) {
+    const response = await fetch(url,
+        {
+            headers: headers,
+            signal: abortController === null ? null : abortController.signal
+        })
     return response;
 }

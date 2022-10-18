@@ -12,7 +12,6 @@
     "@mui/material": "^5.8.5",
     "@sentry/browser": "^5.20.1",
     "@types/react": "^16.8.6 || ^17.0.0",
-    "babel-polyfill": "^6.26.0",
     "category": "^0.1.2",
     "controller": "^1.0.0",
     "css": "^2.2.4",

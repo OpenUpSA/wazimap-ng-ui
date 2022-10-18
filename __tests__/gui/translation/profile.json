@@ -1,0 +1,47 @@
+{
+  "id": 8,
+  "name": "Profile name",
+  "permission_type": "public",
+  "requires_authentication": false,
+  "geography_hierarchy": {
+    "id": 1,
+    "name": "2011 SA Boundaries",
+    "root_geography": {
+      "name": "South Africa",
+      "code": "ZA",
+      "level": "country",
+      "version": "2011 Boundaries"
+    },
+    "description": "",
+    "configuration": {
+      "default_version": "test",
+      "versions": [
+        "test"
+      ]
+    }
+  },
+  "description": "",
+  "configuration": {
+    "urls": [
+      "example.com"
+    ],
+    "translations": {
+      "en": {
+        "Point Mapper": "Translated | Mapper",
+        "Select the category, or specific type of point data you would like to overlay onto the map.": "Translated | Select the category, or specific type of point data you would like to overlay onto the map.",
+        "No filters available for the selected data.": "Translated | No filters available for the selected data.",
+        "No facilities for this location": "Translated | No facilities for this location",
+        "View location in Google Maps": "Translated | View location in Google Maps",
+        "No points available for this location": "Translated | No points available for this location",
+        "Point Filters": "Translated | Point Filters"
+      }
+    },
+    "default_panel": "point_data",
+    "tutorial": [],
+    "default_coordinates": {
+      "lat": -28.995409163308832,
+      "long": 25.093833387362697,
+      "zoom": 6
+    }
+  }
+}

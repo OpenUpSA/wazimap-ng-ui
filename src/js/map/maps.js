@@ -1,5 +1,4 @@
 import {Component} from '../utils';
-import {polygon} from 'leaflet/dist/leaflet-src.esm';
 import {LayerStyler} from './layerstyler';
 import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
 import {Choropleth} from './choropleth/choropleth';

@@ -32,6 +32,11 @@ export class MapChip extends Component {
         this._isContentVisible = false;
         this._appliedFilters = {};
         this.prepareUIEvents();
+        this.choroplethMethods = {
+            subindicator: 'subindicator',
+            sibling: 'sibling',
+            absolute: 'absolute_value'
+        }
 
         // Load components
         this._filterLabel = new FilterLabel(this);
@@ -134,6 +139,38 @@ export class MapChip extends Component {
         this._legendContainer = $(this.container).find(legendContainerClass);
         this._filterHeaderTitleContainer = $(this.container).find(filterHeaderClass);
         this._filterHeaderToggleContainer = $(this.container).find(filterHeaderToggleClass);
+
+        this.appendSubIndicatorDescriptionHtml();
+    }
+
+    appendSubIndicatorDescriptionHtml() {
+        let descText = document.createElement('div');
+        $(descText).addClass('choropleth-method-description');
+        $(this.container).find(legendClass).append(descText);
+
+        let qMark = document.createElement('div');
+        $(qMark).addClass('choropleth-method-qMark');
+        $(qMark).text('?');
+        $(this.container).find(legendClass).append(qMark);
+    }
+
+    updateSubIndicatorDescriptionHtml(method, currentGeo) {
+        if (method === this.choroplethMethods.subindicator) {
+            $(this.container).find(legendClass).find('.choropleth-method-qMark').show();
+            $(this.container).find(legendClass).find('.choropleth-method-description').show();
+            $(this.container).find(legendClass).find('.choropleth-method-description').text('of all categories');
+            this._tooltip.enableTooltip($(this.container).find(legendClass).find('.choropleth-method-qMark'),
+                'The percentage shown is the value for the selected category in a given geographic area, as a percentage of the total for all categories in that area.');
+        } else if (method === this.choroplethMethods.sibling) {
+            $(this.container).find(legendClass).find('.choropleth-method-qMark').show();
+            $(this.container).find(legendClass).find('.choropleth-method-description').show();
+            $(this.container).find(legendClass).find('.choropleth-method-description').text(`of total for ${currentGeo}`);
+            this._tooltip.enableTooltip($(this.container).find(legendClass).find('.choropleth-method-qMark'),
+                `The percentage shown is the value for each shaded geographic area as a percentage of the total for ${currentGeo}`);
+        } else if (method === this.choroplethMethods.absolute) {
+            $(this.container).find(legendClass).find('.choropleth-method-qMark').hide();
+            $(this.container).find(legendClass).find('.choropleth-method-description').hide();
+        }
     }
 
     updateDomElements() {
@@ -157,7 +194,6 @@ export class MapChip extends Component {
     prepareUIEvents() {
         this._closeButton.on('click', () => this.removeMapChip());
     }
-
 
     updateToggleIcon() {
         this._toggleIconDownContainer.find("svg").remove();
@@ -232,6 +268,9 @@ export class MapChip extends Component {
 
         // Description Icon
         this.setDescriptionIcon(this.metadata.indicatorDescription);
+
+        //update subIndicator description html
+        this.updateSubIndicatorDescriptionHtml(params.method, params.currentGeo);
 
         // Linear Scrubber
         this.showLinearScrubber(params)

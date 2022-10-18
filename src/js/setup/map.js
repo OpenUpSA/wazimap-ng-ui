@@ -37,7 +37,7 @@ export function configureMapEvents(controller, objs = {mapcontrol: null}) {
     controller.bubbleEvent(zoomToggle, 'zoomToggled');
     controller.bubbleEvents(mapcontrol, [
         'layer.mouse.over', 'layer.mouse.out', 'layer.mouse.move',
-        'map.layer.loading', 'map.zoomed'
+        'map.layer.loading', 'map.zoomed', 'map.choropleth.loaded'
     ])
     mapcontrol.on('map.layer.loaded', payload => controller.onLayerLoaded(payload))
     mapcontrol.on('layerClick', payload => controller.onLayerClick(payload));

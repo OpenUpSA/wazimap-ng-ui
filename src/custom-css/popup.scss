@@ -1,0 +1,51 @@
+.tooltip-label {
+  float: left;
+  text-align: right;
+  color: #707070;
+  padding: 2px 0px;
+}
+
+.tooltip-row-top .tooltip-label {
+  width: 20px;
+}
+
+.tooltip-row-bottom.sub-indicator-type .tooltip-label {
+  width: 90px;
+}
+
+.tooltip-row-bottom.sibling-type .tooltip-label {
+  width: 135px;
+}
+
+.tooltip-row-top.absolute-type .tooltip-label {
+  display: none;
+}
+
+.tooltip__value_wrapper {
+  float: left;
+}
+
+.tooltip-row-top .tooltip__value_wrapper {
+  width: calc(100% - 20px);
+}
+
+.tooltip-row-top.absolute-type .tooltip__value_wrapper {
+  width: 100%;
+}
+
+.tooltip-row-bottom.sub-indicator-type .tooltip__value_wrapper {
+  width: calc(100% - 90px);
+}
+
+.tooltip-row-bottom.sibling-type .tooltip__value_wrapper {
+  width: calc(100% - 135px);
+}
+
+.tooltip-row-bottom {
+  margin-top: 3px;
+}
+
+.tooltip-row-bottom .tooltip__value_detail {
+  margin-left: unset;
+  color: unset;
+}

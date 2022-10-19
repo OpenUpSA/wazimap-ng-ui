@@ -51,6 +51,7 @@ exports.transformDOM = function (window, $) {
 
     // Add custom css
     addStylesheet(window, "custom-css/mapchip.scss");
+    addStylesheet(window, "custom-css/popup.scss");
 
     // translation
     setupTranslation(window);

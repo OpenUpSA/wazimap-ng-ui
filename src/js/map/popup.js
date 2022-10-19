@@ -15,9 +15,21 @@ export class Popup extends Component {
         this.map = map;
         this.formattingConfig = formattingConfig;
         this.choroplethMethods = {
-            subindicator: 'subindicator',
-            sibling: 'sibling',
-            absolute: 'absolute_value'
+            subindicator: {
+                type: 'subindicator',
+                cssClass: 'sub-indicator-type',
+                bottomText: 'of all categories'
+            },
+            sibling: {
+                type: 'sibling',
+                cssClass: 'sibling-type',
+                bottomText: 'of total for shaded areas'
+            },
+            absolute_value: {
+                type: 'absolute_value',
+                cssClass: 'absolute-type',
+                bottomText: ''
+            }
         }
 
         this.prepareDomElements();
@@ -62,7 +74,7 @@ export class Popup extends Component {
     createPopupContent = (payload, state) => {
         let item = this.map.map_variables.tooltipItem.cloneNode(true);
         if (state.subindicator !== null) {
-            this.modifyTooltipHtml(item, state.subindicator.choropleth_method, state.profile.geometries.boundary.properties.name);
+            this.modifyTooltipHtml(item, state.subindicator.choropleth_method);
         }
 
         this.map.map_variables.hoverAreaLevel = payload.properties.level;
@@ -80,44 +92,39 @@ export class Popup extends Component {
         return item;
     }
 
-    modifyTooltipHtml(item, choroplethMethod, currentGeo) {
-        $('.tooltip__value_wrapper .tooltip__value_detail', item).remove();
-
+    modifyTooltipHtml(item, choroplethMethod) {
         let wrapperClone = $('.map-tooltip__value .tooltip__value_wrapper', item)[0].cloneNode(true);
-        if (choroplethMethod !== this.choroplethMethods.absolute) {
-            $(wrapperClone).css('width', '85%');
-            $(wrapperClone).css('float', 'left');
+        let wrapperClone2 = $('.map-tooltip__value .tooltip__value_wrapper', item)[0].cloneNode(true);
+
+        //top
+        let tooltipRowTop = document.createElement('div');
+        $(tooltipRowTop).addClass('tooltip-row-top').addClass(this.choroplethMethods[choroplethMethod].cssClass);
+
+        let tooltipLabel = document.createElement('div');
+        $(tooltipLabel).addClass('tooltip-label');
+        $(tooltipLabel).text('or');
+
+        $(tooltipRowTop).append(wrapperClone);
+        if (choroplethMethod !== this.choroplethMethods.absolute_value.type) {
+            $(tooltipRowTop).find('.tooltip__value_detail').remove();
         }
+        $(tooltipRowTop).append(tooltipLabel);
 
-        let label = document.createElement('div');
-        $(label).addClass('tooltip-label');
-        $(label).css('width', '15%');
-        $(label).css('float', 'left');
-        $(label).css('text-align', 'left');
-        $(label).css('color', '#707070');
-        $(label).css('padding', '2px 6px');
-        $(label).text('or');
+        //bottom
+        let tooltipRowBottom = document.createElement('div');
+        $(tooltipRowBottom).addClass('tooltip-row-bottom').addClass(this.choroplethMethods[choroplethMethod].cssClass);
 
-        let parentTop = document.createElement('div');
-        $(parentTop).append(wrapperClone);
-        if (choroplethMethod !== this.choroplethMethods.absolute) {
-            $(parentTop).append(label);
-        }
+        let tooltipLabel2 = document.createElement('div');
+        $(tooltipLabel2).addClass('tooltip-label');
+        $(tooltipLabel2).text(this.choroplethMethods[choroplethMethod].bottomText);
 
-        let parentBottom = parentTop.cloneNode(true);
-        $(parentBottom).css('margin-top', '3px');
-        $(parentBottom).find('.tooltip-label').css('width', '75%');
-        if (choroplethMethod === this.choroplethMethods.subindicator) {
-            $(parentBottom).find('.tooltip-label').text('of all categories');
-        } else {
-            $(parentBottom).find('.tooltip-label').text(`of total for ${currentGeo}`);
-        }
-        $(parentBottom).find('.tooltip__value_amount').addClass('percentage-value');
-        $(parentBottom).find('.tooltip__value_wrapper').css('width', '25%');
+        $(tooltipRowBottom).append(wrapperClone2).find('.tooltip__value_amount').remove();
+        $(tooltipRowBottom).append(tooltipLabel2);
 
-        $('.map-tooltip__value .tooltip__value_wrapper', item).replaceWith(parentTop);
-        if (choroplethMethod !== this.choroplethMethods.absolute) {
-            $('.map-tooltip__value', item).append(parentBottom);
+        //parent
+        $('.map-tooltip__value .tooltip__value_wrapper', item).replaceWith(tooltipRowTop);
+        if (choroplethMethod !== this.choroplethMethods.absolute_value.type){
+            $(tooltipRowBottom).insertAfter(tooltipRowTop);
         }
     }
 

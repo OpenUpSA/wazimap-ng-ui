@@ -154,7 +154,7 @@ export class MapChip extends Component {
         $(this.container).find(legendClass).append(qMark);
     }
 
-    updateSubIndicatorDescriptionHtml(method, currentGeo) {
+    updateSubIndicatorDescriptionHtml(method) {
         if (method === this.choroplethMethods.subindicator) {
             $(this.container).find(legendClass).find('.choropleth-method-qMark').show();
             $(this.container).find(legendClass).find('.choropleth-method-description').show();
@@ -164,9 +164,9 @@ export class MapChip extends Component {
         } else if (method === this.choroplethMethods.sibling) {
             $(this.container).find(legendClass).find('.choropleth-method-qMark').show();
             $(this.container).find(legendClass).find('.choropleth-method-description').show();
-            $(this.container).find(legendClass).find('.choropleth-method-description').text(`of total for ${currentGeo}`);
+            $(this.container).find(legendClass).find('.choropleth-method-description').text('of total for shaded areas');
             this._tooltip.enableTooltip($(this.container).find(legendClass).find('.choropleth-method-qMark'),
-                `The percentage shown is the value for each shaded geographic area as a percentage of the total for ${currentGeo}`);
+                'The percentage shown is the value for each shaded geographic area as a percentage of the total for all shaded geographic areas');
         } else if (method === this.choroplethMethods.absolute) {
             $(this.container).find(legendClass).find('.choropleth-method-qMark').hide();
             $(this.container).find(legendClass).find('.choropleth-method-description').hide();
@@ -270,7 +270,7 @@ export class MapChip extends Component {
         this.setDescriptionIcon(this.metadata.indicatorDescription);
 
         //update subIndicator description html
-        this.updateSubIndicatorDescriptionHtml(params.method, params.currentGeo);
+        this.updateSubIndicatorDescriptionHtml(params.method);
 
         // Linear Scrubber
         this.showLinearScrubber(params)

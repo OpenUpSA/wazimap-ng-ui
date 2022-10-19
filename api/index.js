@@ -24,6 +24,8 @@ function index(req, res, next) {
     }
   })
     .then(response => {
+      res.setHeader('Content-Type', 'text/html');
+      res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
       res.render('index', {
         'title': response.data.name,
       });
@@ -42,6 +44,4 @@ app.get('/', index);
 
 app.use(express.static('dist'));
 
-app.listen(port);
-
-console.log(`\nListening on http://0.0.0.0:${port}\n`);
+module.exports = app;

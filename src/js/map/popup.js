@@ -105,9 +105,7 @@ export class Popup extends Component {
         $(tooltipLabel).text('or');
 
         $(tooltipRowTop).append(wrapperClone);
-        if (choroplethMethod !== this.choroplethMethods.absolute_value.type) {
-            $(tooltipRowTop).find('.tooltip__value_detail').remove();
-        }
+        $(tooltipRowTop).find('.tooltip__value_detail').remove();
         $(tooltipRowTop).append(tooltipLabel);
 
         //bottom
@@ -123,7 +121,7 @@ export class Popup extends Component {
 
         //parent
         $('.map-tooltip__value .tooltip__value_wrapper', item).replaceWith(tooltipRowTop);
-        if (choroplethMethod !== this.choroplethMethods.absolute_value.type){
+        if (choroplethMethod !== this.choroplethMethods.absolute_value.type) {
             $(tooltipRowBottom).insertAfter(tooltipRowTop);
         }
     }

@@ -1,4 +1,4 @@
-import {calculateMidColor, Component} from '../../utils';
+import {Component, calculateThemeBackgroundColor} from '../../utils';
 
 const categoryItemDoneClsName = '.point-mapper__h2_load-complete';
 const categoryItemLoadingClsName = '.point-mapper__h2_loading';
@@ -18,10 +18,10 @@ export class Category extends Component {
     fixData(data) {
         data = {...data}
 
-        if (data.metadata == undefined)
+        if (data.metadata === undefined)
             data.metadata = {}
 
-        if (data.metadata.source == undefined)
+        if (data.metadata.source === undefined)
             data.metadata.source = ""
 
         return data
@@ -146,6 +146,6 @@ export class Category extends Component {
     }
 
     get backgroundColor() {
-        return calculateMidColor('#ffffff', this.color);
+        return calculateThemeBackgroundColor(this.color);
     }
 }

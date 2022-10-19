@@ -6566,8 +6566,8 @@ label {
   bottom: 0%;
   z-index: 999;
   min-height: 44px;
-  margin-right: 50px;
-  margin-bottom: 25px;
+  margin-right: 53px;
+  margin-bottom: 32px;
   border-radius: 4px;
   background-color: #fff;
   box-shadow: 0 0 0 -1px rgba(0, 0, 0, 0.2), 0 1px 6px -2px rgba(0, 0, 0, 0.3);
@@ -6811,7 +6811,7 @@ label {
   width: 34px;
   height: 34px;
   margin-right: 10px;
-  margin-bottom: 84px;
+  margin-bottom: 100px;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
@@ -6820,7 +6820,10 @@ label {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  border-radius: 2px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
   background-color: #fff;
   box-shadow: 0 0 0 -1px rgba(0, 0, 0, 0.2), 1px 1px 6px -2px rgba(0, 0, 0, 0.3);
   cursor: pointer;
@@ -7469,7 +7472,7 @@ label {
   left: auto;
   top: auto;
   right: auto;
-  bottom: 30px;
+  bottom: 32px;
   z-index: 999;
   display: -webkit-box;
   display: -webkit-flex;
@@ -9362,7 +9365,7 @@ label {
   left: auto;
   top: auto;
   right: auto;
-  bottom: 25px;
+  bottom: 32px;
   z-index: 999;
   display: -webkit-box;
   display: -webkit-flex;
@@ -10138,6 +10141,38 @@ label {
 
 .compare-item__remove:hover {
   color: #000;
+}
+
+.map-widgets {
+  position: absolute;
+  left: auto;
+  top: auto;
+  right: 0%;
+  bottom: 0%;
+}
+
+.map-widgets_credit {
+  position: absolute;
+  left: auto;
+  top: auto;
+  right: 0%;
+  bottom: 0%;
+  width: 100vw;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+.map-widgets_zoom {
+  position: absolute;
+  right: 10px;
+  bottom: 30px;
+  width: 34px;
+  height: 64px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  background-color: #fff;
 }
 
 @media screen and (max-width: 991px) {

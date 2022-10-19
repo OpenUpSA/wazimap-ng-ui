@@ -6,16 +6,6 @@ function addStylesheet(window, path) {
     headContent.appendChild(tag);
 }
 
-function updateScriptSource(window) {
-    let scripts = window.document.getElementsByTagName('script')
-    for (let i = 0; i < scripts.length; ++i) {
-        let src = scripts[i].getAttribute('src');
-        if (src !== null && src.indexOf('https://gcro.openup.org.za') >= 0) {
-            scripts[i].setAttribute('src', 'js/index.js')
-        }
-    }
-}
-
 function setupTranslation(window) {
     setupPointMapperTranslations(window);
 
@@ -45,13 +35,16 @@ function setupPointMapperTranslations(window) {
     })
 }
 
-exports.transformDOM = function (window, $) {
-    // update js src
-    updateScriptSource(window);
-
+exports.transformDOM = function(window, $) {
     // Add custom css
     addStylesheet(window, "custom-css/mapchip.scss");
     addStylesheet(window, "custom-css/popup.scss");
+
+    $('script[src="https://gcro.openup.org.za/js.117393d3.js"]').remove();
+
+    const tag = window.document.createElement("script");
+    tag.setAttribute("src", "js/index.js");
+    window.document.body.appendChild(tag);
 
     // translation
     setupTranslation(window);

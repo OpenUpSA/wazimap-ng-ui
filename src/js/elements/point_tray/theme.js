@@ -1,4 +1,8 @@
-import {Component, checkIterate, calculateMidColor} from '../../utils';
+import {
+    Component,
+    checkIterate,
+    calculateThemeBackgroundColor
+} from '../../utils';
 import {API} from '../../api';
 import {Category} from './category';
 
@@ -113,6 +117,6 @@ export class Theme extends Component {
     }
 
     get backgroundColor() {
-        return calculateMidColor('#ffffff', this.color);
+        return calculateThemeBackgroundColor(this.color);
     }
 }

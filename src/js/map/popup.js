@@ -116,6 +116,7 @@ export class Popup extends Component {
         $(tooltipLabel2).addClass('tooltip-label');
         $(tooltipLabel2).text(this.choroplethMethods[choroplethMethod].bottomText);
 
+        $(wrapperClone2).find('.tooltip__value_detail').addClass('percentage-value');
         $(tooltipRowBottom).append(wrapperClone2).find('.tooltip__value_amount').remove();
         $(tooltipRowBottom).append(tooltipLabel2);
 

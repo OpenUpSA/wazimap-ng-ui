@@ -1,8 +1,15 @@
 {
+  "buildCommand": "echo foobar",
+  "builds": [
+    {
+      "src": "/src/js/server.js",
+      "use": "@now/node"
+    }
+  ],
   "routes": [
       {
-        "src": "/(.*)",
-        "dest": "src/js/server.js"
+        "src": "/server-side",
+        "dest": "/src/js/server.js"
       }
   ]
 }

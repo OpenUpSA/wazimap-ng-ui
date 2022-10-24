@@ -18,10 +18,10 @@ export class Category extends Component {
     fixData(data) {
         data = {...data}
 
-        if (data.metadata === undefined)
+        if (data.metadata === undefined || data.metadata === null)
             data.metadata = {}
 
-        if (data.metadata.source === undefined)
+        if (data.metadata?.source === undefined)
             data.metadata.source = ""
 
         return data
@@ -54,7 +54,7 @@ export class Category extends Component {
     }
 
     get metadata() {
-        if (this.data.metadata === undefined) {
+        if (this.data.metadata === undefined || this.data.metadata === null) {
             return {
                 source: '',
                 description: '',

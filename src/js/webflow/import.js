@@ -65,6 +65,7 @@ function setupLocationSearchTranslations(window) {
 exports.transformDOM = function(window, $) {
     // Add custom css
     addStylesheet(window, "custom-css/mapchip.scss");
+    addStylesheet(window, "custom-css/popup.scss");
 
     $('script[src="https://gcro.openup.org.za/js.117393d3.js"]').remove();
 

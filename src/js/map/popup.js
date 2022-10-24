@@ -151,7 +151,7 @@ export class Popup extends Component {
                         $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);
                         $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
                         if (state.subindicator.choropleth_method !== this.choroplethMethods.absolute) {
-                            $('.map-tooltip__value .percentage-value', item).text(`(${perc})`);
+                            $('.map-tooltip__value .percentage-value', item).text(`${perc}`);
                         } else {
                             $('.map-tooltip__value .percentage-value', item).text('');
                         }

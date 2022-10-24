@@ -50,7 +50,7 @@ Then('I confirm that the tooltip is created with the correct text and the correc
     cy.get('.leaflet-popup .tooltip-row-top .tooltip-label').should('have.text', 'or');
 
     cy.get('.leaflet-popup .tooltip-row-bottom').should('have.class', 'sub-indicator-type');
-    cy.get('.leaflet-popup .map-tooltip__value .tooltip-row-bottom .tooltip__value_wrapper .tooltip__value_detail').should('have.text', '(10%)');
+    cy.get('.leaflet-popup .map-tooltip__value .tooltip-row-bottom .tooltip__value_wrapper .tooltip__value_detail').should('have.text', '10%');
     cy.get('.leaflet-popup .tooltip-row-bottom .tooltip-label').should('have.text', 'of all categories');
 })
 
@@ -61,7 +61,7 @@ Then('I confirm that the tooltip is created with the correct text and the correc
     cy.get('.leaflet-popup .tooltip-row-top .tooltip-label').should('have.text', 'or');
 
     cy.get('.leaflet-popup .tooltip-row-bottom').should('have.class', 'sibling-type');
-    cy.get('.leaflet-popup .map-tooltip__value .tooltip-row-bottom .tooltip__value_wrapper .tooltip__value_detail').should('have.text', '(5%)');
+    cy.get('.leaflet-popup .map-tooltip__value .tooltip-row-bottom .tooltip__value_wrapper .tooltip__value_detail').should('have.text', '5%');
     cy.get('.leaflet-popup .tooltip-row-bottom .tooltip-label').should('have.text', 'of total for shaded areas');
 })
 

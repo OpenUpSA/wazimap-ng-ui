@@ -33,7 +33,8 @@
         "No facilities for this location": "Translated | No facilities for this location",
         "View location in Google Maps": "Translated | View location in Google Maps",
         "No points available for this location": "Translated | No points available for this location",
-        "Point Filters": "Translated | Point Filters"
+        "Point Filters": "Translated | Point Filters",
+        "Search for a location...": "Translated | Search for a location...",
       }
     },
     "default_panel": "point_data",

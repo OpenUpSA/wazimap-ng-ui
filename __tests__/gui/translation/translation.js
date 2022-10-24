@@ -24,6 +24,10 @@ Then('I wait until map is ready', () => {
     waitUntilGeographyIsLoaded('South Africa Test');
 })
 
+Then('I check if the search box is translated correctly', () => {
+    cy.get('form .location__search_input').should('have.attr', 'placeholder', 'Translated | Search for a location...');
+})
+
 When('I expand Point Mapper', () => {
     expandPointMapper();
 })

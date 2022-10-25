@@ -8,12 +8,25 @@ function addStylesheet(window, path) {
 
 function setupTranslation(window) {
     setupPointMapperTranslations(window);
+    setupLocationSearchTranslations(window);
+    addTranslationDataVariableForText(window);
+    addTranslationDataVariableForPlaceholder(window);
+}
 
-    let i18nElements = window.document.getElementsByClassName('i18n')
-    for (let i = 0; i < i18nElements.length; ++i) {
-        let text = i18nElements[i].textContent.trim();
-        i18nElements[i].setAttribute('data-i18n', text);
-    }
+function addTranslationDataVariableForText(window) {
+  let i18nElements = window.document.getElementsByClassName('i18n');
+  for (let i = 0; i < i18nElements.length; ++i) {
+      let text = i18nElements[i].textContent.trim();
+      i18nElements[i].setAttribute('data-i18n', text);
+  }
+}
+
+function addTranslationDataVariableForPlaceholder(window) {
+  let i18nElements = window.document.getElementsByClassName('i18n-placeholder');
+  for (let i = 0; i < i18nElements.length; ++i) {
+      let placeholderText = i18nElements[i].getAttribute("placeholder").trim();
+      i18nElements[i].setAttribute('data-i18n', placeholderText);
+  }
 }
 
 function setupPointMapperTranslations(window) {
@@ -35,9 +48,24 @@ function setupPointMapperTranslations(window) {
     })
 }
 
+function setupLocationSearchTranslations(window) {
+    let selectors = [
+        'form .location__search_input',
+    ];
+
+    selectors.forEach((selector) => {
+        let element = window.document.querySelector(selector);
+        if (element === null) {
+            throw `Cannot find element : ${selector}`
+        }
+        element.classList.add('i18n-placeholder');
+    })
+}
+
 exports.transformDOM = function(window, $) {
     // Add custom css
     addStylesheet(window, "custom-css/mapchip.scss");
+    addStylesheet(window, "custom-css/popup.scss");
 
     $('script[src="https://gcro.openup.org.za/js.117393d3.js"]').remove();
 

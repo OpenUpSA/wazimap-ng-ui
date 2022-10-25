@@ -3,6 +3,7 @@ Feature: Data Mapper
   Scenario: Verify the translations replaced the texts correctly
     Given I am on the Wazimap Homepage
     Then I wait until map is ready
+    Then I check if the search box is translated correctly
 
     And I expand Point Mapper
     Then I check if the Point Mapper is translated correctly

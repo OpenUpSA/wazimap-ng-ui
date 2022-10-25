@@ -14,6 +14,24 @@ export class Popup extends Component {
 
         this.map = map;
         this.formattingConfig = formattingConfig;
+        this.choroplethMethods = {
+            subindicator: {
+                type: 'subindicator',
+                cssClass: 'sub-indicator-type',
+                bottomText: 'of all categories'
+            },
+            sibling: {
+                type: 'sibling',
+                cssClass: 'sibling-type',
+                bottomText: 'of total for shaded areas'
+            },
+            absolute_value: {
+                type: 'absolute_value',
+                cssClass: 'absolute-type',
+                bottomText: ''
+            }
+        }
+
         this.prepareDomElements();
     }
 
@@ -55,13 +73,16 @@ export class Popup extends Component {
 
     createPopupContent = (payload, state) => {
         let item = this.map.map_variables.tooltipItem.cloneNode(true);
+        if (state.subindicator !== null) {
+            this.modifyTooltipHtml(item, state.subindicator.choropleth_method);
+        }
 
         this.map.map_variables.hoverAreaLevel = payload.properties.level;
         this.map.map_variables.hoverAreaCode = payload.layer.feature.properties.code;
 
         $('.map-tooltip__name div', item).text(payload.properties.name);
         $('.map-tooltip__geography-chip div', item).text(this.map.map_variables.hoverAreaLevel);
-        var areaCode = payload.areaCode;
+        const areaCode = payload.areaCode;
 
         this.setTooltipSubindicators(payload, state, item, areaCode);
         this.setTooltipThemes(item, areaCode);
@@ -69,6 +90,41 @@ export class Popup extends Component {
         $(item).find('.tooltip__notch').remove();   //leafletjs already creates this
 
         return item;
+    }
+
+    modifyTooltipHtml(item, choroplethMethod) {
+        let wrapperClone = $('.map-tooltip__value .tooltip__value_wrapper', item)[0].cloneNode(true);
+        let wrapperClone2 = $('.map-tooltip__value .tooltip__value_wrapper', item)[0].cloneNode(true);
+
+        //top
+        let tooltipRowTop = document.createElement('div');
+        $(tooltipRowTop).addClass('tooltip-row-top').addClass(this.choroplethMethods[choroplethMethod].cssClass);
+
+        let tooltipLabel = document.createElement('div');
+        $(tooltipLabel).addClass('tooltip-label');
+        $(tooltipLabel).text('or');
+
+        $(tooltipRowTop).append(wrapperClone);
+        $(tooltipRowTop).find('.tooltip__value_detail').remove();
+        $(tooltipRowTop).append(tooltipLabel);
+
+        //bottom
+        let tooltipRowBottom = document.createElement('div');
+        $(tooltipRowBottom).addClass('tooltip-row-bottom').addClass(this.choroplethMethods[choroplethMethod].cssClass);
+
+        let tooltipLabel2 = document.createElement('div');
+        $(tooltipLabel2).addClass('tooltip-label');
+        $(tooltipLabel2).text(this.choroplethMethods[choroplethMethod].bottomText);
+
+        $(wrapperClone2).find('.tooltip__value_detail').addClass('percentage-value');
+        $(tooltipRowBottom).append(wrapperClone2).find('.tooltip__value_amount').remove();
+        $(tooltipRowBottom).append(tooltipLabel2);
+
+        //parent
+        $('.map-tooltip__value .tooltip__value_wrapper', item).replaceWith(tooltipRowTop);
+        if (choroplethMethod !== this.choroplethMethods.absolute_value.type) {
+            $(tooltipRowBottom).insertAfter(tooltipRowTop);
+        }
     }
 
     setTooltipThemes = (item, areaCode) => {
@@ -94,10 +150,10 @@ export class Popup extends Component {
                         $('.map-tooltip__value', item).removeClass('hidden');
                         $('.map-tooltip__value .tooltip__value_label div', item).text(`${state.subindicator.indicatorTitle} (${state.selectedSubindicator})`);
                         $('.map-tooltip__value .tooltip__value_amount div', item).text(countFmt);
-                        if (state.subindicator.choropleth_method != 'absolute_value') {
-                            $('.map-tooltip__value .tooltip__value_detail div', item).text(`(${perc})`);
+                        if (state.subindicator.choropleth_method !== this.choroplethMethods.absolute) {
+                            $('.map-tooltip__value .percentage-value', item).text(`${perc}`);
                         } else {
-                            $('.map-tooltip__value .tooltip__value_detail div', item).text('');
+                            $('.map-tooltip__value .percentage-value', item).text('');
                         }
                     }
                 }

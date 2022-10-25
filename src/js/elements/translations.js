@@ -50,5 +50,9 @@ export class Translations extends Component {
         $('.i18n').each(function () {
             $(this).html(self.t($(this).attr('data-i18n')));
         });
+
+        $('.i18n-placeholder').each(function () {
+            $(this).attr("placeholder", self.t($(this).attr('data-i18n')));
+        });
     }
 }

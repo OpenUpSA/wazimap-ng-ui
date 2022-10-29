@@ -36,11 +36,14 @@ import {configureBoundaryEvents} from "./setup/boundaryevents";
 import {configureMapDownloadEvents} from "./setup/mapdownload";
 import {configureTutorialEvents} from "./setup/tutorial";
 import {configureTabNoticeEvents} from "./setup/tabnotice";
-import {configureTranslationEvents} from "./setup/translations"
+import {configureTranslationEvents} from "./setup/translations";
+import {configureFacilityEvents} from "./setup/facilities";
+import {configureRichDataPanelEvents} from "./setup/richDataPanelLinkEvents";
 import {configurePage} from "./setup/general";
 import {Translations} from "./elements/translations";
 import {StyleConfig} from "./elements/style_config";
 import {configureStyleConfigEvents} from "./setup/styleconfig";
+import {RichDataLinkRendrer} from "./elements/data_mapper/components/renderer";
 
 let defaultFormattingConfig = {
     decimal: ",.1f",
@@ -81,6 +84,7 @@ class Application extends Component {
         const tabNotice = new TabNotice(this, config.config.feedback);
         const translations = new Translations(this, config.config.translations);
         const dataMapperMenu = new DataMapperMenu(this, api);
+        const richDataLinkRendrer = new RichDataLinkRendrer(this);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);
@@ -99,6 +103,8 @@ class Application extends Component {
         configureTranslationEvents(controller, translations);
         configurePage(controller, config);
         configureStyleConfigEvents(controller, styleConfig);
+        configureFacilityEvents(controller, {profileLoader: profileLoader});
+        configureRichDataPanelEvents(controller, {richDataLinkRendrer:richDataLinkRendrer});
 
         controller.on('profile.loaded', payload => {
             // there seems to be a bug where menu items close if this is not set

@@ -29,8 +29,7 @@ const RichDataPanelLink = (props) => {
         </IconContainer>
         <TextContainer>
           <p>
-            There are indicators for selected geography in the
-            <Link
+            There are indicators for selected geography in the <Link
               href="#"
               onClick={() => openRichDataPanel()}
             > <PanelIconLink />Rich Data View

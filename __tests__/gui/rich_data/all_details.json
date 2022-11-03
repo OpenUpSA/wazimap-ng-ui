@@ -14,14 +14,162 @@
     "profile_data": {
       "Test Category 1": {
         "description": "",
+		"order": 4,
         "subcategories": {
           "Population": {
             "description": "",
+			"order": 2,
             "indicators": {
               "Youth status": {
                 "id": 98,
                 "description": "An indicator showing whether an individual is in the age group 15 - 35",
                 "choropleth_method": "subindicator",
+				"order": 2,
+                "last_updated_at": "2021-03-04T08:22:16.959409Z",
+                "metadata": {
+                  "source": "StatsSA Census 2011",
+                  "description": "",
+                  "url": null,
+                  "licence": {
+                    "name": "creative commons",
+                    "url": null
+                  },
+                  "primary_group": "youth status",
+                  "groups": [
+                    {
+                      "subindicators": [
+                        "Non-youth",
+                        "Youth"
+                      ],
+                      "dataset": 105,
+                      "name": "youth status",
+                      "can_aggregate": true,
+                      "can_filter": true
+                    }
+                  ]
+                },
+                "content_type": "indicator",
+                "dataset_content_type": "quantitative",
+                "chart_configuration": {
+                  "types": {
+                    "Value": {
+                      "formatting": ",.0f"
+                    },
+                    "Percentage": {
+                      "maxX": 1,
+                      "minX": 0
+                    }
+                  },
+                  "xTicks": 5
+                },
+                "data": [
+                  {
+                    "count": 19644170.051473208,
+                    "youth status": "Youth"
+                  },
+                  {
+                    "count": 31285821.674497947,
+                    "youth status": "Non-youth"
+                  }
+                ],
+                "child_data": {
+                  "NC": [
+                    {
+                      "count": 398812.85508897615,
+                      "youth status": "Youth"
+                    },
+                    {
+                      "count": 744984.5530132334,
+                      "youth status": "Non-youth"
+                    }
+                  ],
+                  "MP": [
+                    {
+                      "count": 1549983.6694277155,
+                      "youth status": "Youth"
+                    },
+                    {
+                      "count": 2412477.4226002577,
+                      "youth status": "Non-youth"
+                    }
+                  ],
+                  "NW": [
+                    {
+                      "count": 1270662.729200918,
+                      "youth status": "Youth"
+                    },
+                    {
+                      "count": 2174183.0653655147,
+                      "youth status": "Non-youth"
+                    }
+                  ],
+                  "WC": [
+                    {
+                      "count": 2204214.795469933,
+                      "youth status": "Youth"
+                    },
+                    {
+                      "count": 3577146.107482197,
+                      "youth status": "Non-youth"
+                    }
+                  ],
+                  "EC": [
+                    {
+                      "count": 2226670.1442380003,
+                      "youth status": "Youth"
+                    },
+                    {
+                      "count": 4226439.346470516,
+                      "youth status": "Non-youth"
+                    }
+                  ],
+                  "FS": [
+                    {
+                      "count": 1016237.4047017085,
+                      "youth status": "Youth"
+                    },
+                    {
+                      "count": 1711923.4336486615,
+                      "youth status": "Non-youth"
+                    }
+                  ],
+                  "GT": [
+                    {
+                      "count": 5110466.437825331,
+                      "youth status": "Youth"
+                    },
+                    {
+                      "count": 7005250.811108921,
+                      "youth status": "Non-youth"
+                    }
+                  ],
+                  "KZN": [
+                    {
+                      "count": 3873329.889222033,
+                      "youth status": "Youth"
+                    },
+                    {
+                      "count": 6097948.300427332,
+                      "youth status": "Non-youth"
+                    }
+                  ],
+                  "LIM": [
+                    {
+                      "count": 1993792.126551515,
+                      "youth status": "Youth"
+                    },
+                    {
+                      "count": 3335468.632570535,
+                      "youth status": "Non-youth"
+                    }
+                  ]
+                }
+              },
+              "Youth status 2": {
+                "id": 98,
+                "description": "An indicator showing whether an individual is in the age group 15 - 35",
+                "choropleth_method": "subindicator",
+				"order": 1,
                 "last_updated_at": "2021-03-04T08:22:16.959409Z",
                 "metadata": {
                   "source": "StatsSA Census 2011",
@@ -166,6 +314,7 @@
           },
           "South African Citizenship": {
             "description": "",
+			"order": 1,
             "indicators": {
               "Citizenship": {
                 "id": 91,
@@ -1523,6 +1672,7 @@
       },
       "Test Category 2": {
         "description": "",
+		"order": 2,
         "subcategories": {
           "Population": {
             "description": "",
@@ -3032,6 +3182,7 @@
       },
       "Test Category 3": {
         "description": "",
+		"order": 3,
         "subcategories": {
           "Subcategory with no indicators": {
             "description": "",
@@ -3203,6 +3354,7 @@
       },
       "Test Category 4": {
         "description": "",
+		"order": 1,
         "subcategories": {
           "Population": {
             "description": "",

@@ -1,6 +1,7 @@
 import {Component} from "../utils";
 import {Category} from "./category";
 import {Profile_header} from "./profile_header";
+import {sortBy} from 'lodash';
 
 const profileWrapperClass = '.rich-data-content';
 const navWrapperClass = '.rich-data-nav__list';
@@ -68,9 +69,11 @@ export default class ProfileLoader extends Component {
         let isFirst = true;
 
         this.createNavItem('top', 'Summary');
-        for (const [category, detail] of Object.entries(categories)) {
+
+        for (const categoryDetail of sortBy(categories, "order")) {
+            const category = Object.keys(categories).filter(k => categories[k] === categoryDetail);
             const id = this.getNewId();
-            let c = new Category(this, this.formattingConfig, category, detail, profileWrapper, id, removePrevCategories, isFirst, profile.geography, this.config);
+            let c = new Category(this, this.formattingConfig, category, categoryDetail, profileWrapper, id, removePrevCategories, isFirst, profile.geography, this.config);
             c.isVisible = c.subCategories.length > 0;
             if (c.isVisible) {
                 this.createNavItem(id, category);

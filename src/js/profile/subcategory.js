@@ -1,9 +1,10 @@
 import {Indicator} from "./blocks/indicator";
-import {Component, formatNumericalValue} from "../utils";
+import {Component} from "../utils";
 import {ContentBlock} from "./blocks/content_block";
 import {HTMLBlock} from "./blocks/html_block";
 import {assertNTemplates} from "../utils";
 import {KeyMetric} from "./key_metric";
+import {sortBy} from 'lodash';
 
 let isFirst = false;
 let scHeaderClone = null;
@@ -126,7 +127,8 @@ export class Subcategory extends Component {
         assertNTemplates(2, $template);
 
         if (!isEmpty) {
-            for (const [title, indicator] of Object.entries(detail.indicators)) {
+            for (const indicator of sortBy(detail.indicators, "order")) {
+                const title = Object.keys(detail.indicators).filter(k => detail.indicators[k] === indicator);
                 if (typeof indicator.data !== 'undefined') {
                     let isLast = index === lastIndex;
                     let block = null;

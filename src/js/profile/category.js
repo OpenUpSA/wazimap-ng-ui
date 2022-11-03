@@ -1,5 +1,6 @@
 import {Subcategory} from "./subcategory";
-import {checkIfSubCategoryHasChildren, Component} from "../utils";
+import {Component} from "../utils";
+import {sortBy} from 'lodash';
 
 
 let categoryTemplate = null;
@@ -111,8 +112,10 @@ export class Category extends Component {
 
     loadSubcategories = (wrapper, detail) => {
         let isFirst = true;
-        for (const [subcategory, detail] of Object.entries(detail.subcategories)) {
-            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, detail, isFirst, this.geography, this.profileConfig);
+
+        for (const subcategoryDetail of sortBy(detail.subcategories, "order")) {
+            const subcategory = Object.keys(detail.subcategories).filter(k => detail.subcategories[k] === subcategoryDetail);
+            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, subcategoryDetail, isFirst, this.geography, this.profileConfig);
             sc.isVisible = sc.indicators.length > 0;
             if (sc.isVisible) {
                 this.subCategories.push(sc);

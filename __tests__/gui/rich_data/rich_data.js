@@ -71,3 +71,33 @@ Then(/^I confirm that the subcategory "([^"]*)" is invisible$/, function (catego
 Then(/^I confirm that the subcategory "([^"]*)" is visible$/, function (categoryName) {
     cy.get(`.sub-category-header h3:contains(${categoryName})`).should('be.visible');
 });
+
+Then('I confirm that the categories are in correct order', () => {
+    const correctOrder = ['Summary', 'Test Category 4', 'Test Category 2', 'Test Category 3', 'Test Category 1'];
+
+    cy.get('.rich-data-nav__list a.rich-data-nav__item .rich-data-nav__item-text .truncate').each(($el, index) => {
+        cy.wrap(correctOrder[index]).should('eq', $el.text());
+    })
+})
+
+Then('I confirm that the subcategories are in correct order', () => {
+    const correctOrder = ['South African Citizenship', 'Population'];
+
+    cy.get('#category-4')
+        .closest('.section')
+        .find('.sub-category-header .sub-category-header__title .indicator__title_wrapper h3')
+        .each(($el, index) => {
+            cy.wrap(correctOrder[index]).should('eq', $el.text());
+        })
+})
+
+Then('I confirm that the indicators are in correct order', () => {
+    const correctOrder = ['Citizenship', 'Youth status 2', 'Youth status'];
+
+    cy.get('#category-4')
+        .closest('.section')
+        .find('.profile-indicator .profile-indicator__header .profile-indicator__title h4')
+        .each(($el, index) => {
+            cy.wrap(correctOrder[index]).should('eq', $el.text());
+        })
+})

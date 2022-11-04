@@ -1,11 +1,7 @@
 import React from "react";
-import {Button, Card, Grid, Autocomplete, Box, TextField} from "@mui/material";
-import AddIcon from '@mui/icons-material/AddCircle';
+import {Autocomplete, Box, Card, Grid, TextField} from "@mui/material";
 
-//components
-import SectionTitle from "./section-title";
-
-const Indicators = (props) => {
+const Indicator = (props) => {
     const countries = [
         {code: 'AD', label: 'Andorra', phone: '376'},
         {
@@ -462,58 +458,45 @@ const Indicators = (props) => {
     />
 
     return (
-        <Grid container>
-            <Grid
-                className={'margin-bottom-20'}
+        <div>
+            <Card
+                className={'comparison-card first'}
+                variant={'outlined'}
             >
-                <SectionTitle>Comparison indicators</SectionTitle>
-            </Grid>
-            <Grid
-                container
-                className={'margin-bottom-20'}
+                <Grid container>
+                    <Grid
+                        xs={5}
+                        item={true}
+                    >
+                        Indicator :</Grid>
+                    <Grid
+                        xs={7}
+                        item={true}
+                    >
+                        {autoComplete}
+                    </Grid>
+                </Grid>
+            </Card>
+            <Card
+                className={'comparison-card last'}
+                variant={'outlined'}
             >
-                <Button
-                    variant={'outlined'}
-                    className={'full-width btn-add-indicator'}
-                    startIcon={<AddIcon/>}
-                >
-                    Click to add an indicator to compare
-                </Button>
-            </Grid>
-            <Grid container>
-                <Card
-                    className={'dark-grey-bg full-width border-radius-10'}
-                    variant={'outlined'}
-                    sx={{height: props.cardHeight}}
-                >
-                    <Card
-                        className={'comparison-card first'}
-                        variant={'outlined'}
+                <Grid container>
+                    <Grid
+                        xs={5}
+                        item={true}
                     >
-                        <Grid container>
-                            <Grid xs={5}>
-                                Indicator :</Grid>
-                            <Grid xs={7}>
-                                {autoComplete}
-                            </Grid>
-                        </Grid>
-                    </Card>
-                    <Card
-                        className={'comparison-card'}
-                        variant={'outlined'}
+                        Choose category :</Grid>
+                    <Grid
+                        xs={7}
+                        item={true}
                     >
-                        <Grid container>
-                            <Grid xs={5}>
-                                Choose category :</Grid>
-                            <Grid xs={7}>
-                                {autoComplete}
-                            </Grid>
-                        </Grid>
-                    </Card>
-                </Card>
-            </Grid>
-        </Grid>
+                        {autoComplete}
+                    </Grid>
+                </Grid>
+            </Card>
+        </div>
     );
 }
 
-export default Indicators;
+export default Indicator;

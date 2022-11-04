@@ -5,7 +5,7 @@ import {API} from "../api";
 //components
 import Geographies from "./geographies";
 import Result from "./result";
-import Indicators from "./indicators";
+import ComparisonIndicators from "./comparison-indicators";
 
 const Body = (props) => {
     const [selectedGeographies, setSelectedGeographies] = useState([]);
@@ -25,6 +25,7 @@ const Body = (props) => {
             <Grid container>
                 <Grid container>
                     <Grid xs={5}
+                          item={true}
                           container
                           justifyContent={'center'}
                           className={'body-grid'}
@@ -41,12 +42,13 @@ const Body = (props) => {
                         <Grid
                             className={'margin-top-25 full-width'}
                         >
-                            <Indicators
+                            <ComparisonIndicators
                                 cardHeight={calculateCardHeight()}
                             />
                         </Grid>
                     </Grid>
                     <Grid xs={7}
+                          item={true}
                           container
                           justifyContent={'center'}
                           className={'body-grid has-left-border'}

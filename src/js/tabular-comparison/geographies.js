@@ -19,10 +19,9 @@ const Geographies = (props) => {
             return;
         }
 
-        let newArr = props.selectedGeographies;
+        let newArr = JSON.parse(JSON.stringify(props.selectedGeographies));
         newArr.push(newValue);
 
-        console.log({newArr})
         props.setSelectedGeographies(newArr);
     }
 
@@ -72,13 +71,19 @@ const Geographies = (props) => {
                     sx={{height: props.cardHeight}}
                 >
                     <Card
-                        className={'comparison-card first'}
+                        className={'comparison-card first last'}
                         variant={'outlined'}
                     >
                         <Grid container>
-                            <Grid xs={5}>
+                            <Grid
+                                xs={5}
+                                item={true}
+                            >
                                 Compare geographies in :</Grid>
-                            <Grid xs={7}>
+                            <Grid
+                                xs={7}
+                                item={true}
+                            >
                                 {autoComplete}
                             </Grid>
                         </Grid>

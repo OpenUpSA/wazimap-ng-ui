@@ -34,7 +34,9 @@ const Result = (props) => {
                                 <TableRow>
                                     {columns.map((column) => {
                                         return (
-                                            <TableCell><b>{column}</b></TableCell>
+                                            <TableCell
+                                                key={column}
+                                            ><b>{column}</b></TableCell>
                                         )
                                     })}
                                 </TableRow>
@@ -42,11 +44,12 @@ const Result = (props) => {
                             <TableBody>
                                 {props.selectedGeographies.map((row) => {
                                     return (
-                                        <TableRow>
+                                        <TableRow
+                                            key={row.code}
+                                        >
                                             <TableCell
                                                 component="th"
                                                 scope="row"
-                                                key={row.code}
                                             >{row.name}</TableCell>
                                         </TableRow>
                                     )

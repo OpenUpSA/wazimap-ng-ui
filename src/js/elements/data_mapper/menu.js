@@ -61,7 +61,7 @@ export function loadMenu(dataMapperMenu, data) {
 
     for (const categoryDetail of sortBy(data, "order")) {
         const categoryName = categoryDetail.name;
-        let category = new Category(this, categoryName, categoryDetail);
+        let category = new Category(dataMapperMenu, categoryName, categoryDetail);
 
         $('.' + noDataWrapperClsName).addClass(hiddenClass);
         hasNoItems = false;

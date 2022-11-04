@@ -71,6 +71,7 @@ exports.transformDOM = function(window, $) {
 
     const tag = window.document.createElement("script");
     tag.setAttribute("src", "js/index.js");
+    tag.setAttribute("type", "module");
     window.document.body.appendChild(tag);
 
     // translation

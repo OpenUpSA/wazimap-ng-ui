@@ -8,17 +8,21 @@ Feature: Rich data menu
     And I expand Rich Data
     Then Rich Data should be displayed
     Then None of the menu items should be active
+    Then I confirm that the categories are in correct order
 
     And I mouseover the hamburger menu
     Then the hamburger menu should show
-    Then I click on Save As Image in Rich Data
-    Then I check if "Test Category 1" is active
 
-    And I scroll to bottom of the page
+    And I click on Save As Image in Rich Data
     Then I check if "Test Category 4" is active
 
+    And I scroll to bottom of the page
+    Then I check if "Test Category 1" is active
+    Then I confirm that the subcategories are in correct order
+    Then I confirm that the indicators are in correct order
+
     And I close the Rich Data
-    Then I expand Rich Data
+    And I expand Rich Data
     Then Rich Data should be displayed
     Then None of the menu items should be active
     Then I check if the indicator with only zero counts is hidden

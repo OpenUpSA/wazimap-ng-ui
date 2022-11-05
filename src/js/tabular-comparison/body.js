@@ -44,6 +44,9 @@ const Body = (props) => {
                         >
                             <ComparisonIndicators
                                 cardHeight={calculateCardHeight()}
+                                selectedGeographies={selectedGeographies}
+                                api={api}
+                                profileId={profileId}
                             />
                         </Grid>
                     </Grid>

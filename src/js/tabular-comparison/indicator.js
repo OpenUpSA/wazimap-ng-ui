@@ -1,17 +1,16 @@
 import React, {useState} from "react";
-import {Autocomplete, Box, Card, Grid, TextField} from "@mui/material";
+import {Autocomplete, Box, Card, Grid, Icon, TextField} from "@mui/material";
 
 const Indicator = (props) => {
     const [selectedIndicator, setSelectedIndicator] = useState(null);
 
     const indicatorAutoComplete = <Autocomplete
-        disablePortal
+        disabled={props.indicators.length <= 0}
         isOptionEqualToValue={(option => true)}
         options={[...new Set(props.indicators.map(item => item.indicator))]}
         getOptionLabel={(option) => option}
         onChange={(event, selectedValue) => {
             let newValue = props.indicators.filter(x => x.indicator === selectedValue)[0];
-            console.log({newValue})
             setSelectedIndicator(newValue);
         }}
         size={'small'}
@@ -31,7 +30,7 @@ const Indicator = (props) => {
     />
 
     const categoryAutoComplete = <Autocomplete
-        disablePortal
+        disabled={selectedIndicator === null}
         isOptionEqualToValue={(option => true)}
         options={
             selectedIndicator == null ? [] :
@@ -57,6 +56,7 @@ const Indicator = (props) => {
 
     return (
         <div>
+            <div className={'remove-indicator'}>x</div>
             <Card
                 className={'comparison-card first'}
                 variant={'outlined'}

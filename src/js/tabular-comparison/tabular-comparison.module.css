@@ -99,8 +99,31 @@ body {
     border-bottom-right-radius: 10px;
 }
 
+.comparison-indicators {
+    overflow: visible !important;
+}
+
 .comparison-indicators .comparison-card.last {
     margin-bottom: 20px;
+}
+
+.comparison-indicators .remove-indicator {
+    background-color: #2F2F2F;
+    color: #fff;
+    border-radius: 100%;
+    width: 22px;
+    height: 22px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
+    text-align: center;
+    position: relative;
+    float: right;
+    margin-left: -22px;
+    margin-top: -11px;
+    left: 11px;
+    display: block;
+    cursor:pointer;
 }
 
 .comparison-select {

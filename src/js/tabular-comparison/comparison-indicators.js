@@ -30,8 +30,6 @@ const ComparisonIndicators = (props) => {
         removedGeographies.forEach((geoToDelete) => {
             setIndicators((indicators) => indicators.filter((indicator) => indicator.geo !== geoToDelete.code));
         })
-
-        console.log({indicators})
     }, [props.selectedGeographies])
 
     const extractIndicators = (geo, profileData) => {

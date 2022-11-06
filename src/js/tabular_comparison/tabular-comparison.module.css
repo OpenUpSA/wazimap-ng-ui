@@ -142,3 +142,7 @@ body {
 .selected-geographies .geo-chip .MuiChip-deleteIcon path {
     color: #2F2F2F;
 }
+
+.MuiTableCell-root{
+    border:1px solid #ECECEC;
+}

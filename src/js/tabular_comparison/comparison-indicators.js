@@ -7,7 +7,6 @@ import SectionTitle from "./section-title";
 import Indicator from "./indicator";
 
 const ComparisonIndicators = (props) => {
-    const [indicatorCount, setIndicatorCount] = useState(0);
     const [indicators, setIndicators] = useState([]);
     const [previousSelectedGeographies, setPreviousSelectedGeographies] = useState([]);
 
@@ -51,7 +50,36 @@ const ComparisonIndicators = (props) => {
     }
 
     const addIndicator = () => {
-        setIndicatorCount((count) => ++count);
+        let newArr = JSON.parse(JSON.stringify(props.indicatorObjs));
+        let maxIndex = newArr.length > 0 ? Math.max(...newArr.map(x => x.index)) : 0;
+
+        const newObj = {
+            index: ++maxIndex,
+            indicator: '',
+            category: ''
+        }
+
+        newArr.push(newObj);
+
+        props.setIndicatorObjs(newArr);
+    }
+
+    const handleRemove = (index) => {
+        props.setIndicatorObjs((objs) => objs.filter((obj) => obj.index !== index));
+    }
+
+    const handleIndicatorSelection = (index, newValue) => {
+        let newArr = JSON.parse(JSON.stringify(props.indicatorObjs));
+        newArr.filter((obj) => obj.index === index)[0].indicator = newValue.indicator;
+
+        props.setIndicatorObjs(newArr);
+    }
+
+    const handleCategorySelection = (index, newValue) => {
+        let newArr = JSON.parse(JSON.stringify(props.indicatorObjs));
+        newArr.filter((obj) => obj.index === index)[0].category = newValue;
+
+        props.setIndicatorObjs(newArr);
     }
 
     return (
@@ -80,10 +108,13 @@ const ComparisonIndicators = (props) => {
                     variant={'outlined'}
                     sx={{height: props.cardHeight}}
                 >
-                    {[...Array(indicatorCount)].map((x, i) =>
+                    {props.indicatorObjs.map((x) =>
                         <Indicator
-                            key={i}
+                            key={x.index}
                             indicators={indicators}
+                            handleRemove={() => handleRemove(x.index)}
+                            handleIndicatorSelection={(newValue) => handleIndicatorSelection(x.index, newValue)}
+                            handleCategorySelection={(newValue) => handleCategorySelection(x.index, newValue)}
                         />
                     )}
                 </Card>

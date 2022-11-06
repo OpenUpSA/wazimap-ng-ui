@@ -9,10 +9,7 @@ const Indicator = (props) => {
         isOptionEqualToValue={(option => true)}
         options={[...new Set(props.indicators.map(item => item.indicator))]}
         getOptionLabel={(option) => option}
-        onChange={(event, selectedValue) => {
-            let newValue = props.indicators.filter(x => x.indicator === selectedValue)[0];
-            setSelectedIndicator(newValue);
-        }}
+        onChange={(event, selectedValue) => handleIndicatorSelection(event, selectedValue)}
         size={'small'}
         renderOption={(props, option) => (
             <Box
@@ -39,6 +36,7 @@ const Indicator = (props) => {
         }
         getOptionLabel={(option) => option}
         size={'small'}
+        onChange={(event, selectedValue) => handleCategorySelection(event, selectedValue)}
         renderOption={(props, option) => (
             <Box
                 component="li"
@@ -54,9 +52,24 @@ const Indicator = (props) => {
             />}
     />
 
+    const handleIndicatorSelection = (event, selectedValue) => {
+        let newValue = props.indicators.filter(x => x.indicator === selectedValue)[0];
+        setSelectedIndicator(newValue);
+
+        props.handleIndicatorSelection(newValue);
+    }
+
+    const handleCategorySelection = (event, selectedValue) => {
+        props.handleCategorySelection(selectedValue);
+    }
+
     return (
         <div>
-            <div className={'remove-indicator'}>x</div>
+            <div
+                className={'remove-indicator'}
+                onClick={props.handleRemove}
+            >x
+            </div>
             <Card
                 className={'comparison-card first'}
                 variant={'outlined'}

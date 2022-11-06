@@ -32,11 +32,13 @@ const Result = (props) => {
                         <Table sx={{minWidth: 650}} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    {columns.map((column) => {
+                                    <TableCell
+                                    ><b>Geography</b></TableCell>
+                                    {props.indicatorObjs.map((column) => {
                                         return (
                                             <TableCell
-                                                key={column}
-                                            ><b>{column}</b></TableCell>
+                                                key={column.index}
+                                            ><b>{column.indicator} : {column.category}</b></TableCell>
                                         )
                                     })}
                                 </TableRow>

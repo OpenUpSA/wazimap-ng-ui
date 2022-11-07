@@ -12,6 +12,12 @@ const Result = (props) => {
         return window.innerHeight - topSpace - bottomSpace;
     }
 
+    const calculateTableHeight = () => {
+        const headerHeight = 58;
+
+        return calculateFullHeight() - headerHeight;
+    }
+
     const displayValue = (geo, obj) => {
         let selectedIndicator = props.indicators.filter((ind) => ind.geo === geo.code && ind.indicator === obj.indicator)[0];
         if (selectedIndicator == null) {
@@ -23,11 +29,11 @@ const Result = (props) => {
         const formatting = selectedIndicator.indicatorDetail.chart_configuration?.types.Value.formatting;
         let value = data?.reduce((n, {count}) => n + count, 0);
 
-
         return (
             <TableCell
-                component="th"
-                scope="row"
+                component={'th'}
+                scope={'row'}
+                key={obj.index}
             >{formatting === undefined ? value : d3format(formatting)(value)}</TableCell>
         )
     }
@@ -47,8 +53,15 @@ const Result = (props) => {
                     variant={'outlined'}
                     sx={{height: calculateFullHeight()}}
                 >
-                    <TableContainer component={Paper}>
-                        <Table sx={{minWidth: 650}} aria-label="simple table">
+                    <TableContainer
+                        component={Paper}
+                        sx={{maxHeight: calculateFullHeight()}}
+                    >
+                        <Table
+                            stickyHeader
+                            sx={{minWidth: 650}}
+                            aria-label={'simple table'}
+                        >
                             <TableHead>
                                 <TableRow>
                                     <TableCell
@@ -57,6 +70,8 @@ const Result = (props) => {
                                         return (
                                             <TableCell
                                                 key={column.index}
+                                                className={'truncate-table-cell'}
+                                                title={column.indicator + ' : ' + column.category}
                                             ><b>{column.indicator} : {column.category}</b></TableCell>
                                         )
                                     })}

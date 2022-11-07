@@ -103,7 +103,7 @@ const ComparisonIndicators = (props) => {
             </Grid>
             <Grid container>
                 <Card
-                    className={'dark-grey-bg full-width border-radius-10 comparison-indicators'}
+                    className={'dark-grey-bg full-width border-radius-10 comparison-indicators auto-scroll-y'}
                     variant={'outlined'}
                     sx={{height: props.cardHeight}}
                 >

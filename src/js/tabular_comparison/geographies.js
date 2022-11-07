@@ -66,7 +66,7 @@ const Geographies = (props) => {
             </Grid>
             <Grid container>
                 <Card
-                    className={'dark-grey-bg full-width border-radius-10'}
+                    className={'dark-grey-bg full-width border-radius-10 auto-scroll-y'}
                     variant={'outlined'}
                     sx={{height: props.cardHeight}}
                 >

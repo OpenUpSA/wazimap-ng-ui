@@ -6,8 +6,6 @@ import {format as d3format} from "d3-format";
 import SectionTitle from "./section-title";
 
 const Result = (props) => {
-    const columns = ['Geography', 'Youth Population', 'Income poverty : Poor', 'Employment status : Unemployed'];
-
     const calculateFullHeight = () => {
         const topSpace = 56 + 60;
         const bottomSpace = 40;
@@ -15,12 +13,16 @@ const Result = (props) => {
     }
 
     const displayValue = (geo, obj) => {
-        const primaryGroup = obj.indicatorDetail.metadata?.primary_group;
-        const data = obj.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
-        const formatting = obj.indicatorDetail.chart_configuration?.types.Value.formatting;
+        let selectedIndicator = props.indicators.filter((ind) => ind.geo === geo.code && ind.indicator === obj.indicator)[0];
+        if (selectedIndicator == null) {
+            return;
+        }
+
+        const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
+        const data = selectedIndicator.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
+        const formatting = selectedIndicator.indicatorDetail.chart_configuration?.types.Value.formatting;
         let value = data?.reduce((n, {count}) => n + count, 0);
 
-        console.log({geo, obj})
 
         return (
             <TableCell

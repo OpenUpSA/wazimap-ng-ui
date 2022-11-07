@@ -99,8 +99,16 @@ body {
     border-bottom-right-radius: 10px;
 }
 
-.comparison-indicators {
-    overflow: visible !important;
+.auto-scroll-y {
+    overflow-y: auto !important;
+}
+
+.comparison-indicators .comparison-card {
+    width: 95%;
+}
+
+.comparison-indicators .comparison-card.first {
+    margin-top: 11px;
 }
 
 .comparison-indicators .comparison-card.last {
@@ -119,11 +127,11 @@ body {
     text-align: center;
     position: relative;
     float: right;
-    margin-left: -22px;
+    margin-left: -2%;
     margin-top: -11px;
-    left: 11px;
+    left: 0px;
     display: block;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .comparison-select {
@@ -143,6 +151,35 @@ body {
     color: #2F2F2F;
 }
 
-.MuiTableCell-root{
-    border:1px solid #ECECEC;
+.MuiTableCell-root {
+    border: 1px solid #ECECEC;
 }
+
+.truncate-table-cell{
+    white-space: nowrap;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*scroll*/
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #C4C4C4;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #969696;
+}
+/*scroll*/

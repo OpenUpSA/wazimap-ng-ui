@@ -7,7 +7,6 @@ import SectionTitle from "./section-title";
 import Indicator from "./indicator";
 
 const ComparisonIndicators = (props) => {
-    const [indicators, setIndicators] = useState([]);
     const [previousSelectedGeographies, setPreviousSelectedGeographies] = useState([]);
 
     useEffect(() => {
@@ -27,7 +26,7 @@ const ComparisonIndicators = (props) => {
         })
 
         removedGeographies.forEach((geoToDelete) => {
-            setIndicators((indicators) => indicators.filter((indicator) => indicator.geo !== geoToDelete.code));
+            props.setIndicators((indicators) => indicators.filter((indicator) => indicator.geo !== geoToDelete.code));
         })
     }, [props.selectedGeographies])
 
@@ -45,8 +44,8 @@ const ComparisonIndicators = (props) => {
             }
         }
 
-        let newArr = JSON.parse(JSON.stringify(arr.concat(indicators)));
-        setIndicators(newArr);
+        let newArr = JSON.parse(JSON.stringify(arr.concat(props.indicators)));
+        props.setIndicators(newArr);
     }
 
     const addIndicator = () => {
@@ -104,14 +103,14 @@ const ComparisonIndicators = (props) => {
             </Grid>
             <Grid container>
                 <Card
-                    className={'dark-grey-bg full-width border-radius-10 comparison-indicators'}
+                    className={'dark-grey-bg full-width border-radius-10 comparison-indicators auto-scroll-y'}
                     variant={'outlined'}
                     sx={{height: props.cardHeight}}
                 >
                     {props.indicatorObjs.map((x) =>
                         <Indicator
                             key={x.index}
-                            indicators={indicators}
+                            indicators={props.indicators}
                             handleRemove={() => handleRemove(x.index)}
                             handleIndicatorSelection={(newValue) => handleIndicatorSelection(x.index, newValue)}
                             handleCategorySelection={(newValue) => handleCategorySelection(x.index, newValue)}

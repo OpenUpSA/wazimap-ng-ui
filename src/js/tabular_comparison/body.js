@@ -10,6 +10,7 @@ import ComparisonIndicators from "./comparison-indicators";
 const Body = (props) => {
     const [selectedGeographies, setSelectedGeographies] = useState([]);
     const [indicatorObjs, setIndicatorObjs] = useState([]);
+    const [indicators, setIndicators] = useState([]);
 
     const api = new API('https://staging.wazimap-ng.openup.org.za');
     const profileId = 8;
@@ -50,6 +51,8 @@ const Body = (props) => {
                                 profileId={profileId}
                                 indicatorObjs={indicatorObjs}
                                 setIndicatorObjs={setIndicatorObjs}
+                                indicators={indicators}
+                                setIndicators={setIndicators}
                             />
                         </Grid>
                     </Grid>
@@ -63,6 +66,7 @@ const Body = (props) => {
                             <Result
                                 selectedGeographies={selectedGeographies}
                                 indicatorObjs={indicatorObjs}
+                                indicators={indicators}
                             />
                         </Grid>
                     </Grid>

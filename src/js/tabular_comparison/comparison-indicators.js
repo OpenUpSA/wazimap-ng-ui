@@ -56,7 +56,8 @@ const ComparisonIndicators = (props) => {
         const newObj = {
             index: ++maxIndex,
             indicator: '',
-            category: ''
+            category: '',
+            indicatorDetail: {}
         }
 
         newArr.push(newObj);
@@ -71,6 +72,7 @@ const ComparisonIndicators = (props) => {
     const handleIndicatorSelection = (index, newValue) => {
         let newArr = JSON.parse(JSON.stringify(props.indicatorObjs));
         newArr.filter((obj) => obj.index === index)[0].indicator = newValue.indicator;
+        newArr.filter((obj) => obj.index === index)[0].indicatorDetail = newValue.indicatorDetail;
 
         props.setIndicatorObjs(newArr);
     }

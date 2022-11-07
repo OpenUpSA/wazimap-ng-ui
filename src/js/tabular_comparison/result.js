@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {Card, Grid, TableContainer, Table, TableBody, TableCell, Paper, TableHead, TableRow} from "@mui/material";
+import {format as d3format} from "d3-format";
 
 //components
 import SectionTitle from "./section-title";
@@ -11,6 +12,22 @@ const Result = (props) => {
         const topSpace = 56 + 60;
         const bottomSpace = 40;
         return window.innerHeight - topSpace - bottomSpace;
+    }
+
+    const displayValue = (geo, obj) => {
+        const primaryGroup = obj.indicatorDetail.metadata?.primary_group;
+        const data = obj.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
+        const formatting = obj.indicatorDetail.chart_configuration?.types.Value.formatting;
+        let value = data?.reduce((n, {count}) => n + count, 0);
+
+        console.log({geo, obj})
+
+        return (
+            <TableCell
+                component="th"
+                scope="row"
+            >{formatting === undefined ? value : d3format(formatting)(value)}</TableCell>
+        )
     }
 
     return (
@@ -44,15 +61,18 @@ const Result = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {props.selectedGeographies.map((row) => {
+                                {props.selectedGeographies.map((geo) => {
                                     return (
                                         <TableRow
-                                            key={row.code}
+                                            key={geo.code}
                                         >
                                             <TableCell
                                                 component="th"
                                                 scope="row"
-                                            >{row.name}</TableCell>
+                                            >{geo.name}</TableCell>
+                                            {
+                                                props.indicatorObjs.map((obj) => displayValue(geo, obj))
+                                            }
                                         </TableRow>
                                     )
                                 })}

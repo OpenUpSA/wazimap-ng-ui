@@ -1,0 +1,117 @@
+body {
+    background-color: #f7f7f7;
+    padding: 0;
+    margin: 0;
+    font-family: 'Roboto', Arial, serif;
+    font-size: 15px;
+}
+
+.header {
+    background-color: #fff;
+    height: 56px;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+}
+
+.page-content {
+    margin-top: 20px;
+}
+
+.dark-grey-bg {
+    background-color: #f1f1f1 !important;
+}
+
+.min-height-250 {
+    min-height: 250px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.margin-bottom-20 {
+    margin-bottom: 20px;
+}
+
+.margin-top-25 {
+    margin-top: 25px;
+}
+
+.padding-bottom-25 {
+    padding-bottom: 25px;
+}
+
+.body-grid {
+    padding-right: 35px;
+    padding-left: 35px;
+}
+
+.has-left-border {
+    border-left: 1px solid #ededed;
+}
+
+.has-bottom-border {
+    border-bottom: 1px solid #ededed;
+}
+
+.border-radius-10 {
+    border-radius: 10px !important;
+}
+
+.section-title {
+    display: block;
+    background-color: #39ad84;
+    color: #fff;
+    font-size: 13px;
+    padding: 7px 18px;
+    border-radius: 20px;
+}
+
+.result-card {
+    height: 100%;
+}
+
+.btn-add-indicator {
+    color: #2F2F2F !important;
+    text-transform: none !important;
+    background-color: #cacaca !important;
+    border: none !important;
+    height: 50px;
+    font-size: 15px !important;
+    line-height: 18px !important;
+    border-radius: 8px !important;
+}
+
+.comparison-card {
+    padding: 10px;
+    box-shadow: 0 1px 14px rgba(0, 0, 0, 0.05);
+    line-height: 40px;
+}
+
+.comparison-card.first {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.comparison-card.last {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.comparison-select {
+    background-color: #F4F4F4;
+}
+
+.selected-geographies .geo-chip {
+    margin-top: 10px;
+    margin-left: 10px;
+    background-color: #CACACA;
+    font-size: 13px;
+    line-height: 15px;
+    font-weight: 400;
+}
+
+.selected-geographies .geo-chip .MuiChip-deleteIcon path {
+    color: #2F2F2F;
+}

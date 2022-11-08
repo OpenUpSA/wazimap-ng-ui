@@ -50,7 +50,6 @@ const Result = (props) => {
                 }
             })
         })
-        console.log({rows});
 
         setRows(rows);
     }, [props.indicatorObjs, props.indicators, props.selectedGeographies])
@@ -69,7 +68,9 @@ const Result = (props) => {
 
         const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
         const data = selectedIndicator.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
-        let value = data?.reduce((n, {count}) => n + count, 0);
+        let value = data?.reduce((n, {count}) => n + parseFloat(count), 0);
+
+        console.log({primaryGroup, data, value})
 
         return value;
     }

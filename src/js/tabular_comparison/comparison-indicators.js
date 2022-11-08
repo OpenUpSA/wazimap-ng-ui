@@ -69,14 +69,16 @@ const ComparisonIndicators = (props) => {
 
     const handleIndicatorSelection = (index, newValue) => {
         let newArr = JSON.parse(JSON.stringify(props.indicatorObjs));
-        newArr.filter((obj) => obj.index === index)[0].indicator = newValue.indicator;
+        let objToUpdate = newArr.filter((obj) => obj.index === index)[0];
+        objToUpdate.indicator = newValue.indicator;
 
         props.setIndicatorObjs(newArr);
     }
 
     const handleCategorySelection = (index, newValue) => {
         let newArr = JSON.parse(JSON.stringify(props.indicatorObjs));
-        newArr.filter((obj) => obj.index === index)[0].category = newValue;
+        let objToUpdate = newArr.filter((obj) => obj.index === index)[0]
+        objToUpdate.category = newValue;
 
         props.setIndicatorObjs(newArr);
     }

@@ -10,14 +10,23 @@ const Result = (props) => {
     const [rows, setRows] = useState([]);
 
     useEffect(() => {
+        populateRows();
+    }, [props.indicatorObjs, props.indicators, props.selectedGeographies])
+
+    const populateRows = () => {
         let rows = [];
         props.selectedGeographies.map((geo) => {
             let newRow = {geo: geo.name, objs: []};
             props.indicatorObjs.map((obj) => {
+                const formatting = props.indicators
+                    .filter(x => x.geo === geo.code && x.indicator === obj.indicator)[0]?.indicatorDetail
+                    .chart_configuration
+                    .types['Value'].formatting;
+
                 let newObj = {
                     obj: obj,
                     value: calculateValue(geo, obj),
-                    formatting: ',.0f'  //todo : update this
+                    formatting: formatting
                 }
                 newRow.objs.push(newObj);
             })
@@ -25,6 +34,12 @@ const Result = (props) => {
             rows.push(newRow);
         })
 
+        setBackgroundColors(rows);
+
+        setRows(rows);
+    }
+
+    const setBackgroundColors = (rows) => {
         let darkestColor = '#BABABA';
         let lightestColor = '#ffffff';
 
@@ -32,7 +47,9 @@ const Result = (props) => {
             let objValues = [];
             rows.forEach((row) => {
                 let objValue = row.objs.filter(x => x.obj === obj)[0]?.value;
-                objValues.push(objValue);
+                if (objValue != null) {
+                    objValues.push(objValue);
+                }
             })
 
             const max = Math.max(...objValues);
@@ -46,13 +63,11 @@ const Result = (props) => {
                 let rowObj = row.objs.filter(x => x.obj === obj)[0];
                 if (rowObj != null) {
                     rowObj.background = scale(rowObj.value);
-                    rowObj.value = d3format(rowObj.formatting)(rowObj.value);
+                    rowObj.value = rowObj.formatting == null ? rowObj.value : d3format(rowObj.formatting)(rowObj.value);
                 }
             })
         })
-
-        setRows(rows);
-    }, [props.indicatorObjs, props.indicators, props.selectedGeographies])
+    }
 
     const calculateFullHeight = () => {
         const topSpace = 56 + 60;
@@ -69,8 +84,6 @@ const Result = (props) => {
         const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
         const data = selectedIndicator.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
         let value = data?.reduce((n, {count}) => n + parseFloat(count), 0);
-
-        console.log({primaryGroup, data, value})
 
         return value;
     }
@@ -105,13 +118,15 @@ const Result = (props) => {
                                     ><b>Geography</b></TableCell>
                                     {
                                         props.indicatorObjs.map((column) => {
-                                            return (
-                                                <TableCell
-                                                    key={column.index}
-                                                    className={'truncate-table-cell'}
-                                                    title={column.indicator + ' : ' + column.category}
-                                                ><b>{column.indicator} : {column.category}</b></TableCell>
-                                            )
+                                            if (column.indicator !== '' && column.category !== '') {
+                                                return (
+                                                    <TableCell
+                                                        key={column.index}
+                                                        className={'truncate-table-cell'}
+                                                        title={column.indicator + ' : ' + column.category}
+                                                    ><b>{column.indicator} : {column.category}</b></TableCell>
+                                                )
+                                            }
                                         })
                                     }
                                 </TableRow>
@@ -129,15 +144,17 @@ const Result = (props) => {
                                                 >{row.geo}</TableCell>
                                                 {
                                                     props.indicatorObjs.map((obj) => {
-                                                        return (
-                                                            <TableCell
-                                                                component={'th'}
-                                                                scope={'row'}
-                                                                key={obj.index}
-                                                                sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
-                                                            >{row.objs.filter(x => x.obj === obj)[0]?.value}
-                                                            </TableCell>
-                                                        )
+                                                        if (obj.indicator !== '' && obj.category !== '') {
+                                                            return (
+                                                                <TableCell
+                                                                    component={'th'}
+                                                                    scope={'row'}
+                                                                    key={obj.index}
+                                                                    sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
+                                                                >{row.objs.filter(x => x.obj === obj)[0]?.value}
+                                                                </TableCell>
+                                                            )
+                                                        }
                                                     })
                                                 }
                                             </TableRow>

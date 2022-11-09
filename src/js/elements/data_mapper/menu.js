@@ -120,7 +120,9 @@ export class DataMapperMenu extends Component {
         $(parentContainer).empty();
         $('.' + loadingClsName).addClass('hidden');
         $('.' + noDataWrapperClsName).removeClass('hidden');
-
+        $(`.${noDataWrapperClsName} div`).last().text(
+          'No data available to plot on the map for the selected geography.'
+        );
         this.triggerEvent('data_mapper_menu.nodata', this);
     }
 

@@ -159,6 +159,7 @@ export class FacilityController extends Component {
             this.model.api.getThemesCount(this.model.profileId, this.model.geography.code, activeVersion.model.name)
                 .then((data) => {
                     this.model.themes = data;
+                    this.triggerEvent('profile.facilities.loaded', {parent: this.parent.parent, data: data});
                     this.addFacilities();
                 })
                 .catch((err) => {

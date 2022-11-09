@@ -78,6 +78,7 @@ Then('I check if scrubber is not visible', () => {
 })
 
 When('I select Population indicator and White subindicator', () => {
+    cy.get('.data-category__h1_content--v2').contains('Population (2011 Census)').click();
     cy.get('.data-category__h2_content--v2').contains('Population group').click();
     cy.get('.data-category__h3_content--v2').contains('White').click();
 })

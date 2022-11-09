@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Higher Education",
+    "id": 53,
+    "icon": "account_balance",
+    "color": "#FF39E8",
+    "order": 12,
+    "subthemes": [
+      {
+        "label": "Universities",
+        "id": 578,
+        "count": 9,
+        "order": 217,
+        "metadata": {
+          "source": "",
+          "description": "Representation of data gathered from various sources",
+          "licence": null
+        }
+      },
+      {
+        "label": "Universities of Technology",
+        "id": 579,
+        "count": 6,
+        "order": 218,
+        "metadata": {
+          "source": "",
+          "description": "Representation of data gathered from various sources",
+          "licence": null
+        }
+      },
+      {
+        "label": "TVET Colleges",
+        "id": 580,
+        "count": 30,
+        "order": 219,
+        "metadata": {
+          "source": "",
+          "description": "Representation of data gathered from various sources",
+          "licence": null
+        }
+      },
+      {
+        "label": "CET Colleges",
+        "id": 628,
+        "count": 1,
+        "order": 259,
+        "metadata": {
+          "source": "",
+          "description": "Representation of data gathered from various sources",
+          "licence": null
+        }
+      }
+    ]
+  },
+  {
+    "name": "Employment & Labour",
+    "id": 7,
+    "icon": "work",
+    "color": "#993AFF",
+    "order": 20,
+    "subthemes": [
+      {
+        "label": "NYDA",
+        "id": 574,
+        "count": 1,
+        "order": 213,
+        "metadata": {
+          "source": "",
+          "description": "Representation of data gathered from various sources",
+          "licence": null
+        }
+      },
+      {
+        "label": "DEL Facilities",
+        "id": 588,
+        "count": 11,
+        "order": 226,
+        "metadata": {
+          "source": "",
+          "description": "Representation of data gathered from various sources",
+          "licence": null
+        }
+      }
+    ]
+  }
+]

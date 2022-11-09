@@ -93,12 +93,6 @@ const TabularComparison = (props) => {
             return;
         }
 
-        init();
-    })
-
-    window.init = init;
-
-    const init = async () => {
         console.log('init')
         let hostname = getHostname();
         let pc = profiles[hostname];
@@ -113,12 +107,12 @@ const TabularComparison = (props) => {
         console.log({pc})
 
         const api = new API(pc.baseUrl, hostname);
-        const data = await api.getProfileConfiguration(hostname);
-
-        setApi(api);
-        setProfileId(data.id);
+        api.getProfileConfiguration(hostname).then((data) => {
+            setApi(api);
+            setProfileId(data.id);
+        });
         setRender(false);
-    }
+    })
 
     return (
         <div>

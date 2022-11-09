@@ -96,7 +96,10 @@ const TabularComparison = (props) => {
         init();
     })
 
+    window.init = init;
+
     const init = async () => {
+        console.log('init')
         let hostname = getHostname();
         let pc = profiles[hostname];
         if (pc === undefined) {

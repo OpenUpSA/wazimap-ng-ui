@@ -97,7 +97,6 @@ const TabularComparison = (props) => {
     })
 
     const init = async () => {
-        console.log('init')
         let hostname = getHostname();
         let pc = profiles[hostname];
         if (pc === undefined) {
@@ -107,6 +106,8 @@ const TabularComparison = (props) => {
                 config: defaultConfig
             }
         }
+
+        console.log({pc})
 
         const api = new API(pc.baseUrl, hostname);
         const data = await api.getProfileConfiguration(hostname);

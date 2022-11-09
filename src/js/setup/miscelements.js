@@ -42,4 +42,8 @@ export function configureMiscElementEvents(application, controller) {
     controller.on('mapdownload.started', () => {
         sidePanels.closeAllPanels();
     });
+
+    controller.on('open.rich_data.panel', () => {
+        sidePanels.togglePanel(SidePanels.PANELS.richData);
+    });
 }

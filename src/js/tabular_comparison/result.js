@@ -33,7 +33,6 @@ const Result = (props) => {
              25.2265C163.625 43.6855 205.584 65.0574 262.707 52.9785L262.293 51.0218Z" fill="#39AD84"/>
         </svg>
 
-
     useEffect(() => {
         populateRows();
     }, [props.indicatorObjs, props.indicators, props.selectedGeographies])

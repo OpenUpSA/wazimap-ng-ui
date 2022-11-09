@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Grid} from "@mui/material";
-import {API} from "../api";
 
 //components
 import Geographies from "./geographies";
@@ -11,9 +10,6 @@ const Body = (props) => {
     const [selectedGeographies, setSelectedGeographies] = useState([]);
     const [indicatorObjs, setIndicatorObjs] = useState([]);
     const [indicators, setIndicators] = useState([]);
-
-    const api = new API('https://staging.wazimap-ng.openup.org.za');
-    const profileId = 8;
 
     const calculateCardHeight = () => {
         const topSpace = 56 + 60;
@@ -35,8 +31,8 @@ const Body = (props) => {
                         <Grid className={'full-width has-bottom-border padding-bottom-25'}>
                             <Geographies
                                 cardHeight={calculateCardHeight()}
-                                api={api}
-                                profileId={profileId}
+                                api={props.api}
+                                profileId={props.profileId}
                                 selectedGeographies={selectedGeographies}
                                 setSelectedGeographies={setSelectedGeographies}
                             />
@@ -47,8 +43,8 @@ const Body = (props) => {
                             <ComparisonIndicators
                                 cardHeight={calculateCardHeight()}
                                 selectedGeographies={selectedGeographies}
-                                api={api}
-                                profileId={profileId}
+                                api={props.api}
+                                profileId={props.profileId}
                                 indicatorObjs={indicatorObjs}
                                 setIndicatorObjs={setIndicatorObjs}
                                 indicators={indicators}

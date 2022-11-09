@@ -30,8 +30,16 @@ body {
     width: 100%;
 }
 
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+
 .margin-bottom-20 {
     margin-bottom: 20px;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
 }
 
 .margin-top-25 {
@@ -81,6 +89,11 @@ body {
     font-size: 15px !important;
     line-height: 18px !important;
     border-radius: 8px !important;
+}
+
+.btn-add-indicator:disabled {
+    background-color: #E2E2E2 !important;
+    color: #C6C6C6 !important;
 }
 
 .comparison-card {
@@ -155,11 +168,33 @@ body {
     border: 1px solid #ECECEC;
 }
 
-.truncate-table-cell{
+.truncate-table-cell {
     white-space: nowrap;
     max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.geography-empty-state {
+    text-align: center;
+    margin-top: 22px;
+}
+
+.geography-empty-state svg {
+    margin-left: 10px;
+}
+
+.indicators-empty-state {
+    text-align: center;
+}
+
+.result-empty-state {
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.result-empty-state svg {
+    margin-right: 10px;
 }
 
 /*scroll*/
@@ -182,4 +217,5 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #969696;
 }
+
 /*scroll*/

@@ -71,6 +71,7 @@ const Geographies = (props) => {
     }
 
     const autoComplete = <Autocomplete
+        disabled={props.api === null}
         disablePortal
         filterOptions={(x) => x}
         isOptionEqualToValue={(option => true)}

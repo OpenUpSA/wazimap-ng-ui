@@ -3,6 +3,7 @@ import {Autocomplete, Box, Card, Grid, Icon, TextField} from "@mui/material";
 
 const Indicator = (props) => {
     const [selectedIndicator, setSelectedIndicator] = useState(null);
+    const [categoryValue, setCategoryValue] = useState(null);
 
     const indicatorAutoComplete = <Autocomplete
         disabled={props.indicators.length <= 0}
@@ -36,6 +37,7 @@ const Indicator = (props) => {
         }
         getOptionLabel={(option) => option}
         size={'small'}
+        value={categoryValue}
         onChange={(event, selectedValue) => handleCategorySelection(event, selectedValue)}
         renderOption={(props, option) => (
             <Box
@@ -55,11 +57,13 @@ const Indicator = (props) => {
     const handleIndicatorSelection = (event, selectedValue) => {
         let newValue = props.indicators.filter(x => x.indicator === selectedValue)[0];
         setSelectedIndicator(newValue);
+        setCategoryValue(null);
 
         props.handleIndicatorSelection(newValue);
     }
 
     const handleCategorySelection = (event, selectedValue) => {
+        setCategoryValue(selectedValue);
         props.handleCategorySelection(selectedValue);
     }
 

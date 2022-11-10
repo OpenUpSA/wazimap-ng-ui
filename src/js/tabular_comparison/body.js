@@ -35,6 +35,7 @@ const Body = (props) => {
                                 profileId={props.profileId}
                                 selectedGeographies={selectedGeographies}
                                 setSelectedGeographies={setSelectedGeographies}
+                                setIndicatorObjs={setIndicatorObjs}
                             />
                         </Grid>
                         <Grid

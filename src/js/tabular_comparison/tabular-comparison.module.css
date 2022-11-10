@@ -12,6 +12,14 @@ body {
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
     -webkit-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    padding-right: 16px;
+    padding-left: 16px;
+}
+
+.header .logo {
+    height: 44px;
+    align-self: center;
 }
 
 .page-content {

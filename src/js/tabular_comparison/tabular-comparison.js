@@ -93,7 +93,6 @@ const TabularComparison = (props) => {
             return;
         }
 
-        console.log('init')
         let hostname = getHostname();
         let pc = profiles[hostname];
         if (pc === undefined) {
@@ -103,8 +102,6 @@ const TabularComparison = (props) => {
                 config: defaultConfig
             }
         }
-
-        console.log({pc})
 
         const api = new API(pc.baseUrl, hostname);
         api.getProfileConfiguration(hostname).then((data) => {

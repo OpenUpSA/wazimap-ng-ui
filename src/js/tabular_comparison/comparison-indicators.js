@@ -23,6 +23,10 @@ const ComparisonIndicators = (props) => {
 
 
     useEffect(() => {
+        if (props.selectedGeographies.length <= 0) {
+            props.setIndicatorObjs([]);
+        }
+
         const addedGeographies = props.selectedGeographies.filter(({code: id1}) => !previousSelectedGeographies.some(({code: id2}) => id2 === id1));
         const removedGeographies = previousSelectedGeographies.filter(({code: id1}) => !props.selectedGeographies.some(({code: id2}) => id2 === id1));
 

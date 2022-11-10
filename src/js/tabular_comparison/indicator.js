@@ -36,6 +36,11 @@ const Indicator = (props) => {
                     .filter((x) => x.name === selectedIndicator.indicatorDetail.metadata.primary_group)[0].subindicators
         }
         getOptionLabel={(option) => option}
+        getOptionDisabled={(option) => {
+            let alreadySelected = props.indicatorObjs.filter(x => x.indicator === selectedIndicator.indicator && x.category === option)[0];
+
+            return alreadySelected != null && alreadySelected.category !== categoryValue;
+        }}
         size={'small'}
         value={categoryValue}
         onChange={(event, selectedValue) => handleCategorySelection(event, selectedValue)}

@@ -119,6 +119,7 @@ const ComparisonIndicators = (props) => {
                 handleRemove={() => handleRemove(x.index)}
                 handleIndicatorSelection={(newValue) => handleIndicatorSelection(x.index, newValue)}
                 handleCategorySelection={(newValue) => handleCategorySelection(x.index, newValue)}
+                indicatorObjs={props.indicatorObjs}
             />
         )
     }

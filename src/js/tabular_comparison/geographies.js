@@ -76,6 +76,9 @@ const Geographies = (props) => {
         filterOptions={(x) => x}
         isOptionEqualToValue={(option => true)}
         options={options}
+        getOptionDisabled={(option) => {
+            return props.selectedGeographies.some(x => x.code === option.code);
+        }}
         getOptionLabel={(option) => option.code + ' - ' + option.name}
         onInputChange={(event, newInputValue) => {
             filterOptions(newInputValue);

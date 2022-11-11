@@ -125,7 +125,7 @@ body {
 }
 
 .comparison-indicators .comparison-card {
-    width: 95%;
+    width: calc(100% - 33px);
 }
 
 .comparison-indicators .comparison-card.first {
@@ -148,7 +148,7 @@ body {
     text-align: center;
     position: relative;
     float: right;
-    margin-left: -2%;
+    margin-left: -11px;
     margin-top: -11px;
     left: 0px;
     display: block;

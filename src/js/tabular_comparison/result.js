@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {Card, Chip, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {Card, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {format as d3format} from "d3-format";
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
+import {defaultValues} from "../defaultValues";
+import {fillMissingKeys} from "../utils";
 
 //components
 import SectionTitle from "./section-title";
@@ -42,10 +44,13 @@ const Result = (props) => {
         props.selectedGeographies.map((geo) => {
             let newRow = {geo: geo.name, objs: []};
             props.indicatorObjs.map((obj) => {
-                const formatting = props.indicators
+                let chartConfig = props.indicators
                     .filter(x => x.geo === geo.code && x.indicator === obj.indicator)[0]?.indicatorDetail
-                    .chart_configuration
-                    .types['Value'].formatting;
+                    .chart_configuration;
+
+                chartConfig = fillMissingKeys(chartConfig, defaultValues.chartConfiguration || {});
+
+                const formatting = chartConfig.types['Value'].formatting;
 
                 let newObj = {
                     obj: obj,
@@ -85,7 +90,7 @@ const Result = (props) => {
 
             rows.forEach((row) => {
                 let rowObj = row.objs.filter(x => x.obj === obj)[0];
-                if (rowObj != null) {
+                if (rowObj != null && rowObj.value != null) {
                     rowObj.background = scale(rowObj.value);
                     rowObj.value = rowObj.formatting == null ? rowObj.value : d3format(rowObj.formatting)(rowObj.value);
                 }
@@ -107,7 +112,11 @@ const Result = (props) => {
 
         const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
         const data = selectedIndicator.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
-        return data?.reduce((n, {count}) => n + parseFloat(count), 0);
+        if (data != null && data.length > 0) {
+            return data.reduce((n, {count}) => n + parseFloat(count), 0);
+        } else {
+            return null;
+        }
     }
 
     const renderResult = () => {
@@ -163,15 +172,27 @@ const Result = (props) => {
                                     {
                                         props.indicatorObjs.map((obj) => {
                                             if (obj.indicator !== '' && obj.category !== '') {
-                                                return (
-                                                    <TableCell
-                                                        component={'th'}
-                                                        scope={'row'}
-                                                        key={obj.index}
-                                                        sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
-                                                    >{row.objs.filter(x => x.obj === obj)[0]?.value}
-                                                    </TableCell>
-                                                )
+                                                const value = row.objs.filter(x => x.obj === obj)[0]?.value;
+                                                if (value === 'NaN') {
+                                                    return (
+                                                        <TableCell
+                                                            component={'th'}
+                                                            scope={'row'}
+                                                            key={obj.index}
+                                                            sx={{backgroundColor: '#fff'}}
+                                                        ></TableCell>   //empty
+                                                    )
+                                                } else {
+                                                    return (
+                                                        <TableCell
+                                                            component={'th'}
+                                                            scope={'row'}
+                                                            key={obj.index}
+                                                            sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
+                                                        >{value}
+                                                        </TableCell>
+                                                    )
+                                                }
                                             }
                                         })
                                     }
@@ -197,7 +218,7 @@ const Result = (props) => {
         return (
             <div
                 className={'result-empty-state result-empty-indicators'}
-                 style={{marginTop: calculateFullHeight() / 2 - 8}}>
+                style={{marginTop: calculateFullHeight() / 2 - 8}}>
                 <span>{arrowSvg2}</span>
                 <span>You’ve chosen a geography, now select an indicator!</span>
             </div>

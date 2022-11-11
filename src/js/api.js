@@ -33,7 +33,7 @@ export class API extends Observable {
         return this.loadUrl(url, this.abortController);
     }
 
-    getProfile(profileId, areaCode) {
+    getProfileWithoutVersion(profileId, areaCode) {
         const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?skip-children=true&format=json`;
         return this.loadUrl(url, this.abortController);
     }

@@ -37,7 +37,7 @@ const ComparisonIndicators = (props) => {
         }
 
         addedGeographies.forEach((geo) => {
-            props.api.getProfile(props.profileId, geo.code).then((data) => {
+            props.api.getProfileWithoutVersion(props.profileId, geo.code).then((data) => {
                 extractIndicators(geo.code, data.profile.profile_data);
             })
         })

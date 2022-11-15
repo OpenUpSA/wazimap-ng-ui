@@ -93,7 +93,7 @@ export function extractRequestedIndicatorData(url, indicatorData) {
 }
 
 export function gotoHomepage() {
-    cy.visit("/index.html");
+    cy.visit("/");
 }
 
 export function waitUntilGeographyIsLoaded(geoName) {

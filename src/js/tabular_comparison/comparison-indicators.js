@@ -53,9 +53,11 @@ const ComparisonIndicators = (props) => {
             for (const [subcategory, subcategoryDetail] of Object.entries(categoryDetail.subcategories)) {
                 if (subcategoryDetail.indicators) {
                     for (const [indicator, indicatorDetail] of Object.entries(subcategoryDetail.indicators)) {
-                        arr.push({
-                            geo, indicator, indicatorDetail
-                        })
+                        if (indicatorDetail.dataset_content_type !== 'qualitative') {
+                            arr.push({
+                                geo, indicator, indicatorDetail
+                            })
+                        }
                     }
                 }
             }

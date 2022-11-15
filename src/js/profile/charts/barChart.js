@@ -9,6 +9,18 @@ const graphValueTypes = {
 };
 
 export const configureBarchart = (data, metadata, config) => {
+    //Youth attendance at an educational institution
+    if (!config.disableToggle) {
+        //todo:don't forget to remove this
+        data.forEach(x => {
+            x.count = parseFloat(x.count) * -1;
+            /*
+            if (x['age group'] === '20-24' && (x['edu level'] === 'Grade 10/11' || x['edu level'] === 'Grade 9')) {
+                x.count = parseFloat(x.count) * -1;
+            }
+        */
+        })
+    }
     const {
         xTicks,
         defaultType,
@@ -142,6 +154,10 @@ export const configureBarchart = (data, metadata, config) => {
                 name: "height",
                 update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
             },
+            {
+                name: "textAlign",
+                value: "barvalue"
+            },
             ...filterSignals
         ],
         scales: [
@@ -198,10 +214,10 @@ export const configureBarchart = (data, metadata, config) => {
                 from: {data: "data_formatted"},
                 encode: {
                     enter: {
-                        align: {value: "left"},
+                        align: {signal: "datum[datatype[Units]] > 0 ? 'left' : 'right'"},
                         baseline: {value: "middle"},
                         fill: {value: "grey"},
-                        fontSize: {value: 10},
+                        fontSize: {value: 10}
                     },
                     update: {
                         text: {
@@ -210,7 +226,7 @@ export const configureBarchart = (data, metadata, config) => {
                         x: {
                             scale: "xscale",
                             field: {signal: "datatype[Units]"},
-                            offset: 5,
+                            offset: {signal: "datum[datatype[Units]] > 0 ? 5 : format(datum[datatype[Units]],numberFormat[Units]).length * -5"},
                         },
                         y: {
                             scale: "yscale",

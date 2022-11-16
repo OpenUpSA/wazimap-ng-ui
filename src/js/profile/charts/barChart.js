@@ -9,18 +9,6 @@ const graphValueTypes = {
 };
 
 export const configureBarchart = (data, metadata, config) => {
-    //Youth attendance at an educational institution
-    if (!config.disableToggle) {
-        //todo:don't forget to remove this
-        data.forEach(x => {
-            x.count = parseFloat(x.count) * -1;
-            /*
-            if (x['age group'] === '20-24' && (x['edu level'] === 'Grade 10/11' || x['edu level'] === 'Grade 9')) {
-                x.count = parseFloat(x.count) * -1;
-            }
-        */
-        })
-    }
     const {
         xTicks,
         defaultType,
@@ -148,11 +136,11 @@ export const configureBarchart = (data, metadata, config) => {
             },
             {
                 name: "y_step",
-                value: 30
+                value: 50
             },
             {
                 name: "height",
-                update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
+                update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step + y_step"
             },
             {
                 name: "textAlign",
@@ -166,21 +154,12 @@ export const configureBarchart = (data, metadata, config) => {
                 type: "band",
                 domain: {data: "data_formatted", field: {signal: "mainGroup"}},
                 range: {step: {signal: "y_step"}},
-                padding: 0.1,
+                padding: 0.4
             },
             xScale
         ],
 
         axes: [
-            {
-                orient: "left",
-                scale: "yscale",
-                domainOpacity: 0.5,
-                labelOpacity: 0.5,
-                tickSize: 0,
-                labelPadding: 6,
-                zindex: 1,
-            },
             xAxis
         ],
 
@@ -214,7 +193,6 @@ export const configureBarchart = (data, metadata, config) => {
                 from: {data: "data_formatted"},
                 encode: {
                     enter: {
-                        align: {signal: "datum[datatype[Units]] > 0 ? 'left' : 'right'"},
                         baseline: {value: "middle"},
                         fill: {value: "grey"},
                         fontSize: {value: 10}
@@ -223,15 +201,44 @@ export const configureBarchart = (data, metadata, config) => {
                         text: {
                             signal: "format(datum[datatype[Units]],numberFormat[Units])"
                         },
+                        align: {signal: "datum[datatype[Units]] > 0 ? 'left' : 'right'"},
                         x: {
                             scale: "xscale",
                             field: {signal: "datatype[Units]"},
-                            offset: {signal: "datum[datatype[Units]] > 0 ? 5 : format(datum[datatype[Units]],numberFormat[Units]).length * -5"},
+                            offset: {signal: "datum[datatype[Units]] > 0 ? 5 : -5"},
                         },
                         y: {
                             scale: "yscale",
                             field: {signal: "mainGroup"},
                             band: 0.5,
+                        },
+                    },
+                },
+            },
+            {
+                type: "text",
+                from: {data: "data_formatted"},
+                encode: {
+                    enter: {
+                        baseline: {value: "top"},
+                        fill: {value: "grey"},
+                        fontSize: {value: 10},
+                    },
+                    update: {
+                        align: {signal: "datum[datatype[Units]] > 0 ? 'left' : 'right'"},
+                        text: {
+                            field: {signal: "mainGroup"}
+                        },
+                        x: {
+                            scale: "xscale",
+                            value: 0,
+                            offset: {signal: "datum[datatype[Units]] > 0 ? 5 : -5"},
+                        },
+                        y: {
+                            scale: "yscale",
+                            band: 1,
+                            field: {signal: "mainGroup"},
+                            offset: {value: 0},
                         },
                     },
                 },

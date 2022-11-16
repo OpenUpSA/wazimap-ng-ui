@@ -72,6 +72,16 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
     }).as('indicator_data');
 }
 
+export function setupInterceptionsForSpecificGeo(geoCode, all_details){
+  cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/${geoCode}/?skip-children=true&format=json`, (req) => {
+      req.reply({
+          statusCode: 200,
+          body: all_details,
+          forceNetworkError: false // default
+      })
+  }).as('all_details')
+}
+
 export function extractRequestedIndicatorData(url, indicatorData) {
     let domain = url.match(/^https:\/\/[^/]+/);
     let geo = url.replace(`${domain}/api/v1/profile/8/geography/`, '');
@@ -94,6 +104,10 @@ export function extractRequestedIndicatorData(url, indicatorData) {
 
 export function gotoHomepage() {
     cy.visit("/");
+}
+
+export function gotoTabularComparison() {
+    cy.visit("/tabular-comparison.html");
 }
 
 export function waitUntilGeographyIsLoaded(geoName) {

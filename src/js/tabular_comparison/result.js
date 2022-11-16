@@ -118,6 +118,7 @@ const Result = (props) => {
                 stickyHeader
                 sx={{minWidth: 650}}
                 aria-label={'simple table'}
+                data-testid={'result-table'}
             >
                 <TableHead>
                     <TableRow>
@@ -146,7 +147,7 @@ const Result = (props) => {
                                     key={row.geo}
                                 >
                                     <TableCell
-                                        component={'th'}
+                                        component={'td'}
                                         scope={'row'}
                                     >{row.geo}</TableCell>
                                     {
@@ -156,7 +157,7 @@ const Result = (props) => {
                                                 if (value === 'NaN') {
                                                     return (
                                                         <TableCell
-                                                            component={'th'}
+                                                            component={'td'}
                                                             scope={'row'}
                                                             key={obj.index}
                                                             sx={{backgroundColor: '#fff'}}
@@ -165,7 +166,7 @@ const Result = (props) => {
                                                 } else {
                                                     return (
                                                         <TableCell
-                                                            component={'th'}
+                                                            component={'td'}
                                                             scope={'row'}
                                                             key={obj.index}
                                                             sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}

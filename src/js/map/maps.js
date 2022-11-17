@@ -158,14 +158,18 @@ export class MapControl extends Component {
             calculation
         } = this.choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
-        this.choropleth.showChoropleth(calculation, values);
+        const bounds = this.choropleth.getBounds(values);
+        const colorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [this.choropleth.legendRange[0], this.choropleth.legendRange[1]]);
+
+        this.choropleth.showChoropleth(calculation, colorScale);
         const intervals = this.choropleth.getIntervals(values);
 
         const formattedIntervals = intervals.map(el => calculator.format(el))
+        const legendColors = intervals.map(idx => colorScale(idx));
 
         this.triggerEvent("map.choropleth.display", {
             data: calculation,
-            colors: this.choropleth.legendColors,
+            colors: legendColors,
             intervals: formattedIntervals
         })
     }

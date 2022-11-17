@@ -33,7 +33,7 @@ export class Legend extends Component {
     }
 
     show(colors, intervalLabels, lightStart = 3) {
-        if (colors.length != intervalLabels.length)
+        if (colors.length !== intervalLabels.length)
             throw 'Expected the number of intervals to be the same as the number of colours.'
 
         this.isLoading = false;

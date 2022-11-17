@@ -1,5 +1,5 @@
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
-import {min as d3min, max as d3max} from 'd3-array';
+import {max as d3max, min as d3min} from 'd3-array';
 
 import {Component} from '../../utils';
 import SubindicatorCalculator from './subindicator_calculator';
@@ -17,7 +17,7 @@ export class Choropleth extends Component {
 
         this.layers = layers;
         this.layerStyler = layerStyler;
-        this.legendColors = options.colors;
+        this.legendRange = options.positive_color_range;
         this.options = options;
         this.buffer = buffer;
         this.currentLayers = [];
@@ -50,15 +50,12 @@ export class Choropleth extends Component {
 
     getIntervals(values) {
         const bounds = this.getBounds(values);
-        const numIntervals = this.legendColors.length;
-        const domain = [...Array(numIntervals).keys()]
-        const scale = d3scaleSequential()
-            .domain([0, numIntervals - 1])
-            .range([bounds.lower, bounds.upper])
+        const numIntervalCount = 5; //hardcoded for now
+        const domain = [...Array(numIntervalCount).keys()]
 
-        const intervals = domain.map(idx => scale(idx))
+        const numbersScale = this.getScale([0, numIntervalCount - 1], [bounds.lower, bounds.upper]);
 
-        return intervals
+        return domain.map(idx => numbersScale(idx));
     }
 
     reset(setLayerToSelected) {
@@ -101,22 +98,22 @@ export class Choropleth extends Component {
         }
     }
 
-    showChoropleth(calculations, values) {
+    getScale(domain, range) {
+        return d3scaleSequential()
+            .domain([domain[0], domain[1]])
+            .range([range[0], range[1]]);
+    }
+
+    showChoropleth(calculations, colorScale) {
         this.reset(true);
         const self = this;
         const childGeographyValues = [...calculations];
-        const bounds = this.getBounds(values);
-        const numIntervals = this.legendColors.length;
-
-        const scale = d3scaleSequential()
-            .domain([bounds.lower, bounds.upper])
-            .range([this.legendColors[0], this.legendColors[numIntervals - 1]]);
 
         childGeographyValues.forEach(el => {
             const layer = self.layers[el.code];
             if (layer !== undefined) {
                 self.currentLayers.push(el.code);
-                const color = scale(el.val);
+                const color = colorScale(el.val);
                 self.layerStyler.setLayerStyle(layer, {
                     over: {fillColor: color, fillOpacity: self.options.opacity_over},
                     out: {fillColor: color, fillOpacity: self.options.opacity},

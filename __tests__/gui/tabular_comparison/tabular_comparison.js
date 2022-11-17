@@ -46,8 +46,7 @@ Then(/^I search for (\w+) in (\w+) autocomplete$/, (value, type) => {
 })
 
 Then(/^I select ([\w ]+) in autocomplete dropdown$/, (value) => {
-  cy.wait(1000);
-  cy.get(".MuiAutocomplete-popper li[data-option-index='0']", {timeout: 20000}).contains(value).click()
+  cy.get(`.MuiAutocomplete-popper li[data-option-index='0']:contains(${value})`, {timeout: 20000}).click()
 })
 
 When('I click on add indictor', () => {

@@ -10,6 +10,7 @@ const IndicatorAutoComplete = (props) => {
             getOptionLabel={(option) => option}
             onChange={(event, selectedValue) => props.handleIndicatorSelection(event, selectedValue)}
             size={'small'}
+            data-testid={'indicator-autocomplete'}
             renderOption={(props, option) => (
                 <Box
                     component="li"

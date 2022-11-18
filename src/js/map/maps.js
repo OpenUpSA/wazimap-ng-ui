@@ -159,8 +159,9 @@ export class MapControl extends Component {
         } = this.choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
         const bounds = this.choropleth.getBounds(values);
-        let positiveColorRange = this.choropleth.options.positive_color_range;
-        let negativeColorRange = this.choropleth.options.negative_color_range;
+        const positiveColorRange = this.choropleth.getColorRange(values, true);
+        const negativeColorRange = this.choropleth.getColorRange(values, false);
+        let zeroColor = this.choropleth.options.zero_color;
 
         const positiveColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [positiveColorRange[0], positiveColorRange[1]]);
         const negativeColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [negativeColorRange[0], negativeColorRange[1]]);
@@ -179,8 +180,10 @@ export class MapControl extends Component {
         const legendColors = intervals.map(idx => {
             if (idx > 0) {
                 return positiveColorScale(idx)
-            } else {
+            } else if (idx < 0) {
                 return negativeColorScale(idx)
+            } else {
+                return zeroColor;
             }
         });
 

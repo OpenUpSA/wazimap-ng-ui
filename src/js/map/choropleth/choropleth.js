@@ -91,20 +91,44 @@ export class Choropleth extends Component {
     }
 
     getBounds(values) {
-        const hasNegetive = values.some(v => v < 0);
+        const hasNegative = values.some(v => v < 0);
         const hasPositive = values.some(v => v > 0);
 
-        if (hasNegetive && hasPositive){
-          const maxScaleValue = Math.max(...values.map(v => Math.abs(v)));
-          return {
-            "lower": maxScaleValue * -1,
-            "upper": maxScaleValue
-          }
+        if (hasNegative && hasPositive) {
+            const maxScaleValue = Math.max(...values.map(v => Math.abs(v)));
+            return {
+                "lower": maxScaleValue * -1,
+                "upper": maxScaleValue
+            }
         }
 
         return {
             lower: d3min(values),
             upper: d3max(values)
+        }
+    }
+
+    getColorRange(values, positiveRangeRequested = true) {
+        const hasNegative = values.some(v => v < 0);
+        const hasPositive = values.some(v => v > 0);
+
+        let positiveColorRange = this.options.positive_color_range;
+        let negativeColorRange = this.options.negative_color_range;
+        let zeroColor = this.options.zero_color;
+
+        if (hasPositive && !hasNegative) {
+            // only positive
+            return positiveColorRange;
+        } else if (!hasPositive && hasNegative) {
+            // only negative
+            return negativeColorRange;
+        } else if (hasPositive && hasNegative) {
+            // both
+            if (positiveRangeRequested) {
+                return [zeroColor, positiveColorRange[1]];
+            } else {
+                return [negativeColorRange[0], zeroColor];
+            }
         }
     }
 

@@ -530,9 +530,9 @@ export function splitRgb(colorRgb) {
 
 // decide if the background is closer to black or white
 // and set the font color accordingly
-export function isColorLight(colorRgb) {
-    const rgb = splitRgb(colorRgb);
-    const threshold = 186;
+export function isColorLight(color) {
+    const rgb = color.startsWith('#') ? hexToRgb(color) : splitRgb(color);
+    const threshold = 120;
     const redMultiplier = 0.299;
     const greenMultiplier = 0.587;
     const blueMultiplier = 0.114;

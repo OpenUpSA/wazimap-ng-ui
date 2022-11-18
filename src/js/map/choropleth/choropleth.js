@@ -103,7 +103,7 @@ export class Choropleth extends Component {
             .range([range[0], range[1]]);
     }
 
-    showChoropleth(calculations, colorScale) {
+    showChoropleth(calculations) {
         this.reset(true);
         const self = this;
         const childGeographyValues = [...calculations];
@@ -112,10 +112,9 @@ export class Choropleth extends Component {
             const layer = self.layers[el.code];
             if (layer !== undefined) {
                 self.currentLayers.push(el.code);
-                const color = colorScale(el.val);
                 self.layerStyler.setLayerStyle(layer, {
-                    over: {fillColor: color, fillOpacity: self.options.opacity_over},
-                    out: {fillColor: color, fillOpacity: self.options.opacity},
+                    over: {fillColor: el.color, fillOpacity: self.options.opacity_over},
+                    out: {fillColor: el.color, fillOpacity: self.options.opacity},
                 })
                 if (typeof layer.feature !== 'undefined') {
                     layer.feature.properties.percentage = el.val;

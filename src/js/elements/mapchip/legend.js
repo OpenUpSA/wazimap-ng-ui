@@ -1,4 +1,4 @@
-import {Component} from "../../utils";
+import {Component, isColorLight} from "../../utils";
 
 export class Legend extends Component {
     constructor(parent, container, legendColors) {
@@ -32,7 +32,7 @@ export class Legend extends Component {
         this._clonedLegend = $('.map-options__legend')[0].cloneNode(true);
     }
 
-    show(colors, intervalLabels, lightStart = 3) {
+    show(colors, intervalLabels) {
         if (colors.length !== intervalLabels.length)
             throw 'Expected the number of intervals to be the same as the number of colours.'
 
@@ -41,9 +41,8 @@ export class Legend extends Component {
         for (let i = 0; i < intervalLabels.length; i++) {
             const interval = intervalLabels[i];
             const item = this._clonedLegendBlock.cloneNode(true);
-            const label = interval;
 
-            if (i >= lightStart) {
+            if (!isColorLight(colors[i])) {
                 $(item).addClass('light');
             }
 

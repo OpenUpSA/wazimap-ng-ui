@@ -159,26 +159,30 @@ export class MapControl extends Component {
         } = this.choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
         const bounds = this.choropleth.getBounds(values);
-        let range;
+        let positiveColorRange = this.choropleth.options.positive_color_range;
+        let negativeColorRange = this.choropleth.options.negative_color_range;
 
-        if (!values.some(v => v < 0)) {
-            // only positive
-            range = this.choropleth.options.positive_color_range;
-        } else if (!values.some(v => v > 0)) {
-            // only negative
-            range = this.choropleth.options.negative_color_range;
-        } else {
-            // positive & negative
-            range = this.choropleth.options.positive_color_range;
-        }
+        const positiveColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [positiveColorRange[0], positiveColorRange[1]]);
+        const negativeColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [negativeColorRange[0], negativeColorRange[1]]);
 
-        const colorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [range[0], range[1]]);
-
-        this.choropleth.showChoropleth(calculation, colorScale);
+        calculation.forEach(x => {
+            if (x.val > 0) {
+                x.color = positiveColorScale(x.val);
+            } else {
+                x.color = negativeColorScale(x.val);
+            }
+        })
+        this.choropleth.showChoropleth(calculation);
         const intervals = this.choropleth.getIntervals(values);
 
         const formattedIntervals = intervals.map(el => calculator.format(el))
-        const legendColors = intervals.map(idx => colorScale(idx));
+        const legendColors = intervals.map(idx => {
+            if (idx > 0) {
+                return positiveColorScale(idx)
+            } else {
+                return negativeColorScale(idx)
+            }
+        });
 
         this.triggerEvent("map.choropleth.display", {
             data: calculation,

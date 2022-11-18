@@ -17,7 +17,6 @@ export class Choropleth extends Component {
 
         this.layers = layers;
         this.layerStyler = layerStyler;
-        this.legendRange = options.positive_color_range;
         this.options = options;
         this.buffer = buffer;
         this.currentLayers = [];

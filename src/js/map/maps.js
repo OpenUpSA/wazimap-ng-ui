@@ -159,7 +159,20 @@ export class MapControl extends Component {
         } = this.choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
         const bounds = this.choropleth.getBounds(values);
-        const colorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [this.choropleth.legendRange[0], this.choropleth.legendRange[1]]);
+        let range;
+
+        if (!values.some(v => v < 0)) {
+            // only positive
+            range = this.choropleth.options.positive_color_range;
+        } else if (!values.some(v => v > 0)) {
+            // only negative
+            range = this.choropleth.options.negative_color_range;
+        } else {
+            // positive & negative
+            range = this.choropleth.options.positive_color_range;
+        }
+
+        const colorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [range[0], range[1]]);
 
         this.choropleth.showChoropleth(calculation, colorScale);
         const intervals = this.choropleth.getIntervals(values);

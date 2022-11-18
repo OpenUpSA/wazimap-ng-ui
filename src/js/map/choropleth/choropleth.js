@@ -91,6 +91,17 @@ export class Choropleth extends Component {
     }
 
     getBounds(values) {
+        const hasNegetive = values.some(v => v < 0);
+        const hasPositive = values.some(v => v > 0);
+
+        if (hasNegetive && hasPositive){
+          const maxScaleValue = Math.max(...values.map(v => Math.abs(v)));
+          return {
+            "lower": maxScaleValue * -1,
+            "upper": maxScaleValue
+          }
+        }
+
         return {
             lower: d3min(values),
             upper: d3max(values)

@@ -8,10 +8,10 @@ export const ParentContainer = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridAutoColumns: '1fr',
   borderRadius: 2,
-  backgroundColor: '#e9eaeb',
-  padding: '15px',
+  backgroundColor: '#f0f0f0',
+  padding: '6px',
   marginTop: '20px',
-  border: '1px solid #dbdbdb',
+  paddingLeft: '0px',
 }));
 
 export const IconContainer = styled(Box)(({ theme }) => ({
@@ -23,8 +23,11 @@ export const TextContainer = styled(Box)(({ theme }) => ({
   gridRow: '1',
   gridColumn: 'span 5',
   '& p': {
-    fontSize: '12px',
-    lineHeight: '100%',
+    color: '#666',
+    fontSize: '0.9em',
+    fontWeight: '500',
+    lineHeight: '20px',
+    marginBottom: '0'
   }
 }));
 
@@ -44,7 +47,10 @@ const PanelIcon = (props) => {
 }
 
 export const PanelIconSidebar = styled(PanelIcon)(({ theme }) => ({
-  fontSize: '30px'
+  fontSize: '30px',
+  margin: 'auto',
+  display: 'block',
+  marginTop: '5px',
 }));
 
 export const PanelIconLink = styled(PanelIcon)(({ theme }) => ({

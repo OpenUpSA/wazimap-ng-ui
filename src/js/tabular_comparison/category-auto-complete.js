@@ -20,6 +20,7 @@ const CategoryAutoComplete = (props) => {
             size={'small'}
             value={props.categoryValue}
             onChange={(event, selectedValue) => props.handleCategorySelection(event, selectedValue)}
+            data-testid={'category-autocomplete'}
             renderOption={(props, option) => (
                 <Box
                     component="li"

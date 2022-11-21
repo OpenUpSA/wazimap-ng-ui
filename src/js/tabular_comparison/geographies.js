@@ -78,6 +78,7 @@ const Geographies = (props) => {
             handleSelection(newValue);
         }}
         size={'small'}
+        data-testid="geography-autocomplete"
         renderOption={(props, option) => (
             <Box
                 component="li"

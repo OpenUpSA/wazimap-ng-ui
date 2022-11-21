@@ -153,6 +153,7 @@ const ComparisonIndicators = (props) => {
                     startIcon={<AddIcon/>}
                     onClick={addIndicator}
                     disabled={props.selectedGeographies.length <= 0}
+                    data-testid={'add-indicator'}
                 >
                     Click to add an indicator to compare
                 </Button>

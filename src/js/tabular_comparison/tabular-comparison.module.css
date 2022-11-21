@@ -1,0 +1,229 @@
+body {
+    background-color: #f7f7f7;
+    padding: 0;
+    margin: 0;
+    font-family: 'Roboto', Arial, serif;
+    font-size: 15px;
+}
+
+.header {
+    background-color: #fff;
+    height: 56px;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    padding-right: 16px;
+    padding-left: 16px;
+}
+
+.header .logo {
+    height: 44px;
+    align-self: center;
+}
+
+.page-content {
+    margin-top: 20px;
+}
+
+.dark-grey-bg {
+    background-color: #f1f1f1 !important;
+}
+
+.min-height-250 {
+    min-height: 250px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+
+.margin-bottom-20 {
+    margin-bottom: 20px;
+}
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.margin-top-25 {
+    margin-top: 25px;
+}
+
+.padding-bottom-25 {
+    padding-bottom: 25px;
+}
+
+.body-grid {
+    padding-right: 35px;
+    padding-left: 35px;
+}
+
+.has-left-border {
+    border-left: 1px solid #ededed;
+}
+
+.has-bottom-border {
+    border-bottom: 1px solid #ededed;
+}
+
+.border-radius-10 {
+    border-radius: 10px !important;
+}
+
+.section-title {
+    display: block;
+    background-color: #39ad84;
+    color: #fff;
+    font-size: 13px;
+    padding: 7px 18px;
+    border-radius: 20px;
+}
+
+.result-card {
+    height: 100%;
+}
+
+.btn-add-indicator {
+    color: #2F2F2F !important;
+    text-transform: none !important;
+    background-color: #cacaca !important;
+    border: none !important;
+    height: 50px;
+    font-size: 15px !important;
+    line-height: 18px !important;
+    border-radius: 8px !important;
+}
+
+.btn-add-indicator:disabled {
+    background-color: #E2E2E2 !important;
+    color: #C6C6C6 !important;
+}
+
+.comparison-card {
+    padding: 10px;
+    box-shadow: 0 1px 14px rgba(0, 0, 0, 0.05);
+    line-height: 40px;
+}
+
+.comparison-card.first {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.comparison-card.last {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.auto-scroll-y {
+    overflow-y: auto !important;
+}
+
+.comparison-indicators .comparison-card {
+    width: calc(100% - 33px);
+}
+
+.comparison-indicators .comparison-card.first {
+    margin-top: 11px;
+}
+
+.comparison-indicators .comparison-card.last {
+    margin-bottom: 20px;
+}
+
+.comparison-indicators .remove-indicator {
+    background-color: #2F2F2F;
+    color: #fff;
+    border-radius: 100%;
+    width: 22px;
+    height: 22px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
+    text-align: center;
+    position: relative;
+    float: right;
+    margin-left: -11px;
+    margin-top: -11px;
+    left: 0px;
+    display: block;
+    cursor: pointer;
+}
+
+.comparison-select {
+    background-color: #F4F4F4;
+}
+
+.selected-geographies .geo-chip {
+    margin-top: 10px;
+    margin-left: 10px;
+    background-color: #CACACA;
+    font-size: 13px;
+    line-height: 15px;
+    font-weight: 400;
+}
+
+.selected-geographies .geo-chip .MuiChip-deleteIcon path {
+    color: #2F2F2F;
+}
+
+.MuiTableCell-root {
+    border: 1px solid #ECECEC;
+}
+
+.truncate-table-cell {
+    white-space: nowrap;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.geography-empty-state {
+    text-align: center;
+    margin-top: 22px;
+}
+
+.geography-empty-state svg {
+    margin-left: 10px;
+}
+
+.indicators-empty-state {
+    text-align: center;
+}
+
+.result-empty-state {
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.result-empty-state svg {
+    margin-right: 10px;
+}
+
+/*scroll*/
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #C4C4C4;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #969696;
+}
+
+/*scroll*/

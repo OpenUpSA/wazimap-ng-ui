@@ -7,6 +7,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.8.5",
     "@sentry/browser": "^5.20.1",
     "@types/react": "^16.8.6 || ^17.0.0",
@@ -45,16 +46,14 @@
     "vega-embed": "^6.13.0",
     "vega-lite": "^4.17.0",
     "xlsx": "^0.17.0",
-    "xss": "^1.0.13",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "xss": "^1.0.13"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
-    "@babel/preset-react": "^7.18.6",
     "@babel/preset-env": "^7.14.0",
+    "@babel/preset-react": "^7.18.6",
     "@testing-library/cypress": "^7.0.0",
     "@testing-library/dom": "^7.27.0",
     "@testing-library/jest-dom": "^5.11.6",
@@ -72,8 +71,8 @@
     "miragejs": "^0.1.41",
     "parcel": "1.12.4",
     "parcel-bundler": "1.12.5",
-    "sass": "^1.52.3",
-    "react-test-renderer": "^18.2.0"
+    "react-test-renderer": "^18.2.0",
+    "sass": "^1.52.3"
   },
   "scripts": {
     "start": "parcel ./src/index.html",
@@ -86,9 +85,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "prebuild-dev": "shx rm -rf dist/*",
-    "build-dev": "parcel build ./src/index.html --no-minify --public-url ./",
+    "build-dev": "parcel build ./src/index.html ./src/tabular-comparison.html --no-minify --public-url ./",
     "prebuild": "shx rm -rf dist/*",
-    "build": "parcel build ./src/index.html --public-url ./ ",
+    "build": "parcel build ./src/index.html ./src/tabular-comparison.html --public-url ./ ",
     "push-prod": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose",
     "push-staging": "push-dir --remote=staging --dir=dist --branch=gh-pages --cleanup --verbose",
     "clean-files": "cp dist/js*.js dist/wazimap-ng.js; cp dist/js*.js.map dist/wazimap-ng.js.map; cp dist/js*.css dist/wazimap-ng.css"

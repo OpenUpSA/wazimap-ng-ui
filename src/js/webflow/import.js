@@ -75,4 +75,10 @@ exports.transformDOM = function(window, $) {
 
     // translation
     setupTranslation(window);
+
+    // Add tabular comparison link
+    const tabularComparisonTag = window.document.createElement("a");
+    tabularComparisonTag.setAttribute("style", "display:none");
+    tabularComparisonTag.setAttribute("href", "/tabular-comparison.html");
+    window.document.body.appendChild(tabularComparisonTag);
 };

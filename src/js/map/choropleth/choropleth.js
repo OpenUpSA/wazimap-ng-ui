@@ -118,16 +118,28 @@ export class Choropleth extends Component {
 
         if (hasPositive && !hasNegative) {
             // only positive
-            return positiveColorRange;
+            return {
+                start: positiveColorRange[0],
+                end: positiveColorRange[1]
+            };
         } else if (!hasPositive && hasNegative) {
             // only negative
-            return negativeColorRange;
+            return {
+                start: negativeColorRange[0],
+                end: negativeColorRange[1]
+            };
         } else if (hasPositive && hasNegative) {
             // both
             if (positiveRangeRequested) {
-                return [zeroColor, positiveColorRange[1]];
+                return {
+                    start: zeroColor,
+                    end: positiveColorRange[1]
+                };
             } else {
-                return [negativeColorRange[0], zeroColor];
+                return {
+                    start: negativeColorRange[0],
+                    end: zeroColor
+                };
             }
         }
     }

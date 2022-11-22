@@ -163,8 +163,8 @@ export class MapControl extends Component {
         const negativeColorRange = this.choropleth.getColorRange(values, false);
         let zeroColor = this.choropleth.options.zero_color;
 
-        const positiveColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [positiveColorRange[0], positiveColorRange[1]]);
-        const negativeColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [negativeColorRange[0], negativeColorRange[1]]);
+        const positiveColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [positiveColorRange.start, positiveColorRange.end]);
+        const negativeColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [negativeColorRange.start, negativeColorRange.end]);
 
         calculation.forEach(x => {
             if (x.val > 0) {

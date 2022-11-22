@@ -111,7 +111,7 @@
       ".data.js"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(leaflet|leaflet.markercluster)/)"
+      "node_modules/(?!(leaflet|leaflet.markercluster|d3-format)/)"
     ],
     "moduleFileExtensions": [
       "js",

@@ -1,17 +1,27 @@
 import {Choropleth} from "../../src/js/map/choropleth/choropleth";
 import {Component} from "../../src/js/utils";
 import SubindicatorCalculator from "../../src/js/map/choropleth/subindicator_calculator";
+import AbsoluteValueCalculator from "../../src/js/map/choropleth/absolute_value_calculator";
+import SiblingCalculator from "../../src/js/map/choropleth/sibling_calculator";
 
 describe('choropleth', () => {
     let component;
     let layerStyler;
     let layerCache;
     let options;
-    let calculator;
+    let subindicatorCalculator;
+    let absoluteValueCalculator;
+    let siblingCalculator;
     let childData;
     let primaryGroup;
     let selectedSubindicator;
     let allSubindicators;
+    let chartConfiguration = {
+        types: {
+            Value: {formatting: '.1f'},
+            Percentage: {formatting: '.01%'}
+        }
+    };
 
     beforeEach(() => {
         component = new Component();
@@ -55,7 +65,9 @@ describe('choropleth', () => {
             "opacity": 0.7,
             "opacity_over": 0.8
         };
-        calculator = new SubindicatorCalculator();
+        subindicatorCalculator = new SubindicatorCalculator();
+        absoluteValueCalculator = new AbsoluteValueCalculator();
+        siblingCalculator = new SiblingCalculator();
         childData = {
             "Geography1": [
                 {"count": 15, "age": "15-19"},
@@ -80,7 +92,7 @@ describe('choropleth', () => {
         const {
             values,
             calculation
-        } = choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
+        } = choropleth.getChoroplethValues(subindicatorCalculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
         expect(values).toStrictEqual([0.23076923076923078, 0.3333333333333333]);
         expect(calculation).toStrictEqual([
@@ -107,7 +119,7 @@ describe('choropleth', () => {
         const {
             values,
             calculation
-        } = choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
+        } = choropleth.getChoroplethValues(subindicatorCalculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
         expect(values).toStrictEqual([
             0.23076923076923078,
@@ -140,7 +152,7 @@ describe('choropleth', () => {
         const {
             values,
             calculation
-        } = choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
+        } = choropleth.getChoroplethValues(subindicatorCalculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
         expect(values).toStrictEqual([0.23076923076923078, 0.3333333333333333]);
         expect(calculation).toStrictEqual([
@@ -158,5 +170,45 @@ describe('choropleth', () => {
                 0.3333333333333333
             ]
         );
+    })
+
+
+    test('Check absolute value formatting for legend intervals', () => {
+        const choropleth = new Choropleth(component, layerCache, layerStyler, options);
+        const {
+            values,
+            calculation
+        } = choropleth.getChoroplethValues(
+            absoluteValueCalculator, childData, primaryGroup, selectedSubindicator, allSubindicators
+        );
+        const intervals = choropleth.getIntervals(values);  //legend values
+        const formattedIntervals = intervals.map(el => absoluteValueCalculator.format(el, chartConfiguration))
+        expect(formattedIntervals).toStrictEqual(['15.0', '16.3', '17.5', '18.8', '20.0']);
+    })
+
+    test('Check subindicator value formatting for legend intervals', () => {
+        const choropleth = new Choropleth(component, layerCache, layerStyler, options);
+        const {
+            values,
+            calculation
+        } = choropleth.getChoroplethValues(
+            subindicatorCalculator, childData, primaryGroup, selectedSubindicator, allSubindicators
+        );
+        const intervals = choropleth.getIntervals(values);  //legend values
+        const formattedIntervals = intervals.map(el => subindicatorCalculator.format(el, chartConfiguration))
+        expect(formattedIntervals).toStrictEqual(['23.1%', '25.6%', '28.2%', '30.8%', '33.3%']);
+    })
+
+    test('Check sibling value formatting for legend intervals', () => {
+        const choropleth = new Choropleth(component, layerCache, layerStyler, options);
+        const {
+            values,
+            calculation
+        } = choropleth.getChoroplethValues(
+            siblingCalculator, childData, primaryGroup, selectedSubindicator, allSubindicators
+        );
+        const intervals = choropleth.getIntervals(values);  //legend values
+        const formattedIntervals = intervals.map(el => siblingCalculator.format(el, chartConfiguration));
+        expect(formattedIntervals).toStrictEqual(['42.9%', '46.4%', '50.0%', '53.6%', '57.1%']);
     })
 })

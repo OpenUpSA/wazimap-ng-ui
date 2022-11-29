@@ -31,7 +31,7 @@ export const configureBarchart = (data, metadata, config) => {
         description: "A",
         width: 800,
         background: "white",
-        padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
+        padding: {"left": 30, "top": 5, "right": 30, "bottom": 5},
         data: [
             {
                 name: "table",
@@ -238,7 +238,7 @@ export const configureBarchart = (data, metadata, config) => {
                             scale: "yscale",
                             band: 1,
                             field: {signal: "mainGroup"},
-                            offset: {value: 0},
+                            offset: {value: 2},
                         },
                     },
                 },

@@ -45,10 +45,12 @@ describe('Rich data panel tests', () => {
                                     "formatting": ",.0f"
                                 },
                                 "Percentage": {
+                                    "formatting": ".0%",
                                     "maxX": 1,
                                     "minX": 0
                                 }
                             },
+                            "defaultType": "Percentage",
                             "xTicks": 6
                         },
                         "groups": [],

@@ -532,7 +532,7 @@ export function splitRgb(colorRgb) {
 // and set the font color accordingly
 export function isColorLight(color) {
     const rgb = color.startsWith('#') ? hexToRgb(color) : splitRgb(color);
-    const threshold = 120;
+    const threshold = 150;
     const redMultiplier = 0.299;
     const greenMultiplier = 0.587;
     const blueMultiplier = 0.114;

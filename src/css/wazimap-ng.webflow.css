@@ -968,7 +968,7 @@ label {
 }
 
 .rich-data-nav__item:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .rich-data-nav__item.w--current {
@@ -2668,7 +2668,7 @@ label {
 }
 
 .nav__link:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .nav__link.tutorial__open {
@@ -2800,7 +2800,7 @@ label {
   bottom: 0%;
   z-index: 3;
   display: none;
-  min-width: 300px;
+  width: 300px;
   background-color: #fff;
 }
 
@@ -2820,13 +2820,13 @@ label {
   bottom: 0%;
   margin-top: 2px;
   margin-right: 2px;
-  margin-bottom: 2px;
-  padding: 22px 14px 14px 18px;
+  margin-bottom: 56px;
+  padding: 22px 14px 0px 18px;
 }
 
 .point-mapper-content.narrow-scroll {
   z-index: 1;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .data-mapper-toggles {
@@ -3427,6 +3427,11 @@ label {
   height: auto;
 }
 
+.point-mapper-content__list.dummy {
+  height: 4000px;
+  background-color: #3a70ff;
+}
+
 .point-mapper-content__header {
   display: -webkit-box;
   display: -webkit-flex;
@@ -3514,13 +3519,13 @@ label {
 .data-mapper-content {
   margin-top: 2px;
   margin-right: 2px;
-  margin-bottom: 2px;
-  padding: 22px 14px 14px 20px;
+  margin-bottom: 56px;
+  padding: 22px 14px 0px 20px;
 }
 
 .data-mapper-content.narrow-scroll {
   z-index: 1;
-  overflow: scroll;
+  overflow: auto;
   width: 300px;
 }
 
@@ -4169,7 +4174,7 @@ label {
 }
 
 .filters__header_toggle:hover {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .map-area {
@@ -4229,7 +4234,7 @@ label {
 }
 
 .filters__header_close:hover {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .styles {
@@ -5678,7 +5683,7 @@ label {
 }
 
 .location__tutorial:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .location__tutorial.hidden {
@@ -7605,7 +7610,7 @@ label {
   grid-template-columns: 33.333333333%;
   -ms-grid-rows: auto;
   grid-template-rows: auto;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   font-size: 13px;
 }
 
@@ -7634,7 +7639,7 @@ label {
 .profile-indicator__table_cell {
   overflow: hidden;
   padding: 8px;
-  border-left: 1px solid rgba(0, 0, 0, 0.06);
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
   white-space: nowrap;
 }
 
@@ -7885,7 +7890,7 @@ label {
 }
 
 .mapping-options__remove-filter:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .mapping-options__remove-filter.is--hidden {
@@ -7943,7 +7948,7 @@ label {
 }
 
 .mapping-options__add-filter:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .mapping-options__add-filter.hidden {
@@ -8014,7 +8019,7 @@ label {
 }
 
 .profile-indicator__add-filter:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .profile-indicator__filter {
@@ -8092,7 +8097,7 @@ label {
 }
 
 .profile-indicator__remove-filter:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .profile-indicator__remove-filter.is--hidden {
@@ -8137,7 +8142,7 @@ label {
 }
 
 .profile-indicator__new-filter:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .profile-indicator__new-filter.is--hidden {
@@ -8304,7 +8309,7 @@ label {
 }
 
 .profile-indicator__new-filter-2:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .point-mapper__h2_facet {
@@ -8659,7 +8664,7 @@ label {
 }
 
 .point-filters__header-toggle:hover {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .point-filters__header-toggle.is--v2 {
@@ -8701,7 +8706,7 @@ label {
 }
 
 .point-filters__header-close:hover {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .point-filters__labels {
@@ -8782,7 +8787,7 @@ label {
 }
 
 .point-filters__add-filter:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .point-filters__add-filter.hidden {
@@ -8884,7 +8889,7 @@ label {
 }
 
 .point-filters__remove-filter:active {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .point-filters__remove-filter.is--hidden {
@@ -10175,6 +10180,87 @@ label {
   background-color: #fff;
 }
 
+.div-block-4 {
+  height: 200px;
+  background-color: rgba(181, 54, 107, 0.2);
+}
+
+.powered-by-wazimap {
+  z-index: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding-left: 12px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  grid-column-gap: 10px;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.06);
+  color: rgba(9, 45, 40, 0.7);
+  text-decoration: none;
+}
+
+.powered-by-wazimap_logo {
+  width: 100px;
+}
+
+.powered-by-wazimap_text {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.powered-by-wazimap_wrapper {
+  position: relative;
+  z-index: 2;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 300px;
+  margin-top: auto;
+  padding: 10px;
+}
+
+.powered-by-wazimap_wrapper.is--map {
+  position: absolute;
+  left: 0%;
+  top: auto;
+  right: auto;
+  bottom: 0%;
+  width: auto;
+}
+
+.powered-by-wazimap_wrapper.is--rich-data {
+  position: absolute;
+  left: 0%;
+  top: auto;
+  right: auto;
+  bottom: 0%;
+  width: auto;
+}
+
+.powered-by-wazimap_logo-wrapper {
+  margin-left: auto;
+  padding: 8px 10px;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.powered-by-wazimap_logo-wrapper:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.powered-by-wazimap_logo-wrapper:active {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
 @media screen and (max-width: 991px) {
   .rich-data-content {
     padding-top: 44px;
@@ -10279,6 +10365,15 @@ label {
     grid-template-columns: 1fr max-content;
     -ms-grid-rows: auto;
     grid-template-rows: auto;
+  }
+
+  .powered-by-wazimap.is-panel {
+    position: relative;
+  }
+
+  .powered-by-wazimap_wrapper {
+    width: 300px;
+    margin-top: auto;
   }
 }
 

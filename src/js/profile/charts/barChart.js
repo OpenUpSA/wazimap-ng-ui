@@ -225,14 +225,14 @@ export const configureBarchart = (data, metadata, config) => {
                         fontSize: {value: 10},
                     },
                     update: {
-                        align: {signal: "datum[datatype[Units]] > 0 ? 'left' : 'right'"},
+                        align: {signal: "datum[datatype[Units]] >= 0 ? 'left' : 'right'"},
                         text: {
                             field: {signal: "mainGroup"}
                         },
                         x: {
                             scale: "xscale",
                             value: 0,
-                            offset: {signal: "datum[datatype[Units]] > 0 ? 5 : -5"},
+                            offset: {signal: "datum[datatype[Units]] >= 0 ? 5 : -5"},
                         },
                         y: {
                             scale: "yscale",

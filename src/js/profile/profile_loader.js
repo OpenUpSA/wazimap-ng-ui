@@ -2,6 +2,9 @@ import {Component} from "../utils";
 import {Category} from "./category";
 import {Profile_header} from "./profile_header";
 import {sortBy} from 'lodash';
+import {createRoot} from "react-dom/client";
+import Watermark from "../ui_components/watermark";
+import React from "react";
 
 const profileWrapperClass = '.rich-data-content';
 const navWrapperClass = '.rich-data-nav__list';
@@ -87,6 +90,17 @@ export default class ProfileLoader extends Component {
 
             removePrevCategories = false;
         }
+
+        this.addWatermark();
+    }
+
+    addWatermark() {
+        let watermarkWrapper = document.createElement('div');
+        $(watermarkWrapper).addClass('watermark-wrapper');
+        $(profileWrapperClass).append(watermarkWrapper);
+
+        let watermarkRoot = createRoot(watermarkWrapper);
+        watermarkRoot.render(<Watermark/>);
     }
 
     getNewId = () => {

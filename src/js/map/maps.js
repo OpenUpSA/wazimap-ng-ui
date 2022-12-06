@@ -5,6 +5,9 @@ import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forward
 import {Choropleth} from './choropleth/choropleth';
 import {MapLocker} from './maplocker';
 import {SubindicatorFilter} from "../profile/subindicator_filter";
+import {createRoot} from "react-dom/client";
+import Watermark from "../ui_components/watermark";
+import React from "react";
 
 
 export class MapControl extends Component {
@@ -40,9 +43,23 @@ export class MapControl extends Component {
         };
 
         this.registerEvents();
+        this.addWatermark();
 
         this.choropleth = new Choropleth(this, this.layerCache, this.layerStyler, config.map.choropleth);
     };
+
+    addWatermark() {
+        let watermarkWrapper = document.createElement('div');
+        $(watermarkWrapper).addClass('watermark-wrapper');
+        $('.map-watermark-wrapper')
+            .css('position', 'absolute')
+            .css('left', '18px')
+            .css('bottom', '22px')
+            .append(watermarkWrapper);
+
+        let watermarkRoot = createRoot(watermarkWrapper);
+        watermarkRoot.render(<Watermark/>);
+    }
 
     registerEvents() {
         this.map.on("zoomend", e => this.onZoomChanged(e));

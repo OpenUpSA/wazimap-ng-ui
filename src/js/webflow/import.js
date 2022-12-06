@@ -71,6 +71,10 @@ function setupWatermarkElements(window){
 
     element.remove();
     window.document.getElementsByClassName('data-mapper-content__list-wrapper')[0].append(element);
+
+    let mapWatermark =window.document.createElement('div');
+    mapWatermark.classList.add('map-watermark-wrapper');
+    window.document.getElementsByClassName('main')[0].append(mapWatermark);
 }
 
 exports.transformDOM = function(window, $) {

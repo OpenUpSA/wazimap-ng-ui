@@ -125,7 +125,9 @@ export class DataMapperMenu extends Component {
         }
 
         let watermarkWrapper = document.createElement('div');
-        $(watermarkWrapper).addClass('watermark-wrapper');
+        $(watermarkWrapper)
+            .addClass('watermark-wrapper')
+            .css('margin-left', '-2px');
         $('.data-mapper-content')
             .css('padding-bottom', 0)
             .append(watermarkWrapper);

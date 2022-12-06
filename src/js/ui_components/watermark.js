@@ -6,14 +6,10 @@ import logo from '../../images/powered-by-wazimap-logo.svg';
 
 const Watermark = (props) => {
     const WatermarkContainer = styled(Box)(({theme}) => ({
-        position: 'absolute',
-        left: 0,
-        top: 'auto',
-        right: 'auto',
-        bottom: 0,
         width: 'auto',
         padding: '10px',
-        display: 'flex'
+        display: 'flex',
+        paddingLeft: 0
     }));
 
     const PoweredBy = styled(Box)(({theme}) => ({
@@ -26,12 +22,11 @@ const Watermark = (props) => {
     }));
 
     const Logo = styled(Link)(({theme}) => ({
-        marginLeft: 'auto',
         padding: '8px 10px',
         borderRadius: '3px',
         backgroundColor: '#e2e2e2',
-        '&:hover':{
-            backgroundColor:'#d8d8d8'
+        '&:hover': {
+            backgroundColor: '#d8d8d8'
         }
     }));
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  --><!--  Last Published: Fri Dec 02 2022 05:57:43 GMT+0000 (Coordinated Universal Time)  --><html data-wf-page="6389933248095b389e0361c1" data-wf-site="5fd05e808ba6609d12285571"><head>
+<!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  --><!--  Last Published: Mon Dec 05 2022 08:09:56 GMT+0000 (Coordinated Universal Time)  --><html data-wf-page="6389933248095b389e0361c1" data-wf-site="5fd05e808ba6609d12285571"><head>
   <meta charset="utf-8">
   <title>Wazimap NG</title>
   <meta content="Discover the human stories in population data. Wazimap is a tool that helps map and visualise data used for population-based decision making." name="description">
@@ -1557,14 +1557,7 @@ line, .grid {
         <div class="data-mapper-content__description">
           <div>Explore data categories available for this location. Click or tap a sub-indicator to show it on the map.<strong><br></strong></div>
         </div>
-        <div class="data-mapper-content__loading">
-          <div class="loading">
-            <div class="loading__icon"><img src="images/loading.gif" alt=""></div>
-            <div class="loading__text">
-              <div>Loading... </div>
-            </div>
-          </div>
-        </div>
+        
         <div class="data-mapper-content__no-data hidden">
           <div class="no-data__icon">
             <div class="svg-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -1574,7 +1567,17 @@ line, .grid {
           </div>
           <div>The Data Mapper cannot be used with this location as it doesn't contain any sub-areas which can be used for mapping</div>
         </div>
-        <div class="data-mapper-content__list"></div>
+        <div class="data-mapper-content__list-wrapper">
+          <div class="data-mapper-content__list"></div>
+          <div class="data-mapper-content__rich-data-panel-link"></div>
+        <div class="data-mapper-content__loading">
+          <div class="loading">
+            <div class="loading__icon"><img src="images/loading.gif" alt=""></div>
+            <div class="loading__text">
+              <div>Loading... </div>
+            </div>
+          </div>
+        </div></div>
       </div>
       <div class="data-mapper-toggles">
         <div data-w-id="82de420b-3451-8ea3-a5a4-f892b059998e" class="panel-toggle rich-data-panel__open">

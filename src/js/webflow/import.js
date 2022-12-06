@@ -11,6 +11,7 @@ function setupTranslation(window) {
     setupLocationSearchTranslations(window);
     addTranslationDataVariableForText(window);
     addTranslationDataVariableForPlaceholder(window);
+    setupWatermarkElements(window);
 }
 
 function addTranslationDataVariableForText(window) {
@@ -60,6 +61,16 @@ function setupLocationSearchTranslations(window) {
         }
         element.classList.add('i18n-placeholder');
     })
+}
+
+function setupWatermarkElements(window){
+    const element = window.document.getElementsByClassName('data-mapper-content__loading')[0];
+    if (element === null) {
+        throw `Cannot find element : data-mapper-content__loading`
+    }
+
+    element.remove();
+    window.document.getElementsByClassName('data-mapper-content__list-wrapper')[0].append(element);
 }
 
 exports.transformDOM = function(window, $) {

@@ -6,6 +6,9 @@ import {Category} from "./category";
 import {SubCategory} from "./subcategory";
 import {Indicator} from "./indicator";
 import {SubIndicator} from './subindicator'
+import {createRoot} from "react-dom/client";
+import Watermark from "../../ui_components/watermark";
+import React from "react";
 
 let parentContainer = null;
 let categoryTemplate = null;
@@ -96,6 +99,8 @@ export class DataMapperMenu extends Component {
             this.showLoadingState();
         } else {
             this.hideLoadingState();
+
+            this.addWatermark();
         }
 
         this._isLoading = value;
@@ -103,6 +108,30 @@ export class DataMapperMenu extends Component {
 
     get api() {
         return this._api;
+    }
+
+    addWatermark() {
+        const paddingSpace = 130;
+        const watermarkHeight = 60;
+        const descriptionHeight = 60;
+        const headerHeight = 35;
+        const windowHeight = window.innerHeight;
+
+        const wrapperMinHeight = windowHeight - (headerHeight + descriptionHeight + paddingSpace + watermarkHeight);
+        $('.data-mapper-content__list-wrapper').css('min-height', wrapperMinHeight);
+
+        if ($('.data-mapper .watermark-wrapper').length > 0) {
+            return;
+        }
+
+        let watermarkWrapper = document.createElement('div');
+        $(watermarkWrapper).addClass('watermark-wrapper');
+        $('.data-mapper-content')
+            .css('padding-bottom', 0)
+            .append(watermarkWrapper);
+
+        let watermarkRoot = createRoot(watermarkWrapper);
+        watermarkRoot.render(<Watermark/>);
     }
 
     hideLoadingState() {
@@ -121,7 +150,7 @@ export class DataMapperMenu extends Component {
         $('.' + loadingClsName).addClass('hidden');
         $('.' + noDataWrapperClsName).removeClass('hidden');
         $(`.${noDataWrapperClsName} div`).last().text(
-          'No data available to plot on the map for the selected geography.'
+            'No data available to plot on the map for the selected geography.'
         );
         this.triggerEvent('data_mapper_menu.nodata', this);
     }

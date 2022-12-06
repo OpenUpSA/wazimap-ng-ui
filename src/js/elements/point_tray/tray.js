@@ -1,5 +1,8 @@
 import {numFmt, Component, hasElements, ThemeStyle, checkIterate} from '../../utils';
 import {Theme} from './theme';
+import {createRoot} from "react-dom/client";
+import Watermark from "../../ui_components/watermark";
+import React from "react";
 
 const categoryWrapperClsName = '.point-mapper__h1_content';
 const treeLineClsName = '.point-data__h2_line-v';
@@ -67,6 +70,32 @@ export class PointDataTray extends Component {
             })
             self.triggerEvent("point_tray.tray.themes_loaded", data);
         })
+
+        this.addWatermark();
+    }
+
+    addWatermark() {
+        const paddingSpace = 110;
+        const watermarkHeight = 60;
+        const descriptionHeight = 60;
+        const headerHeight = 35;
+        const windowHeight = window.innerHeight;
+
+        const wrapperMinHeight = windowHeight - (headerHeight + descriptionHeight + paddingSpace + watermarkHeight);
+        $('.point-mapper-content__list').css('min-height', wrapperMinHeight);
+
+        if ($('.point-mapper .watermark-wrapper').length > 0) {
+            return;
+        }
+
+        let watermarkWrapper = document.createElement('div');
+        $(watermarkWrapper).addClass('watermark-wrapper');
+        $('.point-mapper-content')
+            .css('padding-bottom', 0)
+            .append(watermarkWrapper);
+
+        let watermarkRoot = createRoot(watermarkWrapper);
+        watermarkRoot.render(<Watermark/>);
     }
 
     unSelectAll() {

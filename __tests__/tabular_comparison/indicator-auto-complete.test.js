@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import {within} from '@testing-library/dom'
-
+import { within } from '@testing-library/dom'
 import IndicatorAutoComplete from '../../src/js/tabular_comparison/indicator-auto-complete'
-
 
 
 const mockedHandleIndicatorSelection = jest.fn();
 
-describe('test indicator autocomplete', () => {
+describe('Yest indicator autocomplete', () => {
     const indicatorOptions = [
         'Language most spoken at home',
         'Region of birth',

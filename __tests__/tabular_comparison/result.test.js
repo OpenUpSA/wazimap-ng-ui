@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import {within} from '@testing-library/dom';
+import { within } from '@testing-library/dom';
 import Result from '../../src/js/tabular_comparison/result.js';
 import ec_indicators from "./data/ec_indicators.json";
 import wc_indicators from "./data/wc_indicators.json";
-
 
 
 const renderComponent = ({
@@ -23,19 +22,19 @@ const renderComponent = ({
 
 describe('Test resulting comparison empty states', () => {
 
-    test('Check empty state when no geography is selected', () => {
+    test('Empty state when no geography is selected', () => {
       renderComponent();
       const emptyStateDiv = screen.getByText(/We can’t wait to show you some data! Choose a geography to get started!/i);
       expect(emptyStateDiv).toBeInTheDocument();
     })
 
-    test('Check empty state when geography is selected but no indicator objs', () => {
+    test('Empty state when geography is selected but no indicator objs', () => {
       renderComponent({selectedGeographies: [{"code": "EC", "name": "Eastern Cape"}]});
       const emptyStateDiv = screen.getByText(/You’ve chosen a geography, now select an indicator!/i);
       expect(emptyStateDiv).toBeInTheDocument();
     })
 
-    test('Check empty state when geography is selected and indicator obj is added', () => {
+    test('Empty state when geography is selected and indicator obj is added', () => {
       renderComponent({
           selectedGeographies: [{"code": "EC", "name": "Eastern Cape"}],
           indicatorObjs: [{"index": 1, "indicator": "", "category": ""}]
@@ -50,7 +49,7 @@ describe('Test resulting comparison empty states', () => {
 
 describe('Test resulting comparison', () => {
 
-    test('Check results table when one indicator and one geo is selected', () => {
+    test('Results table when one indicator and one geo is selected', () => {
       renderComponent({
           selectedGeographies: [{"name": "Eastern Cape", "code": "EC"}],
           indicatorObjs: [{ index: 1, indicator: 'Region of birth', category: 'Male' }],
@@ -67,7 +66,7 @@ describe('Test resulting comparison', () => {
 
     })
 
-    test('Check results table when one indicator and two geos are selected without indicators for second geo', () => {
+    test('Results table when one indicator and two geos are selected without indicators for second geo', () => {
       renderComponent({
           selectedGeographies: [
             {"name": "Eastern Cape", "code": "EC"},
@@ -90,7 +89,7 @@ describe('Test resulting comparison', () => {
 
     })
 
-    test('Check results table when one indicator and two geos are selected with valid data', () => {
+    test('Results table when one indicator and two geos are selected with valid data for both geo', () => {
       let indicators = []
       renderComponent({
           selectedGeographies: [
@@ -114,7 +113,7 @@ describe('Test resulting comparison', () => {
 
     })
 
-    test('Check results table when two indicators and two geos with color coding', () => {
+    test('Results table when two indicators and two geos with color coding', () => {
       let indicators = []
       renderComponent({
           selectedGeographies: [
@@ -149,7 +148,7 @@ describe('Test resulting comparison', () => {
 
     })
 
-    test('Check results table data formatting', () => {
+    test('test results table data formatting', () => {
       let indicators = []
       renderComponent({
           selectedGeographies: [

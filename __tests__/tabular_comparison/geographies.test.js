@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { act } from "react-dom/test-utils";
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import {within} from '@testing-library/dom';
+import { within } from '@testing-library/dom';
 import Geographies from '../../src/js/tabular_comparison/geographies';
 
 
@@ -20,13 +20,13 @@ const renderComponent = ({
 }
 
 describe('Test Empty state for geography section', () => {
-    test('Check if empty state text is shown when there is no geography selected', () => {
+    test('Empty state text is shown when there is no geography selected', () => {
       renderComponent();
       const emptyStateDiv = screen.getByText(/Choose a geography to get started!/i);
       expect(emptyStateDiv).toBeInTheDocument();
     })
 
-    test('Check if empty is not shown when there is atleast one selected geography', () => {
+    test('Empty is not shown when there is atleast one selected geography', () => {
 
       const emptyStateDiv = screen.queryByText(/Choose a geography to get started!/i);
       expect(emptyStateDiv).not.toBeInTheDocument();
@@ -44,7 +44,7 @@ describe('Test geography chips', () => {
       renderComponent({selectedGeographies, mockedSetSelectedGeographies});
     })
 
-    test('Check if chips are rendered for selected geographies', () => {
+    test('Geography chips are rendered for selected geographies', () => {
       const geographyPanel = screen.getByTestId('selected-geographies');
       const chips = within(geographyPanel).getAllByRole("button");
       expect(chips).toHaveLength(2);
@@ -52,7 +52,7 @@ describe('Test geography chips', () => {
       expect(chips[1].textContent).toBe('Western Cape');
     })
 
-    test('Check if clicking on cancel icon updates selected geography state', () => {
+    test('Clicking on cancel icon updates selected geography state', () => {
       const geographyPanel = screen.getByTestId('selected-geographies');
       const chips = within(geographyPanel).getAllByRole("button");
       expect(chips).toHaveLength(2);
@@ -79,7 +79,7 @@ describe('Test searching and selecting geographies', () => {
       });
     })
 
-    test('Test if set when searched and selected', async () => {
+    test('Geography can be searched and selected', async () => {
       const autocomplete = screen.getByTestId('geography-autocomplete');
       const input = within(autocomplete).getByRole("combobox");
       autocomplete.focus()

@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import {within} from '@testing-library/dom';
+import { within } from '@testing-library/dom';
 import ComparisonIndicators from '../../src/js/tabular_comparison/comparison-indicators';
 import all_details_ec from "./data/all_details_ec.json";
-
 
 
 const renderComponent = ({
@@ -47,20 +46,20 @@ describe('Test Empty state for comparison indicator', () => {
       }
     })
 
-    test('Check if empty state text is shown when there is no geography selected', () => {
+    test('Empty state text is shown when there is no geography selected', () => {
       renderComponent();
       const emptyStateDiv = screen.getByText(/Indicators can only be selected once a geography is chosen!/i);
       expect(emptyStateDiv).toBeInTheDocument();
     })
 
-    test('test if click on adding indicator button is disabled when no geographies', () => {
+    test('Add indicator button is disabled when no geography is selected', () => {
       renderComponent()
       const addIndicatorButton = screen.getByTestId("add-indicator");
       expect(addIndicatorButton).toBeInTheDocument();
       expect(addIndicatorButton.disabled).toBe(true);
     })
 
-    test('Check if different empty state text is shown when there is geography selected but no indicators', () => {
+    test('Empty state text is shown when there is geography selected but no indicators', () => {
       renderComponent({selectedGeographies, apiDetails});
       const emptyStateDiv = screen.getByText(/Great! Now select an indicator for your chosen geography!/i);
       expect(emptyStateDiv).toBeInTheDocument();
@@ -81,7 +80,7 @@ describe('Test add indictor to compare button', () => {
       mockSetIndicatorObjs = jest.fn();
     })
 
-    test('Check if panel is added correctly when indictor to compare button is clicked', () => {
+    test('Panel is added when indictor to compare button is clicked', () => {
       renderComponent({ selectedGeographies, mockSetIndicatorObjs, apiDetails });
 
       const addIndicatorButton = screen.getByTestId("add-indicator");
@@ -120,13 +119,13 @@ describe('Test indicator panel actions', () => {
       mockSetIndicators = jest.fn();
     })
 
-    test('Check if panels are rendered accoridng to indicator objs preset', () => {
+    test('Panels are rendered accoridng to indicator objs preset', () => {
       renderComponent({selectedGeographies, indicatorObjs, apiDetails})
       const indicatorPanel = screen.getByTestId('indicator-panel-1');
       expect(indicatorPanel).toBeInTheDocument();
     })
 
-    test('Check if indicator value can be selected', () => {
+    test('Indicator value can be searced and selected', () => {
       renderComponent({
         selectedGeographies, indicators, indicatorObjs, apiDetails, mockSetIndicatorObjs
       });
@@ -139,7 +138,7 @@ describe('Test indicator panel actions', () => {
       expect(mockSetIndicatorObjs).toHaveBeenCalledWith([{ index: 1, indicator: 'Employment status', category: '' }])
     })
 
-    test('Check if category value can be selected', () => {
+    test('Category value can be searched and selected', () => {
       renderComponent({
         selectedGeographies, indicators, apiDetails, mockSetIndicatorObjs,
         indicatorObjs: [{ index: 1, indicator: 'Employment status', category: '' }]
@@ -154,7 +153,7 @@ describe('Test indicator panel actions', () => {
       expect(mockSetIndicatorObjs).toHaveBeenCalledWith([{ index: 1, indicator: 'Employment status', category: 'Black African' }])
     })
 
-    test('Check if comparison indicator panel can be removed', () => {
+    test('Comparison indicator panel can be removed by clicking on remove panel button', () => {
       renderComponent({
         selectedGeographies, indicatorObjs, apiDetails, mockSetIndicatorObjs
       });

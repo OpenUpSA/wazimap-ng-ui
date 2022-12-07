@@ -168,7 +168,7 @@ describe('configureBarchart', () => {
         it('axis has tickCount from config', async () => {
             let vegaSpec = configureBarchart(data, metadata, config);
 
-            const [yAxis, xAxis] = vegaSpec.axes
+            const [xAxis, yAxis] = vegaSpec.axes;
 
             expect(xAxis).toHaveProperty('tickCount', 10)
         });

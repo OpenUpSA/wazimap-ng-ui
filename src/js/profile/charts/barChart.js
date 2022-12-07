@@ -31,7 +31,7 @@ export const configureBarchart = (data, metadata, config) => {
         description: "A",
         width: 800,
         background: "white",
-        padding: {"left": 5, "top": 5, "right": 30, "bottom": 5},
+        padding: {"left": 30, "top": 5, "right": 30, "bottom": 5},
         data: [
             {
                 name: "table",
@@ -136,11 +136,15 @@ export const configureBarchart = (data, metadata, config) => {
             },
             {
                 name: "y_step",
-                value: 30
+                value: 50
             },
             {
                 name: "height",
-                update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step"
+                update: "bandspace(domain('yscale').length, 0.1, 0.05) * y_step + y_step"
+            },
+            {
+                name: "textAlign",
+                value: "barvalue"
             },
             ...filterSignals
         ],
@@ -150,21 +154,12 @@ export const configureBarchart = (data, metadata, config) => {
                 type: "band",
                 domain: {data: "data_formatted", field: {signal: "mainGroup"}},
                 range: {step: {signal: "y_step"}},
-                padding: 0.1,
+                padding: 0.4
             },
             xScale
         ],
 
         axes: [
-            {
-                orient: "left",
-                scale: "yscale",
-                domainOpacity: 0.5,
-                labelOpacity: 0.5,
-                tickSize: 0,
-                labelPadding: 6,
-                zindex: 1,
-            },
             xAxis
         ],
 
@@ -198,24 +193,52 @@ export const configureBarchart = (data, metadata, config) => {
                 from: {data: "data_formatted"},
                 encode: {
                     enter: {
-                        align: {value: "left"},
                         baseline: {value: "middle"},
                         fill: {value: "grey"},
-                        fontSize: {value: 10},
+                        fontSize: {value: 10}
                     },
                     update: {
                         text: {
                             signal: "format(datum[datatype[Units]],numberFormat[Units])"
                         },
+                        align: {signal: "datum[datatype[Units]] > 0 ? 'left' : 'right'"},
                         x: {
                             scale: "xscale",
                             field: {signal: "datatype[Units]"},
-                            offset: 5,
+                            offset: {signal: "datum[datatype[Units]] > 0 ? 5 : -5"},
                         },
                         y: {
                             scale: "yscale",
                             field: {signal: "mainGroup"},
                             band: 0.5,
+                        },
+                    },
+                },
+            },
+            {
+                type: "text",
+                from: {data: "data_formatted"},
+                encode: {
+                    enter: {
+                        baseline: {value: "top"},
+                        fill: {value: "grey"},
+                        fontSize: {value: 10},
+                    },
+                    update: {
+                        align: {signal: "datum[datatype[Units]] >= 0 ? 'left' : 'right'"},
+                        text: {
+                            field: {signal: "mainGroup"}
+                        },
+                        x: {
+                            scale: "xscale",
+                            value: 0,
+                            offset: {signal: "datum[datatype[Units]] >= 0 ? 5 : -5"},
+                        },
+                        y: {
+                            scale: "yscale",
+                            band: 1,
+                            field: {signal: "mainGroup"},
+                            offset: {value: 2},
                         },
                     },
                 },

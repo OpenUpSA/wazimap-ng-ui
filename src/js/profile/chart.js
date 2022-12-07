@@ -94,7 +94,7 @@ export class Chart extends Component {
     }
 
     set isToggleDisabled(value) {
-        if  (value){
+        if (value) {
             this.disableChartTypeToggle();
         }
 

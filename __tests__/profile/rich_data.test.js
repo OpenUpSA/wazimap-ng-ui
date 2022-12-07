@@ -1,5 +1,3 @@
-import {screen, fireEvent, getByText} from '@testing-library/dom'
-
 import {Category} from "../../src/js/profile/category.js";
 import {Component} from '../../src/js/utils';
 
@@ -25,7 +23,7 @@ describe('Rich data panel tests', () => {
                         "content_type": "indicator",
                         "metadata": {
                             "groups": [{
-                                "subindicators":[
+                                "subindicators": [
                                     "30-35",
                                     "20-24",
                                     "15-24 (Intl)",
@@ -33,25 +31,27 @@ describe('Rich data panel tests', () => {
                                     "15-19",
                                     "25-29"
                                 ],
-                                "dataset":96,
-                                "name":"age",
-                                "can_aggregate":true,
-                                "can_filter":true
+                                "dataset": 96,
+                                "name": "age",
+                                "can_aggregate": true,
+                                "can_filter": true
                             },],
-                            "primary_group":"age",
+                            "primary_group": "age",
                         },
-                        "dataset_content_type":"quantitative",
+                        "dataset_content_type": "quantitative",
                         "chartConfiguration": {
-                            "types":{
-                                "Value":{
-                                    "formatting":",.0f"
+                            "types": {
+                                "Value": {
+                                    "formatting": ",.0f"
                                 },
-                                "Percentage":{
-                                    "maxX":1,
-                                    "minX":0
+                                "Percentage": {
+                                    "formatting": ".0%",
+                                    "maxX": 1,
+                                    "minX": 0
                                 }
                             },
-                            "xTicks":6
+                            "defaultType": "Percentage",
+                            "xTicks": 6
                         },
                         "groups": [],
                         "description": "<p>An <strong>indicator</strong> description</p>",

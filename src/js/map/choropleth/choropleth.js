@@ -1,5 +1,5 @@
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
-import {min as d3min, max as d3max} from 'd3-array';
+import {max as d3max, min as d3min} from 'd3-array';
 
 import {Component} from '../../utils';
 import SubindicatorCalculator from './subindicator_calculator';
@@ -17,7 +17,6 @@ export class Choropleth extends Component {
 
         this.layers = layers;
         this.layerStyler = layerStyler;
-        this.legendColors = options.colors;
         this.options = options;
         this.buffer = buffer;
         this.currentLayers = [];
@@ -50,15 +49,12 @@ export class Choropleth extends Component {
 
     getIntervals(values) {
         const bounds = this.getBounds(values);
-        const numIntervals = this.legendColors.length;
-        const domain = [...Array(numIntervals).keys()]
-        const scale = d3scaleSequential()
-            .domain([0, numIntervals - 1])
-            .range([bounds.lower, bounds.upper])
+        const numIntervalCount = 5; //hardcoded for now
+        const domain = [...Array(numIntervalCount).keys()]
 
-        const intervals = domain.map(idx => scale(idx))
+        const numbersScale = this.getScale([0, numIntervalCount - 1], [bounds.lower, bounds.upper]);
 
-        return intervals
+        return domain.map(idx => numbersScale(idx));
     }
 
     reset(setLayerToSelected) {
@@ -95,31 +91,77 @@ export class Choropleth extends Component {
     }
 
     getBounds(values) {
+        const hasNegative = values.some(v => v < 0);
+        const hasPositive = values.some(v => v > 0);
+
+        if (hasNegative && hasPositive) {
+            const maxScaleValue = Math.max(...values.map(v => Math.abs(v)));
+            return {
+                "lower": maxScaleValue * -1,
+                "upper": maxScaleValue
+            }
+        }
+
         return {
             lower: d3min(values),
             upper: d3max(values)
         }
     }
 
-    showChoropleth(calculations, values) {
+    getColorRange(values, positiveRangeRequested = true) {
+        const hasNegative = values.some(v => v < 0);
+        const hasPositive = values.some(v => v > 0);
+
+        let positiveColorRange = this.options.positive_color_range;
+        let negativeColorRange = this.options.negative_color_range;
+        let zeroColor = this.options.zero_color;
+
+        if (hasPositive && !hasNegative) {
+            // only positive
+            return {
+                start: positiveColorRange[0],
+                end: positiveColorRange[1]
+            };
+        } else if (!hasPositive && hasNegative) {
+            // only negative
+            return {
+                start: negativeColorRange[0],
+                end: negativeColorRange[1]
+            };
+        } else if (hasPositive && hasNegative) {
+            // both
+            if (positiveRangeRequested) {
+                return {
+                    start: zeroColor,
+                    end: positiveColorRange[1]
+                };
+            } else {
+                return {
+                    start: negativeColorRange[0],
+                    end: zeroColor
+                };
+            }
+        }
+    }
+
+    getScale(domain, range) {
+        return d3scaleSequential()
+            .domain([domain[0], domain[1]])
+            .range([range[0], range[1]]);
+    }
+
+    showChoropleth(calculations) {
         this.reset(true);
         const self = this;
         const childGeographyValues = [...calculations];
-        const bounds = this.getBounds(values);
-        const numIntervals = this.legendColors.length;
-
-        const scale = d3scaleSequential()
-            .domain([bounds.lower, bounds.upper])
-            .range([this.legendColors[0], this.legendColors[numIntervals - 1]]);
 
         childGeographyValues.forEach(el => {
             const layer = self.layers[el.code];
             if (layer !== undefined) {
                 self.currentLayers.push(el.code);
-                const color = scale(el.val);
                 self.layerStyler.setLayerStyle(layer, {
-                    over: {fillColor: color, fillOpacity: self.options.opacity_over},
-                    out: {fillColor: color, fillOpacity: self.options.opacity},
+                    over: {fillColor: el.color, fillOpacity: self.options.opacity_over},
+                    out: {fillColor: el.color, fillOpacity: self.options.opacity},
                 })
                 if (typeof layer.feature !== 'undefined') {
                     layer.feature.properties.percentage = el.val;

@@ -482,7 +482,7 @@ export function trimValue(val) {
     return result;
 }
 
-export function calculateThemeBackgroundColor(iconColor){
+export function calculateThemeBackgroundColor(iconColor) {
     const opacity = '0.2';
     let colorRgb = hexToRgb(iconColor);
 
@@ -517,4 +517,27 @@ export function rgba2hex(orig) {
     hex = hex + a;
 
     return hex;
+}
+
+export function splitRgb(colorRgb) {
+    let rgb = colorRgb.replace(/[^\d,]/g, '').split(',');
+    return {
+        r: parseInt(rgb[0]),
+        g: parseInt(rgb[1]),
+        b: parseInt(rgb[2])
+    };
+}
+
+// decide if the background is closer to black or white
+// and set the font color accordingly
+export function isColorLight(color) {
+    const rgb = color.startsWith('#') ? hexToRgb(color) : splitRgb(color);
+    const threshold = 150;
+    const redMultiplier = 0.299;
+    const greenMultiplier = 0.587;
+    const blueMultiplier = 0.114;
+
+    const total = rgb.r * redMultiplier + rgb.g * greenMultiplier + rgb.b * blueMultiplier;
+
+    return total > threshold;
 }

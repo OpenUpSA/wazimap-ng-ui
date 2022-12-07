@@ -25,17 +25,13 @@ export class Indicator extends ContentBlock {
         let groups = Object.keys(this.indicator.groups);
         const configuration = this.indicator.chartConfiguration;
 
-        if (this.hasData) {
-            let chartData = this.orderChartData();
-            let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution);
-            this.bubbleEvents(c, [
-                'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
-                'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter'
-            ]);
-        } else {
-            this.container.remove();
-        }
+        let chartData = this.orderChartData();
+        let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution);
+        this.bubbleEvents(c, [
+            'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
+            'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
+            'point_tray.subindicator_filter.filter'
+        ]);
     }
 
     orderChartData() {

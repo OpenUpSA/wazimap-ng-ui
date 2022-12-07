@@ -158,14 +158,38 @@ export class MapControl extends Component {
             calculation
         } = this.choropleth.getChoroplethValues(calculator, childData, primaryGroup, selectedSubindicator, allSubindicators);
 
-        this.choropleth.showChoropleth(calculation, values);
+        const bounds = this.choropleth.getBounds(values);
+        const positiveColorRange = this.choropleth.getColorRange(values, true);
+        const negativeColorRange = this.choropleth.getColorRange(values, false);
+        let zeroColor = this.choropleth.options.zero_color;
+
+        const positiveColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [positiveColorRange.start, positiveColorRange.end]);
+        const negativeColorScale = this.choropleth.getScale([bounds.lower, bounds.upper], [negativeColorRange.start, negativeColorRange.end]);
+
+        calculation.forEach(x => {
+            if (x.val > 0) {
+                x.color = positiveColorScale(x.val);
+            } else {
+                x.color = negativeColorScale(x.val);
+            }
+        })
+        this.choropleth.showChoropleth(calculation);
         const intervals = this.choropleth.getIntervals(values);
 
         const formattedIntervals = intervals.map(el => calculator.format(el))
+        const legendColors = intervals.map(idx => {
+            if (idx > 0) {
+                return positiveColorScale(idx)
+            } else if (idx < 0) {
+                return negativeColorScale(idx)
+            } else {
+                return zeroColor;
+            }
+        });
 
         this.triggerEvent("map.choropleth.display", {
             data: calculation,
-            colors: this.choropleth.legendColors,
+            colors: legendColors,
             intervals: formattedIntervals
         })
     }

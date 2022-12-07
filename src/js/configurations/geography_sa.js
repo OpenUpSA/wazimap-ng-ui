@@ -155,6 +155,9 @@ export class Config {
 
         const defaultConfig = {
             colors: d3schemeBlues[5],
+            positive_color_range: ["#eff3ff", "#08519c"],
+            negative_color_range: ["#b30000", "#fef0d9"],
+            zero_color: '#eeeeee',
             opacity: 0.7,
             opacity_over: 0.8
         }

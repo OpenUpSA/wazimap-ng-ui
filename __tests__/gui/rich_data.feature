@@ -25,7 +25,7 @@ Feature: Rich data menu
     And I expand Rich Data
     Then Rich Data should be displayed
     Then None of the menu items should be active
-    Then I check if the indicator with only zero counts is hidden
+    Then I check if the indicator with only zero counts is visible
 
     # confirm the visibility of the categories & subcategories
     Then I confirm that the category "Category with no subcategories" is invisible

@@ -55,8 +55,8 @@ When('I close the Rich Data', () => {
     cy.get('.rich-data-toggles .rich-data-panel__close').click();
 })
 
-Then('I check if the indicator with only zero counts is hidden', () => {
-    cy.get('.profile-indicator__title:contains("Indicator with only zero counts")').should('not.exist');
+Then('I check if the indicator with only zero counts is visible', () => {
+    cy.get('.profile-indicator__title:contains("Indicator with only zero counts")').should('be.visible');
 })
 
 Then(/^I confirm that the category "([^"]*)" is invisible$/, function (categoryName) {

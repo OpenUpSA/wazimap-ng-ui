@@ -298,7 +298,7 @@ When(/^I filter by "([^"]*)"$/, function (filter) {
 });
 
 Then('I check if the legend values are correct', () => {
-    let values = ['42.6%', '46.6%', '50.7%', '54.7%', '58.7%'];
+    let values = ['43%', '47%', '51%', '55%', '59%'];
     cy.get('.map-options__legend_wrap .map_legend-block .truncate').each(($div, index) => {
         expect($div.text()).equal(values[index]);
     })

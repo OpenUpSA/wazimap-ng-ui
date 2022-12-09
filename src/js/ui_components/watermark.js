@@ -13,18 +13,18 @@ const Watermark = (props) => {
     }));
 
     const PoweredBy = styled(Box)(({theme}) => ({
-        fontSize: '12px',
-        lineHeight: 1,
+        fontSize: '9px',
+        lineHeight: '36px',
         borderRadius: '3px',
         backgroundColor: 'rgba(0, 0, 0, 0.06)',
         color: 'rgba(9, 45, 40, 0.7)',
-        padding: '12px'
+        padding: '0px 4px'
     }));
 
     const Logo = styled(Link)(({theme}) => ({
         padding: '8px 10px',
         borderRadius: '3px',
-        backgroundColor: '#e2e2e2',
+        backgroundColor: 'rgba(0, 0, 0, 0.06)',
         '&:hover': {
             backgroundColor: '#d8d8d8'
         }
@@ -42,7 +42,7 @@ const Watermark = (props) => {
                 <img
                     src={logo}
                     loading={'lazy'}
-                    width={'100px'}
+                    width={'80px'}
                 >
                 </img>
             </Logo>

@@ -64,14 +64,6 @@ function setupLocationSearchTranslations(window) {
 }
 
 function setupWatermarkElements(window){
-    const element = window.document.getElementsByClassName('data-mapper-content__loading')[0];
-    if (element === null) {
-        throw `Cannot find element : data-mapper-content__loading`
-    }
-
-    element.remove();
-    window.document.getElementsByClassName('data-mapper-content__list-wrapper')[0].append(element);
-
     let mapWatermark =window.document.createElement('div');
     mapWatermark.classList.add('map-watermark-wrapper');
     window.document.getElementsByClassName('main')[0].append(mapWatermark);
@@ -81,6 +73,7 @@ exports.transformDOM = function(window, $) {
     // Add custom css
     addStylesheet(window, "custom-css/mapchip.scss");
     addStylesheet(window, "custom-css/popup.scss");
+    addStylesheet(window, "custom-css/general.scss");
 
     $('script[src="https://gcro.openup.org.za/js.117393d3.js"]').remove();
 

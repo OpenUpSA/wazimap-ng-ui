@@ -88,6 +88,8 @@ export class DataMapperMenu extends Component {
 
         this._isLoading = false;
         this._api = api;
+
+        this.addWatermark();
     }
 
     get isLoading() {
@@ -99,8 +101,6 @@ export class DataMapperMenu extends Component {
             this.showLoadingState();
         } else {
             this.hideLoadingState();
-
-            this.addWatermark();
         }
 
         this._isLoading = value;
@@ -111,25 +111,14 @@ export class DataMapperMenu extends Component {
     }
 
     addWatermark() {
-        const paddingSpace = 130;
-        const watermarkHeight = 60;
-        const descriptionHeight = 60;
-        const headerHeight = 35;
-        const windowHeight = window.innerHeight;
-
-        const wrapperMinHeight = windowHeight - (headerHeight + descriptionHeight + paddingSpace + watermarkHeight);
-        $('.data-mapper-content__list-wrapper').css('min-height', wrapperMinHeight);
-
         if ($('.data-mapper .watermark-wrapper').length > 0) {
             return;
         }
 
         let watermarkWrapper = document.createElement('div');
         $(watermarkWrapper)
-            .addClass('watermark-wrapper')
-            .css('margin-left', '-2px');
+            .addClass('watermark-wrapper');
         $('.data-mapper-content')
-            .css('padding-bottom', 0)
             .append(watermarkWrapper);
 
         let watermarkRoot = createRoot(watermarkWrapper);

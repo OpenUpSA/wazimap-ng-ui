@@ -26,6 +26,10 @@ export default class ProfileLoader extends Component {
         this.formattingConfig = formattingConfig;
         this.config = _config;
         this.profileHeader = null;
+
+        new ResizeObserver(() => {
+            this.setWatermarkVisibility();
+        }).observe($('.rich-data-nav')[0]);
     }
 
     loadProfile = (dataBundle, activeVersion) => {
@@ -95,13 +99,29 @@ export default class ProfileLoader extends Component {
     }
 
     addWatermark() {
+        if ($('.rich-data-nav .watermark-wrapper').length > 0) {
+            return;
+        }
+
         let watermarkWrapper = document.createElement('div');
-        $(watermarkWrapper).addClass('watermark-wrapper');
-        $(profileWrapperClass).append(watermarkWrapper);
+        $(watermarkWrapper)
+            .addClass('watermark-wrapper')
+            .addClass('truncate');
+        $('.rich-data-nav').append(watermarkWrapper);
 
         let watermarkRoot = createRoot(watermarkWrapper);
         watermarkRoot.render(<Watermark/>);
     }
+
+    setWatermarkVisibility() {
+        const visibilityLimit = 100;
+        if ($('.rich-data-nav').width() > visibilityLimit) {
+            $('.rich-data-nav .watermark-wrapper').show();
+        } else {
+            $('.rich-data-nav .watermark-wrapper').hide();
+        }
+    }
+
 
     getNewId = () => {
         maxId++;

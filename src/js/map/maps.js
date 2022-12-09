@@ -52,9 +52,6 @@ export class MapControl extends Component {
         let watermarkWrapper = document.createElement('div');
         $(watermarkWrapper).addClass('watermark-wrapper');
         $('.map-watermark-wrapper')
-            .css('position', 'absolute')
-            .css('left', '18px')
-            .css('bottom', '22px')
             .append(watermarkWrapper);
 
         let watermarkRoot = createRoot(watermarkWrapper);

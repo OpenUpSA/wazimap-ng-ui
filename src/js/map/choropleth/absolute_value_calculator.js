@@ -1,4 +1,5 @@
-import {numFmt, filterAndSumGeoCounts} from '../../utils'
+import {filterAndSumGeoCounts} from '../../utils';
+import {format as d3format} from "d3-format/src/defaultLocale";
 
 export default class AbsoluteValueCalculator {
     constructor() {}
@@ -14,7 +15,8 @@ export default class AbsoluteValueCalculator {
         return result
     }
 
-    format(x) {
-        return numFmt(x);
+    format(val, config) {
+        let absoluteFormatting = config.types["Value"].formatting;
+        return d3format(absoluteFormatting)(val);
     }
 }

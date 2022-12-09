@@ -10,6 +10,7 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.8.5",
     "@sentry/browser": "^5.20.1",
+    "@testing-library/react": "^13.4.0",
     "@types/react": "^16.8.6 || ^17.0.0",
     "babel-polyfill": "^6.26.0",
     "category": "^0.1.2",

@@ -9,8 +9,7 @@ import Indicator from "./indicator";
 
 const ComparisonIndicators = (props) => {
     const [previousSelectedGeographies, setPreviousSelectedGeographies] = useState([]);
-    const arrowSvg =ComparisonIndicatorArrowSvg;
-
+    const arrowSvg = ComparisonIndicatorArrowSvg;
 
     useEffect(() => {
         if (props.selectedGeographies.length <= 0) {
@@ -68,12 +67,12 @@ const ComparisonIndicators = (props) => {
         }
 
         newArr.push(newObj);
-
         props.setIndicatorObjs(newArr);
     }
 
     const handleRemove = (index) => {
-        props.setIndicatorObjs((objs) => objs.filter((obj) => obj.index !== index));
+        let updatedIndicatorObjs = props.indicatorObjs.filter((obj) => obj.index !== index)
+        props.setIndicatorObjs(updatedIndicatorObjs);
     }
 
     const handleIndicatorSelection = (index, newValue) => {
@@ -112,6 +111,7 @@ const ComparisonIndicators = (props) => {
                 handleIndicatorSelection={(newValue) => handleIndicatorSelection(x.index, newValue)}
                 handleCategorySelection={(newValue) => handleCategorySelection(x.index, newValue)}
                 indicatorObjs={props.indicatorObjs}
+                index={x.index}
             />
         )
     }

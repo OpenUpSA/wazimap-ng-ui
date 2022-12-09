@@ -8,7 +8,7 @@ import SectionTitle from "./section-title";
 
 const Geographies = (props) => {
     const [options, setOptions] = useState([]);
-    const arrowSvg =GeographiesArrowSvg;
+    const arrowSvg = GeographiesArrowSvg;
 
     const filterOptions = (inputValue) => {
         props.api.search(props.profileId, inputValue).then((data) => {
@@ -28,7 +28,8 @@ const Geographies = (props) => {
     }
 
     const handleDelete = (geoToDelete) => {
-        props.setSelectedGeographies((geos) => geos.filter((geo) => geo.code !== geoToDelete.code));
+        let updatedGeographies = props.selectedGeographies.filter((geo) => geo.code !== geoToDelete.code);
+        props.setSelectedGeographies(updatedGeographies);
     }
 
     const renderGeographies = () => {
@@ -126,7 +127,9 @@ const Geographies = (props) => {
                         </Grid>
                     </Card>
                     <Grid
-                        className={'selected-geographies'}>
+                        data-testid={'selected-geographies'}
+                        className={'selected-geographies'}
+                    >
                         {renderGeographies()}
                     </Grid>
                 </Card>

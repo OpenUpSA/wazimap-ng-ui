@@ -38,10 +38,13 @@ const Indicator = (props) => {
     }
 
     return (
-        <div>
+        <div
+          data-testid={`indicator-panel-${props.index}`}
+        >
             <div
                 className={'remove-indicator'}
                 onClick={props.handleRemove}
+                data-testid={`remove-panel-${props.index}`}
             >x
             </div>
             <Card

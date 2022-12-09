@@ -1,4 +1,5 @@
-import {percFmt, filterAndSumGeoCounts} from '../../utils'
+import {filterAndSumGeoCounts} from '../../utils';
+import {format as d3format} from "d3-format/src/defaultLocale";
 
 export default class SiblingCalculator {
     calculate(childData, primaryGroup, selectedSubindicator) {
@@ -18,7 +19,8 @@ export default class SiblingCalculator {
         return result
     }
 
-    format(x) {
-        return percFmt(x);
+    format(val, config) {
+      let percentageFormatting = config.types["Percentage"].formatting;
+      return d3format(percentageFormatting)(val);
     }
 }

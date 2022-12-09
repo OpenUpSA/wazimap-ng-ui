@@ -123,12 +123,14 @@ const Result = (props) => {
                 <TableHead>
                     <TableRow>
                         <TableCell
+                          data-testid={'table-header-0'}
                         ><b>Geography</b></TableCell>
                         {
                             props.indicatorObjs.map((column) => {
                                 if (column.indicator !== '' && column.category !== '') {
                                     return (
                                         <TableCell
+                                            data-testid={`table-header-${column.index}`}
                                             key={column.index}
                                             className={'truncate-table-cell'}
                                             title={column.indicator + ' : ' + column.category}
@@ -141,12 +143,13 @@ const Result = (props) => {
                 </TableHead>
                 <TableBody>
                     {
-                        rows.map((row) => {
+                        rows.map((row, idx) => {
                             return (
                                 <TableRow
                                     key={row.geo}
                                 >
                                     <TableCell
+                                        data-testid={`table-row-${idx}-cell-0`}
                                         component={'td'}
                                         scope={'row'}
                                     >{row.geo}</TableCell>
@@ -157,6 +160,7 @@ const Result = (props) => {
                                                 if (value === 'NaN') {
                                                     return (
                                                         <TableCell
+                                                            data-testid={`table-row-${idx}-cell-${obj.index}`}
                                                             component={'td'}
                                                             scope={'row'}
                                                             key={obj.index}
@@ -166,6 +170,7 @@ const Result = (props) => {
                                                 } else {
                                                     return (
                                                         <TableCell
+                                                            data-testid={`table-row-${idx}-cell-${obj.index}`}
                                                             component={'td'}
                                                             scope={'row'}
                                                             key={obj.index}

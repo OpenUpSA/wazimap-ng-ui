@@ -176,7 +176,7 @@ export class MapControl extends Component {
         this.choropleth.showChoropleth(calculation);
         const intervals = this.choropleth.getIntervals(values);
 
-        const formattedIntervals = intervals.map(el => calculator.format(el))
+        const formattedIntervals = intervals.map(el => calculator.format(el, config.chartConfiguration))
         const legendColors = intervals.map(idx => {
             if (idx > 0) {
                 return positiveColorScale(idx)

@@ -1,4 +1,4 @@
-import {percFmt, numFmt} from '../../utils'
+import {format as d3format} from "d3-format/src/defaultLocale";
 
 export default class SubindicatorCalculator {
     calculate(childData, primaryGroup, selectedSubindicator) {
@@ -23,7 +23,8 @@ export default class SubindicatorCalculator {
         return result;
     }
 
-    format(x) {
-        return percFmt(x);
+    format(val, config) {
+      let percentageFormatting = config.types["Percentage"].formatting;
+      return d3format(percentageFormatting)(val);
     }
 }

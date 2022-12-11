@@ -1,12 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "echo foobar",
-  "builds": [
-    {
-      "src": "/src/js/server.js",
-      "use": "@now/node"
-    }
-  ],
   "routes": [
       {
         "src": "/server-side",

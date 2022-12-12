@@ -2,7 +2,6 @@ import React from "react";
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
-import logo from '../../images/powered-by-wazimap-logo.svg';
 
 const Watermark = (props) => {
     const WatermarkContainer = styled(Box)(({theme}) => ({
@@ -40,7 +39,7 @@ const Watermark = (props) => {
                 target={'_blank'}
             >
                 <img
-                    src={logo}
+                    src={require('../../images/powered-by-wazimap-logo.svg')}
                     loading={'lazy'}
                     width={'80px'}
                 >

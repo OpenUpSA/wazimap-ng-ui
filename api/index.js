@@ -12,7 +12,7 @@ app.use(morgan('short'));
 
 app.engine('.html', handlebars.engine({extname: '.html'}));
 app.set('view engine', '.html');
-app.set('views', '../dist');
+app.set('views', './dist');
 
 
 const apiUrl = process.env.API_URL || "https://production.wazimap-ng.openup.org.za";
@@ -42,6 +42,6 @@ function index(req, res, next) {
 
 app.get('/', index);
 
-app.use(express.static('../dist'));
+app.use(express.static('./dist'));
 
 module.exports = app;

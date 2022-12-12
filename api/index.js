@@ -1,7 +1,11 @@
+import path from 'path';
+
 const express = require('express');
 const handlebars = require('express-handlebars');
 const axios = require('axios');
 var morgan = require('morgan');
+
+const staticDir = path.join(process.cwd(), 'dist');
 
 const port = process.env.PORT || 1234;
 
@@ -12,7 +16,7 @@ app.use(morgan('short'));
 
 app.engine('.html', handlebars.engine({extname: '.html'}));
 app.set('view engine', '.html');
-app.set('views', './dist');
+app.set('views', staticDir);
 
 
 const apiUrl = process.env.API_URL || "https://production.wazimap-ng.openup.org.za";
@@ -42,6 +46,6 @@ function index(req, res, next) {
 
 app.get('/', index);
 
-app.use(express.static('./dist'));
+app.use(express.static(staticDir));
 
 module.exports = app;

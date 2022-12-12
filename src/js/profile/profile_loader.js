@@ -18,7 +18,7 @@ let profileWrapper = null;
 
 
 export default class ProfileLoader extends Component {
-    constructor(parent, formattingConfig, _api, _profileId, _config) {
+    constructor(parent, formattingConfig, _api, _profileId, _config, watermarkEnabled) {
         super(parent);
 
         this.api = _api;
@@ -26,6 +26,7 @@ export default class ProfileLoader extends Component {
         this.formattingConfig = formattingConfig;
         this.config = _config;
         this.profileHeader = null;
+        this.watermarkEnabled = watermarkEnabled;
 
         new ResizeObserver(() => {
             this.setWatermarkVisibility();
@@ -95,7 +96,9 @@ export default class ProfileLoader extends Component {
             removePrevCategories = false;
         }
 
-        this.addWatermark();
+        if (this.watermarkEnabled) {
+            this.addWatermark();
+        }
     }
 
     addWatermark() {

@@ -83,13 +83,15 @@ export function loadMenu(dataMapperMenu, data) {
  * This class is a stub for a menu component
  */
 export class DataMapperMenu extends Component {
-    constructor(parent, api) {
+    constructor(parent, api, watermarkEnabled) {
         super(parent);
 
         this._isLoading = false;
         this._api = api;
 
-        this.addWatermark();
+        if (watermarkEnabled) {
+            this.addWatermark();
+        }
     }
 
     get isLoading() {

@@ -13,13 +13,17 @@ const stylesClsName = '.styles';
 const loadingClsName = '.point-mapper-content__loading';
 
 export class PointDataTray extends Component {
-    constructor(parent, api, profileId) {
+    constructor(parent, api, profileId, watermarkEnabled) {
         super(parent);
         this.api = api;
         this.profileId = profileId;
         this.themes = [];
 
         this.prepareDomElements();
+
+        if (watermarkEnabled) {
+            this.addWatermark();
+        }
     }
 
     prepareDomElements() {
@@ -70,8 +74,6 @@ export class PointDataTray extends Component {
             })
             self.triggerEvent("point_tray.tray.themes_loaded", data);
         })
-
-        this.addWatermark();
     }
 
     addWatermark() {

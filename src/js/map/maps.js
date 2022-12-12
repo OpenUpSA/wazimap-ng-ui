@@ -43,7 +43,9 @@ export class MapControl extends Component {
         };
 
         this.registerEvents();
-        this.addWatermark();
+        if (config.watermarkEnabled) {
+            this.addWatermark();
+        }
 
         this.choropleth = new Choropleth(this, this.layerCache, this.layerStyler, config.map.choropleth);
     };

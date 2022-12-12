@@ -42,6 +42,12 @@ export class Config {
         return SidePanels.PANELS.noPanels;
     }
 
+    get watermarkEnabled(){
+        if (this.config["watermark_enabled"] != undefined)
+            return this.config["watermark_enabled"];
+        return true;
+    }
+
     panelEnabled(panel) {
         if (this.config.panels != undefined && this.config.panels[panel] != undefined && this.config.panels[panel]['visible'] != undefined)
             return this.config.panels[panel]['visible']

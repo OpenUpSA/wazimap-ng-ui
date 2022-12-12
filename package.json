@@ -97,7 +97,7 @@
     "prebuild-dev": "shx rm -rf dist/*",
     "build-dev": "parcel build ./src/index.html --no-minify --public-url ./",
     "prebuild": "shx rm -rf dist/*",
-    "build": "parcel build ./src/index.html src/layouts/main.html --public-url ./ ",
+    "build": "parcel build ./src/app-shell.html src/layouts/main.html --public-url ./ ",
     "push-prod": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose",
     "push-staging": "push-dir --remote=staging --dir=dist --branch=gh-pages --cleanup --verbose",
     "clean-files": "cp dist/js*.js dist/wazimap-ng.js; cp dist/js*.js.map dist/wazimap-ng.js.map; cp dist/js*.css dist/wazimap-ng.css"

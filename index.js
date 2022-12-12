@@ -32,7 +32,7 @@ function index(req, res, next) {
     })
     .catch(err => {
       if (err.response.status == 404) {
-        res.sendStatus(404);
+        res.sendStatus(499);
       } else {
         next(err);
       }

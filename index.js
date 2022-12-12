@@ -41,7 +41,6 @@ function index(req, res, next) {
 
 
 app.get('/', index);
-app.get('/server-side', index);
 
 app.use(express.static('dist'));
 

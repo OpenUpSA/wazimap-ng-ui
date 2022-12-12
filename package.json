@@ -83,8 +83,7 @@
   "scripts": {
     "watch": "parcel watch src/index.html src/layouts/main.html",
     "start": "node src/js/server.js",
-    "dev": "parcel ./src/index.html",
-    "dev-server-side": "concurrently --kill-others 'yarn watch' 'nodemon --watch src/js src/js/server.js'",
+    "dev": "parcel ./src/app-shell.html ./src/layouts/main.html",
     "cypress:gui": "cypress run --browser chrome --spec '__tests__/gui/*.feature' --record --key e45f872b-81b5-4f63-ad26-1dff310fb348",
     "cypress:gui-local": "cypress run --browser chrome --spec '__tests__/gui/*.feature'",
     "cypress": "cypress run --spec '__tests__/e2e/*.feature'",

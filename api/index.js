@@ -24,7 +24,7 @@ const apiUrl = process.env.API_URL || "https://production.wazimap-ng.openup.org.
 function index(req, res, next) {
   axios.get(`${apiUrl}/api/v1/profile_by_url/?format=json`, {
     headers: {
-      'wm-hostname': req.headers.host,
+      'wm-hostname': req.hostname,
     }
   })
     .then(response => {

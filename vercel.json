@@ -5,5 +5,7 @@
       "source": "/",
       "destination": "api/"
     }
-  ]
+  ],
+  "outputDirectory": "dist",
+  "devCommand": "yarn dev"
 }

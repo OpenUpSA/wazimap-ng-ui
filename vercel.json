@@ -2,7 +2,7 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/:match*",
+      "source": "/",
       "destination": "api/"
     }
   ]

@@ -22,9 +22,10 @@ app.set('views', staticDir);
 const apiUrl = process.env.API_URL || "https://production.wazimap-ng.openup.org.za";
 
 function index(req, res, next) {
+  const hostname = req.hostname;
   axios.get(`${apiUrl}/api/v1/profile_by_url/?format=json`, {
     headers: {
-      'wm-hostname': req.hostname,
+      'wm-hostname': hostname,
     }
   })
     .then(response => {
@@ -36,7 +37,7 @@ function index(req, res, next) {
     })
     .catch(err => {
       if (err.response.status == 404) {
-        res.sendStatus(499);
+        res.status(404).send(`Profile not found for hostname ${hostname}`);
       } else {
         next(err);
       }

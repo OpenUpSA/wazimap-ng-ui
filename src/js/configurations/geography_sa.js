@@ -118,7 +118,7 @@ export class Config {
         const defaultConfig = {
             zoomControl: false,
             preferCanvas: true,
-            attributionControl: false
+            attributionControl: true
         }
 
         return {...defaultConfig, ...config}

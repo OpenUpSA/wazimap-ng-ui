@@ -239,6 +239,18 @@ export class FilterController extends Component {
         filterRow.setSecondaryIndexUsingValue(group.value);
     }
 
+    addPreviouslySelectedFilters(group) {
+        let isDefault = true;
+        let isExtra = false;
+        let isRequired = true;
+
+        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
+        // filterRow.indicatorDropdown.disable();
+
+        filterRow.setPrimaryIndexUsingValue(group.group);
+        filterRow.setSecondaryIndexUsingValue(group.value);
+    }
+
     setAddFilterButton() { // TODO write an unselected filters getter in the data model
         if (this.model.dataFilterModel.availableFilters.length > 0)
             this.addFilterButton.enable();
@@ -302,6 +314,7 @@ export class FilterController extends Component {
 
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
+        this.checkAndAddPreviouslySelectedFilters();
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
     }
@@ -313,6 +326,10 @@ export class FilterController extends Component {
                 fr.updateIndicatorDropdowns(fr.model, lastIndex);
             }
         })
+    }
+
+    updateDefaultFilterValues(group) {
+      console.log(group);
     }
 
     checkAndAddNonAggregatableGroups() {
@@ -340,7 +357,18 @@ export class FilterController extends Component {
 
     checkAndAddPreviouslySelectedFilters() {
         const self = this;
-        let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilters;
+        let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilterGroups;
+        let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+        previouslySelectedFilters.forEach(group => {
+            if (group.group != this.model.dataFilterModel.primaryGroup) {
+              if (defaultGroups.some(x => x.group === group.group)){
+                self.updateDefaultFilterValues(group);
+              } else {
+                self.addPreviouslySelectedFilters(group);
+              }
+
+            }
+        })
     }
 
     toggleContentVisibility() {

@@ -9,6 +9,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 
     mapchip.on('mapchip.choropleth.filtered', payload => {
         controller.onChoroplethFiltered(payload);
+        controller.setPersistantIndicatorFilters(payload);
     })
 
     mapchip.on('mapchip.choropleth.selectSubindicator', payload => {
@@ -57,7 +58,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             indicatorTitle: args.payload.indicatorTitle,
             selectedSubindicator: args.payload.selectedSubindicator,
             childData: args.payload.data,
-            filter: args.payload.filter,
+            filter: args.state.subindicator.filter,
             config: args.payload.config,
             method: args.state.subindicator.choropleth_method,
             currentGeo: args.state.profile.geometries.boundary.properties.name

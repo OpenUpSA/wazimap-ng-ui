@@ -282,8 +282,8 @@ export class MapChip extends Component {
     }
 
     setFilterLabel(dataFilterModel, groups) {
-        const defaultFilters = dataFilterModel.configFilters?.defaults || [];
-        this.filterLabel.compareFilters(defaultFilters, this.appliedFilters);
+        const previouslySelectedFilters = dataFilterModel.previouslySelectedFilters || {};
+        this.filterLabel.compareFilters(previouslySelectedFilters, this.appliedFilters);
         this.filterLabel.setFilterLabelTotalCount(groups);
         this.filterLabel.setFilterLabelSelectedCount({});
         this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);

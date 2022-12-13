@@ -15,6 +15,7 @@ export default class Controller extends Component {
             // Set if a choropleth is currently active
             // TODO this state should possibly be stored in the mapcontrol
             subindicator: null,
+            indicatorFilters: {},
             selectedSubindicator: ''
         }
 
@@ -129,7 +130,9 @@ export default class Controller extends Component {
             data: payload.indicatorData,
             indicatorId: payload.indicatorId,
             config: payload.config,
-            metadata: payload.metadata
+            metadata: payload.metadata,
+            indicatorId: payload.indicatorId,
+            filter: this.state.indicatorFilters[payload.indicatorId] || {},
         }
 
         this.state.subindicator = subindicator;
@@ -148,6 +151,13 @@ export default class Controller extends Component {
         this.state.subindicator = subindicator;
 
         this.triggerEvent("mapchip.choropleth.filtered", payload);
+    }
+
+    setPersistantIndicatorFilters(payload) {
+      let indicatorFilters = this.state.indicatorFilters;
+      const subindicator = this.state.subindicator;
+      indicatorFilters[subindicator.indicatorId] = payload.selectedFilter;
+      this.state.indicatorFilters = indicatorFilters
     }
 
     onSelectingSubindicator(payload) {

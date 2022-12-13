@@ -35,3 +35,7 @@ Feature: Watermark
     Then I confirm that the rich data watermark is visible
     And I collapse Rich Data Nav
     Then I confirm that the rich data watermark is not visible
+
+    # Map again
+    And I collapse Rich Data Panel
+    Then I confirm that the map watermark is visible

@@ -64,3 +64,7 @@ When('I collapse Rich Data Nav', () => {
 Then('I confirm that the rich data watermark is not visible', () => {
     cy.get('.rich-data .rich-data-nav .watermark-wrapper').should('not.be.visible');
 })
+
+When('I collapse Rich Data Panel', () => {
+    cy.get('.rich-data-toggles .rich-data-panel__close').click();
+})

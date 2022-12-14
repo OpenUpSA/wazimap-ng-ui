@@ -21,7 +21,7 @@ const Watermark = (props) => {
     }));
 
     const Logo = styled(Link)(({theme}) => ({
-        padding: '8px 10px',
+        padding: '7px 10px',
         borderRadius: '3px',
         backgroundColor: 'rgba(0, 0, 0, 0.06)',
         '&:hover': {

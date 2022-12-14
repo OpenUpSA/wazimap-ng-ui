@@ -17,12 +17,18 @@ let profileWrapper = null;
 export default class ProfileLoader extends Component {
     constructor(parent, formattingConfig, _api, _profileId, _config) {
         super(parent);
-
+        this.state = {
+          indicatorFilters: {}
+        }
         this.api = _api;
         this.profileId = _profileId;
         this.formattingConfig = formattingConfig;
         this.config = _config;
         this.profileHeader = null;
+    }
+
+    get indicatorFilters() {
+      return this.state.indicatorFilters;
     }
 
     loadProfile = (dataBundle, activeVersion) => {
@@ -82,7 +88,7 @@ export default class ProfileLoader extends Component {
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter'
+                'point_tray.subindicator_filter.filter', 'profile.chart.updateSelectedIndicatorFilters',
             ]);
 
             removePrevCategories = false;
@@ -150,5 +156,10 @@ export default class ProfileLoader extends Component {
 
     updateActiveVersion = (activeVersion) => {
         this.triggerEvent('version.updated', activeVersion);
+    }
+
+    updateSelectedIndicatorFilters = (payload) => {
+      let filters = this.state.indicatorFilters;
+      filters[payload.indicatorId] = payload.selectedFilter;
     }
 }

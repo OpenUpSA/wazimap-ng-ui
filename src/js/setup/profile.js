@@ -25,5 +25,6 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
         profileLoader.profileHeader.facilityController.isLoading = true;
         profileLoader.profileHeader.facilityController.getAndAddFacilities(controller.versionController.activeVersion);
     });
-}
 
+    profileLoader.on('profile.chart.updateSelectedIndicatorFilters', payload => profileLoader.updateSelectedIndicatorFilters(payload));
+}

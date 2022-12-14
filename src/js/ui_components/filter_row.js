@@ -115,7 +115,9 @@ class FilterRowModel extends Component {
     set currentSubindicatorValue(value) {
         if (this._currentSubindicatorValue != value) {
             this._currentSubindicatorValue = value;
-            this.dataFilterModel.setSelectedSubindicator(this.currentIndicatorValue, value);
+            if (value !== undefined) {
+                this.dataFilterModel.setSelectedSubindicator(this.currentIndicatorValue, value);
+            }
             this.dataFilterModel.updateFilteredData();
             this.triggerEvent(FilterRowModel.EVENTS.updated, this);
         }

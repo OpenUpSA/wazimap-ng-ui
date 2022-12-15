@@ -70,10 +70,10 @@ class Application extends Component {
         const mapcontrol = new MapControl(this, config, () => controller.shouldMapZoom);
         mapcontrol.popup = new Popup(this, formattingConfig, mapcontrol.map);
         const pointData = new PointData(this, api, mapcontrol.map, profileId, config);
-        const pointDataTray = new PointDataTray(this, api, profileId);
+        const pointDataTray = new PointDataTray(this, api, profileId, config.watermarkEnabled);
         const mapchip = new MapChip(this, config.choropleth);
         const search = new Search(this, api, profileId, 2);
-        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config);
+        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled);
         const locationInfoBox = new LocationInfoBox(this, formattingConfig);
         const zoomToggle = new ZoomToggle(this);
         const preferredChildToggle = new PreferredChildToggle(this);
@@ -83,7 +83,7 @@ class Application extends Component {
         const styleConfig = new StyleConfig(config.style);
         const tabNotice = new TabNotice(this, config.config.feedback);
         const translations = new Translations(this, config.config.translations);
-        const dataMapperMenu = new DataMapperMenu(this, api);
+        const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled);
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
@@ -104,7 +104,7 @@ class Application extends Component {
         configurePage(controller, config);
         configureStyleConfigEvents(controller, styleConfig);
         configureFacilityEvents(controller, {profileLoader: profileLoader});
-        configureRichDataPanelEvents(controller, {richDataLinkRendrer:richDataLinkRendrer});
+        configureRichDataPanelEvents(controller, {richDataLinkRendrer: richDataLinkRendrer});
 
         controller.on('profile.loaded', payload => {
             // there seems to be a bug where menu items close if this is not set

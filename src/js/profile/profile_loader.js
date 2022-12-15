@@ -2,6 +2,9 @@ import {Component} from "../utils";
 import {Category} from "./category";
 import {Profile_header} from "./profile_header";
 import {sortBy} from 'lodash';
+import {createRoot} from "react-dom/client";
+import Watermark from "../ui_components/watermark";
+import React from "react";
 
 const profileWrapperClass = '.rich-data-content';
 const navWrapperClass = '.rich-data-nav__list';
@@ -15,7 +18,7 @@ let profileWrapper = null;
 
 
 export default class ProfileLoader extends Component {
-    constructor(parent, formattingConfig, _api, _profileId, _config) {
+    constructor(parent, formattingConfig, _api, _profileId, _config, watermarkEnabled) {
         super(parent);
 
         this.api = _api;
@@ -23,6 +26,11 @@ export default class ProfileLoader extends Component {
         this.formattingConfig = formattingConfig;
         this.config = _config;
         this.profileHeader = null;
+        this.watermarkEnabled = watermarkEnabled;
+
+        new ResizeObserver(() => {
+            this.setWatermarkVisibility();
+        }).observe($('.rich-data-nav')[0]);
     }
 
     loadProfile = (dataBundle, activeVersion) => {
@@ -87,7 +95,36 @@ export default class ProfileLoader extends Component {
 
             removePrevCategories = false;
         }
+
+        if (this.watermarkEnabled) {
+            this.addWatermark();
+        }
     }
+
+    addWatermark() {
+        if ($('.rich-data-nav .watermark-wrapper').length > 0) {
+            return;
+        }
+
+        let watermarkWrapper = document.createElement('div');
+        $(watermarkWrapper)
+            .addClass('watermark-wrapper')
+            .addClass('truncate');
+        $('.rich-data-nav').append(watermarkWrapper);
+
+        let watermarkRoot = createRoot(watermarkWrapper);
+        watermarkRoot.render(<Watermark/>);
+    }
+
+    setWatermarkVisibility() {
+        const visibilityLimit = 100;
+        if ($('.rich-data-nav').width() > visibilityLimit) {
+            $('.rich-data-nav .watermark-wrapper').show();
+        } else {
+            $('.rich-data-nav .watermark-wrapper').hide();
+        }
+    }
+
 
     getNewId = () => {
         maxId++;

@@ -6,6 +6,9 @@ import {Category} from "./category";
 import {SubCategory} from "./subcategory";
 import {Indicator} from "./indicator";
 import {SubIndicator} from './subindicator'
+import {createRoot} from "react-dom/client";
+import Watermark from "../../ui_components/watermark";
+import React from "react";
 
 let parentContainer = null;
 let categoryTemplate = null;
@@ -80,11 +83,15 @@ export function loadMenu(dataMapperMenu, data) {
  * This class is a stub for a menu component
  */
 export class DataMapperMenu extends Component {
-    constructor(parent, api) {
+    constructor(parent, api, watermarkEnabled) {
         super(parent);
 
         this._isLoading = false;
         this._api = api;
+
+        if (watermarkEnabled) {
+            this.addWatermark();
+        }
     }
 
     get isLoading() {
@@ -105,6 +112,21 @@ export class DataMapperMenu extends Component {
         return this._api;
     }
 
+    addWatermark() {
+        if ($('.data-mapper .watermark-wrapper').length > 0) {
+            return;
+        }
+
+        let watermarkWrapper = document.createElement('div');
+        $(watermarkWrapper)
+            .addClass('watermark-wrapper');
+        $('.data-mapper-content')
+            .append(watermarkWrapper);
+
+        let watermarkRoot = createRoot(watermarkWrapper);
+        watermarkRoot.render(<Watermark/>);
+    }
+
     hideLoadingState() {
         $(`.${loadingClsName}`).addClass('hidden');
         $('.data-mapper-content__list').removeClass('hidden');
@@ -121,7 +143,7 @@ export class DataMapperMenu extends Component {
         $('.' + loadingClsName).addClass('hidden');
         $('.' + noDataWrapperClsName).removeClass('hidden');
         $(`.${noDataWrapperClsName} div`).last().text(
-          'No data available to plot on the map for the selected geography.'
+            'No data available to plot on the map for the selected geography.'
         );
         this.triggerEvent('data_mapper_menu.nodata', this);
     }

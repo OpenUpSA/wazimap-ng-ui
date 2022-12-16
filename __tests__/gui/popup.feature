@@ -1,4 +1,4 @@
-Feature: Data Mapper
+Feature: Popup
 
   Scenario: Verify the tooltip is working correctly
     Given I am on the Wazimap Homepage

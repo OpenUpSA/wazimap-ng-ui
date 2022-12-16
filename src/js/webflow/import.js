@@ -11,6 +11,7 @@ function setupTranslation(window) {
     setupLocationSearchTranslations(window);
     addTranslationDataVariableForText(window);
     addTranslationDataVariableForPlaceholder(window);
+    setupWatermarkElements(window);
 }
 
 function addTranslationDataVariableForText(window) {
@@ -62,10 +63,17 @@ function setupLocationSearchTranslations(window) {
     })
 }
 
+function setupWatermarkElements(window){
+    let mapWatermark =window.document.createElement('div');
+    mapWatermark.classList.add('map-watermark-wrapper');
+    window.document.getElementsByClassName('main')[0].append(mapWatermark);
+}
+
 exports.transformDOM = function(window, $) {
     // Add custom css
     addStylesheet(window, "custom-css/mapchip.scss");
     addStylesheet(window, "custom-css/popup.scss");
+    addStylesheet(window, "custom-css/general.scss");
 
     $('script[src="https://gcro.openup.org.za/js.117393d3.js"]').remove();
 

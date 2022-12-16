@@ -1,7 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    collapseChoroplethFilterDialog, expandChoroplethFilterDialog,
-    expandDataMapper, expandPointFilterDialog,
+    expandDataMapper,
     gotoHomepage, hoverOverTheMapCenter,
     setupInterceptions,
     waitUntilGeographyIsLoaded

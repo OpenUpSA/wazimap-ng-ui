@@ -282,11 +282,21 @@ export class MapChip extends Component {
     }
 
     setFilterLabel(dataFilterModel, groups) {
-        const defaultFilters = dataFilterModel.configFilters?.defaults || [];
-        this.filterLabel.compareFilters(defaultFilters, this.appliedFilters);
+        const selectedFilters = dataFilterModel.previouslySelectedFilters;
+        const defaultFilters = dataFilterModel?.configFilters?.defaults;
+        if (defaultFilters){
+          defaultFilters.forEach(item => {
+            if (selectedFilters[item.name] === undefined){
+              selectedFilters[item.name] = item.value
+            }
+          });
+        }
+
+        this.filterLabel.compareFilters(this.appliedFilters, selectedFilters);
         this.filterLabel.setFilterLabelTotalCount(groups);
         this.filterLabel.setFilterLabelSelectedCount({});
         this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);
+        this.appliedFilters = selectedFilters
     }
 
     setDescriptionIcon(description) {

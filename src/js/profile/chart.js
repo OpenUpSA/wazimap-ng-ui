@@ -80,6 +80,10 @@ export class Chart extends Component {
         this.addChart(data);
     }
 
+    get previouslySelectedFilters() {
+      return this.parent.previouslySelectedFilters;
+    }
+
     get chartType() {
         const type = this.data.chart_type;
         if (type === chartTypes.LineChart) {
@@ -431,7 +435,7 @@ export class Chart extends Component {
     };
 
     handleChartFilter = (indicators, groups) => {
-        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, [], indicators.metadata.primary_group, {});
+        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, this.previouslySelectedFilters, indicators.metadata.primary_group, {});
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }
@@ -459,6 +463,11 @@ export class Chart extends Component {
         this.vegaView.run();
         this.appendDataToTable();
         this.setDownloadUrl();
+        this.triggerEvent('profile.chart.updateSelectedIndicatorFilters', {
+          indicatorId: this.data.id,
+          selectedFilter: selectedFilter
+        });
+
     };
 
     exportAsCsv = () => {

@@ -21,7 +21,6 @@ const indicatorClass = '.styles .profile-indicator';
 export class Subcategory extends Component {
     constructor(parent, formattingConfig, wrapper, subcategory, detail, isFirst, geography, profileConfig) {
         super(parent);
-
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
         this._indicators = [];
         this._formattingConfig = formattingConfig;
@@ -40,6 +39,10 @@ export class Subcategory extends Component {
         this.parent.on('version.updated', (activeVersion) => {
             this.triggerEvent('version.updated', activeVersion);
         });
+    }
+
+    get indicatorFilters() {
+      return this.parent.indicatorFilters;
     }
 
     get indicators() {
@@ -107,7 +110,7 @@ export class Subcategory extends Component {
         this.bubbleEvents(block, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-            'point_tray.subindicator_filter.filter'
+            'point_tray.subindicator_filter.filter', 'profile.chart.updateSelectedIndicatorFilters',
         ]);
 
         return block;

@@ -2,6 +2,8 @@ import {FilterRow} from "../../ui_components/filter_row";
 import {Component, Observable} from "../../utils";
 import {AddFilterButton} from "../../ui_components/add_filter_button";
 import {DataFilterModel} from "../../models/data_filter_model";
+import {isEmpty} from 'lodash';
+
 
 class FilterControllerModel extends Observable {
     static EVENTS = {
@@ -181,7 +183,10 @@ export class FilterController extends Component {
     }
 
     addInitialFilterRow(dataFilterModel) {
-        if (this.noFiltersAvailable) {
+        if (
+          this.noFiltersAvailable || !isEmpty(dataFilterModel.previouslySelectedFilters)
+        ) {
+            this.isLoading = false;
             return;
         }
 
@@ -234,6 +239,14 @@ export class FilterController extends Component {
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
         filterRow.indicatorDropdown.disable();
+
+        filterRow.setPrimaryIndexUsingValue(group.group);
+        filterRow.setSecondaryIndexUsingValue(group.value);
+    }
+
+    addPreviouslySelectedFilters(group) {
+
+        let filterRow = this.addEmptyFilter();
 
         filterRow.setPrimaryIndexUsingValue(group.group);
         filterRow.setSecondaryIndexUsingValue(group.value);
@@ -302,6 +315,7 @@ export class FilterController extends Component {
 
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
+        this.checkAndAddPreviouslySelectedFilters();
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
     }
@@ -313,6 +327,13 @@ export class FilterController extends Component {
                 fr.updateIndicatorDropdowns(fr.model, lastIndex);
             }
         })
+    }
+
+    updateDefaultFilterValues(group) {
+      let filterRow = this.model.filterRows.find(fr => fr.model.currentIndicatorValue === group.group);
+      if (filterRow !== undefined) {
+        filterRow.setSecondaryIndexUsingValue(group.value);
+      }
     }
 
     checkAndAddNonAggregatableGroups() {
@@ -340,7 +361,21 @@ export class FilterController extends Component {
 
     checkAndAddPreviouslySelectedFilters() {
         const self = this;
-        let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilters;
+        let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilterGroups;
+        let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+        previouslySelectedFilters.forEach(group => {
+            if (group.group != this.model.dataFilterModel.primaryGroup) {
+              let selectedDefaultGroup = defaultGroups.find(x => x.group === group.group);
+              if (selectedDefaultGroup !== undefined){
+                if (selectedDefaultGroup.value !== group.value){
+                  self.updateDefaultFilterValues(group);
+                }
+              } else {
+                self.addPreviouslySelectedFilters(group);
+              }
+
+            }
+        })
     }
 
     toggleContentVisibility() {

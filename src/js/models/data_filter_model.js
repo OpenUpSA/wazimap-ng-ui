@@ -110,6 +110,21 @@ export class DataFilterModel extends Observable {
         return defaultFilterGroups;
     }
 
+    get previouslySelectedFilterGroups() {
+        let previouslySelectedFilterGroups = [];
+        if (typeof this.previouslySelectedFilters !== 'undefined') {
+            Object.entries(this.previouslySelectedFilters).forEach(
+              ([key, val]) => {
+                    previouslySelectedFilterGroups.push({
+                        group: key,
+                        value: val
+                    });
+                }
+            );
+        }
+        return previouslySelectedFilterGroups;
+    }
+
     get selectedFilters() {
         return this._selectedFilters;
     }

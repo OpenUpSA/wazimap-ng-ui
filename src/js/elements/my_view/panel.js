@@ -2,6 +2,7 @@ import React from "react";
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
 import MyViewHeader from "./my_view_header";
+import ViewSettings from "./view_settings";
 
 const Panel = (props) => {
     const Container = styled(Box)(({theme}) => ({
@@ -19,6 +20,7 @@ const Panel = (props) => {
     return (
         <Container>
             <MyViewHeader/>
+            <ViewSettings/>
         </Container>
     );
 }

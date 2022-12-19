@@ -31,3 +31,13 @@ export const CrossSvg =
         <path d="M1.89551 2L9.41218 10L16.9288 2" stroke="#2F2F2F" strokeWidth="3"/>
     </svg>
 ;
+
+export const IndicatorOptionsSvg =
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M5.46667 18.7667H7.46667V9.6H5.46667V18.7667ZM11 18.7667H13V5.23333H11V18.7667ZM16.5333 18.7667H18.5333V13.8333H16.5333V18.7667ZM2
+            24C1.46667 24 1 23.8 0.6 23.4C0.2 23 0 22.5333 0 22V2C0 1.46667 0.2 1 0.6 0.6C1 0.2 1.46667 0 2 0H22C22.5333 0 23 0.2 23.4
+             0.6C23.8 1 24 1.46667 24 2V22C24 22.5333 23.8 23 23.4 23.4C23 23.8 22.5333 24 22 24H2Z"
+            fill="#707070"/>
+    </svg>
+;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
 import {ToggleSvg} from "./svg_icons";
@@ -24,8 +24,14 @@ const Toggle = (props) => {
         marginTop: '3px'
     }));
 
+    const setPanelVisible = () => {
+        document.getElementsByClassName('my-view')[0].classList.remove('hidden');
+    }
+
     return (
-        <ToggleContainer>
+        <ToggleContainer
+            onClick={setPanelVisible}
+        >
             <IconContainer>
                 {toggleSvg}
             </IconContainer>

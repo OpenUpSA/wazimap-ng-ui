@@ -82,6 +82,7 @@ function addTabularComparisonLink(window) {
 }
 
 function setupMyViewElements(window) {
+    // toggles
     let rightPanelToggles = window.document.createElement('div');
     rightPanelToggles.classList.add('right-panel-toggles');
 
@@ -90,6 +91,12 @@ function setupMyViewElements(window) {
 
     rightPanelToggles.append(myViewToggle);
     window.document.getElementsByClassName('main')[0].append(rightPanelToggles);
+
+    // my view panel
+    let myViewPanel = window.document.createElement('div');
+    myViewPanel.classList.add('my-view');
+    myViewPanel.classList.add('hidden');
+    window.document.getElementsByClassName('main')[0].append(myViewPanel);
 }
 
 exports.transformDOM = function (window, $) {

@@ -24,3 +24,10 @@ export const ToggleSvg =
             fill="black"/>
     </svg>
 ;
+
+export const CrossSvg =
+    <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16.9287 18L9.41204 10L1.89538 18" stroke="#2F2F2F" strokeWidth="3"/>
+        <path d="M1.89551 2L9.41218 10L16.9288 2" stroke="#2F2F2F" strokeWidth="3"/>
+    </svg>
+;

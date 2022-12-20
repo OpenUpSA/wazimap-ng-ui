@@ -174,11 +174,10 @@ export default class Controller extends Component {
         if (newObj) {
             this._filteredIndicators.push(filteredIndicator)
         } else {
-            this._filteredIndicators = this._filteredIndicators.map(x => x.indicatorId === subindicator.indicatorId ? {...filteredIndicator} : x
-            );
+            this._filteredIndicators = this._filteredIndicators.map(x => x.indicatorId === subindicator.indicatorId ? {...filteredIndicator} : x);
         }
 
-       this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }
 
     setPersistantIndicatorFilters(payload) {

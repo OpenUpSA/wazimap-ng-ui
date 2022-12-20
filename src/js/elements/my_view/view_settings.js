@@ -32,7 +32,7 @@ const ViewSettings = (props) => {
 
     const renderFilteredIndicators = () => {
         return (
-            filteredIndicators.map((fi) => {
+            props.filteredIndicators.map((fi) => {
                 return Object.keys(fi.filter).map((key, index) => {
                     return (
                         <Grid item xs={12} key={fi.indicatorId + '_' + index}>

@@ -5,10 +5,14 @@ import {PanelContainer} from "./styled_elements";
 
 const Panel = (props) => {
     const [filteredIndicators, setFilteredIndicators] = useState([]);
+    const [startedListening, setStartedListening] = useState(false);
 
-    props.controller.on('my_view.filteredIndicators.updated', payload => {
-        setFilteredIndicators(payload.payload);
-    });
+    if (!startedListening) {
+        props.controller.on('my_view.filteredIndicators.updated', payload => {
+            setFilteredIndicators(prev => payload.payload.slice(0));
+            setStartedListening(true);
+        });
+    }
 
     return (
         <PanelContainer>

@@ -1,68 +1,101 @@
-import React from "react";
-import {styled} from "@mui/system";
-import Box from "@mui/material/Box";
-import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {IndicatorOptionsSvg} from "./svg_icons";
+import {IndicatorOptionsSvg, TrashBinSvg} from "./svg_icons";
+import {
+    Container,
+    FilteredIndicatorBox,
+    FilteredIndicatorCard,
+    IconContainer, RemoveButton,
+    StyledAccordion,
+    StyledAccordionDetails,
+    StyledAccordionSummary,
+    StyledTypography,
+    ViewSettingsTitle
+} from "./styled_elements"
+import {Grid} from "@mui/material";
 
 const ViewSettings = (props) => {
+    const [expanded, setExpanded] = useState('indicatorOptions');
+    const [filteredIndicators, setFilteredIndicators] = useState([]);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
+    const trashBinSvg = TrashBinSvg;
 
-    const Container = styled(Box)(() => ({}));
+    useEffect(() => {
+        if (props.filteredIndicators !== filteredIndicators) {
+            setFilteredIndicators(props.filteredIndicators);
+        }
+    }, [props.filteredIndicators]);
 
-    const Title = styled(Box)(() => ({
-        backgroundColor: '#333',
-        color: '#fff',
-        padding: '10px',
-        paddingLeft: '20px',
-        fontWeight: '700'
-    }));
+    const handleExpandedChange = (panel) => {
+        setExpanded(panel);
+    };
 
-    const StyledAccordionSummary = styled(AccordionSummary)(() => ({
-        padding: '10px',
-        paddingLeft: '20px',
-        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'
-    }));
-
-    const StyledTypography = styled(Typography)(() => ({
-        color: '#707070',
-        fontWeight: '600',
-        letterSpacing: '0.06em',
-        fontSize: '12px',
-        lineHeight: 2
-    }));
-
-    const IconContainer = styled(Box)(() => ({
-        marginRight: '15px',
-        display: 'inline-block'
-    }));
-
-    const StyledAccordion = styled(Accordion)(() => ({
-        boxShadow: 'unset'
-    }));
+    const renderFilteredIndicators = () => {
+        return (
+            filteredIndicators.map((fi) => {
+                return Object.keys(fi.filter).map((key, index) => {
+                    return (
+                        <Grid item xs={12} key={fi.indicatorId + '_' + index}>
+                            <FilteredIndicatorCard>
+                                <Grid container>
+                                    <Grid item xs={10}>
+                                        <Grid item xs={12}>
+                                            <FilteredIndicatorBox>
+                                                {fi.indicatorTitle}
+                                            </FilteredIndicatorBox>
+                                        </Grid>
+                                        <Grid container sx={{marginTop: '8px'}}>
+                                            <Grid item xs={6} sx={{paddingRight: '3px'}}>
+                                                <FilteredIndicatorBox>
+                                                    {key}
+                                                </FilteredIndicatorBox>
+                                            </Grid>
+                                            <Grid item xs={6} sx={{paddingLeft: '3px'}}>
+                                                <FilteredIndicatorBox>
+                                                    {fi.filter[key]}
+                                                </FilteredIndicatorBox>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <RemoveButton>
+                                            {trashBinSvg}
+                                        </RemoveButton>
+                                    </Grid>
+                                </Grid>
+                            </FilteredIndicatorCard>
+                        </Grid>
+                    )
+                })
+            })
+        )
+    }
 
     return (
         <Container>
-            <Title>
+            <ViewSettingsTitle>
                 View settings
-            </Title>
-            <StyledAccordion TransitionProps={{unmountOnExit: true}}>
+            </ViewSettingsTitle>
+            <StyledAccordion
+                expanded={expanded === 'indicatorOptions'}
+                onChange={() => handleExpandedChange(expanded === 'indicatorOptions' ? '' : 'indicatorOptions')}
+            >
                 <StyledAccordionSummary
                     expandIcon={<ExpandMoreIcon/>}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
+                    aria-controls={'indicatorOptions-content'}
+                    id={'indicatorOptions-header'}
                 >
                     <IconContainer>
                         {indicatorOptionsSvg}
                     </IconContainer>
                     <StyledTypography>INDICATOR OPTIONS</StyledTypography>
                 </StyledAccordionSummary>
-                <AccordionDetails>
-                    <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                        malesuada lacus ex, sit amet blandit leo lobortis eget.
-                    </Typography>
-                </AccordionDetails>
+                <StyledAccordionDetails>
+                    <StyledTypography>
+                        INDICATOR SPECIFIC OPTIONS
+                    </StyledTypography>
+                    {renderFilteredIndicators()}
+                </StyledAccordionDetails>
             </StyledAccordion>
         </Container>
     );

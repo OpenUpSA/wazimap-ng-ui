@@ -9,6 +9,7 @@ export default class Controller extends Component {
         this.profileId = profileId;
         this.api = api;
         this._shouldMapZoom = false;
+        this._filteredIndicators = [];
 
         this.state = {
             profileId: profileId,
@@ -50,6 +51,10 @@ export default class Controller extends Component {
 
     get shouldMapZoom() {
         return this._shouldMapZoom;
+    }
+
+    get filteredIndicators() {
+        return this._filteredIndicators;
     }
 
     changeGeography(areaCode) {
@@ -128,7 +133,6 @@ export default class Controller extends Component {
             choropleth_method: payload.choropleth_method,
             parents: payload.parents,
             data: payload.indicatorData,
-            indicatorId: payload.indicatorId,
             config: payload.config,
             metadata: payload.metadata,
             indicatorId: payload.indicatorId,
@@ -150,14 +154,38 @@ export default class Controller extends Component {
 
         this.state.subindicator = subindicator;
 
+        this.updateFilteredIndicators();
+
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
+    updateFilteredIndicators() {
+        let subindicator = this.state.subindicator;
+        let filteredIndicator = this._filteredIndicators.filter(x => x.indicatorId === subindicator.indicatorId)[0];
+        let newObj = filteredIndicator == null;
+
+        filteredIndicator = {
+            indicatorId: subindicator.indicatorId,
+            filter: structuredClone(subindicator.filter),
+            indicatorTitle: subindicator.indicatorTitle,
+            selectedSubindicator: subindicator.selectedSubindicator
+        };
+
+        if (newObj) {
+            this._filteredIndicators.push(filteredIndicator)
+        } else {
+            this._filteredIndicators = this._filteredIndicators.map(x => x.indicatorId === subindicator.indicatorId ? {...filteredIndicator} : x
+            );
+        }
+
+       this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+    }
+
     setPersistantIndicatorFilters(payload) {
-      let indicatorFilters = this.state.indicatorFilters;
-      const subindicator = this.state.subindicator;
-      indicatorFilters[subindicator.indicatorId] = payload.selectedFilter;
-      this.state.indicatorFilters = indicatorFilters
+        let indicatorFilters = this.state.indicatorFilters;
+        const subindicator = this.state.subindicator;
+        indicatorFilters[subindicator.indicatorId] = payload.selectedFilter;
+        this.state.indicatorFilters = indicatorFilters
     }
 
     onSelectingSubindicator(payload) {

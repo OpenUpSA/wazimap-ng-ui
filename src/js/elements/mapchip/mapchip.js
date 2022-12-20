@@ -284,12 +284,12 @@ export class MapChip extends Component {
     setFilterLabel(dataFilterModel, groups) {
         const selectedFilters = dataFilterModel.previouslySelectedFilters;
         const defaultFilters = dataFilterModel?.configFilters?.defaults;
-        if (defaultFilters){
-          defaultFilters.forEach(item => {
-            if (selectedFilters[item.name] === undefined){
-              selectedFilters[item.name] = item.value
-            }
-          });
+        if (defaultFilters) {
+            defaultFilters.forEach(item => {
+                if (selectedFilters[item.name] === undefined) {
+                    selectedFilters[item.name] = item.value
+                }
+            });
         }
 
         this.filterLabel.compareFilters(this.appliedFilters, selectedFilters);

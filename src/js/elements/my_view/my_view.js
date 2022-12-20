@@ -5,12 +5,11 @@ import Toggle from "./toggle";
 import Panel from "./panel";
 
 export class MyView extends Component {
-    constructor(parent) {
+    constructor(parent, controller) {
         super(parent);
 
-
         this.addToggle();
-        this.addPanel();
+        this.addPanel(controller);
     }
 
     addToggle() {
@@ -18,8 +17,10 @@ export class MyView extends Component {
         watermarkRoot.render(<Toggle/>);
     }
 
-    addPanel(){
+    addPanel(controller) {
         let myViewRoot = createRoot($('.my-view')[0]);
-        myViewRoot.render(<Panel />)
+        myViewRoot.render(<Panel
+            controller={controller}
+        />)
     }
 }

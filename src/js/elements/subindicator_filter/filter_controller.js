@@ -332,10 +332,14 @@ export class FilterController extends Component {
             const filterRemains = filters.some(f => f.group === selectedGroup && f.value === selectedValue);
 
             if (!filterRemains && selectedGroup !== 'All indicators') {
-                if (row.model.isDefault) {
-                    row.setPrimaryIndex(0);
-                } else {
-                    row.removeRow();
+                row.removeRow();
+
+                this.checkAndAddNonAggregatableGroups();
+                this.checkAndAddDefaultFilterGroups();
+
+                const remainingRowLength = this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').length;
+                if (remainingRowLength <= 0) {
+                    this.addEmptyFilter(true);
                 }
             }
         })

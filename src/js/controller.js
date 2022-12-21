@@ -154,7 +154,6 @@ export default class Controller extends Component {
     }
 
     onChoroplethFiltered(payload) {
-        //update this.state.subindicator with the filtered values
         let subindicator = this.state.subindicator;
         subindicator.subindicatorArr = payload.subindicatorArr;
         subindicator.children = payload.data;
@@ -198,6 +197,10 @@ export default class Controller extends Component {
         objToUpdate.filters = filterArr;
 
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+
+        if (this.state.subindicator.indicatorId === filteredIndicator.indicatorId) {
+            this.triggerEvent('mapchip.choropleth.filtersUpdated', filteredIndicator);
+        }
     }
 
     onSelectingSubindicator(payload) {

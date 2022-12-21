@@ -244,9 +244,9 @@ export class FilterController extends Component {
         filterRow.setSecondaryIndexUsingValue(group.value);
     }
 
-    addPreviouslySelectedFilters(group) {
+    addPreviouslySelectedFilters(group, isDefault) {
 
-        let filterRow = this.addEmptyFilter();
+        let filterRow = this.addEmptyFilter(isDefault);
 
         filterRow.setPrimaryIndexUsingValue(group.group);
         filterRow.setSecondaryIndexUsingValue(group.value);
@@ -320,6 +320,27 @@ export class FilterController extends Component {
         this.addInitialFilterRow(dataFilterModel);
     }
 
+    /**
+     * this function will be triggered when the filters are updated outside the mapchip
+     * e.g when user removes a filter from my view panel
+     **/
+    filtersUpdatedOutsideMapchip(filteredIndicator) {
+        this.model.filterRows.forEach((row) => {
+            const selectedGroup = row.model.currentIndicatorValue;
+            const selectedValue = row.model.currentSubindicatorValue;
+            const filters = filteredIndicator.filters;
+            const filterRemains = filters.some(f => f.group === selectedGroup && f.value === selectedValue);
+
+            if (!filterRemains && selectedGroup !== 'All indicators') {
+                if (row.model.isDefault) {
+                    row.setPrimaryIndex(0);
+                } else {
+                    row.removeRow();
+                }
+            }
+        })
+    }
+
     updateAvailableFiltersOfRows() {
         this.model.filterRows.forEach((fr) => {
             if (fr.model.currentIndicatorValue !== 'All values') {
@@ -363,7 +384,7 @@ export class FilterController extends Component {
         const self = this;
         let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilterGroups;
         let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
-        previouslySelectedFilters.forEach(group => {
+        previouslySelectedFilters.forEach((group, index) => {
             if (group.group != this.model.dataFilterModel.primaryGroup) {
                 let selectedDefaultGroup = defaultGroups.find(x => x.group === group.group);
                 if (selectedDefaultGroup !== undefined) {
@@ -371,7 +392,7 @@ export class FilterController extends Component {
                         self.updateDefaultFilterValues(group);
                     }
                 } else {
-                    self.addPreviouslySelectedFilters(group);
+                    self.addPreviouslySelectedFilters(group, index === 0);
                 }
 
             }

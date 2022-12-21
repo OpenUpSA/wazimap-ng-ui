@@ -72,6 +72,10 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('my_view.filteredIndicators.removed', payload => {
         controller.removeFilteredIndicator(payload.payload.filteredIndicator, payload.payload.selectedFilter);
     })
+
+    controller.on('mapchip.choropleth.filtersUpdated', payload => {
+        mapchip.filterController.filtersUpdatedOutsideMapchip(payload.payload);
+    })
 }
 
 function handleNewProfileChoropleth(controller, api, mapcontrol) {

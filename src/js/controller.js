@@ -16,7 +16,6 @@ export default class Controller extends Component {
             // Set if a choropleth is currently active
             // TODO this state should possibly be stored in the mapcontrol
             subindicator: null,
-            indicatorFilters: {},
             selectedSubindicator: ''
         }
 
@@ -136,7 +135,7 @@ export default class Controller extends Component {
             config: payload.config,
             metadata: payload.metadata,
             indicatorId: payload.indicatorId,
-            filter: this.state.indicatorFilters[payload.indicatorId] || {},
+            filter: this.getIndicatorFilters(payload.indicatorId) || {},
         }
 
         this.state.subindicator = subindicator;
@@ -145,12 +144,21 @@ export default class Controller extends Component {
         this.triggerEvent("map_explorer.subindicator.click", payload);
     }
 
+    getIndicatorFilters(indicatorId) {
+        let obj = {}
+        this.filteredIndicators.filter(x => x.indicatorId === indicatorId)[0]?.filter.forEach(x => {
+            obj[x.group] = x.value
+        })
+
+        return obj;
+    }
+
     onChoroplethFiltered(payload) {
         //update this.state.subindicator with the filtered values
         let subindicator = this.state.subindicator;
         subindicator.subindicatorArr = payload.subindicatorArr;
         subindicator.children = payload.data;
-        subindicator.filter = payload.selectedFilter
+        subindicator.filter = payload.selectedFilter;
 
         this.state.subindicator = subindicator;
 
@@ -178,13 +186,6 @@ export default class Controller extends Component {
         }
 
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-    }
-
-    setPersistantIndicatorFilters(payload) {
-        let indicatorFilters = this.state.indicatorFilters;
-        const subindicator = this.state.subindicator;
-        indicatorFilters[subindicator.indicatorId] = payload.selectedFilter;
-        this.state.indicatorFilters = indicatorFilters
     }
 
     onSelectingSubindicator(payload) {

@@ -14,11 +14,16 @@ const Panel = (props) => {
         });
     }
 
+    const removeFilter = (filteredIndicator, selectedFilter) => {
+        props.controller.triggerEvent('my_view.filteredIndicators.removed',filteredIndicator);
+    }
+
     return (
         <PanelContainer>
             <MyViewHeader/>
             <ViewSettings
                 filteredIndicators={filteredIndicators}
+                removeFilter={(fi, sf) => removeFilter(fi, sf)}
             />
         </PanelContainer>
     );

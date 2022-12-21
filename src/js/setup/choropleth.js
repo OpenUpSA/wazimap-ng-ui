@@ -9,7 +9,6 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 
     mapchip.on('mapchip.choropleth.filtered', payload => {
         controller.onChoroplethFiltered(payload);
-        controller.setPersistantIndicatorFilters(payload);
     })
 
     mapchip.on('mapchip.choropleth.selectSubindicator', payload => {
@@ -68,6 +67,10 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 
     controller.on('redraw', payload => {
         handleNewProfileChoropleth(controller, api, mapcontrol)
+    })
+
+    controller.on('my_view.filteredIndicators.removed', payload => {
+        console.log('my_view.filteredIndicators.removed')
     })
 }
 

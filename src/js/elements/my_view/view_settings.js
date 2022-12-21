@@ -35,7 +35,7 @@ const ViewSettings = (props) => {
         return (
             props.filteredIndicators.map((fi) => {
                 return fi.filter.map((sf, index) => {
-                    if (!sf.isDefault){
+                    if (!sf.isDefault) {
                         return (
                             <Grid item xs={12} key={fi.indicatorId + '_' + index}>
                                 <FilteredIndicatorCard>
@@ -60,7 +60,7 @@ const ViewSettings = (props) => {
                                             </Grid>
                                         </Grid>
                                         <Grid item xs={2}>
-                                            <RemoveButton>
+                                            <RemoveButton onClick={() => props.removeFilter(fi, sf)}>
                                                 {trashBinSvg}
                                             </RemoveButton>
                                         </Grid>

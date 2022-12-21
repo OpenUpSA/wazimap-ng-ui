@@ -15,7 +15,10 @@ const Panel = (props) => {
     }
 
     const removeFilter = (filteredIndicator, selectedFilter) => {
-        props.controller.triggerEvent('my_view.filteredIndicators.removed',filteredIndicator);
+        props.controller.triggerEvent('my_view.filteredIndicators.removed', {
+            filteredIndicator,
+            selectedFilter
+        });
     }
 
     return (

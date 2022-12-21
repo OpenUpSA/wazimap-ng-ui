@@ -70,7 +70,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     })
 
     controller.on('my_view.filteredIndicators.removed', payload => {
-        console.log('my_view.filteredIndicators.removed')
+        controller.removeFilteredIndicator(payload.payload.filteredIndicator, payload.payload.selectedFilter);
     })
 }
 

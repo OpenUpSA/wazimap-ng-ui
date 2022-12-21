@@ -146,7 +146,7 @@ export default class Controller extends Component {
 
     getIndicatorFilters(indicatorId) {
         let obj = {}
-        this.filteredIndicators.filter(x => x.indicatorId === indicatorId)[0]?.filter.forEach(x => {
+        this.filteredIndicators.filter(x => x.indicatorId === indicatorId)[0]?.filters.forEach(x => {
             obj[x.group] = x.value
         })
 
@@ -174,7 +174,7 @@ export default class Controller extends Component {
 
         filteredIndicator = {
             indicatorId: subindicator.indicatorId,
-            filter: selectedFilterDetails,
+            filters: selectedFilterDetails,
             indicatorTitle: subindicator.indicatorTitle,
             selectedSubindicator: subindicator.selectedSubindicator
         };
@@ -184,6 +184,18 @@ export default class Controller extends Component {
         } else {
             this._filteredIndicators = this._filteredIndicators.map(x => x.indicatorId === subindicator.indicatorId ? {...filteredIndicator} : x);
         }
+
+        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+    }
+
+    removeFilteredIndicator(filteredIndicator, selectedFilter) {
+        if (selectedFilter.isDefault) {
+            throw 'Cannot remove a default filter';
+        }
+
+        let objToUpdate = this._filteredIndicators.filter(x => x.indicatorId === filteredIndicator.indicatorId)[0];
+        let filterArr = objToUpdate.filters.filter(x => !(x.group === selectedFilter.group && x.value === selectedFilter.value));
+        objToUpdate.filters = filterArr;
 
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }

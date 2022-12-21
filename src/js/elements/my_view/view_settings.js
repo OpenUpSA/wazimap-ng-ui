@@ -34,7 +34,7 @@ const ViewSettings = (props) => {
     const renderFilteredIndicators = () => {
         return (
             props.filteredIndicators.map((fi) => {
-                return fi.filter.map((sf, index) => {
+                return fi.filters.map((sf, index) => {
                     if (!sf.isDefault) {
                         return (
                             <Grid item xs={12} key={fi.indicatorId + '_' + index}>

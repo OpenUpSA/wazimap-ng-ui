@@ -21,8 +21,4 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
     controller.on('hashChange', () => {
         dataMapperMenu.isLoading = true;
     })
-
-    controller.on('my_view.filteredIndicators.removed', payload => {
-        console.log({dataMapperMenu})
-    })
 }

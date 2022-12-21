@@ -5,7 +5,8 @@ import {
     Container,
     FilteredIndicatorBox,
     FilteredIndicatorCard,
-    IconContainer, RemoveButton,
+    IconContainer,
+    RemoveButton,
     StyledAccordion,
     StyledAccordionDetails,
     StyledAccordionSummary,
@@ -33,39 +34,41 @@ const ViewSettings = (props) => {
     const renderFilteredIndicators = () => {
         return (
             props.filteredIndicators.map((fi) => {
-                return Object.keys(fi.filter).map((key, index) => {
-                    return (
-                        <Grid item xs={12} key={fi.indicatorId + '_' + index}>
-                            <FilteredIndicatorCard>
-                                <Grid container>
-                                    <Grid item xs={10}>
-                                        <Grid item xs={12}>
-                                            <FilteredIndicatorBox>
-                                                {fi.indicatorTitle}
-                                            </FilteredIndicatorBox>
-                                        </Grid>
-                                        <Grid container sx={{marginTop: '8px'}}>
-                                            <Grid item xs={6} sx={{paddingRight: '3px'}}>
+                return fi.filter.map((sf, index) => {
+                    if (!sf.isDefault){
+                        return (
+                            <Grid item xs={12} key={fi.indicatorId + '_' + index}>
+                                <FilteredIndicatorCard>
+                                    <Grid container>
+                                        <Grid item xs={10}>
+                                            <Grid item xs={12}>
                                                 <FilteredIndicatorBox>
-                                                    {key}
+                                                    {fi.indicatorTitle}
                                                 </FilteredIndicatorBox>
                                             </Grid>
-                                            <Grid item xs={6} sx={{paddingLeft: '3px'}}>
-                                                <FilteredIndicatorBox>
-                                                    {fi.filter[key]}
-                                                </FilteredIndicatorBox>
+                                            <Grid container sx={{marginTop: '8px'}}>
+                                                <Grid item xs={6} sx={{paddingRight: '3px'}}>
+                                                    <FilteredIndicatorBox>
+                                                        {sf.group}
+                                                    </FilteredIndicatorBox>
+                                                </Grid>
+                                                <Grid item xs={6} sx={{paddingLeft: '3px'}}>
+                                                    <FilteredIndicatorBox>
+                                                        {sf.value}
+                                                    </FilteredIndicatorBox>
+                                                </Grid>
                                             </Grid>
                                         </Grid>
+                                        <Grid item xs={2}>
+                                            <RemoveButton>
+                                                {trashBinSvg}
+                                            </RemoveButton>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={2}>
-                                        <RemoveButton>
-                                            {trashBinSvg}
-                                        </RemoveButton>
-                                    </Grid>
-                                </Grid>
-                            </FilteredIndicatorCard>
-                        </Grid>
-                    )
+                                </FilteredIndicatorCard>
+                            </Grid>
+                        )
+                    }
                 })
             })
         )

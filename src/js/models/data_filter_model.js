@@ -1,5 +1,6 @@
 import {Observable, trimValue} from "../utils";
 import {DataFilter} from "./data_filter";
+import {isEqual} from "vega-lite";
 
 /**
  * A class that stores the state of a dataset filter. Consists of a list of indicators,
@@ -114,7 +115,7 @@ export class DataFilterModel extends Observable {
         let previouslySelectedFilterGroups = [];
         if (typeof this.previouslySelectedFilters !== 'undefined') {
             Object.entries(this.previouslySelectedFilters).forEach(
-              ([key, val]) => {
+                ([key, val]) => {
                     previouslySelectedFilterGroups.push({
                         group: key,
                         value: val
@@ -135,6 +136,16 @@ export class DataFilterModel extends Observable {
 
     get selectedSubIndicators() {
         return this._selectedSubindicators;
+    }
+
+    get selectedFilterDetails() {
+        return Object.keys(this._selectedSubindicators).map(key => {
+            return {
+                group: key,
+                value: this._selectedSubindicators[key],
+                isDefault: this.defaultFilterGroups.some(f => f.group === key && f.value === this._selectedSubindicators[key])
+            };
+        })
     }
 
     get childData() {
@@ -220,11 +231,8 @@ export class DataFilterModel extends Observable {
     }
 
     setSelectedSubindicator(indicatorName, subindicatorValue) {
-        // if (this._selectedSubindicators[indicatorName] == undefined)
-        //     throw `setSelectedSubindicator: Can't find indicator: ${indicatorName}`
-
         if (this._selectedSubindicators[indicatorName] != subindicatorValue) {
-            this._selectedSubindicators[indicatorName] = subindicatorValue
+            this._selectedSubindicators[indicatorName] = subindicatorValue;
         }
     }
 

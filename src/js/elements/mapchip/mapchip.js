@@ -226,14 +226,16 @@ export class MapChip extends Component {
         this.triggerEvent('mapchip.removed', this.container);
     }
 
-    applyFilter = (filterResult, selectedFilter) => {
+    applyFilter = (filterResult, selectedFilter, selectedFilterDetails) => {
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,
                 selectedFilter: selectedFilter,
+                selectedFilterDetails: selectedFilterDetails,
                 metadata: this.metadata,
                 config: this.config
             }
+
             this.triggerEvent("mapchip.choropleth.filtered", payload)
         }
         this.appliedFilters = selectedFilter;

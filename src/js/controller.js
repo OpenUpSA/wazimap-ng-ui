@@ -154,19 +154,19 @@ export default class Controller extends Component {
 
         this.state.subindicator = subindicator;
 
-        this.updateFilteredIndicators();
+        this.updateFilteredIndicators(payload.selectedFilterDetails);
 
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
-    updateFilteredIndicators() {
+    updateFilteredIndicators(selectedFilterDetails) {
         let subindicator = this.state.subindicator;
         let filteredIndicator = this._filteredIndicators.filter(x => x.indicatorId === subindicator.indicatorId)[0];
         let newObj = filteredIndicator == null;
 
         filteredIndicator = {
             indicatorId: subindicator.indicatorId,
-            filter: structuredClone(subindicator.filter),
+            filter: selectedFilterDetails,
             indicatorTitle: subindicator.indicatorTitle,
             selectedSubindicator: subindicator.selectedSubindicator
         };

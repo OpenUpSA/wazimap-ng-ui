@@ -184,7 +184,7 @@ export class FilterController extends Component {
 
     addInitialFilterRow(dataFilterModel) {
         if (
-          this.noFiltersAvailable || !isEmpty(dataFilterModel.previouslySelectedFilters)
+            this.noFiltersAvailable || !isEmpty(dataFilterModel.previouslySelectedFilters)
         ) {
             this.isLoading = false;
             return;
@@ -306,7 +306,7 @@ export class FilterController extends Component {
 
         this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, () => {
             if (this.filterCallback !== null) {
-                this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators);
+                this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators, this.model.dataFilterModel.selectedFilterDetails);
             }
 
             this.updateAvailableFiltersOfRows();
@@ -330,10 +330,10 @@ export class FilterController extends Component {
     }
 
     updateDefaultFilterValues(group) {
-      let filterRow = this.model.filterRows.find(fr => fr.model.currentIndicatorValue === group.group);
-      if (filterRow !== undefined) {
-        filterRow.setSecondaryIndexUsingValue(group.value);
-      }
+        let filterRow = this.model.filterRows.find(fr => fr.model.currentIndicatorValue === group.group);
+        if (filterRow !== undefined) {
+            filterRow.setSecondaryIndexUsingValue(group.value);
+        }
     }
 
     checkAndAddNonAggregatableGroups() {
@@ -365,14 +365,14 @@ export class FilterController extends Component {
         let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
         previouslySelectedFilters.forEach(group => {
             if (group.group != this.model.dataFilterModel.primaryGroup) {
-              let selectedDefaultGroup = defaultGroups.find(x => x.group === group.group);
-              if (selectedDefaultGroup !== undefined){
-                if (selectedDefaultGroup.value !== group.value){
-                  self.updateDefaultFilterValues(group);
+                let selectedDefaultGroup = defaultGroups.find(x => x.group === group.group);
+                if (selectedDefaultGroup !== undefined) {
+                    if (selectedDefaultGroup.value !== group.value) {
+                        self.updateDefaultFilterValues(group);
+                    }
+                } else {
+                    self.addPreviouslySelectedFilters(group);
                 }
-              } else {
-                self.addPreviouslySelectedFilters(group);
-              }
 
             }
         })

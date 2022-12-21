@@ -16,7 +16,7 @@ import {
 import {Grid} from "@mui/material";
 
 const ViewSettings = (props) => {
-    const [expanded, setExpanded] = useState('indicatorOptions');
+    const [expanded, setExpanded] = useState('');
     const [filteredIndicators, setFilteredIndicators] = useState([]);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
     const trashBinSvg = TrashBinSvg;

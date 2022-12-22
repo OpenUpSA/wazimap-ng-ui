@@ -41,8 +41,8 @@ export class Subcategory extends Component {
         });
     }
 
-    get indicatorFilters() {
-      return this.parent.indicatorFilters;
+    get filteredIndicators() {
+        return this.parent.filteredIndicators;
     }
 
     get indicators() {
@@ -110,7 +110,7 @@ export class Subcategory extends Component {
         this.bubbleEvents(block, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-            'point_tray.subindicator_filter.filter', 'profile.chart.updateSelectedIndicatorFilters',
+            'point_tray.subindicator_filter.filter', 'profile.chart.filtered',
         ]);
 
         return block;

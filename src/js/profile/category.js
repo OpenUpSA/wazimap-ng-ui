@@ -35,8 +35,8 @@ export class Category extends Component {
         this.addCategory(category, detail, isFirst);
     }
 
-    get indicatorFilters() {
-      return this.parent.indicatorFilters;
+    get filteredIndicators() {
+        return this.parent.filteredIndicators;
     }
 
     get subCategories() {
@@ -129,7 +129,7 @@ export class Category extends Component {
             this.bubbleEvents(sc, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter', 'profile.chart.updateSelectedIndicatorFilters',
+                'point_tray.subindicator_filter.filter', 'profile.chart.filtered',
             ]);
         }
     }

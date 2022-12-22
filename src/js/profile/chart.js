@@ -81,7 +81,7 @@ export class Chart extends Component {
     }
 
     get previouslySelectedFilters() {
-      return this.parent.previouslySelectedFilters;
+        return this.parent.previouslySelectedFilters;
     }
 
     get chartType() {
@@ -442,7 +442,7 @@ export class Chart extends Component {
         this._filterController.setDataFilterModel(dataFilterModel);
     };
 
-    applyFilter = (filteredData, selectedFilter) => {
+    applyFilter = (filteredData, selectedFilter, selectedFilterDetails) => {
         this.filteredData = filteredData;
         this.filterGroups.forEach((group) => {
             let {name: filterName} = group;
@@ -463,10 +463,13 @@ export class Chart extends Component {
         this.vegaView.run();
         this.appendDataToTable();
         this.setDownloadUrl();
-        this.triggerEvent('profile.chart.updateSelectedIndicatorFilters', {
-          indicatorId: this.data.id,
-          selectedFilter: selectedFilter
-        });
+
+        const payload = {
+            indicatorId: this.data.id,
+            selectedFilter: selectedFilterDetails,
+            title: this.title
+        };
+        this.triggerEvent('profile.chart.filtered', payload);
 
     };
 

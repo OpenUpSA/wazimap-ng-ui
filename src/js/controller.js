@@ -161,27 +161,32 @@ export default class Controller extends Component {
 
         this.state.subindicator = subindicator;
 
-        this.updateFilteredIndicators(payload.selectedFilterDetails);
+        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails);
 
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
-    updateFilteredIndicators(selectedFilterDetails) {
-        let subindicator = this.state.subindicator;
-        let filteredIndicator = this._filteredIndicators.filter(x => x.indicatorId === subindicator.indicatorId)[0];
+    onChartFiltered(payload) {
+        console.log({'chart': payload});
+        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter);
+    }
+
+    updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails) {
+        let filteredIndicator = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0];
         let newObj = filteredIndicator == null;
 
         filteredIndicator = {
-            indicatorId: subindicator.indicatorId,
+            indicatorId: indicatorId,
             filters: selectedFilterDetails,
-            indicatorTitle: subindicator.indicatorTitle,
-            selectedSubindicator: subindicator.selectedSubindicator
+            indicatorTitle: indicatorTitle
         };
+
+        console.log({filteredIndicator})
 
         if (newObj) {
             this._filteredIndicators.push(filteredIndicator)
         } else {
-            this._filteredIndicators = this._filteredIndicators.map(x => x.indicatorId === subindicator.indicatorId ? {...filteredIndicator} : x);
+            this._filteredIndicators = this._filteredIndicators.map(x => x.indicatorId === indicatorId ? {...filteredIndicator} : x);
         }
 
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);

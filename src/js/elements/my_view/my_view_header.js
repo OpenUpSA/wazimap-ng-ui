@@ -16,7 +16,7 @@ const MyViewHeader = (props) => {
                 {toggleSvg}
             </IconContainer>
             <MyViewTitle>
-                My views
+                My view
             </MyViewTitle>
             <CloseButton
                 onClick={setPanelInvisible}

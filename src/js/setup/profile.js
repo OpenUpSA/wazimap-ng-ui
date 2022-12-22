@@ -3,7 +3,10 @@ import {VersionController} from "../versions/version_controller";
 export function configureProfileEvents(controller, objs = {profileLoader: null}) {
     const profileLoader = objs['profileLoader'];
 
-    controller.on(VersionController.EVENTS.ready, payload => profileLoader.loadProfile(payload.payload, controller.versionController.activeVersion));
+    controller.on(VersionController.EVENTS.ready, payload => {
+        profileLoader.filteredIndicators = controller.filteredIndicators;
+        profileLoader.loadProfile(payload.payload, controller.versionController.activeVersion)
+    });
     controller.on(VersionController.EVENTS.ready, () => {
         profileLoader.updateActiveVersion(controller.versionController.activeVersion)
     });
@@ -26,5 +29,7 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
         profileLoader.profileHeader.facilityController.getAndAddFacilities(controller.versionController.activeVersion);
     });
 
-    profileLoader.on('profile.chart.updateSelectedIndicatorFilters', payload => profileLoader.updateSelectedIndicatorFilters(payload));
+    profileLoader.on('profile.chart.filtered', payload => {
+        controller.onChartFiltered(payload);
+    });
 }

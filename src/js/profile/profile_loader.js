@@ -20,14 +20,12 @@ let profileWrapper = null;
 export default class ProfileLoader extends Component {
     constructor(parent, formattingConfig, _api, _profileId, _config, watermarkEnabled) {
         super(parent);
-        this.state = {
-          indicatorFilters: {}
-        }
         this.api = _api;
         this.profileId = _profileId;
         this.formattingConfig = formattingConfig;
         this.config = _config;
         this.profileHeader = null;
+        this._filteredIndicators = [];
         this.watermarkEnabled = watermarkEnabled;
 
         new ResizeObserver(() => {
@@ -35,8 +33,12 @@ export default class ProfileLoader extends Component {
         }).observe($('.rich-data-nav')[0]);
     }
 
-    get indicatorFilters() {
-      return this.state.indicatorFilters;
+    get filteredIndicators() {
+        return this._filteredIndicators;
+    }
+
+    set filteredIndicators(value) {
+        this._filteredIndicators = value;
     }
 
     loadProfile = (dataBundle, activeVersion) => {
@@ -96,7 +98,7 @@ export default class ProfileLoader extends Component {
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter', 'profile.chart.updateSelectedIndicatorFilters',
+                'point_tray.subindicator_filter.filter', 'profile.chart.filtered',
             ]);
 
             removePrevCategories = false;
@@ -196,7 +198,8 @@ export default class ProfileLoader extends Component {
     }
 
     updateSelectedIndicatorFilters = (payload) => {
-      let filters = this.state.indicatorFilters;
-      filters[payload.indicatorId] = payload.selectedFilter;
+        return;
+        let filters = this.filteredIndicators;
+        filters[payload.indicatorId] = payload.selectedFilter;
     }
 }

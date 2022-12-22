@@ -12,8 +12,8 @@ export class Indicator extends ContentBlock {
     }
 
     get previouslySelectedFilters() {
-      let indicatorFilters = this.parent.indicatorFilters;
-      return indicatorFilters[this.indicator.id] || {};
+        let filteredIndicators = this.parent.filteredIndicators;
+        return filteredIndicators[this.indicator.id] || {};
     }
 
     get hasData() {
@@ -35,7 +35,7 @@ export class Indicator extends ContentBlock {
         this.bubbleEvents(c, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-            'point_tray.subindicator_filter.filter', 'profile.chart.updateSelectedIndicatorFilters'
+            'point_tray.subindicator_filter.filter', 'profile.chart.filtered'
         ]);
     }
 

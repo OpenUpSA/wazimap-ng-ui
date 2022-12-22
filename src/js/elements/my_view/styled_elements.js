@@ -121,7 +121,11 @@ export const FilteredIndicatorBox = styled(Box)(() => ({
     padding: '4px 6px 4px 12px',
     borderRadius: '4px',
     color: '#2F2F2F',
-    fontWeight: '400'
+    fontWeight: '400',
+    width: '100%',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
 }));
 
 export const RemoveButton = styled(Button)(() => ({

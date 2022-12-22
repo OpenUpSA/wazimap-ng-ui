@@ -138,12 +138,13 @@ export class DataFilterModel extends Observable {
         return this._selectedSubindicators;
     }
 
-    get selectedFilterDetails() {
+    get selectedFilterDetails(){
         return Object.keys(this._selectedSubindicators).map(key => {
             return {
                 group: key,
                 value: this._selectedSubindicators[key],
-                isDefault: this.defaultFilterGroups.some(f => f.group === key && f.value === this._selectedSubindicators[key])
+                isDefault: this.defaultFilterGroups.some(f => f.group === key && f.value === this._selectedSubindicators[key]),
+                appliesTo: []
             };
         })
     }

@@ -1,10 +1,7 @@
 import {format as d3format} from "d3-format";
-import {select as d3select} from "d3-selection";
 
-import {appendFilterArrays, Component} from "../utils";
+import {Component} from "../utils";
 import {defaultValues} from "../defaultValues";
-
-import {SubindicatorFilter} from "./subindicator_filter";
 import XLSX from 'xlsx';
 import Papa from 'papaparse';
 
@@ -14,9 +11,9 @@ import * as vega from "vega";
 import {configureBarchart, configureBarchartDownload} from './charts/barChart';
 import {configureLinechart, configureLinechartDownload} from './charts/lineChart';
 import {slugify} from './charts/utils';
-import DropdownMenu from "../elements/dropdown_menu";
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
 import {DataFilterModel} from "../models/data_filter_model";
+import {SidePanels} from "../elements/side_panels";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -464,6 +461,7 @@ export class Chart extends Component {
         this.appendDataToTable();
         this.setDownloadUrl();
 
+        selectedFilterDetails.map(x => x.appliesTo.push(SidePanels.PANELS.richData));
         const payload = {
             indicatorId: this.data.id,
             selectedFilter: selectedFilterDetails,

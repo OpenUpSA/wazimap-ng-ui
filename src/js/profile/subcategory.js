@@ -131,7 +131,7 @@ export class Subcategory extends Component {
 
         if (!isEmpty) {
             for (const indicator of sortBy(detail.indicators, "order")) {
-                const title = Object.keys(detail.indicators).filter(k => detail.indicators[k] === indicator);
+                const title = Object.keys(detail.indicators).filter(k => detail.indicators[k] === indicator)[0];
                 if (typeof indicator.data !== 'undefined') {
                     let isLast = index === lastIndex;
                     let block = null;

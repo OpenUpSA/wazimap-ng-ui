@@ -167,7 +167,6 @@ export default class Controller extends Component {
     }
 
     onChartFiltered(payload) {
-        console.log({'chart': payload});
         this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter);
     }
 
@@ -181,13 +180,13 @@ export default class Controller extends Component {
             indicatorTitle: indicatorTitle
         };
 
-        console.log({filteredIndicator})
-
         if (newObj) {
             this._filteredIndicators.push(filteredIndicator)
         } else {
             this._filteredIndicators = this._filteredIndicators.map(x => x.indicatorId === indicatorId ? {...filteredIndicator} : x);
         }
+
+        console.log({'filteredIndicator': this.filteredIndicators})
 
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }

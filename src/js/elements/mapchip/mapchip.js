@@ -6,6 +6,7 @@ import {Tooltip} from "../../ui_components/tooltip";
 import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
 import {LinearScrubberRenderer} from "./components/linear_scrubber/renderer";
+import {SidePanels} from "../side_panels";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockParentClass = '.map-bottom-items--v2';
@@ -228,6 +229,8 @@ export class MapChip extends Component {
 
     applyFilter = (filterResult, selectedFilter, selectedFilterDetails) => {
         if (filterResult !== null) {
+            selectedFilterDetails.map(x => x.appliesTo.push(SidePanels.PANELS.dataMapper));
+
             const payload = {
                 data: filterResult,
                 selectedFilter: selectedFilter,

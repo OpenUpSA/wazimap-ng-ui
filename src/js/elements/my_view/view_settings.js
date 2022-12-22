@@ -42,8 +42,10 @@ const ViewSettings = (props) => {
                                     <Grid container>
                                         <Grid item xs={10}>
                                             <Grid item xs={12}>
-                                                <FilteredIndicatorBox>
-                                                    {fi.indicatorTitle}
+                                                <FilteredIndicatorBox
+                                                    title={`${fi.indicatorTitle}(${sf.appliesTo[0]})`}
+                                                >
+                                                    {`${fi.indicatorTitle}(${sf.appliesTo[0]})`}
                                                 </FilteredIndicatorBox>
                                             </Grid>
                                             <Grid container sx={{marginTop: '8px'}}>

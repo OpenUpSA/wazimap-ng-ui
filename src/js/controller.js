@@ -186,8 +186,6 @@ export default class Controller extends Component {
             this._filteredIndicators = this._filteredIndicators.map(x => x.indicatorId === indicatorId ? {...filteredIndicator} : x);
         }
 
-        console.log({'filteredIndicator': this.filteredIndicators})
-
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }
 

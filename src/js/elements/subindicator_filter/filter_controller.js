@@ -234,10 +234,15 @@ export class FilterController extends Component {
         let index = 0;
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
-        filterRow.indicatorDropdown.disable();
+        try {
+            filterRow.indicatorDropdown.disable();
 
-        filterRow.setPrimaryIndexUsingValue(group.name);
-        filterRow.setSecondaryIndex(index);
+            filterRow.setPrimaryIndexUsingValue(group.name);
+            filterRow.setSecondaryIndex(index);
+        } catch (err) {
+            filterRow.removeRow();
+            console.error(err);
+        }
     }
 
     addDefaultFilter(group) {
@@ -247,10 +252,15 @@ export class FilterController extends Component {
         let addAsFirstRow = true;
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired, addAsFirstRow);
-        filterRow.indicatorDropdown.disable();
+        try {
+            filterRow.indicatorDropdown.disable();
 
-        filterRow.setPrimaryIndexUsingValue(group.group);
-        filterRow.setSecondaryIndexUsingValue(group.value);
+            filterRow.setPrimaryIndexUsingValue(group.group);
+            filterRow.setSecondaryIndexUsingValue(group.value);
+        } catch (err) {
+            filterRow.removeRow();
+            console.error(err);
+        }
     }
 
     addPreviouslySelectedFilters(group, isDefault) {
@@ -339,8 +349,6 @@ export class FilterController extends Component {
             const selectedValue = row.model.currentSubindicatorValue;
             const filters = filteredIndicator.filters;
             const filterRemains = filters.some(f => f.group === selectedGroup && f.value === selectedValue);
-
-            console.log({selectedGroup, selectedValue, filters, filterRemains})
 
             if (!filterRemains && selectedGroup !== 'All indicators') {
                 row.removeRow();

@@ -1,5 +1,6 @@
 import {Component} from '../utils';
 import {LayerStyler} from './layerstyler';
+import {eventForwarder} from 'leaflet-event-forwarder/dist/leaflet-event-forwarder';
 import {Choropleth} from './choropleth/choropleth';
 import {MapLocker} from './maplocker';
 import {createRoot} from "react-dom/client";

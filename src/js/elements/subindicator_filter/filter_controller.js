@@ -344,6 +344,7 @@ export class FilterController extends Component {
      * e.g when user removes a filter from my view panel
      **/
     filtersUpdatedOutsideMapchip(filteredIndicator) {
+        console.log({filteredIndicator})
         this.model.filterRows.forEach((row) => {
             const selectedGroup = row.model.currentIndicatorValue;
             const selectedValue = row.model.currentSubindicatorValue;

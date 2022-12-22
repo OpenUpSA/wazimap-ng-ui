@@ -140,13 +140,14 @@ export class DataFilterModel extends Observable {
 
     get selectedFilterDetails() {
         return Object.keys(this._selectedSubindicators).map(key => {
-            let isDefault = this.defaultFilterGroups
+            const value = this._selectedSubindicators[key];
+            const isDefault = this.defaultFilterGroups
                     .some(f => f.group === key && f.value === this._selectedSubindicators[key])
-                || this.nonAggregatableGroups.some(x => x.name === key);
+                || this.nonAggregatableGroups.some(x => x.name === key && x.values[0] === value);
 
             return {
                 group: key,
-                value: this._selectedSubindicators[key],
+                value: value,
                 isDefault: isDefault,
                 appliesTo: []
             };

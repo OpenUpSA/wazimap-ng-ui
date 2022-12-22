@@ -4,13 +4,13 @@ import {IndicatorOptionsSvg, TrashBinSvg} from "./svg_icons";
 import {
     Container,
     FilteredIndicatorBox,
-    FilteredIndicatorCard,
+    FilteredIndicatorCard, HelpText,
     IconContainer,
     RemoveButton,
     StyledAccordion,
     StyledAccordionDetails,
     StyledAccordionSummary,
-    StyledTypography,
+    StyledTypography, StyledTypographyWithBottomBorder,
     ViewSettingsTitle
 } from "./styled_elements"
 import {Grid} from "@mui/material";
@@ -94,10 +94,13 @@ const ViewSettings = (props) => {
                     <StyledTypography>INDICATOR OPTIONS</StyledTypography>
                 </StyledAccordionSummary>
                 <StyledAccordionDetails>
-                    <StyledTypography>
+                    <StyledTypographyWithBottomBorder>
                         INDICATOR SPECIFIC OPTIONS
-                    </StyledTypography>
+                    </StyledTypographyWithBottomBorder>
                     {renderFilteredIndicators()}
+                    <HelpText>
+                        Any indicators you adjust will appear here
+                    </HelpText>
                 </StyledAccordionDetails>
             </StyledAccordion>
         </Container>

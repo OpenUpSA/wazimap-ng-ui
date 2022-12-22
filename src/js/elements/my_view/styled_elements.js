@@ -26,6 +26,18 @@ export const StyledTypography = styled(Typography)(() => ({
     lineHeight: 2
 }));
 
+export const StyledTypographyWithBottomBorder = styled(StyledTypography)(() => ({
+    borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+    paddingBottom: '15px'
+}));
+
+export const HelpText = styled(Typography)(() => ({
+    fontSize: '12px',
+    color: '#707070',
+    fontWeight: '400',
+    marginTop: '15px'
+}));
+
 export const IconContainer = styled(Box)(() => ({
     marginRight: '15px',
     display: 'inline-block'
@@ -36,7 +48,9 @@ export const StyledAccordion = styled(Accordion)(() => ({
 }));
 
 export const StyledAccordionDetails = styled(AccordionDetails)(() => ({
-    backgroundColor: 'rgba(0, 0, 0, 0.02)'
+    backgroundColor: 'rgba(0, 0, 0, 0.02)',
+    paddingTop: '25px',
+    paddingBottom: '25px'
 }));
 
 export const AccordionDetailTitle = styled(Typography)(() => ({

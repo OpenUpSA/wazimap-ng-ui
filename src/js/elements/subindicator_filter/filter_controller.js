@@ -198,7 +198,7 @@ export class FilterController extends Component {
         this.isLoading = false;
     }
 
-    addEmptyFilter(isDefault = false, isExtra = true, isRequired = false) {
+    addEmptyFilter(isDefault = false, isExtra = true, isRequired = false, addAsFirstRow = false) {
         if (this.model.dataFilterModel.availableFilters.length > 0) {
             const self = this;
 
@@ -209,7 +209,15 @@ export class FilterController extends Component {
             this.model.addFilterRow(filterRow);
 
             this.addFilterButton.show();
-            $(filterRow.container).insertBefore($(this.container).find(this._elements.addButton));
+            if (addAsFirstRow) {
+                let elementToInsertBefore = $(this.container).find(`${this._elements.filterRowClass}:not(.hidden)`)[0];
+                if (elementToInsertBefore === undefined) {
+                    elementToInsertBefore = $(this.container).find(this._elements.addButton);
+                }
+                $(filterRow.container).insertBefore(elementToInsertBefore);
+            } else {
+                $(filterRow.container).insertBefore($(this.container).find(this._elements.addButton));
+            }
 
             filterRow.on(FilterRow.EVENTS.removed, filterRow => {
                 self.removeFilter(filterRow);
@@ -236,8 +244,9 @@ export class FilterController extends Component {
         let isDefault = true;
         let isExtra = false;
         let isRequired = true;
+        let addAsFirstRow = true;
 
-        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
+        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired, addAsFirstRow);
         filterRow.indicatorDropdown.disable();
 
         filterRow.setPrimaryIndexUsingValue(group.group);
@@ -331,6 +340,8 @@ export class FilterController extends Component {
             const filters = filteredIndicator.filters;
             const filterRemains = filters.some(f => f.group === selectedGroup && f.value === selectedValue);
 
+            console.log({selectedGroup, selectedValue, filters, filterRemains})
+
             if (!filterRemains && selectedGroup !== 'All indicators') {
                 row.removeRow();
 
@@ -378,7 +389,9 @@ export class FilterController extends Component {
         let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
 
         defaultGroups.forEach(group => {
-            if (group.group != this.model.dataFilterModel.primaryGroup) {
+            const alreadyAdded = this.model.filterRows.some(x => x.model.currentIndicatorValue === group.group && x.model.currentSubindicatorValue === group.value);
+
+            if (!alreadyAdded && group.group !== this.model.dataFilterModel.primaryGroup) {
                 self.addDefaultFilter(group);
             }
         })

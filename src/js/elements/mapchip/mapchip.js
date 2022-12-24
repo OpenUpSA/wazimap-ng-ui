@@ -228,6 +228,7 @@ export class MapChip extends Component {
     }
 
     applyFilter = (filterResult, selectedFilter, selectedFilterDetails) => {
+        console.log({selectedFilterDetails});
         if (filterResult !== null) {
             selectedFilterDetails.map(x => x.appliesTo.push(SidePanels.PANELS.dataMapper));
 

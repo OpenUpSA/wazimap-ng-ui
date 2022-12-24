@@ -1,6 +1,7 @@
 import {Component} from './utils';
 import {VersionController} from "./versions/version_controller";
 import {ConfirmationModal} from "./ui_components/confirmation_modal";
+import {SidePanels} from "./elements/side_panels";
 
 export default class Controller extends Component {
     constructor(parent, api, config, profileId = 1) {
@@ -198,10 +199,15 @@ export default class Controller extends Component {
         let filterArr = objToUpdate.filters.filter(x => !(x.group === selectedFilter.group && x.value === selectedFilter.value));
         objToUpdate.filters = filterArr;
 
-        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);   // my view window will be updated
+        if (selectedFilter.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0) {
+            this.triggerEvent('profile.chart.filtersUpdated', filteredIndicator);   // rich data will be updated
+        }
 
-        if (this.state.subindicator.indicatorId === filteredIndicator.indicatorId) {
-            this.triggerEvent('mapchip.choropleth.filtersUpdated', filteredIndicator);
+        if (selectedFilter.appliesTo.indexOf(SidePanels.PANELS.dataMapper) >= 0
+            && this.state.subindicator !== null
+            && this.state.subindicator.indicatorId === filteredIndicator.indicatorId) {
+            this.triggerEvent('mapchip.choropleth.filtersUpdated', filteredIndicator);  // mapchip will be updated
         }
     }
 

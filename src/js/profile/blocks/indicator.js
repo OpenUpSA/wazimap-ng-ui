@@ -6,6 +6,7 @@ export class Indicator extends ContentBlock {
         super(parent, container, indicator, title, isLast, geography);
 
         this.chartAttribution = chartAttribution;
+        this._chart = null;
 
         this.prepareDomElements();
         this.addIndicatorChart();
@@ -20,6 +21,10 @@ export class Indicator extends ContentBlock {
         return this.indicator.data.some(function (e) {
             return e.count > 0
         });
+    }
+
+    get chart() {
+        return this._chart;
     }
 
     prepareDomElements() {
@@ -37,6 +42,8 @@ export class Indicator extends ContentBlock {
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
             'point_tray.subindicator_filter.filter', 'profile.chart.filtered'
         ]);
+
+        this._chart = c;
     }
 
     orderChartData() {

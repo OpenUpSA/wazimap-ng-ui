@@ -74,7 +74,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     })
 
     controller.on('mapchip.choropleth.filtersUpdated', payload => {
-        mapchip.filterController.filtersUpdatedOutsideMapchip(payload.payload);
+        mapchip.filterController.filtersUpdatedInMyView(payload.payload);
     })
 }
 

@@ -110,6 +110,10 @@ export class Chart extends Component {
         return this._config;
     }
 
+    get filterController() {
+        return this._filterController;
+    }
+
     addChart = (data) => {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();

@@ -27,6 +27,7 @@ export default class ProfileLoader extends Component {
         this.profileHeader = null;
         this._filteredIndicators = [];
         this.watermarkEnabled = watermarkEnabled;
+        this._categories = [];
 
         new ResizeObserver(() => {
             this.setWatermarkVisibility();
@@ -39,6 +40,10 @@ export default class ProfileLoader extends Component {
 
     set filteredIndicators(value) {
         this._filteredIndicators = value;
+    }
+
+    get categories() {
+        return this._categories;
     }
 
     loadProfile = (dataBundle, activeVersion) => {
@@ -102,6 +107,8 @@ export default class ProfileLoader extends Component {
             ]);
 
             removePrevCategories = false;
+
+            this._categories.push(c);
         }
 
         if (this.watermarkEnabled) {

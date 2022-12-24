@@ -32,4 +32,17 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
     profileLoader.on('profile.chart.filtered', payload => {
         controller.onChartFiltered(payload);
     });
+
+    controller.on('profile.chart.filtersUpdated', payload => {
+        for (const category of profileLoader.categories) {
+            for (const subCategory of category.subCategories) {
+                for (const indicator of subCategory.indicators) {
+                    if (indicator.indicator.id === payload.payload.indicatorId) {
+                        indicator.chart.filterController.filtersUpdatedInMyView(payload.payload);
+                        break;
+                    }
+                }
+            }
+        }
+    })
 }

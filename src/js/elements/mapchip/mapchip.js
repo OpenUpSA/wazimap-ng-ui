@@ -6,14 +6,12 @@ import {Tooltip} from "../../ui_components/tooltip";
 import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
 import {LinearScrubberRenderer} from "./components/linear_scrubber/renderer";
-import {SidePanels} from "../side_panels";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockParentClass = '.map-bottom-items--v2';
 const mapChipBlockClass = `${mapChipBlockParentClass} .map-options`;
 const legendClass = ".map-options__legend";
 const legendContainerClass = '.map-options__legend_wrap';
-const linearScrubberContainerClass = '.map-options__linear_scrubber_wrap';
 const filterHeaderClass = '.filter__header_sub-indicator';
 const filterHeaderToggleClass = ".filters__header_toggle";
 
@@ -228,10 +226,7 @@ export class MapChip extends Component {
     }
 
     applyFilter = (filterResult, selectedFilter, selectedFilterDetails) => {
-        console.log({selectedFilterDetails});
         if (filterResult !== null) {
-            selectedFilterDetails.map(x => x.appliesTo.push(SidePanels.PANELS.dataMapper));
-
             const payload = {
                 data: filterResult,
                 selectedFilter: selectedFilter,
@@ -265,6 +260,8 @@ export class MapChip extends Component {
         this.metadata = params.metadata;
         this.config = params.config;
         const previouslySelectedFilters = params.filter;
+
+        console.log({previouslySelectedFilters})
         let dataFilterModel = new DataFilterModel(this.metadata.groups, this.config.chartConfiguration.filter, previouslySelectedFilters, this.metadata.primary_group, params.childData);
 
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);

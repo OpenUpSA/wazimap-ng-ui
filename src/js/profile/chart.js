@@ -70,7 +70,7 @@ export class Chart extends Component {
             filterRowClass: filterRowClass,
             filterDropdown: '.profile-indicator__filter',
             addButton: 'a.profile-indicator__new-filter',
-            isMapchip: false,
+            filterPanel: SidePanels.PANELS.richData,
             removeFilterButton: '.profile-indicator__remove-filter'
         });
 
@@ -465,7 +465,6 @@ export class Chart extends Component {
         this.appendDataToTable();
         this.setDownloadUrl();
 
-        selectedFilterDetails.map(x => x.appliesTo.push(SidePanels.PANELS.richData));
         const payload = {
             indicatorId: this.data.id,
             selectedFilter: selectedFilterDetails,

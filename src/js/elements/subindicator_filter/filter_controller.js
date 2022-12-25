@@ -3,6 +3,7 @@ import {Component, Observable} from "../../utils";
 import {AddFilterButton} from "../../ui_components/add_filter_button";
 import {DataFilterModel} from "../../models/data_filter_model";
 import {isEmpty} from 'lodash';
+import {SidePanels} from "../side_panels";
 
 
 class FilterControllerModel extends Observable {
@@ -60,7 +61,7 @@ export class FilterController extends Component {
         filterRowClass: '.map-options__filter-row',
         filterDropdown: '.mapping-options__filter',
         addButton: 'a.mapping-options__add-filter',
-        isMapchip: true,
+        filterPanel: SidePanels.PANELS.dataMapper,
         removeFilterButton: '.mapping-options__remove-filter'
     }) {
         super(parent);
@@ -287,7 +288,7 @@ export class FilterController extends Component {
             let filterRowContainer = $(this._elements.filterRowClass)[0].cloneNode(true);
             let filterRow = new FilterRow(this, filterRowContainer, dataFilter, isDefault, isExtra, this._elements);
             this.filterRows.push(filterRow);
-            this._dataFilterModel.addFilter(filterName);
+            this._dataFilterModel.addFilter(filterName, this._elements.filterPanel);
 
             filterRow.on(FilterRow.EVENTS.removed, filterRow => {
                 self.removeFilter(filterRow);

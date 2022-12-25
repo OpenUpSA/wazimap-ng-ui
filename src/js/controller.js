@@ -184,7 +184,27 @@ export default class Controller extends Component {
         if (newObj) {
             this._filteredIndicators.push(filteredIndicator)
         } else {
-            this._filteredIndicators = this._filteredIndicators.map(x => x.indicatorId === indicatorId ? {...filteredIndicator} : x);
+            this._filteredIndicators = this._filteredIndicators.map(existingObj => {
+                if (existingObj.indicatorId === indicatorId) {
+                    selectedFilterDetails.forEach((newFilter) => {
+                        newFilter.appliesTo.forEach(panel => {
+                            // check for panel
+                            let filterObj = existingObj.filters.filter(x => x.appliesTo.indexOf(panel) >= 0 && x.group === newFilter.group)[0];
+                            if (filterObj === null || filterObj === undefined) {
+                                // either the filter is new or it doesn't apply to the current panel
+                                existingObj.filters.push(newFilter);
+                            } else {
+                                // filter is already added, update the value and isDefault
+                                filterObj.value = newFilter.value;
+                                filterObj.isDefault = newFilter.isDefault;
+                            }
+                        })
+                    })
+                    return existingObj;
+                } else {
+                    return existingObj;
+                }
+            });
         }
 
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);

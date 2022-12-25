@@ -139,19 +139,22 @@ export class DataFilterModel extends Observable {
     }
 
     get selectedFilterDetails() {
-        return Object.keys(this._selectedSubindicators).map(key => {
-            const value = this._selectedSubindicators[key];
+        let details = [...this.selectedFilters].map(sf => {
+            const group = sf.group.name;
+            const value = this._selectedSubindicators[group];
             const isDefault = this.defaultFilterGroups
-                    .some(f => f.group === key && f.value === this._selectedSubindicators[key])
-                || this.nonAggregatableGroups.some(x => x.name === key && x.values[0] === value);
+                    .some(f => f.group === group && f.value === this._selectedSubindicators[group])
+                || this.nonAggregatableGroups.some(x => x.name === group && x.values[0] === value);
 
             return {
-                group: key,
+                group: group,
                 value: value,
                 isDefault: isDefault,
-                appliesTo: []
+                appliesTo: [sf.filterPanel]
             };
         })
+
+        return details.filter(x => x.value !== undefined);
     }
 
     get childData() {
@@ -185,7 +188,7 @@ export class DataFilterModel extends Observable {
                 isAvailable = false;
 
             self.selectedFilters.forEach((sf) => {
-                if (sf.name === filter.name)
+                if (sf.group.name === filter.name)
                     isAvailable = false;
             })
 
@@ -198,10 +201,13 @@ export class DataFilterModel extends Observable {
         return filters.map(f => f.name)
     }
 
-    addFilter(indicatorName) {
+    addFilter(indicatorName, filterPanel) {
         let dataFilter = this.groupLookup[indicatorName];
         if (dataFilter !== undefined) {
-            this._selectedFilters.add(dataFilter);
+            this._selectedFilters.add({
+                group: dataFilter,
+                filterPanel: filterPanel
+            });
         } else {
             throw `addFilter: Can't find indicator: ${indicatorName}`
         }
@@ -214,7 +220,7 @@ export class DataFilterModel extends Observable {
             // if the dataFilter is undefined and previouslyFiltered = true it means
             // the only category that had this field is unchecked from point mapper
             this.selectedFilters.forEach((sf) => {
-                if (sf.name === indicatorName) {
+                if (sf.group.name === indicatorName) {
                     this.selectedFilters.delete(sf);
                 }
             })
@@ -228,7 +234,7 @@ export class DataFilterModel extends Observable {
     isPreviouslyFiltered(indicatorName) {
         let filtered = false;
         this.selectedFilters.forEach((sf) => {
-            if (sf.name === indicatorName) {
+            if (sf.group.name === indicatorName) {
                 filtered = true;
             }
         })

@@ -236,13 +236,17 @@ export class FilterController extends Component {
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
         try {
-            filterRow.indicatorDropdown.disable();
+            if (filterRow !== undefined) {
+                filterRow.indicatorDropdown.disable();
 
-            filterRow.setPrimaryIndexUsingValue(group.name);
-            filterRow.setSecondaryIndex(index);
+                filterRow.setPrimaryIndexUsingValue(group.name);
+                filterRow.setSecondaryIndex(index);
+            }
         } catch (err) {
-            filterRow.removeRow();
-            console.error(err);
+            if (filterRow !== undefined) {
+                console.error(err);
+                filterRow.removeRow();
+            }
         }
     }
 
@@ -254,18 +258,21 @@ export class FilterController extends Component {
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired, addAsFirstRow);
         try {
-            filterRow.indicatorDropdown.disable();
+            if (filterRow !== undefined) {
+                filterRow.indicatorDropdown.disable();
 
-            filterRow.setPrimaryIndexUsingValue(group.group);
-            filterRow.setSecondaryIndexUsingValue(group.value);
+                filterRow.setPrimaryIndexUsingValue(group.group);
+                filterRow.setSecondaryIndexUsingValue(group.value);
+            }
         } catch (err) {
-            filterRow.removeRow();
-            console.error(err);
+            if (filterRow !== undefined) {
+                console.error(err);
+                filterRow.removeRow();
+            }
         }
     }
 
     addPreviouslySelectedFilters(group, isDefault) {
-
         let filterRow = this.addEmptyFilter(isDefault);
 
         filterRow.setPrimaryIndexUsingValue(group.group);
@@ -333,9 +340,12 @@ export class FilterController extends Component {
             this.setAddFilterButton();
         })
 
+        // first add previous filters
+        this.checkAndAddPreviouslySelectedFilters();
+        // then add default filters
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
-        this.checkAndAddPreviouslySelectedFilters();
+
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
     }
@@ -409,18 +419,10 @@ export class FilterController extends Component {
     checkAndAddPreviouslySelectedFilters() {
         const self = this;
         let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilterGroups;
-        let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+
         previouslySelectedFilters.forEach((group, index) => {
             if (group.group != this.model.dataFilterModel.primaryGroup) {
-                let selectedDefaultGroup = defaultGroups.find(x => x.group === group.group);
-                if (selectedDefaultGroup !== undefined) {
-                    if (selectedDefaultGroup.value !== group.value) {
-                        self.updateDefaultFilterValues(group);
-                    }
-                } else {
-                    self.addPreviouslySelectedFilters(group, index === 0);
-                }
-
+                self.addPreviouslySelectedFilters(group, index === 0);
             }
         })
     }

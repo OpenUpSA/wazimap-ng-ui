@@ -1,5 +1,6 @@
 import {Chart} from '../chart';
 import {ContentBlock} from './content_block';
+import {SidePanels} from "../../elements/side_panels";
 
 export class Indicator extends ContentBlock {
     constructor(parent, container, indicator, title, isLast, geography, chartAttribution) {
@@ -13,8 +14,14 @@ export class Indicator extends ContentBlock {
     }
 
     get previouslySelectedFilters() {
-        let filteredIndicators = this.parent.filteredIndicators;
-        return filteredIndicators[this.indicator.id] || {};
+        let previouslySelectedFilters = this.parent.filteredIndicators.filter(x => x.indicatorId === this.indicator.id
+            && x.filters.filter(y => y.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0).length > 0);
+
+        previouslySelectedFilters.forEach(x => {
+            x.filters = x.filters.filter(x => x.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0);
+        });
+
+        return previouslySelectedFilters;
     }
 
     get hasData() {

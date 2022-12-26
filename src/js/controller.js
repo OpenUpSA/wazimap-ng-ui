@@ -158,7 +158,6 @@ export default class Controller extends Component {
         let subindicator = this.state.subindicator;
         subindicator.subindicatorArr = payload.subindicatorArr;
         subindicator.children = payload.data;
-        subindicator.filter = payload.selectedFilter;
 
         this.state.subindicator = subindicator;
 

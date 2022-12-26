@@ -1,4 +1,5 @@
 import {VersionController} from "../versions/version_controller";
+import {SidePanels} from "../elements/side_panels";
 
 export function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip: null, api: null}) {
     const mapcontrol = objs['mapcontrol'];
@@ -51,13 +52,20 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             return;
         }
 
+        let previouslySelectedFilters = controller.filteredIndicators.filter(x => x.indicatorId === args.state.subindicator.indicatorId
+            && x.filters.filter(y => y.appliesTo.indexOf(SidePanels.PANELS.dataMapper) >= 0).length > 0);
+
+        previouslySelectedFilters.forEach(x => {
+            x.filters = x.filters.filter(x => x.appliesTo.indexOf(SidePanels.PANELS.dataMapper) >= 0);
+        });
+
         const metadata = args.payload.metadata;
         const params = {
             metadata: metadata,
             indicatorTitle: args.payload.indicatorTitle,
             selectedSubindicator: args.payload.selectedSubindicator,
             childData: args.payload.data,
-            filter: args.state.subindicator.filter,
+            filter: previouslySelectedFilters,
             config: args.payload.config,
             method: args.state.subindicator.choropleth_method,
             currentGeo: args.state.profile.geometries.boundary.properties.name

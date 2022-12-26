@@ -78,7 +78,11 @@ export class Chart extends Component {
     }
 
     get previouslySelectedFilters() {
-        return this.parent.previouslySelectedFilters;
+        if (this.parent.previouslySelectedFilters === undefined) {
+            return [];
+        } else {
+            return this.parent.previouslySelectedFilters;
+        }
     }
 
     get chartType() {

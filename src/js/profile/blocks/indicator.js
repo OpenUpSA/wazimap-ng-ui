@@ -14,16 +14,20 @@ export class Indicator extends ContentBlock {
     }
 
     get previouslySelectedFilters() {
-        let previouslySelectedFilters = this.parent.filteredIndicators.filter(x => x.indicatorId === this.indicator.id
-            && x.filters.filter(y => y.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0).length > 0);
+        if (this.parent.filteredIndicators === undefined) {
+            return [];
+        } else {
+            let previouslySelectedFilters = this.parent.filteredIndicators.filter(x => x.indicatorId === this.indicator.id
+                && x.filters.filter(y => y.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0).length > 0);
 
-        let tempObj = structuredClone(previouslySelectedFilters);
+            let tempObj = structuredClone(previouslySelectedFilters);
 
-        tempObj.forEach(x => {
-            x.filters = x.filters.filter(x => x.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0);
-        });
+            tempObj.forEach(x => {
+                x.filters = x.filters.filter(x => x.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0);
+            });
 
-        return tempObj;
+            return tempObj;
+        }
     }
 
     get hasData() {

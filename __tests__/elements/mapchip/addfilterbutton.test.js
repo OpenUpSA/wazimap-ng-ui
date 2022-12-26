@@ -20,7 +20,7 @@ describe('Add filter button', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
 
         let prevFilterRow = $('.map-options__filters_content .map-options__filter-row').length;
@@ -64,7 +64,7 @@ describe('Add filter button', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
 
         let btn = document.querySelector('.mapping-options__add-filter');
@@ -83,7 +83,7 @@ describe('Add filter button', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
 
         let btn = document.querySelector(`${mapBottomItems} .mapping-options__add-filter`);

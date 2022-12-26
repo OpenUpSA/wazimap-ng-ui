@@ -161,7 +161,6 @@ export default class Controller extends Component {
     }
 
     updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails) {
-        console.log({indicatorId, indicatorTitle, selectedFilterDetails})
         let filteredIndicator = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0];
         let newObj = filteredIndicator == null;
 

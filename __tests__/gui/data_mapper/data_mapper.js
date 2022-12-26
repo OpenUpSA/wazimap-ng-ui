@@ -294,7 +294,7 @@ When(/^I filter by "([^"]*)"$/, function (filter) {
         .eq(1)
         .click();
 
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filter}")`).click({force: true});
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filter}")`, {timeout: 20000}).click({force: true})
 });
 
 Then('I check if the legend values are correct', () => {

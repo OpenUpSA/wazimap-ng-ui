@@ -407,6 +407,11 @@ export class FilterController extends Component {
         nonAggregatableGroups.forEach(group => {
             if (group.name != this.model.dataFilterModel.primaryGroup && !defaultGroups.some(x => x.group === group.name)) {
                 self.addNonAggregatableFilter(group);
+            } else {
+                this.model.filterRows.filter(x => x.model.currentIndicatorValue === group.name).forEach(row => {
+                    row.indicatorDropdown.disable();
+                    row.indicatorDropdown.model.isDisabled = true;
+                })
             }
         })
     }
@@ -420,6 +425,11 @@ export class FilterController extends Component {
 
             if (!alreadyAdded && group.group !== this.model.dataFilterModel.primaryGroup) {
                 self.addDefaultFilter(group);
+            } else {
+                this.model.filterRows.filter(x => x.model.currentIndicatorValue === group.group).forEach(row => {
+                    row.indicatorDropdown.disable();
+                    row.indicatorDropdown.model.isDisabled = true;
+                })
             }
         })
     }

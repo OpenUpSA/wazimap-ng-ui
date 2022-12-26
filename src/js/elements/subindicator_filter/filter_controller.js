@@ -373,6 +373,14 @@ export class FilterController extends Component {
                 }
             }
         })
+
+        // this cannot be in the loop above
+        this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').forEach((row, index) => {
+            if (index === 0) {
+                // the remove button shouldn't be visible
+                row.hideRemoveButton();
+            }
+        })
     }
 
     updateAvailableFiltersOfRows() {

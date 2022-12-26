@@ -88,7 +88,8 @@ export const PanelContainer = styled(Box)(({}) => ({
     bottom: '0',
     top: '56px',
     zIndex: '999',
-    boxShadow: '0 0 0 -1px rgb(0 0 0 / 20%), 1px 1px 6px -2px rgb(0 0 0 / 30%)'
+    boxShadow: '0 0 0 -1px rgb(0 0 0 / 20%), 1px 1px 6px -2px rgb(0 0 0 / 30%)',
+    overflow: 'auto'
 }));
 
 export const ToggleContainer = styled(Box)(({}) => ({

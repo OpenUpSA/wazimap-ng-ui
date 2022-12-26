@@ -22,7 +22,7 @@ const Panel = (props) => {
     }
 
     return (
-        <PanelContainer>
+        <PanelContainer className={'narrow-scroll'}>
             <MyViewHeader/>
             <ViewSettings
                 filteredIndicators={filteredIndicators}

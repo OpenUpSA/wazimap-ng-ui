@@ -135,23 +135,13 @@ export default class Controller extends Component {
             data: payload.indicatorData,
             config: payload.config,
             metadata: payload.metadata,
-            indicatorId: payload.indicatorId,
-            filter: this.getIndicatorFilters(payload.indicatorId) || {},
+            indicatorId: payload.indicatorId
         }
 
         this.state.subindicator = subindicator;
         this.state.selectedSubindicator = payload.selectedSubindicator;
 
         this.triggerEvent("map_explorer.subindicator.click", payload);
-    }
-
-    getIndicatorFilters(indicatorId) {
-        let obj = {}
-        this.filteredIndicators.filter(x => x.indicatorId === indicatorId)[0]?.filters.forEach(x => {
-            obj[x.group] = x.value
-        })
-
-        return obj;
     }
 
     onChoroplethFiltered(payload) {

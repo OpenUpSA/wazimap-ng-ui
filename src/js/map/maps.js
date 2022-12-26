@@ -141,14 +141,13 @@ export class MapControl extends Component {
      * Handles creating a choropleth when a subindicator is clicked
      * @param  {[type]} data    An object that contains subindictors and obj
      */
-    handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter, metadata, config) {
+    handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, metadata, config) {
         const args = {
             data: data,
             metadata: metadata,
             selectedSubindicator: selectedSubindicator,
             indicatorTitle: indicatorTitle,
             showMapchip: showMapchip,
-            filter: filter,
             config: config
         }
 

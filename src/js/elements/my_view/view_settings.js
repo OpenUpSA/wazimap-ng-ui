@@ -24,6 +24,7 @@ const ViewSettings = (props) => {
     useEffect(() => {
         if (props.filteredIndicators !== filteredIndicators) {
             setFilteredIndicators(props.filteredIndicators);
+            console.log({filteredIndicators})
         }
     }, [props.filteredIndicators]);
 

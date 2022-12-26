@@ -17,11 +17,13 @@ export class Indicator extends ContentBlock {
         let previouslySelectedFilters = this.parent.filteredIndicators.filter(x => x.indicatorId === this.indicator.id
             && x.filters.filter(y => y.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0).length > 0);
 
-        previouslySelectedFilters.forEach(x => {
+        let tempObj = structuredClone(previouslySelectedFilters);
+
+        tempObj.forEach(x => {
             x.filters = x.filters.filter(x => x.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0);
         });
 
-        return previouslySelectedFilters;
+        return tempObj;
     }
 
     get hasData() {

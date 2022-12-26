@@ -55,7 +55,9 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         let previouslySelectedFilters = controller.filteredIndicators.filter(x => x.indicatorId === args.state.subindicator.indicatorId
             && x.filters.filter(y => y.appliesTo.indexOf(SidePanels.PANELS.dataMapper) >= 0).length > 0);
 
-        previouslySelectedFilters.forEach(x => {
+        let previouslySelectedFiltersClone = structuredClone(previouslySelectedFilters);
+
+        previouslySelectedFiltersClone.forEach(x => {
             x.filters = x.filters.filter(x => x.appliesTo.indexOf(SidePanels.PANELS.dataMapper) >= 0);
         });
 
@@ -65,7 +67,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             indicatorTitle: args.payload.indicatorTitle,
             selectedSubindicator: args.payload.selectedSubindicator,
             childData: args.payload.data,
-            filter: previouslySelectedFilters,
+            filter: previouslySelectedFiltersClone,
             config: args.payload.config,
             method: args.state.subindicator.choropleth_method,
             currentGeo: args.state.profile.geometries.boundary.properties.name
@@ -129,12 +131,11 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
     const method = ps.subindicator.choropleth_method;
     const indicatorTitle = payload.payload.indicatorTitle;
     const selectedSubindicator = ps.selectedSubindicator;
-    const filter = ps.subindicator.filter;
     let data = ps.subindicator.data;
     if (childData) {
         ps.subindicator.data = childData;
         data = childData;
     }
 
-    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter, metadata, config);
+    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, metadata, config);
 }

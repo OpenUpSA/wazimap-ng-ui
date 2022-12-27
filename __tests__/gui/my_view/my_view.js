@@ -1,10 +1,16 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
     collapseMyViewPanel,
+    confirmNoChartFilterSelected,
     confirmNoChoroplethFilterSelected,
     expandChoroplethFilterDialog,
-    expandDataMapper, expandMyViewPanel,
-    gotoHomepage, mapBottomItems, selectDropdownOption,
+    expandDataMapper,
+    expandMyViewPanel,
+    expandRichDataPanel,
+    gotoHomepage,
+    mapBottomItems,
+    selectChoroplethDropdownOption,
+    selectChartDropdownOption,
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
@@ -40,12 +46,20 @@ When('I confirm that there are no filters in filter dialog', () => {
     confirmNoChoroplethFilterSelected();
 })
 
-When(/^I select "([^"]*)" in indicator dropdown$/, function (word) {
-    selectDropdownOption(word, 0);
+When(/^I select "([^"]*)" from indicator dropdown in filter dialog$/, function (word) {
+    selectChoroplethDropdownOption(word, 0);
 });
 
-When(/^I select "([^"]*)" in subIndicator dropdown$/, function (word) {
-    selectDropdownOption(word, 1);
+When(/^I select "([^"]*)" from subIndicator dropdown in filter dialog$/, function (word) {
+    selectChoroplethDropdownOption(word, 1);
+});
+
+When(/^I select "([^"]*)" from indicator dropdown in chart filter/, function (word) {
+    selectChartDropdownOption(word, 0);
+});
+
+When(/^I select "([^"]*)" from subIndicator dropdown in chart filter/, function (word) {
+    selectChartDropdownOption(word, 1);
 });
 
 Then(/^I confirm that the choropleth is filtered by "([^"]*)"$/, function (filter) {
@@ -103,3 +117,15 @@ Then(/^I remove the indicator filter at index (\d+)$/, function (index) {
         .find('button[data-test-id="filtered-indicator-remove-button"]')
         .click();
 });
+
+When('I expand Rich Data Panel', () => {
+    expandRichDataPanel();
+});
+
+Then(/^I confirm that the chart is not filtered$/, function () {
+    confirmNoChartFilterSelected();
+});
+
+When('I collapse Rich Data Panel', () => {
+    cy.get('.rich-data-toggles .rich-data-panel__close').click();
+})

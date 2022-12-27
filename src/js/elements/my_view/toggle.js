@@ -11,6 +11,7 @@ const Toggle = (props) => {
 
     return (
         <ToggleContainer
+            data-test-id={'my-view-toggle'}
             onClick={setPanelVisible}
         >
             <ToggleIconContainer>

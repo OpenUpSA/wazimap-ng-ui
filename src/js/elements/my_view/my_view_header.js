@@ -20,6 +20,7 @@ const MyViewHeader = (props) => {
             </MyViewTitle>
             <CloseButton
                 onClick={setPanelInvisible}
+                data-test-id={'my-view-close-button'}
             >
                 {crossSvg}
             </CloseButton>

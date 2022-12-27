@@ -9,7 +9,7 @@ import {
     expandChoroplethFilterDialog,
     expandDataMapper, expandPointFilterDialog,
     expandPointMapper, expandRichDataPanel,
-    gotoHomepage, mapBottomItems,
+    gotoHomepage, mapBottomItems, selectDropdownOption,
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
@@ -284,17 +284,7 @@ Then('I check if the non\-aggregatable group filter is applied', () => {
 })
 
 When(/^I filter by "([^"]*)"$/, function (filter) {
-    cy.get(`.SnackbarContainer-root`).then($p => {
-        if ($p.is(':visible')) {
-            cy.get(`.SnackbarItem-wrappedRoot`).click();
-        }
-    });
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('not.have.class', 'disabled');
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
-        .eq(1)
-        .click();
-
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filter}")`, {timeout: 20000}).click({force: true})
+    selectDropdownOption(filter, 1);
 });
 
 Then('I check if the legend values are correct', () => {

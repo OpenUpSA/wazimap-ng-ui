@@ -1,15 +1,20 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    allDetailsEndpoint, checkDataMapperCategoryCount,
+    allDetailsEndpoint,
+    checkDataMapperCategoryCount,
     checkIfChoroplethFilterDialogIsCollapsed,
     checkIfChoroplethFilterDialogIsExpanded,
-    checkIfPointFilterDialogIsCollapsed, checkIfPointFilterDialogIsExpanded,
+    checkIfPointFilterDialogIsCollapsed,
+    checkIfPointFilterDialogIsExpanded,
     clickOnText,
     collapseChoroplethFilterDialog,
     expandChoroplethFilterDialog,
-    expandDataMapper, expandPointFilterDialog,
-    expandPointMapper, expandRichDataPanel,
-    gotoHomepage, mapBottomItems, selectDropdownOption,
+    expandDataMapper,
+    expandPointFilterDialog,
+    expandPointMapper,
+    expandRichDataPanel,
+    gotoHomepage,
+    mapBottomItems, selectChoroplethDropdownOption,
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
@@ -284,7 +289,7 @@ Then('I check if the non\-aggregatable group filter is applied', () => {
 })
 
 When(/^I filter by "([^"]*)"$/, function (filter) {
-    selectDropdownOption(filter, 1);
+    selectChoroplethDropdownOption(filter, 1);
 });
 
 Then('I check if the legend values are correct', () => {

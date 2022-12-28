@@ -354,12 +354,12 @@ export class FilterController extends Component {
      * this function will be triggered when the filters are updated outside the mapchip or rich data
      * e.g when user removes a filter from my view panel
      **/
-    filtersUpdatedInMyView(filteredIndicator) {
+    filtersUpdatedInMyView(filteredIndicator, panel) {
         this.model.filterRows.forEach((row) => {
             const selectedGroup = row.model.currentIndicatorValue;
             const selectedValue = row.model.currentSubindicatorValue;
             const filters = filteredIndicator.filters;
-            const filterRemains = filters.some(f => f.group === selectedGroup && f.value === selectedValue);
+            const filterRemains = filters.some(f => f.group === selectedGroup && f.value === selectedValue && f.appliesTo.indexOf(panel) >= 0);
 
             if (!filterRemains && selectedGroup !== 'All indicators') {
                 row.removeRow();

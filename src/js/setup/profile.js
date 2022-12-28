@@ -1,4 +1,5 @@
 import {VersionController} from "../versions/version_controller";
+import {SidePanels} from "../elements/side_panels";
 
 export function configureProfileEvents(controller, objs = {profileLoader: null}) {
     const profileLoader = objs['profileLoader'];
@@ -38,7 +39,7 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
             for (const subCategory of category.subCategories) {
                 for (const indicator of subCategory.indicators) {
                     if (indicator.indicator.id === payload.payload.indicatorId) {
-                        indicator.chart.filterController.filtersUpdatedInMyView(payload.payload);
+                        indicator.chart.filterController.filtersUpdatedInMyView(payload.payload, SidePanels.PANELS.richData);
                         break;
                     }
                 }

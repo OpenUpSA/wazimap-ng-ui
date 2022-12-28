@@ -151,16 +151,16 @@ export default class Controller extends Component {
 
         this.state.subindicator = subindicator;
 
-        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails);
+        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails, SidePanels.PANELS.dataMapper);
 
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
     onChartFiltered(payload) {
-        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter);
+        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, SidePanels.PANELS.richData);
     }
 
-    updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails) {
+    updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, filterPanel) {
         let filteredIndicator = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0];
         let newObj = filteredIndicator == null;
 
@@ -180,7 +180,7 @@ export default class Controller extends Component {
                             // check for panel
                             let filterObj = existingObj.filters.filter(x => x.appliesTo.indexOf(panel) >= 0 && x.group === newFilter.group)[0];
                             if (filterObj === null || filterObj === undefined) {
-                                // either the filter is new or it doesn't apply to the current panel
+                                // either the filter is new or the existing filter doesn't apply to the current panel
                                 existingObj.filters.push(newFilter);
                             } else {
                                 // filter is already added, update the value and isDefault
@@ -189,6 +189,21 @@ export default class Controller extends Component {
                             }
                         })
                     })
+
+                    // remove
+                    let filtersToRemove = existingObj.filters.filter(f => {
+                        const stillExists = selectedFilterDetails.filter(x => x.group === f.group && x.value === f.value).length > 0;
+                        return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists;
+                    })
+                    filtersToRemove.forEach(x => {
+                        let objToRemove = existingObj.filters.filter(y => y.group === x.group && y.value === x.value && y.appliesTo.indexOf(filterPanel) >= 0)[0];
+                        if (objToRemove.appliesTo.length > 1) {
+                            objToRemove.appliesTo.splice(objToRemove.appliesTo.indexOf(filterPanel), 1);
+                        } else {
+                            existingObj.filters.splice(existingObj.filters.indexOf(objToRemove), 1);
+                        }
+                    })
+
                     return existingObj;
                 } else {
                     return existingObj;
@@ -205,7 +220,9 @@ export default class Controller extends Component {
         }
 
         let objToUpdate = this._filteredIndicators.filter(x => x.indicatorId === filteredIndicator.indicatorId)[0];
-        let filterArr = objToUpdate.filters.filter(x => !(x.group === selectedFilter.group && x.value === selectedFilter.value));
+        let filterArr = objToUpdate.filters.filter(x => !(x.group === selectedFilter.group
+            && x.value === selectedFilter.value
+            && x.appliesTo.indexOf(selectedFilter.appliesTo[0]) >= 0));
         objToUpdate.filters = filterArr;
 
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);   // my view window will be updated

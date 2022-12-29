@@ -14,14 +14,13 @@ const LockButton = (props) => {
     const lockedButtonSvg = LockedButtonSvg;
 
     useEffect(() => {
+        setIsVisible(rowIndicator !== 'All indicators' && rowSubIndicator !== 'All values');
         checkAndSetIsLocked();
     }, [siteWideFilters, rowIndicator, rowSubIndicator])
 
     if (!startedListening) {
         setStartedListening(true);
         props.filterRow.on('filterRow.indicatorOrSubIndicatorSelected', payload => {
-            setIsVisible(payload.selectedIndicator && payload.selectedSubIndicator);
-
             setRowIndicator(props.filterRow.model.currentIndicatorValue);
             setRowSubIndicator(props.filterRow.model.currentSubindicatorValue);
         });
@@ -29,6 +28,14 @@ const LockButton = (props) => {
         props.filterRow.on('filterRow.siteWideFilters.updated', payload => {
             setSideWideFilters(prev => payload.slice(0));
         })
+
+        props.filterRow.on('filterRow.created.setState', payload => {
+            setSideWideFilters(payload.siteWideFilters);
+            setRowIndicator(payload.currentIndicatorValue);
+            setRowSubIndicator(payload.currentSubIndicatorValue);
+        })
+
+        props.filterRow.triggerEvent('filterRow.created.new');
     }
 
     const StyledButton = styled(Button)(() => ({

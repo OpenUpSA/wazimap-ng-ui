@@ -238,6 +238,10 @@ export class FilterController extends Component {
                 });
             })
 
+            filterRow.on('filterRow.created.new', () => {
+                this.parent.triggerEvent('filterRow.created.new', filterRow);
+            })
+
             return filterRow;
         }
     }
@@ -398,9 +402,16 @@ export class FilterController extends Component {
     }
 
     siteWideFiltersUpdatedInMyView(siteWideIndicators) {
-        console.log('siteWideFiltersUpdatedInMyView');
         this.model.filterRows.forEach((row) => {
             row.triggerEvent('filterRow.siteWideFilters.updated', siteWideIndicators);
+        })
+    }
+
+    setFilterRowState(filterRow, siteWideFilters) {
+        filterRow.triggerEvent('filterRow.created.setState', {
+            siteWideFilters,
+            currentIndicatorValue: filterRow.model.currentIndicatorValue,
+            currentSubIndicatorValue: filterRow.model.currentSubindicatorValue
         })
     }
 

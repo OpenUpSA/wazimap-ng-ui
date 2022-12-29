@@ -102,6 +102,11 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('my_view.siteWideFilters.updated', payload => {
         mapchip.filterController.siteWideFiltersUpdatedInMyView(payload.payload);
     })
+
+    mapchip.on('filterRow.created.new', (filterRow) => {
+        console.log('created new')
+        mapchip.filterController.setFilterRowState(filterRow, controller.siteWideFilters);
+    })
 }
 
 function handleNewProfileChoropleth(controller, api, mapcontrol) {

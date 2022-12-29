@@ -224,6 +224,20 @@ export class FilterController extends Component {
                 self.removeFilter(filterRow);
             })
 
+            filterRow.on('filterRow.filter.locked', () => {
+                this.parent.triggerEvent('filterRow.filter.locked', {
+                    currentIndicatorValue: filterRow.model.currentIndicatorValue,
+                    currentSubIndicatorValue: filterRow.model.currentSubindicatorValue
+                });
+            })
+
+            filterRow.on('filterRow.filter.unlocked', () => {
+                this.parent.triggerEvent('filterRow.filter.unlocked', {
+                    currentIndicatorValue: filterRow.model.currentIndicatorValue,
+                    currentSubIndicatorValue: filterRow.model.currentSubindicatorValue
+                });
+            })
+
             return filterRow;
         }
     }
@@ -380,6 +394,13 @@ export class FilterController extends Component {
                 // the remove button shouldn't be visible
                 row.hideRemoveButton();
             }
+        })
+    }
+
+    siteWideFiltersUpdatedInMyView(siteWideIndicators) {
+        console.log('siteWideFiltersUpdatedInMyView');
+        this.model.filterRows.forEach((row) => {
+            row.triggerEvent('filterRow.siteWideFilters.updated', siteWideIndicators);
         })
     }
 

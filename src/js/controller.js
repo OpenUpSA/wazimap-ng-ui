@@ -11,6 +11,7 @@ export default class Controller extends Component {
         this.api = api;
         this._shouldMapZoom = false;
         this._filteredIndicators = [];
+        this._siteWideFilters = [];
 
         this.state = {
             profileId: profileId,
@@ -55,6 +56,10 @@ export default class Controller extends Component {
 
     get filteredIndicators() {
         return this._filteredIndicators;
+    }
+
+    get siteWideFilters() {
+        return this._siteWideFilters;
     }
 
     changeGeography(areaCode) {
@@ -235,6 +240,21 @@ export default class Controller extends Component {
             && this.state.subindicator.indicatorId === filteredIndicator.indicatorId) {
             this.triggerEvent('mapchip.choropleth.filtersUpdated', filteredIndicator);  // mapchip will be updated
         }
+    }
+
+    addSiteWideFilter(indicatorValue, subIndicatorValue) {
+        this._siteWideFilters.push({
+            indicatorValue,
+            subIndicatorValue
+        });
+
+        this.triggerEvent('my_view.siteWideFilters.updated', this.siteWideFilters);
+    }
+
+    removeSiteWideFilter(indicatorValue, subIndicatorValue) {
+        this._siteWideFilters = this._siteWideFilters.filter(x => !(x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue));
+
+        this.triggerEvent('my_view.siteWideFilters.updated', this.siteWideFilters);
     }
 
     onSelectingSubindicator(payload) {

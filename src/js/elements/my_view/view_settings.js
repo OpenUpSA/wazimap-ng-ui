@@ -82,6 +82,43 @@ const ViewSettings = (props) => {
         )
     }
 
+    const renderSiteWideIndicators = () => {
+        return (
+            props.siteWideFilters.map((swf, index) => {
+                return (
+                    <Grid item xs={12} key={index}>
+                        <FilteredIndicatorCard
+                        >
+                            <Grid container>
+                                <Grid item xs={10}>
+                                    <Grid container>
+                                        <Grid item xs={6} sx={{paddingRight: '3px'}}>
+                                            <FilteredIndicatorBox>
+                                                {swf.indicatorValue}
+                                            </FilteredIndicatorBox>
+                                        </Grid>
+                                        <Grid item xs={6} sx={{paddingLeft: '3px'}}>
+                                            <FilteredIndicatorBox>
+                                                {swf.subIndicatorValue}
+                                            </FilteredIndicatorBox>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <RemoveButton
+                                        onClick={() => props.removeSiteWideFilter(swf)}
+                                    >
+                                        {trashBinSvg}
+                                    </RemoveButton>
+                                </Grid>
+                            </Grid>
+                        </FilteredIndicatorCard>
+                    </Grid>
+                )
+            })
+        )
+    }
+
     return (
         <Container>
             <ViewSettingsTitle>
@@ -105,6 +142,7 @@ const ViewSettings = (props) => {
                     <StyledTypographyWithBottomBorder>
                         SITE-WIDE INDICATOR FILTERS
                     </StyledTypographyWithBottomBorder>
+                    {renderSiteWideIndicators()}
                     <HelpText>
                         Toggle a site-wide filter by clicking the {lockButtonSvg} next to any indicator.
                     </HelpText>

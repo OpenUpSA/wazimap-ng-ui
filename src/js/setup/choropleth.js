@@ -86,6 +86,22 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     controller.on('mapchip.choropleth.filtersUpdated', payload => {
         mapchip.filterController.filtersUpdatedInMyView(payload.payload, SidePanels.PANELS.dataMapper);
     })
+
+    mapchip.on('filterRow.filter.locked', payload => {
+        controller.addSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
+    })
+
+    mapchip.on('filterRow.filter.unlocked', payload => {
+        controller.removeSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
+    })
+
+    controller.on('my_view.siteWideFilters.removed', payload => {
+        controller.removeSiteWideFilter(payload.payload.indicatorValue, payload.payload.subIndicatorValue);
+    })
+
+    controller.on('my_view.siteWideFilters.updated', payload => {
+        mapchip.filterController.siteWideFiltersUpdatedInMyView(payload.payload);
+    })
 }
 
 function handleNewProfileChoropleth(controller, api, mapcontrol) {

@@ -1,7 +1,7 @@
 import {Dropdown, DropdownModel} from "./dropdown";
 import {Component, Observable} from "../utils";
 import {SidePanels} from "../elements/side_panels";
-import {LockFilterButton} from "./lock_filter_button";
+import {LockFilterButtonWrapper} from "./lock_filter_button/lock_filter_button_wrapper";
 
 /**
  *
@@ -9,7 +9,7 @@ import {LockFilterButton} from "./lock_filter_button";
 class FilterRowModel extends Component {
     static EVENTS = {
         updated: 'filterRowModel.updated',  // triggered when new datafiltermodel is set
-        indicatorSelected: 'filterRowModel.indicatorSelected' //
+        indicatorSelected: 'filterRowModel.indicatorSelected'
     }
 
     static ALL_VALUES = 'All values';
@@ -152,7 +152,8 @@ class FilterRowModel extends Component {
  */
 export class FilterRow extends Component {
     static EVENTS = {
-        removed: 'filterRow.removed'
+        removed: 'filterRow.removed',
+        indicatorOrSubIndicatorSelected: 'filterRow.indicatorOrSubIndicatorSelected'
     }
 
     static SELECT_ATTRIBUTE = 'Select an attribute';
@@ -214,12 +215,7 @@ export class FilterRow extends Component {
     }
 
     addLockButton() {
-        this._lockFilterButton = new LockFilterButton(this);
-
-        $(this._lockFilterButton.element).insertBefore($(this.container).find(this._elements.removeFilterButton));
-
-        $(this.container).html($(this.container).html());   //refresh dom
-        this._lockFilterButton.element = $(this.container).find('a.lock-indicator-button');
+        this._lockFilterButton = new LockFilterButtonWrapper(this);
     }
 
 
@@ -279,11 +275,10 @@ export class FilterRow extends Component {
     }
 
     setLockButtonVisibility() {
-        if (this.model.currentIndicatorValue !== FilterRowModel.ALL_INDICATORS && this.model.currentSubindicatorValue !== FilterRowModel.ALL_VALUES) {
-            this._lockFilterButton.isVisible = true;
-        } else {
-            this._lockFilterButton.isVisible = false;
-        }
+        this.triggerEvent(FilterRow.EVENTS.indicatorOrSubIndicatorSelected, {
+            selectedIndicator: this.model.currentIndicatorValue !== FilterRowModel.ALL_INDICATORS,
+            selectedSubIndicator: this.model.currentSubindicatorValue !== FilterRowModel.ALL_VALUES
+        });
     }
 
     updateIndicatorDropdowns(model, currentIndex = 0) {

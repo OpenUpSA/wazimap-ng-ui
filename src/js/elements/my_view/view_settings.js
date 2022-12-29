@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {IndicatorOptionsSvg, TrashBinSvg} from "./svg_icons";
+import {IndicatorOptionsSvg, TrashBinSvg, LockButtonSvg} from "./svg_icons";
 import {
     Container,
     FilteredIndicatorBox,
@@ -20,6 +20,7 @@ const ViewSettings = (props) => {
     const [filteredIndicators, setFilteredIndicators] = useState([]);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
     const trashBinSvg = TrashBinSvg;
+    const lockButtonSvg = LockButtonSvg;
 
     useEffect(() => {
         if (props.filteredIndicators !== filteredIndicators) {
@@ -101,6 +102,12 @@ const ViewSettings = (props) => {
                     <StyledTypography>INDICATOR OPTIONS</StyledTypography>
                 </StyledAccordionSummary>
                 <StyledAccordionDetails>
+                    <StyledTypographyWithBottomBorder>
+                        SITE-WIDE INDICATOR FILTERS
+                    </StyledTypographyWithBottomBorder>
+                    <HelpText>
+                        Toggle a site-wide filter by clicking the {lockButtonSvg} next to any indicator.
+                    </HelpText>
                     <StyledTypographyWithBottomBorder>
                         INDICATOR SPECIFIC OPTIONS
                     </StyledTypographyWithBottomBorder>

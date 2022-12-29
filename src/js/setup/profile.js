@@ -46,4 +46,17 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
             }
         }
     })
+
+    profileLoader.on('filterRow.created.new', payload => {
+        payload.filterController.setFilterRowState(payload.filterRow, controller.siteWideFilters);
+    })
+
+    profileLoader.on('filterRow.filter.unlocked', payload => {
+        controller.removeSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
+    })
+
+    profileLoader.on('filterRow.filter.locked', payload => {
+        console.log('locked')
+        controller.addSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
+    })
 }

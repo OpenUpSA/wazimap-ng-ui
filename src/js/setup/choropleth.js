@@ -103,9 +103,8 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         mapchip.filterController.siteWideFiltersUpdatedInMyView(payload.payload);
     })
 
-    mapchip.on('filterRow.created.new', (filterRow) => {
-        console.log('created new')
-        mapchip.filterController.setFilterRowState(filterRow, controller.siteWideFilters);
+    mapchip.on('filterRow.created.new', (payload) => {
+        payload.filterController.setFilterRowState(payload.filterRow, controller.siteWideFilters);
     })
 }
 

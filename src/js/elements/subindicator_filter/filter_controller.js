@@ -239,7 +239,10 @@ export class FilterController extends Component {
             })
 
             filterRow.on('filterRow.created.new', () => {
-                this.parent.triggerEvent('filterRow.created.new', filterRow);
+                this.parent.triggerEvent('filterRow.created.new', {
+                    filterController: this,
+                    filterRow
+                });
             })
 
             return filterRow;

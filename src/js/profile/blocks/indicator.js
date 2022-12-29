@@ -53,7 +53,7 @@ export class Indicator extends ContentBlock {
         this.bubbleEvents(c, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-            'point_tray.subindicator_filter.filter', 'profile.chart.filtered'
+            'point_tray.subindicator_filter.filter', 'profile.chart.filtered', 'filterRow.created.new', 'filterRow.filter.unlocked', 'filterRow.filter.locked'
         ]);
 
         this._chart = c;

@@ -56,7 +56,16 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
     })
 
     profileLoader.on('filterRow.filter.locked', payload => {
-        console.log('locked')
         controller.addSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
+    })
+
+    controller.on('my_view.siteWideFilters.updated', payload => {
+        for (const category of profileLoader.categories) {
+            for (const subCategory of category.subCategories) {
+                for (const indicator of subCategory.indicators) {
+                    indicator.chart?.filterController.siteWideFiltersUpdatedInMyView(controller.siteWideFilters);
+                }
+            }
+        }
     })
 }

@@ -100,6 +100,10 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     })
 
     controller.on('my_view.siteWideFilters.updated', payload => {
+        if (mapchip.filterController == null) {
+            return;
+        }
+
         mapchip.filterController.siteWideFiltersUpdatedInMyView(payload.payload);
     })
 

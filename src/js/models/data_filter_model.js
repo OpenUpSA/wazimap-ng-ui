@@ -40,6 +40,7 @@ export class DataFilterModel extends Observable {
         this._selectedSubindicators = {}
         this._childData = childData;
         this._filteredData = {};
+        this._siteWideFilters = [];
         this._filterFunction = filterType === DataFilterModel.FILTER_TYPE.indicators ? this.getFilteredIndicatorData : this.getFilteredPointData;
         this._filterType = filterType;
     }
@@ -199,6 +200,14 @@ export class DataFilterModel extends Observable {
     get availableFilterNames() {
         let filters = [...this.availableFilters]
         return filters.map(f => f.name)
+    }
+
+    get siteWideFilters() {
+        return this._siteWideFilters;
+    }
+
+    set siteWideFilters(value) {
+        this._siteWideFilters = value;
     }
 
     addFilter(indicatorName, filterPanel) {

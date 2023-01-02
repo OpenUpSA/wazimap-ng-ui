@@ -361,9 +361,9 @@ export class FilterController extends Component {
             this.setAddFilterButton();
         })
 
-        // first add previous filters
+        // 1 - add previous filters
         this.checkAndAddPreviouslySelectedFilters();
-        // then add default filters
+        // 2 - add default filters
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
 
@@ -408,6 +408,8 @@ export class FilterController extends Component {
         this.model.filterRows.forEach((row) => {
             row.triggerEvent('filterRow.siteWideFilters.updated', siteWideIndicators);
         })
+
+        this.checkAndAddSiteWideFilters();
     }
 
     setFilterRowState(filterRow, siteWideFilters) {
@@ -477,6 +479,17 @@ export class FilterController extends Component {
             if (group.group != this.model.dataFilterModel.primaryGroup) {
                 self.addPreviouslySelectedFilters(group, index === 0);
             }
+        })
+    }
+
+    checkAndAddSiteWideFilters() {
+        this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
+            let rowToUpdate = this.model.filterRows
+                .filter(x => x.model.currentSubindicatorValue === "All values")[0]; // use an existing row if the user has not selected a subIndicator
+            let filterRow = rowToUpdate == null ? this.addEmptyFilter(true) : rowToUpdate;
+
+            filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
+            filterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
         })
     }
 

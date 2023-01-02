@@ -104,7 +104,9 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             return;
         }
 
-        mapchip.filterController.siteWideFiltersUpdatedInMyView(payload.payload);
+        let siteWideFilters = payload.payload;
+        mapchip.filterController.model.dataFilterModel.siteWideFilters = siteWideFilters;
+        mapchip.filterController.siteWideFiltersUpdatedInMyView(siteWideFilters);
     })
 
     mapchip.on('filterRow.created.new', (payload) => {

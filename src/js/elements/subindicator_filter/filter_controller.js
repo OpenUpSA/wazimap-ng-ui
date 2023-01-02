@@ -484,12 +484,16 @@ export class FilterController extends Component {
 
     checkAndAddSiteWideFilters() {
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
-            let rowToUpdate = this.model.filterRows
-                .filter(x => x.model.currentSubindicatorValue === "All values")[0]; // use an existing row if the user has not selected a subIndicator
-            let filterRow = rowToUpdate == null ? this.addEmptyFilter(true) : rowToUpdate;
+            let indicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
 
-            filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
-            filterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
+            if (!indicatorAlreadyFiltered) {
+                let rowToUpdate = this.model.filterRows
+                    .filter(x => x.model.currentSubindicatorValue === "All values")[0]; // use an existing row if the user has not selected a subIndicator
+                let filterRow = rowToUpdate == null ? this.addEmptyFilter(true) : rowToUpdate;
+
+                filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
+                filterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
+            }
         })
     }
 

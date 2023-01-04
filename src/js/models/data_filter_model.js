@@ -28,7 +28,7 @@ export class DataFilterModel extends Observable {
         points: 'points'
     }
 
-    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData, filterType = DataFilterModel.FILTER_TYPE.indicators) {
+    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData, siteWideFilters = [], filterType = DataFilterModel.FILTER_TYPE.indicators) {
         super()
 
         this._groups = groups;
@@ -40,7 +40,7 @@ export class DataFilterModel extends Observable {
         this._selectedSubindicators = {}
         this._childData = childData;
         this._filteredData = {};
-        this._siteWideFilters = [];
+        this._siteWideFilters = siteWideFilters;
         this._filterFunction = filterType === DataFilterModel.FILTER_TYPE.indicators ? this.getFilteredIndicatorData : this.getFilteredPointData;
         this._filterType = filterType;
     }

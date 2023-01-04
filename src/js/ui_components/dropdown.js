@@ -7,14 +7,17 @@ export class DropdownModel extends Observable {
         selected: 'DropdownModel.selected', // triggered when a new item is selected
         enabled: 'DropdownModel.enabled',   // triggered when the dropdown is set to enabled
         disabled: 'DropdownModel.disabled', // triggered when the dropdown is set to disabled
+        unavailable: 'DropdownModel.unavailable',   // triggered when the dropdown is set to unavailable
+        available: 'DropdownModel.available', // triggered when the dropdown is set to available
     }
 
-    constructor(items = [], currentIndex = 0, isDisabled = false) {
+    constructor(items = [], currentIndex = 0, isDisabled = false, isUnavailable = false) {
         super();
 
         this._items = items;
         this._currentIndex = currentIndex;
-        this._isDisabled = isDisabled
+        this._isDisabled = isDisabled;
+        this._isUnavailable = isUnavailable;
     }
 
     get items() {
@@ -57,6 +60,19 @@ export class DropdownModel extends Observable {
             this.triggerEvent(DropdownModel.EVENTS.disabled);
         } else {
             this.triggerEvent(DropdownModel.EVENTS.enabled);
+        }
+    }
+
+    get isUnavailable() {
+        return this._isUnavailable;
+    }
+
+    set isUnavailable(value) {
+        if (value) {
+            this.isDisabled = true;
+            this.triggerEvent(DropdownModel.EVENTS.unavailable);
+        } else {
+            this.triggerEvent(DropdownModel.EVENTS.available);
         }
     }
 
@@ -133,6 +149,9 @@ export class Dropdown extends Component {
 
         this.model.on(DropdownModel.EVENTS.disabled, () => self.disable())
         this.model.on(DropdownModel.EVENTS.enabled, () => self.enable())
+
+        this.model.on(DropdownModel.EVENTS.unavailable, () => self.setUnavailable())
+        this.model.on(DropdownModel.EVENTS.available, () => self.setAvailable())
     }
 
     prepareUIEvents() {
@@ -184,6 +203,14 @@ export class Dropdown extends Component {
     disable() {
         $(this._trigger).addClass('is--disabled');
         $(this.container).addClass('disabled');
+    }
+
+    setAvailable() {
+        $(this._trigger).css('text-decoration', 'unset');
+    }
+
+    setUnavailable() {
+        $(this._trigger).css('text-decoration', 'line-through');
     }
 
     redrawItems(items) {

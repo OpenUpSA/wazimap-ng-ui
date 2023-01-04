@@ -70,7 +70,8 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             filter: previouslySelectedFiltersClone,
             config: args.payload.config,
             method: args.state.subindicator.choropleth_method,
-            currentGeo: args.state.profile.geometries.boundary.properties.name
+            currentGeo: args.state.profile.geometries.boundary.properties.name,
+            siteWideFilters: controller.siteWideFilters
         }
         mapchip.onSubIndicatorChange(params);
     });

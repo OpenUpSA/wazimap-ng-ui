@@ -261,7 +261,12 @@ export class MapChip extends Component {
         this.config = params.config;
         const previouslySelectedFilters = params.filter;
 
-        let dataFilterModel = new DataFilterModel(this.metadata.groups, this.config.chartConfiguration.filter, previouslySelectedFilters, this.metadata.primary_group, params.childData);
+        let dataFilterModel = new DataFilterModel(this.metadata.groups,
+            this.config.chartConfiguration.filter,
+            previouslySelectedFilters,
+            this.metadata.primary_group,
+            params.childData,
+            params.siteWideFilters);
 
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
 

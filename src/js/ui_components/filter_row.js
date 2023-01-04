@@ -204,6 +204,16 @@ export class FilterRow extends Component {
         this.subIndicatorDropdown.model.currentIndex = index;
     }
 
+    setPrimaryValueUnavailable(value) {
+        this.indicatorDropdown.model.isUnavailable = true;
+        this.indicatorDropdown.setText(value);
+    }
+
+    setSecondaryValueUnavailable(value) {
+        this.subIndicatorDropdown.model.isUnavailable = true;
+        this.subIndicatorDropdown.setText(value);
+    }
+
     prepareDomElements() {
         this.addLockButton();
         $(this.container).attr('data-isextra', this._isExtra);

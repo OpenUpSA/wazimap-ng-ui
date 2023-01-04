@@ -35,7 +35,7 @@ export class PointFilter extends Component {
     set activePoints(value) {
         this._activePoints = value;
         if (this._filterController !== null) {
-            let dataFilterModel = new DataFilterModel(this.groups, {}, null, '', this.activePoints, DataFilterModel.FILTER_TYPE.points);
+            let dataFilterModel = new DataFilterModel(this.groups, {}, null, '', this.activePoints, [], DataFilterModel.FILTER_TYPE.points);
             this._filterController.updateDataFilterModel(dataFilterModel);
         }
     }
@@ -81,7 +81,7 @@ export class PointFilter extends Component {
     set isVisible(value) {
         if (!this.isVisible && value) {
             this._filterController = new FilterController(this);
-            let dataFilterModel = new DataFilterModel(this.groups, {}, null, '', this.activePoints, DataFilterModel.FILTER_TYPE.points);
+            let dataFilterModel = new DataFilterModel(this.groups, {}, null, '', this.activePoints, [], DataFilterModel.FILTER_TYPE.points);
             if (this._filterController.filterCallback === null) {
                 this._filterController.filterCallback = this.filterCallback;
             }

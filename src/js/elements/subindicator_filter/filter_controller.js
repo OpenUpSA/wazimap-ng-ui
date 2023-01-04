@@ -366,6 +366,8 @@ export class FilterController extends Component {
         // 2 - add default filters
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
+        // 3 - add site-wide filters
+        this.checkAndAddSiteWideFilters();
 
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
@@ -484,15 +486,28 @@ export class FilterController extends Component {
 
     checkAndAddSiteWideFilters() {
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
-            let indicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
+            let isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
+            let isIndicatorAvailable = this.model.dataFilterModel.availableFilterNames.indexOf(filter.indicatorValue) >= 0;
+            console.log({
+                filter,
+                isIndicatorAvailable,
+                'availableFilterNames': this.model.dataFilterModel.availableFilterNames
+            })
 
-            if (!indicatorAlreadyFiltered) {
-                let rowToUpdate = this.model.filterRows
-                    .filter(x => x.model.currentSubindicatorValue === "All values")[0]; // use an existing row if the user has not selected a subIndicator
-                let filterRow = rowToUpdate == null ? this.addEmptyFilter(true) : rowToUpdate;
+            if (!isIndicatorAlreadyFiltered) {
+                if (isIndicatorAvailable) {
+                    let rowToUpdate = this.model.filterRows
+                        .filter(x => x.model.currentSubindicatorValue === "All values")[0]; // use an existing row if the user has not selected a subIndicator
+                    let filterRow = rowToUpdate == null ? this.addEmptyFilter(true) : rowToUpdate;
 
-                filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
-                filterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
+                    filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
+                    filterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
+                } else {
+                    // add a disabled filterRow
+                    let filterRow = this.addEmptyFilter(true);
+                    filterRow.setPrimaryValueUnavailable(filter.indicatorValue);
+                    filterRow.setSecondaryValueUnavailable(filter.subIndicatorValue);
+                }
             }
         })
     }

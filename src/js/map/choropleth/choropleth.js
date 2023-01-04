@@ -141,6 +141,12 @@ export class Choropleth extends Component {
                     end: zeroColor
                 };
             }
+        } else {
+            // all zero
+            return {
+                start: positiveColorRange[0],
+                end: positiveColorRange[1]
+            }
         }
     }
 

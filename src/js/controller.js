@@ -161,16 +161,15 @@ export default class Controller extends Component {
     }
 
     updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, filterPanel) {
-        let filteredIndicator = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0];
-        let newObj = filteredIndicator == null;
+        let isNewObj = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0] == null;
 
-        filteredIndicator = {
+        let filteredIndicator = {
             indicatorId: indicatorId,
             filters: selectedFilterDetails,
             indicatorTitle: indicatorTitle
         };
 
-        if (newObj) {
+        if (isNewObj) {
             this._filteredIndicators.push(filteredIndicator)
         } else {
             this._filteredIndicators = this._filteredIndicators.map(existingObj => {

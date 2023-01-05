@@ -184,9 +184,7 @@ export class FilterController extends Component {
     }
 
     addInitialFilterRow(dataFilterModel) {
-        if (
-            this.noFiltersAvailable || !isEmpty(dataFilterModel.previouslySelectedFilters)
-        ) {
+        if (this.noFiltersAvailable || !isEmpty(dataFilterModel.previouslySelectedFilters)) {
             this.isLoading = false;
             return;
         }

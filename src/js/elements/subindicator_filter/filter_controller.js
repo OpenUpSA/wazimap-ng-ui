@@ -488,11 +488,6 @@ export class FilterController extends Component {
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
             let isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
             let isIndicatorAvailable = this.model.dataFilterModel.availableFilterNames.indexOf(filter.indicatorValue) >= 0;
-            console.log({
-                filter,
-                isIndicatorAvailable,
-                'availableFilterNames': this.model.dataFilterModel.availableFilterNames
-            })
 
             if (!isIndicatorAlreadyFiltered) {
                 if (isIndicatorAvailable) {

@@ -166,6 +166,13 @@ export default class Controller extends Component {
     }
 
     updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, filterPanel) {
+        console.log({
+            indicatorId,
+            indicatorTitle,
+            selectedFilterDetails,
+            filterPanel,
+            'siteWideFilters': this.siteWideFilters
+        })
         let filteredIndicator = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0];
         let newObj = filteredIndicator == null;
 

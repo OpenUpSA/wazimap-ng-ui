@@ -12,7 +12,7 @@ export const ViewSettingsTitle = styled(Box)(() => ({
     fontWeight: '700'
 }));
 
-export const StyledAccordionSummary = styled(AccordionSummary)(() => ({
+export const StyledAccordionSummary = styled(AccordionSummary)(({theme}) => ({
     padding: '10px',
     paddingLeft: '20px',
     boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)'
@@ -28,7 +28,8 @@ export const StyledTypography = styled(Typography)(() => ({
 
 export const StyledTypographyWithBottomBorder = styled(StyledTypography)(() => ({
     borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
-    paddingBottom: '15px'
+    paddingBottom: '15px',
+    marginBottom: '20px'
 }));
 
 export const HelpText = styled(Typography)(() => ({
@@ -114,7 +115,7 @@ export const FilteredIndicatorCard = styled(Card)(() => ({
     padding: '6px',
     boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
     borderRadius: '4px',
-    marginTop: '20px'
+    marginTop: '10px'
 }));
 
 export const FilteredIndicatorBox = styled(Box)(() => ({
@@ -126,9 +127,21 @@ export const FilteredIndicatorBox = styled(Box)(() => ({
     width: '100%',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    display: 'flex',
+    alignItems: 'center'
 }));
 
 export const RemoveButton = styled(Button)(() => ({
-    height: '100%'
+    height: '100%',
+    minWidth: 'unset',
+    width: '100%'
+}));
+
+export const AppliedPanelInfo = styled(Box)(() => ({
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    padding: '4px',
+    borderRadius: '3px',
+    marginRight: '6px',
+    fontSize: '12px'
 }));

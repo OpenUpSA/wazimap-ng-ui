@@ -107,6 +107,7 @@ Then(/^I confirm that there is an indicator filter for "([^"]*)" at index (\d+)$
                     .should('contain.text', filters[0])
                     .should('contain.text', filters[1])
                     .should('contain.text', filters[2])
+                    .should('contain.text', filters[3])
             }
         })
 });

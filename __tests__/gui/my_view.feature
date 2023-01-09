@@ -35,7 +35,7 @@ Feature: My View Panel
     # My view
     When I expand My View Window
     And I click on "INDICATOR OPTIONS" in My View
-    Then I confirm that there is an indicator filter for "Language most spoken at home(data_explorer):language:English" at index 0
+    Then I confirm that there is an indicator filter for "Data mapper:Language most spoken at home:language:English" at index 0
 
     # Remove filter from my view
     And I remove the indicator filter at index 0
@@ -53,8 +53,8 @@ Feature: My View Panel
     And I select "Afrikaans" from subIndicator dropdown in chart filter
     And I collapse Rich Data Panel
     And I expand My View Window
-    Then I confirm that there is an indicator filter for "Language most spoken at home(data_explorer):language:English" at index 0
-    Then I confirm that there is an indicator filter for "Language most spoken at home(rich_data):language:Afrikaans" at index 1
+    Then I confirm that there is an indicator filter for "Data mapper:Language most spoken at home:language:English" at index 0
+    Then I confirm that there is an indicator filter for "Rich data view:Language most spoken at home:language:Afrikaans" at index 1
 
     # Remove rich data filter from my view
     When I remove the indicator filter at index 1

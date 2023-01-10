@@ -68,12 +68,15 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
         for (const category of profileLoader.categories) {
             for (const subCategory of category.subCategories) {
                 for (const indicator of subCategory.indicators) {
-                    let siteWideFilters = payload.payload;
-                    const chart = indicator.chart;
-                    if (chart !== null && chart !== undefined) {
-                        chart.filterController.model.dataFilterModel.siteWideFilters = siteWideFilters;
-                        chart.filterController.siteWideFiltersUpdatedInMyView(controller.siteWideFilters);
-                    }
+                    // do not block the UI thread
+                    setTimeout(() => {
+                        let siteWideFilters = payload.payload;
+                        const chart = indicator.chart;
+                        if (chart !== null && chart !== undefined) {
+                            chart.filterController.model.dataFilterModel.siteWideFilters = siteWideFilters;
+                            chart.filterController.siteWideFiltersUpdatedInMyView(controller.siteWideFilters);
+                        }
+                    }, 0)
                 }
             }
         }

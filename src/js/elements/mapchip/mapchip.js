@@ -12,7 +12,6 @@ const mapChipBlockParentClass = '.map-bottom-items--v2';
 const mapChipBlockClass = `${mapChipBlockParentClass} .map-options`;
 const legendClass = ".map-options__legend";
 const legendContainerClass = '.map-options__legend_wrap';
-const linearScrubberContainerClass = '.map-options__linear_scrubber_wrap';
 const filterHeaderClass = '.filter__header_sub-indicator';
 const filterHeaderToggleClass = ".filters__header_toggle";
 
@@ -30,7 +29,7 @@ export class MapChip extends Component {
         this._isLoading = false;
         this._filterController = null;
         this._isContentVisible = false;
-        this._appliedFilters = {};
+        this._appliedFilters = [];
         this.prepareUIEvents();
         this.choroplethMethods = {
             subindicator: 'subindicator',
@@ -226,17 +225,19 @@ export class MapChip extends Component {
         this.triggerEvent('mapchip.removed', this.container);
     }
 
-    applyFilter = (filterResult, selectedFilter) => {
+    applyFilter = (filterResult, selectedFilter, selectedFilterDetails) => {
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,
                 selectedFilter: selectedFilter,
+                selectedFilterDetails: selectedFilterDetails,
                 metadata: this.metadata,
                 config: this.config
             }
+
             this.triggerEvent("mapchip.choropleth.filtered", payload)
         }
-        this.appliedFilters = selectedFilter;
+        this.appliedFilters = selectedFilterDetails;
         this.filterLabel.setFilterLabelSelectedCount(selectedFilter);
     }
 
@@ -259,6 +260,7 @@ export class MapChip extends Component {
         this.metadata = params.metadata;
         this.config = params.config;
         const previouslySelectedFilters = params.filter;
+
         let dataFilterModel = new DataFilterModel(this.metadata.groups, this.config.chartConfiguration.filter, previouslySelectedFilters, this.metadata.primary_group, params.childData);
 
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
@@ -282,11 +284,21 @@ export class MapChip extends Component {
     }
 
     setFilterLabel(dataFilterModel, groups) {
-        const defaultFilters = dataFilterModel.configFilters?.defaults || [];
-        this.filterLabel.compareFilters(defaultFilters, this.appliedFilters);
+        const selectedFilters = dataFilterModel.previouslySelectedFilters;
+        const defaultFilters = dataFilterModel?.configFilters?.defaults;
+        if (defaultFilters) {
+            defaultFilters.forEach(item => {
+                if (selectedFilters[item.name] === undefined) {
+                    selectedFilters[item.name] = item.value
+                }
+            });
+        }
+
+        this.filterLabel.compareFilters(this.appliedFilters, selectedFilters);
         this.filterLabel.setFilterLabelTotalCount(groups);
         this.filterLabel.setFilterLabelSelectedCount({});
         this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);
+        this.appliedFilters = selectedFilters
     }
 
     setDescriptionIcon(description) {

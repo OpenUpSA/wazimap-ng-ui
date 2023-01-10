@@ -1,4 +1,5 @@
 import {VersionController} from "../versions/version_controller";
+import {SidePanels} from "../elements/side_panels";
 
 export function configureChoroplethEvents(controller, objs = {mapcontrol: null, mapchip: null, api: null}) {
     const mapcontrol = objs['mapcontrol'];
@@ -51,13 +52,22 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             return;
         }
 
+        let previouslySelectedFilters = controller.filteredIndicators.filter(x => x.indicatorId === args.state.subindicator.indicatorId
+            && x.filters.filter(y => y.appliesTo.indexOf(SidePanels.PANELS.dataMapper) >= 0).length > 0);
+
+        let previouslySelectedFiltersClone = structuredClone(previouslySelectedFilters);
+
+        previouslySelectedFiltersClone.forEach(x => {
+            x.filters = x.filters.filter(x => x.appliesTo.indexOf(SidePanels.PANELS.dataMapper) >= 0);
+        });
+
         const metadata = args.payload.metadata;
         const params = {
             metadata: metadata,
             indicatorTitle: args.payload.indicatorTitle,
             selectedSubindicator: args.payload.selectedSubindicator,
             childData: args.payload.data,
-            filter: args.payload.filter,
+            filter: previouslySelectedFiltersClone,
             config: args.payload.config,
             method: args.state.subindicator.choropleth_method,
             currentGeo: args.state.profile.geometries.boundary.properties.name
@@ -67,6 +77,14 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 
     controller.on('redraw', payload => {
         handleNewProfileChoropleth(controller, api, mapcontrol)
+    })
+
+    controller.on('my_view.filteredIndicators.removed', payload => {
+        controller.removeFilteredIndicator(payload.payload.filteredIndicator, payload.payload.selectedFilter);
+    })
+
+    controller.on('mapchip.choropleth.filtersUpdated', payload => {
+        mapchip.filterController.filtersUpdatedInMyView(payload.payload, SidePanels.PANELS.dataMapper);
     })
 }
 
@@ -113,12 +131,11 @@ function loadAndDisplayChoropleth(payload, mapcontrol, showMapchip = false, chil
     const method = ps.subindicator.choropleth_method;
     const indicatorTitle = payload.payload.indicatorTitle;
     const selectedSubindicator = ps.selectedSubindicator;
-    const filter = ps.subindicator.filter;
     let data = ps.subindicator.data;
     if (childData) {
         ps.subindicator.data = childData;
         data = childData;
     }
 
-    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, filter, metadata, config);
+    mapcontrol.handleChoropleth(data, method, selectedSubindicator, indicatorTitle, showMapchip, metadata, config);
 }

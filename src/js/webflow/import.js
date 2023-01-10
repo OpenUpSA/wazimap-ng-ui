@@ -6,28 +6,33 @@ function addStylesheet(window, path) {
     headContent.appendChild(tag);
 }
 
+function addCustomStyleSheets(window) {
+    addStylesheet(window, "custom-css/mapchip.scss");
+    addStylesheet(window, "custom-css/popup.scss");
+    addStylesheet(window, "custom-css/general.scss");
+}
+
 function setupTranslation(window) {
     setupPointMapperTranslations(window);
     setupLocationSearchTranslations(window);
     addTranslationDataVariableForText(window);
     addTranslationDataVariableForPlaceholder(window);
-    setupWatermarkElements(window);
 }
 
 function addTranslationDataVariableForText(window) {
-  let i18nElements = window.document.getElementsByClassName('i18n');
-  for (let i = 0; i < i18nElements.length; ++i) {
-      let text = i18nElements[i].textContent.trim();
-      i18nElements[i].setAttribute('data-i18n', text);
-  }
+    let i18nElements = window.document.getElementsByClassName('i18n');
+    for (let i = 0; i < i18nElements.length; ++i) {
+        let text = i18nElements[i].textContent.trim();
+        i18nElements[i].setAttribute('data-i18n', text);
+    }
 }
 
 function addTranslationDataVariableForPlaceholder(window) {
-  let i18nElements = window.document.getElementsByClassName('i18n-placeholder');
-  for (let i = 0; i < i18nElements.length; ++i) {
-      let placeholderText = i18nElements[i].getAttribute("placeholder").trim();
-      i18nElements[i].setAttribute('data-i18n', placeholderText);
-  }
+    let i18nElements = window.document.getElementsByClassName('i18n-placeholder');
+    for (let i = 0; i < i18nElements.length; ++i) {
+        let placeholderText = i18nElements[i].getAttribute("placeholder").trim();
+        i18nElements[i].setAttribute('data-i18n', placeholderText);
+    }
 }
 
 function setupPointMapperTranslations(window) {
@@ -63,17 +68,40 @@ function setupLocationSearchTranslations(window) {
     })
 }
 
-function setupWatermarkElements(window){
-    let mapWatermark =window.document.createElement('div');
+function setupWatermarkElements(window) {
+    let mapWatermark = window.document.createElement('div');
     mapWatermark.classList.add('map-watermark-wrapper');
     window.document.getElementsByClassName('main')[0].append(mapWatermark);
 }
 
-exports.transformDOM = function(window, $) {
+function addTabularComparisonLink(window) {
+    const tabularComparisonTag = window.document.createElement("a");
+    tabularComparisonTag.setAttribute("style", "display:none");
+    tabularComparisonTag.setAttribute("href", "/tabular-comparison.html");
+    window.document.body.appendChild(tabularComparisonTag);
+}
+
+function setupMyViewElements(window) {
+    // toggles
+    let rightPanelToggles = window.document.createElement('div');
+    rightPanelToggles.classList.add('right-panel-toggles');
+
+    let myViewToggle = window.document.createElement('div');
+    myViewToggle.classList.add('my-view-toggle');
+
+    rightPanelToggles.append(myViewToggle);
+    window.document.getElementsByClassName('main')[0].append(rightPanelToggles);
+
+    // my view panel
+    let myViewPanel = window.document.createElement('div');
+    myViewPanel.classList.add('my-view');
+    myViewPanel.classList.add('hidden');
+    window.document.getElementsByClassName('main')[0].append(myViewPanel);
+}
+
+exports.transformDOM = function (window, $) {
     // Add custom css
-    addStylesheet(window, "custom-css/mapchip.scss");
-    addStylesheet(window, "custom-css/popup.scss");
-    addStylesheet(window, "custom-css/general.scss");
+    addCustomStyleSheets(window);
 
     $('script[src="https://gcro.openup.org.za/js.117393d3.js"]').remove();
 
@@ -84,9 +112,12 @@ exports.transformDOM = function(window, $) {
     // translation
     setupTranslation(window);
 
+    // watermark
+    setupWatermarkElements(window);
+
     // Add tabular comparison link
-    const tabularComparisonTag = window.document.createElement("a");
-    tabularComparisonTag.setAttribute("style", "display:none");
-    tabularComparisonTag.setAttribute("href", "/tabular-comparison.html");
-    window.document.body.appendChild(tabularComparisonTag);
+    addTabularComparisonLink(window);
+
+    // my view
+    setupMyViewElements(window);
 };

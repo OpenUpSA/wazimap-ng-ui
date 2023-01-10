@@ -2,6 +2,9 @@ import {FilterRow} from "../../ui_components/filter_row";
 import {Component, Observable} from "../../utils";
 import {AddFilterButton} from "../../ui_components/add_filter_button";
 import {DataFilterModel} from "../../models/data_filter_model";
+import {isEmpty} from 'lodash';
+import {SidePanels} from "../side_panels";
+
 
 class FilterControllerModel extends Observable {
     static EVENTS = {
@@ -58,7 +61,7 @@ export class FilterController extends Component {
         filterRowClass: '.map-options__filter-row',
         filterDropdown: '.mapping-options__filter',
         addButton: 'a.mapping-options__add-filter',
-        isMapchip: true,
+        filterPanel: SidePanels.PANELS.dataMapper,
         removeFilterButton: '.mapping-options__remove-filter'
     }) {
         super(parent);
@@ -181,7 +184,8 @@ export class FilterController extends Component {
     }
 
     addInitialFilterRow(dataFilterModel) {
-        if (this.noFiltersAvailable) {
+        if (this.noFiltersAvailable || !isEmpty(dataFilterModel.previouslySelectedFilters)) {
+            this.isLoading = false;
             return;
         }
 
@@ -193,7 +197,7 @@ export class FilterController extends Component {
         this.isLoading = false;
     }
 
-    addEmptyFilter(isDefault = false, isExtra = true, isRequired = false) {
+    addEmptyFilter(isDefault = false, isExtra = true, isRequired = false, addAsFirstRow = false) {
         if (this.model.dataFilterModel.availableFilters.length > 0) {
             const self = this;
 
@@ -204,7 +208,15 @@ export class FilterController extends Component {
             this.model.addFilterRow(filterRow);
 
             this.addFilterButton.show();
-            $(filterRow.container).insertBefore($(this.container).find(this._elements.addButton));
+            if (addAsFirstRow) {
+                let elementToInsertBefore = $(this.container).find(`${this._elements.filterRowClass}:not(.hidden)`)[0];
+                if (elementToInsertBefore === undefined) {
+                    elementToInsertBefore = $(this.container).find(this._elements.addButton);
+                }
+                $(filterRow.container).insertBefore(elementToInsertBefore);
+            } else {
+                $(filterRow.container).insertBefore($(this.container).find(this._elements.addButton));
+            }
 
             filterRow.on(FilterRow.EVENTS.removed, filterRow => {
                 self.removeFilter(filterRow);
@@ -221,19 +233,45 @@ export class FilterController extends Component {
         let index = 0;
 
         let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
-        filterRow.indicatorDropdown.disable();
+        try {
+            if (filterRow !== undefined) {
+                filterRow.indicatorDropdown.disable();
 
-        filterRow.setPrimaryIndexUsingValue(group.name);
-        filterRow.setSecondaryIndex(index);
+                filterRow.setPrimaryIndexUsingValue(group.name);
+                filterRow.setSecondaryIndex(index);
+            }
+        } catch (err) {
+            if (filterRow !== undefined) {
+                console.error(err);
+                filterRow.removeRow();
+            }
+        }
     }
 
     addDefaultFilter(group) {
         let isDefault = true;
         let isExtra = false;
         let isRequired = true;
+        let addAsFirstRow = true;
 
-        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
-        filterRow.indicatorDropdown.disable();
+        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired, addAsFirstRow);
+        try {
+            if (filterRow !== undefined) {
+                filterRow.indicatorDropdown.disable();
+
+                filterRow.setPrimaryIndexUsingValue(group.group);
+                filterRow.setSecondaryIndexUsingValue(group.value);
+            }
+        } catch (err) {
+            if (filterRow !== undefined) {
+                console.error(err);
+                filterRow.removeRow();
+            }
+        }
+    }
+
+    addPreviouslySelectedFilters(group, isDefault) {
+        let filterRow = this.addEmptyFilter(isDefault);
 
         filterRow.setPrimaryIndexUsingValue(group.group);
         filterRow.setSecondaryIndexUsingValue(group.value);
@@ -255,7 +293,7 @@ export class FilterController extends Component {
             let filterRowContainer = $(this._elements.filterRowClass)[0].cloneNode(true);
             let filterRow = new FilterRow(this, filterRowContainer, dataFilter, isDefault, isExtra, this._elements);
             this.filterRows.push(filterRow);
-            this._dataFilterModel.addFilter(filterName);
+            this._dataFilterModel.addFilter(filterName, this._elements.filterPanel);
 
             filterRow.on(FilterRow.EVENTS.removed, filterRow => {
                 self.removeFilter(filterRow);
@@ -293,17 +331,54 @@ export class FilterController extends Component {
 
         this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, () => {
             if (this.filterCallback !== null) {
-                this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators);
+                this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators, this.model.dataFilterModel.selectedFilterDetails);
             }
 
             this.updateAvailableFiltersOfRows();
             this.setAddFilterButton();
         })
 
+        // first add previous filters
+        this.checkAndAddPreviouslySelectedFilters();
+        // then add default filters
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
+
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
+    }
+
+    /**
+     * this function will be triggered when the filters are updated outside the mapchip or rich data
+     * e.g when user removes a filter from my view panel
+     **/
+    filtersUpdatedInMyView(filteredIndicator, panel) {
+        this.model.filterRows.forEach((row) => {
+            const selectedGroup = row.model.currentIndicatorValue;
+            const selectedValue = row.model.currentSubindicatorValue;
+            const filters = filteredIndicator.filters;
+            const filterRemains = filters.some(f => f.group === selectedGroup && f.value === selectedValue && f.appliesTo.indexOf(panel) >= 0);
+
+            if (!filterRemains && selectedGroup !== 'All indicators') {
+                row.removeRow();
+
+                this.checkAndAddNonAggregatableGroups();
+                this.checkAndAddDefaultFilterGroups();
+
+                const remainingRowLength = this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').length;
+                if (remainingRowLength <= 0) {
+                    this.addEmptyFilter(true);
+                }
+            }
+        })
+
+        // this cannot be in the loop above
+        this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').forEach((row, index) => {
+            if (index === 0) {
+                // the remove button shouldn't be visible
+                row.hideRemoveButton();
+            }
+        })
     }
 
     updateAvailableFiltersOfRows() {
@@ -315,6 +390,13 @@ export class FilterController extends Component {
         })
     }
 
+    updateDefaultFilterValues(group) {
+        let filterRow = this.model.filterRows.find(fr => fr.model.currentIndicatorValue === group.group);
+        if (filterRow !== undefined) {
+            filterRow.setSecondaryIndexUsingValue(group.value);
+        }
+    }
+
     checkAndAddNonAggregatableGroups() {
         const self = this;
         let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
@@ -323,6 +405,11 @@ export class FilterController extends Component {
         nonAggregatableGroups.forEach(group => {
             if (group.name != this.model.dataFilterModel.primaryGroup && !defaultGroups.some(x => x.group === group.name)) {
                 self.addNonAggregatableFilter(group);
+            } else {
+                this.model.filterRows.filter(x => x.model.currentIndicatorValue === group.name).forEach(row => {
+                    row.indicatorDropdown.disable();
+                    row.indicatorDropdown.model.isDisabled = true;
+                })
             }
         })
     }
@@ -332,15 +419,28 @@ export class FilterController extends Component {
         let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
 
         defaultGroups.forEach(group => {
-            if (group.group != this.model.dataFilterModel.primaryGroup) {
+            const alreadyAdded = this.model.filterRows.some(x => x.model.currentIndicatorValue === group.group && x.model.currentSubindicatorValue === group.value);
+
+            if (!alreadyAdded && group.group !== this.model.dataFilterModel.primaryGroup) {
                 self.addDefaultFilter(group);
+            } else {
+                this.model.filterRows.filter(x => x.model.currentIndicatorValue === group.group).forEach(row => {
+                    row.indicatorDropdown.disable();
+                    row.indicatorDropdown.model.isDisabled = true;
+                })
             }
         })
     }
 
     checkAndAddPreviouslySelectedFilters() {
         const self = this;
-        let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilters;
+        let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilterGroups;
+
+        previouslySelectedFilters.forEach((group, index) => {
+            if (group.group != this.model.dataFilterModel.primaryGroup) {
+                self.addPreviouslySelectedFilters(group, index === 0);
+            }
+        })
     }
 
     toggleContentVisibility() {

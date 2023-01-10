@@ -140,18 +140,20 @@ export class DataFilterModel extends Observable {
     }
 
     get selectedFilterDetails() {
-        let details = [...this.selectedFilters].map(sf => {
+        const self = this;
+        let details = [...self.selectedFilters].map(sf => {
             const group = sf.group.name;
-            const value = this._selectedSubindicators[group];
-            const isDefault = this.defaultFilterGroups
-                    .some(f => f.group === group && f.value === this._selectedSubindicators[group])
-                || this.nonAggregatableGroups.some(x => x.name === group && x.values[0] === value);
+            const value = self._selectedSubindicators[group];
+            const isDefault = self.defaultFilterGroups
+                    .some(f => f.group === group && f.value === self._selectedSubindicators[group])
+                || self.nonAggregatableGroups.some(x => x.name === group && x.values[0] === value);
 
             return {
                 group: group,
                 value: value,
                 isDefault: isDefault,
-                appliesTo: [sf.filterPanel]
+                appliesTo: [sf.filterPanel],
+                isSiteWideFilter: self.isSiteWideFilter(group, value)
             };
         })
 
@@ -208,6 +210,10 @@ export class DataFilterModel extends Observable {
 
     set siteWideFilters(value) {
         this._siteWideFilters = value;
+    }
+
+    isSiteWideFilter(group, value) {
+        return this.siteWideFilters.filter(x => x.indicatorValue === group && x.subIndicatorValue === value)[0] != null;
     }
 
     addFilter(indicatorName, filterPanel) {

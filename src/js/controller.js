@@ -166,28 +166,22 @@ export default class Controller extends Component {
     }
 
     updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, filterPanel) {
-        console.log({
-            indicatorId,
-            indicatorTitle,
-            selectedFilterDetails,
-            filterPanel,
-            'siteWideFilters': this.siteWideFilters
-        })
-        let filteredIndicator = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0];
-        let newObj = filteredIndicator == null;
+        let selectedFilterDetailsClone = structuredClone(selectedFilterDetails);
+        selectedFilterDetailsClone = selectedFilterDetailsClone.filter(x => !x.isSiteWideFilter && !x.isDefault);
+        let isNewObj = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0] == null;
 
-        filteredIndicator = {
+        let filteredIndicator = {
             indicatorId: indicatorId,
-            filters: selectedFilterDetails,
+            filters: selectedFilterDetailsClone,
             indicatorTitle: indicatorTitle
         };
 
-        if (newObj) {
+        if (isNewObj) {
             this._filteredIndicators.push(filteredIndicator)
         } else {
             this._filteredIndicators = this._filteredIndicators.map(existingObj => {
                 if (existingObj.indicatorId === indicatorId) {
-                    selectedFilterDetails.forEach((newFilter) => {
+                    selectedFilterDetailsClone.forEach((newFilter) => {
                         newFilter.appliesTo.forEach(panel => {
                             // check for panel
                             let filterObj = existingObj.filters.filter(x => x.appliesTo.indexOf(panel) >= 0 && x.group === newFilter.group)[0];
@@ -204,7 +198,7 @@ export default class Controller extends Component {
 
                     // remove
                     let filtersToRemove = existingObj.filters.filter(f => {
-                        const stillExists = selectedFilterDetails.filter(x => x.group === f.group && x.value === f.value).length > 0;
+                        const stillExists = selectedFilterDetailsClone.filter(x => x.group === f.group && x.value === f.value).length > 0;
                         return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists;
                     })
                     filtersToRemove.forEach(x => {

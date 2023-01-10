@@ -29,7 +29,7 @@ export class MapChip extends Component {
         this._isLoading = false;
         this._filterController = null;
         this._isContentVisible = false;
-        this._appliedFilters = {};
+        this._appliedFilters = [];
         this.prepareUIEvents();
         this.choroplethMethods = {
             subindicator: 'subindicator',
@@ -237,7 +237,7 @@ export class MapChip extends Component {
 
             this.triggerEvent("mapchip.choropleth.filtered", payload)
         }
-        this.appliedFilters = selectedFilter;
+        this.appliedFilters = selectedFilterDetails;
         this.filterLabel.setFilterLabelSelectedCount(selectedFilter);
     }
 

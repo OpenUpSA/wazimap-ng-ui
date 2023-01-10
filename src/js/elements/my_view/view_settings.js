@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {IndicatorOptionsSvg, TrashBinSvg, LockButtonSvg} from "./svg_icons";
 import {
+    AppliedPanelInfo,
     Container,
     FilteredIndicatorBox,
     FilteredIndicatorCard, HelpText,
@@ -32,6 +33,14 @@ const ViewSettings = (props) => {
         setExpanded(panel);
     };
 
+    const showPanelName = (appliesTo) => {
+        if (appliesTo === 'data_explorer') {
+            return 'Data mapper';
+        } else if (appliesTo === 'rich_data') {
+            return 'Rich data view';
+        }
+    }
+
     const renderFilteredIndicators = () => {
         return (
             props.filteredIndicators.map((fi) => {
@@ -43,12 +52,15 @@ const ViewSettings = (props) => {
                                     data-test-id={'filtered-indicator-card'}
                                 >
                                     <Grid container>
-                                        <Grid item xs={10}>
+                                        <Grid item xs={11} sx={{paddingRight: '6px'}}>
                                             <Grid item xs={12}>
                                                 <FilteredIndicatorBox
                                                     title={`${fi.indicatorTitle} (${sf.appliesTo})`}
                                                 >
-                                                    {`${fi.indicatorTitle}(${sf.appliesTo[0]})`}
+                                                    <AppliedPanelInfo>
+                                                        {showPanelName(sf.appliesTo[0])}
+                                                    </AppliedPanelInfo>
+                                                    {`${fi.indicatorTitle}`}
                                                 </FilteredIndicatorBox>
                                             </Grid>
                                             <Grid container sx={{marginTop: '8px'}}>
@@ -64,7 +76,7 @@ const ViewSettings = (props) => {
                                                 </Grid>
                                             </Grid>
                                         </Grid>
-                                        <Grid item xs={2}>
+                                        <Grid item xs={1}>
                                             <RemoveButton
                                                 onClick={() => props.removeFilter(fi, sf)}
                                                 data-test-id={'filtered-indicator-remove-button'}
@@ -125,11 +137,12 @@ const ViewSettings = (props) => {
                 View settings
             </ViewSettingsTitle>
             <StyledAccordion
+                disableGutters
                 expanded={expanded === 'indicatorOptions'}
                 onChange={() => handleExpandedChange(expanded === 'indicatorOptions' ? '' : 'indicatorOptions')}
             >
                 <StyledAccordionSummary
-                    expandIcon={<ExpandMoreIcon/>}
+                    expandIcon={<ExpandMoreIcon sx={{width: '32px', height: '32px'}}/>}
                     aria-controls={'indicatorOptions-content'}
                     id={'indicatorOptions-header'}
                 >
@@ -147,7 +160,7 @@ const ViewSettings = (props) => {
                         Toggle a site-wide filter by clicking the {lockButtonSvg} next to any indicator.
                     </HelpText>
                     <StyledTypographyWithBottomBorder>
-                        INDICATOR SPECIFIC OPTIONS
+                        INDICATOR-SPECIFIC OPTIONS
                     </StyledTypographyWithBottomBorder>
                     {renderFilteredIndicators()}
                     <HelpText>

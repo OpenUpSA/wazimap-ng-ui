@@ -35,7 +35,7 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
             || payload.selectedFilter.filter(x => !x.isSiteWideFilter && !x.isDefault).length <= 0) {
             return;
         }
-        
+
         controller.onChartFiltered(payload);
     });
 

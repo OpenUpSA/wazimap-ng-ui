@@ -203,10 +203,4 @@ export default class ProfileLoader extends Component {
     updateActiveVersion = (activeVersion) => {
         this.triggerEvent('version.updated', activeVersion);
     }
-
-    updateSelectedIndicatorFilters = (payload) => {
-        return;
-        let filters = this.filteredIndicators;
-        filters[payload.indicatorId] = payload.selectedFilter;
-    }
 }

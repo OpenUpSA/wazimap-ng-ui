@@ -72,14 +72,14 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
     }).as('indicator_data');
 }
 
-export function setupInterceptionsForSpecificGeo(geoCode, all_details){
-  cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/${geoCode}/?skip-children=true&format=json`, (req) => {
-      req.reply({
-          statusCode: 200,
-          body: all_details,
-          forceNetworkError: false // default
-      })
-  }).as('all_details')
+export function setupInterceptionsForSpecificGeo(geoCode, all_details) {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/${geoCode}/?skip-children=true&format=json`, (req) => {
+        req.reply({
+            statusCode: 200,
+            body: all_details,
+            forceNetworkError: false // default
+        })
+    }).as('all_details')
 }
 
 export function extractRequestedIndicatorData(url, indicatorData) {
@@ -313,4 +313,60 @@ export function compareImages(image1, image2) {
     let pixelDiff = pixelmatch(img1.data, img2.data, null, width, height, {threshold: 0.1});
 
     expect(pixelDiff).to.equal(0);
+}
+
+export function confirmNoChoroplethFilterSelected() {
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible`).should('have.length', 1);
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+        .eq(0)
+        .find(' .dropdown-menu__selected-item .truncate')
+        .should('have.text', 'Select an attribute');
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('have.class', 'disabled');
+}
+
+export function confirmNoChartFilterSelected() {
+    cy.get('.rich-data-content .profile-indicator__filter-row:visible').should('have.length', 1);
+    cy.get('.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter')
+        .eq(0)
+        .find(' .dropdown-menu__selected-item .truncate')
+        .should('have.text', 'Select an attribute');
+    cy.get('.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter').eq(1).should('have.class', 'disabled');
+}
+
+export function selectChoroplethDropdownOption(option, dropdownIndex) {
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+        .eq(dropdownIndex)
+        .should('not.have.class', 'disabled');
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+        .eq(dropdownIndex)
+        .click();
+
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${option}")`, {timeout: 20000}).click({force: true})
+}
+
+export function selectChartDropdownOption(option, dropdownIndex) {
+    cy.get(`.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter`)
+        .eq(dropdownIndex)
+        .should('not.have.class', 'disabled');
+    cy.get(`.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter`)
+        .eq(dropdownIndex)
+        .click();
+
+    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${option}")`, {timeout: 20000}).click({force: true})
+}
+
+export function expandMyViewPanel() {
+    cy.get('div[data-test-id="my-view-panel"]').then($panel => {
+        if ($panel.is(':hidden')) {
+            cy.get('div[data-test-id="my-view-toggle"]').click();
+        }
+    })
+}
+
+export function collapseMyViewPanel() {
+    cy.get('div[data-test-id="my-view-panel"]').then($panel => {
+        if ($panel.is(':visible')) {
+            cy.get('div[data-test-id="my-view-close-button"]').click();
+        }
+    })
 }

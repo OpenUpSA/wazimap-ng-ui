@@ -1,10 +1,7 @@
 import {format as d3format} from "d3-format";
-import {select as d3select} from "d3-selection";
 
-import {appendFilterArrays, Component} from "../utils";
+import {Component} from "../utils";
 import {defaultValues} from "../defaultValues";
-
-import {SubindicatorFilter} from "./subindicator_filter";
 import XLSX from 'xlsx';
 import Papa from 'papaparse';
 
@@ -14,9 +11,9 @@ import * as vega from "vega";
 import {configureBarchart, configureBarchartDownload} from './charts/barChart';
 import {configureLinechart, configureLinechartDownload} from './charts/lineChart';
 import {slugify} from './charts/utils';
-import DropdownMenu from "../elements/dropdown_menu";
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
 import {DataFilterModel} from "../models/data_filter_model";
+import {SidePanels} from "../elements/side_panels";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -73,11 +70,19 @@ export class Chart extends Component {
             filterRowClass: filterRowClass,
             filterDropdown: '.profile-indicator__filter',
             addButton: 'a.profile-indicator__new-filter',
-            isMapchip: false,
+            filterPanel: SidePanels.PANELS.richData,
             removeFilterButton: '.profile-indicator__remove-filter'
         });
 
         this.addChart(data);
+    }
+
+    get previouslySelectedFilters() {
+        if (this.parent.previouslySelectedFilters === undefined) {
+            return [];
+        } else {
+            return this.parent.previouslySelectedFilters;
+        }
     }
 
     get chartType() {
@@ -107,6 +112,10 @@ export class Chart extends Component {
         }
 
         return this._config;
+    }
+
+    get filterController() {
+        return this._filterController;
     }
 
     addChart = (data) => {
@@ -431,14 +440,14 @@ export class Chart extends Component {
     };
 
     handleChartFilter = (indicators, groups) => {
-        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, [], indicators.metadata.primary_group, {});
+        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, this.previouslySelectedFilters, indicators.metadata.primary_group, {});
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }
         this._filterController.setDataFilterModel(dataFilterModel);
     };
 
-    applyFilter = (filteredData, selectedFilter) => {
+    applyFilter = (filteredData, selectedFilter, selectedFilterDetails) => {
         this.filteredData = filteredData;
         this.filterGroups.forEach((group) => {
             let {name: filterName} = group;
@@ -459,6 +468,14 @@ export class Chart extends Component {
         this.vegaView.run();
         this.appendDataToTable();
         this.setDownloadUrl();
+
+        const payload = {
+            indicatorId: this.data.id,
+            selectedFilter: selectedFilterDetails,
+            title: this.title
+        };
+        this.triggerEvent('profile.chart.filtered', payload);
+
     };
 
     exportAsCsv = () => {

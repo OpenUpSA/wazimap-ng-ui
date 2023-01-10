@@ -62,9 +62,7 @@ export class FilterLabel extends Component {
     }
 
     isEqualsJson(obj1, obj2) {
-        let keys1 = Object.keys(obj1);
-        let keys2 = Object.keys(obj2);
-        return keys1.length === keys2.length && Object.keys(obj1).every(key => obj1[key] == obj2[key]);
+        return JSON.stringify(obj1) === JSON.stringify(obj2);
     }
 
     showNotificationBadge() {
@@ -73,7 +71,7 @@ export class FilterLabel extends Component {
 
     showSnackbar() {
         let config = {
-            autoHideDuration: 10000,
+            autoHideDuration: 3000,
             anchorOrigin: {
                 horizontal: "center",
                 vertical: "bottom"
@@ -96,18 +94,13 @@ export class FilterLabel extends Component {
         this._filterHeaderLabelContainer.removeClass("notification-badges");
     }
 
-    compareFilters(defaultFilters, oldFilters) {
-        let flattenFilterObject = {};
-        defaultFilters.forEach((item, idx) => {
-            flattenFilterObject[item.name] = item.value;
-        });
-
-        const showBadge = this.isEqualsJson(flattenFilterObject, oldFilters);
+    compareFilters(previouslySelectedFilters, oldFilters) {
+        const showBadge = this.isEqualsJson(previouslySelectedFilters, (oldFilters[0]?.filters || []));
         if (!showBadge) {
             this.showNotificationBadge();
             this.showSnackbar();
-            if (defaultFilters.length === 0) {
-                this.parent.appliedFilters = {};
+            if (previouslySelectedFilters.length === 0) {
+                this.parent.appliedFilters = [];
             }
         }
     }

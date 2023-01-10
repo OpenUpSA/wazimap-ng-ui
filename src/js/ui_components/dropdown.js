@@ -43,7 +43,7 @@ export class DropdownModel extends Observable {
             }
         }
 
-        console.error(`Did not find value: ${value} in dropdown items`);
+        throw `Did not find value: ${value} in dropdown items`;
     }
 
     get isDisabled() {

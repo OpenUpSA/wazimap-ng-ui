@@ -25,7 +25,7 @@ describe('Filter controller', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
 
         let indicator = params.chartConfiguration.filter.defaults[0].name;
@@ -46,7 +46,7 @@ describe('Filter controller', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
         let indicator = params.groups[2].name;
         let subindicator = params.groups[2].subindicators[0];
@@ -71,7 +71,7 @@ describe('Filter controller', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
 
         let indicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("language")`);
@@ -88,7 +88,7 @@ describe('Filter controller', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
 
         let indicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("age")`);
@@ -137,7 +137,7 @@ describe('Visibility of the filter area', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
         const isVisible = mc.filterController.shouldFiltersBeVisible();
         let filterArea = document.querySelector('.map-options__filters_content');
@@ -153,7 +153,7 @@ describe('Visibility of the filter area', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
         const isVisible = mc.filterController.shouldFiltersBeVisible();
         let message = document.querySelector(`${mapBottomItems} .map-options__filters_content .map-options__no-data`);
@@ -173,7 +173,7 @@ describe('Visibility of the filter area', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
         const isVisible = mc.filterController.shouldFiltersBeVisible();
         const currentIndicatorValue = mc.filterController.model.filterRows[0].model.currentIndicatorValue;
@@ -203,7 +203,7 @@ describe('Visibility of the filter area', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
 
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, params.filter, params.primaryGroup, params.childData);
+        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
         mc.setFilterController(dataFilterModel);
 
         const isVisible = mc.filterController.shouldFiltersBeVisible();

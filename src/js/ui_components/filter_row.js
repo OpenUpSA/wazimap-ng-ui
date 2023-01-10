@@ -1,5 +1,6 @@
 import {Dropdown, DropdownModel} from "./dropdown";
 import {Component, Observable} from "../utils";
+import {SidePanels} from "../elements/side_panels";
 
 /**
  *
@@ -13,7 +14,15 @@ class FilterRowModel extends Component {
     static ALL_VALUES = 'All values';
     static ALL_INDICATORS = 'All indicators';
 
-    constructor(parent, dataFilterModel, isDefault, isExtra, isRequired, defaultIndicatorText = FilterRowModel.ALL_INDICATORS, defaultSubindicatorText = FilterRowModel.ALL_VALUES) {
+    constructor(parent,
+                dataFilterModel,
+                isDefault,
+                isExtra,
+                isRequired,
+                filterPanel = SidePanels.PANELS.dataMapper,
+                defaultIndicatorText = FilterRowModel.ALL_INDICATORS,
+                defaultSubindicatorText = FilterRowModel.ALL_VALUES
+    ) {
         super(parent)
         this._isDefault = isDefault;
         this._isExtra = isExtra;
@@ -23,6 +32,7 @@ class FilterRowModel extends Component {
         this._defaultIndicatorText = defaultIndicatorText;
         this._defaultSubindicatorText = defaultSubindicatorText
         this._dataFilterModel = null;
+        this._filterPanel = filterPanel;
 
         this.dataFilterModel = dataFilterModel;
     }
@@ -92,7 +102,7 @@ class FilterRowModel extends Component {
         }
 
         if (value != null && value !== FilterRowModel.ALL_VALUES) {
-            this.dataFilterModel.addFilter(value);
+            this.dataFilterModel.addFilter(value, this._filterPanel);
         }
         if (!this.isRequired) {
             // no need to filter data before the subIndicator value is selected if isRequired = true
@@ -154,7 +164,7 @@ export class FilterRow extends Component {
 
         this.prepareDomElements();
 
-        this._model = new FilterRowModel(this, dataFilterModel, isDefault, isExtra, isRequired);
+        this._model = new FilterRowModel(this, dataFilterModel, isDefault, isExtra, isRequired, elements.filterPanel);
 
         if (this.model.isDefault)
             this.hideRemoveButton();

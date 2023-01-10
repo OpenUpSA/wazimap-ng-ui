@@ -1,15 +1,20 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    allDetailsEndpoint, checkDataMapperCategoryCount,
+    allDetailsEndpoint,
+    checkDataMapperCategoryCount,
     checkIfChoroplethFilterDialogIsCollapsed,
     checkIfChoroplethFilterDialogIsExpanded,
-    checkIfPointFilterDialogIsCollapsed, checkIfPointFilterDialogIsExpanded,
+    checkIfPointFilterDialogIsCollapsed,
+    checkIfPointFilterDialogIsExpanded,
     clickOnText,
     collapseChoroplethFilterDialog,
     expandChoroplethFilterDialog,
-    expandDataMapper, expandPointFilterDialog,
-    expandPointMapper, expandRichDataPanel,
-    gotoHomepage, mapBottomItems,
+    expandDataMapper,
+    expandPointFilterDialog,
+    expandPointMapper,
+    expandRichDataPanel,
+    gotoHomepage,
+    mapBottomItems, selectChoroplethDropdownOption,
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
@@ -284,17 +289,7 @@ Then('I check if the non\-aggregatable group filter is applied', () => {
 })
 
 When(/^I filter by "([^"]*)"$/, function (filter) {
-    cy.get(`.SnackbarContainer-root`).then($p => {
-        if ($p.is(':visible')) {
-            cy.get(`.SnackbarItem-wrappedRoot`).click();
-        }
-    });
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('not.have.class', 'disabled');
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
-        .eq(1)
-        .click();
-
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filter}")`).click({force: true});
+    selectChoroplethDropdownOption(filter, 1);
 });
 
 Then('I check if the legend values are correct', () => {

@@ -1,6 +1,7 @@
 import {Component} from './utils';
 import {VersionController} from "./versions/version_controller";
 import {ConfirmationModal} from "./ui_components/confirmation_modal";
+import {SidePanels} from "./elements/side_panels";
 
 export default class Controller extends Component {
     constructor(parent, api, config, profileId = 1) {
@@ -9,6 +10,7 @@ export default class Controller extends Component {
         this.profileId = profileId;
         this.api = api;
         this._shouldMapZoom = false;
+        this._filteredIndicators = [];
 
         this.state = {
             profileId: profileId,
@@ -49,6 +51,10 @@ export default class Controller extends Component {
 
     get shouldMapZoom() {
         return this._shouldMapZoom;
+    }
+
+    get filteredIndicators() {
+        return this._filteredIndicators;
     }
 
     changeGeography(areaCode) {
@@ -127,9 +133,9 @@ export default class Controller extends Component {
             choropleth_method: payload.choropleth_method,
             parents: payload.parents,
             data: payload.indicatorData,
-            indicatorId: payload.indicatorId,
             config: payload.config,
-            metadata: payload.metadata
+            metadata: payload.metadata,
+            indicatorId: payload.indicatorId
         }
 
         this.state.subindicator = subindicator;
@@ -139,15 +145,95 @@ export default class Controller extends Component {
     }
 
     onChoroplethFiltered(payload) {
-        //update this.state.subindicator with the filtered values
         let subindicator = this.state.subindicator;
         subindicator.subindicatorArr = payload.subindicatorArr;
         subindicator.children = payload.data;
-        subindicator.filter = payload.selectedFilter
 
         this.state.subindicator = subindicator;
 
+        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails, SidePanels.PANELS.dataMapper);
+
         this.triggerEvent("mapchip.choropleth.filtered", payload);
+    }
+
+    onChartFiltered(payload) {
+        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, SidePanels.PANELS.richData);
+    }
+
+    updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, filterPanel) {
+        let isNewObj = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0] == null;
+
+        let filteredIndicator = {
+            indicatorId: indicatorId,
+            filters: selectedFilterDetails,
+            indicatorTitle: indicatorTitle
+        };
+
+        if (isNewObj) {
+            this._filteredIndicators.push(filteredIndicator)
+        } else {
+            this._filteredIndicators = this._filteredIndicators.map(existingObj => {
+                if (existingObj.indicatorId === indicatorId) {
+                    selectedFilterDetails.forEach((newFilter) => {
+                        newFilter.appliesTo.forEach(panel => {
+                            // check for panel
+                            let filterObj = existingObj.filters.filter(x => x.appliesTo.indexOf(panel) >= 0 && x.group === newFilter.group)[0];
+                            if (filterObj === null || filterObj === undefined) {
+                                // either the filter is new or the existing filter doesn't apply to the current panel
+                                existingObj.filters.push(newFilter);
+                            } else {
+                                // filter is already added, update the value and isDefault
+                                filterObj.value = newFilter.value;
+                                filterObj.isDefault = newFilter.isDefault;
+                            }
+                        })
+                    })
+
+                    // remove
+                    let filtersToRemove = existingObj.filters.filter(f => {
+                        const stillExists = selectedFilterDetails.filter(x => x.group === f.group && x.value === f.value).length > 0;
+                        return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists;
+                    })
+                    filtersToRemove.forEach(x => {
+                        let objToRemove = existingObj.filters.filter(y => y.group === x.group && y.value === x.value && y.appliesTo.indexOf(filterPanel) >= 0)[0];
+                        if (objToRemove.appliesTo.length > 1) {
+                            objToRemove.appliesTo.splice(objToRemove.appliesTo.indexOf(filterPanel), 1);
+                        } else {
+                            existingObj.filters.splice(existingObj.filters.indexOf(objToRemove), 1);
+                        }
+                    })
+
+                    return existingObj;
+                } else {
+                    return existingObj;
+                }
+            });
+        }
+
+        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+    }
+
+    removeFilteredIndicator(filteredIndicator, selectedFilter) {
+        if (selectedFilter.isDefault) {
+            throw 'Cannot remove a default filter';
+        }
+
+        let objToUpdate = this._filteredIndicators.filter(x => x.indicatorId === filteredIndicator.indicatorId)[0];
+        let filterArr = objToUpdate.filters.filter(x => !(x.group === selectedFilter.group
+            && x.value === selectedFilter.value
+            && x.appliesTo.indexOf(selectedFilter.appliesTo[0]) >= 0));
+        objToUpdate.filters = filterArr;
+
+        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);   // my view window will be updated
+        if (selectedFilter.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0) {
+            this.triggerEvent('profile.chart.filtersUpdated', filteredIndicator);   // rich data will be updated
+        }
+
+        if (selectedFilter.appliesTo.indexOf(SidePanels.PANELS.dataMapper) >= 0
+            && this.state.subindicator !== null
+            && this.state.subindicator.indicatorId === filteredIndicator.indicatorId) {
+            this.triggerEvent('mapchip.choropleth.filtersUpdated', filteredIndicator);  // mapchip will be updated
+        }
     }
 
     onSelectingSubindicator(payload) {

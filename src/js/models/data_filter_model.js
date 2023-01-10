@@ -1,5 +1,6 @@
 import {Observable, trimValue} from "../utils";
 import {DataFilter} from "./data_filter";
+import {isEqual} from "vega-lite";
 
 /**
  * A class that stores the state of a dataset filter. Consists of a list of indicators,
@@ -110,6 +111,21 @@ export class DataFilterModel extends Observable {
         return defaultFilterGroups;
     }
 
+    get previouslySelectedFilterGroups() {
+        let previouslySelectedFilterGroups = [];
+
+        this.previouslySelectedFilters.forEach(selectedFilter => {
+            selectedFilter.filters.forEach(x => {
+                previouslySelectedFilterGroups.push({
+                    group: x.group,
+                    value: x.value
+                });
+            })
+        })
+
+        return previouslySelectedFilterGroups;
+    }
+
     get selectedFilters() {
         return this._selectedFilters;
     }
@@ -120,6 +136,25 @@ export class DataFilterModel extends Observable {
 
     get selectedSubIndicators() {
         return this._selectedSubindicators;
+    }
+
+    get selectedFilterDetails() {
+        let details = [...this.selectedFilters].map(sf => {
+            const group = sf.group.name;
+            const value = this._selectedSubindicators[group];
+            const isDefault = this.defaultFilterGroups
+                    .some(f => f.group === group && f.value === this._selectedSubindicators[group])
+                || this.nonAggregatableGroups.some(x => x.name === group && x.values[0] === value);
+
+            return {
+                group: group,
+                value: value,
+                isDefault: isDefault,
+                appliesTo: [sf.filterPanel]
+            };
+        })
+
+        return details.filter(x => x.value !== undefined);
     }
 
     get childData() {
@@ -153,7 +188,7 @@ export class DataFilterModel extends Observable {
                 isAvailable = false;
 
             self.selectedFilters.forEach((sf) => {
-                if (sf.name === filter.name)
+                if (sf.group.name === filter.name)
                     isAvailable = false;
             })
 
@@ -166,10 +201,13 @@ export class DataFilterModel extends Observable {
         return filters.map(f => f.name)
     }
 
-    addFilter(indicatorName) {
+    addFilter(indicatorName, filterPanel) {
         let dataFilter = this.groupLookup[indicatorName];
         if (dataFilter !== undefined) {
-            this._selectedFilters.add(dataFilter);
+            this._selectedFilters.add({
+                group: dataFilter,
+                filterPanel: filterPanel
+            });
         } else {
             throw `addFilter: Can't find indicator: ${indicatorName}`
         }
@@ -182,7 +220,7 @@ export class DataFilterModel extends Observable {
             // if the dataFilter is undefined and previouslyFiltered = true it means
             // the only category that had this field is unchecked from point mapper
             this.selectedFilters.forEach((sf) => {
-                if (sf.name === indicatorName) {
+                if (sf.group.name === indicatorName) {
                     this.selectedFilters.delete(sf);
                 }
             })
@@ -196,7 +234,7 @@ export class DataFilterModel extends Observable {
     isPreviouslyFiltered(indicatorName) {
         let filtered = false;
         this.selectedFilters.forEach((sf) => {
-            if (sf.name === indicatorName) {
+            if (sf.group.name === indicatorName) {
                 filtered = true;
             }
         })
@@ -205,11 +243,8 @@ export class DataFilterModel extends Observable {
     }
 
     setSelectedSubindicator(indicatorName, subindicatorValue) {
-        // if (this._selectedSubindicators[indicatorName] == undefined)
-        //     throw `setSelectedSubindicator: Can't find indicator: ${indicatorName}`
-
         if (this._selectedSubindicators[indicatorName] != subindicatorValue) {
-            this._selectedSubindicators[indicatorName] = subindicatorValue
+            this._selectedSubindicators[indicatorName] = subindicatorValue;
         }
     }
 

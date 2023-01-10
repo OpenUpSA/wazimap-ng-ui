@@ -1,20 +1,43 @@
 import {Chart} from '../chart';
 import {ContentBlock} from './content_block';
+import {SidePanels} from "../../elements/side_panels";
 
 export class Indicator extends ContentBlock {
     constructor(parent, container, indicator, title, isLast, geography, chartAttribution) {
         super(parent, container, indicator, title, isLast, geography);
 
         this.chartAttribution = chartAttribution;
+        this._chart = null;
 
         this.prepareDomElements();
         this.addIndicatorChart();
+    }
+
+    get previouslySelectedFilters() {
+        if (this.parent.filteredIndicators === undefined) {
+            return [];
+        } else {
+            let previouslySelectedFilters = this.parent.filteredIndicators.filter(x => x.indicatorId === this.indicator.id
+                && x.filters.filter(y => y.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0).length > 0);
+
+            let tempObj = structuredClone(previouslySelectedFilters);
+
+            tempObj.forEach(x => {
+                x.filters = x.filters.filter(x => x.appliesTo.indexOf(SidePanels.PANELS.richData) >= 0);
+            });
+
+            return tempObj;
+        }
     }
 
     get hasData() {
         return this.indicator.data.some(function (e) {
             return e.count > 0
         });
+    }
+
+    get chart() {
+        return this._chart;
     }
 
     prepareDomElements() {
@@ -30,8 +53,10 @@ export class Indicator extends ContentBlock {
         this.bubbleEvents(c, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-            'point_tray.subindicator_filter.filter'
+            'point_tray.subindicator_filter.filter', 'profile.chart.filtered'
         ]);
+
+        this._chart = c;
     }
 
     orderChartData() {

@@ -88,6 +88,7 @@ export class DataMapperMenu extends Component {
 
         this._isLoading = false;
         this._api = api;
+        this._subIndicators = [];
 
         if (watermarkEnabled) {
             this.addWatermark();
@@ -110,6 +111,10 @@ export class DataMapperMenu extends Component {
 
     get api() {
         return this._api;
+    }
+
+    get subIndicators() {
+        return this._subIndicators;
     }
 
     addWatermark() {
@@ -177,6 +182,8 @@ export class DataMapperMenu extends Component {
                     subindicatorName,
                     callBack,
                     parentNames);
+
+                this._subIndicators.push(subIndicator);
             });
         }
     }

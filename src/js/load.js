@@ -44,6 +44,7 @@ import {Translations} from "./elements/translations";
 import {StyleConfig} from "./elements/style_config";
 import {configureStyleConfigEvents} from "./setup/styleconfig";
 import {RichDataLinkRendrer} from "./elements/data_mapper/components/renderer";
+import {MyView} from "./elements/my_view/my_view";
 
 let defaultFormattingConfig = {
     decimal: ",.1f",
@@ -85,6 +86,7 @@ class Application extends Component {
         const translations = new Translations(this, config.config.translations);
         const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled);
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
+        const myView = new MyView(this, controller);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);

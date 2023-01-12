@@ -12,6 +12,20 @@ export const ViewSettingsTitle = styled(Box)(() => ({
     fontWeight: '700'
 }));
 
+export const ProfileViewContainer = styled(Box)((props) => ({
+    padding: '17px 24px',
+    height: '56px',
+    background: props.isSelected ? 'rgba(0, 0, 0, 0.05)': 'white',
+    borderLeft: props.isSelected ? '6px solid #00AC87': 'none',
+}));
+
+export const LoadingIconContainer = styled(Box)(() => ({
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
+    alignItems: 'center'
+}));
+
 export const StyledAccordionSummary = styled(AccordionSummary)(() => ({
     padding: '10px',
     paddingLeft: '20px',

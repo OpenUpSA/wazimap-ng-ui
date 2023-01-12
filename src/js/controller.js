@@ -2,6 +2,7 @@ import {Component} from './utils';
 import {VersionController} from "./versions/version_controller";
 import {ConfirmationModal} from "./ui_components/confirmation_modal";
 import {SidePanels} from "./elements/side_panels";
+import {ProfileViewModel} from "./models/profile_view_model";
 
 export default class Controller extends Component {
     constructor(parent, api, config, profileId = 1) {
@@ -11,6 +12,7 @@ export default class Controller extends Component {
         this.api = api;
         this._shouldMapZoom = false;
         this._filteredIndicators = [];
+        this._profileViews = [];
 
         this.state = {
             profileId: profileId,
@@ -47,6 +49,7 @@ export default class Controller extends Component {
 
             self.onHashChange(payload);
         });
+        this.fetchProfileViews(profileId)
     };
 
     get shouldMapZoom() {
@@ -55,6 +58,14 @@ export default class Controller extends Component {
 
     get filteredIndicators() {
         return this._filteredIndicators;
+    }
+
+    get profileViews() {
+        return this._profileViews;
+    }
+
+    set profileViews(value) {
+       this._profileViews = value;
     }
 
     changeGeography(areaCode) {
@@ -210,8 +221,36 @@ export default class Controller extends Component {
                 }
             });
         }
-
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+    }
+
+    fetchProfileViews(profileId) {
+      let $this = this;
+      setTimeout(function(){
+          let profileViews = []
+          const profileViewsContext = [
+            {
+              "name": "Profile View",
+              "Description": "Profile View Description",
+              "is_default": false,
+            }, {
+              "name": "Default View",
+              "Description": "Default View Description",
+              "is_default": true,
+            }
+          ]
+
+          if (profileViewsContext.length === 0){
+            profileViews.push(
+              new ProfileViewModel($this, {}, true, true, true)
+            )
+          } else {
+             profileViewsContext.map(view => profileViews.push(new ProfileViewModel($this, view, view.is_default, view.is_default)));
+          }
+
+          $this.profileViews = profileViews;
+          $this.triggerEvent('my_view.profileViews.updated', $this.profileViews);
+      }, 1000);
     }
 
     removeFilteredIndicator(filteredIndicator, selectedFilter) {

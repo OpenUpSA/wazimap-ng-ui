@@ -151,10 +151,9 @@ export class FilterController extends Component {
 
     prepareDomElements() {
         this._rowContainer = $(this.container).find(this._elements.filterRowClass)[0];
-        $(this._rowContainer).hide();
 
-        while ($(this.container).find(this._elements.filterRowClass).length > 1) {
-            $(this.container).find(this._elements.filterRowClass)[1].remove();
+        while ($(this.container).find(this._elements.filterRowClass).length > 0) {
+            $(this.container).find(this._elements.filterRowClass)[0].remove();
         }
         this.setContentVisibility();
         this.toggleContentVisibility();
@@ -189,6 +188,12 @@ export class FilterController extends Component {
             return;
         }
 
+        if (this.model.filterRows.length > 0) {
+            // there are already filters added, no need to add another empty one
+            this.isLoading = false;
+            return;
+        }
+
         let isDefault = true;
         let isExtra = false;
 
@@ -198,16 +203,30 @@ export class FilterController extends Component {
     }
 
     addEmptyFilter(isDefault = false, isExtra = true, isRequired = false, addAsFirstRow = false) {
-        if (this.model.dataFilterModel.availableFilters.length > 0) {
-            const self = this;
+        if (this.model.dataFilterModel.availableFilters.length <= 0) {
+            return;
+        }
 
+        const self = this;
+
+        let rowToUpdate = self.model.filterRows
+            .filter(x => x.model.currentSubindicatorValue === "All values" && !x.model.isUnavailable)[0]; // use an existing row if the user has not selected a
+        let addNewRow = rowToUpdate == null;
+
+        let filterRow;
+        if (addNewRow) {
             let filterRowContainer = this._rowContainer.cloneNode(true);
             $(filterRowContainer).removeClass('hidden').show();
 
-            let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, isRequired, this._elements);
+            filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, isRequired, this._elements);
             this.model.addFilterRow(filterRow);
+        } else {
+            filterRow = rowToUpdate;
+            $(filterRow.container).removeClass('hidden').show();
+        }
 
-            this.addFilterButton.show();
+        this.addFilterButton.show();
+        if (addNewRow) {
             if (addAsFirstRow) {
                 let elementToInsertBefore = $(this.container).find(`${this._elements.filterRowClass}:not(.hidden)`)[0];
                 if (elementToInsertBefore === undefined) {
@@ -242,9 +261,9 @@ export class FilterController extends Component {
                     filterRow
                 });
             })
-
-            return filterRow;
         }
+
+        return filterRow;
     }
 
     addNonAggregatableFilter(group) {
@@ -489,15 +508,20 @@ export class FilterController extends Component {
 
             if (!isIndicatorAlreadyFiltered) {
                 if (isIndicatorAvailable) {
-                    let rowToUpdate = this.model.filterRows
-                        .filter(x => x.model.currentSubindicatorValue === "All values")[0]; // use an existing row if the user has not selected a subIndicator
-                    let filterRow = rowToUpdate == null ? this.addEmptyFilter(true) : rowToUpdate;
+                    console.log({
+                        isIndicatorAlreadyFiltered,
+                        isIndicatorAvailable,
+                        filter,
+                        'filterRows': this.model.filterRows
+                    });
+                    let filterRow = this.addEmptyFilter(true)
 
                     filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
                     filterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
                 } else {
                     // add a disabled filterRow
                     let filterRow = this.addEmptyFilter(true);
+                    filterRow.model.isUnavailable = true;
                     filterRow.setPrimaryValueUnavailable(filter.indicatorValue);
                     filterRow.setSecondaryValueUnavailable(filter.subIndicatorValue);
                 }

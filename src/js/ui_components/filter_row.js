@@ -28,6 +28,7 @@ class FilterRowModel extends Component {
         this._isDefault = isDefault;
         this._isExtra = isExtra;
         this._isRequired = isRequired;
+        this._isUnavailable = false;
         this._currentIndicatorValue = null;
         this._currentSubindicatorValue = null;
         this._defaultIndicatorText = defaultIndicatorText;
@@ -78,6 +79,17 @@ class FilterRowModel extends Component {
 
     get isRequired() {
         return this._isRequired;
+    }
+
+    get isUnavailable() {
+        /**
+         * when a site-wide filter is not available
+         */
+        return this._isUnavailable;
+    }
+
+    set isUnavailable(value) {
+        this._isUnavailable = value;
     }
 
     get currentIndicatorValue() {
@@ -188,6 +200,10 @@ export class FilterRow extends Component {
         return this._container;
     }
 
+    get lockFilterButton() {
+        return this._lockFilterButton;
+    }
+
     setPrimaryIndexUsingValue(value) {
         this.indicatorDropdown.model.currentItem = value;
     }
@@ -225,6 +241,7 @@ export class FilterRow extends Component {
     }
 
     addLockButton() {
+        $(this.container).find('.lock-filter-button-wrapper').remove();
         this._lockFilterButton = new LockFilterButtonWrapper(this);
     }
 
@@ -313,6 +330,6 @@ export class FilterRow extends Component {
         this.model.currentIndicatorValue = null;
         $(this.container).remove();
         this.model.dataFilterModel.updateFilteredData();
-        this.triggerEvent(FilterRow.EVENTS.removed, self);
+        this.triggerEvent(FilterRow.EVENTS.removed, this);
     }
 }

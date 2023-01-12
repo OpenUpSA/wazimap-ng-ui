@@ -73,6 +73,7 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
                         let siteWideFilters = payload.payload;
                         const chart = indicator.chart;
                         if (chart !== null && chart !== undefined) {
+                            console.log({'title': chart.title})
                             chart.filterController.model.dataFilterModel.siteWideFilters = siteWideFilters;
                             chart.filterController.siteWideFiltersUpdatedInMyView(controller.siteWideFilters);
                         }

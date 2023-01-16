@@ -96,10 +96,6 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
         controller.removeSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
     })
 
-    controller.on('my_view.siteWideFilters.removed', payload => {
-        controller.removeSiteWideFilter(payload.payload.indicatorValue, payload.payload.subIndicatorValue);
-    })
-
     controller.on('my_view.siteWideFilters.updated', payload => {
         if (mapchip.filterController == null) {
             return;

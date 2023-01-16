@@ -27,10 +27,7 @@ const Panel = (props) => {
     }
 
     const removeSiteWideFilter = (swf) => {
-        props.controller.triggerEvent('my_view.siteWideFilters.removed', {
-            'indicatorValue': swf.indicatorValue,
-            'subIndicatorValue': swf.subIndicatorValue
-        });
+        props.controller.removeSiteWideFilter(swf.indicatorValue, swf.subIndicatorValue);
     }
 
     return (

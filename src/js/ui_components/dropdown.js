@@ -195,6 +195,10 @@ export class Dropdown extends Component {
         $(this._selectedItem).text(text)
     }
 
+    getText() {
+        return $(this._selectedItem).text();
+    }
+
     enable() {
         $(this._trigger).removeClass('is--disabled');
         $(this.container).removeClass('disabled');

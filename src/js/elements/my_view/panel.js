@@ -15,7 +15,7 @@ const Panel = (props) => {
         });
 
         props.controller.on('my_view.siteWideFilters.updated', payload => {
-            setSiteWideFilters(prev => payload.payload.slice(0));
+            setSiteWideFilters(prev => payload.payload.siteWideFilters.slice(0));
         })
     }
 

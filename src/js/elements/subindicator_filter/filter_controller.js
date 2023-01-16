@@ -402,15 +402,7 @@ export class FilterController extends Component {
             const filterRemains = filters.some(f => f.group === selectedGroup && f.value === selectedValue && f.appliesTo.indexOf(panel) >= 0);
 
             if (!filterRemains && selectedGroup !== 'All indicators') {
-                row.removeRow();
-
-                this.checkAndAddNonAggregatableGroups();
-                this.checkAndAddDefaultFilterGroups();
-
-                const remainingRowLength = this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').length;
-                if (remainingRowLength <= 0) {
-                    this.addEmptyFilter(true);
-                }
+                this.removeRowAndAddDefaults(row);
             }
         })
 
@@ -423,12 +415,13 @@ export class FilterController extends Component {
         })
     }
 
-    siteWideFiltersUpdatedInMyView(siteWideIndicators) {
+    siteWideFiltersUpdatedInMyView(payload) {
         this.model.filterRows.forEach((row) => {
-            row.triggerEvent('filterRow.siteWideFilters.updated', siteWideIndicators);
+            row.triggerEvent('filterRow.siteWideFilters.updated', payload.siteWideFilters);
         })
 
         this.checkAndAddSiteWideFilters();
+        this.checkAndRemoveSiteWideFilters(payload.removedSiteWideFilter);
     }
 
     setFilterRowState(filterRow, siteWideFilters) {
@@ -508,12 +501,6 @@ export class FilterController extends Component {
 
             if (!isIndicatorAlreadyFiltered) {
                 if (isIndicatorAvailable) {
-                    console.log({
-                        isIndicatorAlreadyFiltered,
-                        isIndicatorAvailable,
-                        filter,
-                        'filterRows': this.model.filterRows
-                    });
                     let filterRow = this.addEmptyFilter(true)
 
                     filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
@@ -527,6 +514,48 @@ export class FilterController extends Component {
                 }
             }
         })
+    }
+
+    checkAndRemoveSiteWideFilters(removedSiteWideFilter) {
+        if (removedSiteWideFilter == null) {
+            return;
+        }
+
+        this.model.filterRows.forEach((filterRow) => {
+            let isRemoved;
+            if (filterRow.model.isUnavailable) {
+                // filterRow is unavailable
+                // check the dropdown values
+                isRemoved = (removedSiteWideFilter.indicatorValue === filterRow.indicatorDropdown.getText()
+                    && removedSiteWideFilter.subIndicatorValue === filterRow.subIndicatorDropdown.getText());
+            } else {
+                // filterRow is available
+                isRemoved = (removedSiteWideFilter.indicatorValue === filterRow.model.currentIndicatorValue
+                    && removedSiteWideFilter.subIndicatorValue === filterRow.model.currentSubindicatorValue);
+            }
+
+            if (isRemoved) {
+                this.removeRowAndAddDefaults(filterRow);
+            }
+        })
+    }
+
+    /**
+     * remove the filterRow
+     * add back the default filter rows(in case they were the ones removed)
+     * add a default empty filter row if no rows are left
+     * @param filterRow the row to be removed
+     */
+    removeRowAndAddDefaults(filterRow) {
+        filterRow.removeRow();
+
+        this.checkAndAddNonAggregatableGroups();
+        this.checkAndAddDefaultFilterGroups();
+
+        const remainingRowLength = this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').length;
+        if (remainingRowLength <= 0) {
+            this.addEmptyFilter(true);
+        }
     }
 
     toggleContentVisibility() {

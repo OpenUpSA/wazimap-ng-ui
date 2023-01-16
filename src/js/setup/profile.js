@@ -70,12 +70,11 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
                 for (const indicator of subCategory.indicators) {
                     // do not block the UI thread
                     setTimeout(() => {
-                        let siteWideFilters = payload.payload;
+                        let siteWideFilters = payload.payload.siteWideFilters;
                         const chart = indicator.chart;
                         if (chart !== null && chart !== undefined) {
-                            console.log({'title': chart.title})
                             chart.filterController.model.dataFilterModel.siteWideFilters = siteWideFilters;
-                            chart.filterController.siteWideFiltersUpdatedInMyView(controller.siteWideFilters);
+                            chart.filterController.siteWideFiltersUpdatedInMyView(payload.payload);
                         }
                     }, 0)
                 }

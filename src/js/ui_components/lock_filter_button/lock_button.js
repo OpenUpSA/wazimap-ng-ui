@@ -19,7 +19,6 @@ const LockButton = (props) => {
     }, [siteWideFilters, rowIndicator, rowSubIndicator])
 
     if (!startedListening) {
-        console.log('startedListening');
         setStartedListening(true);
         props.filterRow.on('filterRow.indicatorOrSubIndicatorSelected', payload => {
             setRowIndicator(props.filterRow.model.currentIndicatorValue);

@@ -94,7 +94,7 @@ const ViewSettings = (props) => {
         )
     }
 
-    const renderSiteWideIndicators = () => {
+    const renderSiteWideFilters = () => {
         return (
             props.siteWideFilters.map((swf, index) => {
                 return (
@@ -155,7 +155,7 @@ const ViewSettings = (props) => {
                     <StyledTypographyWithBottomBorder>
                         SITE-WIDE INDICATOR FILTERS
                     </StyledTypographyWithBottomBorder>
-                    {renderSiteWideIndicators()}
+                    {renderSiteWideFilters()}
                     <HelpText>
                         Toggle a site-wide filter by clicking the {lockButtonSvg} next to any indicator.
                     </HelpText>

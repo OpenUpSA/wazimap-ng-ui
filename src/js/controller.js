@@ -249,13 +249,26 @@ export default class Controller extends Component {
             subIndicatorValue
         });
 
-        this.triggerEvent('my_view.siteWideFilters.updated', this.siteWideFilters);
+        const payload = {
+            siteWideFilters: this.siteWideFilters,
+            removedSiteWideFilter: null
+        }
+
+        this.triggerEvent('my_view.siteWideFilters.updated', payload);
     }
 
     removeSiteWideFilter(indicatorValue, subIndicatorValue) {
         this._siteWideFilters = this._siteWideFilters.filter(x => !(x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue));
 
-        this.triggerEvent('my_view.siteWideFilters.updated', this.siteWideFilters);
+        const payload = {
+            siteWideFilters: this.siteWideFilters,
+            removedSiteWideFilter: {
+                indicatorValue,
+                subIndicatorValue
+            }
+        }
+
+        this.triggerEvent('my_view.siteWideFilters.updated', payload);
     }
 
     onSelectingSubindicator(payload) {

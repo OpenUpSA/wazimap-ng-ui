@@ -70,11 +70,14 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
                 for (const indicator of subCategory.indicators) {
                     // do not block the UI thread
                     setTimeout(() => {
-                        let siteWideFilters = payload.payload.siteWideFilters;
+                        let payloadClone = structuredClone(payload);
+                        const siteWideFilters = payloadClone.payload.siteWideFilters;
                         const chart = indicator.chart;
+                        payloadClone.payload['indicatorId'] = indicator.indicator.id;
+
                         if (chart !== null && chart !== undefined) {
                             chart.filterController.model.dataFilterModel.siteWideFilters = siteWideFilters;
-                            chart.filterController.siteWideFiltersUpdatedInMyView(payload.payload);
+                            chart.filterController.siteWideFiltersUpdatedInMyView(payloadClone.payload, SidePanels.PANELS.richData);
                         }
                     }, 0)
                 }

@@ -265,7 +265,8 @@ export default class Controller extends Component {
             removedSiteWideFilter: {
                 indicatorValue,
                 subIndicatorValue
-            }
+            },
+            filteredIndicators: this.filteredIndicators
         }
 
         this.triggerEvent('my_view.siteWideFilters.updated', payload);

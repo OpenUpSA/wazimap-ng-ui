@@ -415,13 +415,13 @@ export class FilterController extends Component {
         })
     }
 
-    siteWideFiltersUpdatedInMyView(payload) {
+    siteWideFiltersUpdatedInMyView(payload, panel) {
         this.model.filterRows.forEach((row) => {
             row.triggerEvent('filterRow.siteWideFilters.updated', payload.siteWideFilters);
         })
 
         this.checkAndAddSiteWideFilters();
-        this.checkAndRemoveSiteWideFilters(payload.removedSiteWideFilter);
+        this.checkAndRemoveSiteWideFilters(payload, panel);
     }
 
     setFilterRowState(filterRow, siteWideFilters) {
@@ -516,22 +516,34 @@ export class FilterController extends Component {
         })
     }
 
-    checkAndRemoveSiteWideFilters(removedSiteWideFilter) {
-        if (removedSiteWideFilter == null) {
+    checkAndRemoveSiteWideFilters(payload, panel) {
+        if (payload.removedSiteWideFilter == null) {
             return;
         }
 
+        let filteredIndicators = structuredClone(payload.filteredIndicators);
+        filteredIndicators = filteredIndicators.filter(x => x.indicatorId === payload.indicatorId);
+        filteredIndicators.forEach(x => {
+            x.filters = x.filters.filter(x => x.appliesTo.indexOf(panel) >= 0);
+        })
+
         this.model.filterRows.forEach((filterRow) => {
             let isRemoved;
+            let isFilteredIndicator = filteredIndicators.some(x => x.filters.some(y => y.group === payload.removedSiteWideFilter.indicatorValue
+                && y.value === payload.removedSiteWideFilter.subIndicatorValue));
+            if (isFilteredIndicator) {
+                return;
+            }
+
             if (filterRow.model.isUnavailable) {
                 // filterRow is unavailable
                 // check the dropdown values
-                isRemoved = (removedSiteWideFilter.indicatorValue === filterRow.indicatorDropdown.getText()
-                    && removedSiteWideFilter.subIndicatorValue === filterRow.subIndicatorDropdown.getText());
+                isRemoved = (payload.removedSiteWideFilter.indicatorValue === filterRow.indicatorDropdown.getText()
+                    && payload.removedSiteWideFilter.subIndicatorValue === filterRow.subIndicatorDropdown.getText());
             } else {
                 // filterRow is available
-                isRemoved = (removedSiteWideFilter.indicatorValue === filterRow.model.currentIndicatorValue
-                    && removedSiteWideFilter.subIndicatorValue === filterRow.model.currentSubindicatorValue);
+                isRemoved = (payload.removedSiteWideFilter.indicatorValue === filterRow.model.currentIndicatorValue
+                    && payload.removedSiteWideFilter.subIndicatorValue === filterRow.model.currentSubindicatorValue);
             }
 
             if (isRemoved) {

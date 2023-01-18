@@ -231,7 +231,9 @@ export class FilterRow extends Component {
     }
 
     prepareDomElements() {
-        this.addLockButton();
+        if (this._elements.addLockButton){
+            this.addLockButton();
+        }
         $(this.container).attr('data-isextra', this._isExtra);
         $(this.container).attr('data-isdefault', this._isDefault);
         this._removeFilterButton = $(this.container).find(this._elements.removeFilterButton);

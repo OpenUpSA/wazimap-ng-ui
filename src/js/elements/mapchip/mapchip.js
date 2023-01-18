@@ -6,6 +6,7 @@ import {Tooltip} from "../../ui_components/tooltip";
 import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
 import {LinearScrubberRenderer} from "./components/linear_scrubber/renderer";
+import {SidePanels} from "../side_panels";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockParentClass = '.map-bottom-items--v2';
@@ -315,8 +316,15 @@ export class MapChip extends Component {
         this.linearScrubber.render(params);
     }
 
-    setFilterController(dataFilterModel) {
-        this._filterController = new FilterController(this, this._filtersContainer);
+    setFilterController(dataFilterModel, addLockButton = true) {
+        this._filterController = new FilterController(this, this._filtersContainer, {
+            filterRowClass: '.map-options__filter-row',
+            filterDropdown: '.mapping-options__filter',
+            addButton: 'a.mapping-options__add-filter',
+            filterPanel: SidePanels.PANELS.dataMapper,
+            removeFilterButton: '.mapping-options__remove-filter',
+            addLockButton: addLockButton
+        });
 
         this.show();
         if (this._filterController.filterCallback === null) {

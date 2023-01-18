@@ -21,7 +21,7 @@ describe('Dropdowns', () => {
         let mc = new MapChip(component, mapchip_colors);
 
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel);
+        mc.setFilterController(dataFilterModel, false);
 
         let groups = ['All values'];
         params.groups.forEach((g) => {
@@ -52,7 +52,7 @@ describe('Dropdowns', () => {
         let mc = new MapChip(component, mapchip_colors);
 
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel);
+        mc.setFilterController(dataFilterModel, false);
 
         let rowLength = $(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`).length;
         let subindicatorDd = $($(`${mapBottomItems} .map-options__filters_content .map-options__filter-row`)[rowLength - 1]).find('.mapping-options__filter')[1];

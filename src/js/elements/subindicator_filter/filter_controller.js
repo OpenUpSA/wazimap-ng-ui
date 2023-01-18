@@ -62,7 +62,8 @@ export class FilterController extends Component {
         filterDropdown: '.mapping-options__filter',
         addButton: 'a.mapping-options__add-filter',
         filterPanel: SidePanels.PANELS.dataMapper,
-        removeFilterButton: '.mapping-options__remove-filter'
+        removeFilterButton: '.mapping-options__remove-filter',
+        addLockButton: true
     }) {
         super(parent);
         this._container = container;

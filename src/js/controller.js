@@ -2,6 +2,7 @@ import {Component} from './utils';
 import {VersionController} from "./versions/version_controller";
 import {ConfirmationModal} from "./ui_components/confirmation_modal";
 import {SidePanels} from "./elements/side_panels";
+import {isEmpty, has, mapObject, isEqual} from "lodash";
 
 export default class Controller extends Component {
     constructor(parent, api, config, profileId = 1) {
@@ -19,8 +20,13 @@ export default class Controller extends Component {
             subindicator: null,
             selectedSubindicator: ''
         }
-
         const self = this;
+        this._profileView = {};
+        let parts = window.location.hash.split(":");
+        if (parts[0] == '#profileView'){
+          this._profileView = JSON.parse(decodeURIComponent(parts[1]));
+        }
+
         this.versionController = null;
         this.confirmationModal = new ConfirmationModal(this, ConfirmationModal.COOKIE_NAMES.DATA_MAPPER_VERSION_SELECTION);
 
@@ -46,6 +52,21 @@ export default class Controller extends Component {
             }
 
             self.onHashChange(payload);
+        });
+
+        window.addEventListener('popstate', (event) => {
+
+          if (event.state !== null || event.state !== undefined){
+            this._profileView = event.state.profileView;
+            this._filteredIndicators = event.state.filteredIndicators;
+          } else {
+            let parts = window.location.hash.split(":");
+            if (parts[0] == '#profileView'){
+              this._profileView = JSON.parse(decodeURIComponent(parts[1]));
+            }
+            this._filteredIndicators = [];
+          }
+
         });
     };
 
@@ -152,13 +173,112 @@ export default class Controller extends Component {
         this.state.subindicator = subindicator;
 
         this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails, SidePanels.PANELS.dataMapper);
+        this.updateProfileView("filters", "data_mapper", {
+          "indicatorId": subindicator.indicatorId,
+          "filters": payload.selectedFilterDetails,
+        })
 
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
     onChartFiltered(payload) {
         this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, SidePanels.PANELS.richData);
+        let defaultFilters = payload.selectedFilter.filter(f => f.isDefault === true);
+
+        if (defaultFilters.length === 0){
+          this.updateProfileView("filters", "rich_data", {
+            "indicatorId": payload.indicatorId,
+            "filters":  payload.selectedFilter,
+          });
+        }
     }
+
+    updateProfileView(category, subCategory=null, data=null){
+      let update = false;
+      if (category === "filters" && data !== null && subCategory !== null) {
+        let filters = this._profileView["filters"] || {};
+
+        if (!has(filters, subCategory)){
+          filters[subCategory] = [];
+        }
+        let selectedFilters = data.filters.filter(f => f.isDefault === false);
+        selectedFilters = selectedFilters.map(f => {
+            return {"group": f.group, "value": f.value}
+        });
+
+        let isNewObj = filters[subCategory].filter(x => x.indicatorId === data.indicatorId)[0] == null;
+
+        if (isNewObj) {
+          if (selectedFilters.length > 0){
+            filters[subCategory].push({
+              indicatorId: data.indicatorId,
+              filters: selectedFilters
+            });
+            update = true;
+          }
+        } else {
+          if (selectedFilters.length > 0){
+            filters[subCategory].filter(obj => {
+              if (obj.indicatorId === data.indicatorId){
+                if (!isEqual(obj.filters, selectedFilters)){
+                  obj.filters = selectedFilters;
+                  update = true;
+                }
+              }
+            });
+          } else {
+            filters[subCategory] = filters[subCategory].filter(function( obj ) {
+              return obj.indicatorId !== data.indicatorId;
+            });
+            update = true;
+          }
+        }
+        this._profileView["filters"] = filters;
+      }
+
+      if (update){
+        let uri = encodeURIComponent(JSON.stringify(this._profileView));
+        window.history.pushState({
+          profileView: this._profileView,
+          filteredIndicators: this._filteredIndicators
+        }, '', `#profileView:${uri}`);
+      }
+    }
+
+    // loadProfileViewFilters(payload){
+    //   let richDataFilters = this._profileView?.filters?.rich_data || {};
+    //   if (!isEmpty(richDataFilters)){
+    //     let profileData = payload.payload.profile.profileData;
+    //     richDataFilters.map(
+    //       (indicator) => {
+    //         let filters = indicator.filters.map(f => {
+    //           return {
+    //             group: f.group,
+    //             value: f.value,
+    //             isDefault: false,
+    //             appliesTo: [SidePanels.PANELS.richData]
+    //           }
+    //         })
+    //         let indicatorTitle = null;
+    //
+    //         Object.values(profileData).map(category =>{
+    //           Object.values(category["subcategories"]).map(subcategory => {
+    //             Object.values(subcategory["indicators"]).map(ind => {
+    //               if(ind["id"] === indicator.indicatorId){
+    //                 indicatorTitle = ind["label"];
+    //               }
+    //             })
+    //           })
+    //         });
+    //         this.updateFilteredIndicators(indicator.indicatorId, indicatorTitle, filters, SidePanels.PANELS.richData);
+    //         this.triggerEvent('profile.chart.filtersUpdated', {
+    //           indicatorId: indicator.indicatorId,
+    //           filters: filters,
+    //         });
+    //       }
+    //     )
+    //   }
+    // }
 
     updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, filterPanel) {
         let isNewObj = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0] == null;
@@ -209,7 +329,6 @@ export default class Controller extends Component {
                 }
             });
         }
-
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }
 

@@ -45,7 +45,6 @@ class FilterControllerModel extends Observable {
 
     set dataFilterModel(dataFilterModel) {
         this.reset();
-
         this._dataFilterModel = dataFilterModel;
         this.triggerEvent(FilterControllerModel.EVENTS.dataFilterModelUpdated, this);
     }
@@ -270,6 +269,13 @@ export class FilterController extends Component {
         }
     }
 
+    addUrlFiltersFilters(group) {
+      let filterRow = this.addEmptyFilter(false);
+
+      filterRow.setPrimaryIndexUsingValue(group.group);
+      filterRow.setSecondaryIndexUsingValue(group.value);
+    }
+
     addPreviouslySelectedFilters(group, isDefault) {
         let filterRow = this.addEmptyFilter(isDefault);
 
@@ -338,6 +344,7 @@ export class FilterController extends Component {
             this.setAddFilterButton();
         })
 
+        this.checkAndAddUrlFiltersFilters()
         // first add previous filters
         this.checkAndAddPreviouslySelectedFilters();
         // then add default filters
@@ -435,12 +442,30 @@ export class FilterController extends Component {
     checkAndAddPreviouslySelectedFilters() {
         const self = this;
         let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilterGroups;
-
+        console.log(previouslySelectedFilters);
         previouslySelectedFilters.forEach((group, index) => {
             if (group.group != this.model.dataFilterModel.primaryGroup) {
                 self.addPreviouslySelectedFilters(group, index === 0);
             }
         })
+    }
+
+    checkAndAddUrlFiltersFilters() {
+      const self = this;
+      let parts = window.location.hash.split(":");
+      if (parts[0] == '#profileView'){
+        let profileViewFilters = JSON.parse(decodeURIComponent(parts[1]));
+        profileViewFilters = profileViewFilters?.filters[this._elements.filterPanel];
+        let indicatorSpecificFilters = profileViewFilters.filter(f => f.indicatorId === this.parent.data.id)[0];
+        if (indicatorSpecificFilters !== undefined){
+          indicatorSpecificFilters.filters.forEach((group) => {
+              if (group.group != this.model.dataFilterModel.primaryGroup) {
+                  self.addUrlFiltersFilters(group);
+              }
+          })
+        }
+
+      }
     }
 
     toggleContentVisibility() {

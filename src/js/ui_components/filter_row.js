@@ -231,7 +231,7 @@ export class FilterRow extends Component {
     }
 
     prepareDomElements() {
-        if (this._elements.addLockButton){
+        if (this._elements.addLockButton) {
             this.addLockButton();
         }
         $(this.container).attr('data-isextra', this._isExtra);

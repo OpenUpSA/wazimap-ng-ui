@@ -124,8 +124,8 @@ export class Dropdown extends Component {
 
     prepareDomElements() {
         this._ddWrapper = $(this.container).find('.dropdown-menu__content')[0];
-        $(this.container).find('.dropdown__list_item').hide();
-        this._listItem = $(this.container).find('.dropdown__list_item')[0].cloneNode(true);
+        this._listItem = $('.styles .dropdown-menu__content .dropdown__list_item')[0].cloneNode(true);
+        $(this.container).find('.dropdown__list_item').remove();
 
         this._selectedItem = $(this.container).find('.dropdown-menu__selected-item .truncate');
         this._trigger = $(this.container).find('.dropdown-menu__trigger')[0]

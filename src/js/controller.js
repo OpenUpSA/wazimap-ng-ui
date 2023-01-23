@@ -244,6 +244,10 @@ export default class Controller extends Component {
     }
 
     addSiteWideFilter(indicatorValue, subIndicatorValue) {
+        const alreadyAdded = this._siteWideFilters.some(x => x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue);
+        if (alreadyAdded) {
+            return;
+        }
         this._siteWideFilters.push({
             indicatorValue,
             subIndicatorValue

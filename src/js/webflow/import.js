@@ -120,4 +120,8 @@ exports.transformDOM = function (window, $) {
 
     // my view
     setupMyViewElements(window);
+
+    $("title").text("{{ title }}");
+    $('meta[property="og:title"]').attr("content", "{{ title }}");
+    $('meta[property="twitter:title"]').attr("content", "{{ title }}");
 };

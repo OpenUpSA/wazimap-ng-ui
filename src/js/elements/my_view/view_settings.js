@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {IndicatorOptionsSvg, TrashBinSvg, LockButtonSvg} from "./svg_icons";
+import {IndicatorOptionsSvg, TrashBinSvg, LockButtonInTextSvg} from "./svg_icons";
 import {
     AppliedPanelInfo,
     Container,
@@ -21,7 +21,7 @@ const ViewSettings = (props) => {
     const [filteredIndicators, setFilteredIndicators] = useState([]);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
     const trashBinSvg = TrashBinSvg;
-    const lockButtonSvg = LockButtonSvg;
+    const lockButtonSvg = LockButtonInTextSvg;
 
     useEffect(() => {
         if (props.filteredIndicators !== filteredIndicators) {

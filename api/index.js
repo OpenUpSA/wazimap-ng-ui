@@ -7,12 +7,12 @@ var morgan = require('morgan');
 
 const staticDir = path.join(process.cwd(), 'dist');
 
-const port = process.env.PORT || 1234;
-
 const app = express();
+
+// Security best practice
 app.disable('x-powered-by');
 
-app.use(morgan('short'));
+app.use(morgan('short')); // Basic HTTP request logging
 
 app.engine('.html', handlebars.engine({extname: '.html'}));
 app.set('view engine', '.html');
@@ -21,8 +21,8 @@ app.set('views', staticDir);
 
 const apiUrl = process.env.API_URL || "https://production.wazimap-ng.openup.org.za";
 
+
 function index(req, res, next) {
-  console.log("hereGGGGG");
   const hostname = process.env.HOSTNAME || req.hostname;
   axios.get(`${apiUrl}/api/v1/profile_by_url/?format=json`, {
     headers: {

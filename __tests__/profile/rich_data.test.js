@@ -1,7 +1,7 @@
 import {Category} from "../../src/js/profile/category.js";
 import {Component} from '../../src/js/utils';
 
-import html from '../../src/index.html';
+import html from '../../src/app-shell.html';
 
 describe('Rich data panel tests', () => {
     document.body.innerHTML = html;

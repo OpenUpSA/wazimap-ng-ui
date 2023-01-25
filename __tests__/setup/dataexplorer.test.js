@@ -1,4 +1,4 @@
-import html from '../../src/index.html';
+import html from '../../src/app-shell.html';
 import Controller from "../../src/js/controller";
 import {Config as SAConfig} from "../../src/js/configurations/geography_sa";
 import {DataMapperMenu} from "../../src/js/elements/data_mapper/menu";

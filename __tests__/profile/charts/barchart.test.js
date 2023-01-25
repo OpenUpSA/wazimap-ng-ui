@@ -1,7 +1,7 @@
 import {configureBarchart, configureBarchartDownload} from '../../../src/js/profile/charts/barChart.js';
 import {screen, fireEvent, getByText} from '@testing-library/dom'
 import {parse, View} from 'vega';
-import html from '../../../src/index.html';
+import html from '../../../src/app-shell.html';
 import {Chart} from '../../../src/js/profile/chart.js';
 import {Component} from '../../../src/js/utils.js'
 import {TestData} from "../../../src/js/test_data";

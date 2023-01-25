@@ -1,6 +1,6 @@
 import {Component} from "../../../src/js/utils";
 import {Indicator} from "../../../src/js/profile/blocks/indicator";
-import html from '../../../src/index.html';
+import html from '../../../src/app-shell.html';
 
 const CHART_DATA = {
     data: [

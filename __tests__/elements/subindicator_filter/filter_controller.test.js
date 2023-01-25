@@ -1,4 +1,4 @@
-import html from '../../../src/index.html';
+import html from '../../../src/app-shell.html';
 import {Component} from "../../../src/js/utils";
 import {MapChip} from "../../../src/js/elements/mapchip/mapchip";
 import {TestData} from "../../../src/js/test_data";

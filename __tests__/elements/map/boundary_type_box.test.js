@@ -4,7 +4,7 @@ import {Component} from '../../../src/js/utils';
 import Controller from "../../../src/js/controller";
 import {BoundaryTypeBox} from "../../../src/js/map/boundary_type_box.js";
 
-import html from '../../../src/index.html';
+import html from '../../../src/app-shell.html';
 import {Config as SAConfig} from "../../../src/js/configurations/geography_sa";
 
 

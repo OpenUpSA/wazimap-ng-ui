@@ -2,7 +2,7 @@ import {VersionController} from "../../../src/js/versions/version_controller.js"
 import {Version} from "../../../src/js/versions/version.js";
 import Controller from "../../../src/js/controller";
 
-import html from '../../../src/index.html';
+import html from '../../../src/app-shell.html';
 import {Config as SAConfig} from "../../../src/js/configurations/geography_sa";
 
 

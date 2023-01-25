@@ -1,4 +1,4 @@
-import html from '../../src/index.html';
+import html from '../../src/app-shell.html';
 import {Tutorial} from '../../src/js/elements/tutorial';
 import {Component} from "../../src/js/utils";
 

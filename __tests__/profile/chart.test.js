@@ -1,7 +1,7 @@
 import {Component} from "../../src/js/utils";
 import {Chart} from "../../src/js/profile/chart";
 import {TestData} from "../../src/js/test_data";
-import html from "../../src/index.html";
+import html from "../../src/app-shell.html";
 
 let configureLinechart = require("../../src/js/profile/charts/lineChart");
 let configureBarchart = require("../../src/js/profile/charts/barChart");

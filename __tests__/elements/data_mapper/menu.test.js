@@ -1,7 +1,7 @@
 import {loadMenu, DataMapperMenu} from "../../../src/js/elements/data_mapper/menu.js";
 import {Component} from '../../../src/js/utils';
 
-import html from '../../../src/index.html';
+import html from '../../../src/app-shell.html';
 
 
 describe('Check data mapper menu order', () => {

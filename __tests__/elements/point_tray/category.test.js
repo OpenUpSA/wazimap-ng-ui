@@ -1,7 +1,7 @@
 import {Category} from '../../../src/js/elements/point_tray/category';
 import {Component} from '../../../src/js/utils';
 
-import html from '../../../src/index.html';
+import html from '../../../src/app-shell.html';
 
 
 describe('Check metadata value for point tray category', () => {

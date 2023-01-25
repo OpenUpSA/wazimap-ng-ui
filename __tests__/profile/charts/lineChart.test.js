@@ -3,7 +3,7 @@ import {TestData} from "../../../src/js/test_data";
 import {parse, View} from 'vega';
 import {Chart} from "../../../src/js/profile/chart";
 import {Component} from "../../../src/js/utils";
-import html from "../../../src/index.html";
+import html from "../../../src/app-shell.html";
 
 describe('creating specs', () => {
     let data, metadata, config;

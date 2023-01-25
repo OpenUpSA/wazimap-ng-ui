@@ -3,7 +3,7 @@ import {screen, fireEvent, getByText} from '@testing-library/dom'
 import { Category } from "../../src/js/profile/category.js";
 import {Component} from '../../src/js/utils';
 
-import html from '../../src/index.html';
+import html from '../../src/app-shell.html';
 
 describe('Rich data panel HTML indicator test', () => {
     document.body.innerHTML = html;

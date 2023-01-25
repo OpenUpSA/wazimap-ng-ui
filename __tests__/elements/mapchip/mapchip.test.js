@@ -3,7 +3,7 @@ import {screen, fireEvent, getByText} from '@testing-library/dom'
 import {MapChip} from "../../../src/js/elements/mapchip/mapchip.js";
 import {Component} from '../../../src/js/utils';
 
-import html from '../../../src/index.html';
+import html from '../../../src/app-shell.html';
 import {TestData} from "../../../src/js/test_data";
 
 

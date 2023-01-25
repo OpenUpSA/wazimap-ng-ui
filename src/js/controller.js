@@ -165,9 +165,18 @@ export default class Controller extends Component {
         this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, SidePanels.PANELS.richData);
     }
 
+    isAlreadyInFilteredIndicators(filter, indicatorId, filterPanel) {
+        let arrClone = structuredClone(this._filteredIndicators);
+        const alreadyAdded = arrClone.filter(x => x.indicatorId === indicatorId)[0]?.filters
+            .filter(y => y.group === filter.group && y.value === filter.value && y.appliesTo.indexOf(filterPanel) >= 0)[0] != null;
+
+        return alreadyAdded;
+    }
+
     updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, filterPanel) {
         let selectedFilterDetailsClone = structuredClone(selectedFilterDetails);
-        selectedFilterDetailsClone = selectedFilterDetailsClone.filter(x => !x.isSiteWideFilter && !x.isDefault);
+        selectedFilterDetailsClone = selectedFilterDetailsClone.filter(x => !x.isDefault);
+        selectedFilterDetailsClone = selectedFilterDetailsClone.filter(x => !x.isSiteWideFilter || this.isAlreadyInFilteredIndicators(x, indicatorId, filterPanel));
         let isNewObj = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0] == null;
 
         let filteredIndicator = {

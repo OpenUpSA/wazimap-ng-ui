@@ -111,6 +111,7 @@ export class Dropdown extends Component {
 
         this.redrawItems(this.model.items);
         this.model.isDisabled = disabled;
+        this.model.isUnavailable = false;
         this.setText(defaultText);
     }
 

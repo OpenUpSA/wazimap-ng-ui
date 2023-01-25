@@ -110,7 +110,7 @@ class FilterRowModel extends Component {
         let prevIndicator = this._currentIndicatorValue;
         this._currentIndicatorValue = value;
 
-        if (prevIndicator != null && prevIndicator !== FilterRowModel.ALL_VALUES) {
+        if (prevIndicator != null && prevIndicator !== FilterRowModel.ALL_VALUES && !this.isUnavailable) {
             this.dataFilterModel.removeFilter(prevIndicator);
         }
 
@@ -221,11 +221,13 @@ export class FilterRow extends Component {
     }
 
     setPrimaryValueUnavailable(value) {
+        this.model._currentIndicatorValue = value;
         this.indicatorDropdown.model.isUnavailable = true;
         this.indicatorDropdown.setText(value);
     }
 
     setSecondaryValueUnavailable(value) {
+        this.model._currentSubindicatorValue = value;
         this.subIndicatorDropdown.model.isUnavailable = true;
         this.subIndicatorDropdown.setText(value);
     }

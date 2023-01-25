@@ -203,8 +203,8 @@ export class FilterController extends Component {
         this.isLoading = false;
     }
 
-    addEmptyFilter(isDefault = false, isExtra = true, isRequired = false, addAsFirstRow = false) {
-        if (this.model.dataFilterModel.availableFilters.length <= 0) {
+    addEmptyFilter(isDefault = false, isExtra = true, isRequired = false, addAsFirstRow = false, overrideLengthCheck = false) {
+        if (this.model.dataFilterModel.availableFilters.length <= 0 && !overrideLengthCheck) {
             return;
         }
 
@@ -497,8 +497,10 @@ export class FilterController extends Component {
 
     checkAndAddSiteWideFilters() {
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
-            let isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
-            let isIndicatorAvailable = this.model.dataFilterModel.availableFilterNames.indexOf(filter.indicatorValue) >= 0;
+            const isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
+            const groupLookup = this.model.dataFilterModel.groupLookup[filter.indicatorValue];
+            const isPrimaryGroup = this.model.dataFilterModel.primaryGroup === groupLookup?.name;
+            const isIndicatorAvailable = groupLookup !== undefined && !isPrimaryGroup && groupLookup.values.indexOf(filter.subIndicatorValue) >= 0;
 
             if (!isIndicatorAlreadyFiltered) {
                 if (isIndicatorAvailable) {
@@ -508,7 +510,7 @@ export class FilterController extends Component {
                     filterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
                 } else {
                     // add a disabled filterRow
-                    let filterRow = this.addEmptyFilter(true);
+                    let filterRow = this.addEmptyFilter(true, true, false, false, true);
                     filterRow.model.isUnavailable = true;
                     filterRow.setPrimaryValueUnavailable(filter.indicatorValue);
                     filterRow.setSecondaryValueUnavailable(filter.subIndicatorValue);

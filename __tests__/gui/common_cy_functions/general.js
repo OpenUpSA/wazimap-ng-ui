@@ -83,7 +83,7 @@ export function setupInterceptionsForSpecificGeo(geoCode, all_details) {
 }
 
 export function extractRequestedIndicatorData(url, indicatorData) {
-    let domain = url.match(/^https:\/\/[^/]+/);
+    let domain = url.match(/^https?:\/\/[^/]+/);
     let geo = url.replace(`${domain}/api/v1/profile/8/geography/`, '');
     geo = geo.replace(geo.substring(geo.indexOf('/')), '');
 

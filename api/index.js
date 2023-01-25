@@ -33,7 +33,7 @@ function index(req, res, next) {
       res.setHeader('Content-Type', 'text/html');
       res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
       res.render('app-shell', {
-        'title': response.data.name,
+        'title': response.data.config?.page_title || response.data.name,
       });
     })
     .catch(err => {

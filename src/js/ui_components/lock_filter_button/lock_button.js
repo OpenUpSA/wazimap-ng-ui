@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {styled} from "@mui/system";
 import {Button} from "@mui/material";
-import {LockButtonSvg, LockedButtonSvg} from "../../elements/my_view/svg_icons";
+import {LockButtonSvg, LockedButtonSvg, UnavailableLockButtonSvg} from "../../elements/my_view/svg_icons";
 
 const LockButton = (props) => {
     const [startedListening, setStartedListening] = useState(false);
@@ -10,10 +10,13 @@ const LockButton = (props) => {
     const [siteWideFilters, setSideWideFilters] = useState([]);
     const [rowIndicator, setRowIndicator] = useState(null);
     const [rowSubIndicator, setRowSubIndicator] = useState(null);
+    const [isUnavailable, setIsUnavailable] = useState(false);
     const lockButtonSvg = LockButtonSvg;
     const lockedButtonSvg = LockedButtonSvg;
+    const unavailableLockedButtonSvg = UnavailableLockButtonSvg;
 
     useEffect(() => {
+        setIsUnavailable(props.filterRow.model.isUnavailable);
         setIsVisible(rowIndicator !== 'All indicators' && rowSubIndicator !== 'All values');
         checkAndSetIsLocked();
     }, [siteWideFilters, rowIndicator, rowSubIndicator])
@@ -65,7 +68,7 @@ const LockButton = (props) => {
             className={isVisible ? '' : 'hidden'}
             onClick={lockButtonClicked}
         >
-            {isLocked ? lockedButtonSvg : lockButtonSvg}
+            {isLocked ? (isUnavailable ? lockedButtonSvg : lockedButtonSvg) : lockButtonSvg}
         </StyledButton>
     );
 }

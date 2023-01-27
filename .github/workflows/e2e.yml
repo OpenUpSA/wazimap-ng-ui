@@ -9,16 +9,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
       - uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: 18.x
+
       - name: Get yarn cache
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
+
       - name: Cypress run
         uses: cypress-io/github-action@v2.6.1
         with:
           browser: chrome
           headless: true
         env:
-          CYPRESS_BASE_URL: https://staging--wazimap-production.netlify.app
+          CYPRESS_BASE_URL: https://wazimap-ng-ui-express-git-server-side-templating-4447a1-openup.vercel.app/

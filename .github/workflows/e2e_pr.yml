@@ -6,14 +6,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
+
       - name: Get yarn cache
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
+
       - name: Set url
-        run: echo "CYPRESS_BASE_URL=https://deploy-preview-${{github.event.pull_request.number}}--wazimap-production.netlify.app" >> $GITHUB_ENV
+        run: echo "CYPRESS_BASE_URL=https://wazimap-ng-ui-express-git-server-side-templating-4447a1-openup.vercel.app/" >> $GITHUB_ENV
+
       - name: wait for netlify review app
         uses: nev7n/wait_for_response@v1
         with:

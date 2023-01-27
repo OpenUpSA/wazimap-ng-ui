@@ -1,4 +1,4 @@
-import path from 'path';
+const path = require('path');
 
 const express = require('express');
 const handlebars = require('express-handlebars');
@@ -47,7 +47,5 @@ function index(req, res, next) {
 
 
 app.get('/', index);
-
-app.use(express.static(staticDir));
 
 module.exports = app;

@@ -81,8 +81,9 @@
   },
   "scripts": {
     "start": "vercel dev --listen 1234",
+    "start-mock-vercel": "node __tests__/mock_vercel_server.js",
     "start-mock-backend": "node __tests__/mock_backend_server",
-    "start-with-mock-backend": "yarn start-mock-backend & API_URL=http://localhost:4321 yarn start && fg",
+    "start-with-mock-backend": "yarn start-mock-backend & API_URL=http://localhost:4321 yarn start-mock-vercel && fg",
     "cypress:gui": "cypress run --browser chrome --spec __tests__/gui/*.feature --record --key e45f872b-81b5-4f63-ad26-1dff310fb348",
     "cypress:gui-local": "cypress run --browser chrome --spec __tests__/gui/*.feature",
     "cypress": "cypress run --spec __tests__/e2e/*.feature",
@@ -115,6 +116,7 @@
       "/__tests__/gui/",
       "/__tests__/e2e/",
       "/__tests__/mock_backend_server.js",
+      "/__tests__/mock_vercel_server.js",
       "/node_modules/",
       ".data.js"
     ],

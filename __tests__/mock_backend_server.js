@@ -1,3 +1,7 @@
+/* Mock backend server so that the server-side get_profile_by_url can be satisfied
+  with a mock rather than production API request. The client-side part of the GUI
+  tests are mocked within cypress. */
+
 const express = require('express');
 var morgan = require('morgan');
 

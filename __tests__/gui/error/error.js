@@ -18,5 +18,5 @@ Then('An alert message should be shown', () => {
 })
 
 Then('I check if the default title is correct', () => {
-    cy.title().should('eq', 'Wazimap NG');
+    cy.title().should('eq', 'Mock Backend Profile');
 })

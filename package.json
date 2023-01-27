@@ -114,6 +114,7 @@
     "testPathIgnorePatterns": [
       "/__tests__/gui/",
       "/__tests__/e2e/",
+      "/__tests__/mock_backend_server.js",
       "/node_modules/",
       ".data.js"
     ],

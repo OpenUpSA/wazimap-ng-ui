@@ -1,16 +1,23 @@
-name: Unit tests
+name: Unit and GUI tests
 on: [ push, pull_request ]
 jobs:
   unit_tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
+
       - name: Install modules
         run: yarn
+
+      - name: Build frontend
+        run: yarn build
+
       - name: Run tests
         run: yarn test
+
       - name: Run gui tests
         run: yarn test:gui

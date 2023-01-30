@@ -68,7 +68,7 @@ const LockButton = (props) => {
             className={isVisible ? '' : 'hidden'}
             onClick={lockButtonClicked}
         >
-            {isLocked ? (isUnavailable ? lockedButtonSvg : lockedButtonSvg) : lockButtonSvg}
+            {isLocked ? (isUnavailable ? unavailableLockedButtonSvg : lockedButtonSvg) : lockButtonSvg}
         </StyledButton>
     );
 }

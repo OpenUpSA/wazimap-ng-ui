@@ -570,6 +570,7 @@ export class FilterController extends Component {
 
         this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
+        this.checkAndAddSiteWideFilters();
 
         const remainingRowLength = this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').length;
         if (remainingRowLength <= 0) {

@@ -49,16 +49,6 @@ const LockButton = (props) => {
         padding: '0'
     }));
 
-    const showMarkTooltip = useCallback(event => {
-        props.tooltip.enableTooltip(
-            $(event.target),
-            isLocked ?
-                (isUnavailable ? 'This filter cannot be applied here' : 'Remove site-wide filter')
-                :
-                (alreadySiteWide() ? 'Cannot set as site-wide filter' : 'Set as site-wide filter')
-        );
-    }, [isLocked, isUnavailable, siteWideFilters, rowIndicator]);
-
     const checkAndSetIsLocked = () => {
         let filterResult = siteWideFilters.filter(x => x.indicatorValue === rowIndicator && x.subIndicatorValue === rowSubIndicator);
         setIsLocked(filterResult.length > 0);
@@ -86,7 +76,12 @@ const LockButton = (props) => {
         <StyledButton
             className={isVisible ? '' : 'hidden'}
             onClick={lockButtonClicked}
-            onMouseEnter={showMarkTooltip}
+            title={
+                isLocked ?
+                    (isUnavailable ? 'This filter cannot be applied here' : 'Remove site-wide filter')
+                    :
+                    (alreadySiteWide() ? 'Cannot set as site-wide filter' : 'Set as site-wide filter')
+            }
         >
             {isLocked ?
                 (isUnavailable ? unavailableLockedButtonSvg : lockedButtonSvg)

@@ -2,7 +2,6 @@ import {Component} from "../../utils";
 import {createRoot} from "react-dom/client";
 import LockButton from "./lock_button";
 import React from "react";
-import {Tooltip} from "../tooltip";
 
 export class LockFilterButtonWrapper extends Component {
     constructor(parent) {
@@ -25,7 +24,6 @@ export class LockFilterButtonWrapper extends Component {
         root.render(
             <LockButton
                 filterRow={this.parent}
-                tooltip={this.tooltip}
             />
         )
     }

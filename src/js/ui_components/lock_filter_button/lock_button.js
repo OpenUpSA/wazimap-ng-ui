@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {styled} from "@mui/system";
 import {Button} from "@mui/material";
 import {LockButtonSvg, LockedButtonSvg, UnavailableLockButtonSvg} from "../../elements/my_view/svg_icons";
@@ -43,12 +43,21 @@ const LockButton = (props) => {
 
     const StyledButton = styled(Button)(() => ({
         minWidth: 'unset',
-        paddingTop: '10px',
-        paddingBottom: '10px',
         marginRight: '10px',
         width: '36px',
-        height: '36px'
+        height: '36px',
+        padding: '0'
     }));
+
+    const showMarkTooltip = useCallback(event => {
+        props.tooltip.enableTooltip(
+            $(event.target),
+            isLocked ?
+                (isUnavailable ? 'This filter cannot be applied here' : 'Remove site-wide filter')
+                :
+                (alreadySiteWide() ? 'Cannot set as site-wide filter' : 'Set as site-wide filter')
+        );
+    }, [isLocked, isUnavailable, siteWideFilters, rowIndicator]);
 
     const checkAndSetIsLocked = () => {
         let filterResult = siteWideFilters.filter(x => x.indicatorValue === rowIndicator && x.subIndicatorValue === rowSubIndicator);
@@ -56,6 +65,10 @@ const LockButton = (props) => {
     }
 
     const lockButtonClicked = () => {
+        if (isUnavailable) {
+            return
+        }
+
         let newVal = !isLocked;
         if (newVal) {
             props.filterRow.triggerEvent('filterRow.filter.locked');
@@ -64,12 +77,21 @@ const LockButton = (props) => {
         }
     }
 
+    const alreadySiteWide = () => {
+        let filterResult = siteWideFilters.filter(x => x.indicatorValue === rowIndicator);
+        return filterResult.length > 0;
+    }
+
     return (
         <StyledButton
             className={isVisible ? '' : 'hidden'}
             onClick={lockButtonClicked}
+            onMouseEnter={showMarkTooltip}
         >
-            {isLocked ? (isUnavailable ? unavailableLockedButtonSvg : lockedButtonSvg) : lockButtonSvg}
+            {isLocked ?
+                (isUnavailable ? unavailableLockedButtonSvg : lockedButtonSvg)
+                :
+                (alreadySiteWide() ? unavailableLockedButtonSvg : lockButtonSvg)}
         </StyledButton>
     );
 }

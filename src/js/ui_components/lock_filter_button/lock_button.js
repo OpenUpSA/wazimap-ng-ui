@@ -46,7 +46,8 @@ const LockButton = (props) => {
         paddingTop: '10px',
         paddingBottom: '10px',
         marginRight: '10px',
-        width: '34px'
+        width: '36px',
+        height: '36px'
     }));
 
     const checkAndSetIsLocked = () => {

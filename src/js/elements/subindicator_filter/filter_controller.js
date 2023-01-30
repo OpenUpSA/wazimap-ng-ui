@@ -498,18 +498,22 @@ export class FilterController extends Component {
     checkAndAddSiteWideFilters() {
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
             const isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
+            const isIndicatorValueAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue
+                && x.model.currentSubindicatorValue === filter.subIndicatorValue);
             const groupLookup = this.model.dataFilterModel.groupLookup[filter.indicatorValue];
             const isPrimaryGroup = this.model.dataFilterModel.primaryGroup === groupLookup?.name;
             const isIndicatorAvailable = groupLookup !== undefined && !isPrimaryGroup && groupLookup.values.indexOf(filter.subIndicatorValue) >= 0;
 
-            if (!isIndicatorAlreadyFiltered) {
-                if (isIndicatorAvailable) {
+            if (!isIndicatorValueAlreadyFiltered) {
+                if (!isIndicatorAlreadyFiltered && isIndicatorAvailable) {
                     let filterRow = this.addEmptyFilter(true)
 
                     filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
+                    filterRow.indicatorDropdown.disable();
                     filterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
+                    filterRow.subIndicatorDropdown.disable();
                 } else {
-                    // add a disabled filterRow
+                    // add an unavailable filterRow
                     let filterRow = this.addEmptyFilter(true, true, false, false, true);
                     filterRow.model.isUnavailable = true;
                     filterRow.setPrimaryValueUnavailable(filter.indicatorValue);

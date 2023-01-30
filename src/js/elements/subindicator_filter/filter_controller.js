@@ -153,8 +153,10 @@ export class FilterController extends Component {
     prepareDomElements() {
         this._rowContainer = $(this.container).find(this._elements.filterRowClass)[0];
 
-        while ($(this.container).find(this._elements.filterRowClass).length > 0) {
-            $(this.container).find(this._elements.filterRowClass)[0].remove();
+        if ($(this.container).closest('.styles').length <= 0) {
+            while ($(this.container).find(this._elements.filterRowClass).length > 0) {
+                $(this.container).find(this._elements.filterRowClass).first().remove();
+            }
         }
         this.setContentVisibility();
         this.toggleContentVisibility();

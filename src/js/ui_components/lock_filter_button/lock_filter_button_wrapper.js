@@ -7,7 +7,6 @@ export class LockFilterButtonWrapper extends Component {
     constructor(parent) {
         super(parent);
 
-        this.tooltip = new Tooltip();
         this.prepareDomElements();
     }
 

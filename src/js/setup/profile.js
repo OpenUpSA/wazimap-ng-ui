@@ -6,6 +6,7 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
 
     controller.on(VersionController.EVENTS.ready, payload => {
         profileLoader.filteredIndicators = controller.filteredIndicators;
+        profileLoader.siteWideFilters = controller.siteWideFilters;
         profileLoader.loadProfile(payload.payload, controller.versionController.activeVersion)
     });
     controller.on(VersionController.EVENTS.ready, () => {

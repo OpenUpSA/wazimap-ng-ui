@@ -30,6 +30,10 @@ export class Indicator extends ContentBlock {
         }
     }
 
+    get siteWideFilters() {
+        return this.parent.siteWideFilters;
+    }
+
     get hasData() {
         return this.indicator.data.some(function (e) {
             return e.count > 0

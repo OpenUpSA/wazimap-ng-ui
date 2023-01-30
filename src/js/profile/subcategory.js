@@ -45,6 +45,10 @@ export class Subcategory extends Component {
         return this.parent.filteredIndicators;
     }
 
+    get siteWideFilters(){
+        return this.parent.siteWideFilters;
+    }
+
     get indicators() {
         return this._indicators;
     }

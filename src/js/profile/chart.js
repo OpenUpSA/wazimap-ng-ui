@@ -87,6 +87,10 @@ export class Chart extends Component {
         }
     }
 
+    get siteWideFilters() {
+        return this.parent.siteWideFilters;
+    }
+
     get chartType() {
         const type = this.data.chart_type;
         if (type === chartTypes.LineChart) {
@@ -442,7 +446,8 @@ export class Chart extends Component {
     };
 
     handleChartFilter = (indicators, groups) => {
-        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, this.previouslySelectedFilters, indicators.metadata.primary_group, {});
+        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, this.previouslySelectedFilters, indicators.metadata.primary_group, {},
+            this.siteWideFilters);
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }

@@ -39,6 +39,10 @@ export class Category extends Component {
         return this.parent.filteredIndicators;
     }
 
+    get siteWideFilters() {
+        return this.parent.siteWideFilters;
+    }
+
     get subCategories() {
         return this._subCategories;
     }

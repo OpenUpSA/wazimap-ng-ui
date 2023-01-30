@@ -26,6 +26,7 @@ export default class ProfileLoader extends Component {
         this.config = _config;
         this.profileHeader = null;
         this._filteredIndicators = [];
+        this._siteWideFilters = [];
         this.watermarkEnabled = watermarkEnabled;
         this._categories = [];
 
@@ -40,6 +41,14 @@ export default class ProfileLoader extends Component {
 
     set filteredIndicators(value) {
         this._filteredIndicators = value;
+    }
+
+    get siteWideFilters() {
+        return this._siteWideFilters;
+    }
+
+    set siteWideFilters(value) {
+        this._siteWideFilters = value;
     }
 
     get categories() {

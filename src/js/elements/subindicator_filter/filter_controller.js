@@ -186,8 +186,16 @@ export class FilterController extends Component {
     }
 
     addInitialFilterRow(dataFilterModel) {
-        if (this.noFiltersAvailable || !isEmpty(dataFilterModel.previouslySelectedFilters)) {
+        if (!isEmpty(dataFilterModel.previouslySelectedFilters)) {
             this.isLoading = false;
+            return;
+        }
+
+        if (this.noFiltersAvailable) {
+            this.isLoading = false;
+            this.addEmptyFilter(true, false, false, false, true);
+            this.addFilterButton.hide();
+            $(this.container).find(`${this._elements.filterRowClass}`).addClass('hidden');
             return;
         }
 

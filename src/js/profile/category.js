@@ -15,7 +15,7 @@ const descriptionClass = '.category-header__description';
 //category > subcategory > indicator > chart
 
 export class Category extends Component {
-    constructor(parent, formattingConfig, category, detail, _profileWrapper, _id, _removePrevCategories, isFirst, geography, profileConfig) {
+    constructor(parent, formattingConfig, category, detail, _profileWrapper, _id, _removePrevCategories, isFirst, geography, profileConfig, addLockButton = true) {
         super(parent);
 
         categoryTemplate = $(categoryClass)[0].cloneNode(true);
@@ -32,7 +32,7 @@ export class Category extends Component {
 
         this.prepareDomElements();
         this.prepareEvents();
-        this.addCategory(category, detail, isFirst);
+        this.addCategory(category, detail, isFirst, addLockButton);
     }
 
     get filteredIndicators() {
@@ -81,7 +81,7 @@ export class Category extends Component {
         });
     }
 
-    addCategory = (category, detail, isFirst) => {
+    addCategory = (category, detail, isFirst, addLockButton) => {
         const newCategorySection = categoryTemplate.cloneNode(true);
         const sectionHeader = $('.category-header')[0].cloneNode(true);
         const indicatorHeader = $('.sub-category-header')[0].cloneNode(true);
@@ -104,7 +104,7 @@ export class Category extends Component {
             $(newCategorySection).addClass('page-break-before');
         }
 
-        this.loadSubcategories(newCategorySection, detail);
+        this.loadSubcategories(newCategorySection, detail, addLockButton);
 
         this.uiElements.push(newCategorySection);
 
@@ -118,12 +118,12 @@ export class Category extends Component {
         return sectionLink;
     }
 
-    loadSubcategories = (wrapper, detail) => {
+    loadSubcategories = (wrapper, detail, addLockButton) => {
         let isFirst = true;
 
         for (const subcategoryDetail of sortBy(detail.subcategories, "order")) {
             const subcategory = Object.keys(detail.subcategories).filter(k => detail.subcategories[k] === subcategoryDetail);
-            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, subcategoryDetail, isFirst, this.geography, this.profileConfig);
+            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, subcategoryDetail, isFirst, this.geography, this.profileConfig, addLockButton);
             sc.isVisible = sc.indicators.length > 0;
             if (sc.isVisible) {
                 this.subCategories.push(sc);

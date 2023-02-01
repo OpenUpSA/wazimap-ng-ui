@@ -105,10 +105,12 @@ class FilterRowModel extends Component {
          */
 
         let prevIndicator = this._currentIndicatorValue;
+        let updateShareUrl = false;
         this._currentIndicatorValue = value;
 
         if (prevIndicator != null && prevIndicator !== FilterRowModel.ALL_VALUES) {
             this.dataFilterModel.removeFilter(prevIndicator);
+            updateShareUrl = true;
         }
 
         if (value != null && value !== FilterRowModel.ALL_VALUES) {
@@ -116,7 +118,7 @@ class FilterRowModel extends Component {
         }
         if (!this.isRequired) {
             // no need to filter data before the subIndicator value is selected if isRequired = true
-            this.dataFilterModel.updateFilteredData();
+            this.dataFilterModel.updateFilteredData(updateShareUrl);
         }
 
         this.triggerEvent(FilterRowModel.EVENTS.indicatorSelected, this);

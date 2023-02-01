@@ -2,6 +2,7 @@ import {Component} from './utils';
 import {VersionController} from "./versions/version_controller";
 import {ConfirmationModal} from "./ui_components/confirmation_modal";
 import {SidePanels} from "./elements/side_panels";
+import {isEmpty, isEqual} from "lodash";
 
 export default class Controller extends Component {
     constructor(parent, api, config, profileId = 1) {
@@ -46,6 +47,17 @@ export default class Controller extends Component {
             }
 
             self.onHashChange(payload);
+        });
+
+        window.addEventListener('popstate', (event) => {
+          if (event.state){
+            this._filteredIndicators = event.state.filters;
+          } else {
+            this._filteredIndicators = [];
+          }
+          this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+          this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
+          this.reDrawChildren();
         });
     };
 
@@ -151,16 +163,16 @@ export default class Controller extends Component {
 
         this.state.subindicator = subindicator;
 
-        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails, SidePanels.PANELS.dataMapper);
+        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails, payload.updadateSharedUrl, SidePanels.PANELS.dataMapper);
 
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
     onChartFiltered(payload) {
-        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, SidePanels.PANELS.richData);
+        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, payload.updadateSharedUrl, SidePanels.PANELS.richData);
     }
 
-    updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, filterPanel) {
+    updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, updateSharedUrl, filterPanel) {
         let isNewObj = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0] == null;
 
         let filteredIndicator = {
@@ -170,7 +182,7 @@ export default class Controller extends Component {
         };
 
         if (isNewObj) {
-            this._filteredIndicators.push(filteredIndicator)
+            this._filteredIndicators.push(filteredIndicator);
         } else {
             this._filteredIndicators = this._filteredIndicators.map(existingObj => {
                 if (existingObj.indicatorId === indicatorId) {
@@ -189,11 +201,11 @@ export default class Controller extends Component {
                         })
                     })
 
-                    // remove
                     let filtersToRemove = existingObj.filters.filter(f => {
                         const stillExists = selectedFilterDetails.filter(x => x.group === f.group && x.value === f.value).length > 0;
                         return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists;
                     })
+
                     filtersToRemove.forEach(x => {
                         let objToRemove = existingObj.filters.filter(y => y.group === x.group && y.value === x.value && y.appliesTo.indexOf(filterPanel) >= 0)[0];
                         if (objToRemove.appliesTo.length > 1) {
@@ -202,14 +214,15 @@ export default class Controller extends Component {
                             existingObj.filters.splice(existingObj.filters.indexOf(objToRemove), 1);
                         }
                     })
-
                     return existingObj;
                 } else {
                     return existingObj;
                 }
             });
         }
-
+        if (updateSharedUrl){
+          this.updateShareUrl();
+        }
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }
 
@@ -234,6 +247,87 @@ export default class Controller extends Component {
             && this.state.subindicator.indicatorId === filteredIndicator.indicatorId) {
             this.triggerEvent('mapchip.choropleth.filtersUpdated', filteredIndicator);  // mapchip will be updated
         }
+        // this.updateShareUrl();
+    }
+
+    updateShareUrl(){
+      let selectedFilters = [];
+      this._filteredIndicators.map(
+        (indicatorFilter) => {
+          const nonDefaultFilters = indicatorFilter.filters.filter(f => f.isDefault !== true);
+          if (nonDefaultFilters.length > 0){
+            selectedFilters.push({
+              "indicatorId": indicatorFilter.indicatorId,
+              "filters": nonDefaultFilters
+            })
+          }
+        }
+      )
+      let currentState = {"filters": selectedFilters}
+      if (selectedFilters.length > 0){
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileView = JSON.parse(urlParams.get("profileView"));
+        if (profileView === null){
+          history.pushState(
+            {
+              "filters": this._filteredIndicators,
+              "profileView": currentState
+            },
+            '',
+            `?profileView=${encodeURIComponent(JSON.stringify(currentState))}${window.location.hash}`
+          );
+        } else {
+          if(!isEqual(profileView, currentState)){
+            history.pushState(
+              {
+                "filters": this._filteredIndicators,
+                "profileView": currentState
+              },
+              '',
+              `?profileView=${encodeURIComponent(JSON.stringify(currentState))}${window.location.hash}`
+            );
+          }
+        }
+      } else {
+        history.pushState(
+          {
+            "filters": this._filteredIndicators,
+            "profileView": currentState
+          }, '', `/${window.location.hash}`
+        );
+      }
+    }
+
+    loadInitialFilters(dataBundle){
+      if (this._filteredIndicators.length > 0){
+        return;
+      }
+
+      const profileData = dataBundle?.profile?.profileData;
+      const urlParams = new URLSearchParams(window.location.search);
+      const profileView = JSON.parse(urlParams.get("profileView"));
+      if (profileView !== null && (profileData !== null || profileData !== undefined || !isEmpty(profileData))) {
+
+        const urlFilters = profileView["filters"];
+        this._filteredIndicators = urlFilters.map(indicator => {
+          let indicatorTitle = ''
+          Object.values(profileData).map(category => {
+            Object.values(category.subcategories).map(subcategory => {
+              Object.values(subcategory.indicators).map(i => {
+                  if (i.id === indicator.indicatorId){
+                    indicatorTitle = i.label;
+                  }
+              })
+            })
+          })
+          return {
+            indicatorId: indicator.indicatorId,
+            indicatorTitle: indicatorTitle,
+            filters: indicator.filters
+          }
+        });
+        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+      }
     }
 
     onSelectingSubindicator(payload) {

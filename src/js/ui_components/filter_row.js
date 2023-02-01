@@ -19,6 +19,7 @@ class FilterRowModel extends Component {
                 isDefault,
                 isExtra,
                 isRequired,
+                isPreviouslySelected,
                 filterPanel = SidePanels.PANELS.dataMapper,
                 defaultIndicatorText = FilterRowModel.ALL_INDICATORS,
                 defaultSubindicatorText = FilterRowModel.ALL_VALUES
@@ -33,6 +34,7 @@ class FilterRowModel extends Component {
         this._defaultSubindicatorText = defaultSubindicatorText
         this._dataFilterModel = null;
         this._filterPanel = filterPanel;
+        this._isPreviouslySelected = isPreviouslySelected;
 
         this.dataFilterModel = dataFilterModel;
     }
@@ -77,6 +79,14 @@ class FilterRowModel extends Component {
 
     get isRequired() {
         return this._isRequired;
+    }
+
+    get isPreviouslySelected() {
+        return this._isPreviouslySelected;
+    }
+
+    set isPreviouslySelected(value) {
+        this._isPreviouslySelected = value;
     }
 
     get currentIndicatorValue() {
@@ -128,7 +138,9 @@ class FilterRowModel extends Component {
             if (value !== undefined) {
                 this.dataFilterModel.setSelectedSubindicator(this.currentIndicatorValue, value);
             }
-            this.dataFilterModel.updateFilteredData();
+
+            let updateSharedUrl = value !== undefined && !this.isPreviouslySelected;
+            this.dataFilterModel.updateFilteredData(updateSharedUrl=updateSharedUrl);
             this.triggerEvent(FilterRowModel.EVENTS.updated, this);
         }
     }
@@ -157,14 +169,13 @@ export class FilterRow extends Component {
     static SELECT_ATTRIBUTE = 'Select an attribute';
     static SELECT_VALUE = 'Select a value';
 
-    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true, isRequired = false, elements) {
+    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true, isRequired = false, isPreviouslySelected = false, elements) {
         super(parent);
         this._container = container;
         this._elements = elements;
 
         this.prepareDomElements();
-
-        this._model = new FilterRowModel(this, dataFilterModel, isDefault, isExtra, isRequired, elements.filterPanel);
+        this._model = new FilterRowModel(this, dataFilterModel, isDefault, isExtra, isRequired, isPreviouslySelected, elements.filterPanel);
 
         if (this.model.isDefault)
             this.hideRemoveButton();
@@ -229,6 +240,9 @@ export class FilterRow extends Component {
         })
 
         this.subIndicatorDropdown.model.on(DropdownModel.EVENTS.selected, dropdownModel => {
+            if (dropdownModel.manualTrigger){
+              this.model.isPreviouslySelected = false;
+            }
             self.onSubindicatorSelected(dropdownModel.currentItem);
         })
 
@@ -259,7 +273,7 @@ export class FilterRow extends Component {
         this.model.currentIndicatorValue = selectedItem;
     }
 
-    onSubindicatorSelected(selectedItem) {
+    onSubindicatorSelected(selectedItem, manualTrigger) {
         this.model.currentSubindicatorValue = selectedItem
     }
 
@@ -284,7 +298,6 @@ export class FilterRow extends Component {
     removeRow() {
         this.model.currentIndicatorValue = null;
         $(this.container).remove();
-        this.model.dataFilterModel.updateFilteredData();
         this.triggerEvent(FilterRow.EVENTS.removed, self);
     }
 }

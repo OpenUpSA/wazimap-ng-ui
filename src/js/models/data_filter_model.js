@@ -30,7 +30,6 @@ export class DataFilterModel extends Observable {
 
     constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData, filterType = DataFilterModel.FILTER_TYPE.indicators) {
         super()
-
         this._groups = groups;
         this.configFilters = configFilters;
 
@@ -113,7 +112,6 @@ export class DataFilterModel extends Observable {
 
     get previouslySelectedFilterGroups() {
         let previouslySelectedFilterGroups = [];
-
         this.previouslySelectedFilters.forEach(selectedFilter => {
             selectedFilter.filters.forEach(x => {
                 previouslySelectedFilterGroups.push({
@@ -248,11 +246,13 @@ export class DataFilterModel extends Observable {
         }
     }
 
-    updateFilteredData() {
+    updateFilteredData(updateSharedUrl=false) {
         const _filteredData = this._filterFunction();
 
         this.filteredData = _filteredData;
-        this.triggerEvent(DataFilterModel.EVENTS.updated, this);
+        this.triggerEvent(DataFilterModel.EVENTS.updated, {
+          updateSharedUrl: updateSharedUrl
+        });
     }
 
     getFilteredIndicatorData() {

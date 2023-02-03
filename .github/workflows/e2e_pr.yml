@@ -20,10 +20,10 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: echo 'Deployed to: ${{ steps.vercel_preview_url.outputs.vercel_preview_url }}'
+      - run: echo 'Deployed to: ${ steps.vercel_preview_url.outputs.vercel_preview_url }'
 
       - name: Set url
-        run: echo 'CYPRESS_BASE_URL=${{ steps.vercel_preview_url.outputs.vercel_preview_url }}' >> $GITHUB_ENV
+        run: echo 'CYPRESS_BASE_URL=${ steps.vercel_preview_url.outputs.vercel_preview_url }' >> $GITHUB_ENV
 
       - name: wait for netlify review app
         uses: nev7n/wait_for_response@v1

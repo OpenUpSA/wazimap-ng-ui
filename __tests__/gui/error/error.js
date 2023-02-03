@@ -17,6 +17,6 @@ Then('An alert message should be shown', () => {
     })
 })
 
-Then('I check if the default title is correct', () => {
-    cy.title().should('eq', 'Mock Backend Profile');
+Then('I check if the title is correct', () => {
+    cy.title().should('eq', 'Youth Explorer');
 })

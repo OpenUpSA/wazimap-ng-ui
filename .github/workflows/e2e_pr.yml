@@ -15,8 +15,15 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
+      - uses: SFDigitalServices/wait-for-deployment-action@v1
+        id: deployment
+        with:
+          environment: Preview
+
+      - run: echo "Deployed to: ${{ steps.deployment.outputs.url }}"
+
       - name: Set url
-        run: echo "CYPRESS_BASE_URL=https://wazimap-ng-ui-express-git-server-side-templating-4447a1-openup.vercel.app/" >> $GITHUB_ENV
+        run: echo "CYPRESS_BASE_URL=${{ steps.deployment.outputs.url }}" >> $GITHUB_ENV
 
       - name: wait for netlify review app
         uses: nev7n/wait_for_response@v1

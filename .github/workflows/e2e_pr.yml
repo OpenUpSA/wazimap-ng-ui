@@ -1,9 +1,12 @@
 name: E2E
 on:
-  issue_comment:
-    types: [edited]
+  deployment_status:
+
 jobs:
   e2e_tests:
+
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,21 +20,10 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - uses: aaimio/vercel-preview-url-action@ead2d57dd41c5eea0fd8cdf41e2f511175a6bb9e
-        id: vercel_preview_url
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: wait for netlify review app
-        uses: nev7n/wait_for_response@v1
-        with:
-          url: ${{ steps.vercel_preview_url.outputs.vercel_preview_url }}
-          timeout: 120000
-
       - name: Cypress run
         uses: cypress-io/github-action@v2.6.1
         with:
           browser: chrome
           headless: true
         env:
-          CYPRESS_BASE_URL: ${{ steps.vercel_preview_url.outputs.vercel_preview_url }}'
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}

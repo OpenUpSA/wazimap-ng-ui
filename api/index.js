@@ -21,6 +21,11 @@ app.set('views', staticDir);
 
 const apiUrl = process.env.API_URL || "https://production.wazimap-ng.openup.org.za";
 
+function respond(res, context) {
+  res.setHeader('Content-Type', 'text/html');
+  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+  res.render('app-shell', context);
+};
 
 function index(req, res, next) {
   const hostname = process.env.HOSTNAME || req.hostname;
@@ -29,16 +34,15 @@ function index(req, res, next) {
       'wm-hostname': hostname,
     }
   })
-    .then(response => {
-      res.setHeader('Content-Type', 'text/html');
-      res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
-      res.render('app-shell', {
-        'title': response.data.config?.page_title || response.data.name,
+    .then(apiResponse => {
+      respond(res, {
+        'title': apiResponse.data.config?.page_title || apiResponse.data.name,
       });
     })
     .catch(err => {
       if (err.response.status == 404) {
-        res.status(404).send(`Profile not found for hostname ${hostname}`);
+        respond(res, {});
+        console.info(`Profile not found for hostname ${hostname}`);
       } else {
         next(err);
       }

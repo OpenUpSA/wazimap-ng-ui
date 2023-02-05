@@ -17,6 +17,10 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: Get yarn cache
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
       - name: Run gui tests
         run: yarn cypress:gui
         env:

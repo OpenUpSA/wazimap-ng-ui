@@ -17,10 +17,7 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v2.6.1
-        with:
-          browser: chrome
-          headless: true
+      - name: Run gui tests
+        run: yarn cypress:gui
         env:
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}

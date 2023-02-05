@@ -18,5 +18,6 @@ Then('An alert message should be shown', () => {
 })
 
 Then('I check if the title is correct', () => {
-    cy.title().should('eq', 'Youth Explorer');
+  // ######## don't merge into master, just a test
+  cy.wait(2000).title().should('eq', 'Youth Explorer');
 })

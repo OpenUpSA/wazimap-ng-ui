@@ -22,6 +22,6 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Run gui tests
-        run: yarn cypress:gui
+        run: yarn && yarn cypress:gui
         env:
           CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}

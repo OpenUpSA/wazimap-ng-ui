@@ -17,7 +17,6 @@ Then('An alert message should be shown', () => {
     })
 })
 
-Then('I check if the title is correct', () => {
-  // ######## don't merge into master, just a test
-  cy.wait(2000).title().should('eq', 'Youth Explorer');
+Then('I check if the page title is set to the profile title', () => {
+  cy.get('title').should('contain', 'Youth Explorer');
 })

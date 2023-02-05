@@ -40,10 +40,12 @@ function index(req, res, next) {
       });
     })
     .catch(err => {
-      if (err.response.status == 404) {
+      if (err?.response?.status == 404) {
+        // Render response anyway so that frontend can give user-friendly guidance
         respond(res, {});
         console.info(`Profile not found for hostname ${hostname}`);
       } else {
+        console.error(err);
         next(err);
       }
     });

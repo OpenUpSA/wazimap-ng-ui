@@ -1,10 +1,13 @@
 name: E2E
+
 on:
-  push:
-    branches:
-      - staging
+  deployment_status:
+
 jobs:
-  tests:
+  e2e_tests:
+
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -14,14 +17,10 @@ jobs:
         with:
           node-version: 18.x
 
-      - name: Get yarn cache
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
       - name: Cypress run
         uses: cypress-io/github-action@v2.6.1
         with:
           browser: chrome
           headless: true
         env:
-          CYPRESS_BASE_URL: https://wazimap-ng-ui-express-git-server-side-templating-4447a1-openup.vercel.app/
+          CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}

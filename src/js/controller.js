@@ -285,7 +285,7 @@ export default class Controller extends Component {
             `?profileView=${encodeURIComponent(JSON.stringify(currentState))}${window.location.hash}`
           );
         } else {
-          if(!isEqual(profileView, currentState) || initial){
+          if(!isEqual(profileView, currentState)){
             history.pushState(
               {
                 "filters": this._filteredIndicators,

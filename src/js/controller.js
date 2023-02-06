@@ -50,14 +50,21 @@ export default class Controller extends Component {
         });
 
         window.addEventListener('popstate', (event) => {
-          if (event.state){
+          if (event.state && event.state.filters !== undefined){
             this._filteredIndicators = event.state.filters;
+            this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+            this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
+            this.reDrawChildren();
           } else {
-            this._filteredIndicators = [];
+            const urlParams = new URLSearchParams(window.location.search);
+            const profileView = JSON.parse(urlParams.get("profileView"));
+            if (profileView === null && this._filteredIndicators.length > 0) {
+              this._filteredIndicators = [];
+              this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+              this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
+              this.reDrawChildren();
+            }
           }
-          this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-          this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
-          this.reDrawChildren();
         });
     };
 
@@ -247,7 +254,7 @@ export default class Controller extends Component {
             && this.state.subindicator.indicatorId === filteredIndicator.indicatorId) {
             this.triggerEvent('mapchip.choropleth.filtersUpdated', filteredIndicator);  // mapchip will be updated
         }
-        // this.updateShareUrl();
+        this.updateShareUrl();
     }
 
     updateShareUrl(){
@@ -264,9 +271,10 @@ export default class Controller extends Component {
         }
       )
       let currentState = {"filters": selectedFilters}
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const profileView = JSON.parse(urlParams.get("profileView"));
       if (selectedFilters.length > 0){
-        const urlParams = new URLSearchParams(window.location.search);
-        const profileView = JSON.parse(urlParams.get("profileView"));
         if (profileView === null){
           history.pushState(
             {
@@ -277,7 +285,7 @@ export default class Controller extends Component {
             `?profileView=${encodeURIComponent(JSON.stringify(currentState))}${window.location.hash}`
           );
         } else {
-          if(!isEqual(profileView, currentState)){
+          if(!isEqual(profileView, currentState) || initial){
             history.pushState(
               {
                 "filters": this._filteredIndicators,
@@ -288,7 +296,7 @@ export default class Controller extends Component {
             );
           }
         }
-      } else {
+      } else if (selectedFilters.length === 0 && profileView !== null) {
         history.pushState(
           {
             "filters": this._filteredIndicators,
@@ -326,6 +334,15 @@ export default class Controller extends Component {
             filters: indicator.filters
           }
         });
+
+        history.replaceState(
+          {
+            "filters": this._filteredIndicators
+          },
+          '',
+          `${window.location.search}${window.location.hash}`
+        );
+
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
       }
     }

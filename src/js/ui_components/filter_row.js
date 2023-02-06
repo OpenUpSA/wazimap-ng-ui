@@ -275,7 +275,7 @@ export class FilterRow extends Component {
         this.model.currentIndicatorValue = selectedItem;
     }
 
-    onSubindicatorSelected(selectedItem, manualTrigger) {
+    onSubindicatorSelected(selectedItem) {
         this.model.currentSubindicatorValue = selectedItem
     }
 
@@ -300,6 +300,7 @@ export class FilterRow extends Component {
     removeRow() {
         this.model.currentIndicatorValue = null;
         $(this.container).remove();
+        this.model.dataFilterModel.updateFilteredData();
         this.triggerEvent(FilterRow.EVENTS.removed, self);
     }
 }

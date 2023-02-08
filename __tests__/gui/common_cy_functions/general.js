@@ -333,11 +333,11 @@ export function confirmNoChartFilterSelected() {
     cy.get('.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter').eq(1).should('have.class', 'disabled');
 }
 
-export function selectChoroplethDropdownOption(option, dropdownIndex) {
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+export function selectChoroplethDropdownOption(option, dropdownIndex, filterRowIndex=0) {
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${filterRowIndex}) .mapping-options__filter`)
         .eq(dropdownIndex)
         .should('not.have.class', 'disabled');
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${filterRowIndex}) .mapping-options__filter`)
         .eq(dropdownIndex)
         .click();
 

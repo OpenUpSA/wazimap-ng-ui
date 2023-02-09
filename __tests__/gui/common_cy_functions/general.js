@@ -260,6 +260,10 @@ export function expandChoroplethFilterDialog() {
     expandFilterDialog('.map-options');
 }
 
+export function closeChoroplethFilterDialog() {
+    closeFilterDialog('.map-options');
+}
+
 export function checkIfChoroplethFilterDialogIsExpanded() {
     const descriptionArea = '.map-options__context--v2';
     const legendArea = '.map-options__legend';
@@ -270,6 +274,10 @@ export function checkIfChoroplethFilterDialogIsExpanded() {
 
 function expandFilterDialog(parentDiv) {
     cy.get(`${mapBottomItems} ${parentDiv} .toggle-icon-v--last`).click();
+}
+
+function closeFilterDialog(parentDiv) {
+    cy.get(`${mapBottomItems} ${parentDiv} .filters__header_close`).click();
 }
 
 function collapseFilterDialog(parentDiv) {

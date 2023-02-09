@@ -1,5 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
+    allDetailsEndpoint,
     collapseMyViewPanel,
     confirmNoChartFilterSelected,
     confirmNoChoroplethFilterSelected,
@@ -12,7 +13,10 @@ import {
     selectChoroplethDropdownOption,
     selectChartDropdownOption,
     setupInterceptions,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded,
+    collapseChoroplethFilterDialog,
+    setupInterceptionsForSpecificGeo,
+    closeChoroplethFilterDialog
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profile from "./profile.json";
@@ -20,6 +24,9 @@ import profiles from "./profiles.json";
 import profile_indicator_summary from "./profile_indicator_summary.json";
 import profile_indicator_data from "./profile_indicator_data.json";
 import themes from "./themes.json";
+import all_details_WC from "./WC/all_details.json";
+import profile_indicator_summary_WC from './WC/profile_indicator_summary.json';
+import profile_indicator_data_WC from './WC/profile_indicator_data.json';
 
 
 Given('I am on the Wazimap Homepage', () => {
@@ -43,19 +50,13 @@ When('I expand the filter dialog', () => {
     expandChoroplethFilterDialog();
 })
 
+When('I close the filter dialog', () => {
+    closeChoroplethFilterDialog();
+})
+
 When('I confirm that there are no filters in filter dialog', () => {
     confirmNoChoroplethFilterSelected();
 })
-
-Then(/^I check if url state is at "([^"]*)"$/, function (index) {
-  cy.location().then((location) => {
-    let urlParameter = location.search + location.hash;
-    console.log(urlParameter);
-    console.log(expectedQueryStringState[index])
-    expect(urlParameter).to.eq(expectedQueryStringState[index]);
-
-  });
-});
 
 When(/^I select "([^"]*)" from indicator dropdown in filter dialog on row "([^"]*)"$/, function (word, index) {
     selectChoroplethDropdownOption(word, 0, index);
@@ -134,6 +135,10 @@ Then(/^I confirm that there is an indicator filter for "([^"]*)" at index (\d+)$
         })
 });
 
+Then("I confirm that there are no filters in my view panel", function () {
+    cy.get('div[data-test-id="filtered-indicator-card"]').should("have.length", 0)
+});
+
 Then(/^I remove the indicator filter at index (\d+)$/, function (index) {
     cy.get('div[data-test-id="filtered-indicator-card"]')
         .eq(index)
@@ -146,7 +151,12 @@ When('I expand Rich Data Panel', () => {
 });
 
 Then(/^I confirm that the chart is not filtered$/, function () {
-    confirmNoChartFilterSelected();
+  cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0)').should('have.length', 1);
+  cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0) .profile-indicator__filter')
+      .eq(0)
+      .find(' .dropdown-menu__selected-item .truncate')
+      .should('have.text', 'Select an attribute');
+  cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0) .profile-indicator__filter').eq(1).should('have.class', 'disabled');
 });
 
 Then(/^I confirm that the chart is filtered by "([^"]*)" at index (\d+)$/, function (filter, index) {
@@ -167,4 +177,67 @@ Then(/^I confirm that the chart is filtered by "([^"]*)" at index (\d+)$/, funct
 
 When('I collapse Rich Data Panel', () => {
     cy.get('.rich-data-toggles .rich-data-panel__close').click();
+})
+
+When("I go back in browser history", () => {
+  cy.go("back");
+});
+
+When("I go forward in browser history", () => {
+  cy.go("forward");
+});
+
+When('I collapse Data Mapper', () => {
+    collapseChoroplethFilterDialog();
+})
+
+When('I navigate to WC', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(all_details_WC));
+        tempObj.boundary.properties.code = 'WC';
+        tempObj.profile.geography.code = 'WC';
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept(`/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(profile_indicator_summary_WC));
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept('api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (req) => {
+        req.reply({
+            statusCode: 200,
+            body: [],
+            forceNetworkError: false // default
+        })
+    })
+
+    cy.intercept('/api/v1/profile/8/geography/WC/indicator/**/child_data/', (request) => {
+      let tempObj = JSON.parse(JSON.stringify(profile_indicator_data_WC));
+      request.reply({
+          statusCode: 200,
+          body: tempObj,
+          forceNetworkError: false // default
+      });
+    })
+
+    cy.visit('/#geo:WC');
+})
+
+Then('I wait until map is ready for Western Cape', () => {
+    waitUntilGeographyIsLoaded('Western Cape');
+})
+
+When('I go back to root geograohy', () => {
+  cy.get('.map-location .location-tag .location-tag__name:contains("South Africa Test")', {timeout: 20000}).click({force: true});
 })

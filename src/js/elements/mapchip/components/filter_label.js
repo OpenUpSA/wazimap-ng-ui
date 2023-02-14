@@ -94,9 +94,21 @@ export class FilterLabel extends Component {
         this._filterHeaderLabelContainer.removeClass("notification-badges");
     }
 
-    compareFilters(previouslySelectedFilters, oldFilters) {
-        const showBadge = this.isEqualsJson(previouslySelectedFilters, (oldFilters[0]?.filters || []));
-        if (!showBadge) {
+    compareFilters(previouslySelectedFilters, oldFilters, siteWideFilters) {
+        let newFiltersClone = structuredClone(previouslySelectedFilters);
+        newFiltersClone.forEach(f => {
+            f.isSiteWideFilter = siteWideFilters.filter(x => x.indicatorValue === f.group && x.subIndicatorValue === f.value)[0] != null;
+        })
+        newFiltersClone = newFiltersClone.filter(x => !x.isSiteWideFilter);
+
+        let oldFiltersClone = structuredClone((oldFilters[0]?.filters || []));
+        oldFiltersClone.forEach(f => {
+            f.isSiteWideFilter = siteWideFilters.filter(x => x.indicatorValue === f.group && x.subIndicatorValue === f.value)[0] != null;
+        })
+        oldFiltersClone = oldFiltersClone.filter(x => !x.isSiteWideFilter);
+
+        const isEqual = this.isEqualsJson(newFiltersClone, oldFiltersClone);
+        if (!isEqual) {
             this.showNotificationBadge();
             this.showSnackbar();
             if (previouslySelectedFilters.length === 0) {

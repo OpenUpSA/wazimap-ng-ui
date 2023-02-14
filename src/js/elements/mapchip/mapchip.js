@@ -293,14 +293,17 @@ export class MapChip extends Component {
         const selectedFilters = dataFilterModel.previouslySelectedFilters;
         const defaultFilters = dataFilterModel?.configFilters?.defaults;
         if (defaultFilters) {
+            let filters = [];
             defaultFilters.forEach(item => {
-                if (selectedFilters[item.name] === undefined) {
-                    selectedFilters[item.name] = item.value
-                }
+                filters.push({
+                    group: item.name,
+                    value: item.value
+                })
             });
+            selectedFilters.push({filters: filters})
         }
 
-        this.filterLabel.compareFilters(this.appliedFilters, selectedFilters);
+        this.filterLabel.compareFilters(this.appliedFilters, selectedFilters, dataFilterModel.siteWideFilters);
         this.filterLabel.setFilterLabelTotalCount(groups);
         this.filterLabel.setFilterLabelSelectedCount({});
         this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);

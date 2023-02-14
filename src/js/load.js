@@ -39,7 +39,7 @@ import {configureTabNoticeEvents} from "./setup/tabnotice";
 import {configureTranslationEvents} from "./setup/translations";
 import {configureFacilityEvents} from "./setup/facilities";
 import {configureRichDataPanelEvents} from "./setup/richDataPanelLinkEvents";
-import {configurePage} from "./setup/general";
+import {configurePage, initialPageLoad} from "./setup/general";
 import {Translations} from "./elements/translations";
 import {StyleConfig} from "./elements/style_config";
 import {configureStyleConfigEvents} from "./setup/styleconfig";
@@ -107,13 +107,7 @@ class Application extends Component {
         configureStyleConfigEvents(controller, styleConfig);
         configureFacilityEvents(controller, {profileLoader: profileLoader});
         configureRichDataPanelEvents(controller, {richDataLinkRendrer: richDataLinkRendrer});
-
-        controller.on('profile.loaded', payload => {
-            // there seems to be a bug where menu items close if this is not set
-            $(".sub-category__dropdown_wrapper a").attr("href", "#");
-            controller.loadInitialFilters(payload.payload);
-        })
-
+        initialPageLoad(controller)
 
         preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))
 

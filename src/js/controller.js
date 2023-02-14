@@ -257,6 +257,22 @@ export default class Controller extends Component {
         this.updateShareUrl();
     }
 
+    pushState(currentState){
+      let profileView = "/";
+      if (currentState?.filters !== undefined && currentState.filters.length > 0){
+        profileView = `?profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
+      }
+
+      history.pushState(
+        {
+          "filters": this._filteredIndicators,
+          "profileView": currentState
+        },
+        '',
+        `${profileView}${window.location.hash}`
+      );
+    }
+
     updateShareUrl(){
       let selectedFilters = [];
       this._filteredIndicators.map(
@@ -276,33 +292,14 @@ export default class Controller extends Component {
       const profileView = JSON.parse(urlParams.get("profileView"));
       if (selectedFilters.length > 0){
         if (profileView === null){
-          history.pushState(
-            {
-              "filters": this._filteredIndicators,
-              "profileView": currentState
-            },
-            '',
-            `?profileView=${encodeURIComponent(JSON.stringify(currentState))}${window.location.hash}`
-          );
+          this.pushState(currentState);
         } else {
           if(!isEqual(profileView, currentState)){
-            history.pushState(
-              {
-                "filters": this._filteredIndicators,
-                "profileView": currentState
-              },
-              '',
-              `?profileView=${encodeURIComponent(JSON.stringify(currentState))}${window.location.hash}`
-            );
+            this.pushState(currentState);
           }
         }
       } else if (selectedFilters.length === 0 && profileView !== null) {
-        history.pushState(
-          {
-            "filters": this._filteredIndicators,
-            "profileView": currentState
-          }, '', `/${window.location.hash}`
-        );
+        this.pushState(currentState);
       }
     }
 

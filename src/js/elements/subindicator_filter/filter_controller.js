@@ -197,14 +197,14 @@ export class FilterController extends Component {
         this.isLoading = false;
     }
 
-    addEmptyFilter(isDefault = false, isExtra = true, isRequired = false, addAsFirstRow = false) {
+    addEmptyFilter(isDefault = false, isExtra = true, isRequired = false, addAsFirstRow = false, isPreviouslySelected = false) {
         if (this.model.dataFilterModel.availableFilters.length > 0) {
             const self = this;
 
             let filterRowContainer = this._rowContainer.cloneNode(true);
             $(filterRowContainer).removeClass('hidden').show();
 
-            let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, isRequired, this._elements);
+            let filterRow = new FilterRow(this, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, isRequired, isPreviouslySelected, this._elements);
             this.model.addFilterRow(filterRow);
 
             this.addFilterButton.show();
@@ -230,9 +230,11 @@ export class FilterController extends Component {
         let isDefault = true;
         let isExtra = false;
         let isRequired = true;
+        let isPreviouslySelected = true;
+        let addAsFirstRow = false;
         let index = 0;
 
-        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired);
+        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired, addAsFirstRow, isPreviouslySelected);
         try {
             if (filterRow !== undefined) {
                 filterRow.indicatorDropdown.disable();
@@ -253,8 +255,9 @@ export class FilterController extends Component {
         let isExtra = false;
         let isRequired = true;
         let addAsFirstRow = true;
+        let isPreviouslySelected = true;
 
-        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired, addAsFirstRow);
+        let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired, addAsFirstRow, isPreviouslySelected);
         try {
             if (filterRow !== undefined) {
                 filterRow.indicatorDropdown.disable();
@@ -270,8 +273,8 @@ export class FilterController extends Component {
         }
     }
 
-    addPreviouslySelectedFilters(group, isDefault) {
-        let filterRow = this.addEmptyFilter(isDefault);
+    addPreviouslySelectedFilters(group, isDefault, isPreviouslySelected) {
+        let filterRow = this.addEmptyFilter(isDefault, false, false, false, isPreviouslySelected);
 
         filterRow.setPrimaryIndexUsingValue(group.group);
         filterRow.setSecondaryIndexUsingValue(group.value);
@@ -284,14 +287,14 @@ export class FilterController extends Component {
             this.addFilterButton.disable();
     }
 
-    addFilter(filterName, isDefault = false, isExtra = true) {
+    addFilter(filterName, isDefault = false, isExtra = true, isPreviouslySelected = false) {
         const self = this;
 
         let dataFilter = this._dataFilterModel[filterName];
 
         if (dataFilter != undefined) {
             let filterRowContainer = $(this._elements.filterRowClass)[0].cloneNode(true);
-            let filterRow = new FilterRow(this, filterRowContainer, dataFilter, isDefault, isExtra, this._elements);
+            let filterRow = new FilterRow(this, filterRowContainer, dataFilter, isDefault, isExtra, isPreviouslySelected, this._elements);
             this.filterRows.push(filterRow);
             this._dataFilterModel.addFilter(filterName, this._elements.filterPanel);
 
@@ -326,18 +329,16 @@ export class FilterController extends Component {
 
     setDataFilterModel(dataFilterModel) {
         this.reset();
-
         this.model.dataFilterModel = dataFilterModel;
 
-        this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, () => {
+        this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, (data) => {
             if (this.filterCallback !== null) {
-                this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators, this.model.dataFilterModel.selectedFilterDetails);
+                this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators, this.model.dataFilterModel.selectedFilterDetails, data.updateSharedUrl);
             }
 
             this.updateAvailableFiltersOfRows();
             this.setAddFilterButton();
         })
-
         // first add previous filters
         this.checkAndAddPreviouslySelectedFilters();
         // then add default filters
@@ -435,10 +436,10 @@ export class FilterController extends Component {
     checkAndAddPreviouslySelectedFilters() {
         const self = this;
         let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilterGroups;
-
         previouslySelectedFilters.forEach((group, index) => {
-            if (group.group != this.model.dataFilterModel.primaryGroup) {
-                self.addPreviouslySelectedFilters(group, index === 0);
+            const alreadyAdded = this.model.filterRows.some(x => x.model.currentIndicatorValue === group.group && x.model.currentSubindicatorValue === group.value);
+            if (!alreadyAdded && group.group != this.model.dataFilterModel.primaryGroup) {
+                self.addPreviouslySelectedFilters(group, index === 0, true);
             }
         })
     }

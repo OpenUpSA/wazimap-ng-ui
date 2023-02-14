@@ -19,6 +19,7 @@ class FilterRowModel extends Component {
                 isDefault,
                 isExtra,
                 isRequired,
+                isPreviouslySelected,
                 filterPanel = SidePanels.PANELS.dataMapper,
                 defaultIndicatorText = FilterRowModel.ALL_INDICATORS,
                 defaultSubindicatorText = FilterRowModel.ALL_VALUES
@@ -33,6 +34,7 @@ class FilterRowModel extends Component {
         this._defaultSubindicatorText = defaultSubindicatorText
         this._dataFilterModel = null;
         this._filterPanel = filterPanel;
+        this._isPreviouslySelected = isPreviouslySelected;
 
         this.dataFilterModel = dataFilterModel;
     }
@@ -79,6 +81,14 @@ class FilterRowModel extends Component {
         return this._isRequired;
     }
 
+    get isPreviouslySelected() {
+        return this._isPreviouslySelected;
+    }
+
+    set isPreviouslySelected(value) {
+        this._isPreviouslySelected = value;
+    }
+
     get currentIndicatorValue() {
         /**
          * Return the currently selected indicatorValue or defaultText if none is selected
@@ -95,10 +105,12 @@ class FilterRowModel extends Component {
          */
 
         let prevIndicator = this._currentIndicatorValue;
+        let updateShareUrl = false;
         this._currentIndicatorValue = value;
 
         if (prevIndicator != null && prevIndicator !== FilterRowModel.ALL_VALUES) {
             this.dataFilterModel.removeFilter(prevIndicator);
+            updateShareUrl = true;
         }
 
         if (value != null && value !== FilterRowModel.ALL_VALUES) {
@@ -106,7 +118,7 @@ class FilterRowModel extends Component {
         }
         if (!this.isRequired) {
             // no need to filter data before the subIndicator value is selected if isRequired = true
-            this.dataFilterModel.updateFilteredData();
+            this.dataFilterModel.updateFilteredData(updateShareUrl);
         }
 
         this.triggerEvent(FilterRowModel.EVENTS.indicatorSelected, this);
@@ -128,7 +140,9 @@ class FilterRowModel extends Component {
             if (value !== undefined) {
                 this.dataFilterModel.setSelectedSubindicator(this.currentIndicatorValue, value);
             }
-            this.dataFilterModel.updateFilteredData();
+
+            let updateSharedUrl = value !== undefined && !this.isPreviouslySelected;
+            this.dataFilterModel.updateFilteredData(updateSharedUrl=updateSharedUrl);
             this.triggerEvent(FilterRowModel.EVENTS.updated, this);
         }
     }
@@ -157,14 +171,13 @@ export class FilterRow extends Component {
     static SELECT_ATTRIBUTE = 'Select an attribute';
     static SELECT_VALUE = 'Select a value';
 
-    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true, isRequired = false, elements) {
+    constructor(parent, container, dataFilterModel = null, isDefault = false, isExtra = true, isRequired = false, isPreviouslySelected = false, elements) {
         super(parent);
         this._container = container;
         this._elements = elements;
 
         this.prepareDomElements();
-
-        this._model = new FilterRowModel(this, dataFilterModel, isDefault, isExtra, isRequired, elements.filterPanel);
+        this._model = new FilterRowModel(this, dataFilterModel, isDefault, isExtra, isRequired, isPreviouslySelected, elements.filterPanel);
 
         if (this.model.isDefault)
             this.hideRemoveButton();
@@ -229,6 +242,9 @@ export class FilterRow extends Component {
         })
 
         this.subIndicatorDropdown.model.on(DropdownModel.EVENTS.selected, dropdownModel => {
+            if (dropdownModel.manualTrigger){
+              this.model.isPreviouslySelected = false;
+            }
             self.onSubindicatorSelected(dropdownModel.currentItem);
         })
 

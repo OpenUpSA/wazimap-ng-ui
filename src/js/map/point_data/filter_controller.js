@@ -130,7 +130,7 @@ export class FilterController extends Component {
             let filterRowContainer = self._rowContainer.cloneNode(true);
             $(filterRowContainer).removeClass('hidden').show();
 
-            let filterRow = new FilterRow(self, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, false, self.elements);
+            let filterRow = new FilterRow(self, filterRowContainer, this.model.dataFilterModel, isDefault, isExtra, false, false, self.elements);
             this.model.addFilterRow(filterRow);
 
             $(filterRow.container).insertBefore($(self.container).find(self.elements.addButton));

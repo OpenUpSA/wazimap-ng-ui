@@ -238,6 +238,6 @@ Then('I wait until map is ready for Western Cape', () => {
     waitUntilGeographyIsLoaded('Western Cape');
 })
 
-When('I go back to root geograohy', () => {
+When('I go back to root geography', () => {
   cy.get('.map-location .location-tag .location-tag__name:contains("South Africa Test")', {timeout: 20000}).click({force: true});
 })

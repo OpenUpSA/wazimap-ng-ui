@@ -210,7 +210,7 @@ Feature: Sharing url
     Then I confirm that there is an indicator filter for "Rich data view:Language most spoken at home:language:Afrikaans" at index 2
     Then I collapse My View Window
 
-    When I go back to root geograohy
+    When I go back to root geography
     Then I expand My View Window
     And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0

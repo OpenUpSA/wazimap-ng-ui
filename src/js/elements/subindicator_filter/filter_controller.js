@@ -253,6 +253,8 @@ export class FilterController extends Component {
             })
 
             filterRow.on('filterRow.filter.locked', () => {
+                filterRow.indicatorDropdown.disable();
+                filterRow.subIndicatorDropdown.disable();
                 this.parent.triggerEvent('filterRow.filter.locked', {
                     currentIndicatorValue: filterRow.model.currentIndicatorValue,
                     currentSubIndicatorValue: filterRow.model.currentSubindicatorValue
@@ -549,6 +551,8 @@ export class FilterController extends Component {
             let isFilteredIndicator = filteredIndicators.some(x => x.filters.some(y => y.group === payload.removedSiteWideFilter.indicatorValue
                 && y.value === payload.removedSiteWideFilter.subIndicatorValue));
             if (isFilteredIndicator) {
+                filterRow.indicatorDropdown.enable();
+                filterRow.subIndicatorDropdown.enable();
                 return;
             }
 

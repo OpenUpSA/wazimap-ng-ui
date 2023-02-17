@@ -74,9 +74,9 @@ When(/^I select "([^"]*)" from subIndicator dropdown in chart filter/, function 
     selectChartDropdownOption(word, 1);
 });
 
-When("I remove filter from mapchip", function (){
-  cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(1)`).should('have.length', 1);
-  cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(1) .mapping-options__remove-filter:visible`).click();
+When("I remove filter from mapchip", function () {
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(1)`).should('have.length', 1);
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(1) .mapping-options__remove-filter:visible`).click();
 });
 
 Then(/^I confirm that the choropleth is filtered by "([^"]*)" at index (\d+)$/, function (filter, index) {
@@ -96,9 +96,9 @@ Then(/^I confirm that the choropleth is filtered by "([^"]*)" at index (\d+)$/, 
 });
 
 Then("I visit current url", () => {
-  cy.url().then(($url) => {
-    cy.visit($url);
-  });
+    cy.url().then(($url) => {
+        cy.visit($url);
+    });
 });
 
 When('I expand My View Window', () => {
@@ -151,12 +151,12 @@ When('I expand Rich Data Panel', () => {
 });
 
 Then(/^I confirm that the chart is not filtered$/, function () {
-  cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0)').should('have.length', 1);
-  cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0) .profile-indicator__filter')
-      .eq(0)
-      .find(' .dropdown-menu__selected-item .truncate')
-      .should('have.text', 'Select an attribute');
-  cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0) .profile-indicator__filter').eq(1).should('have.class', 'disabled');
+    cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0)').should('have.length', 1);
+    cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0) .profile-indicator__filter')
+        .eq(0)
+        .find(' .dropdown-menu__selected-item .truncate')
+        .should('have.text', 'Select an attribute');
+    cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0) .profile-indicator__filter').eq(1).should('have.class', 'disabled');
 });
 
 Then(/^I confirm that the chart is filtered by "([^"]*)" at index (\d+)$/, function (filter, index) {
@@ -180,11 +180,11 @@ When('I collapse Rich Data Panel', () => {
 })
 
 When("I go back in browser history", () => {
-  cy.go("back");
+    cy.go("back");
 });
 
 When("I go forward in browser history", () => {
-  cy.go("forward");
+    cy.go("forward");
 });
 
 When('I collapse Data Mapper', () => {
@@ -223,12 +223,12 @@ When('I navigate to WC', () => {
     })
 
     cy.intercept('/api/v1/profile/8/geography/WC/indicator/**/child_data/', (request) => {
-      let tempObj = JSON.parse(JSON.stringify(profile_indicator_data_WC));
-      request.reply({
-          statusCode: 200,
-          body: tempObj,
-          forceNetworkError: false // default
-      });
+        let tempObj = JSON.parse(JSON.stringify(profile_indicator_data_WC));
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        });
     })
 
     cy.visit('/#geo:WC');
@@ -239,5 +239,13 @@ Then('I wait until map is ready for Western Cape', () => {
 })
 
 When('I go back to root geography', () => {
-  cy.get('.map-location .location-tag .location-tag__name:contains("South Africa Test")', {timeout: 20000}).click({force: true});
+    cy.get('.map-location .location-tag .location-tag__name:contains("South Africa Test")', {timeout: 20000}).click({force: true});
+})
+
+Then('I add new filter', () => {
+    cy.get(`${mapBottomItems} .map-options .mapping-options__add-filter`).click();
+})
+
+Then('I confirm that the add new filter button exists', () => {
+    cy.get(`${mapBottomItems} .map-options .mapping-options__add-filter`).should('be.visible');
 })

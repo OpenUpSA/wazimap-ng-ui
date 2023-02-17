@@ -35,7 +35,7 @@
                   ],
                   "dataset": 241,
                   "name": "age",
-                  "can_aggregate": false,
+                  "can_aggregate": true,
                   "can_filter": true
                 },
                 {
@@ -66,19 +66,6 @@
                   ],
                   "dataset": 241,
                   "name": "language",
-                  "can_aggregate": true,
-                  "can_filter": true
-                },
-                {
-                  "subindicators": [
-                    "Black African",
-                    "Coloured",
-                    "White",
-                    "Other",
-                    "Indian or Asian"
-                  ],
-                  "dataset": 241,
-                  "name": "race",
                   "can_aggregate": true,
                   "can_filter": true
                 }
@@ -169,19 +156,6 @@
                   ],
                   "dataset": 241,
                   "name": "language",
-                  "can_aggregate": true,
-                  "can_filter": true
-                },
-                {
-                  "subindicators": [
-                    "Black African",
-                    "Coloured",
-                    "White",
-                    "Other",
-                    "Indian or Asian"
-                  ],
-                  "dataset": 241,
-                  "name": "race",
                   "can_aggregate": true,
                   "can_filter": true
                 }

@@ -281,7 +281,13 @@ export default class Controller extends Component {
           if (nonDefaultFilters.length > 0){
             selectedFilters.push({
               "indicatorId": indicatorFilter.indicatorId,
-              "filters": nonDefaultFilters
+              "filters": nonDefaultFilters.map(obj => {
+                return {
+                  "group": obj.group,
+                  "value": obj.value,
+                  "appliesTo": obj.appliesTo
+                }
+              })
             })
           }
         }
@@ -328,7 +334,14 @@ export default class Controller extends Component {
           return {
             indicatorId: indicator.indicatorId,
             indicatorTitle: indicatorTitle,
-            filters: indicator.filters
+            filters: indicator.filters.map(obj => {
+              return {
+                "group": obj.group,
+                "value": obj.value,
+                "appliesTo": obj.appliesTo,
+                "isDefault": false
+              }
+            })
           }
         });
 

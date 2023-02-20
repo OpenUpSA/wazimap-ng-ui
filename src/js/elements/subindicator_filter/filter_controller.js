@@ -551,7 +551,17 @@ export class FilterController extends Component {
             let isFilteredIndicator = filteredIndicators.some(x => x.filters.some(y => y.group === payload.removedSiteWideFilter.indicatorValue
                 && y.value === payload.removedSiteWideFilter.subIndicatorValue));
             if (isFilteredIndicator) {
-                filterRow.indicatorDropdown.enable();
+                const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
+                let nonAggregatableGroupsClone = structuredClone(nonAggregatableGroups);
+                nonAggregatableGroupsClone = nonAggregatableGroupsClone.filter(x => x._name === payload.removedSiteWideFilter.indicatorValue);
+
+                const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+                let defaultGroupsClone = structuredClone(defaultGroups);
+                defaultGroupsClone = defaultGroupsClone.filter(x => x.group === payload.removedSiteWideFilter.indicatorValue);
+
+                if (nonAggregatableGroupsClone.length <= 0 && defaultGroupsClone.length <= 0) {
+                    filterRow.indicatorDropdown.enable();
+                }
                 filterRow.subIndicatorDropdown.enable();
                 return;
             }

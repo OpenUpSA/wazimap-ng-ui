@@ -512,13 +512,12 @@ export class FilterController extends Component {
     checkAndAddSiteWideFilters() {
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
             const isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
-            const isIndicatorValueAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
             const groupLookup = this.model.dataFilterModel.groupLookup[filter.indicatorValue];
             const isPrimaryGroup = this.model.dataFilterModel.primaryGroup === groupLookup?.name;
             const isIndicatorAvailable = groupLookup !== undefined && !isPrimaryGroup && groupLookup.values.indexOf(filter.subIndicatorValue) >= 0;
 
-            if (!isIndicatorValueAlreadyFiltered) {
-                if (!isIndicatorAlreadyFiltered && isIndicatorAvailable) {
+            if (!isIndicatorAlreadyFiltered) {
+                if (isIndicatorAvailable) {
                     let filterRow = this.addEmptyFilter(true)
 
                     filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
@@ -542,7 +541,7 @@ export class FilterController extends Component {
                     let isNonAggregatable = nonAggregatableGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.name && existingFilterRow.model.currentSubindicatorValue === x.values[0]);
                     let isDefault = defaultGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.group && existingFilterRow.model.currentSubindicatorValue === x.value);
 
-                    if (isNonAggregatable || isDefault) {
+                    if ((isNonAggregatable || isDefault) && isIndicatorAvailable) {
                         this.addUnavailableFilterRow(existingFilterRow.model.currentIndicatorValue, existingFilterRow.model.currentSubindicatorValue);
                         existingFilterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
                     } else {

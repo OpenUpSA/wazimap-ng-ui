@@ -510,8 +510,7 @@ export class FilterController extends Component {
     checkAndAddSiteWideFilters() {
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
             const isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
-            const isIndicatorValueAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue
-                && x.model.currentSubindicatorValue === filter.subIndicatorValue);
+            const isIndicatorValueAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
             const groupLookup = this.model.dataFilterModel.groupLookup[filter.indicatorValue];
             const isPrimaryGroup = this.model.dataFilterModel.primaryGroup === groupLookup?.name;
             const isIndicatorAvailable = groupLookup !== undefined && !isPrimaryGroup && groupLookup.values.indexOf(filter.subIndicatorValue) >= 0;
@@ -526,13 +525,36 @@ export class FilterController extends Component {
                     filterRow.subIndicatorDropdown.disable();
                 } else {
                     // add an unavailable filterRow
-                    let filterRow = this.addEmptyFilter(true, true, false, false, true);
-                    filterRow.model.isUnavailable = true;
-                    filterRow.setPrimaryValueUnavailable(filter.indicatorValue);
-                    filterRow.setSecondaryValueUnavailable(filter.subIndicatorValue);
+                    this.addUnavailableFilterRow(filter.indicatorValue, filter.subIndicatorValue);
+                }
+            } else {
+                // indicator is filtered but
+                // still update it if it is the default or non-aggr value
+                // todo : check if it's an indicator-specific filter
+                const existingFilterRow = this.model.filterRows.filter(x => x.model.currentIndicatorValue === filter.indicatorValue)[0];
+
+                if (existingFilterRow.model.currentSubindicatorValue !== filter.subIndicatorValue) {
+                    // update only if it is default or non-aggr
+                    // that way we will not update if it is indicator-specific
+                    let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
+                    let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+                    let isNonAggregatable = nonAggregatableGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.name && existingFilterRow.model.currentSubindicatorValue === x.values[0]);
+                    let isDefault = defaultGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.group && existingFilterRow.model.currentSubindicatorValue === x.value);
+
+                    if (isNonAggregatable || isDefault) {
+                        this.addUnavailableFilterRow(existingFilterRow.model.currentIndicatorValue, existingFilterRow.model.currentSubindicatorValue);
+                        existingFilterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
+                    }
                 }
             }
         })
+    }
+
+    addUnavailableFilterRow(indicatorValue, subIndicatorValue) {
+        let filterRow = this.addEmptyFilter(true, true, false, false, true);
+        filterRow.model.isUnavailable = true;
+        filterRow.setPrimaryValueUnavailable(indicatorValue);
+        filterRow.setSecondaryValueUnavailable(subIndicatorValue);
     }
 
     checkAndRemoveSiteWideFilters(payload, panel) {

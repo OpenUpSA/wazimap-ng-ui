@@ -55,8 +55,8 @@ const LockButton = (props) => {
     }
 
     const lockButtonClicked = () => {
-        if (isUnavailable) {
-            return
+        if (isUnavailable || ((isLocked && isUnavailable) || (!isLocked && alreadySiteWide()))) {
+            return;
         }
 
         let newVal = !isLocked;

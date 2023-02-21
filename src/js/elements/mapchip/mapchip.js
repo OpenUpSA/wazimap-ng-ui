@@ -296,12 +296,17 @@ export class MapChip extends Component {
         if (defaultFilters) {
             let filters = [];
             defaultFilters.forEach(item => {
-                filters.push({
-                    group: item.name,
-                    value: item.value
-                })
+                const alreadyAdded = selectedFilters.some(x => x.filters.some(y => y.appliesTo.indexOf('data_explorer') >= 0 && y.group === item.name));
+                if (!alreadyAdded) {
+                    filters.push({
+                        group: item.name,
+                        value: item.value
+                    })
+                }
             });
-            selectedFilters.push({filters: filters})
+            if (filters.length > 0) {
+                selectedFilters.push({filters: filters})
+            }
         }
 
         this.filterLabel.compareFilters(this.appliedFilters, selectedFilters, dataFilterModel.siteWideFilters);

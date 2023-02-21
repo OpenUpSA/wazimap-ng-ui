@@ -392,7 +392,7 @@ export class FilterController extends Component {
             this.updateAvailableFiltersOfRows();
             this.setAddFilterButton();
         })
-        
+
         // 1 - add previous filters
         this.checkAndAddPreviouslySelectedFilters();
         // 2 - add default filters
@@ -532,7 +532,6 @@ export class FilterController extends Component {
             } else {
                 // indicator is filtered but
                 // still update it if it is the default or non-aggr value
-                // todo : check if it's an indicator-specific filter
                 const existingFilterRow = this.model.filterRows.filter(x => x.model.currentIndicatorValue === filter.indicatorValue)[0];
 
                 if (existingFilterRow.model.currentSubindicatorValue !== filter.subIndicatorValue) {
@@ -546,6 +545,9 @@ export class FilterController extends Component {
                     if (isNonAggregatable || isDefault) {
                         this.addUnavailableFilterRow(existingFilterRow.model.currentIndicatorValue, existingFilterRow.model.currentSubindicatorValue);
                         existingFilterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);
+                    } else {
+                        // add an unavailable filterRow
+                        this.addUnavailableFilterRow(filter.indicatorValue, filter.subIndicatorValue);
                     }
                 }
             }

@@ -61,6 +61,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             x.filters = x.filters.filter(x => x.appliesTo.indexOf(SidePanels.PANELS.dataMapper) >= 0);
         });
 
+
         const metadata = args.payload.metadata;
         const params = {
             metadata: metadata,

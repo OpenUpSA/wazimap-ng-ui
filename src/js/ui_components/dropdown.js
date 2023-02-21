@@ -18,6 +18,7 @@ export class DropdownModel extends Observable {
         this._currentIndex = currentIndex;
         this._isDisabled = isDisabled;
         this._isUnavailable = isUnavailable;
+        this._manualTrigger = false;
     }
 
     get items() {
@@ -74,6 +75,14 @@ export class DropdownModel extends Observable {
         } else {
             this.triggerEvent(DropdownModel.EVENTS.available);
         }
+     }
+        
+    get manualTrigger() {
+        return this._manualTrigger;
+    }
+
+    set manualTrigger(val) {
+      this._manualTrigger = val;
     }
 
     getIndexForValue(value) {
@@ -105,6 +114,7 @@ export class Dropdown extends Component {
         this._model = new DropdownModel(items, 0);
         this._defaultText = defaultText;
         this._listItemElements = [];
+        this._manualTrigger = false;
 
         this.prepareDomElements();
         this.prepareEvents();
@@ -159,6 +169,7 @@ export class Dropdown extends Component {
         const self = this;
 
         $(this._trigger).on('click', () => {
+            self.model.manualTrigger = true;
             self.showItems();
         })
     }

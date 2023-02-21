@@ -48,7 +48,6 @@ export class Chart extends Component {
         super(parent);
 
         this._isToggleDisabled = false;
-
         this.data = data;
         this.title = title;
         this._config = config;
@@ -454,7 +453,7 @@ export class Chart extends Component {
         this._filterController.setDataFilterModel(dataFilterModel);
     };
 
-    applyFilter = (filteredData, selectedFilter, selectedFilterDetails) => {
+    applyFilter = (filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl) => {
         this.filteredData = filteredData;
         this.filterGroups.forEach((group) => {
             let {name: filterName} = group;
@@ -479,7 +478,8 @@ export class Chart extends Component {
         const payload = {
             indicatorId: this.data.id,
             selectedFilter: selectedFilterDetails,
-            title: this.title
+            title: this.title,
+            updadateSharedUrl: updadateSharedUrl,
         };
         this.triggerEvent('profile.chart.filtered', payload);
 

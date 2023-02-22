@@ -97,14 +97,6 @@
                   "minX": 0
                 }
               },
-              "filter": {
-                "defaults": [
-                  {
-                    "name": "age group",
-                    "value": "15-35 (ZA)"
-                  }
-                ]
-              },
               "chartType": "line",
               "disableToggle": true
             },
@@ -207,14 +199,6 @@
                   "maxX": 1,
                   "minX": 0
                 }
-              },
-              "filter": {
-                "defaults": [
-                  {
-                    "name": "age group",
-                    "value": "15-35 (ZA)"
-                  }
-                ]
               },
               "xTicks": 6,
               "disableToggle": true

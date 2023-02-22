@@ -572,38 +572,36 @@ export class FilterController extends Component {
         })
 
         this.model.filterRows.forEach((filterRow) => {
-            let isRemoved;
-            let isFilteredIndicator = filteredIndicators.some(x => x.filters.some(y => y.group === payload.removedSiteWideFilter.indicatorValue
-                && y.value === payload.removedSiteWideFilter.subIndicatorValue));
-            if (isFilteredIndicator) {
-                const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
-                let nonAggregatableGroupsClone = structuredClone(nonAggregatableGroups);
-                nonAggregatableGroupsClone = nonAggregatableGroupsClone.filter(x => x._name === payload.removedSiteWideFilter.indicatorValue);
-
-                const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
-                let defaultGroupsClone = structuredClone(defaultGroups);
-                defaultGroupsClone = defaultGroupsClone.filter(x => x.group === payload.removedSiteWideFilter.indicatorValue);
-
-                if (nonAggregatableGroupsClone.length <= 0 && defaultGroupsClone.length <= 0) {
-                    filterRow.indicatorDropdown.enable();
-                }
-                filterRow.subIndicatorDropdown.enable();
-                return;
-            }
-
             if (filterRow.model.isUnavailable) {
-                // filterRow is unavailable
-                // check the dropdown values
-                isRemoved = (payload.removedSiteWideFilter.indicatorValue === filterRow.indicatorDropdown.getText()
-                    && payload.removedSiteWideFilter.subIndicatorValue === filterRow.subIndicatorDropdown.getText());
+                // remove if it is unavailable
+                this.removeRowAndAddDefaults(filterRow);
             } else {
                 // filterRow is available
+                let isRemoved;
+                let isFilteredIndicator = filteredIndicators.some(x => x.filters.some(y => y.group === payload.removedSiteWideFilter.indicatorValue
+                    && y.value === payload.removedSiteWideFilter.subIndicatorValue));
+                if (isFilteredIndicator) {
+                    const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
+                    let nonAggregatableGroupsClone = structuredClone(nonAggregatableGroups);
+                    nonAggregatableGroupsClone = nonAggregatableGroupsClone.filter(x => x._name === payload.removedSiteWideFilter.indicatorValue);
+
+                    const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
+                    let defaultGroupsClone = structuredClone(defaultGroups);
+                    defaultGroupsClone = defaultGroupsClone.filter(x => x.group === payload.removedSiteWideFilter.indicatorValue);
+
+                    if (nonAggregatableGroupsClone.length <= 0 && defaultGroupsClone.length <= 0) {
+                        filterRow.indicatorDropdown.enable();
+                    }
+                    filterRow.subIndicatorDropdown.enable();
+                    return;
+                }
+
                 isRemoved = (payload.removedSiteWideFilter.indicatorValue === filterRow.model.currentIndicatorValue
                     && payload.removedSiteWideFilter.subIndicatorValue === filterRow.model.currentSubindicatorValue);
-            }
 
-            if (isRemoved) {
-                this.removeRowAndAddDefaults(filterRow);
+                if (isRemoved) {
+                    this.removeRowAndAddDefaults(filterRow);
+                }
             }
         })
     }

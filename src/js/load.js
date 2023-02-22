@@ -86,7 +86,7 @@ class Application extends Component {
         const translations = new Translations(this, config.config.translations);
         const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled);
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
-        const myView = new MyView(this, controller);
+        const myView = new MyView(this, controller, api, profileId);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);

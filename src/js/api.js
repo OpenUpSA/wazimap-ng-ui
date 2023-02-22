@@ -77,6 +77,11 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
+    loadProfileIndicators(profileId) {
+        let url = `${this.baseUrl}/profiles/${profileId}/categories/?format=json`
+        return this.loadUrl(url);
+    }
+
     async waitToLogIn() {
         let count = 0;
         while (true) {

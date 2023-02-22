@@ -1,11 +1,14 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import MyViewHeader from "./my_view_header";
 import ViewSettings from "./view_settings";
-import {PanelContainer} from "./styled_elements";
+import {PanelContainer, LoadingIconContainer} from "./styled_elements";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Panel = (props) => {
     const [filteredIndicators, setFilteredIndicators] = useState([]);
     const [startedListening, setStartedListening] = useState(false);
+    const [profileIndicators, setProfileIndicators] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     if (!startedListening) {
         props.controller.on('my_view.filteredIndicators.updated', payload => {
@@ -13,6 +16,17 @@ const Panel = (props) => {
             setStartedListening(true);
         });
     }
+
+    useEffect(() => {
+        setLoading(true);
+        props.api.loadProfileIndicators(props.profileId).then(
+          (data) => {
+            setLoading(false);
+            setProfileIndicators(data);
+        }).catch((response) => {
+            throw(response);
+        })
+    }, [props.api, props.profileId, setProfileIndicators, setLoading]);
 
     const removeFilter = (filteredIndicator, selectedFilter) => {
         props.controller.triggerEvent('my_view.filteredIndicators.removed', {
@@ -26,11 +40,18 @@ const Panel = (props) => {
             className={'narrow-scroll'}
             data-test-id={'my-view-panel'}
         >
-            <MyViewHeader/>
-            <ViewSettings
-                filteredIndicators={filteredIndicators}
-                removeFilter={(fi, sf) => removeFilter(fi, sf)}
-            />
+          <MyViewHeader/>
+          {loading ?
+              <LoadingIconContainer>
+                <CircularProgress/>
+              </LoadingIconContainer>
+            :
+              <ViewSettings
+                  filteredIndicators={filteredIndicators}
+                  profileIndicators={profileIndicators}
+                  removeFilter={(fi, sf) => removeFilter(fi, sf)}
+              />
+          }
         </PanelContainer>
     );
 }

@@ -13,7 +13,8 @@ import {
     StyledAccordionSummary,
     StyledTypography, StyledTypographyWithBottomBorder,
     ViewSettingsTitle
-} from "./styled_elements"
+} from "./styled_elements";
+import {renderIndicatorTreeView} from "./indicator_tree_view";
 import {Grid} from "@mui/material";
 
 const ViewSettings = (props) => {
@@ -120,6 +121,16 @@ const ViewSettings = (props) => {
                     {renderFilteredIndicators()}
                     <HelpText>
                         Any indicators you adjust will appear here
+                    </HelpText>
+                </StyledAccordionDetails>
+
+                <StyledAccordionDetails>
+                    <StyledTypographyWithBottomBorder>
+                        HIDDEN INDICATORS
+                    </StyledTypographyWithBottomBorder>
+                      <renderIndicatorTreeView/>
+                    <HelpText>
+                        Hidden indicators are not shownin the Data Mapper panel to help focus your view.
                     </HelpText>
                 </StyledAccordionDetails>
             </StyledAccordion>

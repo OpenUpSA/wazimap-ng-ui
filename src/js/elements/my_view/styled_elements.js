@@ -145,3 +145,10 @@ export const AppliedPanelInfo = styled(Box)(() => ({
     marginRight: '6px',
     fontSize: '12px'
 }));
+
+export const LoadingIconContainer = styled(Box)(() => ({
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
+    alignItems: 'center'
+}));

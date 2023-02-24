@@ -98,7 +98,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     })
 
     controller.on('my_view.siteWideFilters.updated', payload => {
-        if (mapchip.filterController == null) {
+        if (mapchip.filterController == null || controller.state.subindicator == null) {
             return;
         }
 

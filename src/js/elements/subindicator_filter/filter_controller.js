@@ -178,8 +178,13 @@ export class FilterController extends Component {
         const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
         const defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
         const previouslySelectedFilterGroups = this.model.dataFilterModel.previouslySelectedFilterGroups;
+        const siteWideFilters = this.model.dataFilterModel.siteWideFilters;
 
-        if (nonAggregatableGroups.length <= 0 && defaultGroups.length <= 0 && previouslySelectedFilterGroups.length <= 0 && this.model.dataFilterModel.availableFilters.length <= 0) {
+        if (nonAggregatableGroups.length <= 0
+            && defaultGroups.length <= 0
+            && previouslySelectedFilterGroups.length <= 0
+            && siteWideFilters.length <= 0
+            && this.model.dataFilterModel.availableFilters.length <= 0) {
             return false;
         } else {
             return true;

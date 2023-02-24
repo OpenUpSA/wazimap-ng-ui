@@ -1,28 +1,50 @@
-import * as React from 'react';
 import TreeView from '@mui/lab/TreeView';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
+import clsx from "clsx";
 
-const renderIndicatorTreeView = (props) => {
+const CustomContent = React.forwardRef(function CustomContent(props, ref) {
+  const {
+    classes,
+    label,
+    nodeId,
+    icon: iconProp,
+    expansionIcon,
+    displayIcon,
+    onDelete
+  } = props;
+
+  const {
+    disabled,
+    expanded,
+    selected,
+    focused,
+    handleExpansion,
+    handleSelection,
+    preventSelection
+  } = useTreeItem(nodeId);
+
+  const handleDelete = () => onDelete(nodeId);
+
   return (
-    <TreeView
-      aria-label="file system navigator"
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
-      sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+    <div
+      className={clsx(classes.root, {
+        [classes.expanded]: expanded,
+        [classes.selected]: selected,
+        [classes.focused]: focused,
+        [classes.disabled]: disabled
+      })}
+      onMouseDown={preventSelection}
+      ref={ref}
     >
-      <TreeItem nodeId="1" label="Applications">
-        <TreeItem nodeId="2" label="Calendar" />
-      </TreeItem>
-      <TreeItem nodeId="5" label="Documents">
-        <TreeItem nodeId="10" label="OSS" />
-        <TreeItem nodeId="6" label="MUI">
-          <TreeItem nodeId="8" label="index.js" />
-        </TreeItem>
-      </TreeItem>
-    </TreeView>
+      <div onClick={handleExpansion} className={classes.iconContainer}>
+        {icon}
+      </div>
+      <Button size="small" onClick={handleDelete}>
+        <p>DELETE<p>
+      </Button>
+        {label}
+    </div>
   );
-}
+});
 
-export default renderIndicatorTreeView;
+export default CustomContent;

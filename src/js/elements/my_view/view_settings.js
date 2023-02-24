@@ -14,8 +14,28 @@ import {
     StyledTypography, StyledTypographyWithBottomBorder,
     ViewSettingsTitle
 } from "./styled_elements";
-import {renderIndicatorTreeView} from "./indicator_tree_view";
 import {Grid} from "@mui/material";
+
+
+import TreeView from '@mui/lab/TreeView';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import TreeItem from '@mui/lab/TreeItem';
+
+import {CustomContent} from "./indicator_tree_view";
+
+
+function MyTreeItem(props) {
+  return (
+    <TreeItem
+      {...props}
+      ContentComponent={CustomContent}
+      ContentProps={{
+        onDelete: (nodeId) => console.log("delete", nodeId)
+      }}
+    />
+  );
+}
+
 
 const ViewSettings = (props) => {
     const [expanded, setExpanded] = useState('');
@@ -94,6 +114,7 @@ const ViewSettings = (props) => {
         )
     }
 
+
     return (
         <Container>
             <ViewSettingsTitle>
@@ -128,7 +149,25 @@ const ViewSettings = (props) => {
                     <StyledTypographyWithBottomBorder>
                         HIDDEN INDICATORS
                     </StyledTypographyWithBottomBorder>
-                      <renderIndicatorTreeView/>
+                    <TreeView
+  defaultCollapseIcon={<ExpandMoreIcon />}
+  defaultExpandIcon={<ChevronRightIcon />}
+  multiSelect
+>
+  <MyTreeItem nodeId="1" label="Applications">
+    <MyTreeItem nodeId="2" label="Calendar" />
+    <MyTreeItem nodeId="3" label="Chrome" />
+    <MyTreeItem nodeId="4" label="Webstorm" />
+  </MyTreeItem>
+  <MyTreeItem nodeId="5" label="Documents">
+    <MyTreeItem nodeId="6" label="Material-UI">
+      <MyTreeItem nodeId="7" label="src">
+        <MyTreeItem nodeId="8" label="index.js" />
+        <MyTreeItem nodeId="9" label="tree-view.js" />
+      </MyTreeItem>
+    </MyTreeItem>
+  </MyTreeItem>
+</TreeView>
                     <HelpText>
                         Hidden indicators are not shownin the Data Mapper panel to help focus your view.
                     </HelpText>

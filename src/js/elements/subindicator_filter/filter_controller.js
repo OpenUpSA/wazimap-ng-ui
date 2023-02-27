@@ -554,6 +554,11 @@ export class FilterController extends Component {
                         // add an unavailable filterRow
                         this.addUnavailableFilterRow(filter.indicatorValue, filter.subIndicatorValue);
                     }
+                } else {
+                    // no need to update dropdowns
+                    // disable the dropdowns
+                    existingFilterRow.indicatorDropdown.disable();
+                    existingFilterRow.subIndicatorDropdown.disable();
                 }
             }
         })

@@ -226,7 +226,8 @@ export default class Controller extends Component {
 
                     let filtersToRemove = existingObj.filters.filter(f => {
                         const stillExists = selectedFilterDetailsClone.filter(x => x.group === f.group && x.value === f.value).length > 0;
-                        return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists;
+                        const isSiteWideFilter = f.isSiteWideFilter || this.siteWideFilters.some(x => x.indicatorValue === f.group && x.subIndicatorValue === f.value);
+                        return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists && !isSiteWideFilter;
                     })
 
                     filtersToRemove.forEach(x => {

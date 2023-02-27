@@ -392,7 +392,10 @@ export class FilterController extends Component {
 
         this.model.dataFilterModel.on(DataFilterModel.EVENTS.updated, (data) => {
             if (this.filterCallback !== null) {
-                this.filterCallback(this.model.dataFilterModel.filteredData, this.model.dataFilterModel.selectedSubIndicators, this.model.dataFilterModel.selectedFilterDetails, data.updateSharedUrl);
+                this.filterCallback(this.model.dataFilterModel.filteredData,
+                    this.model.dataFilterModel.selectedSubIndicators,
+                    this.model.dataFilterModel.selectedFilterDetails,
+                    data.updateSharedUrl);
             }
 
             this.updateAvailableFiltersOfRows();
@@ -518,6 +521,8 @@ export class FilterController extends Component {
     checkAndAddSiteWideFilters() {
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
             const isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
+            const isPairAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue
+                && x.model.currentSubindicatorValue === filter.subIndicatorValue);
             const groupLookup = this.model.dataFilterModel.groupLookup[filter.indicatorValue];
             const isPrimaryGroup = this.model.dataFilterModel.primaryGroup === groupLookup?.name;
             const isIndicatorAvailable = groupLookup !== undefined && !isPrimaryGroup && groupLookup.values.indexOf(filter.subIndicatorValue) >= 0;
@@ -534,7 +539,7 @@ export class FilterController extends Component {
                     // add an unavailable filterRow
                     this.addUnavailableFilterRow(filter.indicatorValue, filter.subIndicatorValue);
                 }
-            } else {
+            } else if (!isPairAlreadyFiltered) {
                 // indicator is filtered but
                 // still update it if it is the default or non-aggr value
                 const existingFilterRow = this.model.filterRows.filter(x => x.model.currentIndicatorValue === filter.indicatorValue)[0];

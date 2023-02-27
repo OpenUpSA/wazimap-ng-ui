@@ -19,6 +19,7 @@ import {Grid} from "@mui/material";
 const ViewSettings = (props) => {
     const [expanded, setExpanded] = useState('');
     const [filteredIndicators, setFilteredIndicators] = useState([]);
+    const [siteWideFiltersEnabled] = useState(props.siteWideFiltersEnabled);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
     const trashBinSvg = TrashBinSvg;
     const lockButtonSvg = LockButtonInTextSvg;
@@ -131,6 +132,24 @@ const ViewSettings = (props) => {
         )
     }
 
+    const renderSiteWideFilterSection = () => {
+        if (!siteWideFiltersEnabled) {
+            return <div></div>
+        } else {
+            return (
+                <div>
+                    <StyledTypographyWithBottomBorder>
+                        SITE-WIDE INDICATOR FILTERS
+                    </StyledTypographyWithBottomBorder>
+                    {renderSiteWideFilters()}
+                    <HelpText>
+                        Toggle a site-wide filter by clicking the {lockButtonSvg} next to any indicator.
+                    </HelpText>
+                </div>
+            )
+        }
+    }
+
     return (
         <Container>
             <ViewSettingsTitle>
@@ -152,13 +171,7 @@ const ViewSettings = (props) => {
                     <StyledTypography>INDICATOR OPTIONS</StyledTypography>
                 </StyledAccordionSummary>
                 <StyledAccordionDetails>
-                    <StyledTypographyWithBottomBorder>
-                        SITE-WIDE INDICATOR FILTERS
-                    </StyledTypographyWithBottomBorder>
-                    {renderSiteWideFilters()}
-                    <HelpText>
-                        Toggle a site-wide filter by clicking the {lockButtonSvg} next to any indicator.
-                    </HelpText>
+                    {renderSiteWideFilterSection()}
                     <StyledTypographyWithBottomBorder>
                         INDICATOR-SPECIFIC OPTIONS
                     </StyledTypographyWithBottomBorder>

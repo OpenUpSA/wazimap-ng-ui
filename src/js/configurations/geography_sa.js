@@ -42,9 +42,15 @@ export class Config {
         return SidePanels.PANELS.noPanels;
     }
 
-    get watermarkEnabled(){
+    get watermarkEnabled() {
         if (this.config["watermark_enabled"] != undefined)
             return this.config["watermark_enabled"];
+        return true;
+    }
+
+    get siteWideFiltersEnabled() {
+        if (this.config["site_wide_filters_enabled"] != undefined)
+            return this.config["site_wide_filters_enabled"];
         return true;
     }
 

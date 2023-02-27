@@ -7,6 +7,7 @@ const Panel = (props) => {
     const [filteredIndicators, setFilteredIndicators] = useState([]);
     const [siteWideFilters, setSiteWideFilters] = useState([]);
     const [startedListening, setStartedListening] = useState(false);
+    const [siteWideFiltersEnabled] = useState(props.siteWideFiltersEnabled);
 
     if (!startedListening) {
         setStartedListening(true);
@@ -41,6 +42,7 @@ const Panel = (props) => {
                 siteWideFilters={siteWideFilters}
                 removeFilter={(fi, sf) => removeFilter(fi, sf)}
                 removeSiteWideFilter={(swf) => removeSiteWideFilter(swf)}
+                siteWideFiltersEnabled={siteWideFiltersEnabled}
             />
         </PanelContainer>
     );

@@ -519,6 +519,7 @@ export class FilterController extends Component {
     }
 
     checkAndAddSiteWideFilters() {
+        debugger;
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
             const isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
             const isPairAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue
@@ -539,12 +540,12 @@ export class FilterController extends Component {
                     // add an unavailable filterRow
                     this.addUnavailableFilterRow(filter.indicatorValue, filter.subIndicatorValue);
                 }
-            } else if (!isPairAlreadyFiltered) {
+            } else {
                 // indicator is filtered but
                 // still update it if it is the default or non-aggr value
                 const existingFilterRow = this.model.filterRows.filter(x => x.model.currentIndicatorValue === filter.indicatorValue)[0];
 
-                if (existingFilterRow.model.currentSubindicatorValue !== filter.subIndicatorValue) {
+                if (!isPairAlreadyFiltered) {
                     // update only if it is default or non-aggr
                     // that way we will not update if it is indicator-specific
                     let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;

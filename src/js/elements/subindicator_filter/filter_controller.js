@@ -519,7 +519,6 @@ export class FilterController extends Component {
     }
 
     checkAndAddSiteWideFilters() {
-        debugger;
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
             const isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
             const isPairAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue

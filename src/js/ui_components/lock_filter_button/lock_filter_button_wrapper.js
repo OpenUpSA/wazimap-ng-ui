@@ -1,17 +1,35 @@
 import {Component} from "../../utils";
 import {createRoot} from "react-dom/client";
 import LockButton from "./lock_button";
+import {GlobalLoading} from '../global_loading'
+
 import React from "react";
 
 export class LockFilterButtonWrapper extends Component {
     constructor(parent) {
         super(parent);
 
+        this.globalLoading = new GlobalLoading(this, 'Applying site-wide filter');
         this.prepareDomElements();
+        this.prepareUIEvents();
     }
 
     prepareDomElements() {
         this.createButton();
+    }
+
+    prepareUIEvents() {
+        this.parent.on('filterRow.filter.locked', () => {
+            this.globalLoading.isVisible = true;
+        })
+
+        this.parent.on('filterRow.filter.unlocked', () => {
+            this.globalLoading.isVisible = true;
+        })
+
+        this.parent.parent.on('filterRow.all.updated', () => {
+            this.globalLoading.isVisible = false;
+        })
     }
 
     createButton() {

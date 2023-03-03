@@ -61,23 +61,33 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
     })
 
     controller.on('my_view.siteWideFilters.updated', payload => {
+        let allIndicators = [];
         for (const category of profileLoader.categories) {
             for (const subCategory of category.subCategories) {
                 for (const indicator of subCategory.indicators) {
                     // do not block the UI thread
-                    setTimeout(() => {
-                        let payloadClone = structuredClone(payload);
-                        const siteWideFilters = payloadClone.payload.siteWideFilters;
-                        const chart = indicator.chart;
-                        payloadClone.payload['indicatorId'] = indicator.indicator.id;
-
-                        if (chart !== null && chart !== undefined) {
-                            chart.filterController.model.dataFilterModel.siteWideFilters = siteWideFilters;
-                            chart.filterController.siteWideFiltersUpdatedInMyView(payloadClone.payload, SidePanels.PANELS.richData);
-                        }
-                    }, 0)
+                    allIndicators.push(indicator);
                 }
             }
         }
+
+        allIndicators.forEach((indicator, index) => {
+            setTimeout(() => {
+                let payloadClone = structuredClone(payload);
+                const siteWideFilters = payloadClone.payload.siteWideFilters;
+                const chart = indicator.chart;
+                payloadClone.payload['indicatorId'] = indicator.indicator.id;
+
+                if (chart !== null && chart !== undefined) {
+                    chart.filterController.model.dataFilterModel.siteWideFilters = siteWideFilters;
+                    chart.filterController.siteWideFiltersUpdatedInMyView(payloadClone.payload, SidePanels.PANELS.richData);
+                }
+
+                if (index === allIndicators.length - 1) {
+                    // last one
+                    chart.filterController.triggerEvent('filterRow.all.updated');
+                }
+            }, 0)
+        })
     })
 }

@@ -16,8 +16,10 @@ const LockButton = (props) => {
     const unavailableLockedButtonSvg = UnavailableLockButtonSvg;
 
     useEffect(() => {
+        // better to use props.filterRow.model.currentSubindicatorValue instead of rowSubIndicator
+        // rowSubIndicator is updated later if it is an unavailable row
         setIsUnavailable(props.filterRow.model.isUnavailable);
-        setIsVisible(rowIndicator !== 'All indicators' && rowSubIndicator !== 'All values');
+        setIsVisible(props.filterRow.model.currentIndicatorValue !== 'All indicators' && props.filterRow.model.currentSubindicatorValue !== 'All values');
         checkAndSetIsLocked();
     }, [siteWideFilters, rowIndicator, rowSubIndicator])
 
@@ -50,7 +52,10 @@ const LockButton = (props) => {
     }));
 
     const checkAndSetIsLocked = () => {
-        let filterResult = siteWideFilters.filter(x => x.indicatorValue === rowIndicator && x.subIndicatorValue === rowSubIndicator);
+        // better to use props.filterRow.model.currentSubindicatorValue instead of rowSubIndicator
+        // rowSubIndicator is updated later if it is an unavailable row
+        let filterResult = siteWideFilters.filter(x => x.indicatorValue === props.filterRow.model.currentIndicatorValue
+            && x.subIndicatorValue === props.filterRow.model.currentSubindicatorValue);
         setIsLocked(filterResult.length > 0);
     }
 

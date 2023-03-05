@@ -81,6 +81,7 @@ const LockButton = (props) => {
         <StyledButton
             className={isVisible ? '' : 'hidden'}
             onClick={lockButtonClicked}
+            data-test-id={'lock-button'}
             title={
                 isLocked ?
                     (isUnavailable ? 'This filter cannot be applied here' : 'Remove site-wide filter')

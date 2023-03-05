@@ -101,17 +101,22 @@ const ViewSettings = (props) => {
                 return (
                     <Grid item xs={12} key={index}>
                         <FilteredIndicatorCard
+                            data-test-id={'site-wide-filter-card'}
                         >
                             <Grid container>
                                 <Grid item xs={10}>
                                     <Grid container>
                                         <Grid item xs={6} sx={{paddingRight: '3px'}}>
-                                            <FilteredIndicatorBox>
+                                            <FilteredIndicatorBox
+                                                data-test-id={'site-wide-filter-indicator'}
+                                            >
                                                 {swf.indicatorValue}
                                             </FilteredIndicatorBox>
                                         </Grid>
                                         <Grid item xs={6} sx={{paddingLeft: '3px'}}>
-                                            <FilteredIndicatorBox>
+                                            <FilteredIndicatorBox
+                                                data-test-id={'site-wide-filter-subIndicator'}
+                                            >
                                                 {swf.subIndicatorValue}
                                             </FilteredIndicatorBox>
                                         </Grid>

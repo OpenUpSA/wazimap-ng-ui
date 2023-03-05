@@ -12,6 +12,7 @@ export default class Controller extends Component {
         this.api = api;
         this._shouldMapZoom = false;
         this._filteredIndicators = [];
+        this._hiddenIndicators = [];
 
         this.state = {
             profileId: profileId,
@@ -74,6 +75,10 @@ export default class Controller extends Component {
 
     get filteredIndicators() {
         return this._filteredIndicators;
+    }
+
+    get hiddenIndicators() {
+        return this._hiddenIndicators;
     }
 
     changeGeography(areaCode) {
@@ -255,6 +260,42 @@ export default class Controller extends Component {
             this.triggerEvent('mapchip.choropleth.filtersUpdated', filteredIndicator);  // mapchip will be updated
         }
         this.updateShareUrl();
+    }
+
+    updateHiddenIndicators(indicatorIds){
+      this._hiddenIndicators = indicatorIds;
+      const currentGeo = this.state.profile.profile.geography.code;
+      let indicators = this.versionController.getIndicatorDataByGeo(currentGeo);
+      const indicatorData = structuredClone(indicators.indicatorData);
+      let newData = {};
+
+      Object.keys(indicatorData).forEach(function(categoryKey, categoryIndex) {
+        let subcategories = {};
+
+        let category = indicatorData[categoryKey];
+        Object.keys(category.subcategories).forEach(function(subcategoryKey, subcategoryIndex) {
+          let subcategoryValue = category.subcategories[subcategoryKey];
+          let indicators = subcategoryValue.indicators;
+          let newIndicators = {};
+          Object.keys(indicators).forEach(function(indicatorKey, indicatorIndex) {
+            let indicatorValue = indicators[indicatorKey];
+            if (!indicatorIds.includes(indicatorValue.id)){
+              newIndicators[indicatorKey] = indicatorValue;
+            }
+          });
+          if (!isEmpty(newIndicators)){
+            subcategoryValue["indicators"] = newIndicators;
+            subcategories[subcategoryKey] = subcategoryValue;
+          }
+        });
+
+        if(!isEmpty(subcategories)){
+          category["subcategories"] = subcategories
+          newData[categoryKey] = category
+        }
+      });
+
+      this.triggerEvent("datamapper.reload", newData);
     }
 
     pushState(currentState){

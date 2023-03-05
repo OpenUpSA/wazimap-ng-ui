@@ -8,6 +8,7 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.10.9",
+    "@mui/lab": "^5.0.0-alpha.120",
     "@mui/material": "^5.8.5",
     "@sentry/browser": "^5.20.1",
     "@testing-library/react": "^13.4.0",

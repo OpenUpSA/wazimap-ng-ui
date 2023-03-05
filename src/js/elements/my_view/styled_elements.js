@@ -1,6 +1,28 @@
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
 import {Accordion, AccordionDetails, AccordionSummary, Button, Card, Typography} from "@mui/material";
+import TreeItem, { treeItemClasses } from '@mui/lab/TreeItem';
+
+
+
+
+
+
+export const StyledTreeItem = styled(TreeItem)(() => ({
+  [`& .${treeItemClasses.content}`]: {
+    'flex-direction': 'row-reverse',
+    'backgroundColor': 'rgba(0, 0, 0, 0.05);',
+    'borderRadius': '4px',
+    'marginBottom': '2px',
+    [`& .${treeItemClasses.label}`]: {
+      fontWeight: 'inherit',
+      color: 'inherit',
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+    borderLeft: `1px dashed`
+  }
+}));
 
 export const Container = styled(Box)(() => ({}));
 

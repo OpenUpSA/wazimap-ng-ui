@@ -35,6 +35,12 @@ const Panel = (props) => {
         });
     }
 
+    const updateHiddenIndicators = (indicatorIds) => {
+        props.controller.triggerEvent('my_view.hiddenIndicators.updated', {
+            indicatorIds
+        });
+    }
+
     return (
         <PanelContainer
             className={'narrow-scroll'}
@@ -50,6 +56,8 @@ const Panel = (props) => {
                   filteredIndicators={filteredIndicators}
                   profileIndicators={profileIndicators}
                   removeFilter={(fi, sf) => removeFilter(fi, sf)}
+                  hiddenIndicators={[]}
+                  updateHiddenIndicators={updateHiddenIndicators}
               />
           }
         </PanelContainer>

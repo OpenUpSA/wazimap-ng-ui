@@ -1,9 +1,31 @@
 import {loadMenu} from '../elements/data_mapper/menu';
 
 export function configureDataExplorerEvents(controller, dataMapperMenu) {
-    controller.bubbleEvents(dataMapperMenu, ['data_mapper_menu.nodata', 'data_mapper_menu.subcategory.expanded'])
+    controller.bubbleEvents(dataMapperMenu, ['data_mapper_menu.nodata', 'data_mapper_menu.subcategory.expanded', 'datamapper.reload'])
     controller.on('versions.indicators.ready', (versionData) => {
         let data = versionData.payload;
+        if (JSON.stringify(data) === JSON.stringify({})) {
+            //no children -- show no-data chip
+            dataMapperMenu.showNoData();
+        } else {
+            loadMenu(dataMapperMenu, data)
+        }
+    })
+
+    controller.on('versions.indicators.ready', (versionData) => {
+        let data = versionData.payload;
+        console.log(data);
+        if (JSON.stringify(data) === JSON.stringify({})) {
+            //no children -- show no-data chip
+            dataMapperMenu.showNoData();
+        } else {
+            loadMenu(dataMapperMenu, data)
+        }
+    })
+
+    controller.on('datamapper.reload', (versionData) => {
+        let data = versionData.payload;
+        console.log(data)
         if (JSON.stringify(data) === JSON.stringify({})) {
             //no children -- show no-data chip
             dataMapperMenu.showNoData();

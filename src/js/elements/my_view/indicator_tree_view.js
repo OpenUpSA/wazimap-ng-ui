@@ -1,50 +1,146 @@
-import TreeView from '@mui/lab/TreeView';
-import TreeItem from '@mui/lab/TreeItem';
-import clsx from "clsx";
+import React, {useState, useCallback, useMemo} from "react";
+import {StyledTreeItem} from "./styled_elements";
+import Box from "@mui/material/Box";
+import {Typography} from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-const CustomContent = React.forwardRef(function CustomContent(props, ref) {
-  const {
-    classes,
-    label,
-    nodeId,
-    icon: iconProp,
-    expansionIcon,
-    displayIcon,
-    onDelete
-  } = props;
 
-  const {
-    disabled,
-    expanded,
-    selected,
-    focused,
-    handleExpansion,
-    handleSelection,
-    preventSelection
-  } = useTreeItem(nodeId);
+const IndicatorItemView = (props) => {
 
-  const handleDelete = () => onDelete(nodeId);
+  const isHidden = useMemo(
+    () => {
+      return props.hiddenIndicators.includes(props.indicator.id)
+    }, [
+      props.indicator,
+      props.hiddenIndicators
+    ]
+  )
+
+  const hideIndicator = useCallback(
+    (e) => {
+      if (isHidden){
+        props.removeHiddenIndicator(props.indicator.id);
+      } else {
+
+        props.addHiddenIndicator(props.indicator.id);
+      }
+    }, [
+      props.indicator,
+      isHidden,
+      props.removeHiddenIndicator,
+      props.addHiddenIndicator,
+    ]
+  )
+  return (
+    <StyledTreeItem nodeId={props.indicator.id.toString()} label={
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          {props.indicator.label}
+        </Typography>
+        <Typography variant="caption" color="inherit" onClick={(e) => hideIndicator(e)}>
+          {isHidden ? <VisibilityOffIcon/> : <VisibilityIcon/>}
+        </Typography>
+      </Box>
+    } />
+  )
+}
+
+
+const IndicatorSubCategoryTreeView = (props) => {
+
+
+  const hiddenIndicators = useMemo(
+    () => {
+      return props.subcategory.indicators.filter(
+          indicator => props.hiddenIndicators.includes(indicator.id)
+      )
+    }, [
+      props.subcategory,
+      props.hiddenIndicators
+    ]
+  )
 
   return (
-    <div
-      className={clsx(classes.root, {
-        [classes.expanded]: expanded,
-        [classes.selected]: selected,
-        [classes.focused]: focused,
-        [classes.disabled]: disabled
-      })}
-      onMouseDown={preventSelection}
-      ref={ref}
-    >
-      <div onClick={handleExpansion} className={classes.iconContainer}>
-        {icon}
-      </div>
-      <Button size="small" onClick={handleDelete}>
-        <p>DELETE<p>
-      </Button>
-        {label}
-    </div>
-  );
-});
+    <StyledTreeItem nodeId={props.subcategory.id.toString()} label={
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          {props.subcategory.name}
+        </Typography>
+        <Typography variant="caption" color="inherit">
+          hidden {hiddenIndicators.length}
+        </Typography>
+      </Box>
+    }>
+    {props.subcategory.indicators.length > 0 && props.subcategory.indicators.map(
+      (indicator, key) => {
+        return (
+          <IndicatorItemView
+            indicator={indicator}
+            key={key}
+            addHiddenIndicator={props.addHiddenIndicator}
+            removeHiddenIndicator={props.removeHiddenIndicator}
+            hiddenIndicators={props.hiddenIndicators}
+          />
+        )
+      })
+    }
+    </StyledTreeItem>
 
-export default CustomContent;
+  )
+}
+
+const IndicatorCategoryTreeView = (props) => {
+  const [hiddenIndicators, setHiddenIndicators] = useState([]);
+  const addHiddenIndicator = useCallback(
+    (indicatorId) => {
+      setHiddenIndicators([...hiddenIndicators, indicatorId]);
+      props.updateHiddenIndicators([...hiddenIndicators, indicatorId]);
+    }, [
+      hiddenIndicators,
+      setHiddenIndicators,
+      props.updateHiddenIndicators
+    ]
+  )
+  const removeHiddenIndicator = useCallback(
+    (indicatorId) => {
+      let filteredIndicators = hiddenIndicators.filter(item => item !== indicatorId);
+      setHiddenIndicators(filteredIndicators);
+      props.updateHiddenIndicators(filteredIndicators);
+    }, [
+      hiddenIndicators,
+      setHiddenIndicators,
+      props.updateHiddenIndicators
+    ]
+  )
+
+  return (
+    <StyledTreeItem nodeId={props.category.id.toString()} label={
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          {props.category.name}
+        </Typography>
+        <Typography variant="caption" color="inherit">
+          hidden {hiddenIndicators.length}
+        </Typography>
+      </Box>
+    }>
+    {props.category.subcategories.length > 0 && props.category.subcategories.map(
+      (subcategory, key) => {
+        return (
+          <IndicatorSubCategoryTreeView
+            subcategory={subcategory}
+            key={key}
+            addHiddenIndicator={addHiddenIndicator}
+            removeHiddenIndicator={removeHiddenIndicator}
+            hiddenIndicators={hiddenIndicators}
+          />
+        )
+      })
+    }
+    </StyledTreeItem>
+
+  )
+}
+
+export default IndicatorCategoryTreeView;

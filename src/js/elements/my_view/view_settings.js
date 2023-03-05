@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import {IndicatorOptionsSvg, TrashBinSvg} from "./svg_icons";
 import {
     AppliedPanelInfo,
@@ -12,34 +12,25 @@ import {
     StyledAccordionDetails,
     StyledAccordionSummary,
     StyledTypography, StyledTypographyWithBottomBorder,
-    ViewSettingsTitle
+    ViewSettingsTitle,
+    StyledTreeItem
 } from "./styled_elements";
 import {Grid} from "@mui/material";
-
-
 import TreeView from '@mui/lab/TreeView';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
-
-import {CustomContent} from "./indicator_tree_view";
-
-
-function MyTreeItem(props) {
-  return (
-    <TreeItem
-      {...props}
-      ContentComponent={CustomContent}
-      ContentProps={{
-        onDelete: (nodeId) => console.log("delete", nodeId)
-      }}
-    />
-  );
-}
+import Box from "@mui/material/Box";
+import IndicatorCategoryTreeView from "./indicator_tree_view";
+import {flatten} from "lodash";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 
 const ViewSettings = (props) => {
     const [expanded, setExpanded] = useState('');
     const [filteredIndicators, setFilteredIndicators] = useState([]);
+    const [profileIndicators, setProfileIndicators] = useState([]);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
     const trashBinSvg = TrashBinSvg;
 
@@ -47,7 +38,56 @@ const ViewSettings = (props) => {
         if (props.filteredIndicators !== filteredIndicators) {
             setFilteredIndicators(props.filteredIndicators);
         }
-    }, [props.filteredIndicators]);
+        if (props.profileIndicators.length > 0 && profileIndicators.length === 0){
+          let profileIndicators = props.profileIndicators.map(
+            (category) => {
+              let subcategories = category.subcategories.map(
+                (subcategory) => {
+                  let indicators = [];
+                  let hiddenIndicatorsList = [];
+                  if (subcategory.indicators.length > 0) {
+                    subcategory.indicators.map(indicator => {
+                      indicators.push({
+                        "name": indicator.label,
+                        "nodeId": indicator.id,
+                        "isHidden": props.hiddenIndicators.includes(indicator.id)
+                      })
+                      if (props.hiddenIndicators.includes(indicator.id)){
+                        hiddenIndicatorsList.push(indicator.id)
+                      }
+                    })
+                  }
+                  return {
+                    "name": subcategory.name,
+                    "nodeId": subcategory.id,
+                    "indicators": indicators,
+                    "hiddenIndicators": hiddenIndicatorsList,
+                  }
+                }
+              );
+              subcategories = subcategories.filter(sub => sub.indicators.length > 0);
+              return {
+                "name": category.name,
+                "nodeId": category.id,
+                "subcategories": subcategories,
+                "hiddenIndicators": flatten(
+                  subcategories.map(
+                    sub => sub.hiddenIndicators
+                  )
+                )
+              }
+            }
+          )
+          profileIndicators = profileIndicators.filter(ind => ind.subcategories.length > 0);
+          setProfileIndicators(props.profileIndicators);
+        }
+    }, [
+        props.filteredIndicators,
+        props.profileIndicators,
+        setProfileIndicators,
+        profileIndicators
+      ]
+    );
 
     const handleExpandedChange = (panel) => {
         setExpanded(panel);
@@ -114,7 +154,26 @@ const ViewSettings = (props) => {
         )
     }
 
-
+    const renderIndicatorTreeView = () =>{
+      return (
+        <TreeView
+          defaultCollapseIcon={<ArrowDropDownIcon />}
+          defaultExpandIcon={<ArrowRightIcon />}
+        >
+          {profileIndicators.length > 0 && profileIndicators.map(
+            (item, key) => {
+              return (
+                <IndicatorCategoryTreeView
+                  category={item}
+                  key={key}
+                  updateHiddenIndicators={props.updateHiddenIndicators}
+                />
+              )
+            })
+          }
+        </TreeView>
+      );
+    }
     return (
         <Container>
             <ViewSettingsTitle>
@@ -149,25 +208,7 @@ const ViewSettings = (props) => {
                     <StyledTypographyWithBottomBorder>
                         HIDDEN INDICATORS
                     </StyledTypographyWithBottomBorder>
-                    <TreeView
-  defaultCollapseIcon={<ExpandMoreIcon />}
-  defaultExpandIcon={<ChevronRightIcon />}
-  multiSelect
->
-  <MyTreeItem nodeId="1" label="Applications">
-    <MyTreeItem nodeId="2" label="Calendar" />
-    <MyTreeItem nodeId="3" label="Chrome" />
-    <MyTreeItem nodeId="4" label="Webstorm" />
-  </MyTreeItem>
-  <MyTreeItem nodeId="5" label="Documents">
-    <MyTreeItem nodeId="6" label="Material-UI">
-      <MyTreeItem nodeId="7" label="src">
-        <MyTreeItem nodeId="8" label="index.js" />
-        <MyTreeItem nodeId="9" label="tree-view.js" />
-      </MyTreeItem>
-    </MyTreeItem>
-  </MyTreeItem>
-</TreeView>
+                    {renderIndicatorTreeView()}
                     <HelpText>
                         Hidden indicators are not shownin the Data Mapper panel to help focus your view.
                     </HelpText>

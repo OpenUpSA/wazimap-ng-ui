@@ -374,6 +374,24 @@ export default class Controller extends Component {
         }
     }
 
+    addSiteWideFilter(indicatorValue, subIndicatorValue) {
+        const alreadyAdded = this._siteWideFilters.some(x => x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue);
+        if (alreadyAdded) {
+            return;
+        }
+        this._siteWideFilters.push({
+            indicatorValue,
+            subIndicatorValue
+        });
+
+        const payload = {
+            siteWideFilters: this.siteWideFilters,
+            removedSiteWideFilter: null
+        }
+
+        this.triggerEvent('my_view.siteWideFilters.updated', payload);
+    }
+
     removeSiteWideFilter(indicatorValue, subIndicatorValue) {
         this._siteWideFilters = this._siteWideFilters.filter(x => !(x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue));
 
@@ -405,8 +423,7 @@ export default class Controller extends Component {
      */
     onHashChange(payload) {
         this.triggerEvent("hashChange", payload);
-    }
-    ;
+    };
 
     onGeographyChange(payload) {
         this.loadProfile(payload, true)
@@ -442,20 +459,17 @@ export default class Controller extends Component {
         this.changeHash(areaCode)
 
         this.triggerEvent("layerClick", payload);
-    }
-    ;
+    };
 
     onLayerLoaded(payload) {
         payload.mapControl.maplocker.unlock();
         this.triggerEvent("map.layer.loaded", payload);
-    }
-    ;
+    };
 
     onProfileLoaded(payload) {
         this.state.profile = payload;
         this.triggerEvent("profileLoaded", payload);
-    }
-    ;
+    };
 
     onPrintProfile(payload) {
         let filename = "geography";

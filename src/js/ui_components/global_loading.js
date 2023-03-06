@@ -15,6 +15,12 @@ export class GlobalLoading extends Component {
         return this._message;
     }
 
+    set message(value) {
+        this._message = value;
+
+        this.element.find('.modal-message').text(value);
+    }
+
     get element() {
         return $(this._element);
     }
@@ -62,6 +68,7 @@ export class GlobalLoading extends Component {
         $(text).css('font-size', '18px');
         $(text).css('margin-left', '15px');
         $(text).css('line-height', '40px');
+        $(text).addClass('modal-message');
         this.element.find('.warning__content').append(text);
 
         document.body.appendChild(this._element);

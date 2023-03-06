@@ -20,10 +20,12 @@ export class LockFilterButtonWrapper extends Component {
 
     prepareUIEvents() {
         this.parent.on('filterRow.filter.locked', () => {
+            this.globalLoading.message = 'Applying site-wide filter';
             this.globalLoading.isVisible = true;
         })
 
         this.parent.on('filterRow.filter.unlocked', () => {
+            this.globalLoading.message = 'Removing site-wide filter';
             this.globalLoading.isVisible = true;
         })
 

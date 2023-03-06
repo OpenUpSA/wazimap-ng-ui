@@ -273,105 +273,105 @@ export default class Controller extends Component {
         }
         this.updateShareUrl();
     }
-  
-      pushState(currentState){
-      let profileView = "/";
-      if (currentState?.filters !== undefined && currentState.filters.length > 0){
-        profileView = `?profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
-      }
 
-      history.pushState(
-        {
-          "filters": this._filteredIndicators,
-          "profileView": currentState
-        },
-        '',
-        `${profileView}${window.location.hash}`
-      );
-    }
-
-    updateShareUrl(){
-      let selectedFilters = [];
-      this._filteredIndicators.map(
-        (indicatorFilter) => {
-          const nonDefaultFilters = indicatorFilter.filters.filter(f => f.isDefault !== true);
-          if (nonDefaultFilters.length > 0){
-            selectedFilters.push({
-              "indicatorId": indicatorFilter.indicatorId,
-              "filters": nonDefaultFilters.map(obj => {
-                return {
-                  "group": obj.group,
-                  "value": obj.value,
-                  "appliesTo": obj.appliesTo
-                }
-              })
-            })
-          }
+    pushState(currentState) {
+        let profileView = "/";
+        if (currentState?.filters !== undefined && currentState.filters.length > 0) {
+            profileView = `?profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
         }
-      )
-      let currentState = {"filters": selectedFilters}
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const profileView = JSON.parse(urlParams.get("profileView"));
-      if (selectedFilters.length > 0){
-        if (profileView === null){
-          this.pushState(currentState);
-        } else {
-          if(!isEqual(profileView, currentState)){
-            this.pushState(currentState);
-          }
-        }
-      } else if (selectedFilters.length === 0 && profileView !== null) {
-        this.pushState(currentState);
-      }
-    }
-
-    loadInitialFilters(dataBundle){
-      if (this._filteredIndicators.length > 0){
-        return;
-      }
-
-      const profileData = dataBundle?.profile?.profileData;
-      const urlParams = new URLSearchParams(window.location.search);
-      const profileView = JSON.parse(urlParams.get("profileView"));
-      if (profileView !== null && (profileData !== null || profileData !== undefined || !isEmpty(profileData))) {
-
-        const urlFilters = profileView["filters"];
-        this._filteredIndicators = urlFilters.map(indicator => {
-          let indicatorTitle = ''
-          Object.values(profileData).map(category => {
-            Object.values(category.subcategories).map(subcategory => {
-              Object.values(subcategory.indicators).map(i => {
-                  if (i.id === indicator.indicatorId){
-                    indicatorTitle = i.label;
-                  }
-              })
-            })
-          })
-          return {
-            indicatorId: indicator.indicatorId,
-            indicatorTitle: indicatorTitle,
-            filters: indicator.filters.map(obj => {
-              return {
-                "group": obj.group,
-                "value": obj.value,
-                "appliesTo": obj.appliesTo,
-                "isDefault": false
-              }
-            })
-          }
-        });
-
-        history.replaceState(
-          {
-            "filters": this._filteredIndicators
-          },
-          '',
-          `${window.location.search}${window.location.hash}`
+        history.pushState(
+            {
+                "filters": this._filteredIndicators,
+                "profileView": currentState
+            },
+            '',
+            `${profileView}${window.location.hash}`
         );
+    }
 
-        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-      }
+    updateShareUrl() {
+        let selectedFilters = [];
+        this._filteredIndicators.map(
+            (indicatorFilter) => {
+                const nonDefaultFilters = indicatorFilter.filters.filter(f => f.isDefault !== true);
+                if (nonDefaultFilters.length > 0) {
+                    selectedFilters.push({
+                        "indicatorId": indicatorFilter.indicatorId,
+                        "filters": nonDefaultFilters.map(obj => {
+                            return {
+                                "group": obj.group,
+                                "value": obj.value,
+                                "appliesTo": obj.appliesTo
+                            }
+                        })
+                    })
+                }
+            }
+        )
+        let currentState = {"filters": selectedFilters}
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileView = JSON.parse(urlParams.get("profileView"));
+        if (selectedFilters.length > 0) {
+            if (profileView === null) {
+                this.pushState(currentState);
+            } else {
+                if (!isEqual(profileView, currentState)) {
+                    this.pushState(currentState);
+                }
+            }
+        } else if (selectedFilters.length === 0 && profileView !== null) {
+            this.pushState(currentState);
+        }
+    }
+
+    loadInitialFilters(dataBundle) {
+        if (this._filteredIndicators.length > 0) {
+            return;
+        }
+
+        const profileData = dataBundle?.profile?.profileData;
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileView = JSON.parse(urlParams.get("profileView"));
+        if (profileView !== null && (profileData !== null || profileData !== undefined || !isEmpty(profileData))) {
+
+            const urlFilters = profileView["filters"];
+            this._filteredIndicators = urlFilters.map(indicator => {
+                let indicatorTitle = ''
+                Object.values(profileData).map(category => {
+                    Object.values(category.subcategories).map(subcategory => {
+                        Object.values(subcategory.indicators).map(i => {
+                            if (i.id === indicator.indicatorId) {
+                                indicatorTitle = i.label;
+                            }
+                        })
+                    })
+                })
+                return {
+                    indicatorId: indicator.indicatorId,
+                    indicatorTitle: indicatorTitle,
+                    filters: indicator.filters.map(obj => {
+                        return {
+                            "group": obj.group,
+                            "value": obj.value,
+                            "appliesTo": obj.appliesTo,
+                            "isDefault": false
+                        }
+                    })
+                }
+            });
+
+            history.replaceState(
+                {
+                    "filters": this._filteredIndicators
+                },
+                '',
+                `${window.location.search}${window.location.hash}`
+            );
+
+            this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+        }
     }
 
     removeSiteWideFilter(indicatorValue, subIndicatorValue) {

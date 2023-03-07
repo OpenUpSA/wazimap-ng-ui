@@ -10297,6 +10297,7 @@ label {
   }
 
   .rich-data-content {
+    max-width: 76vw;
     padding-top: 32px;
     padding-right: 32px;
     padding-left: 32px;
@@ -10305,6 +10306,22 @@ label {
   .nav.narrow {
     padding-right: 32px;
     padding-left: 32px;
+  }
+
+  .map-location {
+    overflow: scroll;
+    max-width: 100vw;
+  }
+
+  .map-location__tags {
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+  }
+
+  .rich-data-toggles {
+    top: 140px;
   }
 
   .category-header {
@@ -10406,6 +10423,18 @@ label {
     padding-right: 6px;
   }
 
+  .point-mapper-toggles {
+    top: 84px;
+  }
+
+  .panel-toggles {
+    top: 140px;
+  }
+
+  .data-mapper-toggles {
+    top: 84px;
+  }
+
   .mapping-options__filter {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
@@ -10505,6 +10534,11 @@ label {
 
   .tutorial-2 {
     overflow: auto;
+  }
+
+  .div-block-5 {
+    height: 96px;
+    background-color: red;
   }
 }
 
@@ -10615,10 +10649,13 @@ label {
 
   .point-mapper {
     display: none;
+    max-width: 83vw;
   }
 
   .data-mapper {
     display: none;
+    max-width: 83vw;
+    min-width: auto;
   }
 
   .mapping-options__filter_menu {

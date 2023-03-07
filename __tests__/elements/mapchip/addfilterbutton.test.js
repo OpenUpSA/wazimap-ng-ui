@@ -19,9 +19,15 @@ describe('Add filter button', () => {
     test('Adds a filter row', () => {
         let component = new Component();
         let mc = new MapChip(component, mapchip_colors);
+        params.chartConfiguration.filter = {
+            defaults: [{
+                name: 'gender',
+                value: 'Male'
+            }]
+        }
 
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel);
+        mc.setFilterController(dataFilterModel, false);
 
         let prevFilterRow = $('.map-options__filters_content .map-options__filter-row').length;
         $('.mapping-options__add-filter').trigger('click');
@@ -65,7 +71,7 @@ describe('Add filter button', () => {
         let mc = new MapChip(component, mapchip_colors);
 
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel);
+        mc.setFilterController(dataFilterModel, false);
 
         let btn = document.querySelector('.mapping-options__add-filter');
         expect(btn).not.toHaveClass('disabled');
@@ -84,7 +90,7 @@ describe('Add filter button', () => {
         let mc = new MapChip(component, mapchip_colors);
 
         let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel);
+        mc.setFilterController(dataFilterModel, false);
 
         let btn = document.querySelector(`${mapBottomItems} .mapping-options__add-filter`);
         expect(btn).toHaveClass('disabled');

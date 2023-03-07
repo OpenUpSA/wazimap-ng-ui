@@ -12,6 +12,7 @@ export default class Controller extends Component {
         this.api = api;
         this._shouldMapZoom = false;
         this._filteredIndicators = [];
+        this._siteWideFilters = [];
 
         this.state = {
             profileId: profileId,
@@ -50,21 +51,21 @@ export default class Controller extends Component {
         });
 
         window.addEventListener('popstate', (event) => {
-          if (event.state && event.state.filters !== undefined){
-            this._filteredIndicators = event.state.filters;
-            this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-            this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
-            this.reDrawChildren();
-          } else {
-            const urlParams = new URLSearchParams(window.location.search);
-            const profileView = JSON.parse(urlParams.get("profileView"));
-            if (profileView === null && this._filteredIndicators.length > 0) {
-              this._filteredIndicators = [];
-              this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-              this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
-              this.reDrawChildren();
+            if (event.state && event.state.filters !== undefined) {
+                this._filteredIndicators = event.state.filters;
+                this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+                this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
+                this.reDrawChildren();
+            } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                const profileView = JSON.parse(urlParams.get("profileView"));
+                if (profileView === null && this._filteredIndicators.length > 0) {
+                    this._filteredIndicators = [];
+                    this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+                    this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
+                    this.reDrawChildren();
+                }
             }
-          }
         });
     };
 
@@ -74,6 +75,10 @@ export default class Controller extends Component {
 
     get filteredIndicators() {
         return this._filteredIndicators;
+    }
+
+    get siteWideFilters() {
+        return this._siteWideFilters;
     }
 
     changeGeography(areaCode) {
@@ -179,12 +184,23 @@ export default class Controller extends Component {
         this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, payload.updadateSharedUrl, SidePanels.PANELS.richData);
     }
 
+    isAlreadyInFilteredIndicators(filter, indicatorId, filterPanel) {
+        let arrClone = structuredClone(this._filteredIndicators);
+        const alreadyAdded = arrClone.filter(x => x.indicatorId === indicatorId)[0]?.filters
+            .filter(y => y.group === filter.group && y.value === filter.value && y.appliesTo.indexOf(filterPanel) >= 0)[0] != null;
+
+        return alreadyAdded;
+    }
+
     updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, updateSharedUrl, filterPanel) {
+        let selectedFilterDetailsClone = structuredClone(selectedFilterDetails);
+        selectedFilterDetailsClone = selectedFilterDetailsClone.filter(x => !x.isDefault);
+        selectedFilterDetailsClone = selectedFilterDetailsClone.filter(x => !x.isSiteWideFilter || this.isAlreadyInFilteredIndicators(x, indicatorId, filterPanel));
         let isNewObj = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0] == null;
 
         let filteredIndicator = {
             indicatorId: indicatorId,
-            filters: selectedFilterDetails,
+            filters: selectedFilterDetailsClone,
             indicatorTitle: indicatorTitle
         };
 
@@ -193,7 +209,7 @@ export default class Controller extends Component {
         } else {
             this._filteredIndicators = this._filteredIndicators.map(existingObj => {
                 if (existingObj.indicatorId === indicatorId) {
-                    selectedFilterDetails.forEach((newFilter) => {
+                    selectedFilterDetailsClone.forEach((newFilter) => {
                         newFilter.appliesTo.forEach(panel => {
                             // check for panel
                             let filterObj = existingObj.filters.filter(x => x.appliesTo.indexOf(panel) >= 0 && x.group === newFilter.group)[0];
@@ -209,8 +225,9 @@ export default class Controller extends Component {
                     })
 
                     let filtersToRemove = existingObj.filters.filter(f => {
-                        const stillExists = selectedFilterDetails.filter(x => x.group === f.group && x.value === f.value).length > 0;
-                        return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists;
+                        const stillExists = selectedFilterDetailsClone.filter(x => x.group === f.group && x.value === f.value).length > 0;
+                        const isSiteWideFilter = f.isSiteWideFilter || this.siteWideFilters.some(x => x.indicatorValue === f.group && x.subIndicatorValue === f.value);
+                        return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists && !isSiteWideFilter;
                     })
 
                     filtersToRemove.forEach(x => {
@@ -227,8 +244,8 @@ export default class Controller extends Component {
                 }
             });
         }
-        if (updateSharedUrl){
-          this.updateShareUrl();
+        if (updateSharedUrl) {
+            this.updateShareUrl();
         }
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }
@@ -257,104 +274,137 @@ export default class Controller extends Component {
         this.updateShareUrl();
     }
 
-    pushState(currentState){
-      let profileView = "/";
-      if (currentState?.filters !== undefined && currentState.filters.length > 0){
-        profileView = `?profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
-      }
+    pushState(currentState) {
+        let profileView = "/";
+        if (currentState?.filters !== undefined && currentState.filters.length > 0) {
+            profileView = `?profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
+        }
 
-      history.pushState(
-        {
-          "filters": this._filteredIndicators,
-          "profileView": currentState
-        },
-        '',
-        `${profileView}${window.location.hash}`
-      );
+        history.pushState(
+            {
+                "filters": this._filteredIndicators,
+                "profileView": currentState
+            },
+            '',
+            `${profileView}${window.location.hash}`
+        );
     }
 
-    updateShareUrl(){
-      let selectedFilters = [];
-      this._filteredIndicators.map(
-        (indicatorFilter) => {
-          const nonDefaultFilters = indicatorFilter.filters.filter(f => f.isDefault !== true);
-          if (nonDefaultFilters.length > 0){
-            selectedFilters.push({
-              "indicatorId": indicatorFilter.indicatorId,
-              "filters": nonDefaultFilters.map(obj => {
-                return {
-                  "group": obj.group,
-                  "value": obj.value,
-                  "appliesTo": obj.appliesTo
+    updateShareUrl() {
+        let selectedFilters = [];
+        this._filteredIndicators.map(
+            (indicatorFilter) => {
+                const nonDefaultFilters = indicatorFilter.filters.filter(f => f.isDefault !== true);
+                if (nonDefaultFilters.length > 0) {
+                    selectedFilters.push({
+                        "indicatorId": indicatorFilter.indicatorId,
+                        "filters": nonDefaultFilters.map(obj => {
+                            return {
+                                "group": obj.group,
+                                "value": obj.value,
+                                "appliesTo": obj.appliesTo
+                            }
+                        })
+                    })
                 }
-              })
-            })
-          }
-        }
-      )
-      let currentState = {"filters": selectedFilters}
+            }
+        )
+        let currentState = {"filters": selectedFilters}
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const profileView = JSON.parse(urlParams.get("profileView"));
-      if (selectedFilters.length > 0){
-        if (profileView === null){
-          this.pushState(currentState);
-        } else {
-          if(!isEqual(profileView, currentState)){
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileView = JSON.parse(urlParams.get("profileView"));
+        if (selectedFilters.length > 0) {
+            if (profileView === null) {
+                this.pushState(currentState);
+            } else {
+                if (!isEqual(profileView, currentState)) {
+                    this.pushState(currentState);
+                }
+            }
+        } else if (selectedFilters.length === 0 && profileView !== null) {
             this.pushState(currentState);
-          }
         }
-      } else if (selectedFilters.length === 0 && profileView !== null) {
-        this.pushState(currentState);
-      }
     }
 
-    loadInitialFilters(dataBundle){
-      if (this._filteredIndicators.length > 0){
-        return;
-      }
+    loadInitialFilters(dataBundle) {
+        if (this._filteredIndicators.length > 0) {
+            return;
+        }
 
-      const profileData = dataBundle?.profile?.profileData;
-      const urlParams = new URLSearchParams(window.location.search);
-      const profileView = JSON.parse(urlParams.get("profileView"));
-      if (profileView !== null && (profileData !== null || profileData !== undefined || !isEmpty(profileData))) {
+        const profileData = dataBundle?.profile?.profileData;
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileView = JSON.parse(urlParams.get("profileView"));
+        if (profileView !== null && (profileData !== null || profileData !== undefined || !isEmpty(profileData))) {
 
-        const urlFilters = profileView["filters"];
-        this._filteredIndicators = urlFilters.map(indicator => {
-          let indicatorTitle = ''
-          Object.values(profileData).map(category => {
-            Object.values(category.subcategories).map(subcategory => {
-              Object.values(subcategory.indicators).map(i => {
-                  if (i.id === indicator.indicatorId){
-                    indicatorTitle = i.label;
-                  }
-              })
-            })
-          })
-          return {
-            indicatorId: indicator.indicatorId,
-            indicatorTitle: indicatorTitle,
-            filters: indicator.filters.map(obj => {
-              return {
-                "group": obj.group,
-                "value": obj.value,
-                "appliesTo": obj.appliesTo,
-                "isDefault": false
-              }
-            })
-          }
+            const urlFilters = profileView["filters"];
+            this._filteredIndicators = urlFilters.map(indicator => {
+                let indicatorTitle = ''
+                Object.values(profileData).map(category => {
+                    Object.values(category.subcategories).map(subcategory => {
+                        Object.values(subcategory.indicators).map(i => {
+                            if (i.id === indicator.indicatorId) {
+                                indicatorTitle = i.label;
+                            }
+                        })
+                    })
+                })
+                return {
+                    indicatorId: indicator.indicatorId,
+                    indicatorTitle: indicatorTitle,
+                    filters: indicator.filters.map(obj => {
+                        return {
+                            "group": obj.group,
+                            "value": obj.value,
+                            "appliesTo": obj.appliesTo,
+                            "isDefault": false
+                        }
+                    })
+                }
+            });
+
+            history.replaceState(
+                {
+                    "filters": this._filteredIndicators
+                },
+                '',
+                `${window.location.search}${window.location.hash}`
+            );
+
+            this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+        }
+    }
+
+    addSiteWideFilter(indicatorValue, subIndicatorValue) {
+        const alreadyAdded = this._siteWideFilters.some(x => x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue);
+        if (alreadyAdded) {
+            return;
+        }
+        this._siteWideFilters.push({
+            indicatorValue,
+            subIndicatorValue
         });
 
-        history.replaceState(
-          {
-            "filters": this._filteredIndicators
-          },
-          '',
-          `${window.location.search}${window.location.hash}`
-        );
+        const payload = {
+            siteWideFilters: this.siteWideFilters,
+            removedSiteWideFilter: null
+        }
 
-        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-      }
+        this.triggerEvent('my_view.siteWideFilters.updated', payload);
+    }
+
+    removeSiteWideFilter(indicatorValue, subIndicatorValue) {
+        this._siteWideFilters = this._siteWideFilters.filter(x => !(x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue));
+
+        const payload = {
+            siteWideFilters: this.siteWideFilters,
+            removedSiteWideFilter: {
+                indicatorValue,
+                subIndicatorValue
+            },
+            filteredIndicators: this.filteredIndicators
+        }
+
+        this.triggerEvent('my_view.siteWideFilters.updated', payload);
     }
 
     onSelectingSubindicator(payload) {

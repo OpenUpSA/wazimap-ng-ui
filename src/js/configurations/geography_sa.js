@@ -51,7 +51,7 @@ export class Config {
     get siteWideFiltersEnabled() {
         if (this.config["site_wide_filters_enabled"] != undefined)
             return this.config["site_wide_filters_enabled"];
-        return true;
+        return false;
     }
 
     panelEnabled(panel) {

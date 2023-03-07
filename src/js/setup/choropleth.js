@@ -71,7 +71,8 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
             filter: previouslySelectedFiltersClone,
             config: args.payload.config,
             method: args.state.subindicator.choropleth_method,
-            currentGeo: args.state.profile.geometries.boundary.properties.name
+            currentGeo: args.state.profile.geometries.boundary.properties.name,
+            siteWideFilters: controller.siteWideFilters
         }
         mapchip.onSubIndicatorChange(params);
     });
@@ -86,6 +87,30 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
 
     controller.on('mapchip.choropleth.filtersUpdated', payload => {
         mapchip.filterController.filtersUpdatedInMyView(payload.payload, SidePanels.PANELS.dataMapper);
+    })
+
+    mapchip.on('filterRow.filter.locked', payload => {
+        controller.addSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
+    })
+
+    mapchip.on('filterRow.filter.unlocked', payload => {
+        controller.removeSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
+    })
+
+    controller.on('my_view.siteWideFilters.updated', payload => {
+        if (mapchip.filterController == null || controller.state.subindicator == null) {
+            return;
+        }
+
+        let payloadClone = structuredClone(payload);
+        payloadClone.payload['indicatorId'] = controller.state.subindicator.indicatorId;
+
+        mapchip.filterController.model.dataFilterModel.siteWideFilters = payloadClone.payload.siteWideFilters;
+        mapchip.filterController.siteWideFiltersUpdatedInMyView(payloadClone.payload, SidePanels.PANELS.dataMapper);
+    })
+
+    mapchip.on('filterRow.created.new', (payload) => {
+        payload.filterController.setFilterRowState(payload.filterRow, controller.siteWideFilters);
     })
 }
 

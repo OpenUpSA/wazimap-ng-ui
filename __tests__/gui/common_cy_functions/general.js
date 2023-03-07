@@ -341,7 +341,7 @@ export function confirmNoChartFilterSelected() {
     cy.get('.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter').eq(1).should('have.class', 'disabled');
 }
 
-export function selectChoroplethDropdownOption(option, dropdownIndex, filterRowIndex=0) {
+export function selectChoroplethDropdownOption(option, dropdownIndex, filterRowIndex = 0) {
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${filterRowIndex}) .mapping-options__filter`)
         .eq(dropdownIndex)
         .should('not.have.class', 'disabled');
@@ -374,7 +374,7 @@ export function expandMyViewPanel() {
 export function collapseMyViewPanel() {
     cy.get('div[data-test-id="my-view-panel"]').then($panel => {
         if ($panel.is(':visible')) {
-            cy.get('div[data-test-id="my-view-close-button"]').click();
+            cy.get('div[data-test-id="my-view-close-button"]').click({force: true});
         }
     })
 }

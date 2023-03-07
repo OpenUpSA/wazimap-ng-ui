@@ -6,6 +6,7 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
 
     controller.on(VersionController.EVENTS.ready, payload => {
         profileLoader.filteredIndicators = controller.filteredIndicators;
+        profileLoader.siteWideFilters = controller.siteWideFilters;
         profileLoader.loadProfile(payload.payload, controller.versionController.activeVersion)
     });
     controller.on(VersionController.EVENTS.ready, () => {
@@ -45,5 +46,48 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
                 }
             }
         }
+    })
+
+    profileLoader.on('filterRow.created.new', payload => {
+        payload.filterController.setFilterRowState(payload.filterRow, controller.siteWideFilters);
+    })
+
+    profileLoader.on('filterRow.filter.unlocked', payload => {
+        controller.removeSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
+    })
+
+    profileLoader.on('filterRow.filter.locked', payload => {
+        controller.addSiteWideFilter(payload.currentIndicatorValue, payload.currentSubIndicatorValue);
+    })
+
+    controller.on('my_view.siteWideFilters.updated', payload => {
+        let allIndicators = [];
+        for (const category of profileLoader.categories) {
+            for (const subCategory of category.subCategories) {
+                for (const indicator of subCategory.indicators) {
+                    // do not block the UI thread
+                    allIndicators.push(indicator);
+                }
+            }
+        }
+
+        allIndicators.forEach((indicator, index) => {
+            setTimeout(() => {
+                let payloadClone = structuredClone(payload);
+                const siteWideFilters = payloadClone.payload.siteWideFilters;
+                const chart = indicator.chart;
+                payloadClone.payload['indicatorId'] = indicator.indicator.id;
+
+                if (chart !== null && chart !== undefined) {
+                    chart.filterController.model.dataFilterModel.siteWideFilters = siteWideFilters;
+                    chart.filterController.siteWideFiltersUpdatedInMyView(payloadClone.payload, SidePanels.PANELS.richData);
+                }
+
+                if (index === allIndicators.length - 1) {
+                    // last one
+                    chart.filterController.triggerEvent('filterRow.all.updated');
+                }
+            }, 0)
+        })
     })
 }

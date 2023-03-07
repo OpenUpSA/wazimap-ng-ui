@@ -84,7 +84,7 @@ class Application extends Component {
         const styleConfig = new StyleConfig(config.style);
         const tabNotice = new TabNotice(this, config.config.feedback);
         const translations = new Translations(this, config.config.translations);
-        const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled);
+        const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled, controller);
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
         const myView = new MyView(this, controller, api, profileId);
 

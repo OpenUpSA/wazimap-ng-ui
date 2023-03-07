@@ -1,14 +1,26 @@
 import {
     Component
 } from '../../utils'
-import {sortBy} from 'lodash';
+import {sortBy, isEmpty} from 'lodash';
 import {Category} from "./category";
 import {SubCategory} from "./subcategory";
 import {Indicator} from "./indicator";
 import {SubIndicator} from './subindicator'
 import {createRoot} from "react-dom/client";
 import Watermark from "../../ui_components/watermark";
+import IndicatorCategoryTreeView from "./components/indicator_tree_view";
 import React from "react";
+
+
+import TreeView from '@mui/lab/TreeView';
+import TreeItem from '@mui/lab/TreeItem';
+import Box from "@mui/material/Box";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+
+
 
 let parentContainer = null;
 let categoryTemplate = null;
@@ -19,63 +31,32 @@ const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 
 export function loadMenu(dataMapperMenu, data) {
-    parentContainer = $(".data-mapper-content__list");
-    categoryTemplate = $(".styles .data-category--v2")[0].cloneNode(true);
-    subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
-    indicatorTemplate = $(".data-category__h2_content--v2", subCategoryTemplate)[0].cloneNode(true);
-    indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
 
-    function addIndicators(parent, indicators) {
-        if (indicators === undefined) {
-            return;
-        }
-        for (const indicatorDetail of sortBy(indicators, "order")) {
-            const primaryGroup = indicatorDetail.metadata.groups.filter((g) => {
-                return g.name === indicatorDetail.metadata.primary_group
-            })[0];
+    let profileIndicators = sortBy(data, "order");
 
-            let metadata = indicatorDetail.metadata;
-            metadata.indicatorDescription = indicatorDetail.description;
-            let indicator = new Indicator(parent,
-                indicatorDetail.label,
-                indicatorDetail.id,
-                indicatorDetail.choropleth_method,
-                primaryGroup,
-                indicatorDetail.version_data,
-                indicatorDetail.metadata,
-                indicatorDetail.choropleth_range,
-                indicatorDetail.enable_linear_scrubber,
-                indicatorDetail.chartConfiguration
-            );
-        }
+    if (isEmpty(data)){
+      dataMapperMenu.showNoData()
+    } else {
+      dataMapperMenu.dataMapperRoot.render(
+        <TreeView
+          defaultCollapseIcon={<ArrowDropDownIcon />}
+          defaultExpandIcon={<ArrowRightIcon />}
+        >
+          {profileIndicators.length >  0 && profileIndicators.map(
+            (item, key) => {
+              return (
+                <IndicatorCategoryTreeView
+                  category={item}
+                  key={key}
+                  api={dataMapperMenu.api}
+                  controller={dataMapperMenu.controller}
+                />
+              )
+            })
+          }
+        </TreeView>
+      );
     }
-
-    function addSubcategories(parent, subcategories) {
-        for (const subcategoryDetail of sortBy(subcategories, "order")) {
-            let subCategory = new SubCategory(parent, subcategoryDetail.name, subcategoryDetail, dataMapperMenu);
-            addIndicators(subCategory, subcategoryDetail.indicators);
-        }
-    }
-
-    $(".data-menu__category").remove();
-    let hasNoItems = true;
-    let hiddenClass = 'hidden';
-    $(parentContainer).find('.data-category--v2').remove();
-
-    for (const categoryDetail of sortBy(data, "order")) {
-        const categoryName = categoryDetail.name;
-        let category = new Category(this, categoryName, categoryDetail);
-
-        $('.' + noDataWrapperClsName).addClass(hiddenClass);
-        hasNoItems = false;
-
-        addSubcategories(category, categoryDetail.subcategories);
-    }
-
-    if (hasNoItems) {
-        dataMapperMenu.showNoData()
-    }
-
     dataMapperMenu.isLoading = false;
 }
 
@@ -83,16 +64,19 @@ export function loadMenu(dataMapperMenu, data) {
  * This class is a stub for a menu component
  */
 export class DataMapperMenu extends Component {
-    constructor(parent, api, watermarkEnabled) {
+    constructor(parent, api, watermarkEnabled, controller) {
         super(parent);
 
         this._isLoading = false;
         this._api = api;
         this._subIndicators = [];
+        this._dataMapperRoot = false;
+        this._controller = controller;
 
         if (watermarkEnabled) {
             this.addWatermark();
         }
+        this.addDataMapperMenuRoot();
     }
 
     get isLoading() {
@@ -109,8 +93,20 @@ export class DataMapperMenu extends Component {
         this._isLoading = value;
     }
 
+    get dataMapperRoot() {
+      return this._dataMapperRoot;
+    }
+
+    set dataMapperRoot(value) {
+      return this._dataMapperRoot = value;
+    }
+
     get api() {
         return this._api;
+    }
+
+    get controller() {
+      return this._controller;
     }
 
     get subIndicators() {
@@ -130,6 +126,13 @@ export class DataMapperMenu extends Component {
 
         let watermarkRoot = createRoot(watermarkWrapper);
         watermarkRoot.render(<Watermark/>);
+    }
+
+    addDataMapperMenuRoot() {
+        let dataMapperElement = document.getElementsByClassName("data-mapper-content__list");
+        if (dataMapperElement.length > 0){
+          this.dataMapperRoot = createRoot(dataMapperElement[0]);
+        }
     }
 
     hideLoadingState() {

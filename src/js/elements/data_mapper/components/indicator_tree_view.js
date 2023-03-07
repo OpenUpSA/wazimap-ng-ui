@@ -1,0 +1,188 @@
+import React, {useState, useCallback, useMemo, useEffect} from "react";
+
+import {sortBy} from 'lodash';
+import {StyledTreeItem} from "./styledElements";
+import Box from "@mui/material/Box";
+import {Typography} from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
+
+const LoadingItemView = (props) => {
+  return (
+    <StyledTreeItem nodeId={"loading"} label={
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          Loading...
+        </Typography>
+      </Box>
+    }/>
+  )
+}
+
+const SubindicatorItemView = (props) => {
+
+  const onClickSubindicator = useCallback(
+    () => {
+      props.controller.onSubIndicatorClick({
+          indicatorTitle: props.indicator.label,
+          selectedSubindicator: props.subindicator,
+          parents: {},
+          choropleth_method: props.indicator.choropleth_method,
+          indicatorId: props.indicator.id,
+          indicatorData: props.indicatorData,
+          versionData: props.indicator.version_data,
+          metadata: props.indicator.metadata,
+          config: {
+              choroplethRange: props.indicator.choropleth_range,
+              enableLinearScrubber: props.indicator.enable_linear_scrubber,
+              chartConfiguration: props.indicator.chartConfiguration
+          }
+      })
+    }, [
+      props.controller,
+      props.indicator,
+      props.subindicator
+    ]
+  )
+
+  return (
+    <StyledTreeItem nodeId={props.subindicator} label={
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          {props.subindicator}
+        </Typography>
+      </Box>
+    } onClick={(e) => onClickSubindicator()}/>
+  )
+}
+
+const IndicatorItemView = (props) => {
+
+  const [indicatorData, setIndicatorData] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(
+    () => {
+      if (indicatorData.length === 0 && !loading){
+        setLoading(true);
+        props.api.getIndicatorChildData(
+          props.controller.state.profileId,
+          props.controller.state.profile.profile.geography.code,
+          props.indicator.id
+        ).then((childData) => {
+          setIndicatorData(childData);
+          setLoading(false);
+        })
+      }
+    },[
+      indicatorData,
+      setIndicatorData,
+      setLoading,
+      props.api,
+      props.indicator,
+      props.controller
+    ]
+  );
+
+  const subindicators = useMemo(
+    () => {
+      const indicator = props.indicator;
+      const primaryGroup = indicator.metadata.primary_group;
+      const primaryGroupObj = indicator.metadata.groups.filter(
+        group => group.name === primaryGroup
+      )
+
+      if (primaryGroupObj.length > 0){
+        return primaryGroupObj[0].subindicators
+      }
+      return [];
+    }, [
+      props.indicator
+    ]
+  );
+
+  return (
+    <StyledTreeItem nodeId={props.indicator.id.toString()} label={
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          {props.indicator.label}
+        </Typography>
+      </Box>
+    }>
+    {loading && <LoadingItemView/>}
+    {!loading && subindicators.length > 0 && subindicators.map(
+      (subindicator, key) => {
+        return (
+          <SubindicatorItemView
+            subindicator={subindicator}
+            key={key}
+            controller={props.controller}
+            loading={loading}
+            indicatorData={indicatorData}
+            indicator={props.indicator}
+          />
+        )
+      })
+    }
+    </StyledTreeItem>
+  )
+}
+
+const IndicatorSubCategoryTreeView = (props) => {
+  let indicators = sortBy(props.subcategory.indicators, "order");
+
+  return (
+    <StyledTreeItem nodeId={props.subcategory.name} label={
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          {props.subcategory.name}
+        </Typography>
+      </Box>
+    }>
+    {indicators.length > 0 && indicators.map(
+      (indicator, key) => {
+        return (
+          <IndicatorItemView
+            indicator={indicator}
+            key={key}
+            api={props.api}
+            controller={props.controller}
+          />
+        )
+      })
+    }
+    </StyledTreeItem>
+
+  )
+}
+
+const IndicatorCategoryTreeView = (props) => {
+
+  let subcategories = sortBy(props.category.subcategories, "order")
+  return (
+    <StyledTreeItem nodeId={props.category.name} label={
+      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          {props.category.name}
+        </Typography>
+      </Box>
+    }>
+    {subcategories.length > 0 && subcategories.map(
+      (subcategory, key) => {
+        return (
+          <IndicatorSubCategoryTreeView
+            subcategory={subcategory}
+            key={key}
+            api={props.api}
+            controller={props.controller}
+          />
+        )
+      })
+    }
+    </StyledTreeItem>
+
+  )
+}
+
+export default IndicatorCategoryTreeView;

@@ -23,6 +23,7 @@
     "urls": [
       "example.com"
     ],
+    "site_wide_filters_enabled": true,
     "tutorial": [],
     "default_coordinates": {
       "lat": -28.995409163308832,

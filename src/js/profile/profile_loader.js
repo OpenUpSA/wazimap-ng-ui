@@ -18,7 +18,7 @@ let profileWrapper = null;
 
 
 export default class ProfileLoader extends Component {
-    constructor(parent, formattingConfig, _api, _profileId, _config, watermarkEnabled, siteWideFiltersEnabled) {
+    constructor(parent, formattingConfig, _api, _profileId, _config, watermarkEnabled, siteWideFiltersEnabled, restrictValues) {
         super(parent);
         this.api = _api;
         this.profileId = _profileId;
@@ -29,6 +29,7 @@ export default class ProfileLoader extends Component {
         this._siteWideFilters = [];
         this.watermarkEnabled = watermarkEnabled;
         this.siteWideFiltersEnabled = siteWideFiltersEnabled;
+        this.restrictValues = restrictValues;
         this._categories = [];
 
         new ResizeObserver(() => {
@@ -114,7 +115,8 @@ export default class ProfileLoader extends Component {
                 isFirst,
                 profile.geography,
                 this.config,
-                this.siteWideFiltersEnabled);
+                this.siteWideFiltersEnabled,
+                this.restrictValues);
             c.isVisible = c.subCategories.length > 0;
             if (c.isVisible) {
                 this.createNavItem(id, category);

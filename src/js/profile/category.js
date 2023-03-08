@@ -15,7 +15,20 @@ const descriptionClass = '.category-header__description';
 //category > subcategory > indicator > chart
 
 export class Category extends Component {
-    constructor(parent, formattingConfig, category, detail, _profileWrapper, _id, _removePrevCategories, isFirst, geography, profileConfig, addLockButton = true) {
+    constructor(
+        parent,
+        formattingConfig,
+        category,
+        detail,
+        _profileWrapper,
+        _id,
+        _removePrevCategories,
+        isFirst,
+        geography,
+        profileConfig,
+        addLockButton = true,
+        restrictValues = {}
+    ) {
         super(parent);
 
         categoryTemplate = $(categoryClass)[0].cloneNode(true);
@@ -32,7 +45,7 @@ export class Category extends Component {
 
         this.prepareDomElements();
         this.prepareEvents();
-        this.addCategory(category, detail, isFirst, addLockButton);
+        this.addCategory(category, detail, isFirst, addLockButton, restrictValues);
     }
 
     get filteredIndicators() {
@@ -81,7 +94,7 @@ export class Category extends Component {
         });
     }
 
-    addCategory = (category, detail, isFirst, addLockButton) => {
+    addCategory = (category, detail, isFirst, addLockButton, restrictValues) => {
         const newCategorySection = categoryTemplate.cloneNode(true);
         const sectionHeader = $('.category-header')[0].cloneNode(true);
         const indicatorHeader = $('.sub-category-header')[0].cloneNode(true);
@@ -104,7 +117,7 @@ export class Category extends Component {
             $(newCategorySection).addClass('page-break-before');
         }
 
-        this.loadSubcategories(newCategorySection, detail, addLockButton);
+        this.loadSubcategories(newCategorySection, detail, addLockButton, restrictValues);
 
         this.uiElements.push(newCategorySection);
 
@@ -118,12 +131,12 @@ export class Category extends Component {
         return sectionLink;
     }
 
-    loadSubcategories = (wrapper, detail, addLockButton) => {
+    loadSubcategories = (wrapper, detail, addLockButton, restrictValues) => {
         let isFirst = true;
 
         for (const subcategoryDetail of sortBy(detail.subcategories, "order")) {
             const subcategory = Object.keys(detail.subcategories).filter(k => detail.subcategories[k] === subcategoryDetail);
-            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, subcategoryDetail, isFirst, this.geography, this.profileConfig, addLockButton);
+            let sc = new Subcategory(this, this.formattingConfig, wrapper, subcategory, subcategoryDetail, isFirst, this.geography, this.profileConfig, addLockButton, restrictValues);
             sc.isVisible = sc.indicators.length > 0;
             if (sc.isVisible) {
                 this.subCategories.push(sc);

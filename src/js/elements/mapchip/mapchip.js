@@ -20,7 +20,7 @@ const filterHeaderToggleClass = ".filters__header_toggle";
  * Represent the map chip at the bottom of the map
  */
 export class MapChip extends Component {
-    constructor(parent, legendColors, siteWideFiltersEnabled) {
+    constructor(parent, legendColors, siteWideFiltersEnabled, restrictValues) {
         super(parent);
         this._tooltip = new Tooltip();
         this.prepareDomElements();
@@ -32,6 +32,7 @@ export class MapChip extends Component {
         this._isContentVisible = false;
         this._appliedFilters = [];
         this.siteWideFiltersEnabled = siteWideFiltersEnabled;
+        this.restrictValues = restrictValues;
         this.prepareUIEvents();
         this.choroplethMethods = {
             subindicator: 'subindicator',
@@ -269,7 +270,9 @@ export class MapChip extends Component {
             previouslySelectedFilters,
             this.metadata.primary_group,
             params.childData,
-            params.siteWideFilters);
+            params.siteWideFilters,
+            DataFilterModel.FILTER_TYPE.indicators,
+            this.restrictValues);
 
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
 

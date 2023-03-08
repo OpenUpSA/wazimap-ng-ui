@@ -3,14 +3,24 @@ import {ContentBlock} from './content_block';
 import {SidePanels} from "../../elements/side_panels";
 
 export class Indicator extends ContentBlock {
-    constructor(parent, container, indicator, title, isLast, geography, chartAttribution, addLockButton = true) {
+    constructor(
+        parent,
+        container,
+        indicator,
+        title,
+        isLast,
+        geography,
+        chartAttribution,
+        addLockButton = true,
+        restrictValues = {}
+    ) {
         super(parent, container, indicator, title, isLast, geography);
 
         this.chartAttribution = chartAttribution;
         this._chart = null;
 
         this.prepareDomElements();
-        this.addIndicatorChart(addLockButton);
+        this.addIndicatorChart(addLockButton, restrictValues);
     }
 
     get previouslySelectedFilters() {
@@ -48,12 +58,12 @@ export class Indicator extends ContentBlock {
         super.prepareDomElements();
     }
 
-    addIndicatorChart(addLockButton) {
+    addIndicatorChart(addLockButton, restrictValues) {
         let groups = Object.keys(this.indicator.groups);
         const configuration = this.indicator.chartConfiguration;
 
         let chartData = this.orderChartData();
-        let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution, addLockButton);
+        let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution, addLockButton, restrictValues);
         this.bubbleEvents(c, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

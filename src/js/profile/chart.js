@@ -42,7 +42,8 @@ export class Chart extends Component {
         _subCategoryNode,
         title,
         chartAttribution,
-        addLockButton = true
+        addLockButton = true,
+        restrictValues = {}
     ) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
@@ -75,7 +76,7 @@ export class Chart extends Component {
             addLockButton: addLockButton
         });
 
-        this.addChart(data);
+        this.addChart(data, restrictValues);
     }
 
     get previouslySelectedFilters() {
@@ -123,7 +124,7 @@ export class Chart extends Component {
         return this._filterController;
     }
 
-    addChart = (data) => {
+    addChart = (data, restrictValues) => {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();
 
@@ -217,7 +218,7 @@ export class Chart extends Component {
                 $svg.removeAttr('height');
                 this.filterGroups = data.metadata.groups;
 
-                this.handleChartFilter(data, data.metadata.groups);
+                this.handleChartFilter(data, data.metadata.groups, restrictValues);
             });
     };
 
@@ -444,9 +445,9 @@ export class Chart extends Component {
         return percentage;
     };
 
-    handleChartFilter = (indicators, groups) => {
+    handleChartFilter = (indicators, groups, restrictValues) => {
         let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, this.previouslySelectedFilters, indicators.metadata.primary_group, {},
-            this.siteWideFilters);
+            this.siteWideFilters, DataFilterModel.FILTER_TYPE.indicators, restrictValues);
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }

@@ -36,7 +36,8 @@ export const HelpText = styled(Typography)(() => ({
     fontSize: '12px',
     color: '#707070',
     fontWeight: '400',
-    marginTop: '15px'
+    marginTop: '15px',
+    marginBottom: '15px'
 }));
 
 export const IconContainer = styled(Box)(() => ({

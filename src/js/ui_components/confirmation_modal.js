@@ -10,7 +10,7 @@ export class ConfirmationModal extends Component {
         super(parent);
 
         this._isVisible = false;
-        this._element = $('.warning-modal');
+        this._element = $('.warning-modal:not(.global-loading-modal)');
         this._cookieName = cookieName;
 
         this.prepareEvents();

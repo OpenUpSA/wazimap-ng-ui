@@ -6,6 +6,7 @@ import {Tooltip} from "../../ui_components/tooltip";
 import {FilterLabel} from "./components/filter_label";
 import {DescriptionInfoIcon} from "./components/description_info_icon";
 import {LinearScrubberRenderer} from "./components/linear_scrubber/renderer";
+import {SidePanels} from "../side_panels";
 
 const filterContentClass = '.map-options__filters_content';
 const mapChipBlockParentClass = '.map-bottom-items--v2';
@@ -19,7 +20,7 @@ const filterHeaderToggleClass = ".filters__header_toggle";
  * Represent the map chip at the bottom of the map
  */
 export class MapChip extends Component {
-    constructor(parent, legendColors) {
+    constructor(parent, legendColors, siteWideFiltersEnabled) {
         super(parent);
         this._tooltip = new Tooltip();
         this.prepareDomElements();
@@ -30,6 +31,7 @@ export class MapChip extends Component {
         this._filterController = null;
         this._isContentVisible = false;
         this._appliedFilters = [];
+        this.siteWideFiltersEnabled = siteWideFiltersEnabled;
         this.prepareUIEvents();
         this.choroplethMethods = {
             subindicator: 'subindicator',
@@ -262,7 +264,12 @@ export class MapChip extends Component {
         this.config = params.config;
         const previouslySelectedFilters = params.filter;
 
-        let dataFilterModel = new DataFilterModel(this.metadata.groups, this.config.chartConfiguration.filter, previouslySelectedFilters, this.metadata.primary_group, params.childData);
+        let dataFilterModel = new DataFilterModel(this.metadata.groups,
+            this.config.chartConfiguration.filter,
+            previouslySelectedFilters,
+            this.metadata.primary_group,
+            params.childData,
+            params.siteWideFilters);
 
         this.setTitle(params.indicatorTitle, params.selectedSubindicator);
 
@@ -281,21 +288,29 @@ export class MapChip extends Component {
         this.show();
 
         // Filter controller
-        this.setFilterController(dataFilterModel);
+        this.setFilterController(dataFilterModel, this.siteWideFiltersEnabled);
     }
 
     setFilterLabel(dataFilterModel, groups) {
         const selectedFilters = dataFilterModel.previouslySelectedFilters;
         const defaultFilters = dataFilterModel?.configFilters?.defaults;
         if (defaultFilters) {
+            let filters = [];
             defaultFilters.forEach(item => {
-                if (selectedFilters[item.name] === undefined) {
-                    selectedFilters[item.name] = item.value
+                const alreadyAdded = selectedFilters.some(x => x.filters.some(y => y.appliesTo.indexOf('data_explorer') >= 0 && y.group === item.name));
+                if (!alreadyAdded) {
+                    filters.push({
+                        group: item.name,
+                        value: item.value
+                    })
                 }
             });
+            if (filters.length > 0) {
+                selectedFilters.push({filters: filters})
+            }
         }
 
-        this.filterLabel.compareFilters(this.appliedFilters, selectedFilters);
+        this.filterLabel.compareFilters(this.appliedFilters, selectedFilters, dataFilterModel.siteWideFilters);
         this.filterLabel.setFilterLabelTotalCount(groups);
         this.filterLabel.setFilterLabelSelectedCount({});
         this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);
@@ -311,8 +326,15 @@ export class MapChip extends Component {
         this.linearScrubber.render(params);
     }
 
-    setFilterController(dataFilterModel) {
-        this._filterController = new FilterController(this, this._filtersContainer);
+    setFilterController(dataFilterModel, addLockButton = true) {
+        this._filterController = new FilterController(this, this._filtersContainer, {
+            filterRowClass: '.map-options__filter-row',
+            filterDropdown: '.mapping-options__filter',
+            addButton: 'a.mapping-options__add-filter',
+            filterPanel: SidePanels.PANELS.dataMapper,
+            removeFilterButton: '.mapping-options__remove-filter',
+            addLockButton: addLockButton
+        });
 
         this.show();
         if (this._filterController.filterCallback === null) {

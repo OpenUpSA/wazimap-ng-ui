@@ -89,6 +89,7 @@ Feature: Sharing url
     And I expand the filter dialog
 
     And I select "30-35" from subIndicator dropdown in filter dialog on row "0"
+    And I add new filter
     When I select "language" from indicator dropdown in filter dialog on row "1"
     And I select "English" from subIndicator dropdown in filter dialog on row "1"
     And I collapse Data Mapper
@@ -197,6 +198,7 @@ Feature: Sharing url
     And I expand the filter dialog
 
     And I select "30-35" from subIndicator dropdown in filter dialog on row "0"
+    And I add new filter
     When I select "language" from indicator dropdown in filter dialog on row "1"
     And I select "English" from subIndicator dropdown in filter dialog on row "1"
     And I collapse Data Mapper

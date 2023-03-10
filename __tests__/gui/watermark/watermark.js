@@ -25,6 +25,10 @@ Then('I confirm that the map watermark is visible', () => {
     cy.get('.map-watermark-wrapper .watermark-wrapper').should('be.visible');
 })
 
+Then('I confirm that the watermak links to the correct url', () => {
+    cy.get('.map-watermark-wrapper .watermark-wrapper a').should('have.attr', 'href', 'https://wazimap.com/');
+})
+
 When('I expand Data Mapper', () => {
     expandDataMapper();
 })

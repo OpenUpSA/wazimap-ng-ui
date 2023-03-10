@@ -22,3 +22,9 @@
   right: 0;
   top: 80px;
 }
+
+@media (max-width: 480px) {
+  .right-panel-toggles {
+    top: 320px;
+  }
+}

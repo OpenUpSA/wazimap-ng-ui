@@ -262,8 +262,14 @@ export default class Controller extends Component {
         this.updateShareUrl();
     }
 
-    updateHiddenIndicators(indicatorIds){
-      this._hiddenIndicators = indicatorIds;
+    updateHiddenIndicators(indicatorId, action="add"){
+      let hiddenIndicators = structuredClone(this._hiddenIndicators)
+      if(action === "add"){
+        hiddenIndicators = [...hiddenIndicators, indicatorId]
+      } else {
+        hiddenIndicators = hiddenIndicators.filter(item => item !== indicatorId);
+      }
+      this._hiddenIndicators = hiddenIndicators;
       const currentGeo = this.state.profile.profile.geography.code;
       let indicators = this.versionController.getIndicatorDataByGeo(currentGeo);
       const indicatorData = structuredClone(indicators.indicatorData);
@@ -279,7 +285,7 @@ export default class Controller extends Component {
           let newIndicators = {};
           Object.keys(indicators).forEach(function(indicatorKey, indicatorIndex) {
             let indicatorValue = indicators[indicatorKey];
-            if (!indicatorIds.includes(indicatorValue.id)){
+            if (!hiddenIndicators.includes(indicatorValue.id)){
               newIndicators[indicatorKey] = indicatorValue;
             }
           });

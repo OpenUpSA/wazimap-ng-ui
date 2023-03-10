@@ -95,7 +95,7 @@ const IndicatorCategoryTreeView = (props) => {
   const addHiddenIndicator = useCallback(
     (indicatorId) => {
       setHiddenIndicators([...hiddenIndicators, indicatorId]);
-      props.updateHiddenIndicators([...hiddenIndicators, indicatorId]);
+      props.updateHiddenIndicators(indicatorId, "add");
     }, [
       hiddenIndicators,
       setHiddenIndicators,
@@ -106,7 +106,7 @@ const IndicatorCategoryTreeView = (props) => {
     (indicatorId) => {
       let filteredIndicators = hiddenIndicators.filter(item => item !== indicatorId);
       setHiddenIndicators(filteredIndicators);
-      props.updateHiddenIndicators(filteredIndicators);
+      props.updateHiddenIndicators(indicatorId, "remove");
     }, [
       hiddenIndicators,
       setHiddenIndicators,

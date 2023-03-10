@@ -85,7 +85,7 @@ export function configureChoroplethEvents(controller, objs = {mapcontrol: null, 
     })
 
     controller.on('my_view.hiddenIndicators.updated', payload => {
-        controller.updateHiddenIndicators(payload.payload.indicatorIds);
+        controller.updateHiddenIndicators(payload.payload.indicatorId, payload.payload.action);
     })
 
     controller.on('mapchip.choropleth.filtersUpdated', payload => {

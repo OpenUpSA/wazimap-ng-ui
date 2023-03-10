@@ -35,9 +35,10 @@ const Panel = (props) => {
         });
     }
 
-    const updateHiddenIndicators = (indicatorIds) => {
+    const updateHiddenIndicators = (indicatorId, action) => {
         props.controller.triggerEvent('my_view.hiddenIndicators.updated', {
-            indicatorIds
+            "indicatorId": indicatorId,
+            "action": action
         });
     }
 

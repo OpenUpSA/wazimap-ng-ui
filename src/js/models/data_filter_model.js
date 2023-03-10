@@ -28,7 +28,7 @@ export class DataFilterModel extends Observable {
         points: 'points'
     }
 
-    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData, filterType = DataFilterModel.FILTER_TYPE.indicators) {
+    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData, siteWideFilters = [], filterType = DataFilterModel.FILTER_TYPE.indicators) {
         super()
         this._groups = groups;
         this.configFilters = configFilters;
@@ -39,6 +39,7 @@ export class DataFilterModel extends Observable {
         this._selectedSubindicators = {}
         this._childData = childData;
         this._filteredData = {};
+        this._siteWideFilters = siteWideFilters;
         this._filterFunction = filterType === DataFilterModel.FILTER_TYPE.indicators ? this.getFilteredIndicatorData : this.getFilteredPointData;
         this._filterType = filterType;
     }
@@ -137,18 +138,20 @@ export class DataFilterModel extends Observable {
     }
 
     get selectedFilterDetails() {
-        let details = [...this.selectedFilters].map(sf => {
+        const self = this;
+        let details = [...self.selectedFilters].map(sf => {
             const group = sf.group.name;
-            const value = this._selectedSubindicators[group];
-            const isDefault = this.defaultFilterGroups
-                    .some(f => f.group === group && f.value === this._selectedSubindicators[group])
-                || this.nonAggregatableGroups.some(x => x.name === group && x.values[0] === value);
+            const value = self._selectedSubindicators[group];
+            const isDefault = self.defaultFilterGroups
+                    .some(f => f.group === group && f.value === self._selectedSubindicators[group])
+                || self.nonAggregatableGroups.some(x => x.name === group && x.values[0] === value);
 
             return {
                 group: group,
                 value: value,
                 isDefault: isDefault,
-                appliesTo: [sf.filterPanel]
+                appliesTo: [sf.filterPanel],
+                isSiteWideFilter: self.isSiteWideFilter(group, value)
             };
         })
 
@@ -197,6 +200,18 @@ export class DataFilterModel extends Observable {
     get availableFilterNames() {
         let filters = [...this.availableFilters]
         return filters.map(f => f.name)
+    }
+
+    get siteWideFilters() {
+        return this._siteWideFilters;
+    }
+
+    set siteWideFilters(value) {
+        this._siteWideFilters = value;
+    }
+
+    isSiteWideFilter(group, value) {
+        return this.siteWideFilters.filter(x => x.indicatorValue === group && x.subIndicatorValue === value)[0] != null;
     }
 
     addFilter(indicatorName, filterPanel) {

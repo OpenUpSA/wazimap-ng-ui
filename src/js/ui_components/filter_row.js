@@ -1,6 +1,7 @@
 import {Dropdown, DropdownModel} from "./dropdown";
 import {Component, Observable} from "../utils";
 import {SidePanels} from "../elements/side_panels";
+import {LockFilterButtonWrapper} from "./lock_filter_button/lock_filter_button_wrapper";
 
 /**
  *
@@ -8,7 +9,7 @@ import {SidePanels} from "../elements/side_panels";
 class FilterRowModel extends Component {
     static EVENTS = {
         updated: 'filterRowModel.updated',  // triggered when new datafiltermodel is set
-        indicatorSelected: 'filterRowModel.indicatorSelected' //
+        indicatorSelected: 'filterRowModel.indicatorSelected'
     }
 
     static ALL_VALUES = 'All values';
@@ -28,6 +29,7 @@ class FilterRowModel extends Component {
         this._isDefault = isDefault;
         this._isExtra = isExtra;
         this._isRequired = isRequired;
+        this._isUnavailable = false;
         this._currentIndicatorValue = null;
         this._currentSubindicatorValue = null;
         this._defaultIndicatorText = defaultIndicatorText;
@@ -81,6 +83,17 @@ class FilterRowModel extends Component {
         return this._isRequired;
     }
 
+    get isUnavailable() {
+        /**
+         * when a site-wide filter is not available
+         */
+        return this._isUnavailable;
+    }
+
+    set isUnavailable(value) {
+        this._isUnavailable = value;
+        }
+        
     get isPreviouslySelected() {
         return this._isPreviouslySelected;
     }
@@ -108,7 +121,7 @@ class FilterRowModel extends Component {
         let updateShareUrl = false;
         this._currentIndicatorValue = value;
 
-        if (prevIndicator != null && prevIndicator !== FilterRowModel.ALL_VALUES) {
+        if (prevIndicator != null && prevIndicator !== FilterRowModel.ALL_VALUES && !this.isUnavailable) {
             this.dataFilterModel.removeFilter(prevIndicator);
             updateShareUrl = true;
         }
@@ -165,7 +178,8 @@ class FilterRowModel extends Component {
  */
 export class FilterRow extends Component {
     static EVENTS = {
-        removed: 'filterRow.removed'
+        removed: 'filterRow.removed',
+        indicatorOrSubIndicatorSelected: 'filterRow.indicatorOrSubIndicatorSelected'
     }
 
     static SELECT_ATTRIBUTE = 'Select an attribute';
@@ -199,6 +213,10 @@ export class FilterRow extends Component {
         return this._container;
     }
 
+    get lockFilterButton() {
+        return this._lockFilterButton;
+    }
+
     setPrimaryIndexUsingValue(value) {
         this.indicatorDropdown.model.currentItem = value;
     }
@@ -215,13 +233,33 @@ export class FilterRow extends Component {
         this.subIndicatorDropdown.model.currentIndex = index;
     }
 
+    setPrimaryValueUnavailable(value) {
+        this.model._currentIndicatorValue = value;
+        this.indicatorDropdown.model.isUnavailable = true;
+        this.indicatorDropdown.setText(value);
+    }
+
+    setSecondaryValueUnavailable(value) {
+        this.model._currentSubindicatorValue = value;
+        this.subIndicatorDropdown.model.isUnavailable = true;
+        this.subIndicatorDropdown.setText(value);
+    }
+
     prepareDomElements() {
+        if (this._elements.addLockButton) {
+            this.addLockButton();
+        }
         $(this.container).attr('data-isextra', this._isExtra);
         $(this.container).attr('data-isdefault', this._isDefault);
         this._removeFilterButton = $(this.container).find(this._elements.removeFilterButton);
 
         this._indicatorDd = $(this.container).find(this._elements.filterDropdown)[0];
         this._subindicatorDd = $(this.container).find(this._elements.filterDropdown)[1];
+    }
+
+    addLockButton() {
+        $(this.container).find('.lock-filter-button-wrapper').remove();
+        this._lockFilterButton = new LockFilterButtonWrapper(this);
     }
 
 
@@ -273,10 +311,21 @@ export class FilterRow extends Component {
         }
 
         this.model.currentIndicatorValue = selectedItem;
+
+        this.setLockButtonVisibility();
     }
 
     onSubindicatorSelected(selectedItem) {
-        this.model.currentSubindicatorValue = selectedItem
+        this.model.currentSubindicatorValue = selectedItem;
+
+        this.setLockButtonVisibility();
+    }
+
+    setLockButtonVisibility() {
+        this.triggerEvent(FilterRow.EVENTS.indicatorOrSubIndicatorSelected, {
+            selectedIndicator: this.model.currentIndicatorValue !== FilterRowModel.ALL_INDICATORS,
+            selectedSubIndicator: this.model.currentSubindicatorValue !== FilterRowModel.ALL_VALUES
+        });
     }
 
     updateIndicatorDropdowns(model, currentIndex = 0) {
@@ -301,6 +350,6 @@ export class FilterRow extends Component {
         this.model.currentIndicatorValue = null;
         $(this.container).remove();
         this.model.dataFilterModel.updateFilteredData();
-        this.triggerEvent(FilterRow.EVENTS.removed, self);
+        this.triggerEvent(FilterRow.EVENTS.removed, this);
     }
 }

@@ -102,7 +102,7 @@
             },
             "chart_type": "line",
             "choropleth_range": "by_subindicator",
-            "enable_linear_scrubber": true
+            "enable_linear_scrubber": false
           }
         }
       },
@@ -241,7 +241,7 @@
                   ],
                   "dataset": 1299,
                   "name": "age group",
-                  "can_aggregate": false,
+                  "can_aggregate": true,
                   "can_filter": true
                 },
                 {
@@ -292,14 +292,6 @@
                   "maxX": 1,
                   "minX": 0
                 }
-              },
-              "filter": {
-                "defaults": [
-                  {
-                    "name": "age group",
-                    "value": "15-35 (ZA)"
-                  }
-                ]
               },
               "xTicks": 6
             },

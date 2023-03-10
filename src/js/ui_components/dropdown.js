@@ -7,14 +7,17 @@ export class DropdownModel extends Observable {
         selected: 'DropdownModel.selected', // triggered when a new item is selected
         enabled: 'DropdownModel.enabled',   // triggered when the dropdown is set to enabled
         disabled: 'DropdownModel.disabled', // triggered when the dropdown is set to disabled
+        unavailable: 'DropdownModel.unavailable',   // triggered when the dropdown is set to unavailable
+        available: 'DropdownModel.available', // triggered when the dropdown is set to available
     }
 
-    constructor(items = [], currentIndex = 0, isDisabled = false) {
+    constructor(items = [], currentIndex = 0, isDisabled = false, isUnavailable = false) {
         super();
 
         this._items = items;
         this._currentIndex = currentIndex;
         this._isDisabled = isDisabled;
+        this._isUnavailable = isUnavailable;
         this._manualTrigger = false;
     }
 
@@ -61,6 +64,19 @@ export class DropdownModel extends Observable {
         }
     }
 
+    get isUnavailable() {
+        return this._isUnavailable;
+    }
+
+    set isUnavailable(value) {
+        if (value) {
+            this.isDisabled = true;
+            this.triggerEvent(DropdownModel.EVENTS.unavailable);
+        } else {
+            this.triggerEvent(DropdownModel.EVENTS.available);
+        }
+     }
+        
     get manualTrigger() {
         return this._manualTrigger;
     }
@@ -105,6 +121,7 @@ export class Dropdown extends Component {
 
         this.redrawItems(this.model.items);
         this.model.isDisabled = disabled;
+        this.model.isUnavailable = false;
         this.setText(defaultText);
     }
 
@@ -118,8 +135,8 @@ export class Dropdown extends Component {
 
     prepareDomElements() {
         this._ddWrapper = $(this.container).find('.dropdown-menu__content')[0];
-        $(this.container).find('.dropdown__list_item').hide();
-        this._listItem = $(this.container).find('.dropdown__list_item')[0].cloneNode(true);
+        this._listItem = $('.styles .dropdown-menu__content .dropdown__list_item')[0].cloneNode(true);
+        $(this.container).find('.dropdown__list_item').remove();
 
         this._selectedItem = $(this.container).find('.dropdown-menu__selected-item .truncate');
         this._trigger = $(this.container).find('.dropdown-menu__trigger')[0]
@@ -143,6 +160,9 @@ export class Dropdown extends Component {
 
         this.model.on(DropdownModel.EVENTS.disabled, () => self.disable())
         this.model.on(DropdownModel.EVENTS.enabled, () => self.enable())
+
+        this.model.on(DropdownModel.EVENTS.unavailable, () => self.setUnavailable())
+        this.model.on(DropdownModel.EVENTS.available, () => self.setAvailable())
     }
 
     prepareUIEvents() {
@@ -187,6 +207,10 @@ export class Dropdown extends Component {
         $(this._selectedItem).text(text)
     }
 
+    getText() {
+        return $(this._selectedItem).text();
+    }
+
     enable() {
         $(this._trigger).removeClass('is--disabled');
         $(this.container).removeClass('disabled');
@@ -195,6 +219,14 @@ export class Dropdown extends Component {
     disable() {
         $(this._trigger).addClass('is--disabled');
         $(this.container).addClass('disabled');
+    }
+
+    setAvailable() {
+        $(this._trigger).css('text-decoration', 'unset');
+    }
+
+    setUnavailable() {
+        $(this._trigger).css('text-decoration', 'line-through');
     }
 
     redrawItems(items) {

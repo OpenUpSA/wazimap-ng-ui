@@ -61,10 +61,6 @@ export class FilterLabel extends Component {
         }
     }
 
-    isEqualsJson(obj1, obj2) {
-        return JSON.stringify(obj1) === JSON.stringify(obj2);
-    }
-
     showNotificationBadge() {
         this._filterHeaderLabelContainer.addClass("notification-badges");
     }
@@ -94,14 +90,40 @@ export class FilterLabel extends Component {
         this._filterHeaderLabelContainer.removeClass("notification-badges");
     }
 
-    compareFilters(previouslySelectedFilters, oldFilters) {
-        const showBadge = this.isEqualsJson(previouslySelectedFilters, (oldFilters[0]?.filters || []));
-        if (!showBadge) {
+    compareFilters(previouslySelectedFilters, oldFilters, siteWideFilters) {
+        let newFiltersClone = this.tidyFilterArray(previouslySelectedFilters, siteWideFilters);
+        let oldFiltersClone = this.tidyFilterArray((oldFilters[0]?.filters || []), siteWideFilters);
+
+        const isEqual = this.isEqualsJson(newFiltersClone, oldFiltersClone);
+        if (!isEqual) {
             this.showNotificationBadge();
             this.showSnackbar();
             if (previouslySelectedFilters.length === 0) {
                 this.parent.appliedFilters = [];
             }
         }
+    }
+
+    tidyFilterArray(arrToClone, siteWideFilters) {
+        const keyArray = ['group', 'value'];
+
+        let arr = structuredClone(arrToClone);
+        arr.forEach(f => {
+            f.isSiteWideFilter = siteWideFilters.filter(x => x.indicatorValue === f.group && x.subIndicatorValue === f.value)[0] != null;
+        })
+        arr = arr.filter(x => !x.isSiteWideFilter);
+        arr.forEach(function (x) {
+            Object.keys(x).forEach(key => {
+                if (keyArray.indexOf(key) < 0) {
+                    delete x[key];
+                }
+            })
+        });
+
+        return arr;
+    }
+
+    isEqualsJson(obj1, obj2) {
+        return JSON.stringify(obj1) === JSON.stringify(obj2);
     }
 }

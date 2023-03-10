@@ -72,9 +72,9 @@ class Application extends Component {
         mapcontrol.popup = new Popup(this, formattingConfig, mapcontrol.map);
         const pointData = new PointData(this, api, mapcontrol.map, profileId, config);
         const pointDataTray = new PointDataTray(this, api, profileId, config.watermarkEnabled);
-        const mapchip = new MapChip(this, config.choropleth);
+        const mapchip = new MapChip(this, config.choropleth, config.siteWideFiltersEnabled);
         const search = new Search(this, api, profileId, 2);
-        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled);
+        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled, config.siteWideFiltersEnabled);
         const locationInfoBox = new LocationInfoBox(this, formattingConfig);
         const zoomToggle = new ZoomToggle(this);
         const preferredChildToggle = new PreferredChildToggle(this);
@@ -86,7 +86,7 @@ class Application extends Component {
         const translations = new Translations(this, config.config.translations);
         const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled);
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
-        const myView = new MyView(this, controller);
+        const myView = new MyView(this, controller, config.siteWideFiltersEnabled);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);

@@ -41,7 +41,8 @@ export class Chart extends Component {
         groups,
         _subCategoryNode,
         title,
-        chartAttribution
+        chartAttribution,
+        addLockButton = true
     ) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
@@ -70,7 +71,8 @@ export class Chart extends Component {
             filterDropdown: '.profile-indicator__filter',
             addButton: 'a.profile-indicator__new-filter',
             filterPanel: SidePanels.PANELS.richData,
-            removeFilterButton: '.profile-indicator__remove-filter'
+            removeFilterButton: '.profile-indicator__remove-filter',
+            addLockButton: addLockButton
         });
 
         this.addChart(data);
@@ -82,6 +84,10 @@ export class Chart extends Component {
         } else {
             return this.parent.previouslySelectedFilters;
         }
+    }
+
+    get siteWideFilters() {
+        return this.parent.siteWideFilters;
     }
 
     get chartType() {
@@ -439,7 +445,8 @@ export class Chart extends Component {
     };
 
     handleChartFilter = (indicators, groups) => {
-        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, this.previouslySelectedFilters, indicators.metadata.primary_group, {});
+        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, this.previouslySelectedFilters, indicators.metadata.primary_group, {},
+            this.siteWideFilters);
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }

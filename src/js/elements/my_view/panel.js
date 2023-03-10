@@ -5,13 +5,19 @@ import {PanelContainer} from "./styled_elements";
 
 const Panel = (props) => {
     const [filteredIndicators, setFilteredIndicators] = useState([]);
+    const [siteWideFilters, setSiteWideFilters] = useState([]);
     const [startedListening, setStartedListening] = useState(false);
+    const [siteWideFiltersEnabled] = useState(props.siteWideFiltersEnabled);
 
     if (!startedListening) {
+        setStartedListening(true);
         props.controller.on('my_view.filteredIndicators.updated', payload => {
             setFilteredIndicators(prev => payload.payload.slice(0));
-            setStartedListening(true);
         });
+
+        props.controller.on('my_view.siteWideFilters.updated', payload => {
+            setSiteWideFilters(prev => payload.payload.siteWideFilters.slice(0));
+        })
     }
 
     const removeFilter = (filteredIndicator, selectedFilter) => {
@@ -19,6 +25,10 @@ const Panel = (props) => {
             filteredIndicator,
             selectedFilter
         });
+    }
+
+    const removeSiteWideFilter = (swf) => {
+        props.controller.removeSiteWideFilter(swf.indicatorValue, swf.subIndicatorValue);
     }
 
     return (
@@ -29,7 +39,10 @@ const Panel = (props) => {
             <MyViewHeader/>
             <ViewSettings
                 filteredIndicators={filteredIndicators}
+                siteWideFilters={siteWideFilters}
                 removeFilter={(fi, sf) => removeFilter(fi, sf)}
+                removeSiteWideFilter={(swf) => removeSiteWideFilter(swf)}
+                siteWideFiltersEnabled={siteWideFiltersEnabled}
             />
         </PanelContainer>
     );

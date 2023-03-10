@@ -1,7 +1,7 @@
 import React, {useState, useCallback, useMemo, useEffect} from "react";
 
 import {sortBy} from 'lodash';
-import {StyledTreeItem} from "./styledElements";
+import {StyledCategoryTreeItem, StyledSubCategoryTreeItem, StyledSubindicatorTreeItem, StyledIndicatorTreeItem} from "./styledElements";
 import Box from "@mui/material/Box";
 import {Typography} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -10,9 +10,9 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const LoadingItemView = (props) => {
   return (
-    <StyledTreeItem nodeId={"loading"} label={
+    <StyledSubindicatorTreeItem nodeId={"loading"} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+        <Typography variant="body2" sx={{ fontSize: '1em', letterSpacing: '.3px', color: '#666'}}>
           Loading...
         </Typography>
       </Box>
@@ -47,9 +47,9 @@ const SubindicatorItemView = (props) => {
   )
 
   return (
-    <StyledTreeItem nodeId={props.subindicator} label={
+    <StyledSubindicatorTreeItem nodeId={props.subindicator} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+        <Typography variant="body2" sx={{ fontSize: '1em', letterSpacing: '.3px', color: '#666'}}>
           {props.subindicator}
         </Typography>
       </Box>
@@ -103,9 +103,9 @@ const IndicatorItemView = (props) => {
   );
 
   return (
-    <StyledTreeItem nodeId={props.indicator.id.toString()} label={
+    <StyledIndicatorTreeItem nodeId={props.indicator.id.toString()} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+        <Typography variant="body2" sx={{ fontSize: '1em', letterSpacing: '.3px', color: '#666'}}>
           {props.indicator.label}
         </Typography>
       </Box>
@@ -125,7 +125,7 @@ const IndicatorItemView = (props) => {
         )
       })
     }
-    </StyledTreeItem>
+    </StyledIndicatorTreeItem>
   )
 }
 
@@ -133,9 +133,9 @@ const IndicatorSubCategoryTreeView = (props) => {
   let indicators = sortBy(props.subcategory.indicators, "order");
 
   return (
-    <StyledTreeItem nodeId={props.subcategory.name} label={
+    <StyledSubCategoryTreeItem nodeId={props.subcategory.name} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+        <Typography variant="body2" sx={{ fontSize: '1em', fontWeight: '500', letterSpacing: '.3px' }}>
           {props.subcategory.name}
         </Typography>
       </Box>
@@ -152,7 +152,7 @@ const IndicatorSubCategoryTreeView = (props) => {
         )
       })
     }
-    </StyledTreeItem>
+    </StyledSubCategoryTreeItem>
 
   )
 }
@@ -161,9 +161,9 @@ const IndicatorCategoryTreeView = (props) => {
 
   let subcategories = sortBy(props.category.subcategories, "order")
   return (
-    <StyledTreeItem nodeId={props.category.name} label={
+    <StyledCategoryTreeItem nodeId={props.category.name} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+        <Typography variant="body2" sx={{ fontSize: '.9em', fontWeight: '500', letterSpacing: '.3px' }}>
           {props.category.name}
         </Typography>
       </Box>
@@ -180,7 +180,7 @@ const IndicatorCategoryTreeView = (props) => {
         )
       })
     }
-    </StyledTreeItem>
+    </StyledCategoryTreeItem>
 
   )
 }

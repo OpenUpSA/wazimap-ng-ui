@@ -27,4 +27,8 @@
   .right-panel-toggles {
     top: 320px;
   }
+
+  .choropleth-method-description, .filters__header_label {
+    display: none !important;
+  }
 }

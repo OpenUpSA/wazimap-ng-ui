@@ -54,6 +54,12 @@ export class Config {
         return false;
     }
 
+    get defaultFilter() {
+        if (this.config["default_filter"] != undefined)
+            return this.config["default_filter"];
+        return {};
+    }
+
     get restrictValues() {
         if (this.config["restrict_values"] != undefined)
             return this.config["restrict_values"];

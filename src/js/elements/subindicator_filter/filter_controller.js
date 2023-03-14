@@ -319,8 +319,6 @@ export class FilterController extends Component {
         let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired, addAsFirstRow, isPreviouslySelected);
         try {
             if (filterRow !== undefined) {
-                filterRow.indicatorDropdown.disable();
-
                 filterRow.setPrimaryIndexUsingValue(group.group);
                 filterRow.setSecondaryIndexUsingValue(group.value);
             }
@@ -402,6 +400,7 @@ export class FilterController extends Component {
             this.setAddFilterButton();
         })
 
+        debugger;
         // 1 - add previous filters
         this.checkAndAddPreviouslySelectedFilters();
         // 2 - add default filters
@@ -409,6 +408,8 @@ export class FilterController extends Component {
         this.checkAndAddDefaultFilterGroups();
         // 3 - add site-wide filters
         this.checkAndAddSiteWideFilters();
+        // 4 - global default filters
+        this.checkAndAddGlobalDefaultFilters();
 
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);
@@ -498,11 +499,6 @@ export class FilterController extends Component {
 
             if (!alreadyAdded && group.group !== this.model.dataFilterModel.primaryGroup) {
                 self.addDefaultFilter(group);
-            } else {
-                this.model.filterRows.filter(x => x.model.currentIndicatorValue === group.group).forEach(row => {
-                    row.indicatorDropdown.disable();
-                    row.indicatorDropdown.model.isDisabled = true;
-                })
             }
         })
     }
@@ -566,6 +562,19 @@ export class FilterController extends Component {
                     existingFilterRow.subIndicatorDropdown.disable();
                 }
             }
+        })
+    }
+
+    checkAndAddGlobalDefaultFilters() {
+        const self = this;
+        let globalFilter = self.model.dataFilterModel.globalFilter;
+        Object.keys(globalFilter).forEach(key => {
+            let filterRow = self.addEmptyFilter(true)
+
+            filterRow.setPrimaryIndexUsingValue(key);
+            filterRow.indicatorDropdown.disable();
+            filterRow.setSecondaryIndexUsingValue(globalFilter[key]);
+            filterRow.subIndicatorDropdown.disable();
         })
     }
 

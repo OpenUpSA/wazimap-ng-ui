@@ -36,7 +36,8 @@ export class DataFilterModel extends Observable {
         childData,
         siteWideFilters = [],
         filterType = DataFilterModel.FILTER_TYPE.indicators,
-        restrictValues = {}
+        restrictValues = {},
+        globalFilter = {}
     ) {
         super()
         this._groups = groups;
@@ -52,10 +53,15 @@ export class DataFilterModel extends Observable {
         this._filterFunction = filterType === DataFilterModel.FILTER_TYPE.indicators ? this.getFilteredIndicatorData : this.getFilteredPointData;
         this._filterType = filterType;
         this._restrictValues = restrictValues;
+        this._globalFilter = globalFilter;
     }
 
     get restrictValues() {
         return this._restrictValues;
+    }
+
+    get globalFilter() {
+        return this._globalFilter;
     }
 
     get aggregatableGroups() {

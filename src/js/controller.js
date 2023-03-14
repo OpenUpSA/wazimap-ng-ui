@@ -53,6 +53,7 @@ export default class Controller extends Component {
         window.addEventListener('popstate', (event) => {
           if (event.state && event.state.filters !== undefined){
             this._filteredIndicators = event.state.filters;
+            this._hiddenIndicators = event.state.hiddenIndicators;
             this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
             this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
             this.reDrawChildren();
@@ -272,48 +273,24 @@ export default class Controller extends Component {
       this._hiddenIndicators = hiddenIndicators;
       const currentGeo = this.state.profile.profile.geography.code;
       let indicators = this.versionController.getIndicatorDataByGeo(currentGeo);
-      const indicatorData = structuredClone(indicators.indicatorData);
-      let newData = {};
-
-      Object.keys(indicatorData).forEach(function(categoryKey, categoryIndex) {
-        let subcategories = {};
-
-        let category = indicatorData[categoryKey];
-        Object.keys(category.subcategories).forEach(function(subcategoryKey, subcategoryIndex) {
-          let subcategoryValue = category.subcategories[subcategoryKey];
-          let indicators = subcategoryValue.indicators;
-          let newIndicators = {};
-          Object.keys(indicators).forEach(function(indicatorKey, indicatorIndex) {
-            let indicatorValue = indicators[indicatorKey];
-            if (!hiddenIndicators.includes(indicatorValue.id)){
-              newIndicators[indicatorKey] = indicatorValue;
-            }
-          });
-          if (!isEmpty(newIndicators)){
-            subcategoryValue["indicators"] = newIndicators;
-            subcategories[subcategoryKey] = subcategoryValue;
-          }
-        });
-
-        if(!isEmpty(subcategories)){
-          category["subcategories"] = subcategories
-          newData[categoryKey] = category
-        }
-      });
-
-      this.triggerEvent("datamapper.reload", newData);
+      this.triggerEvent("datamapper.reload", indicators.indicatorData);
+      this.updateShareUrl();
     }
 
     pushState(currentState){
       let profileView = "/";
-      if (currentState?.filters !== undefined && currentState.filters.length > 0){
+      if (
+          currentState?.filters !== undefined && currentState.filters.length > 0
+          || currentState?.hiddenIndicators !== undefined && currentState.hiddenIndicators.length > 0
+        ){
         profileView = `?profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
       }
 
       history.pushState(
         {
           "filters": this._filteredIndicators,
-          "profileView": currentState
+          "hiddenIndicators": this.hiddenIndicators,
+          "profileView": currentState,
         },
         '',
         `${profileView}${window.location.hash}`
@@ -333,11 +310,14 @@ export default class Controller extends Component {
           }
         }
       )
-      let currentState = {"filters": selectedFilters}
+      let currentState = {
+          "filters": selectedFilters,
+          "hiddenIndicators": this.hiddenIndicators,
+      }
 
       const urlParams = new URLSearchParams(window.location.search);
       const profileView = JSON.parse(urlParams.get("profileView"));
-      if (selectedFilters.length > 0){
+      if (selectedFilters.length > 0 || this.hiddenIndicators.length > 0){
         if (profileView === null){
           this.pushState(currentState);
         } else {
@@ -345,13 +325,13 @@ export default class Controller extends Component {
             this.pushState(currentState);
           }
         }
-      } else if (selectedFilters.length === 0 && profileView !== null) {
+      } else if ((selectedFilters.length === 0 || this.hiddenIndicators.length === 0) && profileView !== null ) {
         this.pushState(currentState);
       }
     }
 
     loadInitialFilters(dataBundle){
-      if (this._filteredIndicators.length > 0){
+      if (this._filteredIndicators.length > 0 || this._hiddenIndicators.length > 0){
         return;
       }
 
@@ -379,9 +359,12 @@ export default class Controller extends Component {
           }
         });
 
+        this._hiddenIndicators = profileView["hiddenIndicators"] || [];
+
         history.replaceState(
           {
-            "filters": this._filteredIndicators
+            "filters": this._filteredIndicators,
+            "hiddenIndicators": this._hiddenIndicators
           },
           '',
           `${window.location.search}${window.location.hash}`

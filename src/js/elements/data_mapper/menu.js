@@ -32,7 +32,36 @@ const loadingClsName = 'data-mapper-content__loading';
 
 export function loadMenu(dataMapperMenu, data) {
 
-    let profileIndicators = sortBy(data, "order");
+    const filterIndicatorData = (indicatorData, hiddenIndicators) => {
+      let newData = {};
+      Object.keys(indicatorData).forEach(function(categoryKey, categoryIndex) {
+        let subcategories = {};
+
+        let category = indicatorData[categoryKey];
+        Object.keys(category.subcategories).forEach(function(subcategoryKey, subcategoryIndex) {
+          let subcategoryValue = category.subcategories[subcategoryKey];
+          let indicators = subcategoryValue.indicators;
+          let newIndicators = {};
+          Object.keys(indicators).forEach(function(indicatorKey, indicatorIndex) {
+            let indicatorValue = indicators[indicatorKey];
+            if (!hiddenIndicators.includes(indicatorValue.id)){
+              newIndicators[indicatorKey] = indicatorValue;
+            }
+          });
+          if (!isEmpty(newIndicators)){
+            subcategoryValue["indicators"] = newIndicators;
+            subcategories[subcategoryKey] = subcategoryValue;
+          }
+        });
+
+        if(!isEmpty(subcategories)){
+          category["subcategories"] = subcategories
+          newData[categoryKey] = category
+        }
+      });
+      return sortBy(newData, "order");
+    }
+    const profileIndicators = filterIndicatorData(data, dataMapperMenu.controller.hiddenIndicators);
 
     if (isEmpty(data)){
       dataMapperMenu.showNoData()

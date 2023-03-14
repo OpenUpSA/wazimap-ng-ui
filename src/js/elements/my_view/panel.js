@@ -57,7 +57,7 @@ const Panel = (props) => {
                   filteredIndicators={filteredIndicators}
                   profileIndicators={profileIndicators}
                   removeFilter={(fi, sf) => removeFilter(fi, sf)}
-                  hiddenIndicators={[]}
+                  hiddenIndicators={props.controller.hiddenIndicators}
                   updateHiddenIndicators={updateHiddenIndicators}
               />
           }

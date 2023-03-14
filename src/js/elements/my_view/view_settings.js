@@ -170,6 +170,7 @@ const ViewSettings = (props) => {
                       category={item}
                       key={key}
                       updateHiddenIndicators={props.updateHiddenIndicators}
+                      hiddenIndicators={props.hiddenIndicators}
                     />
                   )
                 })

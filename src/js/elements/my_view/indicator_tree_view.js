@@ -8,6 +8,8 @@ import Box from "@mui/material/Box";
 import {Typography} from "@mui/material";
 import {EyeIcon, EyeCloseIcon} from "./svg_icons";
 
+import {map, flatten, intersection} from "lodash";
+
 
 const IndicatorItemView = (props) => {
   const eyeIcon = EyeIcon;
@@ -96,7 +98,23 @@ const IndicatorSubCategoryTreeView = (props) => {
 }
 
 const IndicatorCategoryTreeView = (props) => {
-  const [hiddenIndicators, setHiddenIndicators] = useState([]);
+
+  const hiddenIndicatorIds = useMemo(
+    () => {
+      let indicatorIds = [];
+      const indicators = flatten(map(props.category.subcategories, "indicators"));
+      if (indicators.length > 0){
+        indicatorIds = map(indicators, "id")
+      }
+
+      return intersection(props.hiddenIndicators, indicatorIds);
+    }, [
+      props.category,
+      props.hiddenIndicators
+    ]
+  )
+
+  const [hiddenIndicators, setHiddenIndicators] = useState(hiddenIndicatorIds);
   const addHiddenIndicator = useCallback(
     (indicatorId) => {
       setHiddenIndicators([...hiddenIndicators, indicatorId]);

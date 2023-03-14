@@ -34,11 +34,11 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
         }
     })
 
-    controller.on('data_mapper_menu.subcategory.expanded', (payload) => {
-        dataMapperMenu.loadAndAddSubIndicators(payload.payload, payload.state.profileId, payload.state.profile.profile.geography.code, callBack => {
-            controller.onSubIndicatorClick(callBack)
-        });
-    })
+    // controller.on('data_mapper_menu.subcategory.expanded', (payload) => {
+    //     dataMapperMenu.loadAndAddSubIndicators(payload.payload, payload.state.profileId, payload.state.profile.profile.geography.code, callBack => {
+    //         controller.onSubIndicatorClick(callBack)
+    //     });
+    // })
 
     controller.on('hashChange', () => {
         dataMapperMenu.isLoading = true;

@@ -2,10 +2,6 @@ import {
     Component
 } from '../../utils'
 import {sortBy, isEmpty} from 'lodash';
-import {Category} from "./category";
-import {SubCategory} from "./subcategory";
-import {Indicator} from "./indicator";
-import {SubIndicator} from './subindicator'
 import {createRoot} from "react-dom/client";
 import Watermark from "../../ui_components/watermark";
 import IndicatorCategoryTreeView from "./components/indicator_tree_view";
@@ -183,40 +179,5 @@ export class DataMapperMenu extends Component {
             'No data available to plot on the map for the selected geography.'
         );
         this.triggerEvent('data_mapper_menu.nodata', this);
-    }
-
-    loadAndAddSubIndicators(subcategory, profileId, geoCode, callBack) {
-        const indicators = subcategory.children;
-        indicators.forEach((indicator) => {
-            if (indicator.isLoading) {
-                //if !isLoading => subIndicators are already created
-                this.api.getIndicatorChildData(profileId, geoCode, indicator.id)
-                    .then((childData) => {
-                        const parentNames = {
-                            category: subcategory.parent.text,
-                            subcategory: subcategory.text,
-                            indicator: indicator.text
-                        }
-                        indicator.isLoading = false;
-                        indicator.childData = childData;
-                        this.addSubIndicators(indicator, parentNames, callBack)
-                    })
-            }
-        })
-    }
-
-    addSubIndicators(parent, parentNames, callBack) {
-        let primaryGroup = parent.primaryGroup;
-        if (primaryGroup !== null && typeof primaryGroup.subindicators !== 'undefined') {
-            primaryGroup.subindicators.forEach((subindicatorName) => {
-                let subIndicator = new SubIndicator(parent,
-                    false,
-                    subindicatorName,
-                    callBack,
-                    parentNames);
-
-                this._subIndicators.push(subIndicator);
-            });
-        }
     }
 }

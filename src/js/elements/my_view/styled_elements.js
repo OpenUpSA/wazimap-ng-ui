@@ -4,23 +4,95 @@ import {Accordion, AccordionDetails, AccordionSummary, Button, Card, Typography}
 import TreeItem, { treeItemClasses } from '@mui/lab/TreeItem';
 
 
-
-
-
-
-export const StyledTreeItem = styled(TreeItem)(() => ({
+export const StyledCategoryTreeItem = styled(TreeItem)(() => ({
   [`& .${treeItemClasses.content}`]: {
-    'flex-direction': 'row-reverse',
-    'backgroundColor': 'rgba(0, 0, 0, 0.05);',
-    'borderRadius': '4px',
-    'marginBottom': '2px',
+    flexDirection: 'row-reverse',
+    borderRadius: '4px',
+    marginBottom: '8px',
+    backgroundColor: 'rgba(0, 0, 0, 0.05);',
+    height: '32px',
+    paddingLeft: '8px',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.07);',
+    },
+    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+      backgroundColor: 'rgba(0, 0, 0, 0.05);',
+    },
+    '& .MuiTreeItem-iconContainer svg': {
+      fontSize: '20px',
+      color: '#707070'
+    },
     [`& .${treeItemClasses.label}`]: {
-      fontWeight: 'inherit',
-      color: 'inherit',
+      width: '100%',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      fontSize: '14px',
+      letterSpacing: '.3px',
+      marginRight: '12px',
+      paddingLeft: '0px',
+      color: '#2F2F2F',
+      fontSize: '14px',
+      alignItems: 'center',
+      '& .MuiBox-root': {
+        padding: '0px',
+        display: 'flex',
+        '& p': {
+          flexGrow: 1
+        },
+        '& span': {
+          color: '#707070'
+        }
+      },
     },
   },
   [`& .${treeItemClasses.group}`]: {
-    borderLeft: `1px dashed`
+    marginLeft: '12px',
+  }
+}));
+
+export const StyledSubCategoryTreeItem = styled(StyledCategoryTreeItem)(() => ({
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: '12px',
+    borderLeft: '1px solid rgba(0, 0, 0, 0.11)',
+    marginLeft: '0px',
+    paddingLeft: '11px',
+    marginLeft: '6px',
+  }
+}));
+
+export const StyledTreeItem = styled(TreeItem)(() => ({
+  [`& .${treeItemClasses.content}`]: {
+    backgroundColor: 'rgba(0, 0, 0, 0.05);',
+    borderRadius: '4px',
+    marginBottom: '8px',
+    '& .MuiTreeItem-iconContainer': {
+      display: 'none',
+    },
+    '&::after': {
+      position: 'absolute',
+        left: '8.5%',
+        zIndex: '1',
+        width: '10px',
+        height: '1px',
+        marginLeft: '4px',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        content: '""'
+    },
+    [`& .${treeItemClasses.label}`]: {
+      fontWeight: 'inherit',
+      color: 'inherit',
+      marginRight: '0px',
+      '& span': {
+        display: 'flex',
+        justifyContent: 'center',
+      }
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: '12px'
   }
 }));
 
@@ -134,6 +206,13 @@ export const ToggleIconContainer = styled(Box)(({}) => ({
 }));
 
 export const FilteredIndicatorCard = styled(Card)(() => ({
+    padding: '6px',
+    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+    borderRadius: '4px',
+    marginTop: '10px'
+}));
+
+export const IndicatorTreeViewCard = styled(Card)(() => ({
     padding: '6px',
     boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
     borderRadius: '4px',

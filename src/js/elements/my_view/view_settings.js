@@ -13,7 +13,8 @@ import {
     StyledAccordionSummary,
     StyledTypography, StyledTypographyWithBottomBorder,
     ViewSettingsTitle,
-    StyledTreeItem
+    StyledTreeItem,
+    IndicatorTreeViewCard
 } from "./styled_elements";
 import {Grid} from "@mui/material";
 import TreeView from '@mui/lab/TreeView';
@@ -156,22 +157,26 @@ const ViewSettings = (props) => {
 
     const renderIndicatorTreeView = () =>{
       return (
-        <TreeView
-          defaultCollapseIcon={<ArrowDropDownIcon />}
-          defaultExpandIcon={<ArrowRightIcon />}
-        >
-          {profileIndicators.length > 0 && profileIndicators.map(
-            (item, key) => {
-              return (
-                <IndicatorCategoryTreeView
-                  category={item}
-                  key={key}
-                  updateHiddenIndicators={props.updateHiddenIndicators}
-                />
-              )
-            })
-          }
-        </TreeView>
+        <Grid item xs={12}>
+          <IndicatorTreeViewCard>
+            <TreeView
+              defaultCollapseIcon={<ArrowDropDownIcon />}
+              defaultExpandIcon={<ArrowRightIcon />}
+            >
+              {profileIndicators.length > 0 && profileIndicators.map(
+                (item, key) => {
+                  return (
+                    <IndicatorCategoryTreeView
+                      category={item}
+                      key={key}
+                      updateHiddenIndicators={props.updateHiddenIndicators}
+                    />
+                  )
+                })
+              }
+            </TreeView>
+          </IndicatorTreeViewCard>
+        </Grid>
       );
     }
     return (

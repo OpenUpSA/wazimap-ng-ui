@@ -1,12 +1,17 @@
 import React, {useState, useCallback, useMemo} from "react";
-import {StyledTreeItem} from "./styled_elements";
+import {
+  StyledTreeItem,
+  StyledCategoryTreeItem,
+  StyledSubCategoryTreeItem
+} from "./styled_elements";
 import Box from "@mui/material/Box";
 import {Typography} from "@mui/material";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import {EyeIcon, EyeCloseIcon} from "./svg_icons";
 
 
 const IndicatorItemView = (props) => {
+  const eyeIcon = EyeIcon;
+  const eyeCloseIcon = EyeCloseIcon;
 
   const isHidden = useMemo(
     () => {
@@ -39,7 +44,7 @@ const IndicatorItemView = (props) => {
           {props.indicator.label}
         </Typography>
         <Typography variant="caption" color="inherit" onClick={(e) => hideIndicator(e)}>
-          {isHidden ? <VisibilityOffIcon/> : <VisibilityIcon/>}
+          {isHidden ? eyeCloseIcon : eyeIcon}
         </Typography>
       </Box>
     } />
@@ -62,12 +67,12 @@ const IndicatorSubCategoryTreeView = (props) => {
   )
 
   return (
-    <StyledTreeItem nodeId={props.subcategory.id.toString()} label={
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+    <StyledSubCategoryTreeItem nodeId={props.subcategory.id.toString()} label={
+      <Box>
+        <Typography variant="body2">
           {props.subcategory.name}
         </Typography>
-        <Typography variant="caption" color="inherit">
+        <Typography variant="caption">
           hidden {hiddenIndicators.length}
         </Typography>
       </Box>
@@ -85,7 +90,7 @@ const IndicatorSubCategoryTreeView = (props) => {
         )
       })
     }
-    </StyledTreeItem>
+    </StyledSubCategoryTreeItem>
 
   )
 }
@@ -115,12 +120,12 @@ const IndicatorCategoryTreeView = (props) => {
   )
 
   return (
-    <StyledTreeItem nodeId={props.category.id.toString()} label={
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+    <StyledCategoryTreeItem nodeId={props.category.id.toString()} label={
+      <Box>
+        <Typography variant="body2">
           {props.category.name}
         </Typography>
-        <Typography variant="caption" color="inherit">
+        <Typography variant="caption">
           hidden {hiddenIndicators.length}
         </Typography>
       </Box>
@@ -138,8 +143,7 @@ const IndicatorCategoryTreeView = (props) => {
         )
       })
     }
-    </StyledTreeItem>
-
+    </StyledCategoryTreeItem>
   )
 }
 

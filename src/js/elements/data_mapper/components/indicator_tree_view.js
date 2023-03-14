@@ -27,12 +27,15 @@ const SubindicatorItemView = (props) => {
       props.controller.onSubIndicatorClick({
           indicatorTitle: props.indicator.label,
           selectedSubindicator: props.subindicator,
-          parents: {},
+          parents: props.parents,
           choropleth_method: props.indicator.choropleth_method,
           indicatorId: props.indicator.id,
           indicatorData: props.indicatorData,
           versionData: props.indicator.version_data,
-          metadata: props.indicator.metadata,
+          metadata: {
+            ...props.indicator.metadata,
+            indicatorDescription: props.indicator.description,
+          },
           config: {
               choroplethRange: props.indicator.choropleth_range,
               enableLinearScrubber: props.indicator.enable_linear_scrubber,
@@ -121,6 +124,10 @@ const IndicatorItemView = (props) => {
             loading={loading}
             indicatorData={indicatorData}
             indicator={props.indicator}
+            parents={{
+              ...props.parents,
+              indicator: props.indicator.label
+            }}
           />
         )
       })
@@ -148,6 +155,12 @@ const IndicatorSubCategoryTreeView = (props) => {
             key={key}
             api={props.api}
             controller={props.controller}
+            categoryName={props.categoryName}
+            SubCategoryName={props.subcategory.name}
+            parents={{
+              ...props.parents,
+              subcategory: props.subcategory.name
+            }}
           />
         )
       })
@@ -176,6 +189,7 @@ const IndicatorCategoryTreeView = (props) => {
             key={key}
             api={props.api}
             controller={props.controller}
+            parents={{category: props.category.name}}
           />
         )
       })

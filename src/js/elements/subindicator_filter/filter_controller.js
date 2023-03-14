@@ -400,7 +400,6 @@ export class FilterController extends Component {
             this.setAddFilterButton();
         })
 
-        debugger;
         // 1 - add previous filters
         this.checkAndAddPreviouslySelectedFilters();
         // 2 - add default filters

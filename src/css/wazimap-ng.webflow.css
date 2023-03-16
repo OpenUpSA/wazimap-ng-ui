@@ -314,7 +314,7 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  max-width: 95vw;
+  max-width: 85vw;
   padding: 8px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -459,7 +459,6 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  min-width: 160px;
   margin-top: 4px;
   padding-top: 8px;
   padding-right: 12px;
@@ -473,6 +472,10 @@ label {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
   border-top: 1px solid rgba(0, 0, 0, 0.15);
   border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -518,24 +521,17 @@ label {
 }
 
 .map-location__tags {
-  position: relative;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   overflow: auto;
+  max-width: 100%;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-self: stretch;
-  -ms-flex-item-align: stretch;
-  align-self: stretch;
 }
 
 .rich-data-nav__list {
@@ -10314,6 +10310,18 @@ label {
 
   .map-location {
     max-width: 95vw;
+  }
+
+  .map-location__tags {
+    max-width: 100%;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    -ms-grid-row-align: center;
+    align-self: center;
   }
 
   .rich-data-toggles {

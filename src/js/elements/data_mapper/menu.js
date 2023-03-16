@@ -16,6 +16,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
+import {cloneDeep} from "lodash";
 
 
 let parentContainer = null;
@@ -57,7 +58,7 @@ export function loadMenu(dataMapperMenu, data) {
       });
       return sortBy(newData, "order");
     }
-    const profileIndicators = filterIndicatorData(data, dataMapperMenu.controller.hiddenIndicators);
+    const profileIndicators = filterIndicatorData(cloneDeep(data), dataMapperMenu.controller.hiddenIndicators);
 
     if (isEmpty(data)){
       dataMapperMenu.showNoData()

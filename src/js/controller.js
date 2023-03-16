@@ -273,7 +273,7 @@ export default class Controller extends Component {
       this._hiddenIndicators = hiddenIndicators;
       const currentGeo = this.state.profile.profile.geography.code;
       let indicators = this.versionController.getIndicatorDataByGeo(currentGeo);
-      this.triggerEvent("datamapper.reload", structuredClone(indicators.indicatorData));
+      this.triggerEvent("datamapper.reload", indicators.indicatorData);
       this.updateShareUrl();
     }
 

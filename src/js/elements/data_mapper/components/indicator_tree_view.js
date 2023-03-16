@@ -62,30 +62,21 @@ const SubindicatorItemView = (props) => {
 
 const IndicatorItemView = (props) => {
 
-  const [indicatorData, setIndicatorData] = useState([])
   const [loading, setLoading] = useState(false)
-
   useEffect(
     () => {
-      if (indicatorData.length === 0 && !loading){
+      if (props.indicator?.indicatorData === undefined && !loading){
         setLoading(true);
         props.api.getIndicatorChildData(
           props.controller.state.profileId,
           props.controller.state.profile.profile.geography.code,
           props.indicator.id
         ).then((childData) => {
-          setIndicatorData(childData);
+          props.indicator.indicatorData = childData;
           setLoading(false);
         })
       }
-    },[
-      indicatorData,
-      setIndicatorData,
-      setLoading,
-      props.api,
-      props.indicator,
-      props.controller
-    ]
+    }
   );
 
   const subindicators = useMemo(
@@ -122,7 +113,7 @@ const IndicatorItemView = (props) => {
             key={key}
             controller={props.controller}
             loading={loading}
-            indicatorData={indicatorData}
+            indicatorData={props.indicator?.indicatorData}
             indicator={props.indicator}
             parents={{
               ...props.parents,
@@ -171,7 +162,6 @@ const IndicatorSubCategoryTreeView = (props) => {
 }
 
 const IndicatorCategoryTreeView = (props) => {
-
   let subcategories = sortBy(props.category.subcategories, "order")
   return (
     <StyledCategoryTreeItem nodeId={props.category.name} label={

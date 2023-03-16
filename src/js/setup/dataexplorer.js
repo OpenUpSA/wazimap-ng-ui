@@ -14,7 +14,6 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
 
     controller.on('versions.indicators.ready', (versionData) => {
         let data = versionData.payload;
-        console.log(data);
         if (JSON.stringify(data) === JSON.stringify({})) {
             //no children -- show no-data chip
             dataMapperMenu.showNoData();
@@ -25,7 +24,6 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
 
     controller.on('datamapper.reload', (versionData) => {
         let data = versionData.payload;
-        console.log(data)
         if (JSON.stringify(data) === JSON.stringify({})) {
             //no children -- show no-data chip
             dataMapperMenu.showNoData();

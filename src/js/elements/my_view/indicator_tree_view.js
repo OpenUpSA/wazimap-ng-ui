@@ -53,9 +53,7 @@ const IndicatorItemView = (props) => {
   )
 }
 
-
 const IndicatorSubCategoryTreeView = (props) => {
-
 
   const hiddenIndicators = useMemo(
     () => {

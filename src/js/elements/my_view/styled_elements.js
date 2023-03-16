@@ -40,7 +40,8 @@ export const StyledCategoryTreeItem = styled(TreeItem)(() => ({
         padding: '0px',
         display: 'flex',
         '& p': {
-          flexGrow: 1
+          flexGrow: 1,
+          paddingRight: '10px',
         },
         '& span': {
           color: '#707070'

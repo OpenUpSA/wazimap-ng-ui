@@ -41,8 +41,8 @@ const IndicatorItemView = (props) => {
   )
   return (
     <StyledTreeItem nodeId={props.indicator.id.toString()} label={
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-        <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+      <Box>
+        <Typography variant="body2" className={"truncate"}>
           {props.indicator.label}
         </Typography>
         <Typography variant="caption" color="inherit" onClick={(e) => hideIndicator(e)}>
@@ -69,7 +69,7 @@ const IndicatorSubCategoryTreeView = (props) => {
   return (
     <StyledSubCategoryTreeItem nodeId={props.subcategory.id.toString()} label={
       <Box>
-        <Typography variant="body2">
+        <Typography variant="body2" className={"truncate"}>
           {props.subcategory.name}
         </Typography>
         <Typography variant="caption">
@@ -138,7 +138,7 @@ const IndicatorCategoryTreeView = (props) => {
   return (
     <StyledCategoryTreeItem nodeId={props.category.id.toString()} label={
       <Box>
-        <Typography variant="body2">
+        <Typography variant="body2" className={"truncate"}>
           {props.category.name}
         </Typography>
         <Typography variant="caption">

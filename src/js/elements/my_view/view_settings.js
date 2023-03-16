@@ -21,7 +21,7 @@ import TreeView from '@mui/lab/TreeView';
 import TreeItem from '@mui/lab/TreeItem';
 import Box from "@mui/material/Box";
 import IndicatorCategoryTreeView from "./indicator_tree_view";
-import {flatten} from "lodash";
+import {flatten, map} from "lodash";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -42,45 +42,22 @@ const ViewSettings = (props) => {
         if (props.profileIndicators.length > 0 && profileIndicators.length === 0){
           let profileIndicators = props.profileIndicators.map(
             (category) => {
-              let subcategories = category.subcategories.map(
-                (subcategory) => {
-                  let indicators = [];
-                  let hiddenIndicatorsList = [];
-                  if (subcategory.indicators.length > 0) {
-                    subcategory.indicators.map(indicator => {
-                      indicators.push({
-                        "name": indicator.label,
-                        "nodeId": indicator.id,
-                        "isHidden": props.hiddenIndicators.includes(indicator.id)
-                      })
-                      if (props.hiddenIndicators.includes(indicator.id)){
-                        hiddenIndicatorsList.push(indicator.id)
-                      }
-                    })
-                  }
-                  return {
-                    "name": subcategory.name,
-                    "nodeId": subcategory.id,
-                    "indicators": indicators,
-                    "hiddenIndicators": hiddenIndicatorsList,
+              let subcategories = []
+              category.subcategories.map(
+                subcategory => {
+                  if (subcategory.indicators.length > 0){
+                    subcategories.push(subcategory)
                   }
                 }
-              );
-              subcategories = subcategories.filter(sub => sub.indicators.length > 0);
+              )
               return {
-                "name": category.name,
-                "nodeId": category.id,
-                "subcategories": subcategories,
-                "hiddenIndicators": flatten(
-                  subcategories.map(
-                    sub => sub.hiddenIndicators
-                  )
-                )
+                ...category,
+                subcategories: subcategories
               }
             }
           )
           profileIndicators = profileIndicators.filter(ind => ind.subcategories.length > 0);
-          setProfileIndicators(props.profileIndicators);
+          setProfileIndicators(profileIndicators);
         }
     }, [
         props.filteredIndicators,

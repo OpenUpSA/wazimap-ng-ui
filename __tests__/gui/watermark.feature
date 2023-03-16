@@ -6,6 +6,7 @@ Feature: Watermark
 
     # All the panels are closed
     Then I confirm that the map watermark is visible
+    Then I confirm that the watermak links to the correct url
 
     # Data mapper
     And I expand Data Mapper

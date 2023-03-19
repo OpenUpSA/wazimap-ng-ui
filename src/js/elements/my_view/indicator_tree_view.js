@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useMemo} from "react";
+import React, {useState, useCallback, useMemo, useEffect} from "react";
 import {
   StyledTreeItem,
   StyledCategoryTreeItem,
@@ -111,8 +111,14 @@ const IndicatorCategoryTreeView = (props) => {
       props.hiddenIndicators
     ]
   )
-
   const [hiddenIndicators, setHiddenIndicators] = useState(hiddenIndicatorIds);
+
+  useEffect(() => {
+    if (hiddenIndicators !== hiddenIndicatorIds){
+      setHiddenIndicators(hiddenIndicatorIds);
+    }
+  }, [hiddenIndicatorIds])
+
   const addHiddenIndicator = useCallback(
     (indicatorId) => {
       setHiddenIndicators([...hiddenIndicators, indicatorId]);
@@ -134,7 +140,6 @@ const IndicatorCategoryTreeView = (props) => {
       props.updateHiddenIndicators
     ]
   )
-
   return (
     <StyledCategoryTreeItem nodeId={props.category.id.toString()} label={
       <Box>

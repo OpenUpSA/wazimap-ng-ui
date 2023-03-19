@@ -60,8 +60,9 @@ export default class Controller extends Component {
           } else {
             const urlParams = new URLSearchParams(window.location.search);
             const profileView = JSON.parse(urlParams.get("profileView"));
-            if (profileView === null && this._filteredIndicators.length > 0) {
+            if (profileView === null) {
               this._filteredIndicators = [];
+              this._hiddenIndicators = [];
               this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
               this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
               this.reDrawChildren();

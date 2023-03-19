@@ -8,11 +8,17 @@ const Panel = (props) => {
     const [filteredIndicators, setFilteredIndicators] = useState([]);
     const [startedListening, setStartedListening] = useState(false);
     const [profileIndicators, setProfileIndicators] = useState([]);
+    const [hiddenIndicators, setHiddenIndicators] = useState(props.controller.hiddenIndicators);
     const [loading, setLoading] = useState(false);
 
     if (!startedListening) {
         props.controller.on('my_view.filteredIndicators.updated', payload => {
             setFilteredIndicators(prev => payload.payload.slice(0));
+            setStartedListening(true);
+        });
+
+        props.controller.on('my_view.hiddenIndicatorsPanel.reload', payload => {
+            setHiddenIndicators(payload.payload);
             setStartedListening(true);
         });
     }
@@ -57,7 +63,7 @@ const Panel = (props) => {
                   filteredIndicators={filteredIndicators}
                   profileIndicators={profileIndicators}
                   removeFilter={(fi, sf) => removeFilter(fi, sf)}
-                  hiddenIndicators={props.controller.hiddenIndicators}
+                  hiddenIndicators={hiddenIndicators}
                   updateHiddenIndicators={updateHiddenIndicators}
               />
           }

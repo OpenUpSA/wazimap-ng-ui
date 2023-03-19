@@ -51,23 +51,26 @@ export default class Controller extends Component {
         });
 
         window.addEventListener('popstate', (event) => {
-          if (event.state && event.state.filters !== undefined){
-            this._filteredIndicators = event.state.filters;
-            this._hiddenIndicators = event.state.hiddenIndicators;
+          let hiddenIndicators = [], filteredIndicators = [];
+          if (event.state){
+            filteredIndicators = event.state.filters;
+            hiddenIndicators = event.state.hiddenIndicators;
+          }
+
+          if (!isEqual(hiddenIndicators, this._hiddenIndicators)){
+            this._hiddenIndicators = hiddenIndicators;
+            this.reloadDataMapper();
+            this.triggerEvent('my_view.hiddenIndicatorsPanel.reload', this.hiddenIndicators);
+          }
+
+          if (!isEqual(filteredIndicators, this._filteredIndicators)){
+            this._filteredIndicators = filteredIndicators;
             this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
             this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
             this.reDrawChildren();
-          } else {
-            const urlParams = new URLSearchParams(window.location.search);
-            const profileView = JSON.parse(urlParams.get("profileView"));
-            if (profileView === null) {
-              this._filteredIndicators = [];
-              this._hiddenIndicators = [];
-              this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-              this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
-              this.reDrawChildren();
-            }
           }
+
+
         });
     };
 
@@ -272,10 +275,14 @@ export default class Controller extends Component {
         hiddenIndicators = hiddenIndicators.filter(item => item !== indicatorId);
       }
       this._hiddenIndicators = hiddenIndicators;
+      this.reloadDataMapper();
+      this.updateShareUrl();
+    }
+
+    reloadDataMapper() {
       const currentGeo = this.state.profile.profile.geography.code;
       let indicators = this.versionController.getIndicatorDataByGeo(currentGeo);
       this.triggerEvent("datamapper.reload", indicators.indicatorData);
-      this.updateShareUrl();
     }
 
     pushState(currentState){

@@ -30,38 +30,40 @@ const loadingClsName = 'data-mapper-content__loading';
 export function loadMenu(dataMapperMenu, data) {
 
     const filterIndicatorData = (indicatorData, hiddenIndicators) => {
-      let newData = {};
-      Object.keys(indicatorData).forEach(function(categoryKey, categoryIndex) {
-        let subcategories = {};
-
-        let category = indicatorData[categoryKey];
-        Object.keys(category.subcategories).forEach(function(subcategoryKey, subcategoryIndex) {
-          let subcategoryValue = category.subcategories[subcategoryKey];
-          let indicators = subcategoryValue.indicators;
-          let newIndicators = {};
-          Object.keys(indicators).forEach(function(indicatorKey, indicatorIndex) {
-            let indicatorValue = indicators[indicatorKey];
-            if (!hiddenIndicators.includes(indicatorValue.id)){
-              newIndicators[indicatorKey] = indicatorValue;
+      let categories = sortBy(indicatorData, "order");
+      categories = categories.map(category => {
+        let subcategories = sortBy(category.subcategories, "order");
+        subcategories = subcategories.map(subcategory => {
+          let indicators = sortBy(subcategory.indicators, "order");
+          indicators = indicators.map(indicator => {
+            const isIndicatorHidden = hiddenIndicators.includes(indicator.id);
+            return {
+              ...indicator,
+              isHidden: isIndicatorHidden,
             }
-          });
-          if (!isEmpty(newIndicators)){
-            subcategoryValue["indicators"] = newIndicators;
-            subcategories[subcategoryKey] = subcategoryValue;
+          })
+          const isSubCategoryHidden = indicators.filter(indicator => !indicator.isHidden).length === 0;
+          return {
+            ...subcategory,
+            indicators: indicators,
+            isHidden: isSubCategoryHidden
           }
-        });
+        })
 
-        if(!isEmpty(subcategories)){
-          category["subcategories"] = subcategories
-          newData[categoryKey] = category
+        const isCategoryHidden = subcategories.filter(subcategory => !subcategory.isHidden).length === 0;
+        return {
+          ...category,
+          subcategories: subcategories,
+          isHidden: isCategoryHidden
         }
-      });
-      return sortBy(newData, "order");
+      })
+      return categories;
     }
-    const profileIndicators = filterIndicatorData(cloneDeep(data), dataMapperMenu.controller.hiddenIndicators);
 
+    let profileIndicators = filterIndicatorData(data, dataMapperMenu.controller.hiddenIndicators);
     if (isEmpty(data)){
       dataMapperMenu.showNoData()
+      dataMapperMenu.dataMapperRoot.render(<></>);
     } else {
       dataMapperMenu.dataMapperRoot.render(
         <TreeView
@@ -70,14 +72,16 @@ export function loadMenu(dataMapperMenu, data) {
         >
           {profileIndicators.length >  0 && profileIndicators.map(
             (item, key) => {
-              return (
-                <IndicatorCategoryTreeView
-                  category={item}
-                  key={key}
-                  api={dataMapperMenu.api}
-                  controller={dataMapperMenu.controller}
-                />
-              )
+              if (!item.isHidden){
+                return (
+                  <IndicatorCategoryTreeView
+                    category={item}
+                    key={key}
+                    api={dataMapperMenu.api}
+                    controller={dataMapperMenu.controller}
+                  />
+                )
+              }
             })
           }
         </TreeView>

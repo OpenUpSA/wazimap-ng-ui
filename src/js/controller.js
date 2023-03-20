@@ -69,8 +69,6 @@ export default class Controller extends Component {
             this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
             this.reDrawChildren();
           }
-
-
         });
     };
 
@@ -268,7 +266,7 @@ export default class Controller extends Component {
     }
 
     updateHiddenIndicators(indicatorId, action="add"){
-      let hiddenIndicators = structuredClone(this._hiddenIndicators)
+      let hiddenIndicators = structuredClone(this._hiddenIndicators);
       if(action === "add"){
         hiddenIndicators = [...hiddenIndicators, indicatorId]
       } else {
@@ -379,6 +377,7 @@ export default class Controller extends Component {
         );
 
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+        this.triggerEvent('my_view.hiddenIndicatorsPanel.reload', this.hiddenIndicators);
       }
     }
 

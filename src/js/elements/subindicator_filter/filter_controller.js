@@ -408,7 +408,7 @@ export class FilterController extends Component {
         // 3 - add site-wide filters
         this.checkAndAddSiteWideFilters();
         // 4 - global default filters
-        this.checkAndAddGlobalDefaultFilters();
+        // this.checkAndAddGlobalDefaultFilters();  //todo:remove this
 
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);

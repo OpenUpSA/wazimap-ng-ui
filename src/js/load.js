@@ -72,7 +72,7 @@ class Application extends Component {
         mapcontrol.popup = new Popup(this, formattingConfig, mapcontrol.map);
         const pointData = new PointData(this, api, mapcontrol.map, profileId, config);
         const pointDataTray = new PointDataTray(this, api, profileId, config.watermarkEnabled);
-        const mapchip = new MapChip(this, config.choropleth, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilter);
+        const mapchip = new MapChip(this, config.choropleth, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters);
         const search = new Search(this, api, profileId, 2);
         const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled, config.siteWideFiltersEnabled, config.restrictValues);
         const locationInfoBox = new LocationInfoBox(this, formattingConfig);

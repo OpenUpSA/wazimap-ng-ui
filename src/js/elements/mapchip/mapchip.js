@@ -267,7 +267,18 @@ export class MapChip extends Component {
         const previouslySelectedFilters = params.filter;
         let chartDefaultFilters = this.config.chartConfiguration.filter;
 
-        console.log({chartDefaultFilters, 'defaultFilters': this.defaultFilters})
+        if (this.defaultFilters.length > 0) {
+            // there are global default filters
+            if (chartDefaultFilters?.defaults === undefined) {
+                chartDefaultFilters = {
+                    defaults: []
+                }
+            }
+
+            this.defaultFilters.forEach(df => {
+                chartDefaultFilters.defaults.push(df);
+            })
+        }
 
         let dataFilterModel = new DataFilterModel(this.metadata.groups,
             chartDefaultFilters,

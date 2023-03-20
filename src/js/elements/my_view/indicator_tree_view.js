@@ -150,7 +150,7 @@ const IndicatorCategoryTreeView = (props) => {
           hidden {hiddenIndicators.length}
         </Typography>
       </Box>
-    }>
+    } data-test-id={props.category.name}>
     {props.category.subcategories.length > 0 && props.category.subcategories.map(
       (subcategory, key) => {
         return (

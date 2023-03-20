@@ -70,7 +70,6 @@ Feature: Sharing url
     And I collapse Rich Data Panel
 
     When I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Rich data view:Language most spoken at home:language:Afrikaans" at index 0
 
   Scenario: Verify history when user clicks on back or forward button
@@ -104,7 +103,6 @@ Feature: Sharing url
 
     When I go back in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
     Then I collapse My View Window
@@ -118,7 +116,6 @@ Feature: Sharing url
 
     When I go back in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I collapse My View Window
     And I expand the filter dialog
@@ -130,7 +127,6 @@ Feature: Sharing url
 
     When I go back in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there are no filters in my view panel
     Then I collapse My View Window
     And I expand the filter dialog
@@ -142,7 +138,6 @@ Feature: Sharing url
 
     When I go forward in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I collapse My View Window
     And I expand the filter dialog
@@ -154,7 +149,6 @@ Feature: Sharing url
 
     When I go forward in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I collapse My View Window
     And I expand the filter dialog
@@ -166,7 +160,6 @@ Feature: Sharing url
 
     When I go forward in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
     Then I collapse My View Window
@@ -228,7 +221,6 @@ Feature: Sharing url
     When I go back in browser history
     Then I wait until map is ready for Western Cape
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
     Then I collapse My View Window
@@ -249,7 +241,6 @@ Feature: Sharing url
     When I go forward in browser history
     Then I wait until map is ready
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
     Then I collapse My View Window

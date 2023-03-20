@@ -299,7 +299,7 @@ function checkIfFilterDialogIsCollapsed(parentDiv, contentDiv) {
 }
 
 export function checkDataMapperCategoryCount(count) {
-    cy.get('.data-mapper-content__list .data-category--v2').should('have.length', count);
+    cy.get('.data-mapper-content__list .indicator-category').should('have.length', count);
 }
 
 export function compareImages(image1, image2) {
@@ -374,7 +374,7 @@ export function expandMyViewPanel() {
 export function collapseMyViewPanel() {
     cy.get('div[data-test-id="my-view-panel"]').then($panel => {
         if ($panel.is(':visible')) {
-            cy.get('div[data-test-id="my-view-close-button"]').click();
+            cy.get('div[data-test-id="my-view-close-button"]', {timeout: 20000}).click({force: true});
         }
     })
 }

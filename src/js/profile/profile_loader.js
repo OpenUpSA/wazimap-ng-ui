@@ -18,7 +18,7 @@ let profileWrapper = null;
 
 
 export default class ProfileLoader extends Component {
-    constructor(parent, formattingConfig, _api, _profileId, _config, watermarkEnabled) {
+    constructor(parent, formattingConfig, _api, _profileId, _config, watermarkEnabled, siteWideFiltersEnabled) {
         super(parent);
         this.api = _api;
         this.profileId = _profileId;
@@ -26,7 +26,9 @@ export default class ProfileLoader extends Component {
         this.config = _config;
         this.profileHeader = null;
         this._filteredIndicators = [];
+        this._siteWideFilters = [];
         this.watermarkEnabled = watermarkEnabled;
+        this.siteWideFiltersEnabled = siteWideFiltersEnabled;
         this._categories = [];
 
         new ResizeObserver(() => {
@@ -40,6 +42,14 @@ export default class ProfileLoader extends Component {
 
     set filteredIndicators(value) {
         this._filteredIndicators = value;
+    }
+
+    get siteWideFilters() {
+        return this._siteWideFilters;
+    }
+
+    set siteWideFilters(value) {
+        this._siteWideFilters = value;
     }
 
     get categories() {
@@ -94,7 +104,17 @@ export default class ProfileLoader extends Component {
         for (const categoryDetail of sortBy(categories, "order")) {
             const category = Object.keys(categories).filter(k => categories[k] === categoryDetail);
             const id = this.getNewId();
-            let c = new Category(this, this.formattingConfig, category, categoryDetail, profileWrapper, id, removePrevCategories, isFirst, profile.geography, this.config);
+            let c = new Category(this,
+                this.formattingConfig,
+                category,
+                categoryDetail,
+                profileWrapper,
+                id,
+                removePrevCategories,
+                isFirst,
+                profile.geography,
+                this.config,
+                this.siteWideFiltersEnabled);
             c.isVisible = c.subCategories.length > 0;
             if (c.isVisible) {
                 this.createNavItem(id, category);
@@ -103,7 +123,7 @@ export default class ProfileLoader extends Component {
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
-                'point_tray.subindicator_filter.filter', 'profile.chart.filtered',
+                'point_tray.subindicator_filter.filter', 'profile.chart.filtered', 'filterRow.created.new', 'filterRow.filter.unlocked', 'filterRow.filter.locked'
             ]);
 
             removePrevCategories = false;

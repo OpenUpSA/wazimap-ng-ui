@@ -178,6 +178,7 @@ describe('configureBarchart', () => {
 describe('Test downloadable barchart', () => {
     let data, metadata, config;
     beforeEach(() => {
+        document.body.innerHTML = html;
         const td = new TestData();
         metadata = td.chartMetadata,
             data = td.chartData,

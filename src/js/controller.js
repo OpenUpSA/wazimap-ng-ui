@@ -13,6 +13,7 @@ export default class Controller extends Component {
         this._shouldMapZoom = false;
         this._filteredIndicators = [];
         this._hiddenIndicators = [];
+        this._siteWideFilters = [];
 
         this.state = {
             profileId: profileId,
@@ -97,6 +98,10 @@ export default class Controller extends Component {
 
     get hiddenIndicators() {
         return this._hiddenIndicators;
+    }
+
+    get siteWideFilters() {
+        return this._siteWideFilters;
     }
 
     changeGeography(areaCode) {
@@ -202,12 +207,23 @@ export default class Controller extends Component {
         this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, payload.updadateSharedUrl, SidePanels.PANELS.richData);
     }
 
+    isAlreadyInFilteredIndicators(filter, indicatorId, filterPanel) {
+        let arrClone = structuredClone(this._filteredIndicators);
+        const alreadyAdded = arrClone.filter(x => x.indicatorId === indicatorId)[0]?.filters
+            .filter(y => y.group === filter.group && y.value === filter.value && y.appliesTo.indexOf(filterPanel) >= 0)[0] != null;
+
+        return alreadyAdded;
+    }
+
     updateFilteredIndicators(indicatorId, indicatorTitle, selectedFilterDetails, updateSharedUrl, filterPanel) {
+        let selectedFilterDetailsClone = structuredClone(selectedFilterDetails);
+        selectedFilterDetailsClone = selectedFilterDetailsClone.filter(x => !x.isDefault);
+        selectedFilterDetailsClone = selectedFilterDetailsClone.filter(x => !x.isSiteWideFilter || this.isAlreadyInFilteredIndicators(x, indicatorId, filterPanel));
         let isNewObj = this._filteredIndicators.filter(x => x.indicatorId === indicatorId)[0] == null;
 
         let filteredIndicator = {
             indicatorId: indicatorId,
-            filters: selectedFilterDetails,
+            filters: selectedFilterDetailsClone,
             indicatorTitle: indicatorTitle
         };
 
@@ -216,7 +232,7 @@ export default class Controller extends Component {
         } else {
             this._filteredIndicators = this._filteredIndicators.map(existingObj => {
                 if (existingObj.indicatorId === indicatorId) {
-                    selectedFilterDetails.forEach((newFilter) => {
+                    selectedFilterDetailsClone.forEach((newFilter) => {
                         newFilter.appliesTo.forEach(panel => {
                             // check for panel
                             let filterObj = existingObj.filters.filter(x => x.appliesTo.indexOf(panel) >= 0 && x.group === newFilter.group)[0];
@@ -232,8 +248,9 @@ export default class Controller extends Component {
                     })
 
                     let filtersToRemove = existingObj.filters.filter(f => {
-                        const stillExists = selectedFilterDetails.filter(x => x.group === f.group && x.value === f.value).length > 0;
-                        return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists;
+                        const stillExists = selectedFilterDetailsClone.filter(x => x.group === f.group && x.value === f.value).length > 0;
+                        const isSiteWideFilter = f.isSiteWideFilter || this.siteWideFilters.some(x => x.indicatorValue === f.group && x.subIndicatorValue === f.value);
+                        return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists && !isSiteWideFilter;
                     })
 
                     filtersToRemove.forEach(x => {
@@ -250,8 +267,8 @@ export default class Controller extends Component {
                 }
             });
         }
-        if (updateSharedUrl){
-          this.updateShareUrl();
+        if (updateSharedUrl) {
+            this.updateShareUrl();
         }
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }
@@ -394,6 +411,39 @@ export default class Controller extends Component {
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
         this.triggerEvent('my_view.hiddenIndicatorsPanel.reload', this.hiddenIndicators);
       }
+    }
+
+    addSiteWideFilter(indicatorValue, subIndicatorValue) {
+        const alreadyAdded = this._siteWideFilters.some(x => x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue);
+        if (alreadyAdded) {
+            return;
+        }
+        this._siteWideFilters.push({
+            indicatorValue,
+            subIndicatorValue
+        });
+
+        const payload = {
+            siteWideFilters: this.siteWideFilters,
+            removedSiteWideFilter: null
+        }
+
+        this.triggerEvent('my_view.siteWideFilters.updated', payload);
+    }
+
+    removeSiteWideFilter(indicatorValue, subIndicatorValue) {
+        this._siteWideFilters = this._siteWideFilters.filter(x => !(x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue));
+
+        const payload = {
+            siteWideFilters: this.siteWideFilters,
+            removedSiteWideFilter: {
+                indicatorValue,
+                subIndicatorValue
+            },
+            filteredIndicators: this.filteredIndicators
+        }
+
+        this.triggerEvent('my_view.siteWideFilters.updated', payload);
     }
 
     onSelectingSubindicator(payload) {

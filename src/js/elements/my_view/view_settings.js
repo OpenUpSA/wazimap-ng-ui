@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
+import {IndicatorOptionsSvg, TrashBinSvg, LockButtonInTextSvg} from "./svg_icons";
 
-import {IndicatorOptionsSvg, TrashBinSvg} from "./svg_icons";
 import {
     AppliedPanelInfo,
     Container,
@@ -32,8 +32,10 @@ const ViewSettings = (props) => {
     const [expanded, setExpanded] = useState('');
     const [filteredIndicators, setFilteredIndicators] = useState([]);
     const [profileIndicators, setProfileIndicators] = useState([]);
+    const [siteWideFiltersEnabled] = useState(props.siteWideFiltersEnabled);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
     const trashBinSvg = TrashBinSvg;
+    const lockButtonSvg = LockButtonInTextSvg;
 
     useEffect(() => {
         if (props.filteredIndicators !== filteredIndicators) {
@@ -157,6 +159,67 @@ const ViewSettings = (props) => {
         </Grid>
       );
     }
+
+    const renderSiteWideFilters = () => {
+        return (
+            props.siteWideFilters.map((swf, index) => {
+                return (
+                    <Grid item xs={12} key={index}>
+                        <FilteredIndicatorCard
+                            data-test-id={'site-wide-filter-card'}
+                        >
+                            <Grid container>
+                                <Grid item xs={10}>
+                                    <Grid container>
+                                        <Grid item xs={6} sx={{paddingRight: '3px'}}>
+                                            <FilteredIndicatorBox
+                                                data-test-id={'site-wide-filter-indicator'}
+                                            >
+                                                {swf.indicatorValue}
+                                            </FilteredIndicatorBox>
+                                        </Grid>
+                                        <Grid item xs={6} sx={{paddingLeft: '3px'}}>
+                                            <FilteredIndicatorBox
+                                                data-test-id={'site-wide-filter-subIndicator'}
+                                            >
+                                                {swf.subIndicatorValue}
+                                            </FilteredIndicatorBox>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <RemoveButton
+                                        onClick={() => props.removeSiteWideFilter(swf)}
+                                    >
+                                        {trashBinSvg}
+                                    </RemoveButton>
+                                </Grid>
+                            </Grid>
+                        </FilteredIndicatorCard>
+                    </Grid>
+                )
+            })
+        )
+    }
+
+    const renderSiteWideFilterSection = () => {
+        if (!siteWideFiltersEnabled) {
+            return <div></div>
+        } else {
+            return (
+                <div>
+                    <StyledTypographyWithBottomBorder>
+                        SITE-WIDE INDICATOR FILTERS
+                    </StyledTypographyWithBottomBorder>
+                    {renderSiteWideFilters()}
+                    <HelpText>
+                        Toggle a site-wide filter by clicking the {lockButtonSvg} next to any indicator.
+                    </HelpText>
+                </div>
+            )
+        }
+    }
+
     return (
         <Container>
             <ViewSettingsTitle>
@@ -178,6 +241,7 @@ const ViewSettings = (props) => {
                     <StyledTypography>INDICATOR OPTIONS</StyledTypography>
                 </StyledAccordionSummary>
                 <StyledAccordionDetails>
+                    {renderSiteWideFilterSection()}
                     <StyledTypographyWithBottomBorder>
                         INDICATOR-SPECIFIC OPTIONS
                     </StyledTypographyWithBottomBorder>

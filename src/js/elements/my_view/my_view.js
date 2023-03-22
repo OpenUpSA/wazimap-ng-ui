@@ -5,8 +5,10 @@ import Toggle from "./toggle";
 import Panel from "./panel";
 
 export class MyView extends Component {
-    constructor(parent, controller, api, profileId) {
+    constructor(parent, controller, siteWideFiltersEnabled, api, profileId) {
         super(parent);
+
+        this.siteWideFiltersEnabled = siteWideFiltersEnabled;
 
         this.addToggle();
         this.addPanel(controller, api, profileId);
@@ -21,6 +23,7 @@ export class MyView extends Component {
         let myViewRoot = createRoot($('.my-view')[0]);
         myViewRoot.render(<Panel
             controller={controller}
+            siteWideFiltersEnabled={this.siteWideFiltersEnabled}
             api={api}
             profileId={profileId}
         />)

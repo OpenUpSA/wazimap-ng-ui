@@ -56,7 +56,7 @@ describe('Indicator', () => {
 
     test('Handles chart data order correctly', () => {
         const component = new Component();
-        const indicator = new Indicator(component, null, CHART_DATA, 'some title', false, null, 'this is the chart attribution');
+        const indicator = new Indicator(component, null, CHART_DATA, 'some title', false, null, 'this is the chart attribution', false);
         indicator.orderChartData();
         let order = [
             "No income",

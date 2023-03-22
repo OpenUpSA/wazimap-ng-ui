@@ -6,21 +6,26 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 const Panel = (props) => {
     const [filteredIndicators, setFilteredIndicators] = useState([]);
+    const [siteWideFilters, setSiteWideFilters] = useState([]);
     const [startedListening, setStartedListening] = useState(false);
+    const [siteWideFiltersEnabled] = useState(props.siteWideFiltersEnabled);
     const [profileIndicators, setProfileIndicators] = useState([]);
     const [hiddenIndicators, setHiddenIndicators] = useState(props.controller.hiddenIndicators);
     const [loading, setLoading] = useState(false);
 
     if (!startedListening) {
+        setStartedListening(true);
         props.controller.on('my_view.filteredIndicators.updated', payload => {
             setFilteredIndicators(prev => payload.payload.slice(0));
-            setStartedListening(true);
         });
 
         props.controller.on('my_view.hiddenIndicatorsPanel.reload', payload => {
             setHiddenIndicators(payload.payload);
-            setStartedListening(true);
         });
+
+        props.controller.on('my_view.siteWideFilters.updated', payload => {
+            setSiteWideFilters(prev => payload.payload.siteWideFilters.slice(0));
+        })
     }
 
     useEffect(() => {
@@ -42,10 +47,14 @@ const Panel = (props) => {
     }
 
     const updateHiddenIndicators = (indicatorId, action) => {
-        props.controller.triggerEvent('my_view.hiddenIndicators.updated', {
-            "indicatorId": indicatorId,
-            "action": action
-        });
+      props.controller.triggerEvent('my_view.hiddenIndicators.updated', {
+          "indicatorId": indicatorId,
+          "action": action
+      });
+    }
+
+    const removeSiteWideFilter = (swf) => {
+        props.controller.removeSiteWideFilter(swf.indicatorValue, swf.subIndicatorValue);
     }
 
     return (
@@ -61,10 +70,13 @@ const Panel = (props) => {
             :
               <ViewSettings
                   filteredIndicators={filteredIndicators}
+                  siteWideFilters={siteWideFilters}
                   profileIndicators={profileIndicators}
                   removeFilter={(fi, sf) => removeFilter(fi, sf)}
                   hiddenIndicators={hiddenIndicators}
                   updateHiddenIndicators={updateHiddenIndicators}
+                  removeSiteWideFilter={(swf) => removeSiteWideFilter(swf)}
+                  siteWideFiltersEnabled={siteWideFiltersEnabled}
               />
           }
         </PanelContainer>

@@ -205,7 +205,6 @@ Feature: Sharing url
 
     When I go back to root geography
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
     Then I collapse My View Window
@@ -226,9 +225,6 @@ Feature: Sharing url
     Then I collapse My View Window
 
     When I expand Data Mapper
-    And I click on "Demographics" in Data Mapper
-    And I click on "Migration" in Data Mapper
-    And I click on "Region of birth" in Data Mapper
     And I click on "Male" in Data Mapper
     And I expand the filter dialog
     Then I confirm that the choropleth is filtered by "age:30-35" at index 0

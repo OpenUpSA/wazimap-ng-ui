@@ -52,10 +52,25 @@ export default class Controller extends Component {
 
         window.addEventListener('popstate', (event) => {
           let hiddenIndicators = [], filteredIndicators = [];
+
           if (event.state){
             filteredIndicators = event.state.filters;
             hiddenIndicators = event.state.hiddenIndicators;
-          }
+          } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                const profileView = JSON.parse(urlParams.get("profileView"));
+                if (profileView === null) {
+                    if (this._filteredIndicators.length > 0){
+                      filteredIndicators = [];
+                    }
+                    if (this._hiddenIndicators.length > 0){
+                      hiddenIndicators = [];
+                    }
+                } else {
+                  filteredIndicators = this.filteredIndicators;
+                  hiddenIndicators = this.hiddenIndicators;
+                }
+            }
 
           if (!isEqual(hiddenIndicators, this._hiddenIndicators)){
             this._hiddenIndicators = hiddenIndicators;

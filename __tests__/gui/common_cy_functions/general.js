@@ -6,7 +6,7 @@ export const allDetailsEndpoint = 'all_details';
 const recursiveResult = {PANEL_ALREADY_EXPANDED: false, ALL_PANELS_CLOSED: true};
 
 export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [],
-                                   profile_indicator_summary = {}, indicator_data = {}) {
+                                   profile_indicator_summary = {}, indicator_data = {}, categories_data = []) {
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=test&skip-children=true&format=json`, (req) => {
         req.reply({
             statusCode: 200,
@@ -70,6 +70,14 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             forceNetworkError: false // default
         });
     }).as('indicator_data');
+
+    cy.intercept('/api/v1/profiles/8/categories/?format=json', (request) => {
+        request.reply({
+            statusCode: 200,
+            body: extractRequestedIndicatorData(request.url, categories_data),
+            forceNetworkError: false // default
+        });
+    }).as('categories_data');
 }
 
 export function setupInterceptionsForSpecificGeo(geoCode, all_details) {

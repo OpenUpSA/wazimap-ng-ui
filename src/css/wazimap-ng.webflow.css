@@ -314,6 +314,7 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  max-width: 85vw;
   padding: 8px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -425,9 +426,9 @@ label {
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-flex: 0;
-  -webkit-flex: 0 auto;
-  -ms-flex: 0 auto;
-  flex: 0 auto;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
   border: 1px solid transparent;
   border-radius: 3px;
   background-color: #707070;
@@ -458,7 +459,6 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  min-width: 160px;
   margin-top: 4px;
   padding-top: 8px;
   padding-right: 12px;
@@ -472,6 +472,10 @@ label {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
   border-top: 1px solid rgba(0, 0, 0, 0.15);
   border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -517,23 +521,17 @@ label {
 }
 
 .map-location__tags {
-  position: relative;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  overflow: auto;
+  max-width: 100%;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   flex-direction: row;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-align-self: stretch;
-  -ms-flex-item-align: stretch;
-  align-self: stretch;
 }
 
 .rich-data-nav__list {
@@ -4077,6 +4075,10 @@ label {
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
   -ms-flex: 1;
@@ -4093,8 +4095,6 @@ label {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  width: 50%;
-  margin-bottom: 4px;
   color: #999;
   font-size: 0.7em;
   line-height: 1em;
@@ -10297,6 +10297,7 @@ label {
   }
 
   .rich-data-content {
+    max-width: 76vw;
     padding-top: 32px;
     padding-right: 32px;
     padding-left: 32px;
@@ -10305,6 +10306,26 @@ label {
   .nav.narrow {
     padding-right: 32px;
     padding-left: 32px;
+  }
+
+  .map-location {
+    max-width: 95vw;
+  }
+
+  .map-location__tags {
+    max-width: 100%;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    -ms-grid-row-align: center;
+    align-self: center;
+  }
+
+  .rich-data-toggles {
+    top: 190px;
   }
 
   .category-header {
@@ -10406,6 +10427,18 @@ label {
     padding-right: 6px;
   }
 
+  .point-mapper-toggles {
+    top: 134px;
+  }
+
+  .panel-toggles {
+    top: 190px;
+  }
+
+  .data-mapper-toggles {
+    top: 134px;
+  }
+
   .mapping-options__filter {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
@@ -10455,6 +10488,11 @@ label {
     flex: 0 auto;
   }
 
+  .map-geo-select {
+    bottom: 85px;
+    z-index: 500;
+  }
+
   .mag-geo__dropdown_wrap {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
@@ -10465,6 +10503,12 @@ label {
   .rich-data__print {
     top: 70px;
     display: none;
+  }
+
+  .map-bottom-items {
+    width: 100%;
+    padding-right: 53px;
+    padding-left: 10px;
   }
 
   .div-block {
@@ -10503,8 +10547,19 @@ label {
     flex: 1;
   }
 
+  .map-bottom-items--v2 {
+    width: 100%;
+    padding-right: 52px;
+    padding-left: 10px;
+  }
+
   .tutorial-2 {
     overflow: auto;
+  }
+
+  .div-block-5 {
+    height: 96px;
+    background-color: red;
   }
 }
 
@@ -10615,10 +10670,13 @@ label {
 
   .point-mapper {
     display: none;
+    max-width: 83vw;
   }
 
   .data-mapper {
     display: none;
+    max-width: 83vw;
+    min-width: auto;
   }
 
   .mapping-options__filter_menu {
@@ -10721,6 +10779,10 @@ label {
     width: 90%;
     padding: 4px 16px;
     grid-row-gap: 4px;
+  }
+
+  .map-bottom-items {
+    padding-right: 40px;
   }
 
   .profile-indicator__filter_menu {

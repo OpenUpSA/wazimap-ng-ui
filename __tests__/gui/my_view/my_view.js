@@ -12,7 +12,7 @@ import {
     selectChoroplethDropdownOption,
     selectChartDropdownOption,
     setupInterceptions,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded, confirmChoroplethIsFiltered
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profile from "./profile.json";
@@ -64,18 +64,7 @@ When(/^I select "([^"]*)" from subIndicator dropdown in chart filter/, function 
 
 Then(/^I confirm that the choropleth is filtered by "([^"]*)"$/, function (filter) {
     const filters = filter.split(':');
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible`).should('have.length', 1);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
-        .eq(0)
-        .find(' .dropdown-menu__selected-item .truncate')
-        .should('have.text', filters[0]);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
-        .eq(1)
-        .find(' .dropdown-menu__selected-item .truncate')
-        .should('have.text', filters[1]);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
-        .eq(1)
-        .should('not.have.class', 'disabled');
+    confirmChoroplethIsFiltered(filters[0], filters[1], 0);
 });
 
 When('I expand My View Window', () => {

@@ -1,7 +1,7 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
     checkIfPointFilterDialogIsCollapsed, checkIfPointFilterDialogIsExpanded,
-    clickOnText, collapsePointFilterDialog, expandPointFilterDialog, expandPointMapper,
+    clickOnText, collapsePointFilterDialog, confirmDropdownOptions, expandPointFilterDialog, expandPointMapper,
     gotoHomepage,
     hoverOverTheMapCenter,
     setupInterceptions,
@@ -150,19 +150,7 @@ When('I click on the first filter dropdown', () => {
 })
 
 Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {
-    let filters = [];
-    cy.get('.dropdown-menu__content:visible .dropdown__list_item:visible').each(($el) => {
-        const text = $el.text().trim();
-        filters.push(text);
-    }).then(() => {
-        let params = [];
-        arr.split(',').forEach((a) => {
-            params.push(a.trim());
-        })
-
-        expect(params).to.have.members(filters);
-        cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("All values")`).click();
-    });
+    confirmDropdownOptions(arr);
 });
 
 When(/^I filter by "([^"]*)"$/, (filter) => {

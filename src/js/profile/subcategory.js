@@ -29,7 +29,8 @@ export class Subcategory extends Component {
         geography,
         profileConfig,
         addLockButton = true,
-        restrictValues = {}
+        restrictValues = {},
+        defaultFilters = []
     ) {
         super(parent);
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
@@ -41,7 +42,7 @@ export class Subcategory extends Component {
         this._uiElements = [];
 
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
-        this.addIndicators(wrapper, detail, addLockButton, restrictValues);
+        this.addIndicators(wrapper, detail, addLockButton, restrictValues, defaultFilters);
 
         this.prepareEvents();
     }
@@ -120,8 +121,19 @@ export class Subcategory extends Component {
         wrapper.append(scHeader);
     }
 
-    addIndicatorBlock(container, indicator, title, isLast, addLockButton, restrictValues) {
-        let block = new Indicator(this, container, indicator, title, isLast, this.geography, this._profileConfig.chart_attribution, addLockButton, restrictValues);
+    addIndicatorBlock(container, indicator, title, isLast, addLockButton, restrictValues, defaultFilters) {
+        let block = new Indicator(
+            this,
+            container,
+            indicator,
+            title,
+            isLast,
+            this.geography,
+            this._profileConfig.chart_attribution,
+            addLockButton,
+            restrictValues,
+            defaultFilters
+        );
         this.bubbleEvents(block, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
@@ -137,7 +149,7 @@ export class Subcategory extends Component {
         return block;
     }
 
-    addIndicators = (wrapper, detail, addLockButton, restrictValues) => {
+    addIndicators = (wrapper, detail, addLockButton, restrictValues, defaultFilters) => {
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
@@ -155,7 +167,7 @@ export class Subcategory extends Component {
                     $(wrapper).append(indicatorContainer);
                     let metadata = indicator.metadata;
                     if (indicator.content_type === ContentBlock.BLOCK_TYPES.Indicator) {
-                        block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast, addLockButton, restrictValues);
+                        block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast, addLockButton, restrictValues, defaultFilters);
                     } else if (indicator.content_type === ContentBlock.BLOCK_TYPES.HTMLBlock) {
                         block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast);
                     }

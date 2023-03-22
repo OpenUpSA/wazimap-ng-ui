@@ -333,8 +333,13 @@ export class FilterController extends Component {
     addPreviouslySelectedFilters(group, isDefault, isPreviouslySelected) {
         let filterRow = this.addEmptyFilter(isDefault, false, false, false, isPreviouslySelected);
 
-        filterRow.setPrimaryIndexUsingValue(group.group);
-        filterRow.setSecondaryIndexUsingValue(group.value);
+        try {
+            filterRow.setPrimaryIndexUsingValue(group.group);
+            filterRow.setSecondaryIndexUsingValue(group.value);
+        } catch (err) {
+            console.error(err);
+            filterRow.removeRow();
+        }
     }
 
     setAddFilterButton() { // TODO write an unselected filters getter in the data model
@@ -407,8 +412,6 @@ export class FilterController extends Component {
         this.checkAndAddDefaultFilterGroups();
         // 3 - add site-wide filters
         this.checkAndAddSiteWideFilters();
-        // 4 - global default filters
-        // this.checkAndAddGlobalDefaultFilters();  //todo:remove this
 
         this.setFilterVisibility();
         this.addInitialFilterRow(dataFilterModel);

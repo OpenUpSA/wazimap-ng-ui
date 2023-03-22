@@ -12,7 +12,8 @@ export class Indicator extends ContentBlock {
         geography,
         chartAttribution,
         addLockButton = true,
-        restrictValues = {}
+        restrictValues = {},
+        defaultFilters = []
     ) {
         super(parent, container, indicator, title, isLast, geography);
 
@@ -20,7 +21,7 @@ export class Indicator extends ContentBlock {
         this._chart = null;
 
         this.prepareDomElements();
-        this.addIndicatorChart(addLockButton, restrictValues);
+        this.addIndicatorChart(addLockButton, restrictValues, defaultFilters);
     }
 
     get previouslySelectedFilters() {
@@ -58,12 +59,12 @@ export class Indicator extends ContentBlock {
         super.prepareDomElements();
     }
 
-    addIndicatorChart(addLockButton, restrictValues) {
+    addIndicatorChart(addLockButton, restrictValues, defaultFilters) {
         let groups = Object.keys(this.indicator.groups);
         const configuration = this.indicator.chartConfiguration;
 
         let chartData = this.orderChartData();
-        let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution, addLockButton, restrictValues);
+        let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution, addLockButton, restrictValues, defaultFilters);
         this.bubbleEvents(c, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

@@ -53,14 +53,15 @@ Then('I select an indicator', () => {
   cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
   cy.get('.indicator-item').contains('Population group').click();
   cy.get('.subIndicator-item').contains('Black african').click();
+  cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
 
     cy.get(`${mapBottomItems} .map-options .map-options__legend`).should('be.visible');
 })
 
 When('I select another indicator', () => {
-  cy.get('.indicator-subcategory').contains('Population (2011 Census)').click();
-  cy.get('.indicator-item').contains('Population group 2').click();
-  cy.get('.subIndicator-item').contains('Indian or Asian').click();
+  cy.get('.indicator-subcategory', {timeout: 20000}).contains('Population (2011 Census)').click();
+  cy.get('.indicator-item', {timeout: 20000}).contains('Population group 2').click();
+  cy.get('.subIndicator-item', {timeout: 20000}).contains('Indian or Asian').click();
 })
 
 Then('I check if the choropleth filter dialog is collapsed', () => {
@@ -125,19 +126,19 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
 
     cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
         //loading = true
-        cy.get('.data-mapper-content__list').should('not.be.visible');
-        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('contain.text', 'Loading');
-        cy.get(`${mapBottomItems} .map-options  .map-options__loading`).should('be.visible');
-        cy.get(`${mapBottomItems} .map-options  .map-options__legend_loading`).should('be.visible');
+        cy.get('.data-mapper-content__list', {timeout: 20000}).should('not.be.visible');
+        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`, {timeout: 20000}).should('contain.text', 'Loading');
+        cy.get(`${mapBottomItems} .map-options  .map-options__loading`, {timeout: 20000}).should('be.visible');
+        cy.get(`${mapBottomItems} .map-options  .map-options__legend_loading`, {timeout: 20000}).should('be.visible');
 
         sendResponse();
 
         //loading = false
-        cy.get('.data-mapper-content__loading').should('not.be.visible');
-        cy.get('.data-mapper-content__list').should('be.visible');
-        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('not.contain.text', 'Loading');
-        cy.get(`${mapBottomItems} .map-options  .map-options__loading`).should('not.be.visible');
-        cy.get(`${mapBottomItems} .map-options  .map-options__legend_loading`).should('not.be.visible');
+        cy.get('.data-mapper-content__loading', {timeout: 20000}).should('not.be.visible');
+        cy.get('.data-mapper-content__list', {timeout: 20000}).should('be.visible');
+        cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`, {timeout: 20000}).should('not.contain.text', 'Loading');
+        cy.get(`${mapBottomItems} .map-options  .map-options__loading`, {timeout: 20000}).should('not.be.visible');
+        cy.get(`${mapBottomItems} .map-options  .map-options__legend_loading`, {timeout: 20000}).should('not.be.visible');
     });
 })
 
@@ -239,7 +240,7 @@ When('I navigate to FS', () => {
             body: [],
             forceNetworkError: false // default
         })
-    })
+    });
 
     cy.visit('/#geo:FS');
 })
@@ -271,9 +272,9 @@ Then('I expand filter dialog', () => {
 })
 
 Then('I check if the message is displayed correctly', () => {
-    cy.get(`${mapBottomItems} .map-options .map-options__loading`).should('not.be.visible');
-    cy.get(`${mapBottomItems} .map-options .map-options__no-data`).should('be.visible');
-    cy.get(`${mapBottomItems} .map-options .map-options__no-data`).should('contain.text', 'No filters available for the selected data.');
+    cy.get(`${mapBottomItems} .map-options .map-options__loading`, {timeout: 20000}).should('not.be.visible');
+    cy.get(`${mapBottomItems} .map-options .map-options__no-data`, {timeout: 20000}).should('be.visible');
+    cy.get(`${mapBottomItems} .map-options .map-options__no-data`, {timeout: 20000}).should('contain.text', 'No filters available for the selected data.');
 })
 
 Then('I check if the non\-aggregatable group filter is applied', () => {

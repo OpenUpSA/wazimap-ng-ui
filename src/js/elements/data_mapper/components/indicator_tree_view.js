@@ -78,6 +78,10 @@ const IndicatorItemView = (props) => {
         ).then((childData) => {
           props.indicator.indicatorData = childData;
           setLoading(false);
+        }).catch((response) => {
+          props.indicator.indicatorData = {};
+          setLoading(false);
+          throw(response);
         })
       }
     }

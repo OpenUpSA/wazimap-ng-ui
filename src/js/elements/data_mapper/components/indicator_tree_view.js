@@ -138,7 +138,7 @@ const IndicatorItemView = (props) => {
 const IndicatorSubCategoryTreeView = (props) => {
 
   return (
-    <StyledSubCategoryTreeItem nodeId={props.subcategory.name} label={
+    <StyledSubCategoryTreeItem nodeId={`subcategory-${props.subcategory.id}`} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
         <Typography variant="body2" sx={{ fontSize: '1em', fontWeight: '500', letterSpacing: '.3px' }} className="indicator-subcategory">
           {props.subcategory.name}
@@ -173,7 +173,7 @@ const IndicatorSubCategoryTreeView = (props) => {
 
 const IndicatorCategoryTreeView = (props) => {
   return (
-    <StyledCategoryTreeItem nodeId={props.category.name} label={
+    <StyledCategoryTreeItem nodeId={`catergoy-${props.category.id}`} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
         <Typography variant="body2" sx={{ fontSize: '.9em', fontWeight: '500', letterSpacing: '.3px' }}>
           {props.category.name}

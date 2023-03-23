@@ -45,11 +45,16 @@ const IndicatorItemView = (props) => {
         <Typography variant="body2" className={"truncate"}>
           {props.indicator.label}
         </Typography>
-        <Typography variant="caption" color="inherit" onClick={(e) => hideIndicator(e)}>
+        <Typography
+          variant="caption"
+          color="inherit"
+          onClick={(e) => hideIndicator(e)}
+          data-test-id={isHidden ? "eyeCloseIcon" : "eyeIcon"}
+        >
           {isHidden ? eyeCloseIcon : eyeIcon}
         </Typography>
       </Box>
-    } />
+    } data-test-id={`MyView-${props.indicator.label}`} />
   )
 }
 
@@ -76,7 +81,7 @@ const IndicatorSubCategoryTreeView = (props) => {
           hidden {hiddenIndicators.length}
         </Typography>
       </Box>
-    }>
+    } data-test-id={`MyView-${props.subcategory.name}`}>
     {props.subcategory.indicators.length > 0 && props.subcategory.indicators.map(
       (indicator, key) => {
         return (
@@ -150,7 +155,7 @@ const IndicatorCategoryTreeView = (props) => {
           hidden {hiddenIndicators.length}
         </Typography>
       </Box>
-    } data-test-id={props.category.name}>
+    } data-test-id={`MyView-${props.category.name}`}>
     {props.category.subcategories.length > 0 && props.category.subcategories.map(
       (subcategory, key) => {
         return (

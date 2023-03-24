@@ -22,3 +22,13 @@
   right: 0;
   top: 80px;
 }
+
+@media (max-width: 480px) {
+  .right-panel-toggles {
+    top: 370px;
+  }
+
+  .choropleth-method-description, .filters__header_label {
+    display: none !important;
+  }
+}

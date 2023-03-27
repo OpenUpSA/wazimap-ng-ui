@@ -1,10 +1,12 @@
 {
   "Economic Opportunities": {
     "order": 1,
+    "id": 3,
     "name": "Economic Opportunities",
     "subcategories": {
       "NEET Status": {
         "order": 1,
+        "id": 4,
         "name": "NEET Status",
         "indicators": {
           "Not in Employment": {

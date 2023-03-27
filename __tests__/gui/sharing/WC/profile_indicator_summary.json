@@ -1,10 +1,12 @@
 {
   "Demographics": {
     "order": 91,
+    "id": 91,
     "name": "Demographics",
     "subcategories": {
       "Language": {
         "order": 242,
+        "id": 242,
         "name": "Language",
         "indicators": {
           "Language most spoken at home": {
@@ -116,6 +118,7 @@
       },
       "Migration": {
         "order": 243,
+        "id": 243,
         "name": "Migration",
         "indicators": {
           "Region of birth": {
@@ -219,6 +222,7 @@
       },
       "Population": {
         "order": 244,
+        "id": 244,
         "name": "Population",
         "indicators": {
           "Total population by age group": {
@@ -318,6 +322,7 @@
       },
       "Province of birth": {
         "order": 245,
+        "id": 245,
         "name": "Province of birth",
         "indicators": {
           "Province of birth": {
@@ -429,6 +434,7 @@
       },
       "South African Citizenship": {
         "order": 246,
+        "id": 246,
         "name": "South African Citizenship",
         "indicators": {
           "Citizenship": {
@@ -529,6 +535,7 @@
       },
       "Youth population by age group": {
         "order": 247,
+        "id": 247,
         "name": "Youth population by age group",
         "indicators": {
           "Youth population by age group": {
@@ -632,6 +639,7 @@
       },
       "Youth status": {
         "order": 248,
+        "id": 248,
         "name": "Youth status",
         "indicators": {
           "Total population by youth status": {

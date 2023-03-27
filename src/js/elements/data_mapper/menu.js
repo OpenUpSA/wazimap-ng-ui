@@ -16,8 +16,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
-import {cloneDeep} from "lodash";
-
 
 let parentContainer = null;
 let categoryTemplate = null;
@@ -27,39 +25,42 @@ let indicatorItemTemplate = null;
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 
-export function loadMenu(dataMapperMenu, data) {
-
-    const filterIndicatorData = (indicatorData, hiddenIndicators) => {
-      let categories = sortBy(indicatorData, "order");
-      categories = categories.map(category => {
-        let subcategories = sortBy(category.subcategories, "order");
-        subcategories = subcategories.map(subcategory => {
-          let indicators = sortBy(subcategory.indicators, "order");
-          indicators = indicators.map(indicator => {
-            const isIndicatorHidden = hiddenIndicators.includes(indicator.id);
-            return {
-              ...indicator,
-              isHidden: isIndicatorHidden,
-            }
-          })
-          const isSubCategoryHidden = indicators.filter(indicator => !indicator.isHidden).length === 0;
-          return {
-            ...subcategory,
-            indicators: indicators,
-            isHidden: isSubCategoryHidden
-          }
-        })
-
-        const isCategoryHidden = subcategories.filter(subcategory => !subcategory.isHidden).length === 0;
+export const filterIndicatorData = (indicatorData, hiddenIndicators) => {
+  let categories = sortBy(indicatorData, "order");
+  categories = categories.map(category => {
+    let subcategories = sortBy(category.subcategories, "order");
+    subcategories = subcategories.map(subcategory => {
+      let indicators = sortBy(subcategory.indicators, "order");
+      indicators = indicators.map(indicator => {
+        const isIndicatorHidden = (
+          hiddenIndicators.includes(indicator.id) ||
+          indicator.content_type !== "indicator" ||
+          indicator.dataset_content_type !== 'quantitative'
+        );
         return {
-          ...category,
-          subcategories: subcategories,
-          isHidden: isCategoryHidden
+          ...indicator,
+          isHidden: isIndicatorHidden,
         }
       })
-      return categories;
-    }
+      const isSubCategoryHidden = indicators.filter(indicator => !indicator.isHidden).length === 0;
+      return {
+        ...subcategory,
+        indicators: indicators,
+        isHidden: isSubCategoryHidden
+      }
+    })
 
+    const isCategoryHidden = subcategories.filter(subcategory => !subcategory.isHidden).length === 0;
+    return {
+      ...category,
+      subcategories: subcategories,
+      isHidden: isCategoryHidden
+    }
+  })
+  return categories;
+}
+
+export function loadMenu(dataMapperMenu, data) {
     let profileIndicators = filterIndicatorData(data, dataMapperMenu.controller.hiddenIndicators);
     if (isEmpty(data)){
       dataMapperMenu.showNoData()

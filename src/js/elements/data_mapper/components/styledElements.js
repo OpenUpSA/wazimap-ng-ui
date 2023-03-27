@@ -9,7 +9,6 @@ import TreeItem, { treeItemClasses } from '@mui/lab/TreeItem';
 export const StyledCategoryTreeItem = styled(TreeItem)(() => ({
   [`& .${treeItemClasses.content}`]: {
     'flexDirection': 'row-reverse',
-    'borderRadius': '2px',
     'marginBottom': '8px',
     'backgroundColor': '#39ad84',
     'borderRadius': '2px',

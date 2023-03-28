@@ -481,10 +481,10 @@ export class FilterController extends Component {
     checkAndAddNonAggregatableGroups() {
         const self = this;
         let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
-        let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
 
         nonAggregatableGroups.forEach(group => {
-            if (group.name != this.model.dataFilterModel.primaryGroup && !defaultGroups.some(x => x.group === group.name)) {
+            const alreadyAdded = this.model.filterRows.some(x => x.model.currentIndicatorValue === group.name);
+            if (group.name != this.model.dataFilterModel.primaryGroup && !alreadyAdded) {
                 self.addNonAggregatableFilter(group);
             } else {
                 this.model.filterRows.filter(x => x.model.currentIndicatorValue === group.name).forEach(row => {

@@ -305,6 +305,7 @@ export class FilterController extends Component {
             if (filterRow !== undefined) {
                 console.error(err);
                 filterRow.removeRow();
+                this.addEmptyRowIfNoneLeft();
             }
         }
     }
@@ -319,8 +320,6 @@ export class FilterController extends Component {
         let filterRow = this.addEmptyFilter(isDefault, isExtra, isRequired, addAsFirstRow, isPreviouslySelected);
         try {
             if (filterRow !== undefined) {
-                filterRow.indicatorDropdown.disable();
-
                 filterRow.setPrimaryIndexUsingValue(group.group);
                 filterRow.setSecondaryIndexUsingValue(group.value);
             }
@@ -328,6 +327,7 @@ export class FilterController extends Component {
             if (filterRow !== undefined) {
                 console.error(err);
                 filterRow.removeRow();
+                this.addEmptyRowIfNoneLeft();
             }
         }
     }
@@ -335,8 +335,14 @@ export class FilterController extends Component {
     addPreviouslySelectedFilters(group, isDefault, isPreviouslySelected) {
         let filterRow = this.addEmptyFilter(isDefault, false, false, false, isPreviouslySelected);
 
-        filterRow.setPrimaryIndexUsingValue(group.group);
-        filterRow.setSecondaryIndexUsingValue(group.value);
+        try {
+            filterRow.setPrimaryIndexUsingValue(group.group);
+            filterRow.setSecondaryIndexUsingValue(group.value);
+        } catch (err) {
+            console.error(err);
+            filterRow.removeRow();
+            this.addEmptyRowIfNoneLeft();
+        }
     }
 
     setAddFilterButton() { // TODO write an unselected filters getter in the data model
@@ -475,10 +481,10 @@ export class FilterController extends Component {
     checkAndAddNonAggregatableGroups() {
         const self = this;
         let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
-        let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
 
         nonAggregatableGroups.forEach(group => {
-            if (group.name != this.model.dataFilterModel.primaryGroup && !defaultGroups.some(x => x.group === group.name)) {
+            const alreadyAdded = this.model.filterRows.some(x => x.model.currentIndicatorValue === group.name);
+            if (group.name != this.model.dataFilterModel.primaryGroup && !alreadyAdded) {
                 self.addNonAggregatableFilter(group);
             } else {
                 this.model.filterRows.filter(x => x.model.currentIndicatorValue === group.name).forEach(row => {
@@ -498,11 +504,6 @@ export class FilterController extends Component {
 
             if (!alreadyAdded && group.group !== this.model.dataFilterModel.primaryGroup) {
                 self.addDefaultFilter(group);
-            } else {
-                this.model.filterRows.filter(x => x.model.currentIndicatorValue === group.group).forEach(row => {
-                    row.indicatorDropdown.disable();
-                    row.indicatorDropdown.model.isDisabled = true;
-                })
             }
         })
     }
@@ -566,6 +567,19 @@ export class FilterController extends Component {
                     existingFilterRow.subIndicatorDropdown.disable();
                 }
             }
+        })
+    }
+
+    checkAndAddGlobalDefaultFilters() {
+        const self = this;
+        let globalFilter = self.model.dataFilterModel.globalFilter;
+        Object.keys(globalFilter).forEach(key => {
+            let filterRow = self.addEmptyFilter(true)
+
+            filterRow.setPrimaryIndexUsingValue(key);
+            filterRow.indicatorDropdown.disable();
+            filterRow.setSecondaryIndexUsingValue(globalFilter[key]);
+            filterRow.subIndicatorDropdown.disable();
         })
     }
 
@@ -635,6 +649,10 @@ export class FilterController extends Component {
         this.checkAndAddDefaultFilterGroups();
         this.checkAndAddSiteWideFilters();
 
+        this.addEmptyRowIfNoneLeft();
+    }
+
+    addEmptyRowIfNoneLeft() {
         const remainingRowLength = this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').length;
         if (remainingRowLength <= 0) {
             this.addEmptyFilter(true);

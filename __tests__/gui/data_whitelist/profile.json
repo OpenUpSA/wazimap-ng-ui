@@ -1,0 +1,49 @@
+{
+  "id": 8,
+  "name": "Profile name",
+  "permission_type": "public",
+  "requires_authentication": false,
+  "geography_hierarchy": {
+    "id": 1,
+    "name": "2011 SA Boundaries",
+    "root_geography": {
+      "name": "South Africa",
+      "code": "ZA",
+      "level": "country",
+      "version": "2011 Boundaries"
+    },
+    "description": "",
+    "configuration": {
+      "default_version": "test",
+      "versions": [
+        "test"
+      ]
+    }
+  },
+  "description": "",
+  "configuration": {
+    "urls": [
+      "example.com"
+    ],
+    "site_wide_filters_enabled": true,
+    "default_filters": [
+      {
+        "name": "gender",
+        "value": "Female"
+      }
+    ],
+    "restrict_values": {
+      "language": [
+        "English",
+        "Afrikaans",
+        "This is ignored"
+      ]
+    },
+    "tutorial": [],
+    "default_coordinates": {
+      "lat": -28.995409163308832,
+      "long": 25.093833387362697,
+      "zoom": 6
+    }
+  }
+}

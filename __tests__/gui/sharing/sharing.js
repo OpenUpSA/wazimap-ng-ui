@@ -16,7 +16,7 @@ import {
     waitUntilGeographyIsLoaded,
     collapseChoroplethFilterDialog,
     setupInterceptionsForSpecificGeo,
-    closeChoroplethFilterDialog
+    closeChoroplethFilterDialog, confirmChoroplethIsFiltered
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profile from "./profile.json";
@@ -81,18 +81,7 @@ When("I remove filter from mapchip", function () {
 
 Then(/^I confirm that the choropleth is filtered by "([^"]*)" at index (\d+)$/, function (filter, index) {
     const filters = filter.split(':');
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index})`).should('have.length', 1);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
-        .eq(0)
-        .find(' .dropdown-menu__selected-item .truncate')
-        .should('have.text', filters[0]);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
-        .eq(1)
-        .find(' .dropdown-menu__selected-item .truncate')
-        .should('have.text', filters[1]);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
-        .eq(1)
-        .should('not.have.class', 'disabled');
+    confirmChoroplethIsFiltered(filters[0], filters[1], index);
 });
 
 Then("I visit current url", () => {

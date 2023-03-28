@@ -121,10 +121,28 @@ export const StyledTypography = styled(Typography)(() => ({
     lineHeight: 2
 }));
 
+export const StyledIconTypography = styled(Typography)(() => ({
+    color: '#707070',
+    '& svg': {
+      fontSize: '17px',
+      verticalAlign: 'bottom',
+      '&:hover': {
+        cursor: 'pointer'
+      }
+    }
+}));
+
 export const StyledTypographyWithBottomBorder = styled(StyledTypography)(() => ({
     borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
     paddingBottom: '15px',
     marginBottom: '20px'
+}));
+
+export const StyledBoxWithBottomBorder = styled(Box)(() => ({
+    borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+    paddingBottom: '15px',
+    marginBottom: '20px',
+    display: 'flex'
 }));
 
 export const HelpText = styled(Typography)(() => ({

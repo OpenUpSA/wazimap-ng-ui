@@ -380,7 +380,7 @@ export default class Controller extends Component {
 
         const urlFilters = profileView["filters"];
         this._filteredIndicators = urlFilters.map(indicator => {
-          let indicatorTitle = ''
+          let indicatorTitle = '';
           Object.values(profileData).map(category => {
             Object.values(category.subcategories).map(subcategory => {
               Object.values(subcategory.indicators).map(i => {

@@ -14,7 +14,9 @@ import {
     StyledTypography, StyledTypographyWithBottomBorder,
     ViewSettingsTitle,
     StyledTreeItem,
-    IndicatorTreeViewCard
+    IndicatorTreeViewCard,
+    StyledBoxWithBottomBorder,
+    StyledIconTypography
 } from "./styled_elements";
 import {Grid} from "@mui/material";
 import TreeView from '@mui/lab/TreeView';
@@ -26,6 +28,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import InfoIcon from '@mui/icons-material/Info';
+import Tooltip from '@mui/material/Tooltip';
+
+
 
 
 const ViewSettings = (props) => {
@@ -36,6 +42,14 @@ const ViewSettings = (props) => {
     const indicatorOptionsSvg = IndicatorOptionsSvg;
     const trashBinSvg = TrashBinSvg;
     const lockButtonSvg = LockButtonInTextSvg;
+    const hiddenIndicatorsTooltipText = () => {
+      return (
+        <>
+          <p>You can hide indicators to share a simplified view with only the indicators relevant to your needs</p>
+          <p>All indicators available in all geographic areas are shown here, potentially include some which may not be available at you currently selected geography</p>
+        </>
+      )
+    }
 
     useEffect(() => {
         if (props.filteredIndicators !== filteredIndicators) {
@@ -249,12 +263,20 @@ const ViewSettings = (props) => {
                     <HelpText>
                         Any indicators you adjust will appear here
                     </HelpText>
-                </StyledAccordionDetails>
 
-                <StyledAccordionDetails>
-                    <StyledTypographyWithBottomBorder>
+                    <StyledBoxWithBottomBorder>
+                      <StyledTypography variant="body2" sx={{width: "100%"}}>
                         HIDDEN INDICATORS
-                    </StyledTypographyWithBottomBorder>
+                      </StyledTypography>
+                      <StyledIconTypography
+                        variant="caption"
+                        color="inherit"
+                      >
+                        <Tooltip title={hiddenIndicatorsTooltipText()} arrow placement="top">
+                          <InfoIcon fontSize="small" />
+                        </Tooltip>
+                      </StyledIconTypography>
+                    </StyledBoxWithBottomBorder>
                     {renderIndicatorTreeView()}
                     <HelpText>
                         Hidden indicators are not shownin the Data Mapper panel to help focus your view.

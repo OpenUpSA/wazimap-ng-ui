@@ -284,7 +284,7 @@ const ViewSettings = (props) => {
                     </StyledBoxWithBottomBorder>
                     {renderIndicatorTreeView()}
                     <HelpText>
-                        Hidden indicators are not shownin the Data Mapper panel to help focus your view.
+                        Hidden indicators are not shown in the Data Mapper panel to help focus your view.
                     </HelpText>
                 </StyledAccordionDetails>
             </StyledAccordion>

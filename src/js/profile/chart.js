@@ -42,7 +42,9 @@ export class Chart extends Component {
         _subCategoryNode,
         title,
         chartAttribution,
-        addLockButton = true
+        addLockButton = true,
+        restrictValues = {},
+        defaultFilters = []
     ) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
@@ -75,7 +77,7 @@ export class Chart extends Component {
             addLockButton: addLockButton
         });
 
-        this.addChart(data);
+        this.addChart(data, restrictValues, defaultFilters);
     }
 
     get previouslySelectedFilters() {
@@ -123,7 +125,7 @@ export class Chart extends Component {
         return this._filterController;
     }
 
-    addChart = (data) => {
+    addChart = (data, restrictValues, defaultFilters) => {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();
 
@@ -217,7 +219,7 @@ export class Chart extends Component {
                 $svg.removeAttr('height');
                 this.filterGroups = data.metadata.groups;
 
-                this.handleChartFilter(data, data.metadata.groups);
+                this.handleChartFilter(data, data.metadata.groups, restrictValues, defaultFilters);
             });
     };
 
@@ -444,9 +446,31 @@ export class Chart extends Component {
         return percentage;
     };
 
-    handleChartFilter = (indicators, groups) => {
-        let dataFilterModel = new DataFilterModel(groups, this.data.chartConfiguration.filter, this.previouslySelectedFilters, indicators.metadata.primary_group, {},
-            this.siteWideFilters);
+    handleChartFilter = (indicators, groups, restrictValues, defaultFilters) => {
+        let chartDefaultFilters = this.data.chartConfiguration.filter;
+
+        if (defaultFilters.length > 0) {
+            // there are global default filters
+            if (chartDefaultFilters?.defaults === undefined) {
+                chartDefaultFilters = {
+                    defaults: []
+                }
+            }
+
+            defaultFilters.forEach(df => {
+                chartDefaultFilters.defaults.push(df);
+            })
+        }
+        let dataFilterModel = new DataFilterModel(
+            groups,
+            chartDefaultFilters,
+            this.previouslySelectedFilters,
+            indicators.metadata.primary_group,
+            {},
+            this.siteWideFilters,
+            DataFilterModel.FILTER_TYPE.indicators,
+            restrictValues
+        );
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }

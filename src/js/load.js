@@ -58,7 +58,7 @@ export default function configureApplication(profileId, config) {
 
 class Application extends Component {
     constructor(profileId, config) {
-        super()
+        super();
 
         const api = config.api;
         const controller = new Controller(this, api, config, profileId);
@@ -72,9 +72,9 @@ class Application extends Component {
         mapcontrol.popup = new Popup(this, formattingConfig, mapcontrol.map);
         const pointData = new PointData(this, api, mapcontrol.map, profileId, config);
         const pointDataTray = new PointDataTray(this, api, profileId, config.watermarkEnabled);
-        const mapchip = new MapChip(this, config.choropleth, config.siteWideFiltersEnabled);
+        const mapchip = new MapChip(this, config.choropleth, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters);
         const search = new Search(this, api, profileId, 2);
-        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled, config.siteWideFiltersEnabled);
+        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters);
         const locationInfoBox = new LocationInfoBox(this, formattingConfig);
         const zoomToggle = new ZoomToggle(this);
         const preferredChildToggle = new PreferredChildToggle(this);

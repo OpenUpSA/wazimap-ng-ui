@@ -28,7 +28,16 @@ export class DataFilterModel extends Observable {
         points: 'points'
     }
 
-    constructor(groups, configFilters, previouslySelectedFilters, primaryGroup, childData, siteWideFilters = [], filterType = DataFilterModel.FILTER_TYPE.indicators) {
+    constructor(
+        groups,
+        configFilters,
+        previouslySelectedFilters,
+        primaryGroup,
+        childData,
+        siteWideFilters = [],
+        filterType = DataFilterModel.FILTER_TYPE.indicators,
+        restrictValues = {}
+    ) {
         super()
         this._groups = groups;
         this.configFilters = configFilters;
@@ -42,6 +51,11 @@ export class DataFilterModel extends Observable {
         this._siteWideFilters = siteWideFilters;
         this._filterFunction = filterType === DataFilterModel.FILTER_TYPE.indicators ? this.getFilteredIndicatorData : this.getFilteredPointData;
         this._filterType = filterType;
+        this._restrictValues = restrictValues;
+    }
+
+    get restrictValues() {
+        return this._restrictValues;
     }
 
     get aggregatableGroups() {
@@ -76,7 +90,7 @@ export class DataFilterModel extends Observable {
         let self = this;
         let gr = {};
         this.groups.forEach(group => {
-            let dataFilter = new DataFilter(group, self.keys);
+            let dataFilter = new DataFilter(group, this.restrictValues, self.keys);
 
             gr[dataFilter[this.keys.name]] = dataFilter;
         });
@@ -87,7 +101,7 @@ export class DataFilterModel extends Observable {
         let self = this;
         let filters = [];
         this.groups.forEach(group => {
-            let dataFilter = new DataFilter(group, self.keys);
+            let dataFilter = new DataFilter(group, this.restrictValues, self.keys);
             filters.push(dataFilter);
         });
 
@@ -261,12 +275,12 @@ export class DataFilterModel extends Observable {
         }
     }
 
-    updateFilteredData(updateSharedUrl=false) {
+    updateFilteredData(updateSharedUrl = false) {
         const _filteredData = this._filterFunction();
 
         this.filteredData = _filteredData;
         this.triggerEvent(DataFilterModel.EVENTS.updated, {
-          updateSharedUrl: updateSharedUrl
+            updateSharedUrl: updateSharedUrl
         });
     }
 

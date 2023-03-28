@@ -305,6 +305,7 @@ export class FilterController extends Component {
             if (filterRow !== undefined) {
                 console.error(err);
                 filterRow.removeRow();
+                this.addEmptyRowIfNoneLeft();
             }
         }
     }
@@ -326,6 +327,7 @@ export class FilterController extends Component {
             if (filterRow !== undefined) {
                 console.error(err);
                 filterRow.removeRow();
+                this.addEmptyRowIfNoneLeft();
             }
         }
     }
@@ -339,6 +341,7 @@ export class FilterController extends Component {
         } catch (err) {
             console.error(err);
             filterRow.removeRow();
+            this.addEmptyRowIfNoneLeft();
         }
     }
 
@@ -646,6 +649,10 @@ export class FilterController extends Component {
         this.checkAndAddDefaultFilterGroups();
         this.checkAndAddSiteWideFilters();
 
+        this.addEmptyRowIfNoneLeft();
+    }
+
+    addEmptyRowIfNoneLeft() {
         const remainingRowLength = this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').length;
         if (remainingRowLength <= 0) {
             this.addEmptyFilter(true);

@@ -16,7 +16,8 @@ import {
     StyledTreeItem,
     IndicatorTreeViewCard,
     StyledBoxWithBottomBorder,
-    StyledIconTypography
+    StyledIconTypography,
+    StyledTooltip
 } from "./styled_elements";
 import {Grid} from "@mui/material";
 import TreeView from '@mui/lab/TreeView';
@@ -29,9 +30,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import InfoIcon from '@mui/icons-material/Info';
-import Tooltip from '@mui/material/Tooltip';
-
-
 
 
 const ViewSettings = (props) => {
@@ -45,8 +43,17 @@ const ViewSettings = (props) => {
     const hiddenIndicatorsTooltipText = () => {
       return (
         <>
-          <p>You can hide indicators to share a simplified view with only the indicators relevant to your needs</p>
-          <p>All indicators available in all geographic areas are shown here, potentially include some which may not be available at you currently selected geography</p>
+          <p>
+          You can hide indicators to share a simplified view
+          with only the indicators relevant to your needs.
+          </p>
+
+          <p>
+            All indicators available in all geographic areas
+            are shown here, potentially including some which
+            may not be available at your currently-selected
+            geography.
+          </p>
         </>
       )
     }
@@ -269,12 +276,10 @@ const ViewSettings = (props) => {
                         HIDDEN INDICATORS
                       </StyledTypography>
                       <StyledIconTypography
-                        variant="caption"
-                        color="inherit"
                       >
-                        <Tooltip title={hiddenIndicatorsTooltipText()} arrow placement="top">
+                        <StyledTooltip title={hiddenIndicatorsTooltipText()} arrow placement="top">
                           <InfoIcon fontSize="small" />
-                        </Tooltip>
+                        </StyledTooltip>
                       </StyledIconTypography>
                     </StyledBoxWithBottomBorder>
                     {renderIndicatorTreeView()}

@@ -1,7 +1,9 @@
+import React from "react";
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
 import {Accordion, AccordionDetails, AccordionSummary, Button, Card, Typography} from "@mui/material";
 import TreeItem, { treeItemClasses } from '@mui/lab/TreeItem';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 
 
 export const StyledCategoryTreeItem = styled(TreeItem)(() => ({
@@ -95,6 +97,20 @@ export const StyledTreeItem = styled(TreeItem)(() => ({
   [`& .${treeItemClasses.group}`]: {
     marginLeft: '12px'
   }
+}));
+
+export const StyledTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(() => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: "#2F2F2F",
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#2F2F2F",
+    fontSize: "15px",
+    maxWidth: 370,
+    textAlign: "center",
+  },
 }));
 
 export const Container = styled(Box)(() => ({}));

@@ -40,7 +40,7 @@ const IndicatorItemView = (props) => {
     ]
   )
   return (
-    <StyledTreeItem nodeId={props.indicator.id.toString()} label={
+    <StyledTreeItem nodeId={`myview-indicator-${props.indicator.id}`} label={
       <Box>
         <Typography variant="body2" className={"truncate"}>
           {props.indicator.label}
@@ -72,7 +72,7 @@ const IndicatorSubCategoryTreeView = (props) => {
   )
 
   return (
-    <StyledSubCategoryTreeItem nodeId={props.subcategory.id.toString()} label={
+    <StyledSubCategoryTreeItem nodeId={`myview-subcategory-${props.subcategory.id}`} label={
       <Box>
         <Typography variant="body2" className={"truncate"}>
           {props.subcategory.name}
@@ -146,7 +146,7 @@ const IndicatorCategoryTreeView = (props) => {
     ]
   )
   return (
-    <StyledCategoryTreeItem nodeId={props.category.id.toString()} label={
+    <StyledCategoryTreeItem nodeId={`myview-category-${props.category.id}`} label={
       <Box>
         <Typography variant="body2" className={"truncate"}>
           {props.category.name}

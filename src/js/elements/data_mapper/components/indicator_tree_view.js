@@ -54,13 +54,19 @@ const SubindicatorItemView = (props) => {
   )
 
   return (
-    <StyledSubindicatorTreeItem nodeId={props.subindicator} label={
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-        <Typography variant="body2" sx={{ fontSize: '1em', letterSpacing: '.3px', color: '#666'}} className={"truncate"}>
-          {props.subindicator}
-        </Typography>
-      </Box>
-    } onClick={(e) => onClickSubindicator()} data-test-id={props.subindicator} className={"subIndicator-item"}/>
+    <StyledSubindicatorTreeItem
+      nodeId={`datamapper-subindicator-${props.indicator.id}-${props.subindicator}`}
+      label={
+        <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
+          <Typography variant="body2" sx={{ fontSize: '1em', letterSpacing: '.3px', color: '#666'}} className={"truncate"}>
+            {props.subindicator}
+          </Typography>
+        </Box>
+      }
+      onClick={(e) => onClickSubindicator()}
+      data-test-id={`datamapper-subindicator-${props.indicator.id}-${props.subindicator}`}
+      className={"subIndicator-item"}
+    />
   )
 }
 
@@ -105,13 +111,13 @@ const IndicatorItemView = (props) => {
   );
 
   return (
-    <StyledIndicatorTreeItem nodeId={props.indicator.id.toString()} label={
+    <StyledIndicatorTreeItem nodeId={`datamapper-indicator-${props.indicator.id}`} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
         <Typography variant="body2" sx={{ fontSize: '1em', letterSpacing: '.3px', color: '#666'}} className="indicator-item">
           {props.indicator.label}
         </Typography>
       </Box>
-    } data-test-id={props.indicator.label}>
+    } data-test-id={`datamapper-indicator-${props.indicator.id}`}>
     {loading && <LoadingItemView/>}
     {!loading && subindicators.length > 0 && subindicators.map(
       (subindicator, key) => {
@@ -138,13 +144,13 @@ const IndicatorItemView = (props) => {
 const IndicatorSubCategoryTreeView = (props) => {
 
   return (
-    <StyledSubCategoryTreeItem nodeId={`subcategory-${props.subcategory.id}`} label={
+    <StyledSubCategoryTreeItem nodeId={`datamapper-subcategory-${props.subcategory.id}`} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
         <Typography variant="body2" sx={{ fontSize: '1em', fontWeight: '500', letterSpacing: '.3px' }} className="indicator-subcategory">
           {props.subcategory.name}
         </Typography>
       </Box>
-    } data-test-id={props.subcategory.name}>
+    } data-test-id={`datamapper-subcategory-${props.subcategory.id}`}>
     {!props.subcategory.length > 0 && props.subcategory.indicators.map(
       (indicator, key) => {
 
@@ -173,13 +179,13 @@ const IndicatorSubCategoryTreeView = (props) => {
 
 const IndicatorCategoryTreeView = (props) => {
   return (
-    <StyledCategoryTreeItem nodeId={`catergoy-${props.category.id}`} label={
+    <StyledCategoryTreeItem nodeId={`datamapper-category-${props.category.id}`} label={
       <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
         <Typography variant="body2" sx={{ fontSize: '.9em', fontWeight: '500', letterSpacing: '.3px' }}>
           {props.category.name}
         </Typography>
       </Box>
-    } data-test-id={props.category.name} className={"indicator-category"}>
+    } data-test-id={`datamapper-category-${props.category.id}`} className={"indicator-category"}>
     {!props.category.isHidden && props.category.subcategories.map(
       (subcategory, key) => {
         if (!subcategory.isHidden){

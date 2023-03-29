@@ -34,9 +34,9 @@ When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
 });
 
 Then('I select an indicator', () => {
-  cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
-  cy.get('.indicator-item').contains('Population group').click();
-  cy.get('.subIndicator-item').contains('Black african').click();
+  cy.get('li[data-test-id="datamapper-subcategory-3"]').click();
+  cy.get('li[data-test-id="datamapper-indicator-927"]').click();
+  cy.get('li[data-test-id="datamapper-subindicator-927-Black african"]').click();
 })
 
 Then('I check if scrubber is visible', () => {
@@ -68,9 +68,9 @@ Then('I check if mapchip title name is changed', () => {
 })
 
 When('I select next indicator', () => {
-    cy.get('.indicator-subcategory').contains('Population (2011 Census)').click();
-    cy.get('.indicator-item').contains('Population group 2').click();
-    cy.get('.subIndicator-item').contains('Black African').click();
+    cy.get('li[data-test-id="datamapper-subcategory-4"]').click();
+    cy.get('li[data-test-id="datamapper-indicator-840"]').click();
+    cy.get('li[data-test-id="datamapper-subindicator-840-Black African"]').click();
 })
 
 Then('I check if scrubber is not visible', () => {
@@ -78,13 +78,11 @@ Then('I check if scrubber is not visible', () => {
 })
 
 When('I select Population indicator and White subindicator', () => {
-  cy.get('.indicator-subcategory').contains('Population (2011 Census)').click();
-  cy.get('.indicator-item').contains('Population group 2').click();
-  cy.get('.subIndicator-item').contains('White').click();
+  cy.get('li[data-test-id="datamapper-subindicator-927-White"]').click();
 })
 
 Then('I select Black african subindicator', () => {
-    cy.get('.subIndicator-item').contains('Black african').click();
+    cy.get('li[data-test-id="datamapper-subindicator-927-Black african"]').click();
 })
 
 Then('I expand choropleth filter dialog', () => {

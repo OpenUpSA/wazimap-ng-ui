@@ -372,6 +372,37 @@ export function selectChartDropdownOption(option, dropdownIndex) {
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${option}")`, {timeout: 20000}).click({force: true})
 }
 
+export function confirmChoroplethIsFiltered(group, value, index){
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index})`).should('have.length', 1);
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
+        .eq(0)
+        .find(' .dropdown-menu__selected-item .truncate')
+        .should('have.text', group);
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
+        .eq(1)
+        .find(' .dropdown-menu__selected-item .truncate')
+        .should('have.text', value);
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
+        .eq(1)
+        .should('not.have.class', 'disabled');
+}
+
+export function confirmDropdownOptions(arr){
+    let filters = [];
+    cy.get('.dropdown-menu__content:visible .dropdown__list_item:visible').each(($el) => {
+        const text = $el.text().trim();
+        filters.push(text);
+    }).then(() => {
+        let params = [];
+        arr.split(',').forEach((a) => {
+            params.push(a.trim());
+        })
+
+        expect(params).to.have.members(filters);
+        cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible`).first().click();
+    });
+}
+
 export function expandMyViewPanel() {
     cy.get('div[data-test-id="my-view-panel"]').then($panel => {
         if ($panel.is(':hidden')) {
@@ -385,5 +416,25 @@ export function collapseMyViewPanel() {
         if ($panel.is(':visible')) {
             cy.get('div[data-test-id="my-view-close-button"]').click({force: true});
         }
+    })
+}
+
+export function confirmChartIsFiltered(group, value, chartTitle){
+    let matches = false;
+
+    cy.get(`.profile-indicator__title h4:contains("${chartTitle}")`)
+        .closest('.profile-indicator')
+        .find('.profile-indicator__filter-row')
+        .each(($el) => {
+            matches = $el.find('.profile-indicator__filter')
+                    .eq(0)
+                    .find('.profile-indicator__filter_menu .dropdown-menu__trigger .dropdown-menu__selected-item .truncate')
+                    .text() === group &&
+                $el.find('.profile-indicator__filter')
+                    .eq(1)
+                    .find('.profile-indicator__filter_menu .dropdown-menu__trigger .dropdown-menu__selected-item .truncate')
+                    .text() === value
+        }).then(() => {
+        expect(matches).equal(true);
     })
 }

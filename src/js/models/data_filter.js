@@ -1,11 +1,15 @@
 export class DataFilter {
-    constructor(group, keys = {
+    constructor(group, restrictValues, keys = {
         name: 'name',
         values: 'subindicators'
     }) {
-        this._values = group[keys.values];
-        this._can_aggregate = group.can_aggregate;
         this._name = group[keys.name];
+        let values = group[keys.values];
+        if (restrictValues[group[keys.name]] !== undefined) {
+            values = values.filter(element => restrictValues[group[keys.name]].includes(element));
+        }
+        this._values = values;
+        this._can_aggregate = group.can_aggregate;
     }
 
     get values() {

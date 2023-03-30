@@ -378,9 +378,9 @@ export function confirmChoroplethIsFiltered(group, value, index){
         .eq(0)
         .find(' .dropdown-menu__selected-item .truncate')
         .should('have.text', group);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter:eq(1) .dropdown-menu__selected-item .truncate`, {timeout: 20000})
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter:eq(1) .dropdown-menu__selected-item .truncate`, {timeout: 5000})
         .should('have.text', value);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`, {timeout: 20000})
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`, {timeout: 5000})
         .eq(1)
         .should('not.have.class', 'disabled');
 }

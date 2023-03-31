@@ -102,7 +102,9 @@ const IndicatorItemView = (props) => {
       )
 
       if (primaryGroupObj.length > 0){
-        return primaryGroupObj[0].subindicators
+        return primaryGroupObj[0].subindicators.filter(
+          sub => sub !== undefined && sub
+        );
       }
       return [];
     }, [

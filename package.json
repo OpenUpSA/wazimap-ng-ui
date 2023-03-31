@@ -45,7 +45,7 @@
     "shx": "^0.3.2",
     "start-server-and-test": "^1.13.1",
     "svelte-dev-tools": "^0.0.2",
-    "vega": "^5.17.0",
+    "vega": "^5.23.0",
     "vega-embed": "^6.13.0",
     "vega-lite": "^4.17.0",
     "xlsx": "^0.17.0",

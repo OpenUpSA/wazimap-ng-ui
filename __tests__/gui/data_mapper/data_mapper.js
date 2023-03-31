@@ -50,17 +50,17 @@ When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
 });
 
 Then('I select an indicator', () => {
-    cy.get('.data-category__h1_content--v2').contains('Population (2016 Community Survey)').click();
-    cy.get('.data-category__h2_content--v2').contains('Population group').click();
-    cy.get('.data-category__h3_content--v2').contains('Black african').click();
-
+    cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
+    cy.get('.indicator-item').contains('Population group').click();
+    cy.get('.subIndicator-item').contains('Black african').click();
+    cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
     cy.get(`${mapBottomItems} .map-options .map-options__legend`).should('be.visible');
 })
 
 When('I select another indicator', () => {
-    cy.get('.data-category__h1_content--v2').contains('Population (2011 Census)').click();
-    cy.get('.data-category__h2_content--v2').contains('Population group 2').click();
-    cy.get('.data-category__h3_content--v2').contains('Indian or Asian').click();
+    cy.get('.indicator-subcategory').contains('Population (2011 Census)').click();
+    cy.get('.indicator-item').contains('Population group 2').click();
+    cy.get('.subIndicator-item').contains('Indian or Asian').click();
 })
 
 Then('I check if the choropleth filter dialog is collapsed', () => {
@@ -239,7 +239,7 @@ When('I navigate to FS', () => {
             body: [],
             forceNetworkError: false // default
         })
-    })
+    });
 
     cy.visit('/#geo:FS');
 })

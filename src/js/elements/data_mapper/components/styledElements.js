@@ -3,6 +3,206 @@ import { styled } from '@mui/system';
 import SvgIcon from '@mui/material/SvgIcon';
 import Box from '@mui/material/Box';
 
+import TreeItem, { treeItemClasses } from '@mui/lab/TreeItem';
+
+
+export const StyledCategoryTreeItem = styled(TreeItem)(() => ({
+  [`& .${treeItemClasses.content}`]: {
+    'flexDirection': 'row-reverse',
+    'marginBottom': '8px',
+    'backgroundColor': '#39ad84',
+    'borderRadius': '2px',
+    'height': '36px',
+    'paddingLeft': '8px',
+    'transition': 'all .2s ease',
+    'color': '#fff',
+    'textDecoration': 'none',
+    'cursor': 'pointer',
+    'fontFamily': 'Roboto,sans-serif',
+    '&:hover': {
+      'backgroundColor': '#39ad84',
+    },
+    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+      'backgroundColor': '#39ad84',
+    },
+    '& .MuiTreeItem-iconContainer svg': {
+      fontSize: '22px'
+    },
+    '& .MuiTreeItem-label': {
+      paddingLeft: '0px',
+    },
+    '& .MuiBox-root': {
+      padding: '0px',
+    },
+    [`& .${treeItemClasses.label}`]: {
+      'width': '100%',
+      'whiteSpace': 'nowrap',
+      'overflow': 'hidden',
+      'textOverflow': 'ellipsis',
+      'fontSize': '1em',
+      'fontWeight': '500',
+      'letterSpacing': '.3px',
+      'marginRight': '12px',
+      'paddingLeft': '0px',
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: '12px',
+  }
+}));
+
+export const StyledSubCategoryTreeItem = styled(TreeItem)(() => ({
+  [`& .${treeItemClasses.content}`]: {
+    'flexDirection': 'row-reverse',
+    'backgroundColor': '#f0f0f0',
+    'borderRadius': '2px',
+    'marginBottom': '6px',
+    'height': '32px',
+    'paddingLeft': '8px',
+    'transition': 'all .2s ease',
+    'textDecoration': 'none',
+    'cursor': 'pointer',
+    'fontFamily': 'Roboto,sans-serif',
+    '&:hover': {
+      'backgroundColor': '#f0f0f0',
+    },
+    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+      'backgroundColor': '#f0f0f0',
+    },
+    '& .MuiTreeItem-iconContainer svg': {
+      fontSize: '18px',
+      color: '#666'
+    },
+    '& .MuiTreeItem-label': {
+      paddingLeft: '0px',
+    },
+    '& .MuiBox-root': {
+      padding: '0px',
+    },
+    [`& .${treeItemClasses.label}`]: {
+      'width': '100%',
+      'whiteSpace': 'nowrap',
+      'overflow': 'hidden',
+      'textOverflow': 'ellipsis',
+      'fontSize': '.85em',
+      'fontWeight': '500',
+      'letterSpacing': '.3px',
+      'marginRight': '12px',
+      'paddingLeft': '0px',
+      'color': '#666'
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: '12px',
+  }
+}));
+
+export const StyledSubindicatorTreeItem = styled(TreeItem)(() => ({
+  [`& .${treeItemClasses.content}`]: {
+    'flexDirection': 'row-reverse',
+    'backgroundColor': '#f0f0f0',
+    'borderRadius': '2px',
+    'marginBottom': '6px',
+    'height': '32px',
+    'paddingLeft': '8px',
+    'transition': 'all .2s ease',
+    'textDecoration': 'none',
+    'cursor': 'pointer',
+    'fontFamily': 'Roboto,sans-serif',
+    '&:hover': {
+      'backgroundColor': '#dad7d7',
+    },
+    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+      'backgroundColor': '#dad7d7',
+    },
+    '& .MuiTreeItem-iconContainer svg': {
+      fontSize: '18px',
+      color: '#666'
+    },
+    '& .MuiTreeItem-label': {
+      paddingLeft: '0px',
+    },
+    '& .MuiBox-root': {
+      padding: '0px',
+    },
+    '&::after': {
+      position: 'absolute',
+        'left': '24px',
+        'zIndex': '1',
+        'width': '8px',
+        'height': '1px',
+        marginLeft: '4px',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        content: '""'
+    },
+    [`& .${treeItemClasses.label}`]: {
+      'width': '100%',
+      'whiteSpace': 'nowrap',
+      'overflow': 'hidden',
+      'textOverflow': 'ellipsis',
+      'fontSize': '.85em',
+      'fontWeight': '500',
+      'letterSpacing': '.3px',
+      'marginRight': '12px',
+      'paddingLeft': '0px',
+      'color': '#666'
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: '12px'
+  }
+}));
+
+export const StyledIndicatorTreeItem = styled(TreeItem)(() => ({
+  [`& .${treeItemClasses.content}`]: {
+    'flexDirection': 'row-reverse',
+    'backgroundColor': '#f0f0f0',
+    'borderRadius': '2px',
+    'marginBottom': '6px',
+    'height': '32px',
+    'paddingLeft': '8px',
+    'transition': 'all .2s ease',
+    'textDecoration': 'none',
+    'cursor': 'pointer',
+    'fontFamily': 'Roboto,sans-serif',
+    '&:hover': {
+      'backgroundColor': '#f0f0f0',
+    },
+    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+      'backgroundColor': '#f0f0f0',
+    },
+    '& .MuiTreeItem-iconContainer svg': {
+      fontSize: '18px',
+      color: '#666'
+    },
+    '& .MuiTreeItem-label': {
+      paddingLeft: '0px',
+    },
+    '& .MuiBox-root': {
+      padding: '0px',
+    },
+    [`& .${treeItemClasses.label}`]: {
+      'width': '100%',
+      'whiteSpace': 'nowrap',
+      'overflow': 'hidden',
+      'textOverflow': 'ellipsis',
+      'fontSize': '.85em',
+      'fontWeight': '500',
+      'letterSpacing': '.3px',
+      'marginRight': '12px',
+      'paddingLeft': '0px',
+      'color': '#666'
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+      marginLeft: '12px',
+      borderLeft: '1px solid rgba(0, 0, 0, 0.11)',
+      marginLeft: '0px',
+      paddingLeft: '11px',
+      marginLeft: '3px',
+  }
+}));
+
 
 export const ParentContainer = styled(Box)(({ theme }) => ({
   display: 'grid',

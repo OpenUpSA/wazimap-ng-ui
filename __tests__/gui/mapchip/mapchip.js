@@ -36,9 +36,9 @@ When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
 });
 
 Then('I select an indicator', () => {
-    cy.get('.data-category__h1_content--v2').contains('Population (2016 Community Survey)').click();
-    cy.get('.data-category__h2_content--v2').contains('Population group').click();
-    cy.get('.data-category__h3_content--v2').contains('Black african').click();
+  cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
+  cy.get('.indicator-item').contains('Population group').click();
+  cy.get('.subIndicator-item').contains('Black african').click();
 })
 
 Then('I check if the choropleth filter dialog is collapsed', () => {
@@ -121,9 +121,9 @@ When('I click on Economic Opportunities in Data Mapper', function () {
 });
 
 Then('I select another indicator', () => {
-    cy.get('.data-category__h1_content--v2').contains('NEET Status').click();
-    cy.get('.data-category__h2_content--v2').contains('Not in Employment').click();
-    cy.get('.data-category__h3_content--v2').contains('Employed').click();
+    cy.get('.indicator-subcategory').contains('NEET Status').click();
+    cy.get('.indicator-item').contains('Not in Employment').click();
+    cy.get('.subIndicator-item').contains('Employed').click();
 })
 
 Then('I check if snackbar is visible', () => {

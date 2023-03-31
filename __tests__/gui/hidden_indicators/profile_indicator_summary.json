@@ -1,12 +1,10 @@
 {
   "Demographics": {
     "order": 91,
-    "id": 1,
     "name": "Demographics",
     "subcategories": {
       "Language": {
         "order": 242,
-        "id": 1,
         "name": "Language",
         "indicators": {
           "Language most spoken at home": {
@@ -37,7 +35,7 @@
                   ],
                   "dataset": 241,
                   "name": "age",
-                  "can_aggregate": false,
+                  "can_aggregate": true,
                   "can_filter": true
                 },
                 {
@@ -70,19 +68,6 @@
                   "name": "language",
                   "can_aggregate": true,
                   "can_filter": true
-                },
-                {
-                  "subindicators": [
-                    "Black African",
-                    "Coloured",
-                    "White",
-                    "Other",
-                    "Indian or Asian"
-                  ],
-                  "dataset": 241,
-                  "name": "race",
-                  "can_aggregate": true,
-                  "can_filter": true
                 }
               ]
             },
@@ -110,7 +95,6 @@
       },
       "Migration": {
         "order": 243,
-        "id": 2,
         "name": "Migration",
         "indicators": {
           "Region of birth": {
@@ -174,19 +158,6 @@
                   "name": "language",
                   "can_aggregate": true,
                   "can_filter": true
-                },
-                {
-                  "subindicators": [
-                    "Black African",
-                    "Coloured",
-                    "White",
-                    "Other",
-                    "Indian or Asian"
-                  ],
-                  "dataset": 241,
-                  "name": "race",
-                  "can_aggregate": true,
-                  "can_filter": true
                 }
               ]
             },
@@ -214,7 +185,6 @@
       },
       "South African Citizenship": {
         "order": 246,
-        "id": 3,
         "name": "South African Citizenship",
         "indicators": {
           "Citizenship": {

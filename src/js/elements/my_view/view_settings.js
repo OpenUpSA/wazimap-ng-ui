@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {IndicatorOptionsSvg, TrashBinSvg, LockButtonInTextSvg} from "./svg_icons";
+
 import {
     AppliedPanelInfo,
     Container,
@@ -12,23 +12,83 @@ import {
     StyledAccordionDetails,
     StyledAccordionSummary,
     StyledTypography, StyledTypographyWithBottomBorder,
-    ViewSettingsTitle
-} from "./styled_elements"
+    ViewSettingsTitle,
+    StyledTreeItem,
+    IndicatorTreeViewCard,
+    StyledBoxWithBottomBorder,
+    StyledIconTypography,
+    StyledTooltip
+} from "./styled_elements";
 import {Grid} from "@mui/material";
+import TreeView from '@mui/lab/TreeView';
+import TreeItem from '@mui/lab/TreeItem';
+import Box from "@mui/material/Box";
+import IndicatorCategoryTreeView from "./indicator_tree_view";
+import {flatten, map} from "lodash";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import InfoIcon from '@mui/icons-material/Info';
+
 
 const ViewSettings = (props) => {
     const [expanded, setExpanded] = useState('');
     const [filteredIndicators, setFilteredIndicators] = useState([]);
+    const [profileIndicators, setProfileIndicators] = useState([]);
     const [siteWideFiltersEnabled] = useState(props.siteWideFiltersEnabled);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
     const trashBinSvg = TrashBinSvg;
     const lockButtonSvg = LockButtonInTextSvg;
+    const hiddenIndicatorsTooltipText = () => {
+      return (
+        <>
+          <p>
+          You can hide indicators to share a simplified view
+          with only the indicators relevant to your needs.
+          </p>
+
+          <p>
+            All indicators available in all geographic areas
+            are shown here, potentially including some which
+            may not be available at your currently-selected
+            geography.
+          </p>
+        </>
+      )
+    }
 
     useEffect(() => {
         if (props.filteredIndicators !== filteredIndicators) {
             setFilteredIndicators(props.filteredIndicators);
         }
-    }, [props.filteredIndicators]);
+        if (props.profileIndicators.length > 0 && profileIndicators.length === 0){
+          let profileIndicators = props.profileIndicators.map(
+            (category) => {
+              let subcategories = []
+              category.subcategories.map(
+                subcategory => {
+                  if (subcategory.indicators.length > 0){
+                    subcategories.push(subcategory)
+                  }
+                }
+              )
+              return {
+                ...category,
+                subcategories: subcategories
+              }
+            }
+          )
+          profileIndicators = profileIndicators.filter(ind => ind.subcategories.length > 0);
+          setProfileIndicators(profileIndicators);
+        }
+    }, [
+        props.filteredIndicators,
+        props.profileIndicators,
+        setProfileIndicators,
+        profileIndicators
+      ]
+    );
 
     const handleExpandedChange = (panel) => {
         setExpanded(panel);
@@ -93,6 +153,32 @@ const ViewSettings = (props) => {
                 })
             })
         )
+    }
+
+    const renderIndicatorTreeView = () =>{
+      return (
+        <Grid item xs={12}>
+          <IndicatorTreeViewCard>
+            <TreeView
+              defaultCollapseIcon={<ArrowDropDownIcon />}
+              defaultExpandIcon={<ArrowRightIcon />}
+            >
+              {profileIndicators.length > 0 && profileIndicators.map(
+                (item, key) => {
+                  return (
+                    <IndicatorCategoryTreeView
+                      category={item}
+                      key={key}
+                      updateHiddenIndicators={props.updateHiddenIndicators}
+                      hiddenIndicators={props.hiddenIndicators}
+                    />
+                  )
+                })
+              }
+            </TreeView>
+          </IndicatorTreeViewCard>
+        </Grid>
+      );
     }
 
     const renderSiteWideFilters = () => {
@@ -183,6 +269,22 @@ const ViewSettings = (props) => {
                     {renderFilteredIndicators()}
                     <HelpText>
                         Any indicators you adjust will appear here
+                    </HelpText>
+
+                    <StyledBoxWithBottomBorder>
+                      <StyledTypography variant="body2" sx={{width: "100%"}}>
+                        HIDDEN INDICATORS
+                      </StyledTypography>
+                      <StyledIconTypography
+                      >
+                        <StyledTooltip title={hiddenIndicatorsTooltipText()} arrow placement="top">
+                          <InfoIcon fontSize="small" />
+                        </StyledTooltip>
+                      </StyledIconTypography>
+                    </StyledBoxWithBottomBorder>
+                    {renderIndicatorTreeView()}
+                    <HelpText>
+                        Hidden indicators are not shown in the Data Mapper panel to help focus your view.
                     </HelpText>
                 </StyledAccordionDetails>
             </StyledAccordion>

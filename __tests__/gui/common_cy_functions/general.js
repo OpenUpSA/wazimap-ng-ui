@@ -6,7 +6,8 @@ export const allDetailsEndpoint = 'all_details';
 const recursiveResult = {PANEL_ALREADY_EXPANDED: false, ALL_PANELS_CLOSED: true};
 
 export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [],
-                                   profile_indicator_summary = {}, indicator_data = {}) {
+                                   profile_indicator_summary = {}, indicator_data = {}, categories_data = []) {
+
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=test&skip-children=true&format=json`, (req) => {
         req.reply({
             statusCode: 200,
@@ -70,6 +71,14 @@ export function setupInterceptions(profiles, all_details, profile, themes, point
             forceNetworkError: false // default
         });
     }).as('indicator_data');
+
+    cy.intercept('/api/v1/profiles/8/categories/?format=json', (request) => {
+        request.reply({
+            statusCode: 200,
+            body: categories_data,
+            forceNetworkError: false // default
+        });
+    }).as('categories_data');
 }
 
 export function setupInterceptionsForSpecificGeo(geoCode, all_details) {
@@ -299,7 +308,7 @@ function checkIfFilterDialogIsCollapsed(parentDiv, contentDiv) {
 }
 
 export function checkDataMapperCategoryCount(count) {
-    cy.get('.data-mapper-content__list .data-category--v2').should('have.length', count);
+    cy.get('.data-mapper-content__list .indicator-category').should('have.length', count);
 }
 
 export function compareImages(image1, image2) {
@@ -369,11 +378,9 @@ export function confirmChoroplethIsFiltered(group, value, index){
         .eq(0)
         .find(' .dropdown-menu__selected-item .truncate')
         .should('have.text', group);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
-        .eq(1)
-        .find(' .dropdown-menu__selected-item .truncate')
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter:eq(1) .dropdown-menu__selected-item .truncate`, {timeout: 5000})
         .should('have.text', value);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`, {timeout: 5000})
         .eq(1)
         .should('not.have.class', 'disabled');
 }

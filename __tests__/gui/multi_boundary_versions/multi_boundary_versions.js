@@ -105,10 +105,10 @@ Then('I check if there are 2 categories', () => {
 })
 
 When('I select an indicator from Elections category', () => {
-    cy.get('.data-category__h1_title').contains('Elections').click();
-    cy.get('.data-category__h1_content--v2').contains('2011 Municipal elections').click();
-    cy.get('.data-category__h2_content--v2').contains('2011 Voter turnout').click();
-    cy.get('.data-category__h3_content--v2').contains('2011 Voted').click();
+    cy.get('.indicator-category').contains('Elections').click();
+    cy.get('.indicator-subcategory').contains('2011 Municipal elections').click();
+    cy.get('.indicator-item').contains('2011 Voter turnout').click();
+    cy.get('.subIndicator-item').contains('2011 Voted').click();
 })
 
 Then('I navigate to a geography with no children', () => {

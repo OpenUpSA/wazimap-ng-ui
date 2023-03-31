@@ -1,6 +1,120 @@
+import React from "react";
 import {styled} from "@mui/system";
 import Box from "@mui/material/Box";
 import {Accordion, AccordionDetails, AccordionSummary, Button, Card, Typography} from "@mui/material";
+import TreeItem, { treeItemClasses } from '@mui/lab/TreeItem';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+
+
+export const StyledCategoryTreeItem = styled(TreeItem)(() => ({
+  [`& .${treeItemClasses.content}`]: {
+    flexDirection: 'row-reverse',
+    borderRadius: '4px',
+    marginBottom: '8px',
+    backgroundColor: 'rgba(0, 0, 0, 0.05);',
+    height: '32px',
+    paddingLeft: '8px',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.07);',
+    },
+    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+      backgroundColor: 'rgba(0, 0, 0, 0.05);',
+    },
+    '& .MuiTreeItem-iconContainer svg': {
+      fontSize: '20px',
+      color: '#707070'
+    },
+    [`& .${treeItemClasses.label}`]: {
+      width: '100%',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      fontSize: '14px',
+      letterSpacing: '.3px',
+      marginRight: '12px',
+      paddingLeft: '0px',
+      color: '#2F2F2F',
+      fontSize: '14px',
+      alignItems: 'center',
+      '& .MuiBox-root': {
+        padding: '0px',
+        display: 'flex',
+        '& p': {
+          flexGrow: 1,
+          paddingRight: '10px',
+        },
+        '& span': {
+          color: '#707070'
+        }
+      },
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: '12px',
+  }
+}));
+
+export const StyledSubCategoryTreeItem = styled(StyledCategoryTreeItem)(() => ({
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: '12px',
+    borderLeft: '1px solid rgba(0, 0, 0, 0.11)',
+    marginLeft: '0px',
+    paddingLeft: '11px',
+    marginLeft: '6px',
+  }
+}));
+
+export const StyledTreeItem = styled(TreeItem)(() => ({
+  [`& .${treeItemClasses.content}`]: {
+    backgroundColor: 'rgba(0, 0, 0, 0.05);',
+    borderRadius: '4px',
+    marginBottom: '8px',
+    '& .MuiTreeItem-iconContainer': {
+      display: 'none',
+    },
+    '&::after': {
+      position: 'absolute',
+        left: '8.5%',
+        zIndex: '1',
+        width: '10px',
+        height: '1px',
+        marginLeft: '4px',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        content: '""'
+    },
+    [`& .${treeItemClasses.label}`]: {
+      fontWeight: 'inherit',
+      color: 'inherit',
+      marginRight: '0px',
+      '& span': {
+        display: 'flex',
+        justifyContent: 'center',
+      }
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: '12px'
+  }
+}));
+
+export const StyledTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(() => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: "#515151",
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#515151",
+    color: "#FFFFFF",
+    fontSize: "14px",
+    maxWidth: 370,
+    textAlign: "center",
+    borderRadius: "4px",
+    fontWeight: "400"
+  },
+}));
 
 export const Container = styled(Box)(() => ({}));
 
@@ -26,10 +140,28 @@ export const StyledTypography = styled(Typography)(() => ({
     lineHeight: 2
 }));
 
+export const StyledIconTypography = styled(Typography)(() => ({
+    color: '#707070',
+    '& svg': {
+      fontSize: '17px',
+      verticalAlign: 'bottom',
+      '&:hover': {
+        cursor: 'pointer'
+      }
+    }
+}));
+
 export const StyledTypographyWithBottomBorder = styled(StyledTypography)(() => ({
     borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
     paddingBottom: '15px',
     marginBottom: '20px'
+}));
+
+export const StyledBoxWithBottomBorder = styled(Box)(() => ({
+    borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+    paddingBottom: '15px',
+    marginBottom: '20px',
+    display: 'flex'
 }));
 
 export const HelpText = styled(Typography)(() => ({
@@ -119,6 +251,13 @@ export const FilteredIndicatorCard = styled(Card)(() => ({
     marginTop: '10px'
 }));
 
+export const IndicatorTreeViewCard = styled(Card)(() => ({
+    padding: '6px',
+    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+    borderRadius: '4px',
+    marginTop: '10px'
+}));
+
 export const FilteredIndicatorBox = styled(Box)(() => ({
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
     padding: '4px 6px 4px 12px',
@@ -145,4 +284,11 @@ export const AppliedPanelInfo = styled(Box)(() => ({
     borderRadius: '3px',
     marginRight: '6px',
     fontSize: '12px'
+}));
+
+export const LoadingIconContainer = styled(Box)(() => ({
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
+    alignItems: 'center'
 }));

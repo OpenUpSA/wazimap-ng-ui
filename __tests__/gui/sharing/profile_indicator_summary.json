@@ -2,10 +2,12 @@
   "Demographics": {
     "order": 91,
     "name": "Demographics",
+    "id": 91,
     "subcategories": {
       "Language": {
         "order": 242,
         "name": "Language",
+        "id": 242,
         "indicators": {
           "Language most spoken at home": {
             "id": 1125,
@@ -95,6 +97,7 @@
       },
       "Migration": {
         "order": 243,
+        "id": 243,
         "name": "Migration",
         "indicators": {
           "Region of birth": {
@@ -185,6 +188,7 @@
       },
       "South African Citizenship": {
         "order": 246,
+        "id": 246,
         "name": "South African Citizenship",
         "indicators": {
           "Citizenship": {

@@ -34,9 +34,9 @@ When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
 });
 
 Then('I select an indicator', () => {
-    cy.get('.data-category__h1_content--v2').contains('Population (2016 Community Survey)').click();
-    cy.get('.data-category__h2_content--v2').contains('Population group').click();
-    cy.get('.data-category__h3_content--v2').contains('Black african').click();
+    cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
+    cy.get('.indicator-item').contains('Population group').click();
+    cy.get('.subIndicator-item').contains('Black african').click();
 })
 
 Then('I check order of subindicators', () => {
@@ -46,15 +46,16 @@ Then('I check order of subindicators', () => {
       "Black african",
       "White"
     ]
-    cy.get('.data-category__h3_content--v2').first().find('.truncate').each(($div, idx) => {
+    cy.get('.subIndicator-item').first().find('.truncate').each(($div, idx) => {
         expect($div.text()).equal(subindictaors[idx]);
-    })
+    });
+    cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
 })
 
 Then('I select another indicator', () => {
-  cy.get('.data-category__h1_content--v2').contains('Population (2011 Census)').click();
-  cy.get('.data-category__h2_content--v2').contains('Population group 2').click();
-  cy.get('.data-category__h3_content--v2').contains('Indian or Asian').click();
+  cy.get('.indicator-subcategory').contains('Population (2011 Census)').click();
+  cy.get('.indicator-item').contains('Population group 2').click();
+  cy.get('.subIndicator-item').contains('Indian or Asian').click();
 })
 
 Then('I check order of subindicators for Population group 2', () => {
@@ -66,7 +67,7 @@ Then('I check order of subindicators for Population group 2', () => {
       "Coloured",
       "White"
     ]
-    cy.get('.data-category__h3_content--v2').children().eq(1).find('.truncate').each(($div, idx) => {
+    cy.get('.subIndicator-item').children().find('.truncate').each(($div, idx) => {
         expect($div.text()).equal(subindictaors[idx]);
     })
 })
@@ -83,9 +84,10 @@ Then('I recheck order of subindicators for Population group', () => {
       "Black african",
       "Coloured"
     ]
-    cy.get('.data-category__h3_content--v2').first().find('.truncate').each(($div, idx) => {
+    cy.get('.subIndicator-item').first().find('.truncate').each(($div, idx) => {
         expect($div.text()).equal(subindictaors[idx]);
-    })
+    });
+    cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
 })
 
 Then('I recheck order of subindicators for Population group 2', () => {
@@ -97,7 +99,7 @@ Then('I recheck order of subindicators for Population group 2', () => {
       "White",
       "Other"
     ]
-    cy.get('.data-category__h3_content--v2').children().eq(1).find('.truncate').each(($div, idx) => {
+    cy.get('.subIndicator-item').children().find('.truncate').each(($div, idx) => {
         expect($div.text()).equal(subindictaors[idx]);
     })
 })

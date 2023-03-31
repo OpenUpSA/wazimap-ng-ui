@@ -5,13 +5,13 @@ import Toggle from "./toggle";
 import Panel from "./panel";
 
 export class MyView extends Component {
-    constructor(parent, controller, siteWideFiltersEnabled) {
+    constructor(parent, controller, siteWideFiltersEnabled, api, profileId) {
         super(parent);
 
         this.siteWideFiltersEnabled = siteWideFiltersEnabled;
 
         this.addToggle();
-        this.addPanel(controller);
+        this.addPanel(controller, api, profileId);
     }
 
     addToggle() {
@@ -19,11 +19,13 @@ export class MyView extends Component {
         watermarkRoot.render(<Toggle/>);
     }
 
-    addPanel(controller) {
+    addPanel(controller, api, profileId) {
         let myViewRoot = createRoot($('.my-view')[0]);
         myViewRoot.render(<Panel
             controller={controller}
             siteWideFiltersEnabled={this.siteWideFiltersEnabled}
+            api={api}
+            profileId={profileId}
         />)
     }
 }

@@ -1,14 +1,17 @@
 {
   "Demographics":{
     "order": 1,
+    "id": 2,
     "name": "Demographics",
     "subcategories":{
       "2021 Municipal elections":{
         "order": 1,
+        "id": 3,
         "name": "2021 Municipal elections",
       },
       "2016 Municipal elections":{
         "order": 2,
+        "id": 4,
         "name": "2016 Municipal elections",
         "indicators":{
           "2016 Voter turnout":{
@@ -56,6 +59,7 @@
       },
       "Municipal leadership":{
         "order": 3,
+        "id": 5,
         "name": "Municipal leadership",
         "key_metrics": [
           {

@@ -60,6 +60,8 @@ class Application extends Component {
     constructor(profileId, config) {
         super();
 
+        console.log({config})
+
         const api = config.api;
         const controller = new Controller(this, api, config, profileId);
         if (config.analytics)

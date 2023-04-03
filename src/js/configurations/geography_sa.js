@@ -7,10 +7,17 @@ export class Config {
     constructor() {
         this.config = {};
         this.versions = [];
+        this._viewName = null;
     }
 
     setConfig(config) {
         this.config = config;
+        this.setView();
+    }
+
+    setView() {
+        const urlParams = new URLSearchParams(window.location.search);
+        this._viewName = urlParams.get('view');
     }
 
     setVersions(geography_hierarchy) {
@@ -55,14 +62,30 @@ export class Config {
     }
 
     get defaultFilters() {
+        let globalConfig = [];
         if (this.config["default_filters"] != undefined)
-            return this.config["default_filters"];
-        return [];
+            globalConfig = this.config["default_filters"];
+        return globalConfig;
     }
 
     get restrictValues() {
-        if (this.config["restrict_values"] != undefined)
-            return this.config["restrict_values"];
+        let globalConfig = {};
+        if (
+            this.views[this._viewName] != undefined
+            && this.views[this._viewName]["restrict_values"] != undefined
+        ) {
+            console.log({'rest': this.views[this._viewName]["restrict_values"]})
+        }
+
+        if (this.config["restrict_values"] != undefined) {
+            globalConfig = this.config["restrict_values"];
+        }
+        return globalConfig;
+    }
+
+    get views() {
+        if (this.config["views"] != undefined)
+            return this.config["views"];
         return {};
     }
 

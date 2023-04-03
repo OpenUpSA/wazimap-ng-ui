@@ -1,17 +1,7 @@
-import {loadMenu, DataMapperMenu} from "../../../src/js/elements/data_mapper/menu.js";
-import {Component} from '../../../src/js/utils';
-
-import html from '../../../src/index.html';
+import {filterIndicatorData} from "../../../src/js/elements/data_mapper/menu.js";
 
 
 describe('Check data mapper menu order', () => {
-    let dataMapperMenu;
-
-    beforeEach(() => {
-        document.body.innerHTML = html;
-        let component = new Component();
-        dataMapperMenu = new DataMapperMenu(component, null, false);
-    });
 
     test('Check if categories are rendered according to order field in data', () => {
         let data = {
@@ -20,11 +10,10 @@ describe('Check data mapper menu order', () => {
             "Youth Poverty": {"order": 3, "name": 'Youth Poverty', "subcategories": {}},
         }
 
-        loadMenu(dataMapperMenu, data);
-        let categoryDivs = document.querySelectorAll('.data-category--v2 .data-category__h1_title');
-        expect($(categoryDivs[0]).text().trim()).toBe("Education");
-        expect($(categoryDivs[1]).text().trim()).toBe("Youth Poverty");
-        expect($(categoryDivs[2]).text().trim()).toBe("Demographics");
+        const orderedData = filterIndicatorData(data, []);
+        expect(orderedData[0].name).toBe("Education");
+        expect(orderedData[1].name).toBe("Youth Poverty");
+        expect(orderedData[2].name).toBe("Demographics");
     });
 
     test('Check if subcategories are rendered according to order field in data', () => {
@@ -38,11 +27,11 @@ describe('Check data mapper menu order', () => {
             },
         }
 
-        loadMenu(dataMapperMenu, data);
-        let subCategoryDivs = document.querySelectorAll('.data-category--v2 .data-category__h2_trigger--v2');
-        expect($(subCategoryDivs[0]).text().trim()).toBe("Population");
-        expect($(subCategoryDivs[1]).text().trim()).toBe("Language");
-        expect($(subCategoryDivs[2]).text().trim()).toBe("Migration");
+        const orderedData = filterIndicatorData(data, []);
+        const subcategories = orderedData[0].subcategories;
+        expect(subcategories[0].name).toBe("Population");
+        expect(subcategories[1].name).toBe("Language");
+        expect(subcategories[2].name).toBe("Migration");
     });
 
     test('Check if indicators are rendered according to order field in data', () => {
@@ -71,10 +60,10 @@ describe('Check data mapper menu order', () => {
                 }
             }
         }
-        loadMenu(dataMapperMenu, data);
-        let indicatorDivs = document.querySelectorAll('.data-category--v2 .data-category__h3_trigger--v2');
-        expect($(indicatorDivs[0]).text().trim()).toBe("Employment status");
-        expect($(indicatorDivs[1]).text().trim()).toBe("Unemployment - Official");
-        expect($(indicatorDivs[2]).text().trim()).toBe("Unemployment - Expanded");
+        const orderedData = filterIndicatorData(data, []);
+        const indicators = orderedData[0].subcategories[0].indicators;
+        expect(indicators[0].label).toBe("Employment status");
+        expect(indicators[1].label).toBe("Unemployment - Official");
+        expect(indicators[2].label).toBe("Unemployment - Expanded");
     });
 })

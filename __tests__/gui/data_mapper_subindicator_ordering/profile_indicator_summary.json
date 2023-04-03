@@ -1,10 +1,12 @@
 {
   "Demographics": {
     "order": 2,
+    "id": 2,
     "name": "Demographics",
     "subcategories": {
       "Population (2016 Community Survey)": {
         "order": 1,
+        "id": 1,
         "name": "Population (2016 Community Survey)",
         "indicators": {
           "Population group": {
@@ -76,6 +78,7 @@
       },
       "Population (2011 Census)": {
         "order": 2,
+        "id": 2,
         "name": "Population (2011 Census)",
         "indicators": {
           "Population group 2": {

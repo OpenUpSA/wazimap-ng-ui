@@ -1,6 +1,6 @@
 Feature: Sharing url
 
-  Scenario: Verify adding/removing an indicator-specific filter, copy a URL, and go to that URL results in same filters applied on Data mapper and Rich data view.
+  Scenario: Verify adding/removing an indicator-specific filter & hidden indicators, copy a URL, and go to that URL results in same filters applied on Data mapper and Rich data view.
     Given I am on the Wazimap Homepage
     Then I wait until map is ready
 
@@ -9,6 +9,7 @@ Feature: Sharing url
     And I click on "Language" in Data Mapper
     And I click on "Language most spoken at home" in Data Mapper
     And I click on "15-19" in Data Mapper
+    And I check if "Migration" on Data Mapper is visible
     And I expand the filter dialog
 
     When I select "gender" from indicator dropdown in filter dialog on row "0"
@@ -16,11 +17,18 @@ Feature: Sharing url
     And I add new filter
     And I select "language" from indicator dropdown in filter dialog on row "1"
     And I select "English" from subIndicator dropdown in filter dialog on row "1"
+    And I expand My View Window
+    And I click on "INDICATOR OPTIONS" in My View
+    And I click on "MyView-Demographics" in hidden indicator tree
+    And I click on "MyView-Migration" in hidden indicator tree
+    And I click on eye icon on "MyView-Region of birth" indicator
+    And I check if "Migration" on Data Mapper is hidden
     Then I visit current url
     Then I wait until map is ready
 
     When I expand Data Mapper
     And I click on "Demographics" in Data Mapper
+    And I check if "Migration" on Data Mapper is hidden
     And I click on "Language" in Data Mapper
     And I click on "Language most spoken at home" in Data Mapper
     And I click on "15-19" in Data Mapper
@@ -33,6 +41,9 @@ Feature: Sharing url
     And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Language most spoken at home:gender:Male" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Language most spoken at home:language:English" at index 1
+    And I click on "MyView-Demographics" in hidden indicator tree
+    And I check hidden values text on "MyView-Migration" is "hidden 1"
+    And I check hidden values text on "MyView-Demographics" is "hidden 1"
     Then I collapse My View Window
     Then I remove filter from mapchip
     And I expand Rich Data Panel
@@ -58,6 +69,11 @@ Feature: Sharing url
     Then I confirm that there is an indicator filter for "Data mapper:Language most spoken at home:gender:Male" at index 1
     Then I confirm that there is an indicator filter for "Rich data view:Language most spoken at home:language:Afrikaans" at index 0
     And I remove the indicator filter at index 1
+    And I click on "MyView-Demographics" in hidden indicator tree
+    And I check hidden values text on "MyView-Migration" is "hidden 1"
+    And I check hidden values text on "MyView-Demographics" is "hidden 1"
+    And I click on "MyView-Migration" in hidden indicator tree
+    And I click on eye close icon on "MyView-Region of birth" indicator
     Then I visit current url
     Then I wait until map is ready
 
@@ -73,8 +89,8 @@ Feature: Sharing url
     And I collapse Rich Data Panel
 
     When I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Rich data view:Language most spoken at home:language:Afrikaans" at index 0
+    And I check hidden values text on "MyView-Demographics" is "hidden 0"
 
   Scenario: Verify history when user clicks on back or forward button
 
@@ -104,11 +120,26 @@ Feature: Sharing url
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
     Then I confirm that there is an indicator filter for "Rich data view:Language most spoken at home:language:Afrikaans" at index 2
+    Then I check hidden values text on "MyView-Demographics" is "hidden 0"
+    Then I click on "MyView-Demographics" in hidden indicator tree
+    Then I click on "MyView-South African Citizenship" in hidden indicator tree
+    Then I click on eye icon on "MyView-Citizenship" indicator
+    And I check hidden values text on "MyView-Demographics" is "hidden 1"
     Then I collapse My View Window
+    Then I expand Data Mapper
+    And I check if "South African Citizenship" on Data Mapper is hidden
 
     When I go back in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
+    And I check hidden values text on "MyView-Demographics" is "hidden 0"
+    Then I click on "MyView-Demographics" in hidden indicator tree
+    Then I check hidden values text on "MyView-South African Citizenship" is "hidden 0"
+    Then I collapse My View Window
+    Then I expand Data Mapper
+    And I check if "South African Citizenship" on Data Mapper is visible
+
+    When I go back in browser history
+    Then I expand My View Window
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
     Then I collapse My View Window
@@ -122,7 +153,6 @@ Feature: Sharing url
 
     When I go back in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I collapse My View Window
     And I expand the filter dialog
@@ -134,7 +164,6 @@ Feature: Sharing url
 
     When I go back in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there are no filters in my view panel
     Then I collapse My View Window
     And I expand the filter dialog
@@ -146,7 +175,6 @@ Feature: Sharing url
 
     When I go forward in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I collapse My View Window
     And I expand the filter dialog
@@ -158,7 +186,6 @@ Feature: Sharing url
 
     When I go forward in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I collapse My View Window
     And I expand the filter dialog
@@ -170,7 +197,6 @@ Feature: Sharing url
 
     When I go forward in browser history
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
     Then I collapse My View Window
@@ -182,7 +208,16 @@ Feature: Sharing url
     And I confirm that the chart is filtered by "language:Afrikaans" at index 0
     And I collapse Rich Data Panel
 
-  Scenario: Verify navigating between geographies retains filters
+    When I go forward in browser history
+    Then I expand My View Window
+    And I check hidden values text on "MyView-Demographics" is "hidden 1"
+    Then I click on "MyView-Demographics" in hidden indicator tree
+    Then I check hidden values text on "MyView-South African Citizenship" is "hidden 1"
+    Then I collapse My View Window
+    Then I expand Data Mapper
+    And I check if "South African Citizenship" on Data Mapper is hidden
+
+  Scenario: Verify navigating between geographies retains filters & hidden indictaors
 
     Given I am on the Wazimap Homepage
     Then I wait until map is ready
@@ -192,6 +227,8 @@ Feature: Sharing url
 
     When I expand Data Mapper
     And I click on "Demographics" in Data Mapper
+    And I check if "Migration" on Data Mapper is visible
+    And I check if "South African Citizenship" on Data Mapper is visible
     And I click on "Migration" in Data Mapper
     And I click on "Region of birth" in Data Mapper
     And I click on "Male" in Data Mapper
@@ -213,13 +250,23 @@ Feature: Sharing url
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
     Then I confirm that there is an indicator filter for "Rich data view:Language most spoken at home:language:Afrikaans" at index 2
+    Then I check hidden values text on "MyView-Demographics" is "hidden 0"
+    Then I click on "MyView-Demographics" in hidden indicator tree
+    Then I click on "MyView-South African Citizenship" in hidden indicator tree
+    Then I click on eye icon on "MyView-Citizenship" indicator
+    And I check hidden values text on "MyView-Demographics" is "hidden 1"
     Then I collapse My View Window
+    Then I expand Data Mapper
+    And I check if "South African Citizenship" on Data Mapper is hidden
 
     When I go back to root geography
+    And I check if "Migration" on Data Mapper is visible
+    And I check if "South African Citizenship" on Data Mapper is hidden
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
+    And I check hidden values text on "MyView-Demographics" is "hidden 1"
+    And I check hidden values text on "MyView-South African Citizenship" is "hidden 1"
     Then I collapse My View Window
     And I expand the filter dialog
     Then I confirm that the choropleth is filtered by "age:30-35" at index 0
@@ -233,15 +280,15 @@ Feature: Sharing url
     When I go back in browser history
     Then I wait until map is ready for Western Cape
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
+    And I check hidden values text on "MyView-Demographics" is "hidden 1"
+    And I check hidden values text on "MyView-South African Citizenship" is "hidden 1"
     Then I collapse My View Window
 
     When I expand Data Mapper
-    And I click on "Demographics" in Data Mapper
-    And I click on "Migration" in Data Mapper
-    And I click on "Region of birth" in Data Mapper
+    And I check if "Migration" on Data Mapper is visible
+    And I check if "South African Citizenship" on Data Mapper is hidden
     And I click on "Male" in Data Mapper
     And I expand the filter dialog
     Then I confirm that the choropleth is filtered by "age:30-35" at index 0
@@ -252,11 +299,15 @@ Feature: Sharing url
     And I collapse Rich Data Panel
 
     When I go forward in browser history
+    And I expand Data Mapper
+    And I check if "Migration" on Data Mapper is visible
+    And I check if "South African Citizenship" on Data Mapper is hidden
     Then I wait until map is ready
     Then I expand My View Window
-    And I click on "INDICATOR OPTIONS" in My View
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:age:30-35" at index 0
     Then I confirm that there is an indicator filter for "Data mapper:Region of birth:language:English" at index 1
+    And I check hidden values text on "MyView-Demographics" is "hidden 1"
+    And I check hidden values text on "MyView-South African Citizenship" is "hidden 1"
     Then I collapse My View Window
     And I expand the filter dialog
     Then I confirm that the choropleth is filtered by "age:30-35" at index 0

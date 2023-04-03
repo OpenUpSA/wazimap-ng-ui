@@ -1,10 +1,12 @@
 {
   "Demographics": {
     "order": 91,
+    "id": 2,
     "name": "Demographics",
     "subcategories": {
       "Language": {
         "order": 242,
+        "id": 7,
         "name": "Language",
         "indicators": {
           "Language most spoken at home": {
@@ -735,10 +737,12 @@
   },
   "Economic Opportunities": {
     "order": 92,
+    "id": 3,
     "name": "Economic Opportunities",
     "subcategories": {
       "Employment": {
         "order": 252,
+        "id": 8,
         "name": "Employment",
         "indicators": {
           "Employment status": {
@@ -1128,6 +1132,7 @@
       },
       "NEET Status": {
         "order": 253,
+        "id": 9,
         "name": "NEET Status",
         "indicators": {
           "Not in Employment, Education and Training (NEET) status": {

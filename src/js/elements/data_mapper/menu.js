@@ -1,14 +1,21 @@
 import {
     Component
 } from '../../utils'
-import {sortBy} from 'lodash';
-import {Category} from "./category";
-import {SubCategory} from "./subcategory";
-import {Indicator} from "./indicator";
-import {SubIndicator} from './subindicator'
+import {sortBy, isEmpty} from 'lodash';
 import {createRoot} from "react-dom/client";
 import Watermark from "../../ui_components/watermark";
+import IndicatorCategoryTreeView from "./components/indicator_tree_view";
 import React from "react";
+
+
+import TreeView from '@mui/lab/TreeView';
+import TreeItem from '@mui/lab/TreeItem';
+import Box from "@mui/material/Box";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+
 
 let parentContainer = null;
 let categoryTemplate = null;
@@ -18,64 +25,69 @@ let indicatorItemTemplate = null;
 const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 
+export const filterIndicatorData = (indicatorData, hiddenIndicators) => {
+  let categories = sortBy(indicatorData, "order");
+  categories = categories.map(category => {
+    let subcategories = sortBy(category.subcategories, "order");
+    subcategories = subcategories.map(subcategory => {
+      let indicators = sortBy(subcategory.indicators, "order");
+      indicators = indicators.map(indicator => {
+        const isIndicatorHidden = (
+          hiddenIndicators.includes(indicator.id) ||
+          indicator.content_type !== "indicator" ||
+          indicator.dataset_content_type !== 'quantitative'
+        );
+        return {
+          ...indicator,
+          isHidden: isIndicatorHidden,
+        }
+      })
+      const isSubCategoryHidden = indicators.filter(indicator => !indicator.isHidden).length === 0;
+      return {
+        ...subcategory,
+        indicators: indicators,
+        isHidden: isSubCategoryHidden
+      }
+    })
+
+    const isCategoryHidden = subcategories.filter(subcategory => !subcategory.isHidden).length === 0;
+    return {
+      ...category,
+      subcategories: subcategories,
+      isHidden: isCategoryHidden
+    }
+  })
+  return categories;
+}
+
 export function loadMenu(dataMapperMenu, data) {
-    parentContainer = $(".data-mapper-content__list");
-    categoryTemplate = $(".styles .data-category--v2")[0].cloneNode(true);
-    subCategoryTemplate = $(".data-category__h2", categoryTemplate)[0].cloneNode(true);
-    indicatorTemplate = $(".data-category__h2_content--v2", subCategoryTemplate)[0].cloneNode(true);
-    indicatorItemTemplate = $(".data-category__h4", subCategoryTemplate)[0].cloneNode(true);
-
-    function addIndicators(parent, indicators) {
-        if (indicators === undefined) {
-            return;
-        }
-        for (const indicatorDetail of sortBy(indicators, "order")) {
-            const primaryGroup = indicatorDetail.metadata.groups.filter((g) => {
-                return g.name === indicatorDetail.metadata.primary_group
-            })[0];
-
-            let metadata = indicatorDetail.metadata;
-            metadata.indicatorDescription = indicatorDetail.description;
-            let indicator = new Indicator(parent,
-                indicatorDetail.label,
-                indicatorDetail.id,
-                indicatorDetail.choropleth_method,
-                primaryGroup,
-                indicatorDetail.version_data,
-                indicatorDetail.metadata,
-                indicatorDetail.choropleth_range,
-                indicatorDetail.enable_linear_scrubber,
-                indicatorDetail.chartConfiguration
-            );
-        }
+    let profileIndicators = filterIndicatorData(data, dataMapperMenu.controller.hiddenIndicators);
+    if (isEmpty(data)){
+      dataMapperMenu.showNoData()
+      dataMapperMenu.dataMapperRoot.render(<></>);
+    } else {
+      dataMapperMenu.dataMapperRoot.render(
+        <TreeView
+          defaultCollapseIcon={<ArrowDropDownIcon />}
+          defaultExpandIcon={<ArrowRightIcon />}
+        >
+          {profileIndicators.length >  0 && profileIndicators.map(
+            (item, key) => {
+              if (!item.isHidden){
+                return (
+                  <IndicatorCategoryTreeView
+                    category={item}
+                    key={key}
+                    api={dataMapperMenu.api}
+                    controller={dataMapperMenu.controller}
+                  />
+                )
+              }
+            })
+          }
+        </TreeView>
+      );
     }
-
-    function addSubcategories(parent, subcategories) {
-        for (const subcategoryDetail of sortBy(subcategories, "order")) {
-            let subCategory = new SubCategory(parent, subcategoryDetail.name, subcategoryDetail, dataMapperMenu);
-            addIndicators(subCategory, subcategoryDetail.indicators);
-        }
-    }
-
-    $(".data-menu__category").remove();
-    let hasNoItems = true;
-    let hiddenClass = 'hidden';
-    $(parentContainer).find('.data-category--v2').remove();
-
-    for (const categoryDetail of sortBy(data, "order")) {
-        const categoryName = categoryDetail.name;
-        let category = new Category(this, categoryName, categoryDetail);
-
-        $('.' + noDataWrapperClsName).addClass(hiddenClass);
-        hasNoItems = false;
-
-        addSubcategories(category, categoryDetail.subcategories);
-    }
-
-    if (hasNoItems) {
-        dataMapperMenu.showNoData()
-    }
-
     dataMapperMenu.isLoading = false;
 }
 
@@ -83,16 +95,19 @@ export function loadMenu(dataMapperMenu, data) {
  * This class is a stub for a menu component
  */
 export class DataMapperMenu extends Component {
-    constructor(parent, api, watermarkEnabled) {
+    constructor(parent, api, watermarkEnabled, controller) {
         super(parent);
 
         this._isLoading = false;
         this._api = api;
         this._subIndicators = [];
+        this._dataMapperRoot = false;
+        this._controller = controller;
 
         if (watermarkEnabled) {
             this.addWatermark();
         }
+        this.addDataMapperMenuRoot();
     }
 
     get isLoading() {
@@ -109,8 +124,20 @@ export class DataMapperMenu extends Component {
         this._isLoading = value;
     }
 
+    get dataMapperRoot() {
+      return this._dataMapperRoot;
+    }
+
+    set dataMapperRoot(value) {
+      return this._dataMapperRoot = value;
+    }
+
     get api() {
         return this._api;
+    }
+
+    get controller() {
+      return this._controller;
     }
 
     get subIndicators() {
@@ -132,6 +159,13 @@ export class DataMapperMenu extends Component {
         watermarkRoot.render(<Watermark/>);
     }
 
+    addDataMapperMenuRoot() {
+        let dataMapperElement = document.getElementsByClassName("data-mapper-content__list");
+        if (dataMapperElement.length > 0){
+          this.dataMapperRoot = createRoot(dataMapperElement[0]);
+        }
+    }
+
     hideLoadingState() {
         $(`.${loadingClsName}`).addClass('hidden');
         $('.data-mapper-content__list').removeClass('hidden');
@@ -151,40 +185,5 @@ export class DataMapperMenu extends Component {
             'No data available to plot on the map for the selected geography.'
         );
         this.triggerEvent('data_mapper_menu.nodata', this);
-    }
-
-    loadAndAddSubIndicators(subcategory, profileId, geoCode, callBack) {
-        const indicators = subcategory.children;
-        indicators.forEach((indicator) => {
-            if (indicator.isLoading) {
-                //if !isLoading => subIndicators are already created
-                this.api.getIndicatorChildData(profileId, geoCode, indicator.id)
-                    .then((childData) => {
-                        const parentNames = {
-                            category: subcategory.parent.text,
-                            subcategory: subcategory.text,
-                            indicator: indicator.text
-                        }
-                        indicator.isLoading = false;
-                        indicator.childData = childData;
-                        this.addSubIndicators(indicator, parentNames, callBack)
-                    })
-            }
-        })
-    }
-
-    addSubIndicators(parent, parentNames, callBack) {
-        let primaryGroup = parent.primaryGroup;
-        if (primaryGroup !== null && typeof primaryGroup.subindicators !== 'undefined') {
-            primaryGroup.subindicators.forEach((subindicatorName) => {
-                let subIndicator = new SubIndicator(parent,
-                    false,
-                    subindicatorName,
-                    callBack,
-                    parentNames);
-
-                this._subIndicators.push(subIndicator);
-            });
-        }
     }
 }

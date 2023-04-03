@@ -1,13 +1,16 @@
 {
   "Elections": {
     "order": 1,
+    "id": 1,
     "name": "Elections",
     "subcategories": {
       "2021 Municipal elections": {
-        "description": ""
+        "description": "",
+        "id": 1,
       },
       "2016 Municipal elections": {
         "order": 1,
+        "id": 2,
         "name": "2016 Municipal elections",
         "indicators": {
           "Voter turnout": {
@@ -216,10 +219,12 @@
   },
   "Demographics": {
     "order": 2,
+    "id": 2,
     "name": "Demographics",
     "subcategories": {
       "Population (2016 Community Survey)": {
         "order": 1,
+        "id": 3,
         "name": "Population (2016 Community Survey)",
         "indicators": {
           "Population group": {
@@ -291,6 +296,7 @@
       },
       "Population (2011 Census)": {
         "order": 2,
+        "id": 4,
         "name": "Population (2011 Census)",
         "indicators": {
           "Population group 2": {

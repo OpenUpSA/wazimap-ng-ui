@@ -21,6 +21,7 @@ import {
 import all_details from "./all_details.json";
 import profile from "./profile.json";
 import profiles from "./profiles.json";
+import categories from "./categories.json";
 import profile_indicator_summary from "./profile_indicator_summary.json";
 import profile_indicator_data from "./profile_indicator_data.json";
 import themes from "./themes.json";
@@ -30,7 +31,10 @@ import profile_indicator_data_WC from './WC/profile_indicator_data.json';
 
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, themes, {}, [], profile_indicator_summary, profile_indicator_data);
+    setupInterceptions(
+      profiles, all_details, profile, themes, {}, [],
+      profile_indicator_summary, profile_indicator_data, categories
+    );
     gotoHomepage();
 })
 
@@ -237,4 +241,34 @@ Then('I add new filter', () => {
 
 Then('I confirm that the add new filter button exists', () => {
     cy.get(`${mapBottomItems} .map-options .mapping-options__add-filter`).should('be.visible');
+})
+
+Then(/^I click on "([^"]*)" in hidden indicator tree$/, function (word) {
+    cy.get(`li[data-test-id="${word}"]`).click();
+})
+
+Then(/^I click on eye icon on "([^"]*)" indicator$/, function (word) {
+    cy.get(`li[data-test-id="${word}"]`).find('.MuiTreeItem-label:first span[data-test-id="eyeIcon"]').click();
+})
+
+Then(/^I check if "([^"]*)" on Data Mapper is hidden$/, function (word) {
+    cy.get('.data-mapper').findByText(word).should('not.exist')
+})
+
+Then(/^I check if "([^"]*)" on Data Mapper is visible/, function (word) {
+    cy.get('.data-mapper').findByText(word).should('be.visible')
+})
+
+Then(/^I check hidden values text on "([^"]*)" is "([^"]*)"$/, function (word, text) {
+    cy.get(`li[data-test-id="${word}"]`).find('.MuiTreeItem-label:first span').each(($div, idx) => {
+        expect($div.text()).equal(text);
+    });
+})
+
+Then(/^I click on eye icon on "([^"]*)" indicator$/, function (word) {
+    cy.get(`li[data-test-id="${word}"]`).find('.MuiTreeItem-label:first span[data-test-id="eyeIcon"]').click();
+})
+
+Then(/^I click on eye close icon on "([^"]*)" indicator$/, function (word) {
+    cy.get(`li[data-test-id="${word}"]`).find('.MuiTreeItem-label:first span[data-test-id="eyeCloseIcon"]').click();
 })

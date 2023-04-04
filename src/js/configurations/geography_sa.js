@@ -63,24 +63,43 @@ export class Config {
 
     get defaultFilters() {
         let globalConfig = [];
-        if (this.config["default_filters"] != undefined)
+        let viewConfig = [];
+        let mergedConfig = [];
+        if (
+            this.views[this._viewName] !== undefined
+            && this.views[this._viewName]["default_filters"] !== undefined
+        ) {
+            viewConfig = this.views[this._viewName]["default_filters"];
+        }
+
+        if (this.config["default_filters"] !== undefined) {
             globalConfig = this.config["default_filters"];
-        return globalConfig;
+        }
+
+        mergedConfig = globalConfig.filter(x => !viewConfig.find(y => x['name'] === y['name']));
+        mergedConfig = mergedConfig.concat(viewConfig);
+
+        return mergedConfig;
     }
 
     get restrictValues() {
         let globalConfig = {};
+        let viewConfig = {};
+        let mergedConfig = {};
         if (
-            this.views[this._viewName] != undefined
-            && this.views[this._viewName]["restrict_values"] != undefined
+            this.views[this._viewName] !== undefined
+            && this.views[this._viewName]["restrict_values"] !== undefined
         ) {
-            console.log({'rest': this.views[this._viewName]["restrict_values"]})
+            viewConfig = this.views[this._viewName]["restrict_values"];
         }
 
-        if (this.config["restrict_values"] != undefined) {
+        if (this.config["restrict_values"] !== undefined) {
             globalConfig = this.config["restrict_values"];
         }
-        return globalConfig;
+
+        Object.assign(mergedConfig, globalConfig, viewConfig);
+
+        return mergedConfig;
     }
 
     get views() {

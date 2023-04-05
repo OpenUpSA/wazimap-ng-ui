@@ -105,6 +105,7 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
     })
 
     controller.on('my_view.hiddenIndicatorsPanel.reload', payload => {
+        profileLoader.hiddenIndicators = payload.payload;
         for (const category of profileLoader.categories) {
             for (const subCategory of category.subCategories) {
                 for (const indicator of subCategory.indicators) {

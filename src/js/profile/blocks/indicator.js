@@ -13,16 +13,18 @@ export class Indicator extends ContentBlock {
         chartAttribution,
         addLockButton = true,
         restrictValues = {},
-        defaultFilters = []
+        defaultFilters = [],
+        hiddenIndicators = []
     ) {
         super(parent, container, indicator, title, isLast, geography);
-
         this.chartAttribution = chartAttribution;
         this._chart = null;
-
         this.prepareDomElements();
         this.addIndicatorChart(addLockButton, restrictValues, defaultFilters);
-        this._isVisible = true;
+        this._isVisible = !hiddenIndicators.includes(indicator.id);
+        if (!this._isVisible){
+          $(this.container).hide();
+        }
     }
 
     get isVisible(){

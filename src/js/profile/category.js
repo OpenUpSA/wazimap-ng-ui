@@ -28,7 +28,8 @@ export class Category extends Component {
         profileConfig,
         addLockButton = true,
         restrictValues = {},
-        defaultFilters = []
+        defaultFilters = [],
+        hiddenIndicators = []
     ) {
         super(parent);
 
@@ -47,7 +48,7 @@ export class Category extends Component {
 
         this.prepareDomElements();
         this.prepareEvents();
-        this.addCategory(category, detail, isFirst, addLockButton, restrictValues, defaultFilters);
+        this.addCategory(category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators);
     }
 
     get filteredIndicators() {
@@ -76,7 +77,6 @@ export class Category extends Component {
                 $(ele).hide();
             })
         }
-
         this._isVisible = value;
     }
 
@@ -102,7 +102,7 @@ export class Category extends Component {
         });
     }
 
-    addCategory = (category, detail, isFirst, addLockButton, restrictValues, defaultFilters) => {
+    addCategory = (category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators) => {
         const newCategorySection = categoryTemplate.cloneNode(true);
         const sectionHeader = $('.category-header')[0].cloneNode(true);
         const indicatorHeader = $('.sub-category-header')[0].cloneNode(true);
@@ -125,7 +125,7 @@ export class Category extends Component {
             $(newCategorySection).addClass('page-break-before');
         }
 
-        this.loadSubcategories(newCategorySection, detail, addLockButton, restrictValues, defaultFilters);
+        this.loadSubcategories(newCategorySection, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators);
 
         this.uiElements.push(newCategorySection);
 
@@ -139,7 +139,7 @@ export class Category extends Component {
         return sectionLink;
     }
 
-    loadSubcategories = (wrapper, detail, addLockButton, restrictValues, defaultFilters) => {
+    loadSubcategories = (wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators) => {
         let isFirst = true;
 
         for (const subcategoryDetail of sortBy(detail.subcategories, "order")) {
@@ -155,10 +155,13 @@ export class Category extends Component {
                 this.profileConfig,
                 addLockButton,
                 restrictValues,
-                defaultFilters
+                defaultFilters,
+                hiddenIndicators
             );
-            sc.isVisible = sc.indicators.length > 0;
-            if (sc.isVisible) {
+            sc.isVisible = sc.indicators.filter(
+              ind => ind.isVisible
+            ).length > 0;
+            if (sc.indicators.length > 0) {
                 this.subCategories.push(sc);
                 isFirst = false;    //set to false only when there is a visible item
             }

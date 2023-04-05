@@ -65,12 +65,8 @@ export class Config {
         let globalConfig = [];
         let viewConfig = [];
         let mergedConfig = [];
-        if (
-            this.views[this._viewName] !== undefined
-            && this.views[this._viewName]["default_filters"] !== undefined
-        ) {
-            viewConfig = this.views[this._viewName]["default_filters"];
-        }
+
+        viewConfig = this.getViewConfig('default_filters') || [];
 
         if (this.config["default_filters"] !== undefined) {
             globalConfig = this.config["default_filters"];
@@ -86,12 +82,8 @@ export class Config {
         let globalConfig = {};
         let viewConfig = {};
         let mergedConfig = {};
-        if (
-            this.views[this._viewName] !== undefined
-            && this.views[this._viewName]["restrict_values"] !== undefined
-        ) {
-            viewConfig = this.views[this._viewName]["restrict_values"];
-        }
+
+        viewConfig = this.getViewConfig('restrict_values') || {};
 
         if (this.config["restrict_values"] !== undefined) {
             globalConfig = this.config["restrict_values"];
@@ -100,6 +92,16 @@ export class Config {
         Object.assign(mergedConfig, globalConfig, viewConfig);
 
         return mergedConfig;
+    }
+
+    getViewConfig(filterType) {
+        if (
+            this.views[this._viewName] !== undefined
+            && this.views[this._viewName][filterType] !== undefined
+        ) {
+            return this.views[this._viewName][filterType];
+        }
+        return null;
     }
 
     get views() {

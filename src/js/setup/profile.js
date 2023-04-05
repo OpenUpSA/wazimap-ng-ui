@@ -90,4 +90,17 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
             }, 0)
         })
     })
+
+    controller.on('my_view.hiddenIndicators.updated', payload => {
+      for (const category of profileLoader.categories) {
+          for (const subCategory of category.subCategories) {
+              for (const indicator of subCategory.indicators) {
+                  if (indicator.indicator.id === payload.payload.indicatorId) {
+                      indicator.isVisible = payload.payload.action !== "add";
+                      break;
+                  }
+              }
+          }
+      }
+    })
 }

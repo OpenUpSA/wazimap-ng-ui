@@ -43,6 +43,7 @@ export class Category extends Component {
         this._subCategories = [];
         this._isVisible = true;
         this._uiElements = [];
+        this._category = category;
 
         this.prepareDomElements();
         this.prepareEvents();
@@ -81,6 +82,12 @@ export class Category extends Component {
 
     get uiElements() {
         return this._uiElements;
+    }
+
+    updateVisibility = () => {
+      this.isVisible = Object.values(this.subCategories).filter(
+        sub => sub.isVisible
+      ).length > 0;
     }
 
     prepareDomElements = () => {

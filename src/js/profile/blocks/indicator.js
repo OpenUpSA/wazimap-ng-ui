@@ -22,6 +22,21 @@ export class Indicator extends ContentBlock {
 
         this.prepareDomElements();
         this.addIndicatorChart(addLockButton, restrictValues, defaultFilters);
+        this._isVisible = true;
+    }
+
+    get isVisible(){
+      return this._isVisible;
+    }
+
+    set isVisible(value){
+      if (!value){
+        $(this.container).hide();
+      } else {
+        $(this.container).show();
+      }
+      this._isVisible = value;
+      this.parent.updateVisibility();
     }
 
     get previouslySelectedFilters() {

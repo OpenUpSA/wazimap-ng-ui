@@ -87,12 +87,18 @@ export class Subcategory extends Component {
                 $(ele).hide();
             })
         }
-
         this._isVisible = value;
+        this.parent.updateVisibility();
     }
 
     get uiElements() {
         return this._uiElements;
+    }
+
+    updateVisibility = () => {
+      this.isVisible = Object.values(this._indicators).filter(
+        indicator => indicator.isVisible
+      ).length > 0;
     }
 
     addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {

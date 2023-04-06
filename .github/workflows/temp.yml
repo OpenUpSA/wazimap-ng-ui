@@ -1,5 +1,5 @@
 name: Temp
-on: [ push, pull_request ]
+on: [ push ]
 jobs:
   temp:
     runs-on: ubuntu-latest

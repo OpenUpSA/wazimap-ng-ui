@@ -83,7 +83,7 @@
     "cypress:gui-local": "cypress run --browser chrome --spec __tests__/gui/*.feature",
     "cypress": "cypress run --spec __tests__/e2e/*.feature",
     "cypress:temp": "start-server-and-test start http://localhost:1234 cypress:temp2",
-    "cypress:temp2": "cypress run --browser chrome --spec __tests__/gui/popup.feature",
+    "cypress:temp2": "cypress run --browser chrome --spec __tests__/gui/popup.feature, __tests__/gui/point_data.feature",
     "cypress:open": "cypress open",
     "test:gui-local": "start-server-and-test start http://localhost:1234 cypress:gui-local",
     "test:gui": "start-server-and-test start http://localhost:1234 cypress:gui",

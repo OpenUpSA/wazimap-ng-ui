@@ -39,7 +39,7 @@ When('I move the cursor', () => {
 })
 
 When('I hover over the center of the map', () => {
-    hoverOverTheMapCenter();
+    hoverOverTheMapCenter('.leaflet-popup .map-tooltip__value .tooltip__value_label .truncate');
 })
 
 Then('I confirm that the tooltip is created with the correct text and the correct values if the choropleth method is sub-indicator', () => {

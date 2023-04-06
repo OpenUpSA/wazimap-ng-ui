@@ -5,8 +5,8 @@ const filtersClass = '.profile-indicator__filters-wrapper';
 const bodyClass = '.profile-indicator__chart_body';
 
 export class HTMLBlock extends ContentBlock {
-    constructor(parent, container, indicator, title, isLast, geography) {
-        super(parent, container, indicator, title, isLast, geography)
+    constructor(parent, container, indicator, title, isLast, geography, hiddenIndicators) {
+        super(parent, container, indicator, title, isLast, geography, hiddenIndicators)
 
         this.prepareDomElements();
     }

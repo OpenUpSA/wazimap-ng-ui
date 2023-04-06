@@ -16,29 +16,11 @@ export class Indicator extends ContentBlock {
         defaultFilters = [],
         hiddenIndicators = []
     ) {
-        super(parent, container, indicator, title, isLast, geography);
+        super(parent, container, indicator, title, isLast, geography, hiddenIndicators);
         this.chartAttribution = chartAttribution;
         this._chart = null;
         this.prepareDomElements();
         this.addIndicatorChart(addLockButton, restrictValues, defaultFilters);
-        this._isVisible = !hiddenIndicators.includes(indicator.id);
-        if (!this._isVisible){
-          $(this.container).hide();
-        }
-    }
-
-    get isVisible(){
-      return this._isVisible;
-    }
-
-    set isVisible(value){
-      if (!value){
-        $(this.container).hide();
-      } else {
-        $(this.container).show();
-      }
-      this._isVisible = value;
-      this.parent.updateVisibility();
     }
 
     get previouslySelectedFilters() {

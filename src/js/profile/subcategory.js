@@ -151,8 +151,8 @@ export class Subcategory extends Component {
         return block;
     }
 
-    addHTMLBlock(container, indicator, title, isLast) {
-        let block = new HTMLBlock(this, container, indicator, title, isLast, this.geography)
+    addHTMLBlock(container, indicator, title, isLast, hiddenIndicators) {
+        let block = new HTMLBlock(this, container, indicator, title, isLast, this.geography, hiddenIndicators)
 
         return block;
     }
@@ -177,7 +177,7 @@ export class Subcategory extends Component {
                     if (indicator.content_type === ContentBlock.BLOCK_TYPES.Indicator) {
                         block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast, addLockButton, restrictValues, defaultFilters, hiddenIndicators);
                     } else if (indicator.content_type === ContentBlock.BLOCK_TYPES.HTMLBlock) {
-                        block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast, true, {}, [], hiddenIndicators);
+                        block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast, hiddenIndicators);
                     }
 
                     this._indicators.push(block);

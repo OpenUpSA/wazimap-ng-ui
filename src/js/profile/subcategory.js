@@ -41,6 +41,7 @@ export class Subcategory extends Component {
         this._profileConfig = profileConfig;
         this._isVisible = true;
         this._uiElements = [];
+        this._scHeader = null;
 
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
         this.addIndicators(wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators);
@@ -102,6 +103,11 @@ export class Subcategory extends Component {
       this.parent.updateVisibility();
     }
 
+    updateDomElements = () => {
+      $(this._scHeader).parents('.section').find(subcategoryHeaderClass).removeClass('first');
+      $(this._scHeader).removeClass('page-break-before').addClass('first');
+    }
+
     addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
         let scHeader = scHeaderClone.cloneNode(true);
 
@@ -126,6 +132,7 @@ export class Subcategory extends Component {
         this.uiElements.push(scHeader);
 
         wrapper.append(scHeader);
+        this._scHeader = scHeader;
     }
 
     addIndicatorBlock(container, indicator, title, isLast, addLockButton, restrictValues, defaultFilters, hiddenIndicators) {

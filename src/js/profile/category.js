@@ -71,6 +71,10 @@ export class Category extends Component {
         if (value) {
             this.uiElements.forEach((ele) => {
                 $(ele).show();
+                const firstSubcategory = this.subCategories.find(
+                  sub => sub.isVisible
+                )
+                firstSubcategory.updateDomElements();
             })
         } else {
             this.uiElements.forEach((ele) => {

@@ -22,6 +22,7 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
     ]);
 
     controller.on('hashChange', () => {
+        profileLoader.hiddenIndicators = controller.hiddenIndicators;
         if (profileLoader.profileHeader !== null) {
             profileLoader.profileHeader.facilityController.isLoading = true;
         }

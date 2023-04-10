@@ -1,5 +1,4 @@
 Feature: Sharing url
-
   Scenario: Verify adding/removing an indicator-specific filter & hidden indicators, copy a URL, and go to that URL results in same filters applied on Data mapper and Rich data view.
     Given I am on the Wazimap Homepage
     Then I wait until map is ready
@@ -47,6 +46,11 @@ Feature: Sharing url
     Then I collapse My View Window
     Then I remove filter from mapchip
     And I expand Rich Data Panel
+    Then I confirm category "Demographics" at position 0 is "visible"
+    Then I confirm subcategory "Language" at position 0 is "visible"
+    Then I confirm indicator "Language most spoken at home" at position 0 is "visible"
+    Then I confirm subcategory "Migration" at position 0 is "hidden"
+    Then I confirm indicator "Region of birth" at position 0 is "hidden"
 
     When I select "language" from indicator dropdown in chart filter
     And I select "Afrikaans" from subIndicator dropdown in chart filter
@@ -62,6 +66,11 @@ Feature: Sharing url
     Then I confirm that the choropleth is filtered by "gender:Male" at index 0
     And I expand Rich Data Panel
     Then I confirm that the chart is filtered by "language:Afrikaans" at index 0
+    Then I confirm category "Demographics" at position 0 is "visible"
+    Then I confirm subcategory "Language" at position 0 is "visible"
+    Then I confirm indicator "Language most spoken at home" at position 0 is "visible"
+    Then I confirm subcategory "Migration" at position 0 is "hidden"
+    Then I confirm indicator "Region of birth" at position 0 is "hidden"
     And I collapse Rich Data Panel
 
     When I expand My View Window
@@ -86,6 +95,11 @@ Feature: Sharing url
     Then I confirm that the choropleth is filtered by "age:15-19" at index 0
     And I expand Rich Data Panel
     Then I confirm that the chart is filtered by "language:Afrikaans" at index 0
+    Then I confirm category "Demographics" at position 0 is "visible"
+    Then I confirm subcategory "Language" at position 0 is "visible"
+    Then I confirm indicator "Language most spoken at home" at position 0 is "visible"
+    Then I confirm subcategory "Migration" at position 1 is "visible"
+    Then I confirm indicator "Region of birth" at position 1 is "visible"
     And I collapse Rich Data Panel
 
     When I expand My View Window
@@ -113,6 +127,10 @@ Feature: Sharing url
     When I expand Rich Data Panel
     Then I select "language" from indicator dropdown in chart filter
     And I select "Afrikaans" from subIndicator dropdown in chart filter
+    Then I confirm that the chart is filtered by "language:Afrikaans" at index 0
+    Then I confirm category "Demographics" at position 0 is "visible"
+    Then I confirm subcategory "South African Citizenship" at position 2 is "visible"
+    Then I confirm indicator "Citizenship" at position 2 is "visible"
     And I collapse Rich Data Panel
 
     When I expand My View Window
@@ -129,6 +147,12 @@ Feature: Sharing url
     Then I expand Data Mapper
     And I check if "South African Citizenship" on Data Mapper is hidden
 
+    When I expand Rich Data Panel
+    Then I confirm category "Demographics" at position 0 is "visible"
+    Then I confirm subcategory "South African Citizenship" at position 0 is "hidden"
+    Then I confirm indicator "Citizenship" at position 0 is "hidden"
+    And I collapse Rich Data Panel
+
     When I go back in browser history
     Then I expand My View Window
     And I check hidden values text on "MyView-Demographics" is "hidden 0"
@@ -137,6 +161,12 @@ Feature: Sharing url
     Then I collapse My View Window
     Then I expand Data Mapper
     And I check if "South African Citizenship" on Data Mapper is visible
+
+    When I expand Rich Data Panel
+    Then I confirm category "Demographics" at position 0 is "visible"
+    Then I confirm subcategory "South African Citizenship" at position 2 is "visible"
+    Then I confirm indicator "Citizenship" at position 2 is "visible"
+    And I collapse Rich Data Panel
 
     When I go back in browser history
     Then I expand My View Window
@@ -149,6 +179,9 @@ Feature: Sharing url
     And I collapse Data Mapper
     Then I expand Rich Data Panel
     And I confirm that the chart is not filtered
+    Then I confirm category "Demographics" at position 0 is "visible"
+    Then I confirm subcategory "South African Citizenship" at position 2 is "visible"
+    Then I confirm indicator "Citizenship" at position 2 is "visible"
     And I collapse Rich Data Panel
 
     When I go back in browser history
@@ -206,6 +239,8 @@ Feature: Sharing url
     And I collapse Data Mapper
     Then I expand Rich Data Panel
     And I confirm that the chart is filtered by "language:Afrikaans" at index 0
+    And I confirm subcategory "South African Citizenship" at position 0 is "hidden"
+    And I confirm indicator "Citizenship" at position 0 is "hidden"
     And I collapse Rich Data Panel
 
     When I go forward in browser history
@@ -243,6 +278,8 @@ Feature: Sharing url
     When I expand Rich Data Panel
     Then I select "language" from indicator dropdown in chart filter
     And I select "Afrikaans" from subIndicator dropdown in chart filter
+    And I confirm subcategory "South African Citizenship" at position 2 is "visible"
+    And I confirm indicator "Citizenship" at position 2 is "visible"
     And I collapse Rich Data Panel
 
     When I expand My View Window
@@ -259,7 +296,17 @@ Feature: Sharing url
     Then I expand Data Mapper
     And I check if "South African Citizenship" on Data Mapper is hidden
 
+    Then I expand Rich Data Panel
+    And I confirm subcategory "South African Citizenship" at position 0 is "hidden"
+    And I confirm indicator "Citizenship" at position 0 is "hidden"
+    And I collapse Rich Data Panel
+
     When I go back to root geography
+    Then I expand Rich Data Panel
+    And I confirm subcategory "South African Citizenship" at position 0 is "hidden"
+    And I confirm indicator "Citizenship" at position 0 is "hidden"
+    And I collapse Rich Data Panel
+    Then I expand Data Mapper
     And I check if "Migration" on Data Mapper is visible
     And I check if "South African Citizenship" on Data Mapper is hidden
     Then I expand My View Window
@@ -274,6 +321,8 @@ Feature: Sharing url
     And I collapse Data Mapper
     Then I expand Rich Data Panel
     And I confirm that the chart is filtered by "language:Afrikaans" at index 0
+    And I confirm subcategory "South African Citizenship" at position 0 is "hidden"
+    And I confirm indicator "Citizenship" at position 0 is "hidden"
     And I collapse Rich Data Panel
     And I close the filter dialog
 
@@ -296,6 +345,9 @@ Feature: Sharing url
     And I collapse Data Mapper
     Then I expand Rich Data Panel
     And I confirm that the chart is filtered by "language:Afrikaans" at index 0
+    And I confirm subcategory "South African Citizenship" at position 0 is "hidden"
+    And I confirm indicator "Citizenship" at position 0 is "hidden"
+    Then I confirm category "Demographics" at position 0 is "visible"
     And I collapse Rich Data Panel
 
     When I go forward in browser history
@@ -315,4 +367,7 @@ Feature: Sharing url
     And I collapse Data Mapper
     Then I expand Rich Data Panel
     And I confirm that the chart is filtered by "language:Afrikaans" at index 0
+    Then I confirm category "Demographics" at position 0 is "visible"
+    Then I confirm subcategory "South African Citizenship" at position 0 is "hidden"
+    Then I confirm indicator "Citizenship" at position 0 is "hidden"
     And I collapse Rich Data Panel

@@ -7,10 +7,17 @@ export class Config {
     constructor() {
         this.config = {};
         this.versions = [];
+        this._viewName = null;
     }
 
     setConfig(config) {
         this.config = config;
+        this.setView();
+    }
+
+    setView() {
+        const urlParams = new URLSearchParams(window.location.search);
+        this._viewName = urlParams.get('view');
     }
 
     setVersions(geography_hierarchy) {
@@ -55,14 +62,51 @@ export class Config {
     }
 
     get defaultFilters() {
-        if (this.config["default_filters"] != undefined)
-            return this.config["default_filters"];
-        return [];
+        let globalConfig = [];
+        let viewConfig = [];
+        let mergedConfig = [];
+
+        viewConfig = this.getViewConfig('default_filters') || [];
+
+        if (this.config["default_filters"] !== undefined) {
+            globalConfig = this.config["default_filters"];
+        }
+
+        mergedConfig = globalConfig.filter(x => !viewConfig.find(y => x['name'] === y['name']));
+        mergedConfig = mergedConfig.concat(viewConfig);
+
+        return mergedConfig;
     }
 
     get restrictValues() {
-        if (this.config["restrict_values"] != undefined)
-            return this.config["restrict_values"];
+        let globalConfig = {};
+        let viewConfig = {};
+        let mergedConfig = {};
+
+        viewConfig = this.getViewConfig('restrict_values') || {};
+
+        if (this.config["restrict_values"] !== undefined) {
+            globalConfig = this.config["restrict_values"];
+        }
+
+        Object.assign(mergedConfig, globalConfig, viewConfig);
+
+        return mergedConfig;
+    }
+
+    getViewConfig(filterType) {
+        if (
+            this.views[this._viewName] !== undefined
+            && this.views[this._viewName][filterType] !== undefined
+        ) {
+            return this.views[this._viewName][filterType];
+        }
+        return null;
+    }
+
+    get views() {
+        if (this.config["views"] != undefined)
+            return this.config["views"];
         return {};
     }
 

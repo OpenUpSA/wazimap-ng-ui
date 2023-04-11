@@ -61,3 +61,8 @@ Then(/^I confirm that "([^"]*)" is applied to "([^"]*)" as a site\-wide filter$/
     const filters = filter.split(':');
     confirmChartIsFiltered(filters[0], filters[1], chartTitle);
 });
+
+Given('I am on the Wazimap Homepage Test View', () => {
+    setupInterceptions(profiles, all_details, profile, themes, {}, [], profile_indicator_summary, profile_indicator_data);
+    cy.visit("/?view=test");
+})

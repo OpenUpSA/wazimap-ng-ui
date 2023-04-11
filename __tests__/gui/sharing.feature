@@ -239,8 +239,8 @@ Feature: Sharing url
     And I collapse Data Mapper
     Then I expand Rich Data Panel
     And I confirm that the chart is filtered by "language:Afrikaans" at index 0
-    And I confirm subcategory "South African Citizenship" at position 0 is "hidden"
-    And I confirm indicator "Citizenship" at position 0 is "hidden"
+    And I confirm subcategory "South African Citizenship" at position 2 is "visible"
+    And I confirm indicator "Citizenship" at position 2 is "visible"
     And I collapse Rich Data Panel
 
     When I go forward in browser history

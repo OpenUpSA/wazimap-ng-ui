@@ -147,7 +147,6 @@ export function hoverOverTheMapCenter(elementSelectorToFind = null, retryCount =
 
     if (elementSelectorToFind !== null) {
         cy.get("body").then(($body) => {
-            cy.log($body.find(elementSelectorToFind).length)
             if (!$body.find(elementSelectorToFind).length && retryCount > 1) {
                 cy.log('hover failed - try again');
                 hoverOverTheMapCenter(elementSelectorToFind, retryCount - 1);

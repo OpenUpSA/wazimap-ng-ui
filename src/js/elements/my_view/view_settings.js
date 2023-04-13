@@ -41,53 +41,53 @@ const ViewSettings = (props) => {
     const trashBinSvg = TrashBinSvg;
     const lockButtonSvg = LockButtonInTextSvg;
     const hiddenIndicatorsTooltipText = () => {
-      return (
-        <>
-          <p>
-          You can hide indicators to share a simplified view
-          with only the indicators relevant to your needs.
-          </p>
+        return (
+            <>
+                <p>
+                    You can hide indicators to share a simplified view
+                    with only the indicators relevant to your needs.
+                </p>
 
-          <p>
-            All indicators available in all geographic areas
-            are shown here, potentially including some which
-            may not be available at your currently-selected
-            geography.
-          </p>
-        </>
-      )
+                <p>
+                    All indicators available in all geographic areas
+                    are shown here, potentially including some which
+                    may not be available at your currently-selected
+                    geography.
+                </p>
+            </>
+        )
     }
 
     useEffect(() => {
-        if (props.filteredIndicators !== filteredIndicators) {
-            setFilteredIndicators(props.filteredIndicators);
-        }
-        if (props.profileIndicators.length > 0 && profileIndicators.length === 0){
-          let profileIndicators = props.profileIndicators.map(
-            (category) => {
-              let subcategories = []
-              category.subcategories.map(
-                subcategory => {
-                  if (subcategory.indicators.length > 0){
-                    subcategories.push(subcategory)
-                  }
-                }
-              )
-              return {
-                ...category,
-                subcategories: subcategories
-              }
+            if (props.filteredIndicators !== filteredIndicators) {
+                setFilteredIndicators(props.filteredIndicators);
             }
-          )
-          profileIndicators = profileIndicators.filter(ind => ind.subcategories.length > 0);
-          setProfileIndicators(profileIndicators);
-        }
-    }, [
-        props.filteredIndicators,
-        props.profileIndicators,
-        setProfileIndicators,
-        profileIndicators
-      ]
+            if (props.profileIndicators.length > 0 && profileIndicators.length === 0) {
+                let profileIndicators = props.profileIndicators.map(
+                    (category) => {
+                        let subcategories = []
+                        category.subcategories.map(
+                            subcategory => {
+                                if (subcategory.indicators.length > 0) {
+                                    subcategories.push(subcategory)
+                                }
+                            }
+                        )
+                        return {
+                            ...category,
+                            subcategories: subcategories
+                        }
+                    }
+                )
+                profileIndicators = profileIndicators.filter(ind => ind.subcategories.length > 0);
+                setProfileIndicators(profileIndicators);
+            }
+        }, [
+            props.filteredIndicators,
+            props.profileIndicators,
+            setProfileIndicators,
+            profileIndicators
+        ]
     );
 
     const handleExpandedChange = (panel) => {
@@ -121,7 +121,7 @@ const ViewSettings = (props) => {
                                                     <AppliedPanelInfo>
                                                         {showPanelName(sf.appliesTo[0])}
                                                     </AppliedPanelInfo>
-                                                    {`${fi.indicatorTitle}`}
+                                                    {renderIndicatorTitle(fi)}
                                                 </FilteredIndicatorBox>
                                             </Grid>
                                             <Grid container sx={{marginTop: '8px'}}>
@@ -155,30 +155,42 @@ const ViewSettings = (props) => {
         )
     }
 
-    const renderIndicatorTreeView = () =>{
-      return (
-        <Grid item xs={12}>
-          <IndicatorTreeViewCard>
-            <TreeView
-              defaultCollapseIcon={<ArrowDropDownIcon />}
-              defaultExpandIcon={<ArrowRightIcon />}
-            >
-              {profileIndicators.length > 0 && profileIndicators.map(
-                (item, key) => {
-                  return (
-                    <IndicatorCategoryTreeView
-                      category={item}
-                      key={key}
-                      updateHiddenIndicators={props.updateHiddenIndicators}
-                      hiddenIndicators={props.hiddenIndicators}
-                    />
-                  )
-                })
-              }
-            </TreeView>
-          </IndicatorTreeViewCard>
-        </Grid>
-      );
+    const renderIndicatorTitle = (fi) => {
+        if (fi.indicatorIsAvailable) {
+            return (
+                `${fi.indicatorTitle}`
+            )
+        } else {
+            return (
+                <i>Indicator no longer available*</i>
+            )
+        }
+    }
+
+    const renderIndicatorTreeView = () => {
+        return (
+            <Grid item xs={12}>
+                <IndicatorTreeViewCard>
+                    <TreeView
+                        defaultCollapseIcon={<ArrowDropDownIcon/>}
+                        defaultExpandIcon={<ArrowRightIcon/>}
+                    >
+                        {profileIndicators.length > 0 && profileIndicators.map(
+                            (item, key) => {
+                                return (
+                                    <IndicatorCategoryTreeView
+                                        category={item}
+                                        key={key}
+                                        updateHiddenIndicators={props.updateHiddenIndicators}
+                                        hiddenIndicators={props.hiddenIndicators}
+                                    />
+                                )
+                            })
+                        }
+                    </TreeView>
+                </IndicatorTreeViewCard>
+            </Grid>
+        );
     }
 
     const renderSiteWideFilters = () => {
@@ -272,15 +284,15 @@ const ViewSettings = (props) => {
                     </HelpText>
 
                     <StyledBoxWithBottomBorder>
-                      <StyledTypography variant="body2" sx={{width: "100%"}}>
-                        HIDDEN INDICATORS
-                      </StyledTypography>
-                      <StyledIconTypography
-                      >
-                        <StyledTooltip title={hiddenIndicatorsTooltipText()} arrow placement="top">
-                          <InfoIcon fontSize="small" />
-                        </StyledTooltip>
-                      </StyledIconTypography>
+                        <StyledTypography variant="body2" sx={{width: "100%"}}>
+                            HIDDEN INDICATORS
+                        </StyledTypography>
+                        <StyledIconTypography
+                        >
+                            <StyledTooltip title={hiddenIndicatorsTooltipText()} arrow placement="top">
+                                <InfoIcon fontSize="small"/>
+                            </StyledTooltip>
+                        </StyledIconTypography>
                     </StyledBoxWithBottomBorder>
                     {renderIndicatorTreeView()}
                     <HelpText>

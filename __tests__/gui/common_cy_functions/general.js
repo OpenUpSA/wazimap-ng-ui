@@ -139,7 +139,7 @@ export function clickOnTheFirstCategory() {
     cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1 .point-mapper__h1_content .point-mapper__h2_wrapper .point-mapper__h2').first().click();
 }
 
-export function hoverOverTheMapCenter(elementSelectorToFind = null, retryCount = 5) {
+export const hoverOverTheMapCenter = (elementSelectorToFind = null, retryCount = 5) => new Cypress.Promise(function (resolve) {
     const coordinates = getMapCenter();
     cy.get('body')
         .trigger('mousemove', {clientX: 0, clientY: 0})
@@ -149,11 +149,15 @@ export function hoverOverTheMapCenter(elementSelectorToFind = null, retryCount =
         cy.get("body").then(($body) => {
             if (!$body.find(elementSelectorToFind).length && retryCount > 1) {
                 cy.log('hover failed - try again');
-                hoverOverTheMapCenter(elementSelectorToFind, retryCount - 1);
+                hoverOverTheMapCenter(elementSelectorToFind, retryCount - 1).then(() => {
+                    resolve();
+                });
+            } else {
+                resolve();
             }
         })
     }
-}
+})
 
 export function getMapCenter() {
     let navHeight = 56;

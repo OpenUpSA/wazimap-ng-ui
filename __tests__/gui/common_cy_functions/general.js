@@ -139,12 +139,25 @@ export function clickOnTheFirstCategory() {
     cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1 .point-mapper__h1_content .point-mapper__h2_wrapper .point-mapper__h2').first().click();
 }
 
-export function hoverOverTheMapCenter() {
+export const hoverOverTheMapCenter = (elementSelectorToFind = null, retryCount = 5) => new Cypress.Promise(function (resolve) {
     const coordinates = getMapCenter();
     cy.get('body')
         .trigger('mousemove', {clientX: 0, clientY: 0})
         .trigger('mousemove', {clientX: coordinates.x, clientY: coordinates.y});
-}
+
+    if (elementSelectorToFind !== null) {
+        cy.get("body").then(($body) => {
+            if (!$body.find(elementSelectorToFind).length && retryCount > 1) {
+                cy.log('hover failed - try again');
+                hoverOverTheMapCenter(elementSelectorToFind, retryCount - 1).then(() => {
+                    resolve();
+                });
+            } else {
+                resolve();
+            }
+        })
+    }
+})
 
 export function getMapCenter() {
     let navHeight = 56;
@@ -372,7 +385,7 @@ export function selectChartDropdownOption(option, dropdownIndex) {
     cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${option}")`, {timeout: 20000}).click({force: true})
 }
 
-export function confirmChoroplethIsFiltered(group, value, index){
+export function confirmChoroplethIsFiltered(group, value, index) {
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index})`).should('have.length', 1);
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
         .eq(0)
@@ -385,7 +398,7 @@ export function confirmChoroplethIsFiltered(group, value, index){
         .should('not.have.class', 'disabled');
 }
 
-export function confirmDropdownOptions(arr){
+export function confirmDropdownOptions(arr) {
     let filters = [];
     cy.get('.dropdown-menu__content:visible .dropdown__list_item:visible').each(($el) => {
         const text = $el.text().trim();
@@ -417,7 +430,7 @@ export function collapseMyViewPanel() {
     })
 }
 
-export function confirmChartIsFiltered(group, value, chartTitle){
+export function confirmChartIsFiltered(group, value, chartTitle) {
     let matches = false;
 
     cy.get(`.profile-indicator__title h4:contains("${chartTitle}")`)

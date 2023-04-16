@@ -36,8 +36,9 @@ When('I click on a category', () => {
 
 When('I click on a marker', () => {
     //click on the center of the window
-    hoverOverTheMapCenter();
-    cy.get('.leaflet-marker-pane .leaflet-zoom-animated').click({force: true});
+    hoverOverTheMapCenter().then(() => {
+        cy.get('.leaflet-marker-pane .leaflet-zoom-animated').click({force: true});
+    })
 })
 
 When('I click on the More info button', () => {

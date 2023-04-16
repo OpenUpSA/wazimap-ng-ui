@@ -39,6 +39,23 @@
         "This is ignored"
       ]
     },
+    "views": {
+      "test": {
+        "default_filters": [
+          {
+            "name": "gender",
+            "value": "Male"
+          }
+        ],
+        "restrict_values": {
+          "language": [
+            "English",
+            "Sepedi",
+            "isiXhosa"
+          ]
+        }
+      }
+    },
     "tutorial": [],
     "default_coordinates": {
       "lat": -28.995409163308832,

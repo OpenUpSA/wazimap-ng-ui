@@ -317,11 +317,21 @@ export default class Controller extends Component {
 
     pushState(currentState) {
         let profileView = "/";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let hasOtherKeys = false;
+        [...urlParams.keys()].forEach((key, index) => {
+            if (key !== 'profileView') {
+                profileView += `${index === 0 ? '?' : '&'}${key}=${urlParams.get(key)}`;
+                hasOtherKeys = true;
+            }
+        })
+
         if (
             currentState?.filters !== undefined && currentState.filters.length > 0
             || currentState?.hiddenIndicators !== undefined && currentState.hiddenIndicators.length > 0
         ) {
-            profileView = `?profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
+            profileView += `${hasOtherKeys ? '&' : '?'}profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
         }
 
         history.pushState(
@@ -354,6 +364,7 @@ export default class Controller extends Component {
         }
 
         const urlParams = new URLSearchParams(window.location.search);
+
         const profileView = JSON.parse(urlParams.get("profileView"));
         if (selectedFilters.length > 0 || this.hiddenIndicators.length > 0) {
             if (profileView === null) {
@@ -387,7 +398,7 @@ export default class Controller extends Component {
                         Object.values(subcategory.indicators).map(i => {
                             if (i.id === indicator.indicatorId) {
                                 indicatorTitle = i.label;
-                                indicatorIsAvailable = true;
+                                 indicatorIsAvailable = true;
                             }
                         })
                     })

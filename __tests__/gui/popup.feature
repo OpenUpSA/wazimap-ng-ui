@@ -12,7 +12,6 @@ Feature: Popup
     And I click on "Language" in Data Mapper
     And I click on "Language most spoken at home" in Data Mapper
     And I click on "15-19" in Data Mapper
-    And I hover over the center of the map
     Then I confirm that the tooltip is created with the correct text and the correct values if the choropleth method is sub-indicator
 
     # choropleth method sibling
@@ -20,7 +19,6 @@ Feature: Popup
     And I click on "Migration" in Data Mapper
     And I click on "Region of birth" in Data Mapper
     And I click on "Male" in Data Mapper
-    And I hover over the center of the map
     Then I confirm that the tooltip is created with the correct text and the correct values if the choropleth method is sibling
 
     # choropleth method absolute
@@ -28,5 +26,4 @@ Feature: Popup
     And I click on "South African Citizenship" in Data Mapper
     And I click on "Citizenship" in Data Mapper
     And I click on "Yes" in Data Mapper
-    And I hover over the center of the map
     Then I confirm that the tooltip is created with the correct text and the label is hidden if the choropleth method is absolute

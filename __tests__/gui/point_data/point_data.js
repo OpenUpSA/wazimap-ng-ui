@@ -112,26 +112,19 @@ When('I check if the cluster is created correctly', () => {
         expect($el.attr('stroke-dasharray')).equal(categories[index].circleVal);
     })
 
-    hoverOverTheMapCenter();
+    hoverOverTheMapCenter(".leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item").then(() => {
+        cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item', {timeout: 20000}).get(($el) => {
+            expect($el.length).equal(2);
+        })
 
-    cy.get("body").then(($body) => {
-        if (!$body.find(".leaflet-popup-content").length) {
-            cy.log('hover failed - try again');
-            hoverOverTheMapCenter();
-        }
+        cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item').each(($el, index) => {
+            expect($el.find('.tooltip__cluster-icon').attr('style')).to.contain(`background-color: ${categories[index].color};`);
+            expect($el.find('.tooltip__cluster-title')).to.have.text(categories[index].name);
+            expect($el.find('.tootlip__cluster-facet')).to.have.text('1');
+        })
+
+        cy.get('body').trigger('click', {clientX: 0, clientY: 0})
     })
-
-    cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item', {timeout: 20000}).get(($el) => {
-        expect($el.length).equal(2);
-    })
-
-    cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item').each(($el, index) => {
-        expect($el.find('.tooltip__cluster-icon').attr('style')).to.contain(`background-color: ${categories[index].color};`);
-        expect($el.find('.tooltip__cluster-title')).to.have.text(categories[index].name);
-        expect($el.find('.tootlip__cluster-facet')).to.have.text('1');
-    })
-
-    cy.get('body').trigger('click', {clientX: 0, clientY: 0})
 })
 
 Then('I check if the filter dialog is displayed', () => {

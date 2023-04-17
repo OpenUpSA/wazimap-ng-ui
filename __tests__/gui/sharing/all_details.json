@@ -11152,6 +11152,1368 @@
                       ]
                   }
               }
+          },
+          "South African Citizenship": {
+              "description": "",
+              "order": 246,
+              "indicators": {
+                  "Citizenship": {
+                      "id": 1124,
+                      "order": 918,
+                      "label": "Citizenship",
+                      "description": "",
+                      "choropleth_method": "subindicator",
+                      "last_updated_at": "2023-03-27T09:17:46.756298Z",
+                      "metadata": {
+                          "source": "StatsSA Census 2011",
+                          "description": "",
+                          "url": null,
+                          "licence": {
+                              "name": "creative commons",
+                              "url": null
+                          },
+                          "primary_group": "citizenship",
+                          "groups": [
+                              {
+                                  "subindicators": [
+                                      "15-24 (Intl)",
+                                      "15-35 (ZA)",
+                                      "15-19",
+                                      "20-24",
+                                      "25-29",
+                                      "30-35"
+                                  ],
+                                  "dataset": 96,
+                                  "name": "age group",
+                                  "can_aggregate": false,
+                                  "can_filter": true
+                              },
+                              {
+                                  "subindicators": [
+                                      "Yes",
+                                      "No",
+                                      "Unspecified"
+                                  ],
+                                  "dataset": 96,
+                                  "name": "citizenship",
+                                  "can_aggregate": true,
+                                  "can_filter": true
+                              },
+                              {
+                                  "subindicators": [
+                                      "Female",
+                                      "Male"
+                                  ],
+                                  "dataset": 96,
+                                  "name": "gender",
+                                  "can_aggregate": true,
+                                  "can_filter": true
+                              },
+                              {
+                                  "subindicators": [
+                                      "Black African",
+                                      "Coloured",
+                                      "Indian or Asian",
+                                      "White",
+                                      "Other"
+                                  ],
+                                  "dataset": 96,
+                                  "name": "race",
+                                  "can_aggregate": true,
+                                  "can_filter": true
+                              }
+                          ]
+                      },
+                      "content_type": "indicator",
+                      "dataset_content_type": "quantitative",
+                      "version": "2011 Boundaries",
+                      "chart_configuration": {
+                          "types": {
+                              "Value": {
+                                  "formatting": ",.0f"
+                              },
+                              "Percentage": {
+                                  "maxX": 1,
+                                  "minX": 0
+                              }
+                          },
+                          "filter": {
+                              "defaults": [
+                                  {
+                                      "name": "age group",
+                                      "value": "15-35 (ZA)"
+                                  }
+                              ]
+                          },
+                          "xTicks": 6
+                      },
+                      "chart_type": "bar",
+                      "choropleth_range": "by_subindicator",
+                      "enable_linear_scrubber": false,
+                      "data": [
+                          {
+                              "race": "Black African",
+                              "count": "1986297",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "37359",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "10626",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "207872",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "465",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "1101",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "47993",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "1476",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "294",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": "129616",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": "1268",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": "949",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "4519",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "2974",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "132",
+                              "gender": "Male",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "2010361",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "31435",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "11084",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "209486",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "372",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "1084",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "47651",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "779",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "311",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": "125861",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": "1387",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": "962",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "4361",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "1512",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "87",
+                              "gender": "Female",
+                              "age group": "15-19",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "1901376",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "131487",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "9401",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "199085",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "803",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "725",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "52340",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "7466",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "361",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": "141186",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": "2176",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": "936",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "5791",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "14244",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "359",
+                              "gender": "Male",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "2012015",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "99581",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "9777",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "208215",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "716",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "878",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "50961",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "1842",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "246",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": "141615",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": "2444",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": "915",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "4896",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "5208",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "200",
+                              "gender": "Female",
+                              "age group": "20-24",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "1731366",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "186744",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "10152",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "182106",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "1051",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "731",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "54317",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "11999",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "469",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": "153818",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": "2658",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": "1028",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "6454",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "20342",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "500",
+                              "gender": "Male",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "1869178",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "123546",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "9849",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "197014",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "683",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "777",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "53672",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "3285",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "357",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": "158197",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": "3186",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": "1014",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "4877",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "6897",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "268",
+                              "gender": "Female",
+                              "age group": "25-29",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "1607378",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "167190",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "9668",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "178786",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "1110",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "719",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "60087",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "10998",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "494",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": "176015",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": "3598",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": "1098",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "6402",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "16726",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "429",
+                              "gender": "Male",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "1731408",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "91390",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": "8633",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "195573",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "629",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": "748",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "60271",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "2971",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": "370",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": "182179",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": "4293",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": "1201",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "4635",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "5135",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": "210",
+                              "gender": "Female",
+                              "age group": "30-35",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 3887673,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 7226417,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 168846,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 522780,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 20027,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 39847,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 406957,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 767849,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 1268,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 3429,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 1826,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 3276,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 100333,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 214737,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 8942,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 31939,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 655,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 1618,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": 270802,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": 600635,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": 3444,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": 9700,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": 1885,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": 4011,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 10310,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 23166,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 17218,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 54286,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 491,
+                              "gender": "Male",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 1420,
+                              "gender": "Male",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 4022376,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 7622962,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 131016,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 345952,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 20861,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Black African",
+                              "count": 39343,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 417701,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 810288,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 1088,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 2400,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 1962,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Coloured",
+                              "count": 3487,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 98612,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 212555,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 2621,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 8877,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 557,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Indian or Asian",
+                              "count": 1284,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": 267476,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": 607852,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "White",
+                              "count": 3831,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": 11310,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "White",
+                              "count": 1877,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "White",
+                              "count": 4092,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 9257,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 18769,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Yes"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 6720,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 18752,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "No"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 287,
+                              "gender": "Female",
+                              "age group": "15-24 (Intl)",
+                              "citizenship": "Unspecified"
+                          },
+                          {
+                              "race": "Other",
+                              "count": 765,
+                              "gender": "Female",
+                              "age group": "15-35 (ZA)",
+                              "citizenship": "Unspecified"
+                          }
+                      ]
+                  }
+              }
           }
         }
       }

@@ -32,6 +32,7 @@ export default class ProfileLoader extends Component {
         this.restrictValues = restrictValues;
         this.defaultFilters = defaultFilters;
         this._categories = [];
+        this._hiddenIndicators = [];
 
         new ResizeObserver(() => {
             this.setWatermarkVisibility();
@@ -56,6 +57,14 @@ export default class ProfileLoader extends Component {
 
     get categories() {
         return this._categories;
+    }
+
+    get hiddenIndicators() {
+        return this._hiddenIndicators;
+    }
+
+    set hiddenIndicators(value) {
+      this._hiddenIndicators = value;
     }
 
     loadProfile = (dataBundle, activeVersion) => {
@@ -119,13 +128,18 @@ export default class ProfileLoader extends Component {
                 this.config,
                 this.siteWideFiltersEnabled,
                 this.restrictValues,
-                this.defaultFilters
+                this.defaultFilters,
+                this.hiddenIndicators
             );
-            c.isVisible = c.subCategories.length > 0;
-            if (c.isVisible) {
-                this.createNavItem(id, category);
+            if (c.subCategories.length > 0) {
+                let navItem = this.createNavItem(id, category);
+                c.uiElements.push(navItem);
                 isFirst = false;    //set to false only when there is a visible item
             }
+            c.isVisible = c.subCategories.filter(
+              subcategory => subcategory.isVisible
+            ).length > 0;
+
             this.bubbleEvents(c, [
                 'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
                 'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',
@@ -194,6 +208,8 @@ export default class ProfileLoader extends Component {
         })
 
         $(navWrapperClass).append(navItem);
+
+        return navItem;
     }
 
     bindPageScroll = () => {

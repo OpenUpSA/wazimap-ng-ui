@@ -22,6 +22,7 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
     ]);
 
     controller.on('hashChange', () => {
+        profileLoader.hiddenIndicators = controller.hiddenIndicators;
         if (profileLoader.profileHeader !== null) {
             profileLoader.profileHeader.facilityController.isLoading = true;
         }
@@ -89,5 +90,29 @@ export function configureProfileEvents(controller, objs = {profileLoader: null})
                 }
             }, 0)
         })
+    })
+
+    controller.on('my_view.hiddenIndicators.updated', payload => {
+      for (const category of profileLoader.categories) {
+          for (const subCategory of category.subCategories) {
+              for (const indicator of subCategory.indicators) {
+                  if (indicator.indicator.id === payload.payload.indicatorId) {
+                      indicator.isVisible = payload.payload.action !== "add";
+                      break;
+                  }
+              }
+          }
+      }
+    })
+
+    controller.on('my_view.hiddenIndicatorsPanel.reload', payload => {
+        profileLoader.hiddenIndicators = payload.payload;
+        for (const category of profileLoader.categories) {
+            for (const subCategory of category.subCategories) {
+                for (const indicator of subCategory.indicators) {
+                  indicator.isVisible = !payload.payload.includes(indicator.indicator.id);
+                }
+            }
+        }
     })
 }

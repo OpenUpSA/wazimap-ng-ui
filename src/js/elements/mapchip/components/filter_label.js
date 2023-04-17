@@ -2,6 +2,7 @@ import {Component} from "../../../utils";
 import React from 'react';
 import SnackbarContent from './snackbar_content';
 import toast from "../../../ui_components/snackbar/snackbar";
+import {sortBy} from "lodash";
 
 
 export class FilterLabel extends Component {
@@ -92,15 +93,13 @@ export class FilterLabel extends Component {
 
     compareFilters(previouslySelectedFilters, oldFilters, siteWideFilters) {
         let newFiltersClone = this.tidyFilterArray(previouslySelectedFilters, siteWideFilters);
-        let oldFiltersClone = this.tidyFilterArray((oldFilters[0]?.filters || []), siteWideFilters);
+        let oldFiltersClone = this.tidyFilterArray(oldFilters, siteWideFilters);
+
 
         const isEqual = this.isEqualsJson(newFiltersClone, oldFiltersClone);
         if (!isEqual) {
             this.showNotificationBadge();
             this.showSnackbar();
-            if (previouslySelectedFilters.length === 0) {
-                this.parent.appliedFilters = [];
-            }
         }
     }
 
@@ -119,7 +118,7 @@ export class FilterLabel extends Component {
                 }
             })
         });
-
+        arr = sortBy(arr, o => o.group)
         return arr;
     }
 

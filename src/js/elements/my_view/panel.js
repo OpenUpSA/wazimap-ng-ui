@@ -31,10 +31,10 @@ const Panel = (props) => {
     useEffect(() => {
         setLoading(true);
         props.api.loadProfileIndicators(props.profileId).then(
-          (data) => {
-            setLoading(false);
-            setProfileIndicators(data);
-        }).catch((response) => {
+            (data) => {
+                setLoading(false);
+                setProfileIndicators(data);
+            }).catch((response) => {
             throw(response);
         })
     }, [props.api, props.profileId, setProfileIndicators, setLoading]);
@@ -47,10 +47,10 @@ const Panel = (props) => {
     }
 
     const updateHiddenIndicators = (indicatorId, action) => {
-      props.controller.triggerEvent('my_view.hiddenIndicators.updated', {
-          "indicatorId": indicatorId,
-          "action": action
-      });
+        props.controller.triggerEvent('my_view.hiddenIndicators.updated', {
+            "indicatorId": indicatorId,
+            "action": action
+        });
     }
 
     const removeSiteWideFilter = (swf) => {
@@ -62,23 +62,23 @@ const Panel = (props) => {
             className={'narrow-scroll'}
             data-test-id={'my-view-panel'}
         >
-          <MyViewHeader/>
-          {loading ?
-              <LoadingIconContainer>
-                <CircularProgress/>
-              </LoadingIconContainer>
-            :
-              <ViewSettings
-                  filteredIndicators={filteredIndicators}
-                  siteWideFilters={siteWideFilters}
-                  profileIndicators={profileIndicators}
-                  removeFilter={(fi, sf) => removeFilter(fi, sf)}
-                  hiddenIndicators={hiddenIndicators}
-                  updateHiddenIndicators={updateHiddenIndicators}
-                  removeSiteWideFilter={(swf) => removeSiteWideFilter(swf)}
-                  siteWideFiltersEnabled={siteWideFiltersEnabled}
-              />
-          }
+            <MyViewHeader/>
+            {loading ?
+                <LoadingIconContainer>
+                    <CircularProgress/>
+                </LoadingIconContainer>
+                :
+                <ViewSettings
+                    filteredIndicators={filteredIndicators}
+                    siteWideFilters={siteWideFilters}
+                    profileIndicators={profileIndicators}
+                    removeFilter={(fi, sf) => removeFilter(fi, sf)}
+                    hiddenIndicators={hiddenIndicators}
+                    updateHiddenIndicators={updateHiddenIndicators}
+                    removeSiteWideFilter={(swf) => removeSiteWideFilter(swf)}
+                    siteWideFiltersEnabled={siteWideFiltersEnabled}
+                />
+            }
         </PanelContainer>
     );
 }

@@ -13,20 +13,16 @@ import {
     StyledAccordionSummary,
     StyledTypography, StyledTypographyWithBottomBorder,
     ViewSettingsTitle,
-    StyledTreeItem,
     IndicatorTreeViewCard,
     StyledBoxWithBottomBorder,
     StyledIconTypography,
-    StyledTooltip
+    StyledTooltip, UnavailableFilteredIndicatorBox,
+    FilterNotAvailableHelpText
 } from "./styled_elements";
 import {Grid} from "@mui/material";
 import TreeView from '@mui/lab/TreeView';
-import TreeItem from '@mui/lab/TreeItem';
-import Box from "@mui/material/Box";
 import IndicatorCategoryTreeView from "./indicator_tree_view";
-import {flatten, map} from "lodash";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import InfoIcon from '@mui/icons-material/Info';
@@ -35,6 +31,7 @@ import InfoIcon from '@mui/icons-material/Info';
 const ViewSettings = (props) => {
     const [expanded, setExpanded] = useState('');
     const [filteredIndicators, setFilteredIndicators] = useState([]);
+    const [allFiltersAreAvailable, setAllFiltersAreAvailable] = useState(true);
     const [profileIndicators, setProfileIndicators] = useState([]);
     const [siteWideFiltersEnabled] = useState(props.siteWideFiltersEnabled);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
@@ -106,7 +103,9 @@ const ViewSettings = (props) => {
         return (
             props.filteredIndicators.map((fi) => {
                 return fi.filters.map((sf, index) => {
+                    const currentIndicator = getCurrentIndicator(fi.indicatorId);
                     if (!sf.isDefault) {
+                        const isFilterAvailable = checkIfFilterAvailable(currentIndicator, sf.group, sf.value);
                         return (
                             <Grid item xs={12} key={fi.indicatorId + '_' + index}>
                                 <FilteredIndicatorCard
@@ -114,26 +113,15 @@ const ViewSettings = (props) => {
                                 >
                                     <Grid container>
                                         <Grid item xs={11} sx={{paddingRight: '6px'}}>
-                                            <Grid item xs={12}>
-                                                <FilteredIndicatorBox
-                                                    title={`${fi.indicatorTitle} (${sf.appliesTo})`}
-                                                >
-                                                    <AppliedPanelInfo>
-                                                        {showPanelName(sf.appliesTo[0])}
-                                                    </AppliedPanelInfo>
-                                                    {renderIndicatorTitle(fi)}
-                                                </FilteredIndicatorBox>
+                                            <Grid item xs={12} sx={{position: 'relative'}}>
+                                                {renderIndicatorTitleBox(fi, sf)}
                                             </Grid>
                                             <Grid container sx={{marginTop: '8px'}}>
-                                                <Grid item xs={6} sx={{paddingRight: '3px'}}>
-                                                    <FilteredIndicatorBox>
-                                                        {sf.group}
-                                                    </FilteredIndicatorBox>
+                                                <Grid item xs={6} sx={{paddingRight: '3px', position: 'relative'}}>
+                                                    {renderFilterValueBox(sf.group, isFilterAvailable, '-1px')}
                                                 </Grid>
-                                                <Grid item xs={6} sx={{paddingLeft: '3px'}}>
-                                                    <FilteredIndicatorBox>
-                                                        {sf.value}
-                                                    </FilteredIndicatorBox>
+                                                <Grid item xs={6} sx={{paddingLeft: '3px', position: 'relative'}}>
+                                                    {renderFilterValueBox(sf.value, isFilterAvailable, '-4px')}
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -155,14 +143,92 @@ const ViewSettings = (props) => {
         )
     }
 
-    const renderIndicatorTitle = (fi) => {
+    const checkIfFilterAvailable = (currentIndicator, group, value) => {
+        let isFilterAvailable;
+        if (currentIndicator === null) {
+            isFilterAvailable = true;
+        } else {
+            isFilterAvailable = currentIndicator.groups.filter(x => x.name === group && x.subindicators.indexOf(value) >= 0).length > 0;
+        }
+
+        return isFilterAvailable;
+    }
+
+    const getCurrentIndicator = (indicatorId) => {
+        let currentIndicator = null;
+        profileIndicators.forEach((category) => {
+            category.subcategories.forEach((subcategory) => {
+                subcategory.indicators.forEach((indicator) => {
+                    if (currentIndicator === null && indicator.id === indicatorId) {
+                        currentIndicator = indicator;
+                    }
+                })
+            })
+        })
+
+        return currentIndicator;
+    }
+
+    const renderIndicatorTitleBox = (fi, sf) => {
         if (fi.indicatorIsAvailable) {
             return (
-                `${fi.indicatorTitle}`
+                <FilteredIndicatorBox
+                    title={`${fi.indicatorTitle} (${sf.appliesTo})`}
+                >
+                    <AppliedPanelInfo>
+                        {showPanelName(sf.appliesTo[0])}
+                    </AppliedPanelInfo>
+                    {fi.indicatorTitle}
+                </FilteredIndicatorBox>
             )
         } else {
+            // not available
+
+            if (allFiltersAreAvailable) {
+                setAllFiltersAreAvailable(false);
+            }
+
             return (
-                <i>Indicator no longer available*</i>
+                <UnavailableFilteredIndicatorBox
+                    title={`${fi.indicatorTitle} (${sf.appliesTo})`}
+                    sx={{
+                        '&::after': {
+                            right: '-4px',
+                        }
+                    }}
+                >
+                    <AppliedPanelInfo>
+                        {showPanelName(sf.appliesTo[0])}
+                    </AppliedPanelInfo>
+                    <i>Indicator no longer available*</i>
+                </UnavailableFilteredIndicatorBox>
+            )
+        }
+    }
+
+    const renderFilterValueBox = (value, isAvailable, rightVal) => {
+        if (isAvailable) {
+            return (
+                <FilteredIndicatorBox>
+                    {value}
+                </FilteredIndicatorBox>
+            )
+        } else {
+
+            if (allFiltersAreAvailable) {
+                setAllFiltersAreAvailable(false);
+            }
+
+            return (
+                <UnavailableFilteredIndicatorBox
+                    sx={{
+                        '&::after': {
+                            right: rightVal,
+                        }
+                    }}
+                >
+                    <s>{value}</s>
+                </UnavailableFilteredIndicatorBox>
             )
         }
     }
@@ -253,6 +319,19 @@ const ViewSettings = (props) => {
         }
     }
 
+    const renderFiltersNotAvailableHelpText = () => {
+        if (allFiltersAreAvailable) {
+            return <HelpText></HelpText>
+        } else {
+            return (
+                <FilterNotAvailableHelpText>
+                    This indicator or filter has either been changed or deleted since the view you requested was shared.
+                    It is currently unavailable.
+                </FilterNotAvailableHelpText>
+            )
+        }
+    }
+
     return (
         <Container>
             <ViewSettingsTitle>
@@ -278,10 +357,11 @@ const ViewSettings = (props) => {
                     <StyledTypographyWithBottomBorder>
                         INDICATOR-SPECIFIC OPTIONS
                     </StyledTypographyWithBottomBorder>
-                    {renderFilteredIndicators()}
                     <HelpText>
                         Any indicators you adjust will appear here
                     </HelpText>
+                    {renderFilteredIndicators()}
+                    {renderFiltersNotAvailableHelpText()}
 
                     <StyledBoxWithBottomBorder>
                         <StyledTypography variant="body2" sx={{width: "100%"}}>

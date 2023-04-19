@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import {Typography} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import {isEmpty} from "lodash";
 
 
 const LoadingItemView = (props) => {
@@ -34,7 +35,7 @@ const SubindicatorItemView = (props) => {
           parents: props.parents,
           choropleth_method: props.indicator.choropleth_method,
           indicatorId: props.indicator.id,
-          indicatorData: props.indicatorData,
+          indicatorData: props.indicator.indicatorData,
           versionData: props.indicator.version_data,
           metadata: {
             ...props.indicator.metadata,
@@ -72,21 +73,20 @@ const SubindicatorItemView = (props) => {
 
 const IndicatorItemView = (props) => {
 
-  const [loading, setLoading] = useState(false)
+  const [counter, setCounter] = useState(0)
   useEffect(
     () => {
-      if (!props.indicator.isHidden && props.indicator?.indicatorData === undefined && !loading){
-        setLoading(true);
+      if (!props.indicator.isHidden && props.indicator.indicatorData === undefined){
         props.api.getIndicatorChildData(
           props.controller.state.profileId,
           props.controller.state.profile.profile.geography.code,
           props.indicator.id
         ).then((childData) => {
           props.indicator.indicatorData = childData;
-          setLoading(false);
+          setCounter(counter+1);
         }).catch((response) => {
           props.indicator.indicatorData = {};
-          setLoading(false);
+          setCounter(counter+1);
           throw(response);
         })
       }
@@ -120,16 +120,14 @@ const IndicatorItemView = (props) => {
         </Typography>
       </Box>
     } data-test-id={`datamapper-indicator-${props.indicator.id}`}>
-    {loading && <LoadingItemView/>}
-    {!loading && subindicators.length > 0 && subindicators.map(
+    {isEmpty(props.indicator.indicatorData || {}) && <LoadingItemView/>}
+    {!isEmpty(props.indicator.indicatorData || {}) && subindicators.length > 0 && subindicators.map(
       (subindicator, key) => {
         return (
           <SubindicatorItemView
             subindicator={subindicator}
             key={key}
             controller={props.controller}
-            loading={loading}
-            indicatorData={props.indicator?.indicatorData}
             indicator={props.indicator}
             parents={{
               ...props.parents,

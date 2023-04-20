@@ -133,7 +133,7 @@ const IndicatorItemView = (props) => {
                         <SubindicatorItemView
                             subindicator={subindicator}
                             key={`datamapper-subindicator-${props.indicator.id}-${index}-${props.controller.state.profile.profile.geography.code}`}
-                            dataKey={`datamapper-subindicator-${props.indicator.id}-${index}-${props.controller.state.profile.profile.geography.code}`}
+
                             controller={props.controller}
                             loading={loading}
                             indicatorData={props.indicator?.indicatorData}

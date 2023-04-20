@@ -1,7 +1,5 @@
 import {Component} from "../utils";
-import {ChildrenIndicator, ChildrenIndicators, DataBundle} from "../dataobjects";
-import {Version} from "./version";
-import {loadMenu} from "../elements/data_mapper/menu";
+import {ChildrenIndicators, DataBundle} from "../dataobjects";
 
 export class VersionController extends Component {
     static EVENTS = {

@@ -294,7 +294,9 @@ const ViewSettings = (props) => {
             return <HelpText></HelpText>
         } else {
             return (
-                <FilterNotAvailableHelpText>
+                <FilterNotAvailableHelpText
+                    data-test-id={'filter-not-available-help-text'}
+                >
                     {props.filtersNotAvailableText}
                 </FilterNotAvailableHelpText>
             )

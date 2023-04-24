@@ -224,7 +224,8 @@ export default class Controller extends Component {
         let filteredIndicator = {
             indicatorId: indicatorId,
             filters: selectedFilterDetailsClone,
-            indicatorTitle: indicatorTitle
+            indicatorTitle: indicatorTitle,
+            indicatorIsAvailable: true
         };
 
         if (isNewObj) {
@@ -398,7 +399,7 @@ export default class Controller extends Component {
                         Object.values(subcategory.indicators).map(i => {
                             if (i.id === indicator.indicatorId) {
                                 indicatorTitle = i.label;
-                                 indicatorIsAvailable = true;
+                                indicatorIsAvailable = true;
                             }
                         })
                     })

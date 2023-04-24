@@ -17,7 +17,7 @@ import {
     StyledBoxWithBottomBorder,
     StyledIconTypography,
     StyledTooltip, UnavailableFilteredIndicatorBox,
-    FilterNotAvailableHelpText
+    FilterNotAvailableHelpText, UnavailableFilterIconContainer
 } from "./styled_elements";
 import {Grid} from "@mui/material";
 import TreeView from '@mui/lab/TreeView';
@@ -31,7 +31,7 @@ import InfoIcon from '@mui/icons-material/Info';
 const ViewSettings = (props) => {
     const [expanded, setExpanded] = useState('');
     const [filteredIndicators, setFilteredIndicators] = useState([]);
-    const [allFiltersAreAvailable, setAllFiltersAreAvailable] = useState(true);
+    const [allFiltersAreAvailable, setAllFiltersAreAvailable] = useState(props.allFiltersAreAvailable);
     const [profileIndicators, setProfileIndicators] = useState([]);
     const [siteWideFiltersEnabled] = useState(props.siteWideFiltersEnabled);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
@@ -87,6 +87,14 @@ const ViewSettings = (props) => {
         ]
     );
 
+    useEffect(() => {
+        if (allFiltersAreAvailable !== props.allFiltersAreAvailable) {
+            setAllFiltersAreAvailable(props.allFiltersAreAvailable);
+        }
+    }, [
+        props.allFiltersAreAvailable
+    ])
+
     const handleExpandedChange = (panel) => {
         setExpanded(panel);
     };
@@ -103,9 +111,7 @@ const ViewSettings = (props) => {
         return (
             props.filteredIndicators.map((fi) => {
                 return fi.filters.map((sf, index) => {
-                    const currentIndicator = getCurrentIndicator(fi.indicatorId);
                     if (!sf.isDefault) {
-                        const isFilterAvailable = checkIfFilterAvailable(currentIndicator, sf.group, sf.value);
                         return (
                             <Grid item xs={12} key={fi.indicatorId + '_' + index}>
                                 <FilteredIndicatorCard
@@ -118,10 +124,10 @@ const ViewSettings = (props) => {
                                             </Grid>
                                             <Grid container sx={{marginTop: '8px'}}>
                                                 <Grid item xs={6} sx={{paddingRight: '3px', position: 'relative'}}>
-                                                    {renderFilterValueBox(sf.group, isFilterAvailable, '-1px')}
+                                                    {renderFilterValueBox(sf.group, sf.isFilterAvailable, '-1px')}
                                                 </Grid>
                                                 <Grid item xs={6} sx={{paddingLeft: '3px', position: 'relative'}}>
-                                                    {renderFilterValueBox(sf.value, isFilterAvailable, '-4px')}
+                                                    {renderFilterValueBox(sf.value, sf.isFilterAvailable, '-4px')}
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -143,32 +149,6 @@ const ViewSettings = (props) => {
         )
     }
 
-    const checkIfFilterAvailable = (currentIndicator, group, value) => {
-        let isFilterAvailable;
-        if (currentIndicator === null) {
-            isFilterAvailable = true;
-        } else {
-            isFilterAvailable = currentIndicator.groups.filter(x => x.name === group && x.subindicators.indexOf(value) >= 0).length > 0;
-        }
-
-        return isFilterAvailable;
-    }
-
-    const getCurrentIndicator = (indicatorId) => {
-        let currentIndicator = null;
-        profileIndicators.forEach((category) => {
-            category.subcategories.forEach((subcategory) => {
-                subcategory.indicators.forEach((indicator) => {
-                    if (currentIndicator === null && indicator.id === indicatorId) {
-                        currentIndicator = indicator;
-                    }
-                })
-            })
-        })
-
-        return currentIndicator;
-    }
-
     const renderIndicatorTitleBox = (fi, sf) => {
         if (fi.indicatorIsAvailable) {
             return (
@@ -183,11 +163,6 @@ const ViewSettings = (props) => {
             )
         } else {
             // not available
-
-            if (allFiltersAreAvailable) {
-                setAllFiltersAreAvailable(false);
-            }
-
             return (
                 <UnavailableFilteredIndicatorBox
                     title={`${fi.indicatorTitle} (${sf.appliesTo})`}
@@ -214,11 +189,6 @@ const ViewSettings = (props) => {
                 </FilteredIndicatorBox>
             )
         } else {
-
-            if (allFiltersAreAvailable) {
-                setAllFiltersAreAvailable(false);
-            }
-
             return (
                 <UnavailableFilteredIndicatorBox
                     sx={{
@@ -325,9 +295,24 @@ const ViewSettings = (props) => {
         } else {
             return (
                 <FilterNotAvailableHelpText>
-                    This indicator or filter has either been changed or deleted since the view you requested was shared.
-                    It is currently unavailable.
+                    {props.filtersNotAvailableText}
                 </FilterNotAvailableHelpText>
+            )
+        }
+    }
+
+    const renderIndicatorOptionsIcon = () => {
+        if (allFiltersAreAvailable) {
+            return (
+                <IconContainer>
+                    {indicatorOptionsSvg}
+                </IconContainer>
+            )
+        } else {
+            return (
+                <UnavailableFilterIconContainer>
+                    {indicatorOptionsSvg}
+                </UnavailableFilterIconContainer>
             )
         }
     }
@@ -347,9 +332,7 @@ const ViewSettings = (props) => {
                     aria-controls={'indicatorOptions-content'}
                     id={'indicatorOptions-header'}
                 >
-                    <IconContainer>
-                        {indicatorOptionsSvg}
-                    </IconContainer>
+                    {renderIndicatorOptionsIcon()}
                     <StyledTypography>INDICATOR OPTIONS</StyledTypography>
                 </StyledAccordionSummary>
                 <StyledAccordionDetails>

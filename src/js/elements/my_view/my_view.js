@@ -9,14 +9,25 @@ export class MyView extends Component {
         super(parent);
 
         this.siteWideFiltersEnabled = siteWideFiltersEnabled;
+        this.toggleElement = $('.right-panel-toggles .my-view-toggle')[0];
+        this.toggleRoot = createRoot(this.toggleElement);
 
         this.addToggle();
         this.addPanel(controller, api, profileId);
     }
 
     addToggle() {
-        let watermarkRoot = createRoot($('.right-panel-toggles .my-view-toggle')[0]);
-        watermarkRoot.render(<Toggle/>);
+        this.toggleRoot.render(<Toggle
+            allFiltersAreAvailable={true}
+        />);
+    }
+
+    setFilterAvailability(val) {
+        if (!val) {
+            this.toggleRoot.render(<Toggle
+                allFiltersAreAvailable={false}
+            />);
+        }
     }
 
     addPanel(controller, api, profileId) {
@@ -26,6 +37,7 @@ export class MyView extends Component {
             siteWideFiltersEnabled={this.siteWideFiltersEnabled}
             api={api}
             profileId={profileId}
+            setFilterAvailability={(value) => this.setFilterAvailability(value)}
         />)
     }
 }

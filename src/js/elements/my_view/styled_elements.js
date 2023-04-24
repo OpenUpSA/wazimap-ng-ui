@@ -171,7 +171,22 @@ export const HelpText = styled(Typography)(() => ({
 
 export const IconContainer = styled(Box)(() => ({
     marginRight: '15px',
-    display: 'inline-block'
+    display: 'inline-block',
+    position: 'relative'
+}));
+
+export const UnavailableFilterIconContainer = styled(IconContainer)(() => ({
+    '&::after': {
+        content: '""',
+        display: 'block',
+        height: '8px',
+        width: '8px',
+        backgroundColor: '#FF5B39',
+        borderRadius: '100%',
+        position: 'absolute',
+        right: '-10px',
+        top: '-10px'
+    }
 }));
 
 export const StyledAccordion = styled(Accordion)(() => ({
@@ -241,6 +256,20 @@ export const ToggleIconContainer = styled(Box)(({}) => ({
     marginTop: '3px'
 }));
 
+export const UnavailableFilterToggleIconContainer = styled(ToggleIconContainer)(({}) => ({
+    '&::after': {
+        content: '""',
+        display: 'block',
+        height: '8px',
+        width: '8px',
+        backgroundColor: '#FF5B39',
+        borderRadius: '100%',
+        position: 'absolute',
+        right: '4px',
+        top: '4px'
+    }
+}));
+
 export const FilteredIndicatorCard = styled(Card)(() => ({
     padding: '6px',
     boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
@@ -295,7 +324,8 @@ export const FilterNotAvailableHelpText = styled(HelpText)(() => ({
         borderRadius: '100%',
         position: 'absolute',
         marginLeft: '-15px',
-        marginTop: '5px'
+        marginTop: '5px',
+        transitionDelay: '0.1s'
     }
 }));
 

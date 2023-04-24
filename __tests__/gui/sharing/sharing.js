@@ -272,3 +272,15 @@ Then(/^I click on eye icon on "([^"]*)" indicator$/, function (word) {
 Then(/^I click on eye close icon on "([^"]*)" indicator$/, function (word) {
     cy.get(`li[data-test-id="${word}"]`).find('.MuiTreeItem-label:first span[data-test-id="eyeCloseIcon"]').click();
 })
+
+Then(/^I confirm category "([^"]*)" at position (\d+) is "([^"]*)"$/, function (word, idx, type) {
+    cy.get(`.category-header__title:${type}:eq(${idx}) .cc-clear`).should("have.text", word);
+});
+
+Then(/^I confirm subcategory "([^"]*)" at position (\d+) is "([^"]*)"$/, function (word, idx, type) {
+    cy.get(`.sub-category-header__title:${type}:eq(${idx}) .cc-clear`).should("have.text", word);
+});
+
+Then(/^I confirm indicator "([^"]*)" at position (\d+) is "([^"]*)"$/, function (word, idx, type) {
+    cy.get(`.profile-indicator__title:${type}:eq(${idx}) h4`).should("have.text", word);
+});

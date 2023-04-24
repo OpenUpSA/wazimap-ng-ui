@@ -13,13 +13,12 @@ export class Indicator extends ContentBlock {
         chartAttribution,
         addLockButton = true,
         restrictValues = {},
-        defaultFilters = []
+        defaultFilters = [],
+        hiddenIndicators = []
     ) {
-        super(parent, container, indicator, title, isLast, geography);
-
+        super(parent, container, indicator, title, isLast, geography, hiddenIndicators);
         this.chartAttribution = chartAttribution;
         this._chart = null;
-
         this.prepareDomElements();
         this.addIndicatorChart(addLockButton, restrictValues, defaultFilters);
     }

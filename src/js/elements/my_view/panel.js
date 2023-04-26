@@ -83,7 +83,7 @@ const Panel = (props) => {
     }
 
     const setFilterAvailability = () => {
-        let isAvailable = !filteredIndicators.some(x => !x.indicatorIsAvailable);
+        let isAvailable = !filteredIndicators.some(x => !x.indicatorIsAvailable && x.filters.length > 0);
         if (isAvailable) {
             isAvailable = !filteredIndicators.some(x => x.filters.some(y => !y.isFilterAvailable))
         }

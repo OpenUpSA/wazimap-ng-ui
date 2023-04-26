@@ -182,13 +182,8 @@ const ViewSettings = (props) => {
     }
 
     const renderFilterValueBox = (value, isAvailable, rightVal) => {
-        if (isAvailable) {
-            return (
-                <FilteredIndicatorBox>
-                    {value}
-                </FilteredIndicatorBox>
-            )
-        } else {
+        // isAvailable is initially undefined
+        if (isAvailable === false) {
             return (
                 <UnavailableFilteredIndicatorBox
                     sx={{
@@ -199,6 +194,12 @@ const ViewSettings = (props) => {
                 >
                     <s>{value}</s>
                 </UnavailableFilteredIndicatorBox>
+            )
+        } else {
+            return (
+                <FilteredIndicatorBox>
+                    {value}
+                </FilteredIndicatorBox>
             )
         }
     }

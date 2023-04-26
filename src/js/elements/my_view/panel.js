@@ -22,7 +22,6 @@ const Panel = (props) => {
             setFilteredIndicators(prev => fi);
             fi.forEach(i => {
                 if (allFiltersAreAvailable && !i.indicatorIsAvailable) {
-                    setAllFiltersAreAvailable(false);
                     setFiltersNotAvailableText('This indicator or filter has either been changed or deleted since the view you requested was shared. It is currently unavailable.');
                 }
             })
@@ -49,14 +48,11 @@ const Panel = (props) => {
     }, [props.api, props.profileId, setProfileIndicators, setLoading]);
 
     useEffect(() => {
-        let noFiltersSelected = true;
         let newFilteredIndicators = filteredIndicators.map(fi => {
             const currentIndicator = getCurrentIndicator(fi.indicatorId);
             fi.filters.forEach(fs => {
-                noFiltersSelected = false;
                 fs.isFilterAvailable = checkIfFilterAvailable(currentIndicator, fs.group, fs.value);
                 if (!fs.isFilterAvailable && allFiltersAreAvailable) {
-                    setAllFiltersAreAvailable(false);
                     setFiltersNotAvailableText('Some filters cannot be applied because the field or value is not available in the relevant data. This might be because the indicator data has been modified since the link was shared, or because the shared link was modified and is not compatible with the data.');
                 }
             })
@@ -64,13 +60,11 @@ const Panel = (props) => {
             return fi;
         })
 
-        if (noFiltersSelected && !allFiltersAreAvailable) {
-            setAllFiltersAreAvailable(true);
-        }
-
         if (JSON.stringify(newFilteredIndicators) !== JSON.stringify(filteredIndicators)) {
             setFilteredIndicators(newFilteredIndicators);
         }
+
+        setFilterAvailability();
     }, [profileIndicators, filteredIndicators])
 
     useEffect(() => {
@@ -86,6 +80,15 @@ const Panel = (props) => {
         }
 
         return isFilterAvailable;
+    }
+
+    const setFilterAvailability = () => {
+        let isAvailable = !filteredIndicators.some(x => !x.indicatorIsAvailable);
+        if (isAvailable) {
+            isAvailable = !filteredIndicators.some(x => x.filters.some(y => !y.isFilterAvailable))
+        }
+
+        setAllFiltersAreAvailable(isAvailable);
     }
 
     const getCurrentIndicator = (indicatorId) => {

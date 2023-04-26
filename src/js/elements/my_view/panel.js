@@ -49,9 +49,11 @@ const Panel = (props) => {
     }, [props.api, props.profileId, setProfileIndicators, setLoading]);
 
     useEffect(() => {
+        let noFiltersSelected = true;
         let newFilteredIndicators = filteredIndicators.map(fi => {
             const currentIndicator = getCurrentIndicator(fi.indicatorId);
             fi.filters.forEach(fs => {
+                noFiltersSelected = false;
                 fs.isFilterAvailable = checkIfFilterAvailable(currentIndicator, fs.group, fs.value);
                 if (!fs.isFilterAvailable && allFiltersAreAvailable) {
                     setAllFiltersAreAvailable(false);
@@ -61,6 +63,11 @@ const Panel = (props) => {
 
             return fi;
         })
+
+        if (noFiltersSelected && !allFiltersAreAvailable) {
+            setAllFiltersAreAvailable(true);
+        }
+
         if (JSON.stringify(newFilteredIndicators) !== JSON.stringify(filteredIndicators)) {
             setFilteredIndicators(newFilteredIndicators);
         }

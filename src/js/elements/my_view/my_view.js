@@ -23,11 +23,9 @@ export class MyView extends Component {
     }
 
     setFilterAvailability(val) {
-        if (!val) {
-            this.toggleRoot.render(<Toggle
-                allFiltersAreAvailable={false}
-            />);
-        }
+        this.toggleRoot.render(<Toggle
+            allFiltersAreAvailable={val}
+        />);
     }
 
     addPanel(controller, api, profileId) {

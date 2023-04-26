@@ -7,14 +7,16 @@ import {
     gotoHomepage, mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded,
-    selectChoroplethDropdownOption
+    selectChoroplethDropdownOption,
+    gotoProfileViewHomepage
 } from "../common_cy_functions/general";
 import all_details from "./default/all_details.json";
 import profiles from "./default/profiles.json";
 import profile from './default/profile.json';
 import profile_indicator_summary from './default/profile_indicator_summary.json';
 import na_profile_indicator_summary from './non_aggregatable_filters/profile_indicator_summary.json';
-import profile_indicator_data from './default/profile_indicator_data.json'
+import profile_indicator_data from './default/profile_indicator_data.json';
+import pdf_profile from './profile_default_filters/profile.json';
 
 Given('I am on the Wazimap Homepage', () => {
     setupInterceptions(profiles, all_details, profile, [], [], [], profile_indicator_summary, profile_indicator_data);
@@ -23,6 +25,16 @@ Given('I am on the Wazimap Homepage', () => {
 
 Given('I am on the Wazimap Homepage for testing non aggregatable filters', () => {
     setupInterceptions(profiles, all_details, profile, [], [], [], na_profile_indicator_summary, profile_indicator_data);
+    gotoHomepage();
+})
+
+Given('I am on the Wazimap Homepage for testing profile views default filters', () => {
+    setupInterceptions(profiles, all_details, pdf_profile, [], [], [], profile_indicator_summary, profile_indicator_data);
+    gotoProfileViewHomepage("youth");
+})
+
+Given('I am on the Wazimap Homepage for testing profile default filters', () => {
+    setupInterceptions(profiles, all_details, pdf_profile, [], [], [], profile_indicator_summary, profile_indicator_data);
     gotoHomepage();
 })
 

@@ -136,7 +136,7 @@ Feature: Snackbar
 
     Then I check if snackbar is visible
     Then I click on snackbar to hide it
-    Then I check applied filter label text is "0" of "3" applied
+    Then I check applied filter label text is "1" of "3" applied
 
     When I expand the filter dialog
     Then I select "gender" from indicator dropdown in filter dialog on row "0"

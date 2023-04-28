@@ -68,7 +68,7 @@ Then('I confirm that the tooltip is created with the correct text and the label 
     hoverOverTheMapCenter('.leaflet-popup .map-tooltip__value .tooltip__value_label .truncate').then(() => {
         cy.get('.leaflet-popup .map-tooltip__value .tooltip__value_label .truncate').should('have.text', 'Citizenship (Yes)');
         cy.get('.leaflet-popup .tooltip-row-top').should('have.class', 'absolute-type');
-        cy.get('.leaflet-popup .map-tooltip__value .tooltip-row-top .tooltip__value_wrapper .tooltip__value_amount div').should('have.text', '253,065');
+        cy.get('.leaflet-popup .map-tooltip__value .tooltip-row-top .tooltip__value_wrapper .tooltip__value_amount div').should('have.text', '948,765');
         cy.get('.leaflet-popup .tooltip-row-top .tooltip-label').should('be.hidden');
     })
 })

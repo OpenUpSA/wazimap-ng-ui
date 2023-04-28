@@ -655,7 +655,7 @@ export class FilterController extends Component {
     addEmptyRowIfNoneLeft() {
         const remainingRowLength = this.model.filterRows.filter(x => x.model.currentIndicatorValue !== 'All indicators').length;
         if (remainingRowLength <= 0) {
-            this.addEmptyFilter(true);
+            this.addEmptyFilter(true, false, false, false, true, true);
         }
     }
 

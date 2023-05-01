@@ -3,6 +3,7 @@ import {Theme} from './theme';
 import {createRoot} from "react-dom/client";
 import Watermark from "../../ui_components/watermark";
 import React from "react";
+import Treeview from "./treeview";
 
 const categoryWrapperClsName = '.point-mapper__h1_content';
 const treeLineClsName = '.point-data__h2_line-v';
@@ -24,6 +25,7 @@ export class PointDataTray extends Component {
         if (watermarkEnabled) {
             this.addWatermark();
         }
+        this.addTreeviewRoot();
     }
 
     prepareDomElements() {
@@ -50,7 +52,21 @@ export class PointDataTray extends Component {
         return theme;
     }
 
+    addTreeviewRoot() {
+        let pointMapperElement = document.getElementsByClassName("point-mapper-content__list");
+        if (pointMapperElement.length > 0) {
+            this.pointMapperRoot = createRoot(pointMapperElement[0]);
+        }
+    }
+
     loadThemes() {
+        this.pointMapperRoot.render(
+            <Treeview
+            />
+        );
+    }
+
+    loadThemesOld() {
         const self = this;
         let themeIndex = 0;
 

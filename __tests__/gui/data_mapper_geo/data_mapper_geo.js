@@ -1,20 +1,10 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
     allDetailsEndpoint,
-    checkDataMapperCategoryCount,
     checkIfChoroplethFilterDialogIsCollapsed,
-    checkIfChoroplethFilterDialogIsExpanded,
-    checkIfPointFilterDialogIsCollapsed,
-    checkIfPointFilterDialogIsExpanded,
-    clickOnText,
-    collapseChoroplethFilterDialog,
-    expandChoroplethFilterDialog,
     expandDataMapper,
-    expandPointFilterDialog,
-    expandPointMapper,
-    expandRichDataPanel,
     gotoHomepage,
-    mapBottomItems, selectChoroplethDropdownOption,
+    mapBottomItems,
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
@@ -27,7 +17,6 @@ import profile_indicator_data from "./profile_indicator_data.json";
 import themes from "./themes.json";
 import all_details_WC from "./WC/all_details.json";
 import profile_indicator_summary_WC from './WC/profile_indicator_summary.json';
-import profile_indicator_data_WC from './WC/profile_indicator_data.json';
 
 
 Given('I am on the Wazimap Homepage', () => {
@@ -66,6 +55,14 @@ Then(/^I check if mapchip header text contains "([^"]*)"$/, (text) => {
 
 
 When('I navigate to WC', () => {
+    cy.on('uncaught:exception', (err, runnable) => {
+        // returning false here prevents Cypress from
+        // failing the test
+        if (err.name === "AbortError") {
+            return false
+        }
+    })
+
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
         let tempObj = JSON.parse(JSON.stringify(all_details_WC));
         tempObj.boundary.properties.code = 'WC';
@@ -96,20 +93,11 @@ When('I navigate to WC', () => {
         })
     })
 
-    cy.intercept('/api/v1/profile/8/geography/WC/indicator/**/child_data/', (request) => {
-        let tempObj = JSON.parse(JSON.stringify(profile_indicator_data_WC));
-        request.reply({
-            statusCode: 200,
-            body: tempObj,
-            forceNetworkError: false // default
-        });
-    })
-
     cy.visit('/#geo:WC');
 })
 
 Then('I wait until map is ready for Western Cape', () => {
-    waitUntilGeographyIsLoaded('Western Cape');
+     waitUntilGeographyIsLoaded('Western Cape');
 })
 
 

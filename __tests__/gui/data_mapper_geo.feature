@@ -16,7 +16,6 @@ Feature: Data Mapper
 
     And I click on "20-24" in Data Mapper
     Then I check if mapchip header text contains "20-24"
-    And I click on "Demographics" in Data Mapper
 
     When I navigate to WC
     Then I wait until map is ready for Western Cape

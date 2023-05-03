@@ -1,0 +1,88 @@
+[
+  {
+    "id": 118,
+    "subcategories": [
+      {
+        "id": 295,
+        "name": "Language",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1125,
+            "label": "Language most spoken at home"
+          }
+        ]
+      },
+      {
+        "id": 293,
+        "name": "Migration",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1123,
+            "label": "Region of birth"
+          }
+        ]
+      },
+      {
+        "id": 290,
+        "name": "Population",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1120,
+            "label": "Total population by age group"
+          }
+        ]
+      },
+      {
+        "id": 296,
+        "name": "Province of birth",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1126,
+            "label": "Province of birth"
+          }
+        ]
+      },
+      {
+        "id": 294,
+        "name": "South African Citizenship",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1124,
+            "label": "Citizenship"
+          }
+        ]
+      },
+      {
+        "id": 292,
+        "name": "Youth population by age group",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1122,
+            "label": "Youth population by age group"
+          }
+        ]
+      },
+      {
+        "id": 291,
+        "name": "Youth status",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1121,
+            "label": "Total population by youth status"
+          }
+        ]
+      }
+    ],
+    "name": "Demographics",
+    "description": "",
+    "order": 91,
+    "icon": "None"
+  }
+]

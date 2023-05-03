@@ -411,8 +411,8 @@ export class FilterController extends Component {
         // 1 - add previous filters
         this.checkAndAddPreviouslySelectedFilters();
         // 2 - add default filters
-        this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
+        this.checkAndAddNonAggregatableGroups();
         // 3 - add site-wide filters
         this.checkAndAddSiteWideFilters();
 
@@ -645,8 +645,8 @@ export class FilterController extends Component {
     removeRowAndAddDefaults(filterRow) {
         filterRow.removeRow();
 
-        this.checkAndAddNonAggregatableGroups();
         this.checkAndAddDefaultFilterGroups();
+        this.checkAndAddNonAggregatableGroups();
         this.checkAndAddSiteWideFilters();
 
         this.addEmptyRowIfNoneLeft();

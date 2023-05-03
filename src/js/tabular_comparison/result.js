@@ -5,6 +5,7 @@ import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {defaultValues} from "../defaultValues";
 import {fillMissingKeys} from "../utils";
 import {ResultArrowSvg, ResultArrowSvg2} from "./svg-icons";
+import Tooltip from "@mui/material/Tooltip";
 
 //components
 import SectionTitle from "./section-title";
@@ -24,18 +25,20 @@ const Result = (props) => {
         props.selectedGeographies.map((geo) => {
             let newRow = {geo: geo.name, objs: []};
             props.indicatorObjs.map((obj) => {
-                let chartConfig = props.indicators
-                    .filter(x => x.geo === geo.code && x.indicator === obj.indicator)[0]?.indicatorDetail
-                    .chart_configuration;
-
+                let indicatorDetail = props.indicators
+                    .filter(x => x.geo === geo.code && x.indicator === obj.indicator)[0]?.indicatorDetail;
+                let chartConfig = indicatorDetail?.chart_configuration || {};
+                const choroplethMethod = indicatorDetail?.choropleth_method;
                 chartConfig = fillMissingKeys(chartConfig, defaultValues.chartConfiguration || {});
-
-                const formatting = chartConfig.types['Value'].formatting;
+                const formatting = choroplethMethod === "subindicator" ? chartConfig.types['Percentage'].formatting : chartConfig.types['Value'].formatting;
+                const {absoluteValue, percentageValue} = calculateValue(geo, obj, choroplethMethod);
 
                 let newObj = {
                     obj: obj,
-                    value: calculateValue(geo, obj),
-                    formatting: formatting
+                    value: choroplethMethod === "subindicator" ? percentageValue : absoluteValue,
+                    formatting: formatting,
+                    choroplethMethod: choroplethMethod,
+                    tooltip: choroplethMethod === "subindicator" ? d3format(chartConfig.types['Value'].formatting)(absoluteValue) : null,
                 }
                 newRow.objs.push(newObj);
             })
@@ -84,19 +87,34 @@ const Result = (props) => {
         return window.innerHeight - topSpace - bottomSpace;
     }
 
-    const calculateValue = (geo, obj) => {
+    const get_total_count = (data) => {
+      if (data != null && data.length > 0) {
+          return data.reduce((n, {count}) => n + parseFloat(count), 0);
+      }
+      return null;
+    }
+
+    const calculateValue = (geo, obj, choroplethMethod) => {
+        let absoluteValue = null, percentageValue = null;
         let selectedIndicator = props.indicators.filter((ind) => ind.geo === geo.code && ind.indicator === obj.indicator)[0];
         if (selectedIndicator == null) {
-            return;
+            return {absoluteValue, percentageValue};
         }
-
         const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
         const data = selectedIndicator.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
-        if (data != null && data.length > 0) {
-            return data.reduce((n, {count}) => n + parseFloat(count), 0);
-        } else {
-            return null;
+
+        if (data === null && data.length === 0) {
+          return {absoluteValue, percentageValue};
         }
+
+        absoluteValue = get_total_count(data);
+        const primaryGroupCount = get_total_count(data);
+        if (choroplethMethod === "subindicator"){
+          const totalCount = get_total_count(selectedIndicator.indicatorDetail.data);
+          percentageValue = (primaryGroupCount/totalCount);
+        }
+
+        return {absoluteValue, percentageValue};
     }
 
     const renderResult = () => {
@@ -157,6 +175,7 @@ const Result = (props) => {
                                         props.indicatorObjs.map((obj) => {
                                             if (obj.indicator !== '' && obj.category !== '') {
                                                 const value = row.objs.filter(x => x.obj === obj)[0]?.value;
+                                                const tooltip = row.objs.filter(x => x.obj === obj)[0]?.tooltip;
                                                 if (value === 'NaN') {
                                                     return (
                                                         <TableCell
@@ -169,6 +188,7 @@ const Result = (props) => {
                                                     )
                                                 } else {
                                                     return (
+                                                      <Tooltip title={tooltip} key={obj.index} arrow>
                                                         <TableCell
                                                             data-testid={`table-row-${idx}-cell-${obj.index}`}
                                                             component={'td'}
@@ -177,6 +197,7 @@ const Result = (props) => {
                                                             sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
                                                         >{value}
                                                         </TableCell>
+                                                      </Tooltip>
                                                     )
                                                 }
                                             }

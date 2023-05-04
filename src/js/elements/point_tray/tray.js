@@ -1,5 +1,5 @@
 import {numFmt, Component, hasElements, ThemeStyle, checkIterate} from '../../utils';
-import {Theme} from './theme';
+import {Theme} from './theme_to_be_removed';
 import {createRoot} from "react-dom/client";
 import Watermark from "../../ui_components/watermark";
 import React from "react";

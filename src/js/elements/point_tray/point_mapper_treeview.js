@@ -1,49 +1,34 @@
-import React, {useEffect, useState} from "react";
-import {TreeItem, TreeView} from "@mui/lab";
-import {CategoryTreeItem, ThemeTreeItem} from "./styled_elements";
+import React, {useState} from "react";
+import {TreeView} from "@mui/lab";
+import Theme from "./theme";
 
 const PointMapperTreeview = (props) => {
-    const renderCategories = (categories) => {
-        return categories.map(category => {
-            return (
-                <CategoryTreeItem
-                    nodeId={`category-${category.id}`}
-                    key={category.id}
-                    label={category.name}
-                >
-                </CategoryTreeItem>
-            )
-        })
-    }
+    const [expanded, setExpanded] = useState([]);
 
     const renderThemes = () => {
         return props.themes.map(theme => {
             return (
-                <ThemeTreeItem
-                    nodeId={`theme-${theme.id}`}
-                    key={theme.id}
-                    label={theme.name}
-                    icon={
-                        <i
-                            className={'material-icons'}
-                            style={{color: `${theme.color}`}}
-                        >
-                            {theme.icon}
-                        </i>
-                    }
-                    defaultExpandIcon={'a'}
-                    defaultCollapseIcon={'b'}
-                >
-                    {renderCategories(theme.categories)}
-                </ThemeTreeItem>
+                <Theme
+                    theme={theme}
+                />
             )
         })
     }
 
+    const handleTreeViewToggle = (event, nodeIds) => {
+        if (event.target.localName === 'input') {
+            // switch toggled
+            return;
+        }
+        setExpanded(nodeIds);
+    }
+
     const renderTreeview = () => {
-        console.log({'themes': props.themes})
         return (
             <TreeView
+                disableSelection={true}
+                expanded={expanded}
+                onNodeToggle={handleTreeViewToggle}
             >
                 {renderThemes()}
             </TreeView>

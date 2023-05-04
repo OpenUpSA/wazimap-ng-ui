@@ -42,10 +42,10 @@ export class Subcategory extends Component {
         this._isVisible = true;
         this._uiElements = [];
         this._scHeader = null;
+        this._hasKeyMetrics = false;
 
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
         this.addIndicators(wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators);
-
         this.prepareEvents();
     }
 
@@ -96,10 +96,18 @@ export class Subcategory extends Component {
         return this._uiElements;
     }
 
+    get hasKeyMetrics() {
+        return this._hasKeyMetrics;
+    }
+
+    set hasKeyMetrics(value) {
+        this._hasKeyMetrics=value;
+    }
+
     updateVisibility = () => {
       this.isVisible = Object.values(this._indicators).filter(
         indicator => indicator.isVisible
-      ).length > 0;
+      ).length > 0 || this.hasKeyMetrics;
       this.parent.updateVisibility();
     }
 
@@ -170,7 +178,6 @@ export class Subcategory extends Component {
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
         const $template = $(indicatorClass);
         assertNTemplates(2, $template);
-
         if (!isEmpty) {
             for (const indicator of sortBy(detail.indicators, "order")) {
                 const title = Object.keys(detail.indicators).filter(k => detail.indicators[k] === indicator)[0];
@@ -186,7 +193,6 @@ export class Subcategory extends Component {
                     } else if (indicator.content_type === ContentBlock.BLOCK_TYPES.HTMLBlock) {
                         block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast, hiddenIndicators);
                     }
-
                     this._indicators.push(block);
                     index++;
                 }
@@ -214,5 +220,6 @@ export class Subcategory extends Component {
         key_metrics.forEach((km) => {
             new KeyMetric(self, km, metricTemplate, metricWrapper);
         })
+        this.hasKeyMetrics = true;
     }
 }

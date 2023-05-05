@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import {Card, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {format as d3format} from "d3-format";
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
+import {max as d3max, min as d3min} from 'd3-array';
 import {defaultValues} from "../defaultValues";
-import {fillMissingKeys} from "../utils";
+import {fillMissingKeys, getColorRange} from "../utils";
 import {ResultArrowSvg, ResultArrowSvg2} from "./svg-icons";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -13,7 +14,6 @@ import SectionTitle from "./section-title";
 const Result = (props) => {
     const [rows, setRows] = useState([]);
     const arrowSvg = ResultArrowSvg;
-
     const arrowSvg2 = ResultArrowSvg2;
 
     useEffect(() => {
@@ -28,17 +28,16 @@ const Result = (props) => {
                 let indicatorDetail = props.indicators
                     .filter(x => x.geo === geo.code && x.indicator === obj.indicator)[0]?.indicatorDetail;
                 let chartConfig = indicatorDetail?.chart_configuration || {};
-                const choroplethMethod = indicatorDetail?.choropleth_method;
                 chartConfig = fillMissingKeys(chartConfig, defaultValues.chartConfiguration || {});
-                const formatting = choroplethMethod === "subindicator" ? chartConfig.types['Percentage'].formatting : chartConfig.types['Value'].formatting;
-                const {absoluteValue, percentageValue} = calculateValue(geo, obj, choroplethMethod);
+                const {value, formatting, tooltip} = getRowDetailsByChoroplethMethod(
+                    geo, obj, chartConfig
+                );
 
                 let newObj = {
                     obj: obj,
-                    value: choroplethMethod === "subindicator" ? percentageValue : absoluteValue,
+                    value: value,
                     formatting: formatting,
-                    choroplethMethod: choroplethMethod,
-                    tooltip: choroplethMethod === "subindicator" ? d3format(chartConfig.types['Value'].formatting)(absoluteValue) : null,
+                    tooltip: tooltip,
                 }
                 newRow.objs.push(newObj);
             })
@@ -51,9 +50,20 @@ const Result = (props) => {
         setRows(rows);
     }
 
+    const getBounds = (values) => {
+        const hasNegative = values.some(v => v < 0);
+        const hasPositive = values.some(v => v > 0);
+
+        if (hasNegative && hasPositive) {
+          const maxScaleValue = Math.max(...values.map(v => Math.abs(v)));
+          return [maxScaleValue * -1, maxScaleValue]
+        }
+        return [d3min(values), d3max(values)]
+    }
+
     const setBackgroundColors = (rows) => {
-        let darkestColor = '#BABABA';
-        let lightestColor = '#ffffff';
+        let choroplethConfig = props.profileConfig?.choropleth || {};
+        choroplethConfig = fillMissingKeys(choroplethConfig, defaultValues.choroplethConfig || {});
 
         props.indicatorObjs.forEach((obj) => {
             let objValues = [];
@@ -63,18 +73,23 @@ const Result = (props) => {
                     objValues.push(objValue);
                 }
             })
+            console.log(choroplethConfig);
+            let positiveColorRange = getColorRange(objValues, choroplethConfig, true);
+            let negativeColorRange = getColorRange(objValues, choroplethConfig, false);
+            const [min, max] = getBounds(objValues);
 
-            const max = Math.max(...objValues);
-            const min = Math.min(...objValues);
-
-            const scale = d3scaleSequential()
+            const negativeColorScale = d3scaleSequential()
                 .domain([min, max])
-                .range([lightestColor, darkestColor]);
+                .range(negativeColorRange);
+
+            const positiveColorScale = d3scaleSequential()
+                .domain([min, max])
+                .range(positiveColorRange);
 
             rows.forEach((row) => {
                 let rowObj = row.objs.filter(x => x.obj === obj)[0];
                 if (rowObj != null && rowObj.value != null) {
-                    rowObj.background = scale(rowObj.value);
+                    rowObj.background = rowObj.value > 0 ? positiveColorScale(rowObj.value) : negativeColorScale(rowObj.value);
                     rowObj.value = rowObj.formatting == null ? rowObj.value : d3format(rowObj.formatting)(rowObj.value);
                 }
             })
@@ -87,34 +102,39 @@ const Result = (props) => {
         return window.innerHeight - topSpace - bottomSpace;
     }
 
-    const get_total_count = (data) => {
+    const getTotalCount = (data) => {
       if (data != null && data.length > 0) {
           return data.reduce((n, {count}) => n + parseFloat(count), 0);
       }
       return null;
     }
 
-    const calculateValue = (geo, obj, choroplethMethod) => {
-        let absoluteValue = null, percentageValue = null;
+    const getRowDetailsByChoroplethMethod = (geo, obj, chartConfig) => {
+        let value = null, tooltip = null;
+        let formatting = chartConfig.types['Value'].formatting;
         let selectedIndicator = props.indicators.filter((ind) => ind.geo === geo.code && ind.indicator === obj.indicator)[0];
         if (selectedIndicator == null) {
-            return {absoluteValue, percentageValue};
+            return {value, tooltip, formatting};
         }
+        const choroplethMethod = selectedIndicator.indicatorDetail?.choropleth_method;
         const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
         const data = selectedIndicator.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
 
         if (data === null && data.length === 0) {
-          return {absoluteValue, percentageValue};
+          return {value, tooltip, formatting};
         }
 
-        absoluteValue = get_total_count(data);
-        const primaryGroupCount = get_total_count(data);
+        const primaryGroupTotal = getTotalCount(data);
         if (choroplethMethod === "subindicator"){
-          const totalCount = get_total_count(selectedIndicator.indicatorDetail.data);
-          percentageValue = (primaryGroupCount/totalCount);
+          const totalCount = getTotalCount(selectedIndicator.indicatorDetail.data);
+          tooltip = d3format(formatting)(primaryGroupTotal);
+          value = (primaryGroupTotal/totalCount);
+          formatting = chartConfig.types['Percentage'].formatting;
+        } else {
+          value = primaryGroupTotal;
         }
 
-        return {absoluteValue, percentageValue};
+        return {value, tooltip, formatting};
     }
 
     const renderResult = () => {

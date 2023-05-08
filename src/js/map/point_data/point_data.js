@@ -167,7 +167,7 @@ export class PointData extends Component {
 
             if (layer !== undefined) {
                 this.map.removeLayer(layer);
-                pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+                pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.id}']`).remove();
 
                 this.activePoints = this.activePoints.filter((ap) => {
                     return ap.category.id !== category.id
@@ -190,7 +190,7 @@ export class PointData extends Component {
             })
             this.markers.removeLayers(removeMarkers);
             this.pointFilter.activePoints = this.activePoints;
-            pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+            pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.id}']`).remove();
         }
 
         if (pointLegend.find(`.${pointLegendItemClsName}`).length <= 0) {
@@ -290,9 +290,9 @@ export class PointData extends Component {
         let item = pointLegendItem.cloneNode(true);
         $('.point-legend__text', item).text(category.data.name);
         $('.point-legend__color', item).css('background-color', color);
-        $(item).attr('data-id', category.data.id);
+        $(item).attr('data-id', category.id);
         $('.point-legend__remove', item).on('click', () => {
-            $(`.point-mapper__h2[data-id=${category.data.id}]`).trigger('click');
+            $(`.point-mapper__h2[data-id=${category.id}]`).trigger('click');
             if ($('.map-point-legend .point-legend').length <= 0) {
                 //all the legend items are removed - remove filters too
                 $('.point-filters__header-close').trigger('click');

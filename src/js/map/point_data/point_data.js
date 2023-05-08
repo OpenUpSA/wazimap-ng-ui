@@ -269,7 +269,6 @@ export class PointData extends Component {
                 name: prop.name,
                 category: category,
                 theme: category.theme,
-                themeIndex: category.themeIndex,
                 data: prop.data,
                 image: prop.image,
                 url: prop.url,
@@ -286,7 +285,7 @@ export class PointData extends Component {
 
     showPointLegend = (category) => {
         pointLegend.addClass('visible-in-download');
-        let color = $(`.theme-${category.themeIndex}`).css('color');
+        let color = category.data.theme.color;
         let item = pointLegendItem.cloneNode(true);
         $('.point-legend__text', item).text(category.data.name);
         $('.point-legend__color', item).css('background-color', color);

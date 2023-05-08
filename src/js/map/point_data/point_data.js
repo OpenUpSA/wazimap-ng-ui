@@ -272,7 +272,7 @@ export class PointData extends Component {
                 data: prop.data,
                 image: prop.image,
                 url: prop.url,
-                icon: category.data.theme.icon
+                icon: category.theme.icon
             })
         })
 
@@ -285,9 +285,9 @@ export class PointData extends Component {
 
     showPointLegend = (category) => {
         pointLegend.addClass('visible-in-download');
-        let color = category.data.theme.color;
+        let color = category.theme.color;
         let item = pointLegendItem.cloneNode(true);
-        $('.point-legend__text', item).text(category.data.name);
+        $('.point-legend__text', item).text(category.name);
         $('.point-legend__color', item).css('background-color', color);
         $(item).attr('data-id', category.id);
         $('.point-legend__remove', item).on('click', () => {
@@ -364,7 +364,7 @@ export class PointData extends Component {
                     icon: divIcon,
                     color: color,
                     pane: 'clusters',
-                    categoryName: point.category.data.name
+                    categoryName: point.category.name
                 });
         } else {
             marker = L.circleMarker([point.y, point.x], {
@@ -498,7 +498,7 @@ export class PointData extends Component {
 
     appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName, visibleAttributes = null) => {
         $('.' + itemsClsName, item).empty();
-        const htmlFields = point.category.data.configuration?.field_type || {};
+        const htmlFields = point.category.configuration?.field_type || {};
         point.data.forEach((a, i) => {
             if (a.value !== null
                 && (visibleAttributes === null || visibleAttributes.indexOf(a.key) >= 0)

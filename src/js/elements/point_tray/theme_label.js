@@ -6,7 +6,18 @@ const ThemeLabel = (props) => {
     const handleThemeSelection = (event, checked) => {
         event.stopPropagation();
         event.nativeEvent.stopImmediatePropagation();
+    }
 
+    const renderArrowIcon = () => {
+        if (props.isThemeExpanded) {
+            return (
+                <i className={'fa-angle-up fas'}/>
+            )
+        } else {
+            return (
+                <i className={'fa-angle-down fas'}/>
+            )
+        }
     }
 
     return (
@@ -38,7 +49,7 @@ const ThemeLabel = (props) => {
                     sm={3}
                     sx={{textAlign: 'center'}}
                 >
-                    <i className={'fa-angle-down fas'} aria-hidden="true"/>
+                    {renderArrowIcon()}
                 </Grid>
             </Grid>
         </Grid>

@@ -5,11 +5,17 @@ import Theme from "./theme";
 const PointMapperTreeview = (props) => {
     const [expanded, setExpanded] = useState([]);
 
+    const isThemeExpanded = (theme) => {
+        return expanded.indexOf(`theme-${theme.id}`) >= 0;
+    }
+
     const renderThemes = () => {
         return props.themes.map(theme => {
             return (
                 <Theme
                     theme={theme}
+                    isThemeExpanded={isThemeExpanded(theme)}
+                    categoryToggled={props.categoryToggled}
                 />
             )
         })

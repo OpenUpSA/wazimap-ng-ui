@@ -4,17 +4,12 @@ import ThemeLabel from "./theme_label";
 import Category from "./category";
 
 const Theme = (props) => {
-
-    const categoryToggled = (category) => {
-
-    }
-
     const renderCategories = (categories) => {
         return categories.map(category => {
             return (
                 <Category
                     category={category}
-                    categoryToggled={categoryToggled}
+                    categoryToggled={props.categoryToggled}
                 />
             )
         })
@@ -27,6 +22,7 @@ const Theme = (props) => {
             label={
                 <ThemeLabel
                     theme={props.theme}
+                    isThemeExpanded={props.isThemeExpanded}
                 />
             }
             icon={

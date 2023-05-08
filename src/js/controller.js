@@ -224,7 +224,8 @@ export default class Controller extends Component {
         let filteredIndicator = {
             indicatorId: indicatorId,
             filters: selectedFilterDetailsClone,
-            indicatorTitle: indicatorTitle
+            indicatorTitle: indicatorTitle,
+            indicatorIsAvailable: true
         };
 
         if (isNewObj) {
@@ -392,11 +393,13 @@ export default class Controller extends Component {
             const urlFilters = profileView["filters"];
             this._filteredIndicators = urlFilters.map(indicator => {
                 let indicatorTitle = '';
+                let indicatorIsAvailable = false;
                 Object.values(profileData).map(category => {
                     Object.values(category.subcategories).map(subcategory => {
                         Object.values(subcategory.indicators).map(i => {
                             if (i.id === indicator.indicatorId) {
                                 indicatorTitle = i.label;
+                                indicatorIsAvailable = true;
                             }
                         })
                     })
@@ -404,7 +407,8 @@ export default class Controller extends Component {
                 return {
                     indicatorId: indicator.indicatorId,
                     indicatorTitle: indicatorTitle,
-                    filters: indicator.filters
+                    filters: indicator.filters,
+                    indicatorIsAvailable: indicatorIsAvailable
                 }
             });
 

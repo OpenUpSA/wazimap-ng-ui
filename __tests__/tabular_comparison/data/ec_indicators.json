@@ -10923,7 +10923,8 @@
                     },
                     "Percentage": {
                         "maxX": 1,
-                        "minX": 0
+                        "minX": 0,
+                        "formatting": ".2%"
                     }
                 },
                 "filter": {

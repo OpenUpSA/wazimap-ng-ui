@@ -73,7 +73,7 @@ const Result = (props) => {
                     objValues.push(objValue);
                 }
             })
-            console.log(choroplethConfig);
+
             let positiveColorRange = getColorRange(objValues, choroplethConfig, true);
             let negativeColorRange = getColorRange(objValues, choroplethConfig, false);
             const [min, max] = getBounds(objValues);

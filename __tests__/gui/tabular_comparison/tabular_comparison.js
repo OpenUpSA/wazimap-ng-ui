@@ -66,7 +66,12 @@ Then('I check result table after adding second indicator', (type) => {
    cy.get(`[data-testid=result-table]`).find('th').eq(2).should('have.text', 'Employment status : Unemployed');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(0).should('have.text', 'Eastern Cape');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.text', '301,909');
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.text', '952,709');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.css', 'background-color').and('eq', 'rgb(124, 162, 206)')
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.text', '17.02%');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.css', 'background-color').and('eq', 'rgb(124, 162, 206)')
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).trigger('mouseover');
+   cy.get(`[role="tooltip"]`).first().find('div').should('have.text', '952,709');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).trigger('mouseout');
 })
 
 Then(/^I clear the (\w+) autocomplete field/, (type) => {
@@ -79,8 +84,15 @@ Then('I check result table after adding second geography', (type) => {
    cy.get(`[data-testid=result-table]`).find('th').eq(2).should('have.text', 'Employment status : Unemployed');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(0).should('have.text', 'Eastern Cape');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.text', '301,909');
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.text', '952,709');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.css', 'background-color').and('eq', 'rgb(239, 243, 255)')
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.text', '17.02%');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.css', 'background-color').and('eq', 'rgb(239, 243, 255)')
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(0).should('have.text', 'Western Cape');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(1).should('have.text', '928,895');
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(2).should('have.text', '967,681');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(1).should('have.css', 'background-color').and('eq', 'rgb(8, 81, 156)')
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(2).should('have.text', '18.35%');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(2).should('have.css', 'background-color').and('eq', 'rgb(8, 81, 156)')
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(2).trigger('mouseover');
+   cy.get(`[role="tooltip"]`).first().find('div').should('have.text', '967,681');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).trigger('mouseout');
 })

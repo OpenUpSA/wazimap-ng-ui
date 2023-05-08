@@ -15,7 +15,7 @@ export function configurePointDataEvents(controller, objs = {pointDataTray: null
     ])
 
     controller.bubbleEvents(pointData, [
-        'loadedCategoryPoints', 'loadingCategoryPoints',
+        'point_data.category.loaded', 'point_data.category.loading',
         'point_data.load_popup.hovered', 'point_data.load_popup.clicked',
         'point_data.all.unselected'
     ]);

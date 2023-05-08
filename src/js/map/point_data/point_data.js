@@ -123,16 +123,6 @@ export class PointData extends Component {
         }
     }
 
-    showLoading(category) {
-        category.showLoading(true);
-        category.showDone(false);
-    }
-
-    showDone(category) {
-        category.showLoading(false);
-        category.showDone(true);
-    }
-
     /**
      * this function is called when a category is toggled
      * */
@@ -144,7 +134,7 @@ export class PointData extends Component {
         layer = this.genLayer()
         this.categoryLayers[category.id] = layer;
 
-        this.triggerEvent('loadingCategoryPoints', category);
+        this.triggerEvent('point_data.category.loading', category);
 
         const data = await this.getAddressPoints(category);
         const points = {
@@ -154,9 +144,8 @@ export class PointData extends Component {
         self.showPointLegend(category);
         self.createMarkers(points, layer);
         self.map.addLayer(layer);
-        self.showDone(category);
 
-        self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
+        self.triggerEvent('point_data.category.loaded', {category: category, points: data});
 
         self.pointFilter.isVisible = true;
     }

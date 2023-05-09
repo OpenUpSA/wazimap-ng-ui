@@ -46,7 +46,6 @@ export class IndicatorHelper {
         indicator.chartConfiguration = this.getChartConfiguration(indicator.chart_configuration)
 
         if (indicator.type == undefined) {
-            console.warn(`Indicator ${title} does not have a type`)
             indicator.type = ContentBlock.BLOCK_TYPES.Indicator
         } else if (indicator.type == ContentBlock.BLOCK_TYPES.HTMLBlock) { // Not sure why this isn't working
             if (indicator.html == undefined)

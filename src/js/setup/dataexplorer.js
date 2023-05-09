@@ -6,10 +6,6 @@ export function configureDataExplorerEvents(controller, dataMapperMenu) {
         loadMenu(dataMapperMenu, versionData.payload);
     })
 
-    controller.on('versions.indicators.ready', (versionData) => {
-        loadMenu(dataMapperMenu, versionData.payload);
-    })
-
     controller.on('datamapper.reload', (versionData) => {
         loadMenu(dataMapperMenu, versionData.payload);
     })

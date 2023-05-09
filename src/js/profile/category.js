@@ -164,8 +164,8 @@ export class Category extends Component {
             );
             sc.isVisible = sc.indicators.filter(
               ind => ind.isVisible
-            ).length > 0;
-            if (sc.indicators.length > 0) {
+            ).length > 0 || sc.hasKeyMetrics;
+            if (sc.indicators.length > 0 || sc.hasKeyMetrics) {
                 this.subCategories.push(sc);
                 isFirst = false;    //set to false only when there is a visible item
             }

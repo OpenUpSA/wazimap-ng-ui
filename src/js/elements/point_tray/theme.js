@@ -1,4 +1,4 @@
-import React from "react";
+import React  from "react";
 import {ThemeTreeItem} from "./styled_elements";
 import ThemeLabel from "./theme_label";
 import Category from "./category";

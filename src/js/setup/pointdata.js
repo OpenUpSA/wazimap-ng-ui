@@ -6,6 +6,12 @@ export function configurePointDataEvents(controller, objs = {pointDataTray: null
     controller.on("point_tray.category.unselected", payload => pointData.removeCategoryPoints(payload.payload));
     controller.on("map.zoomed", payload => pointData.onMapZoomed(payload.payload));
     controller.on("point_data.all.unselected", () => pointDataTray.unSelectAll())
+    controller.on("point_data.category.loading", payload => {
+        pointDataTray.triggerCategoryLoading(payload.payload);
+    });
+    controller.on("point_data.category.loaded", payload => {
+        pointDataTray.triggerCategoryLoaded(payload.payload.category);
+    });
 
     controller.bubbleEvents(pointDataTray, [
         'point_tray.theme.selected', 'point_tray.theme.unselected',

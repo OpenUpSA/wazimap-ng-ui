@@ -3,14 +3,42 @@ import {TreeView} from "@mui/lab";
 import Theme from "./theme";
 
 const PointMapperTreeview = (props) => {
-    const [expanded, setExpanded] = useState([]);
+    const [themes, setThemes] = useState(props.themes);
+    const [startedListening, setStartedListening] = useState(false);
+    const [expandedThemes, setExpandedThemes] = useState([]);
+
+    if (!startedListening) {
+        setStartedListening(true);
+
+        props.parent.on('point_data.category.loading', category => {
+            setCategoryLoading(category, true);
+        });
+
+        props.parent.on('point_data.category.loaded', category => {
+            setCategoryLoading(category, false);
+        });
+    }
+
+    const setCategoryLoading = (category, isLoading) => {
+        const arr = themes.map(t => {
+            t.categories = t.categories.map(c => {
+                if (c.id === category.id) {
+                    c.isLoading = isLoading;
+                }
+                return c;
+            })
+            return t;
+        });
+
+        setThemes(arr);
+    }
 
     const isThemeExpanded = (theme) => {
-        return expanded.indexOf(`theme-${theme.id}`) >= 0;
+        return expandedThemes.indexOf(`theme-${theme.id}`) >= 0;
     }
 
     const renderThemes = () => {
-        return props.themes.map(theme => {
+        return themes.map(theme => {
             return (
                 <Theme
                     theme={theme}
@@ -26,14 +54,14 @@ const PointMapperTreeview = (props) => {
             // switch toggled
             return;
         }
-        setExpanded(nodeIds);
+        setExpandedThemes(nodeIds);
     }
 
     const renderTreeview = () => {
         return (
             <TreeView
                 disableSelection={true}
-                expanded={expanded}
+                expanded={expandedThemes}
                 onNodeToggle={handleTreeViewToggle}
             >
                 {renderThemes()}

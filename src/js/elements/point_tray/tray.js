@@ -59,8 +59,15 @@ export class PointDataTray extends Component {
         }
     }
 
+    triggerCategoryLoaded(category) {
+        this.triggerEvent("point_data.category.loaded", category);
+    }
+
+    triggerCategoryLoading(category) {
+        this.triggerEvent("point_data.category.loading", category);
+    }
+
     categoryToggled(category) {
-        console.log({'tray.js category': category})
         this.triggerEvent("point_tray.category.selected", category)
     }
 
@@ -73,6 +80,7 @@ export class PointDataTray extends Component {
                 <PointMapperTreeview
                     themes={data}
                     categoryToggled={(category) => self.categoryToggled(category)}
+                    parent={this}
                 />
             );
             self.triggerEvent("point_tray.tray.themes_loaded", data);

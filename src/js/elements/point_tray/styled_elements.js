@@ -17,7 +17,10 @@ export const CategoryTreeItem = styled(TreeItem)(() => ({
         [`& .${treeItemClasses.label}`]: {
             fontWeight: '400',
             fontSize: '0.85em',
-            padding: '10px'
+            padding: '10px',
+            '& i': {
+                fontSize: '14px'
+            }
         },
         [`& .${treeItemClasses.iconContainer}`]: {
             display: 'none'
@@ -45,8 +48,7 @@ export const ThemeTreeItem = styled(TreeItem)(() => ({
             lineHeight: '1.2'
         }
     },
-    [`& .${treeItemClasses.selected}`]: {
-    }
+    [`& .${treeItemClasses.selected}`]: {}
 }));
 
 export const AntSwitch = styled(Switch)(({theme}) => ({

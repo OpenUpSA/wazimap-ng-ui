@@ -11,19 +11,28 @@ const PointMapperTreeview = (props) => {
         setStartedListening(true);
 
         props.parent.on('point_data.category.loading', category => {
-            setCategoryLoading(category, true);
+            setCategoryLoadingState(category, true);
         });
 
         props.parent.on('point_data.category.loaded', category => {
-            setCategoryLoading(category, false);
+            setCategorySelectedState(category, true);
+            setCategoryLoadingState(category, false);
         });
     }
 
-    const setCategoryLoading = (category, isLoading) => {
+    const setCategorySelectedState = (category, isSelected) => {
+        setCategoryProperty(category, 'isSelected', isSelected);
+    }
+
+    const setCategoryLoadingState = (category, isLoading) => {
+        setCategoryProperty(category, 'isLoading', isLoading);
+    }
+
+    const setCategoryProperty = (category, key, value) => {
         const arr = themes.map(t => {
             t.categories = t.categories.map(c => {
                 if (c.id === category.id) {
-                    c.isLoading = isLoading;
+                    c[key] = value;
                 }
                 return c;
             })

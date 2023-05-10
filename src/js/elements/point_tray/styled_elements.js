@@ -2,35 +2,9 @@ import {styled} from "@mui/system";
 import TreeItem, {treeItemClasses} from "@mui/lab/TreeItem";
 import {Switch} from "@mui/material";
 
-export const CategoryTreeItem = styled(TreeItem)(() => ({
+export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
     [`& .${treeItemClasses.content}`]: {
-        backgroundColor: '#f0f0f0',
-        borderRadius: '2px',
-        padding: '0px',
-        marginBottom: '4px',
-        color: '#666',
-        transitionDuration: '0.2s',
-        '&:hover': {
-            backgroundColor: '#d8d8d8',
-            color: '#000'
-        },
-        [`& .${treeItemClasses.label}`]: {
-            fontWeight: '400',
-            fontSize: '0.85em',
-            padding: '10px',
-            '& i': {
-                fontSize: '14px'
-            }
-        },
-        [`& .${treeItemClasses.iconContainer}`]: {
-            display: 'none'
-        }
-    }
-}));
-
-export const ThemeTreeItem = styled(TreeItem)(() => ({
-    [`& .${treeItemClasses.content}`]: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: theme.palette.parent,
         borderRadius: '2px',
         padding: '0px',
         paddingLeft: '12px',
@@ -48,7 +22,83 @@ export const ThemeTreeItem = styled(TreeItem)(() => ({
             lineHeight: '1.2'
         }
     },
-    [`& .${treeItemClasses.selected}`]: {}
+    [`& .${treeItemClasses.group}`]: {
+        [`& .${treeItemClasses.content}`]: {
+            backgroundColor: theme.palette.child,
+            borderRadius: '2px',
+            padding: '0px',
+            marginBottom: '4px',
+            color: '#666',
+            height: '38px',
+            transitionDuration: '0.2s',
+            '&:hover': {
+                backgroundColor: '#d8d8d8',
+                color: '#000'
+            },
+            [`& .${treeItemClasses.label}`]: {
+                fontWeight: '400',
+                fontSize: '0.85em',
+                lineHeight: '1.2em',
+                padding: '10px',
+                '& i': {
+                    fontSize: '14px'
+                }
+            },
+            [`& .${treeItemClasses.iconContainer}`]: {
+                display: 'none'
+            }
+        }
+    }
+}));
+
+export const CategoryTreeItem = styled(TreeItem)(({theme}) => ({
+    [`& .${treeItemClasses.content}`]: {
+        backgroundColor: theme.palette.main,
+        borderRadius: '2px',
+        padding: '0px',
+        marginBottom: '4px',
+        color: '#666',
+        height: '38px',
+        transitionDuration: '0.2s',
+        '&:hover': {
+            backgroundColor: '#d8d8d8',
+            color: '#000'
+        },
+        [`& .${treeItemClasses.label}`]: {
+            fontWeight: '400',
+            fontSize: '0.85em',
+            lineHeight: '1.2em',
+            padding: '10px',
+            '& i': {
+                fontSize: '14px'
+            }
+        },
+        [`& .${treeItemClasses.iconContainer}`]: {
+            display: 'none'
+        }
+    }
+}));
+
+export const ThemeTreeItem = styled(TreeItem)(({theme}) => ({
+    [`& .${treeItemClasses.content}`]: {
+        backgroundColor: theme.palette.main,
+        borderRadius: '2px',
+        padding: '0px',
+        paddingLeft: '12px',
+        marginBottom: '8px',
+        color: '#333',
+        transitionDuration: '0.2s',
+        '&:hover': {
+            backgroundColor: '#d8d8d8',
+            color: '#000'
+        },
+        [`& .${treeItemClasses.label}`]: {
+            fontWeight: '500',
+            fontSize: '0.9em',
+            padding: '8px',
+            lineHeight: '1.2'
+        }
+    }
 }));
 
 export const AntSwitch = styled(Switch)(({theme}) => ({

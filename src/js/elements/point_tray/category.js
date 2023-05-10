@@ -1,8 +1,6 @@
 import React from "react";
-import {CategoryTreeItem} from "./styled_elements";
-import {Grid} from "@mui/material";
-import {treeItemClasses} from "@mui/lab/TreeItem";
-import {calculateThemeBackgroundColor} from "../../utils";
+import {StyledTreeItem} from "./styled_elements";
+import {Grid, ThemeProvider} from "@mui/material";
 
 const Category = (props) => {
     const handleClick = (event) => {
@@ -46,18 +44,15 @@ const Category = (props) => {
     }
 
     return (
-        <CategoryTreeItem
-            nodeId={`category-${props.category.id}`}
-            key={props.category.id}
-            label={renderLabel()}
-            onClick={handleClick}
-            sx={{
-                [`& .${treeItemClasses.content}`]: {
-                    backgroundColor: props.category.isSelected ? calculateThemeBackgroundColor(props.category.theme.color) : '#f0f0f0'
-                }
-            }}
-        >
-        </CategoryTreeItem>
+        <ThemeProvider theme={props.styleTheme}>
+            <StyledTreeItem
+                nodeId={`category-${props.category.id}`}
+                key={props.category.id}
+                label={renderLabel()}
+                onClick={handleClick}
+            >
+            </StyledTreeItem>
+        </ThemeProvider>
     )
 }
 

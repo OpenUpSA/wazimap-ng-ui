@@ -26,67 +26,67 @@ const noDataWrapperClsName = 'data-mapper-content__no-data';
 const loadingClsName = 'data-mapper-content__loading';
 
 export const filterIndicatorData = (indicatorData, hiddenIndicators) => {
-  let categories = sortBy(indicatorData, "order");
-  categories = categories.map(category => {
-    let subcategories = sortBy(category.subcategories, "order");
-    subcategories = subcategories.map(subcategory => {
-      let indicators = sortBy(subcategory.indicators, "order");
-      indicators = indicators.map(indicator => {
-        const isIndicatorHidden = (
-          hiddenIndicators.includes(indicator.id) ||
-          indicator.content_type !== "indicator" ||
-          indicator.dataset_content_type !== 'quantitative'
-        );
-        return {
-          ...indicator,
-          isHidden: isIndicatorHidden,
-        }
-      })
-      const isSubCategoryHidden = indicators.filter(indicator => !indicator.isHidden).length === 0;
-      return {
-        ...subcategory,
-        indicators: indicators,
-        isHidden: isSubCategoryHidden
-      }
-    })
+    let categories = sortBy(indicatorData, "order");
+    categories = categories.map(category => {
+        let subcategories = sortBy(category.subcategories, "order");
+        subcategories = subcategories.map(subcategory => {
+            let indicators = sortBy(subcategory.indicators, "order");
+            indicators = indicators.map(indicator => {
+                const isIndicatorHidden = (
+                    hiddenIndicators.includes(indicator.id) ||
+                    indicator.content_type !== "indicator" ||
+                    indicator.dataset_content_type !== 'quantitative'
+                );
+                return {
+                    ...indicator,
+                    isHidden: isIndicatorHidden,
+                }
+            })
+            const isSubCategoryHidden = indicators.filter(indicator => !indicator.isHidden).length === 0;
+            return {
+                ...subcategory,
+                indicators: indicators,
+                isHidden: isSubCategoryHidden
+            }
+        })
 
-    const isCategoryHidden = subcategories.filter(subcategory => !subcategory.isHidden).length === 0;
-    return {
-      ...category,
-      subcategories: subcategories,
-      isHidden: isCategoryHidden
-    }
-  })
-  return categories;
+        const isCategoryHidden = subcategories.filter(subcategory => !subcategory.isHidden).length === 0;
+        return {
+            ...category,
+            subcategories: subcategories,
+            isHidden: isCategoryHidden
+        }
+    })
+    return categories;
 }
 
 export function loadMenu(dataMapperMenu, data) {
     let profileIndicators = filterIndicatorData(data, dataMapperMenu.controller.hiddenIndicators);
-    if (isEmpty(data)){
-      dataMapperMenu.showNoData()
-      dataMapperMenu.dataMapperRoot.render(<></>);
+    if (isEmpty(data)) {
+        dataMapperMenu.showNoData()
+        dataMapperMenu.dataMapperRoot.render(<></>);
     } else {
-      dataMapperMenu.dataMapperRoot.render(
-        <TreeView
-          defaultCollapseIcon={<ArrowDropDownIcon />}
-          defaultExpandIcon={<ArrowRightIcon />}
-        >
-          {profileIndicators.length >  0 && profileIndicators.map(
-            (item, key) => {
-              if (!item.isHidden){
-                return (
-                  <IndicatorCategoryTreeView
-                    category={item}
-                    key={key}
-                    api={dataMapperMenu.api}
-                    controller={dataMapperMenu.controller}
-                  />
-                )
-              }
-            })
-          }
-        </TreeView>
-      );
+        dataMapperMenu.dataMapperRoot.render(
+            <TreeView
+                defaultCollapseIcon={<ArrowDropDownIcon/>}
+                defaultExpandIcon={<ArrowRightIcon/>}
+            >
+                {profileIndicators.length > 0 && profileIndicators.map(
+                    (item, index) => {
+                        if (!item.isHidden) {
+                            return (
+                                <IndicatorCategoryTreeView
+                                    category={item}
+                                    key={`datamapper-category-${item.id}-${index}-${dataMapperMenu.controller.state.profile.profile.geography.code}`}
+                                    api={dataMapperMenu.api}
+                                    controller={dataMapperMenu.controller}
+                                />
+                            )
+                        }
+                    })
+                }
+            </TreeView>
+        );
     }
     dataMapperMenu.isLoading = false;
 }
@@ -125,11 +125,11 @@ export class DataMapperMenu extends Component {
     }
 
     get dataMapperRoot() {
-      return this._dataMapperRoot;
+        return this._dataMapperRoot;
     }
 
     set dataMapperRoot(value) {
-      return this._dataMapperRoot = value;
+        return this._dataMapperRoot = value;
     }
 
     get api() {
@@ -137,7 +137,7 @@ export class DataMapperMenu extends Component {
     }
 
     get controller() {
-      return this._controller;
+        return this._controller;
     }
 
     get subIndicators() {
@@ -161,8 +161,8 @@ export class DataMapperMenu extends Component {
 
     addDataMapperMenuRoot() {
         let dataMapperElement = document.getElementsByClassName("data-mapper-content__list");
-        if (dataMapperElement.length > 0){
-          this.dataMapperRoot = createRoot(dataMapperElement[0]);
+        if (dataMapperElement.length > 0) {
+            this.dataMapperRoot = createRoot(dataMapperElement[0]);
         }
     }
 

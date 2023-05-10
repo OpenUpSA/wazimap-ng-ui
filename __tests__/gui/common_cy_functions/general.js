@@ -115,6 +115,10 @@ export function gotoHomepage() {
     cy.visit("/");
 }
 
+export function gotoProfileViewHomepage(view_name) {
+    cy.visit(`/?view=${view_name}`);
+}
+
 export function gotoTabularComparison() {
     cy.visit("/tabular-comparison.html");
 }

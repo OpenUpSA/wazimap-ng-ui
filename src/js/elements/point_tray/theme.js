@@ -44,6 +44,7 @@ const Theme = (props) => {
                         isThemeExpanded={props.isThemeExpanded}
                         isThemeSelected={checkIfAllCategoriesAreSelected()}
                         isThemeLoading={checkIfThemeIsLoading()}
+                        themeToggled={props.themeToggled}
                     />
                 }
                 icon={

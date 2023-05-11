@@ -1,11 +1,13 @@
 import React from "react";
 import {Grid} from "@mui/material";
-import {AntSwitch} from "./styled_elements";
+import {AntSwitch, TextTruncatingGrid} from "./styled_elements";
 
 const ThemeLabel = (props) => {
     const handleThemeSelection = (event, checked) => {
         event.stopPropagation();
         event.nativeEvent.stopImmediatePropagation();
+
+        props.themeToggled(props.theme, checked);
     }
 
     const renderArrowIcon = () => {
@@ -42,10 +44,10 @@ const ThemeLabel = (props) => {
             container
             alignItems={'center'}
         >
-            <Grid
+            <TextTruncatingGrid
                 item
                 sm={8}
-            >{props.theme.name}</Grid>
+            >{props.theme.name}</TextTruncatingGrid>
             <Grid
                 item
                 container

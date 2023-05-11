@@ -75,7 +75,25 @@ export class PointDataTray extends Component {
             // selected
             this.triggerEvent("point_tray.category.selected", category);
         }
+    }
 
+    themeToggled(theme, isChecked) {
+        if (isChecked) {
+            // select all categories
+            theme.categories.forEach(category => {
+                if (category.isSelected !== true) {
+                    // false or undefined
+                    this.triggerEvent("point_tray.category.selected", category);
+                }
+            })
+        } else {
+            // unselect all categories
+            theme.categories.forEach(category => {
+                if (category.isSelected) {
+                    this.triggerEvent("point_tray.category.unselected", category);
+                }
+            })
+        }
     }
 
     loadThemes() {
@@ -87,6 +105,7 @@ export class PointDataTray extends Component {
                 <PointMapperTreeview
                     themes={data}
                     categoryToggled={(category) => self.categoryToggled(category)}
+                    themeToggled={(theme, isChecked) => self.themeToggled(theme, isChecked)}
                     parent={this}
                 />
             );

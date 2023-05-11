@@ -57,6 +57,7 @@ const PointMapperTreeview = (props) => {
                     theme={theme}
                     isThemeExpanded={isThemeExpanded(theme)}
                     categoryToggled={props.categoryToggled}
+                    themeToggled={props.themeToggled}
                 />
             )
         })

@@ -1,5 +1,5 @@
 import React from "react";
-import {StyledTreeItem} from "./styled_elements";
+import {StyledTreeItem, TextTruncatingGrid} from "./styled_elements";
 import {Grid, ThemeProvider} from "@mui/material";
 
 const Category = (props) => {
@@ -13,10 +13,10 @@ const Category = (props) => {
                 container
                 alignItems={'center'}
             >
-                <Grid
+                <TextTruncatingGrid
                     item
                     sm={11}
-                >{props.category.name}</Grid>
+                >{props.category.name}</TextTruncatingGrid>
                 <Grid
                     item
                     container

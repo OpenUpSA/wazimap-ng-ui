@@ -1,6 +1,6 @@
 import {styled} from "@mui/system";
 import TreeItem, {treeItemClasses} from "@mui/lab/TreeItem";
-import {Switch} from "@mui/material";
+import {Switch, Grid} from "@mui/material";
 
 export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
     [`&.selected .${treeItemClasses.content}`]: {
@@ -59,6 +59,12 @@ export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
             backgroundColor: theme.palette.selected,
         },
     }
+}));
+
+export const TextTruncatingGrid = styled(Grid)(({theme}) => ({
+    overflow: 'hidden',
+    whiteSpace: 'noWrap',
+    textOverflow: 'ellipsis'
 }));
 
 export const AntSwitch = styled(Switch)(({theme}) => ({

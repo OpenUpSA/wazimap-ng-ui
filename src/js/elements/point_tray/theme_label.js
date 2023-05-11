@@ -42,6 +42,7 @@ const ThemeLabel = (props) => {
                 >
                     <AntSwitch
                         onChange={handleThemeSelection}
+                        checked={props.isThemeSelected}
                     />
                 </Grid>
                 <Grid

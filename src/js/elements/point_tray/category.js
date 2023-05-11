@@ -50,6 +50,7 @@ const Category = (props) => {
                 key={props.category.id}
                 label={renderLabel()}
                 onClick={handleClick}
+                className={props.category.isSelected ? 'selected' : ''}
             >
             </StyledTreeItem>
         </ThemeProvider>

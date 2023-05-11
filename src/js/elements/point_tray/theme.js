@@ -8,13 +8,6 @@ import {calculateThemeBackgroundColor} from "../../utils";
 const Theme = (props) => {
     const renderCategories = (categories) => {
         return categories.map(category => {
-            styleTheme.palette.child = category.isSelected ? calculateThemeBackgroundColor(props.theme.color) : '#f0f0f0';
-            console.log({
-                category,
-                'isSelected': JSON.stringify(category.isSelected),
-                styleTheme,
-                'child': styleTheme.palette.child
-            })
             return (
                 <Category
                     category={category}
@@ -31,8 +24,8 @@ const Theme = (props) => {
 
     let styleTheme = createTheme({
         palette: {
-            parent: checkIfAllCategoriesAreSelected() ? calculateThemeBackgroundColor(props.theme.color) : '#f0f0f0',
-            child: '#f0f0f0'
+            main: '#f0f0f0',
+            selected: calculateThemeBackgroundColor(props.theme.color)
         },
     });
 
@@ -45,6 +38,7 @@ const Theme = (props) => {
                     <ThemeLabel
                         theme={props.theme}
                         isThemeExpanded={props.isThemeExpanded}
+                        isThemeSelected={checkIfAllCategoriesAreSelected()}
                     />
                 }
                 icon={
@@ -55,6 +49,7 @@ const Theme = (props) => {
                         {props.theme.icon}
                     </i>
                 }
+                className={checkIfAllCategoriesAreSelected() ? 'selected' : ''}
             >
                 {renderCategories(props.theme.categories)}
             </StyledTreeItem>

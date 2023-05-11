@@ -3,8 +3,18 @@ import TreeItem, {treeItemClasses} from "@mui/lab/TreeItem";
 import {Switch} from "@mui/material";
 
 export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
+    [`&.selected .${treeItemClasses.content}`]: {
+        backgroundColor: theme.palette.selected,
+        [`& .selected .${treeItemClasses.content}`]: {
+            backgroundColor: theme.palette.selected,
+            '&:hover': {
+                backgroundColor: theme.palette.selected,
+                color: '#333'
+            },
+        },
+    },
     [`& .${treeItemClasses.content}`]: {
-        backgroundColor: theme.palette.parent,
+        backgroundColor: theme.palette.main,
         borderRadius: '2px',
         padding: '0px',
         paddingLeft: '12px',
@@ -24,7 +34,7 @@ export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
     },
     [`& .${treeItemClasses.group}`]: {
         [`& .${treeItemClasses.content}`]: {
-            backgroundColor: theme.palette.child,
+            backgroundColor: theme.palette.main,
             borderRadius: '2px',
             padding: '0px',
             marginBottom: '4px',
@@ -47,57 +57,10 @@ export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
             [`& .${treeItemClasses.iconContainer}`]: {
                 display: 'none'
             }
-        }
-    }
-}));
-
-export const CategoryTreeItem = styled(TreeItem)(({theme}) => ({
-    [`& .${treeItemClasses.content}`]: {
-        backgroundColor: theme.palette.main,
-        borderRadius: '2px',
-        padding: '0px',
-        marginBottom: '4px',
-        color: '#666',
-        height: '38px',
-        transitionDuration: '0.2s',
-        '&:hover': {
-            backgroundColor: '#d8d8d8',
-            color: '#000'
         },
-        [`& .${treeItemClasses.label}`]: {
-            fontWeight: '400',
-            fontSize: '0.85em',
-            lineHeight: '1.2em',
-            padding: '10px',
-            '& i': {
-                fontSize: '14px'
-            }
+        [`& .selected .${treeItemClasses.content}`]: {
+            backgroundColor: theme.palette.selected,
         },
-        [`& .${treeItemClasses.iconContainer}`]: {
-            display: 'none'
-        }
-    }
-}));
-
-export const ThemeTreeItem = styled(TreeItem)(({theme}) => ({
-    [`& .${treeItemClasses.content}`]: {
-        backgroundColor: theme.palette.main,
-        borderRadius: '2px',
-        padding: '0px',
-        paddingLeft: '12px',
-        marginBottom: '8px',
-        color: '#333',
-        transitionDuration: '0.2s',
-        '&:hover': {
-            backgroundColor: '#d8d8d8',
-            color: '#000'
-        },
-        [`& .${treeItemClasses.label}`]: {
-            fontWeight: '500',
-            fontSize: '0.9em',
-            padding: '8px',
-            lineHeight: '1.2'
-        }
     }
 }));
 
@@ -122,7 +85,7 @@ export const AntSwitch = styled(Switch)(({theme}) => ({
             color: '#fff',
             '& + .MuiSwitch-track': {
                 opacity: 1,
-                backgroundColor: theme.palette.mode === 'dark' ? '#177ddc' : '#1890ff',
+                backgroundColor: theme.palette.mode === 'dark' ? '#3c3c3c' : '#3c3c3c',
             },
         },
     },

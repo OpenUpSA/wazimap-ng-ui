@@ -20,6 +20,23 @@ const ThemeLabel = (props) => {
         }
     }
 
+    const renderSwitch = () => {
+        if (props.isThemeLoading) {
+            return (
+                <i
+                    className={'fa fa-duotone fa-spinner fa-spin'}
+                />
+            )
+        } else {
+            return (
+                <AntSwitch
+                    onChange={handleThemeSelection}
+                    checked={props.isThemeSelected}
+                />
+            )
+        }
+    }
+
     return (
         <Grid
             container
@@ -38,12 +55,9 @@ const ThemeLabel = (props) => {
                 <Grid
                     item
                     sm={9}
-                    sx={{textAlign: 'center'}}
+                    sx={{textAlign: 'center', height: '20px'}}
                 >
-                    <AntSwitch
-                        onChange={handleThemeSelection}
-                        checked={props.isThemeSelected}
-                    />
+                    {renderSwitch()}
                 </Grid>
                 <Grid
                     item

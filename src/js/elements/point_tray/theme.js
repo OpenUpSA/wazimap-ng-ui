@@ -22,6 +22,10 @@ const Theme = (props) => {
         return !props.theme.categories.some(x => !x.isSelected);
     }
 
+    const checkIfThemeIsLoading = () => {
+        return props.theme.categories.some(x => x.isLoading);
+    }
+
     let styleTheme = createTheme({
         palette: {
             main: '#f0f0f0',
@@ -39,6 +43,7 @@ const Theme = (props) => {
                         theme={props.theme}
                         isThemeExpanded={props.isThemeExpanded}
                         isThemeSelected={checkIfAllCategoriesAreSelected()}
+                        isThemeLoading={checkIfThemeIsLoading()}
                     />
                 }
                 icon={

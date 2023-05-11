@@ -68,7 +68,14 @@ export class PointDataTray extends Component {
     }
 
     categoryToggled(category) {
-        this.triggerEvent("point_tray.category.selected", category)
+        if (category.isSelected) {
+            // unselected
+            this.triggerEvent("point_tray.category.unselected", category)
+        } else {
+            // selected
+            this.triggerEvent("point_tray.category.selected", category);
+        }
+
     }
 
     loadThemes() {

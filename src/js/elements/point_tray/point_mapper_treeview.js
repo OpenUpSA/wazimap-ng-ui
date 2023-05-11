@@ -18,6 +18,10 @@ const PointMapperTreeview = (props) => {
             setCategorySelectedState(category, true);
             setCategoryLoadingState(category, false);
         });
+
+        props.parent.on('point_tray.category.unselected', category => {
+            setCategorySelectedState(category, false);
+        })
     }
 
     const setCategorySelectedState = (category, isSelected) => {

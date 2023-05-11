@@ -5,12 +5,9 @@ import {Switch} from "@mui/material";
 export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
     [`&.selected .${treeItemClasses.content}`]: {
         backgroundColor: theme.palette.selected,
-        [`& .selected .${treeItemClasses.content}`]: {
+        '&:hover': {
             backgroundColor: theme.palette.selected,
-            '&:hover': {
-                backgroundColor: theme.palette.selected,
-                color: '#333'
-            },
+            color: '#333'
         },
     },
     [`& .${treeItemClasses.content}`]: {

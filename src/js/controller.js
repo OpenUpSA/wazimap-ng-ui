@@ -35,11 +35,7 @@ export default class Controller extends Component {
             let parts = hash.split(':')
             let payload = null;
 
-            if (parts[0] == '#geo') {
-                payload = self.changeGeography(parts[1])
-                self._shouldMapZoom = true;
-
-            } else if (parts[0] == '#logout') {
+            if (parts[0] == '#logout') {
                 self.onLogout();
             } else {
                 //if a category nav is clicked, the hash becomes something like #divId, in that case it should behave same as if hash == ''
@@ -132,7 +128,22 @@ export default class Controller extends Component {
     };
 
     triggerHashChange() {
-        $(window).trigger('hashchange');
+        const hash = decodeURI(window.location.hash);
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const areaCode = urlParams.get("geo");
+        if (areaCode !== null){
+          this.changeHash(areaCode)
+        }
+
+        let parts = hash.split(':')
+        if (parts[0] == '#geo') {
+            this.api.cancelAndInitAbortController();
+            this.changeHash(parts[1], true);
+        } else {
+          this.api.cancelAndInitAbortController();
+          $(window).trigger('hashchange');
+        }
     };
 
     /**
@@ -499,15 +510,30 @@ export default class Controller extends Component {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set("geo", areaCode);
 
-        history.pushState(
-            {
-                "filters": this._filteredIndicators,
-                "hiddenIndicators": this.hiddenIndicators,
-                "geo": areaCode,
-            },
-            '',
-            `?${urlParams.toString()}${window.location.hash}`
-        );
+        if (replaceState){
+          let hash = window.location.hash.replace(`#geo:${areaCode}`, '');
+
+          history.replaceState(
+              {
+                  "filters": this._filteredIndicators,
+                  "hiddenIndicators": this.hiddenIndicators,
+                  "geo": areaCode,
+              },
+              '',
+              `?${urlParams.toString()}${hash}`
+          );
+        } else {
+          history.pushState(
+              {
+                  "filters": this._filteredIndicators,
+                  "hiddenIndicators": this.hiddenIndicators,
+                  "geo": areaCode,
+              },
+              '',
+              `?${urlParams.toString()}${window.location.hash}`
+          );
+        }
+
 
         const payload = this.changeGeography(areaCode)
         this._shouldMapZoom = true;

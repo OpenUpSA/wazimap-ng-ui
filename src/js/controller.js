@@ -495,8 +495,24 @@ export default class Controller extends Component {
         this.versionController.loadAllVersions(this.config.versions);
     }
 
-    changeHash(areaCode) {
-        window.location.hash = `#geo:${areaCode}`;
+    changeHash(areaCode, replaceState=false) {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("geo", areaCode);
+
+        history.pushState(
+            {
+                "filters": this._filteredIndicators,
+                "hiddenIndicators": this.hiddenIndicators,
+                "geo": areaCode,
+            },
+            '',
+            `?${urlParams.toString()}${window.location.hash}`
+        );
+
+        const payload = this.changeGeography(areaCode)
+        this._shouldMapZoom = true;
+        this.onHashChange(payload);
+
     }
 
 

@@ -31,10 +31,23 @@ export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
     },
     [`& .${treeItemClasses.group}`]: {
         marginTop: '8px',
+        borderLeft: '1px solid rgba(0, 0, 0, 0.11)',
+        paddingLeft: '8px',
+
         [`& .${treeItemClasses.root}`]: {
             marginBottom: '4px',
             '&:last-child': {
                 marginBottom: '0px',
+            },
+            '&:after': {
+                position: 'absolute',
+                left: '24px',
+                width: '8px',
+                height: '1px',
+                marginTop: '-19px',
+                marginLeft: '12px',
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                content: '""'
             },
         },
         [`& .${treeItemClasses.content}`]: {

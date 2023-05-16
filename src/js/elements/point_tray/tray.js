@@ -1,5 +1,4 @@
 import {numFmt, Component, hasElements, ThemeStyle, checkIterate} from '../../utils';
-import {Theme} from './theme_to_be_removed';
 import {createRoot} from "react-dom/client";
 import Watermark from "../../ui_components/watermark";
 import React from "react";
@@ -111,32 +110,6 @@ export class PointDataTray extends Component {
             );
             self.triggerEvent("point_tray.tray.themes_loaded", data);
             $(loadingClsName).addClass('hidden');
-        })
-    }
-
-    loadThemesOld() {
-        const self = this;
-        let themeIndex = 0;
-
-        self.triggerEvent("point_tray.tray.loading_themes", self);
-
-        self.api.loadThemes(this.profileId).then(data => {
-            checkIterate(data, themeDatum => {
-                themeIndex++;
-                let theme = self.createTheme(themeIndex, themeDatum);
-                this.themes.push(theme);
-                let item = theme.element;
-
-                //append tree
-                let treeItem = this.treeLineItem.cloneNode(true);
-                $(categoryWrapperClsName, item).append(treeItem);
-
-                ThemeStyle.replaceChildDivWithIcon($(item).find('.point-data__h1_icon'), themeDatum.icon)
-
-                $(loadingClsName).addClass('hidden');
-                $(wrapperClsName).append(item);
-            })
-            self.triggerEvent("point_tray.tray.themes_loaded", data);
         })
     }
 

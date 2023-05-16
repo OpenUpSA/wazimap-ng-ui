@@ -3,6 +3,7 @@ import TreeItem, {treeItemClasses} from "@mui/lab/TreeItem";
 import {Switch, Grid} from "@mui/material";
 
 export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
+    marginBottom: '8px',
     [`&.selected .${treeItemClasses.content}`]: {
         backgroundColor: theme.palette.selected,
         '&:hover': {
@@ -15,7 +16,6 @@ export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
         borderRadius: '2px',
         padding: '0px',
         paddingLeft: '12px',
-        marginBottom: '8px',
         color: '#333',
         transitionDuration: '0.2s',
         '&:hover': {
@@ -30,11 +30,17 @@ export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
         }
     },
     [`& .${treeItemClasses.group}`]: {
+        marginTop: '8px',
+        [`& .${treeItemClasses.root}`]: {
+            marginBottom: '4px',
+            '&:last-child': {
+                marginBottom: '0px',
+            },
+        },
         [`& .${treeItemClasses.content}`]: {
             backgroundColor: theme.palette.main,
             borderRadius: '2px',
             padding: '0px',
-            marginBottom: '4px',
             color: '#666',
             height: '38px',
             transitionDuration: '0.2s',
@@ -64,7 +70,8 @@ export const StyledTreeItem = styled(TreeItem)(({theme}) => ({
 export const TextTruncatingGrid = styled(Grid)(({theme}) => ({
     overflow: 'hidden',
     whiteSpace: 'noWrap',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    paddingRight: '5px'
 }));
 
 export const AntSwitch = styled(Switch)(({theme}) => ({

@@ -488,11 +488,13 @@ export class PointData extends Component {
     appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName, visibleAttributes = null) => {
         $('.' + itemsClsName, item).empty();
         const htmlFields = point.category.configuration?.field_type || {};
+
         point.data.forEach((a, i) => {
             if (a.value !== null
                 && (visibleAttributes === null || visibleAttributes.indexOf(a.key) >= 0)
                 && Object.prototype.toString.call(a.value) !== '[object Object]'
                 && a.value.toString().trim() !== '') {
+
                 let itemRow = rowItem.cloneNode(true);
                 $(itemRow).removeClass('last');
                 $('.' + labelClsName, itemRow).text(a.key);

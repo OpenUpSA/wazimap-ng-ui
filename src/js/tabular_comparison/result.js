@@ -4,6 +4,7 @@ import {format as d3format} from "d3-format";
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {max as d3max, min as d3min} from 'd3-array';
 import {defaultValues} from "../defaultValues";
+import {Config as SAConfig} from '../configurations/geography_sa';
 import {fillMissingKeys, getColorRange} from "../utils";
 import {ResultArrowSvg, ResultArrowSvg2} from "./svg-icons";
 import Tooltip from "@mui/material/Tooltip";
@@ -15,6 +16,7 @@ const Result = (props) => {
     const [rows, setRows] = useState([]);
     const arrowSvg = ResultArrowSvg;
     const arrowSvg2 = ResultArrowSvg2;
+    const defaultConfig = new SAConfig();
 
     useEffect(() => {
         populateRows();
@@ -63,7 +65,7 @@ const Result = (props) => {
 
     const setBackgroundColors = (rows) => {
         let choroplethConfig = props.profileConfig?.choropleth || {};
-        choroplethConfig = fillMissingKeys(choroplethConfig, defaultValues.choroplethConfig || {});
+        choroplethConfig = fillMissingKeys(choroplethConfig, defaultConfig.choropleth || {});
 
         props.indicatorObjs.forEach((obj) => {
             let objValues = [];

@@ -47,6 +47,7 @@ const Category = (props) => {
         <ThemeProvider theme={props.styleTheme}>
             <StyledTreeItem
                 nodeId={`category-${props.category.id}`}
+                data-test-class={'tree-view-category-item'}
                 key={props.category.id}
                 label={renderLabel()}
                 onClick={handleClick}

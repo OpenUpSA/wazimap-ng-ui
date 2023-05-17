@@ -37,6 +37,7 @@ const Theme = (props) => {
         <ThemeProvider theme={styleTheme}>
             <StyledTreeItem
                 nodeId={`theme-${props.theme.id}`}
+                data-test-class={'tree-view-theme-item'}
                 key={props.theme.id}
                 label={
                     <ThemeLabel

@@ -13,20 +13,16 @@ import {
     StyledAccordionSummary,
     StyledTypography, StyledTypographyWithBottomBorder,
     ViewSettingsTitle,
-    StyledTreeItem,
     IndicatorTreeViewCard,
     StyledBoxWithBottomBorder,
     StyledIconTypography,
-    StyledTooltip
+    StyledTooltip, UnavailableFilteredIndicatorBox,
+    FilterNotAvailableHelpText, UnavailableFilterIconContainer
 } from "./styled_elements";
 import {Grid} from "@mui/material";
 import TreeView from '@mui/lab/TreeView';
-import TreeItem from '@mui/lab/TreeItem';
-import Box from "@mui/material/Box";
 import IndicatorCategoryTreeView from "./indicator_tree_view";
-import {flatten, map} from "lodash";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import InfoIcon from '@mui/icons-material/Info';
@@ -35,60 +31,69 @@ import InfoIcon from '@mui/icons-material/Info';
 const ViewSettings = (props) => {
     const [expanded, setExpanded] = useState('');
     const [filteredIndicators, setFilteredIndicators] = useState([]);
+    const [allFiltersAreAvailable, setAllFiltersAreAvailable] = useState(props.allFiltersAreAvailable);
     const [profileIndicators, setProfileIndicators] = useState([]);
     const [siteWideFiltersEnabled] = useState(props.siteWideFiltersEnabled);
     const indicatorOptionsSvg = IndicatorOptionsSvg;
     const trashBinSvg = TrashBinSvg;
     const lockButtonSvg = LockButtonInTextSvg;
     const hiddenIndicatorsTooltipText = () => {
-      return (
-        <>
-          <p>
-          You can hide indicators to share a simplified view
-          with only the indicators relevant to your needs.
-          </p>
+        return (
+            <>
+                <p>
+                    You can hide indicators to share a simplified view
+                    with only the indicators relevant to your needs.
+                </p>
 
-          <p>
-            All indicators available in all geographic areas
-            are shown here, potentially including some which
-            may not be available at your currently-selected
-            geography.
-          </p>
-        </>
-      )
+                <p>
+                    All indicators available in all geographic areas
+                    are shown here, potentially including some which
+                    may not be available at your currently-selected
+                    geography.
+                </p>
+            </>
+        )
     }
 
     useEffect(() => {
-        if (props.filteredIndicators !== filteredIndicators) {
-            setFilteredIndicators(props.filteredIndicators);
-        }
-        if (props.profileIndicators.length > 0 && profileIndicators.length === 0){
-          let profileIndicators = props.profileIndicators.map(
-            (category) => {
-              let subcategories = []
-              category.subcategories.map(
-                subcategory => {
-                  if (subcategory.indicators.length > 0){
-                    subcategories.push(subcategory)
-                  }
-                }
-              )
-              return {
-                ...category,
-                subcategories: subcategories
-              }
+            if (props.filteredIndicators !== filteredIndicators) {
+                setFilteredIndicators(props.filteredIndicators);
             }
-          )
-          profileIndicators = profileIndicators.filter(ind => ind.subcategories.length > 0);
-          setProfileIndicators(profileIndicators);
+            if (props.profileIndicators.length > 0 && profileIndicators.length === 0) {
+                let profileIndicators = props.profileIndicators.map(
+                    (category) => {
+                        let subcategories = []
+                        category.subcategories.map(
+                            subcategory => {
+                                if (subcategory.indicators.length > 0) {
+                                    subcategories.push(subcategory)
+                                }
+                            }
+                        )
+                        return {
+                            ...category,
+                            subcategories: subcategories
+                        }
+                    }
+                )
+                profileIndicators = profileIndicators.filter(ind => ind.subcategories.length > 0);
+                setProfileIndicators(profileIndicators);
+            }
+        }, [
+            props.filteredIndicators,
+            props.profileIndicators,
+            setProfileIndicators,
+            profileIndicators
+        ]
+    );
+
+    useEffect(() => {
+        if (allFiltersAreAvailable !== props.allFiltersAreAvailable) {
+            setAllFiltersAreAvailable(props.allFiltersAreAvailable);
         }
     }, [
-        props.filteredIndicators,
-        props.profileIndicators,
-        setProfileIndicators,
-        profileIndicators
-      ]
-    );
+        props.allFiltersAreAvailable
+    ])
 
     const handleExpandedChange = (panel) => {
         setExpanded(panel);
@@ -114,26 +119,15 @@ const ViewSettings = (props) => {
                                 >
                                     <Grid container>
                                         <Grid item xs={11} sx={{paddingRight: '6px'}}>
-                                            <Grid item xs={12}>
-                                                <FilteredIndicatorBox
-                                                    title={`${fi.indicatorTitle} (${sf.appliesTo})`}
-                                                >
-                                                    <AppliedPanelInfo>
-                                                        {showPanelName(sf.appliesTo[0])}
-                                                    </AppliedPanelInfo>
-                                                    {`${fi.indicatorTitle}`}
-                                                </FilteredIndicatorBox>
+                                            <Grid item xs={12} sx={{position: 'relative'}}>
+                                                {renderIndicatorTitleBox(fi, sf)}
                                             </Grid>
                                             <Grid container sx={{marginTop: '8px'}}>
-                                                <Grid item xs={6} sx={{paddingRight: '3px'}}>
-                                                    <FilteredIndicatorBox>
-                                                        {sf.group}
-                                                    </FilteredIndicatorBox>
+                                                <Grid item xs={6} sx={{paddingRight: '3px', position: 'relative'}}>
+                                                    {renderFilterValueBox(sf.group, sf.isFilterAvailable, '-1px')}
                                                 </Grid>
-                                                <Grid item xs={6} sx={{paddingLeft: '3px'}}>
-                                                    <FilteredIndicatorBox>
-                                                        {sf.value}
-                                                    </FilteredIndicatorBox>
+                                                <Grid item xs={6} sx={{paddingLeft: '3px', position: 'relative'}}>
+                                                    {renderFilterValueBox(sf.value, sf.isFilterAvailable, '-4px')}
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -155,30 +149,85 @@ const ViewSettings = (props) => {
         )
     }
 
-    const renderIndicatorTreeView = () =>{
-      return (
-        <Grid item xs={12}>
-          <IndicatorTreeViewCard>
-            <TreeView
-              defaultCollapseIcon={<ArrowDropDownIcon />}
-              defaultExpandIcon={<ArrowRightIcon />}
-            >
-              {profileIndicators.length > 0 && profileIndicators.map(
-                (item, key) => {
-                  return (
-                    <IndicatorCategoryTreeView
-                      category={item}
-                      key={key}
-                      updateHiddenIndicators={props.updateHiddenIndicators}
-                      hiddenIndicators={props.hiddenIndicators}
-                    />
-                  )
-                })
-              }
-            </TreeView>
-          </IndicatorTreeViewCard>
-        </Grid>
-      );
+    const renderIndicatorTitleBox = (fi, sf) => {
+        if (fi.indicatorIsAvailable) {
+            return (
+                <FilteredIndicatorBox
+                    title={`${fi.indicatorTitle} (${sf.appliesTo})`}
+                >
+                    <AppliedPanelInfo>
+                        {showPanelName(sf.appliesTo[0])}
+                    </AppliedPanelInfo>
+                    {fi.indicatorTitle}
+                </FilteredIndicatorBox>
+            )
+        } else {
+            // not available
+            return (
+                <UnavailableFilteredIndicatorBox
+                    title={`${fi.indicatorTitle} (${sf.appliesTo})`}
+                    sx={{
+                        '&::after': {
+                            right: '-4px',
+                        }
+                    }}
+                >
+                    <AppliedPanelInfo>
+                        {showPanelName(sf.appliesTo[0])}
+                    </AppliedPanelInfo>
+                    <i>Indicator no longer available*</i>
+                </UnavailableFilteredIndicatorBox>
+            )
+        }
+    }
+
+    const renderFilterValueBox = (value, isAvailable, rightVal) => {
+        // isAvailable is initially undefined
+        if (isAvailable === false) {
+            return (
+                <UnavailableFilteredIndicatorBox
+                    sx={{
+                        '&::after': {
+                            right: rightVal,
+                        }
+                    }}
+                >
+                    <s>{value}</s>
+                </UnavailableFilteredIndicatorBox>
+            )
+        } else {
+            return (
+                <FilteredIndicatorBox>
+                    {value}
+                </FilteredIndicatorBox>
+            )
+        }
+    }
+
+    const renderIndicatorTreeView = () => {
+        return (
+            <Grid item xs={12}>
+                <IndicatorTreeViewCard>
+                    <TreeView
+                        defaultCollapseIcon={<ArrowDropDownIcon/>}
+                        defaultExpandIcon={<ArrowRightIcon/>}
+                    >
+                        {profileIndicators.length > 0 && profileIndicators.map(
+                            (item, key) => {
+                                return (
+                                    <IndicatorCategoryTreeView
+                                        category={item}
+                                        key={key}
+                                        updateHiddenIndicators={props.updateHiddenIndicators}
+                                        hiddenIndicators={props.hiddenIndicators}
+                                    />
+                                )
+                            })
+                        }
+                    </TreeView>
+                </IndicatorTreeViewCard>
+            </Grid>
+        );
     }
 
     const renderSiteWideFilters = () => {
@@ -241,6 +290,36 @@ const ViewSettings = (props) => {
         }
     }
 
+    const renderFiltersNotAvailableHelpText = () => {
+        if (allFiltersAreAvailable) {
+            return <HelpText></HelpText>
+        } else {
+            return (
+                <FilterNotAvailableHelpText
+                    data-test-id={'filter-not-available-help-text'}
+                >
+                    {props.filtersNotAvailableText}
+                </FilterNotAvailableHelpText>
+            )
+        }
+    }
+
+    const renderIndicatorOptionsIcon = () => {
+        if (allFiltersAreAvailable) {
+            return (
+                <IconContainer>
+                    {indicatorOptionsSvg}
+                </IconContainer>
+            )
+        } else {
+            return (
+                <UnavailableFilterIconContainer>
+                    {indicatorOptionsSvg}
+                </UnavailableFilterIconContainer>
+            )
+        }
+    }
+
     return (
         <Container>
             <ViewSettingsTitle>
@@ -256,9 +335,7 @@ const ViewSettings = (props) => {
                     aria-controls={'indicatorOptions-content'}
                     id={'indicatorOptions-header'}
                 >
-                    <IconContainer>
-                        {indicatorOptionsSvg}
-                    </IconContainer>
+                    {renderIndicatorOptionsIcon()}
                     <StyledTypography>INDICATOR OPTIONS</StyledTypography>
                 </StyledAccordionSummary>
                 <StyledAccordionDetails>
@@ -266,21 +343,22 @@ const ViewSettings = (props) => {
                     <StyledTypographyWithBottomBorder>
                         INDICATOR-SPECIFIC OPTIONS
                     </StyledTypographyWithBottomBorder>
-                    {renderFilteredIndicators()}
                     <HelpText>
                         Any indicators you adjust will appear here
                     </HelpText>
+                    {renderFilteredIndicators()}
+                    {renderFiltersNotAvailableHelpText()}
 
                     <StyledBoxWithBottomBorder>
-                      <StyledTypography variant="body2" sx={{width: "100%"}}>
-                        HIDDEN INDICATORS
-                      </StyledTypography>
-                      <StyledIconTypography
-                      >
-                        <StyledTooltip title={hiddenIndicatorsTooltipText()} arrow placement="top">
-                          <InfoIcon fontSize="small" />
-                        </StyledTooltip>
-                      </StyledIconTypography>
+                        <StyledTypography variant="body2" sx={{width: "100%"}}>
+                            HIDDEN INDICATORS
+                        </StyledTypography>
+                        <StyledIconTypography
+                        >
+                            <StyledTooltip title={hiddenIndicatorsTooltipText()} arrow placement="top">
+                                <InfoIcon fontSize="small"/>
+                            </StyledTooltip>
+                        </StyledIconTypography>
                     </StyledBoxWithBottomBorder>
                     {renderIndicatorTreeView()}
                 </StyledAccordionDetails>

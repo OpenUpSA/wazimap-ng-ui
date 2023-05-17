@@ -9,7 +9,55 @@
         "indicators": [
           {
             "id": 1125,
-            "label": "Language most spoken at home"
+            "label": "Language most spoken at home",
+            "groups": [
+              {
+                "subindicators": [
+                  "15-19",
+                  "20-24",
+                  "25-29",
+                  "30-35",
+                  "15-24 (Intl)",
+                  "15-35 (ZA)"
+                ],
+                "name": "age"
+              },
+              {
+                "subindicators": [
+                  "Male",
+                  "Female"
+                ],
+                "name": "gender"
+              },
+              {
+                "subindicators": [
+                  "Afrikaans",
+                  "English",
+                  "isiNdebele",
+                  "isiXhosa",
+                  "isiZulu",
+                  "Sepedi",
+                  "Sesotho",
+                  "Setswana",
+                  "Sign language",
+                  "Siswati",
+                  "Tshivenda",
+                  "Xitsonga",
+                  "Other"
+                ],
+                "name": "language"
+              },
+              {
+                "subindicators": [
+                  "Black African",
+                  "Coloured",
+                  "White",
+                  "Other",
+                  "Indian or Asian"
+                ],
+                "name": "race"
+              }
+            ]
           }
         ]
       },
@@ -20,7 +68,55 @@
         "indicators": [
           {
             "id": 1123,
-            "label": "Region of birth"
+            "label": "Region of birth",
+            "groups": [
+              {
+                "subindicators": [
+                  "15-19",
+                  "20-24",
+                  "25-29",
+                  "30-35",
+                  "15-24 (Intl)",
+                  "15-35 (ZA)"
+                ],
+                "name": "age"
+              },
+              {
+                "subindicators": [
+                  "Male",
+                  "Female"
+                ],
+                "name": "gender"
+              },
+              {
+                "subindicators": [
+                  "Afrikaans",
+                  "English",
+                  "isiNdebele",
+                  "isiXhosa",
+                  "isiZulu",
+                  "Sepedi",
+                  "Sesotho",
+                  "Setswana",
+                  "Sign language",
+                  "Siswati",
+                  "Tshivenda",
+                  "Xitsonga",
+                  "Other"
+                ],
+                "name": "language"
+              },
+              {
+                "subindicators": [
+                  "Black African",
+                  "Coloured",
+                  "White",
+                  "Other",
+                  "Indian or Asian"
+                ],
+                "name": "race"
+              }
+            ]
           }
         ]
       },
@@ -53,7 +149,45 @@
         "indicators": [
           {
             "id": 1124,
-            "label": "Citizenship"
+            "label": "Citizenship",
+            "groups": [
+              {
+                "subindicators": [
+                  "15-24 (Intl)",
+                  "15-35 (ZA)",
+                  "15-19",
+                  "20-24",
+                  "25-29",
+                  "30-35"
+                ],
+                "name": "age group"
+              },
+              {
+                "subindicators": [
+                  "Yes",
+                  "No",
+                  "Unspecified"
+                ],
+                "name": "citizenship"
+              },
+              {
+                "subindicators": [
+                  "Female",
+                  "Male"
+                ],
+                "name": "gender"
+              },
+              {
+                "subindicators": [
+                  "Black African",
+                  "Coloured",
+                  "Indian or Asian",
+                  "White",
+                  "Other"
+                ],
+                "name": "race"
+              }
+            ]
           }
         ]
       },

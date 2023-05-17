@@ -72,12 +72,12 @@ export function loadMenu(dataMapperMenu, data) {
                 defaultExpandIcon={<ArrowRightIcon/>}
             >
                 {profileIndicators.length > 0 && profileIndicators.map(
-                    (item, key) => {
+                    (item, index) => {
                         if (!item.isHidden) {
                             return (
                                 <IndicatorCategoryTreeView
                                     category={item}
-                                    key={key}
+                                    key={`datamapper-category-${item.id}-${index}-${dataMapperMenu.controller.state.profile.profile.geography.code}`}
                                     api={dataMapperMenu.api}
                                     controller={dataMapperMenu.controller}
                                 />

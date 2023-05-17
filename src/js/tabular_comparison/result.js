@@ -7,7 +7,6 @@ import {defaultValues} from "../defaultValues";
 import {Config as SAConfig} from '../configurations/geography_sa';
 import {fillMissingKeys, getColorRange} from "../utils";
 import {ResultArrowSvg, ResultArrowSvg2} from "./svg-icons";
-import Tooltip from "@mui/material/Tooltip";
 
 //components
 import SectionTitle from "./section-title";
@@ -210,16 +209,15 @@ const Result = (props) => {
                                                     )
                                                 } else {
                                                     return (
-                                                      <Tooltip title={tooltip} key={obj.index} arrow>
-                                                        <TableCell
-                                                            data-testid={`table-row-${idx}-cell-${obj.index}`}
-                                                            component={'td'}
-                                                            scope={'row'}
-                                                            key={obj.index}
-                                                            sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
-                                                        >{value}
-                                                        </TableCell>
-                                                      </Tooltip>
+                                                      <TableCell
+                                                          title={tooltip}
+                                                          data-testid={`table-row-${idx}-cell-${obj.index}`}
+                                                          component={'td'}
+                                                          scope={'row'}
+                                                          key={obj.index}
+                                                          sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
+                                                      >{value}
+                                                      </TableCell>
                                                     )
                                                 }
                                             }

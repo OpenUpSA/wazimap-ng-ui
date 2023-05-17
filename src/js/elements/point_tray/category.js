@@ -48,7 +48,6 @@ const Category = (props) => {
             <StyledTreeItem
                 nodeId={`category-${props.category.id}`}
                 data-test-class={'tree-view-category-item'}
-                key={props.category.id}
                 label={renderLabel()}
                 onClick={handleClick}
                 className={props.category.isSelected ? 'selected' : ''}

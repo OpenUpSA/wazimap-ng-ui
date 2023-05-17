@@ -10,6 +10,7 @@ const Theme = (props) => {
         return categories.map(category => {
             return (
                 <Category
+                    key={category.id}
                     category={category}
                     categoryToggled={props.categoryToggled}
                     styleTheme={styleTheme}
@@ -38,7 +39,6 @@ const Theme = (props) => {
             <StyledTreeItem
                 nodeId={`theme-${props.theme.id}`}
                 data-test-class={'tree-view-theme-item'}
-                key={props.theme.id}
                 label={
                     <ThemeLabel
                         theme={props.theme}

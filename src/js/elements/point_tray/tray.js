@@ -67,6 +67,10 @@ export class PointDataTray extends Component {
     }
 
     categoryToggled(category) {
+        if (category.isLoading){
+            return;
+        }
+
         if (category.isSelected) {
             // unselected
             this.triggerEvent("point_tray.category.unselected", category)
@@ -80,7 +84,7 @@ export class PointDataTray extends Component {
         if (isChecked) {
             // select all categories
             theme.categories.forEach(category => {
-                if (category.isSelected !== true) {
+                if (category.isSelected !== true && category.isLoading !== true) {
                     // false or undefined
                     this.triggerEvent("point_tray.category.selected", category);
                 }

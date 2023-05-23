@@ -15,7 +15,7 @@ import profile from "../facilities/profile.json";
 import profiles from "./profiles.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, null, null);
+    setupInterceptions(profiles, all_details, profile, [], null);
 
     cy.intercept('/api/v1/profile/8/geography/ZA/themes_count/?version=test&format=json', (request) => {
         request.reply({

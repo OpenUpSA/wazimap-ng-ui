@@ -13,7 +13,7 @@ import profile_indicator_data from './profile_indicator_data.json';
 import profile_indicator_summary_changed_order from './profile_indicator_summary_changed_order.json';
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, {}, {}, [], profile_indicator_summary, profile_indicator_data);
+    setupInterceptions(profiles, all_details, profile, [], {}, [], profile_indicator_summary, profile_indicator_data);
     gotoHomepage();
 })
 
@@ -73,7 +73,7 @@ Then('I check order of subindicators for Population group 2', () => {
 })
 
 Then('I am on the Wazimap Homepage with updated data', () => {
-  setupInterceptions(profiles, all_details, profile, {}, {}, [], profile_indicator_summary_changed_order, profile_indicator_data);
+  setupInterceptions(profiles, all_details, profile, [], {}, [], profile_indicator_summary_changed_order, profile_indicator_data);
   gotoHomepage();
 })
 

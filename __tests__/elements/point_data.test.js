@@ -9,20 +9,20 @@ import html from '../../src/index.html';
 import {TestPointData, TestMapControlConfigData} from "../../src/js/test_data";
 
 
-function getLabel(facility){
-  return facility.querySelector(".facility-info__item_label");
+function getLabel(facility) {
+    return facility.querySelector(".facility-info__item_label");
 }
 
-function getValue(facility){
-  return facility.querySelector(".facility-info__item_value");
+function getValue(facility) {
+    return facility.querySelector(".facility-info__item_value");
 }
 
 describe('Check point data HTML description', () => {
     document.body.innerHTML = html;
     const pointDataConfig = {
-      config: {
-        point_markers: {}
-      }
+        config: {
+            point_markers: {}
+        }
     }
 
     test('Description is rendered with HTML tags according to config', () => {
@@ -30,7 +30,7 @@ describe('Check point data HTML description', () => {
         let component = new Component();
         let testMapControlClass = new TestMapControlConfigData();
         let mapcontrol = new MapControl(
-          this, testMapControlClass.mapControlConfig, false
+            this, testMapControlClass.mapControlConfig, false
         );
         let testPointData = new TestPointData();
         let pointData = new PointData(component, '', mapcontrol.map, '', pointDataConfig)
@@ -42,6 +42,7 @@ describe('Check point data HTML description', () => {
         // Test for Allowed tag
         let facilityLabel = getLabel(facilityItems[0]);
         let facilityValue = getValue(facilityItems[0]);
+        
         expect(facilityLabel.textContent).toBe('Test allowed Tag');
         expect(facilityValue.firstChild.nodeType).toBe(1);
         expect(facilityValue.innerHTML).toContain("<b>");

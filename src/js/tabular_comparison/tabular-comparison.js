@@ -13,6 +13,7 @@ import './tabular-comparison.module.css';
 const TabularComparison = (props) => {
     const [api, setApi] = useState(null);
     const [profileId, setProfileId] = useState();
+    const [profileConfig, setProfileConfig] = useState({});
     const [render, setRender] = useState(true);
 
     const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
@@ -107,6 +108,7 @@ const TabularComparison = (props) => {
         api.getProfileConfiguration(hostname).then((data) => {
             setApi(api);
             setProfileId(data.id);
+            setProfileConfig(data.configuration)
         });
         setRender(false);
     })
@@ -117,6 +119,7 @@ const TabularComparison = (props) => {
             <Body
                 api={api}
                 profileId={profileId}
+                profileConfig={profileConfig}
             />
         </div>
     );

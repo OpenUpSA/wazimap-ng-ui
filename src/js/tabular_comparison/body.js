@@ -64,6 +64,7 @@ const Body = (props) => {
                                 selectedGeographies={selectedGeographies}
                                 indicatorObjs={indicatorObjs}
                                 indicators={indicators}
+                                profileConfig={props.profileConfig}
                             />
                         </Grid>
                     </Grid>

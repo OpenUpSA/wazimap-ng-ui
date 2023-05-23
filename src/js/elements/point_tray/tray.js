@@ -1,8 +1,8 @@
 import {numFmt, Component, hasElements, ThemeStyle, checkIterate} from '../../utils';
-import {Theme} from './theme';
 import {createRoot} from "react-dom/client";
 import Watermark from "../../ui_components/watermark";
 import React from "react";
+import PointMapperTreeview from "./point_mapper_treeview";
 
 const categoryWrapperClsName = '.point-mapper__h1_content';
 const treeLineClsName = '.point-data__h2_line-v';
@@ -24,6 +24,7 @@ export class PointDataTray extends Component {
         if (watermarkEnabled) {
             this.addWatermark();
         }
+        this.addTreeviewRoot();
     }
 
     prepareDomElements() {
@@ -50,29 +51,69 @@ export class PointDataTray extends Component {
         return theme;
     }
 
+    addTreeviewRoot() {
+        let pointMapperElement = document.getElementsByClassName("point-mapper-content__list");
+        if (pointMapperElement.length > 0) {
+            this.pointMapperRoot = createRoot(pointMapperElement[0]);
+        }
+    }
+
+    triggerCategoryLoaded(category) {
+        this.triggerEvent("point_data.category.loaded", category);
+    }
+
+    triggerCategoryLoading(category) {
+        this.triggerEvent("point_data.category.loading", category);
+    }
+
+    categoryToggled(category) {
+        if (category.isLoading){
+            return;
+        }
+
+        if (category.isSelected) {
+            // unselected
+            this.triggerEvent("point_tray.category.unselected", category)
+        } else {
+            // selected
+            this.triggerEvent("point_tray.category.selected", category);
+        }
+    }
+
+    themeToggled(theme, isChecked) {
+        if (isChecked) {
+            // select all categories
+            theme.categories.forEach(category => {
+                if (category.isSelected !== true && category.isLoading !== true) {
+                    // false or undefined
+                    this.triggerEvent("point_tray.category.selected", category);
+                }
+            })
+        } else {
+            // unselect all categories
+            theme.categories.forEach(category => {
+                if (category.isSelected) {
+                    this.triggerEvent("point_tray.category.unselected", category);
+                }
+            })
+        }
+    }
+
     loadThemes() {
         const self = this;
-        let themeIndex = 0;
-
         self.triggerEvent("point_tray.tray.loading_themes", self);
 
         self.api.loadThemes(this.profileId).then(data => {
-            checkIterate(data, themeDatum => {
-                themeIndex++;
-                let theme = self.createTheme(themeIndex, themeDatum);
-                this.themes.push(theme);
-                let item = theme.element;
-
-                //append tree
-                let treeItem = this.treeLineItem.cloneNode(true);
-                $(categoryWrapperClsName, item).append(treeItem);
-
-                ThemeStyle.replaceChildDivWithIcon($(item).find('.point-data__h1_icon'), themeDatum.icon)
-
-                $(loadingClsName).addClass('hidden');
-                $(wrapperClsName).append(item);
-            })
+            this.pointMapperRoot.render(
+                <PointMapperTreeview
+                    themes={data}
+                    categoryToggled={(category) => self.categoryToggled(category)}
+                    themeToggled={(theme, isChecked) => self.themeToggled(theme, isChecked)}
+                    parent={this}
+                />
+            );
             self.triggerEvent("point_tray.tray.themes_loaded", data);
+            $(loadingClsName).addClass('hidden');
         })
     }
 

@@ -72,7 +72,7 @@ Given('I am on the Wazimap Homepage', () => {
         })
     })
 
-    setupInterceptions(profiles, null, profile, null, null, [], {}, profile_indicator_data);
+    setupInterceptions(profiles, null, profile, [], null, [], {}, profile_indicator_data);
     gotoHomepage();
 })
 

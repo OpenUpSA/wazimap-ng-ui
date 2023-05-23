@@ -132,15 +132,15 @@ export function clickOnText(text) {
 }
 
 export function clickOnTheFirstTheme() {
-    cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1').first().click();
+    cy.get('.point-mapper li[data-test-class="tree-view-theme-item"]').first().click();
 }
 
 export function checkIfCategoriesAreDisplayed() {
-    cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1 .point-mapper__h1_content').should('be.visible');
+    cy.get('.point-mapper li[data-test-class="tree-view-category-item"]').should('be.visible');
 }
 
 export function clickOnTheFirstCategory() {
-    cy.get('.point-mapper .point-mapper-content__list .point-mapper__h1 .point-mapper__h1_content .point-mapper__h2_wrapper .point-mapper__h2').first().click();
+    cy.get('.point-mapper li[data-test-class="tree-view-category-item"]').first().click();
 }
 
 export const hoverOverTheMapCenter = (elementSelectorToFind = null, retryCount = 5) => new Cypress.Promise(function (resolve) {

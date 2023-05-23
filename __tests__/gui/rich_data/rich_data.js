@@ -10,7 +10,7 @@ import profiles from "../rich_data/profiles.json";
 import profile from "../rich_data/profile.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, null, null);
+    setupInterceptions(profiles, all_details, profile, [], null);
     gotoHomepage();
 })
 

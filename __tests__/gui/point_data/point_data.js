@@ -37,20 +37,20 @@ When('I expand Higher Education theme', () => {
 })
 
 Then('I select TVET colleges category', () => {
-    cy.get('.point-mapper__h2:contains("TVET colleges")')
-        .closest('.point-mapper__h1')
-        .find('.point-mapper__h1_trigger')
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges")')
+        .closest('li[data-test-class="tree-view-theme-item"]')
+        .find('i.material-icons')
         .should('have.css', 'color')
         .and('eq', 'rgb(34, 166, 179)');
-    cy.get('.point-mapper__h2:contains("TVET colleges")').click();
-    cy.get('.point-mapper__h2:contains("TVET colleges") .point-mapper__h2_load-complete').should('be.visible');
-    cy.get('.point-mapper__h2:contains("TVET colleges")')
-        .should('have.css', 'background-image')
-        .and('eq', 'linear-gradient(rgba(34, 166, 179, 0.2), rgba(34, 166, 179, 0.2))');
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges")').click();
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges") i.fa-check').should('be.visible');
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges") .MuiTreeItem-content')
+        .should('have.css', 'background-color')
+        .and('eq', 'rgba(34, 166, 179, 0.2)');
 })
 
 Then('I deselect TVET colleges category', () => {
-    cy.get('.point-mapper__h2:contains("TVET colleges")').click();
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges")').click();
 })
 
 When(/^I check if the marker color is rgb\((\d+), (\d+), (\d+)\)$/, (color1, color2, color3) => {
@@ -76,20 +76,20 @@ When('I expand Labour theme', () => {
 })
 
 Then('I select Additional DEL facilities category', () => {
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")')
-        .closest('.point-mapper__h1')
-        .find('.point-mapper__h1_trigger')
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)")')
+        .closest('li[data-test-class="tree-view-theme-item"]')
+        .find('i.material-icons')
         .should('have.css', 'color')
         .and('eq', 'rgb(235, 77, 75)');
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")').click();
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)") .point-mapper__h2_load-complete').should('be.visible');
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")')
-        .should('have.css', 'background-image')
-        .and('eq', 'linear-gradient(rgba(235, 77, 75, 0.2), rgba(235, 77, 75, 0.2))');
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)")').click();
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)") i.fa-check').should('be.visible');
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)") .MuiTreeItem-content')
+        .should('have.css', 'background-color')
+        .and('eq', 'rgba(235, 77, 75, 0.2)');
 })
 
 Then('I deselect Additional DEL facilities category', () => {
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")').click();
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)")').click();
 })
 
 When('I check if the cluster is created correctly', () => {

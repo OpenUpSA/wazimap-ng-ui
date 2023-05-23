@@ -2,8 +2,10 @@ import React, {useEffect, useState} from "react";
 import {Card, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {format as d3format} from "d3-format";
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
+import {max as d3max, min as d3min} from 'd3-array';
 import {defaultValues} from "../defaultValues";
-import {fillMissingKeys} from "../utils";
+import {Config as SAConfig} from '../configurations/geography_sa';
+import {fillMissingKeys, getColorRange} from "../utils";
 import {ResultArrowSvg, ResultArrowSvg2} from "./svg-icons";
 
 //components
@@ -12,8 +14,8 @@ import SectionTitle from "./section-title";
 const Result = (props) => {
     const [rows, setRows] = useState([]);
     const arrowSvg = ResultArrowSvg;
-
     const arrowSvg2 = ResultArrowSvg2;
+    const defaultConfig = new SAConfig();
 
     useEffect(() => {
         populateRows();
@@ -24,18 +26,19 @@ const Result = (props) => {
         props.selectedGeographies.map((geo) => {
             let newRow = {geo: geo.name, objs: []};
             props.indicatorObjs.map((obj) => {
-                let chartConfig = props.indicators
-                    .filter(x => x.geo === geo.code && x.indicator === obj.indicator)[0]?.indicatorDetail
-                    .chart_configuration;
-
+                let indicatorDetail = props.indicators
+                    .filter(x => x.geo === geo.code && x.indicator === obj.indicator)[0]?.indicatorDetail;
+                let chartConfig = indicatorDetail?.chart_configuration || {};
                 chartConfig = fillMissingKeys(chartConfig, defaultValues.chartConfiguration || {});
-
-                const formatting = chartConfig.types['Value'].formatting;
+                const {value, formatting, tooltip} = getRowDetailsByChoroplethMethod(
+                    geo, obj, chartConfig
+                );
 
                 let newObj = {
                     obj: obj,
-                    value: calculateValue(geo, obj),
-                    formatting: formatting
+                    value: value,
+                    formatting: formatting,
+                    tooltip: tooltip,
                 }
                 newRow.objs.push(newObj);
             })
@@ -48,9 +51,20 @@ const Result = (props) => {
         setRows(rows);
     }
 
+    const getBounds = (values) => {
+        const hasNegative = values.some(v => v < 0);
+        const hasPositive = values.some(v => v > 0);
+
+        if (hasNegative && hasPositive) {
+          const maxScaleValue = Math.max(...values.map(v => Math.abs(v)));
+          return [maxScaleValue * -1, maxScaleValue]
+        }
+        return [d3min(values), d3max(values)]
+    }
+
     const setBackgroundColors = (rows) => {
-        let darkestColor = '#BABABA';
-        let lightestColor = '#ffffff';
+        let choroplethConfig = props.profileConfig?.choropleth || {};
+        choroplethConfig = fillMissingKeys(choroplethConfig, defaultConfig.choropleth || {});
 
         props.indicatorObjs.forEach((obj) => {
             let objValues = [];
@@ -61,17 +75,22 @@ const Result = (props) => {
                 }
             })
 
-            const max = Math.max(...objValues);
-            const min = Math.min(...objValues);
+            let positiveColorRange = getColorRange(objValues, choroplethConfig, true);
+            let negativeColorRange = getColorRange(objValues, choroplethConfig, false);
+            const [min, max] = getBounds(objValues);
 
-            const scale = d3scaleSequential()
+            const negativeColorScale = d3scaleSequential()
                 .domain([min, max])
-                .range([lightestColor, darkestColor]);
+                .range(negativeColorRange);
+
+            const positiveColorScale = d3scaleSequential()
+                .domain([min, max])
+                .range(positiveColorRange);
 
             rows.forEach((row) => {
                 let rowObj = row.objs.filter(x => x.obj === obj)[0];
                 if (rowObj != null && rowObj.value != null) {
-                    rowObj.background = scale(rowObj.value);
+                    rowObj.background = rowObj.value > 0 ? positiveColorScale(rowObj.value) : negativeColorScale(rowObj.value);
                     rowObj.value = rowObj.formatting == null ? rowObj.value : d3format(rowObj.formatting)(rowObj.value);
                 }
             })
@@ -84,19 +103,39 @@ const Result = (props) => {
         return window.innerHeight - topSpace - bottomSpace;
     }
 
-    const calculateValue = (geo, obj) => {
+    const getTotalCount = (data) => {
+      if (data != null && data.length > 0) {
+          return data.reduce((n, {count}) => n + parseFloat(count), 0);
+      }
+      return null;
+    }
+
+    const getRowDetailsByChoroplethMethod = (geo, obj, chartConfig) => {
+        let value = null, tooltip = null;
+        let formatting = chartConfig.types['Value'].formatting;
         let selectedIndicator = props.indicators.filter((ind) => ind.geo === geo.code && ind.indicator === obj.indicator)[0];
         if (selectedIndicator == null) {
-            return;
+            return {value, tooltip, formatting};
         }
-
+        const choroplethMethod = selectedIndicator.indicatorDetail?.choropleth_method;
         const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
         const data = selectedIndicator.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
-        if (data != null && data.length > 0) {
-            return data.reduce((n, {count}) => n + parseFloat(count), 0);
-        } else {
-            return null;
+
+        if (data === null && data.length === 0) {
+          return {value, tooltip, formatting};
         }
+
+        const primaryGroupTotal = getTotalCount(data);
+        if (choroplethMethod === "subindicator"){
+          const totalCount = getTotalCount(selectedIndicator.indicatorDetail.data);
+          tooltip = d3format(formatting)(primaryGroupTotal);
+          value = (primaryGroupTotal/totalCount);
+          formatting = chartConfig.types['Percentage'].formatting;
+        } else {
+          value = primaryGroupTotal;
+        }
+
+        return {value, tooltip, formatting};
     }
 
     const renderResult = () => {
@@ -157,6 +196,7 @@ const Result = (props) => {
                                         props.indicatorObjs.map((obj) => {
                                             if (obj.indicator !== '' && obj.category !== '') {
                                                 const value = row.objs.filter(x => x.obj === obj)[0]?.value;
+                                                const tooltip = row.objs.filter(x => x.obj === obj)[0]?.tooltip;
                                                 if (value === 'NaN') {
                                                     return (
                                                         <TableCell
@@ -169,14 +209,15 @@ const Result = (props) => {
                                                     )
                                                 } else {
                                                     return (
-                                                        <TableCell
-                                                            data-testid={`table-row-${idx}-cell-${obj.index}`}
-                                                            component={'td'}
-                                                            scope={'row'}
-                                                            key={obj.index}
-                                                            sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
-                                                        >{value}
-                                                        </TableCell>
+                                                      <TableCell
+                                                          title={tooltip}
+                                                          data-testid={`table-row-${idx}-cell-${obj.index}`}
+                                                          component={'td'}
+                                                          scope={'row'}
+                                                          key={obj.index}
+                                                          sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
+                                                      >{value}
+                                                      </TableCell>
                                                     )
                                                 }
                                             }

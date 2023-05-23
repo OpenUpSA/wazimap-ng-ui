@@ -30,6 +30,11 @@ export default class Controller extends Component {
         $(window).on('hashchange', () => {
             const hash = decodeURI(window.location.hash);
             let parts = hash.split(':')
+
+            if (parts[0] == '#geo') {
+                this.changeHash(parts[1], true);
+            }
+
             if (parts[0] == '#logout') {
                 self.onLogout();
             }

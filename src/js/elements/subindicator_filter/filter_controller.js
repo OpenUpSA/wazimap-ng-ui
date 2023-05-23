@@ -63,7 +63,8 @@ export class FilterController extends Component {
         addButton: 'a.mapping-options__add-filter',
         filterPanel: SidePanels.PANELS.dataMapper,
         removeFilterButton: '.mapping-options__remove-filter',
-        addLockButton: true
+        addLockButton: true,
+        rowContainer: null
     }) {
         super(parent);
         this._container = container;
@@ -150,8 +151,12 @@ export class FilterController extends Component {
         this._noFiltersAvailable = value;
     }
 
+    get rowContainer() {
+        return this._rowContainer;
+    }
+
     prepareDomElements() {
-        this._rowContainer = $(this.container).find(this._elements.filterRowClass)[0];
+        this._rowContainer = this._elements.rowContainer == null ? $(this.container).find(this._elements.filterRowClass)[0] : this._elements.rowContainer;
 
         if ($(this.container).closest('.styles').length <= 0) {
             while ($(this.container).find(this._elements.filterRowClass).length > 0) {

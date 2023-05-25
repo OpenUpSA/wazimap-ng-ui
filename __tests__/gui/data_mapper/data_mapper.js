@@ -166,7 +166,7 @@ When('I expand Higher Education theme', () => {
 })
 
 Then('I click on TVET colleges category', () => {
-    cy.get('.point-mapper__h2:contains("TVET colleges")').click();
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges")').click();
 })
 
 Then('I check if the point filter dialog is collapsed', () => {

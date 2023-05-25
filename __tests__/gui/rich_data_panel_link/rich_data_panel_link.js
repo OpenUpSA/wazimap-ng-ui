@@ -26,7 +26,7 @@ import themes_count_CPT from "./CPT/themes_count.json";
 import all_details_DC3 from "./DC3/all_details.json";
 
 Given('I am on the Wazimap Homepage', () => {
-  setupInterceptions(profiles, all_details_ZA, profile, {}, {}, themes_count_ZA, profile_indicator_summary_ZA, {});
+  setupInterceptions(profiles, all_details_ZA, profile, [], {}, themes_count_ZA, profile_indicator_summary_ZA, {});
   gotoHomepage();
 })
 

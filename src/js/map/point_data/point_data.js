@@ -123,16 +123,6 @@ export class PointData extends Component {
         }
     }
 
-    showLoading(category) {
-        category.showLoading(true);
-        category.showDone(false);
-    }
-
-    showDone(category) {
-        category.showLoading(false);
-        category.showDone(true);
-    }
-
     /**
      * this function is called when a category is toggled
      * */
@@ -144,7 +134,7 @@ export class PointData extends Component {
         layer = this.genLayer()
         this.categoryLayers[category.id] = layer;
 
-        this.triggerEvent('loadingCategoryPoints', category);
+        this.triggerEvent('point_data.category.loading', category);
 
         const data = await this.getAddressPoints(category);
         const points = {
@@ -154,9 +144,8 @@ export class PointData extends Component {
         self.showPointLegend(category);
         self.createMarkers(points, layer);
         self.map.addLayer(layer);
-        self.showDone(category);
 
-        self.triggerEvent('loadedCategoryPoints', {category: category, points: data});
+        self.triggerEvent('point_data.category.loaded', {category: category, points: data});
 
         self.pointFilter.isVisible = true;
     }
@@ -167,7 +156,7 @@ export class PointData extends Component {
 
             if (layer !== undefined) {
                 this.map.removeLayer(layer);
-                pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+                pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.id}']`).remove();
 
                 this.activePoints = this.activePoints.filter((ap) => {
                     return ap.category.id !== category.id
@@ -190,7 +179,7 @@ export class PointData extends Component {
             })
             this.markers.removeLayers(removeMarkers);
             this.pointFilter.activePoints = this.activePoints;
-            pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.data.id}']`).remove();
+            pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.id}']`).remove();
         }
 
         if (pointLegend.find(`.${pointLegendItemClsName}`).length <= 0) {
@@ -269,11 +258,10 @@ export class PointData extends Component {
                 name: prop.name,
                 category: category,
                 theme: category.theme,
-                themeIndex: category.themeIndex,
                 data: prop.data,
                 image: prop.image,
                 url: prop.url,
-                icon: category.data.theme.icon
+                icon: category.theme.icon
             })
         })
 
@@ -286,13 +274,13 @@ export class PointData extends Component {
 
     showPointLegend = (category) => {
         pointLegend.addClass('visible-in-download');
-        let color = $(`.theme-${category.themeIndex}`).css('color');
+        let color = category.theme.color;
         let item = pointLegendItem.cloneNode(true);
-        $('.point-legend__text', item).text(category.data.name);
+        $('.point-legend__text', item).text(category.name);
         $('.point-legend__color', item).css('background-color', color);
-        $(item).attr('data-id', category.data.id);
+        $(item).attr('data-id', category.id);
         $('.point-legend__remove', item).on('click', () => {
-            $(`.point-mapper__h2[data-id=${category.data.id}]`).trigger('click');
+            $(`.point-mapper__h2[data-id=${category.id}]`).trigger('click');
             if ($('.map-point-legend .point-legend').length <= 0) {
                 //all the legend items are removed - remove filters too
                 $('.point-filters__header-close').trigger('click');
@@ -365,7 +353,7 @@ export class PointData extends Component {
                     icon: divIcon,
                     color: color,
                     pane: 'clusters',
-                    categoryName: point.category.data.name
+                    categoryName: point.category.name
                 });
         } else {
             marker = L.circleMarker([point.y, point.x], {
@@ -499,12 +487,14 @@ export class PointData extends Component {
 
     appendPointData = (point, item, rowItem, itemsClsName, labelClsName, valueClsName, visibleAttributes = null) => {
         $('.' + itemsClsName, item).empty();
-        const htmlFields = point.category.data.configuration?.field_type || {};
+        const htmlFields = point.category.configuration?.field_type || {};
+
         point.data.forEach((a, i) => {
             if (a.value !== null
                 && (visibleAttributes === null || visibleAttributes.indexOf(a.key) >= 0)
                 && Object.prototype.toString.call(a.value) !== '[object Object]'
                 && a.value.toString().trim() !== '') {
+
                 let itemRow = rowItem.cloneNode(true);
                 $(itemRow).removeClass('last');
                 $('.' + labelClsName, itemRow).text(a.key);

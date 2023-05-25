@@ -30,7 +30,7 @@ export default class Controller extends Component {
         $(window).on('hashchange', () => {
             const hash = decodeURI(window.location.hash);
             let parts = hash.split(':')
-
+            this.api.cancelAndInitAbortController();
             if (parts[0] == '#geo') {
                 this.changeHash(parts[1], true);
             }
@@ -43,6 +43,7 @@ export default class Controller extends Component {
         window.addEventListener('popstate', (event) => {
             let hiddenIndicators = [], filteredIndicators = [];
             let areaCode = '';
+            console.log("IN popstate event");
 
             if (event.state) {
                 filteredIndicators = event.state.filters;
@@ -134,13 +135,13 @@ export default class Controller extends Component {
         const urlParams = new URLSearchParams(window.location.search);
 
         let parts = hash.split(':')
-        if (parts[0] == '#geo') {
+        if (parts[0] === '#geo') {
             this.changeHash(parts[1], true);
-        }
-
-        const areaCode = urlParams.get("geo") || this.config.rootGeography;
-        if (areaCode !== null){
-          this.changeHash(areaCode, false, areaCode === this.config.rootGeography);
+        } else {
+          const areaCode = urlParams.get("geo") || this.config.rootGeography;
+          if (areaCode !== null){
+            this.changeHash(areaCode, false, areaCode === this.config.rootGeography);
+          }
         }
     };
 

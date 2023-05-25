@@ -140,7 +140,7 @@ export default class Controller extends Component {
 
         const areaCode = urlParams.get("geo") || this.config.rootGeography;
         if (areaCode !== null){
-          this.changeHash(areaCode, false, true)
+          this.changeHash(areaCode, false, areaCode === this.config.rootGeography);
         }
     };
 
@@ -427,7 +427,8 @@ export default class Controller extends Component {
             history.replaceState(
                 {
                     "filters": this._filteredIndicators,
-                    "hiddenIndicators": this._hiddenIndicators
+                    "hiddenIndicators": this._hiddenIndicators,
+                    "geo": this.versionController.areaCode
                 },
                 '',
                 `${window.location.search}${window.location.hash}`
@@ -531,7 +532,7 @@ export default class Controller extends Component {
               `?${urlParams.toString()}${window.location.hash}`
           );
         }
-        const payload = this.changeGeography(areaCode)
+        const payload = this.changeGeography(areaCode);
         this._shouldMapZoom = !isRootGeo;
         this.onHashChange(payload);
     }

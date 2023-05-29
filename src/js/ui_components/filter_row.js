@@ -2,11 +2,10 @@ import {Dropdown, DropdownModel} from "./dropdown";
 import {Component, Observable} from "../utils";
 import {SidePanels} from "../elements/side_panels";
 import {LockFilterButtonWrapper} from "./lock_filter_button/lock_filter_button_wrapper";
+import {DataFilterModel} from "../models/data_filter_model";
 import {isArray, isEqual, isString} from "lodash";
 
-/**
- *
- */
+
 class FilterRowModel extends Component {
     static EVENTS = {
         updated: 'filterRowModel.updated',  // triggered when new datafiltermodel is set
@@ -94,7 +93,7 @@ class FilterRowModel extends Component {
 
     set isUnavailable(value) {
         this._isUnavailable = value;
-        }
+    }
 
     get isPreviouslySelected() {
         return this._isPreviouslySelected;
@@ -118,7 +117,6 @@ class FilterRowModel extends Component {
          * Sets the currently selected indictorValue and updates the dataFilterModel. Also triggers
          * an indicatorSelected event
          */
-
         let prevIndicator = this._currentIndicatorValue;
         let updateShareUrl = false;
         this._currentIndicatorValue = value;
@@ -157,7 +155,7 @@ class FilterRowModel extends Component {
             }
 
             let updateSharedUrl = value !== undefined && !this.isPreviouslySelected;
-            this.dataFilterModel.updateFilteredData(updateSharedUrl=updateSharedUrl);
+            this.dataFilterModel.updateFilteredData(updateSharedUrl = updateSharedUrl);
             this.triggerEvent(FilterRowModel.EVENTS.updated, this);
         }
     }
@@ -185,7 +183,8 @@ class FilterRowModel extends Component {
 export class FilterRow extends Component {
     static EVENTS = {
         removed: 'filterRow.removed',
-        indicatorOrSubIndicatorSelected: 'filterRow.indicatorOrSubIndicatorSelected'
+        indicatorOrSubIndicatorSelected: 'filterRow.indicatorOrSubIndicatorSelected',
+        keywordSelected:'filterRow.keyword.selected'
     }
 
     static SELECT_ATTRIBUTE = 'Select an attribute';
@@ -298,14 +297,16 @@ export class FilterRow extends Component {
         })
 
         this.subIndicatorDropdown.model.on(DropdownModel.EVENTS.selected, dropdownModel => {
-            if (dropdownModel.manualTrigger){
-              this.model.isPreviouslySelected = false;
+            if (dropdownModel.manualTrigger) {
+                this.model.isPreviouslySelected = false;
             }
             self.onSubindicatorSelected(dropdownModel.currentItem);
         })
 
         this.model.on(FilterRowModel.EVENTS.indicatorSelected, model => {
-            if (model.currentIndicatorValue !== FilterRowModel.ALL_VALUES) {
+            if (model.dataFilterModel.filterType === DataFilterModel.FILTER_TYPE.points && model.currentIndicatorValue === 'Keyword') {
+               self.parent.triggerEvent(FilterRow.EVENTS.keywordSelected);
+            } else if (model.currentIndicatorValue !== FilterRowModel.ALL_VALUES) {
                 self.updateSubindicatorDropdown();
             }
         })

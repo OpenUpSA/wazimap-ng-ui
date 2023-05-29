@@ -46,7 +46,11 @@ export class PointFilter extends Component {
 
     get groups() {
         const self = this;
-        let groups = [];
+        const defaultOption = {
+            name: 'Keyword',
+            values: []
+        };
+        let groups = [defaultOption];
         let categories = [...new Set(this.activePoints.map(x => x.category))];
         let isFilterable = categories.some(x => self.getFilterableFields(x).length > 0);
 
@@ -89,6 +93,12 @@ export class PointFilter extends Component {
             this._filterController.setDataFilterModel(dataFilterModel);
 
             $(`${this._mapBottomItems} .point-filters`).removeClass('hidden');
+
+
+            this.filterController.on('filterRow.keyword.selected', () => {
+                console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+            })
+
             this.hideFilterContent();
         } else if (!value) {
             $(`${this._mapBottomItems} .point-filters`).addClass('hidden');

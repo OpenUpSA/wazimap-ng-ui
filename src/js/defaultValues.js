@@ -1,3 +1,5 @@
+import {schemeBlues as d3schemeBlues} from 'd3-scale-chromatic';
+
 const DEFAULT_CONFIG = 'default'
 let chartConfiguration = {
     types: {
@@ -8,6 +10,7 @@ let chartConfiguration = {
     defaultType: 'Percentage', // [Value|Percentage]
     xTicks: null
 };
+
 export const defaultValues = {
     chartConfiguration,
     DEFAULT_CONFIG

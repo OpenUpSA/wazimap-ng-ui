@@ -45,13 +45,14 @@ export class PointFilter extends Component {
     }
 
     get groups() {
+        const self = this;
         let groups = [];
         let categories = [...new Set(this.activePoints.map(x => x.category))];
-        let isFilterable = categories.some(x => x.filterableFields.length > 0);
+        let isFilterable = categories.some(x => self.getFilterableFields(x).length > 0);
 
         if (isFilterable) {
             this.activePoints.forEach((ap) => {
-                const filterableFields = ap.category.filterableFields;
+                const filterableFields = self.getFilterableFields(ap.category);
                 if (filterableFields.length > 0) {
                     ap.point.data.forEach((d) => {
                         const dVal = trimValue(d.value);
@@ -97,6 +98,16 @@ export class PointFilter extends Component {
 
     get filterController() {
         return this._filterController;
+    }
+
+    getFilterableFields(category) {
+        let fields = [];
+
+        if (category.configuration !== undefined && category.configuration.filterable_fields !== undefined) {
+            fields = category.configuration.filterable_fields;
+        }
+
+        return fields;
     }
 
     prepareEvents() {

@@ -1,6 +1,9 @@
 import {Component, trimValue} from "../../utils";
 import {FilterController} from "./filter_controller";
 import {DataFilterModel} from "../../models/data_filter_model";
+import {createRoot} from "react-dom/client";
+import React from "react";
+import KeywordSearch from "./keyword-search";
 
 export class PointFilter extends Component {
     constructor(parent) {
@@ -95,8 +98,11 @@ export class PointFilter extends Component {
             $(`${this._mapBottomItems} .point-filters`).removeClass('hidden');
 
 
-            this.filterController.on('filterRow.keyword.selected', () => {
-                console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+            this.filterController.on('filterRow.keyword.selected', (filterRow) => {
+                let root = createRoot(filterRow.subIndicatorDropdown.container);
+                root.render(
+                    <KeywordSearch/>
+                );
             })
 
             this.hideFilterContent();

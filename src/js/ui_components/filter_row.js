@@ -305,7 +305,7 @@ export class FilterRow extends Component {
 
         this.model.on(FilterRowModel.EVENTS.indicatorSelected, model => {
             if (model.dataFilterModel.filterType === DataFilterModel.FILTER_TYPE.points && model.currentIndicatorValue === 'Keyword') {
-               self.parent.triggerEvent(FilterRow.EVENTS.keywordSelected);
+               self.parent.triggerEvent(FilterRow.EVENTS.keywordSelected, this);
             } else if (model.currentIndicatorValue !== FilterRowModel.ALL_VALUES) {
                 self.updateSubindicatorDropdown();
             }

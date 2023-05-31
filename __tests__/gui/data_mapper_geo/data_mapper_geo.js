@@ -5,7 +5,7 @@ import {
     expandDataMapper,
     gotoHomepage,
     mapBottomItems,
-    setupInterceptions,
+    setupInterceptions, visitToGeo,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
@@ -21,8 +21,8 @@ import profile_indicator_summary_WC from './WC/profile_indicator_summary.json';
 
 Given('I am on the Wazimap Homepage', () => {
     setupInterceptions(
-      profiles, all_details, profile, themes, {}, [],
-      profile_indicator_summary, profile_indicator_data, categories
+        profiles, all_details, profile, themes, {}, [],
+        profile_indicator_summary, profile_indicator_data, categories
     );
     gotoHomepage();
 })
@@ -50,7 +50,7 @@ Then('I check if the choropleth filter dialog is collapsed', () => {
 
 
 Then(/^I check if mapchip header text contains "([^"]*)"$/, (text) => {
-   cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('contain.text', text);
+    cy.get(`${mapBottomItems} .map-options  .map-options__filters .map-options__filters_header .filters__header_name .truncate`).should('contain.text', text);
 })
 
 
@@ -93,14 +93,14 @@ When('I navigate to WC', () => {
         })
     })
 
-    cy.visit('/#geo:WC');
+    visitToGeo('WC');
 })
 
 Then('I wait until map is ready for Western Cape', () => {
-     waitUntilGeographyIsLoaded('Western Cape');
+    waitUntilGeographyIsLoaded('Western Cape');
 })
 
 
 Then('I navigate to ZA', () => {
-    cy.visit('/#geo:ZA');
+    visitToGeo('ZA');
 })

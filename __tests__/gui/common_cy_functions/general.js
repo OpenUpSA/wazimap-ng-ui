@@ -6,26 +6,26 @@ export const allDetailsEndpoint = 'all_details';
 const recursiveResult = {PANEL_ALREADY_EXPANDED: false, ALL_PANELS_CLOSED: true};
 
 const geoCoordinates = {
-  "EC": {
-    lat: -32.033241,
-    lng: 26.838765,
-  },
-  "WC": {
-    lat: -33.571055,
-    lng: 19.868258,
-  },
-  "FS": {
-    lat: -28.886856,
-    lng: 26.202557,
-  },
-  "NC": {
-    lat: -29.719176,
-    lng: 21.283331,
-  },
-  "CPT": {
-    lat: -33.978895,
-    lng: 18.529666,
-  }
+    "EC": {
+        lat: -32.033241,
+        lng: 26.838765,
+    },
+    "WC": {
+        lat: -33.571055,
+        lng: 19.868258,
+    },
+    "FS": {
+        lat: -28.886856,
+        lng: 26.202557,
+    },
+    "NC": {
+        lat: -29.719176,
+        lng: 21.283331,
+    },
+    "CPT": {
+        lat: -33.978895,
+        lng: 18.529666,
+    }
 }
 
 
@@ -116,19 +116,19 @@ export function setupInterceptionsForSpecificGeo(geoCode, all_details) {
 }
 
 export function visitToGeo(geoCode) {
-  const coords = geoCoordinates[geoCode];
-  let L;
-  cy.window().then((win) => {
-      L = win.L;
-      let map = win.map;
-      const latlng = L.latLng(coords.lat, coords.lng);
+    const coords = geoCoordinates[geoCode];
+    let L;
+    cy.window().then((win) => {
+        L = win.L;
+        let map = win.map;
+        const latlng = L.latLng(coords.lat, coords.lng);
 
-      map.flyTo(latlng, 14);
-      hoverOverTheMapCenter('.leaflet-interactive')
-          .then(() => {
-              cy.get('.leaflet-interactive').click();
-          })
-  });
+        map.flyTo(latlng, 14);
+        hoverOverTheMapCenter('.leaflet-overlay-pane .leaflet-zoom-animated')
+            .then(() => {
+                cy.get('.leaflet-overlay-pane .leaflet-zoom-animated').click();
+            })
+    });
 }
 
 export function extractRequestedIndicatorData(url, indicatorData) {

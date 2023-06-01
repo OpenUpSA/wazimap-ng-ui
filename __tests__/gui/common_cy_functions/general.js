@@ -6,26 +6,36 @@ export const allDetailsEndpoint = 'all_details';
 const recursiveResult = {PANEL_ALREADY_EXPANDED: false, ALL_PANELS_CLOSED: true};
 
 const geoCoordinates = {
-    "EC": {
-        lat: -32.033241,
-        lng: 26.838765,
-    },
-    "WC": {
-        lat: -33.571055,
-        lng: 19.868258,
-    },
-    "FS": {
-        lat: -28.886856,
-        lng: 26.202557,
-    },
-    "NC": {
-        lat: -29.719176,
-        lng: 21.283331,
-    },
-    "CPT": {
-        lat: -33.978895,
-        lng: 18.529666,
-    }
+  "EC": {
+    lat: -32.033241,
+    lng: 26.838765,
+    name: "Eastern Cape"
+  },
+  "WC": {
+    lat: -33.571055,
+    lng: 19.868258,
+    name: "Western Cape"
+  },
+  "FS": {
+    lat: -28.886856,
+    lng: 26.202557,
+    name: "Free State"
+  },
+  "NC": {
+    lat: -29.719176,
+    lng: 21.283331,
+    name: "Northen Cape"
+  },
+  "CPT": {
+    lat: -33.978895,
+    lng: 18.529666,
+    name: "City of Cape Town"
+  },
+  "DC3": {
+    lat: -34.433911,
+    lng: 19.857072,
+    name: "Overberg"
+  }
 }
 
 
@@ -115,7 +125,12 @@ export function setupInterceptionsForSpecificGeo(geoCode, all_details) {
     }).as('all_details')
 }
 
-export function visitToGeo(geoCode) {
+export function visitToGeo(geoCode, isParent=false) {
+
+  if (isParent){
+    const geoName = geoCoordinates[geoCode].name;
+    cy.get(`.map-location .location-tag .location-tag__name .truncate:contains('${geoName}')`, {timeout: 20000}).click();
+  } else {
     const coords = geoCoordinates[geoCode];
     let L;
     cy.window().then((win) => {
@@ -124,11 +139,12 @@ export function visitToGeo(geoCode) {
         const latlng = L.latLng(coords.lat, coords.lng);
 
         map.flyTo(latlng, 14);
-        hoverOverTheMapCenter('.leaflet-overlay-pane .leaflet-zoom-animated')
+        hoverOverTheMapCenter('.leaflet-interactive')
             .then(() => {
-                cy.get('.leaflet-overlay-pane .leaflet-zoom-animated').click();
+                cy.get('.leaflet-interactive').click();
             })
     });
+  }
 }
 
 export function extractRequestedIndicatorData(url, indicatorData) {

@@ -6,37 +6,58 @@ export const allDetailsEndpoint = 'all_details';
 const recursiveResult = {PANEL_ALREADY_EXPANDED: false, ALL_PANELS_CLOSED: true};
 
 const geoCoordinates = {
-  "EC": {
-    lat: -32.033241,
-    lng: 26.838765,
-    name: "Eastern Cape"
-  },
-  "WC": {
-    lat: -33.571055,
-    lng: 19.868258,
-    name: "Western Cape"
-  },
-  "FS": {
-    lat: -28.886856,
-    lng: 26.202557,
-    name: "Free State"
-  },
-  "NC": {
-    lat: -29.719176,
-    lng: 21.283331,
-    name: "Northen Cape"
-  },
-  "CPT": {
-    lat: -33.978895,
-    lng: 18.529666,
-    name: "City of Cape Town"
-  },
-  "DC3": {
-    lat: -34.433911,
-    lng: 19.857072,
-    name: "Overberg"
-  }
+    "EC": {
+        lat: -32.033241,
+        lng: 26.838765,
+        name: "Eastern Cape"
+    },
+    "WC": {
+        lat: -33.571055,
+        lng: 19.868258,
+        name: "Western Cape"
+    },
+    "FS": {
+        lat: -28.886856,
+        lng: 26.202557,
+        name: "Free State"
+    },
+    "NC": {
+        lat: -29.719176,
+        lng: 21.283331,
+        name: "Northen Cape"
+    },
+    "CPT": {
+        lat: -33.978895,
+        lng: 18.529666,
+        name: "City of Cape Town"
+    },
+    "DC3": {
+        lat: -34.433911,
+        lng: 19.857072,
+        name: "Overberg"
+    },
+    "ZA-Test": {
+        name: "South Africa Test"
+    }
 }
+const allPanels = [
+    {
+        panel: '.data-mapper',
+        wrapper: '.data-mapper-toggles',
+        button: '.data-mapper-panel__open',
+        closeButton: '.data-mapper-panel__close'
+    }, {
+        panel: '.point-mapper',
+        wrapper: '.point-mapper-toggles',
+        button: '.point-mapper-panel__close',
+        closeButton: ''
+    }, {
+        panel: '.rich-data',
+        wrapper: '.rich-data-toggles',
+        button: '.rich-data-panel__open',
+        closeButton: '.rich-data-panel__close'
+    }
+];
 
 
 export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [],
@@ -125,26 +146,25 @@ export function setupInterceptionsForSpecificGeo(geoCode, all_details) {
     }).as('all_details')
 }
 
-export function visitToGeo(geoCode, isParent=false) {
+export function visitToGeo(geoCode, isParent = false, forceClick = false) {
+    if (isParent) {
+        const geoName = geoCoordinates[geoCode].name;
+        cy.get(`.map-location .location-tag .location-tag__name .truncate:contains('${geoName}')`, {timeout: 20000}).click();
+    } else {
+        const coords = geoCoordinates[geoCode];
+        let L;
+        cy.window().then((win) => {
+            L = win.L;
+            let map = win.map;
+            const latlng = L.latLng(coords.lat, coords.lng);
 
-  if (isParent){
-    const geoName = geoCoordinates[geoCode].name;
-    cy.get(`.map-location .location-tag .location-tag__name .truncate:contains('${geoName}')`, {timeout: 20000}).click();
-  } else {
-    const coords = geoCoordinates[geoCode];
-    let L;
-    cy.window().then((win) => {
-        L = win.L;
-        let map = win.map;
-        const latlng = L.latLng(coords.lat, coords.lng);
-
-        map.flyTo(latlng, 14);
-        hoverOverTheMapCenter('.leaflet-interactive')
-            .then(() => {
-                cy.get('.leaflet-interactive').click();
-            })
-    });
-  }
+            map.flyTo(latlng, 14);
+            hoverOverTheMapCenter('.leaflet-interactive')
+                .then(() => {
+                    cy.get('.leaflet-interactive').click({force: forceClick});
+                })
+        });
+    }
 }
 
 export function extractRequestedIndicatorData(url, indicatorData) {
@@ -241,25 +261,28 @@ export function expandDataMapper() {
     expandPanel('.data-mapper');
 }
 
+export function collapseRichDataPanel() {
+    collapsePanel('.rich-data');
+}
+
+function collapsePanel(panel) {
+    const panelToBeCollapsed = allPanels.filter((p) => {
+        return p.panel === panel
+    })[0];
+
+    cy.get(panelToBeCollapsed.panel).then($p => {
+        if ($p.is(':visible')) {
+            cy.get(`${panelToBeCollapsed.wrapper} ${panelToBeCollapsed.closeButton}`).click();
+        } else {
+            // the panelToBeExpanded is already collapsed
+        }
+    })
+}
+
 function expandPanel(panel) {
     cy.wait(1000);
     // cy.wait is necessary because closing a panel and opening another takes some time.
     // if a test is too quickly closing and opening panels, it creates problems
-    const allPanels = [
-        {
-            panel: '.data-mapper',
-            wrapper: '.data-mapper-toggles',
-            button: '.data-mapper-panel__open'
-        }, {
-            panel: '.point-mapper',
-            wrapper: '.point-mapper-toggles',
-            button: '.point-mapper-panel__open'
-        }, {
-            panel: '.rich-data',
-            wrapper: '.rich-data-toggles',
-            button: '.rich-data-panel__open'
-        }
-    ];
 
     const panelToBeExpanded = allPanels.filter((p) => {
         return p.panel === panel

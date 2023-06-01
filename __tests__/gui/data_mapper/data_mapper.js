@@ -15,7 +15,7 @@ import {
     expandRichDataPanel,
     gotoHomepage,
     mapBottomItems, selectChoroplethDropdownOption,
-    setupInterceptions,
+    setupInterceptions, visitToGeo,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
@@ -121,7 +121,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         })
     })
 
-    cy.visit('/#geo:EC');
+    visitToGeo('EC');
 
     cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
         //loading = true
@@ -213,7 +213,7 @@ When('I navigate to WC', () => {
         })
     })
 
-    cy.visit('/#geo:WC');
+    visitToGeo('WC');
 })
 
 When('I navigate to FS', () => {
@@ -241,7 +241,7 @@ When('I navigate to FS', () => {
         })
     });
 
-    cy.visit('/#geo:FS');
+    visitToGeo('FS');
 })
 
 Then(/^I check if there are (\d+) categories$/, function (count) {
@@ -249,13 +249,13 @@ Then(/^I check if there are (\d+) categories$/, function (count) {
 });
 
 Then('I navigate to ZA', () => {
-    cy.visit('/#geo:ZA');
+    visitToGeo('ZA');
 })
 
 Then(/^I navigate to WC and back to ZA in (\d+) ms$/, function (ms) {
-    cy.visit('/#geo:WC');
+    visitToGeo('WC');
     cy.wait(ms);   //without this controller ignores the first request  - to be able to navigate between 2 geographies we need a small delay
-    cy.visit('/#geo:ZA');
+    visitToGeo('ZA');
 
     cy.on('uncaught:exception', (err, runnable) => {
         // returning false here prevents Cypress from

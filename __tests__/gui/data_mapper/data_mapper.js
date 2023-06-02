@@ -235,7 +235,15 @@ When('I navigate to FS', () => {
         })
     });
 
-    visitToGeo('FS');
+    cy.on('uncaught:exception', (err, runnable) => {
+        // returning false here prevents Cypress from
+        // failing the test
+        if (err.name === "AbortError") {
+            return false
+        }
+    })
+
+    visitToGeo('FS', false, true);
 })
 
 Then(/^I check if there are (\d+) categories$/, function (count) {

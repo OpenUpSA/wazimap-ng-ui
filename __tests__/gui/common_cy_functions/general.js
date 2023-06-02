@@ -49,8 +49,8 @@ const allPanels = [
     }, {
         panel: '.point-mapper',
         wrapper: '.point-mapper-toggles',
-        button: '.point-mapper-panel__close',
-        closeButton: ''
+        button: '.point-mapper-panel__open',
+        closeButton: '.point-mapper-panel__close'
     }, {
         panel: '.rich-data',
         wrapper: '.rich-data-toggles',
@@ -161,7 +161,10 @@ export function visitToGeo(geoCode, isParent = false, forceClick = false) {
             map.flyTo(latlng, 14);
             hoverOverTheMapCenter('.leaflet-interactive')
                 .then(() => {
-                    cy.get('.leaflet-interactive').click({force: forceClick});
+                    const waitMs = forceClick ? 4000 : 0;
+                    cy.wait(waitMs).then(() => {
+                        cy.get('.leaflet-interactive').click({force: forceClick});
+                    })
                 })
         });
     }

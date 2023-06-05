@@ -6,12 +6,13 @@ import {
     setupInterceptions, visitToGeo,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
-import all_details from "../facilities/all_details.json";
-import all_details_NC from "../facilities/all_details_NC.json";
+import all_details from "./all_details.json";
+import all_details_NC from "./all_details_NC.json";
+import all_details_EC from "./all_details_EC.json"
 import themes_count from "./themes_count.json";
 import themes_count_EC from "./themes_count_EC.json";
 import all_details_WC from "./all_details_WC.json";
-import profile from "../facilities/profile.json";
+import profile from "./profile.json";
 import profiles from "./profiles.json";
 
 Given('I am on the Wazimap Homepage', () => {
@@ -70,7 +71,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,
-                body: all_details,
+                body: all_details_EC,
                 forceNetworkError: false // default
             })
         });

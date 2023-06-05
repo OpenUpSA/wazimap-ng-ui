@@ -24,7 +24,7 @@ const geoCoordinates = {
     "NC": {
         lat: -29.719176,
         lng: 21.283331,
-        name: "Northen Cape"
+        name: "Northern Cape"
     },
     "CPT": {
         lat: -33.978895,
@@ -38,6 +38,16 @@ const geoCoordinates = {
     },
     "ZA-Test": {
         name: "South Africa Test"
+    },
+    "DC8": {
+        lat: -28.039903,
+        lng: 20.962051,
+        name: "Siyanda"
+    },
+    "NC085": {
+      lat: -28.371381,
+      lng: 23.079396,
+      name: "Tsantsabane"
     }
 }
 const allPanels = [

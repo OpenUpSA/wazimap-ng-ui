@@ -6,22 +6,30 @@ import {
     expandRichDataPanel,
     gotoHomepage,
     setupInterceptions,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded,
+    visitToGeo
 } from "../common_cy_functions/general";
+
+import all_details_2011 from "../multi_boundary_versions/2011/all_details.json";
+import all_details_2016 from "../multi_boundary_versions/2016/all_details.json";
+import profile_indicator_summary_2011 from "../multi_boundary_versions/2011/profile_indicator_summary.json";
+import profile_indicator_summary_2016 from "../multi_boundary_versions/2016/profile_indicator_summary.json";
+
+import all_details_2011_NC from "../multi_boundary_versions/2011/all_details_NC.json";
+import all_details_2016_NC from "../multi_boundary_versions/2016/all_details_NC.json";
+
+import all_details_2011_DC8 from "../multi_boundary_versions/2011/all_details_DC8.json";
+import all_details_2016_DC8 from "../multi_boundary_versions/2016/all_details_DC8.json";
+
+import all_details_2011_NC085 from "../multi_boundary_versions/2011/all_details_NC085.json";
+
 import profiles from "../multi_boundary_versions/profiles.json";
-import all_details_2011 from "../multi_boundary_versions/all_details_2011.json";
-import all_details_2016 from "../multi_boundary_versions/all_details_2016.json";
-import all_details_2011_41804004 from "../multi_boundary_versions/all_details_2011_41804004.json";
-import all_details_2016_41804004 from "../multi_boundary_versions/all_details_2016_41804004.json";
-import all_details_2011_NC085 from "./all_details_2011_NC085.json";
 import profile from "../multi_boundary_versions/profile.json";
-import profile_indicator_summary_2011 from "./profile_indicator_summary_2011.json";
-import profile_indicator_summary_2016 from "./profile_indicator_summary_2016.json";
 import profile_indicator_data from './profile_indicator_data.json'
-import all_details_2016_NC from './all_details_2016_NC.json';
+
 
 Given('I am on the Wazimap Homepage', () => {
-    cy.intercept(`api/v1/${allDetailsEndpoint}/profile/8/geography/VT/?version=2011%20Boundaries&skip-children=true&format=json`, (req) => {
+    cy.intercept(`api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=2011%20Boundaries&skip-children=true&format=json`, (req) => {
         req.reply({
             statusCode: 201,
             body: all_details_2011,
@@ -30,7 +38,7 @@ Given('I am on the Wazimap Homepage', () => {
         })
     })
 
-    cy.intercept(`api/v1/profile/8/geography/VT/profile_indicator_summary/?version=2011%20Boundaries&format=json`, (req) => {
+    cy.intercept(`api/v1/profile/8/geography/ZA/profile_indicator_summary/?version=2011%20Boundaries&format=json`, (req) => {
         req.reply({
             statusCode: 201,
             body: profile_indicator_summary_2011,
@@ -39,7 +47,7 @@ Given('I am on the Wazimap Homepage', () => {
         })
     })
 
-    cy.intercept(`api/v1/${allDetailsEndpoint}/profile/8/geography/VT/?version=2016%20with%20wards&skip-children=true&format=json`, (req) => {
+    cy.intercept(`api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=2016%20Boundaries%20(ye)&skip-children=true&format=json`, (req) => {
         req.reply({
             statusCode: 201,
             body: all_details_2016,
@@ -47,7 +55,7 @@ Given('I am on the Wazimap Homepage', () => {
         })
     }).as('all_details')
 
-    cy.intercept(`api/v1/profile/8/geography/VT/profile_indicator_summary/?version=2016%20with%20wards&format=json`, (req) => {
+    cy.intercept(`api/v1/profile/8/geography/ZA/profile_indicator_summary/?version=2016%20Boundaries%20(ye)&format=json`, (req) => {
         req.reply({
             statusCode: 201,
             body: profile_indicator_summary_2016,
@@ -56,7 +64,7 @@ Given('I am on the Wazimap Homepage', () => {
         })
     })
 
-    cy.intercept('api/v1/profile/8/geography/VT/themes_count/?version=2011%20Boundaries&format=json', (req) => {
+    cy.intercept('api/v1/profile/8/geography/ZA/themes_count/?version=2011%20Boundaries&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: [],
@@ -64,7 +72,7 @@ Given('I am on the Wazimap Homepage', () => {
         })
     }).as('themes_count')
 
-    cy.intercept('api/v1/profile/8/geography/VT/themes_count/?version=2016%20with%20wards&format=json', (req) => {
+    cy.intercept('api/v1/profile/8/geography/ZA/themes_count/?version=2016%20Boundaries%20(ye)&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: [],
@@ -77,7 +85,11 @@ Given('I am on the Wazimap Homepage', () => {
 })
 
 Then('I wait until map is ready', () => {
-    waitUntilGeographyIsLoaded('Version Test');
+    waitUntilGeographyIsLoaded('South Africa Test');
+})
+
+Then(/^I wait until "([^"]*)" is loaded/, (geoName) => {
+    waitUntilGeographyIsLoaded(geoName);
 })
 
 Then(/^I check if "([^"]*)" is the selected version$/, (versionName) => {
@@ -111,24 +123,77 @@ When('I select an indicator from Elections category', () => {
     cy.get('.subIndicator-item').contains('2011 Voted').click();
 })
 
+Then('I navigate to a Northern Cape', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC/?version=2011%20Boundaries&skip-children=true&format=json`, (request) => {
+        request.reply({
+            statusCode: 200,
+            body: all_details_2011_NC,
+            forceNetworkError: false // default
+        });
+    });
+
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC/?version=2016%20Boundaries%20(ye)&skip-children=true&format=json`, (request) => {
+        request.reply({
+            statusCode: 200,
+            body: all_details_2016_NC,
+            forceNetworkError: false // default
+        });
+    });
+
+    cy.intercept('api/v1/profile/8/geography/NC/themes_count/?version=2011%20Boundaries&format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: [],
+            forceNetworkError: false // default
+        })
+    })
+
+    cy.intercept('api/v1/profile/8/geography/NC/themes_count/?version=2016%20Boundaries%20(ye)&format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: [],
+            forceNetworkError: false // default
+        })
+    })
+
+    cy.intercept('api/v1/profile/8/geography/NC/profile_indicator_summary/?version=2011%20Boundaries&format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: {},
+            forceNetworkError: false // default
+        })
+    })
+
+    cy.intercept('api/v1/profile/8/geography/NC/profile_indicator_summary/?version=2016%20Boundaries%20(ye)&format=json', (req) => {
+        req.reply({
+            statusCode: 201,
+            body: {},
+            forceNetworkError: false // default
+        })
+    })
+
+    visitToGeo("NC")
+})
+
+
 Then('I navigate to a geography with no children', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/41804004/?version=2011%20Boundaries&skip-children=true&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/DC8/?version=2011%20Boundaries&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 200,
-            body: all_details_2011_41804004,
+            body: all_details_2011_DC8,
             forceNetworkError: false // default
         });
     });
 
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/41804004/?version=2016%20with%20wards&skip-children=true&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/DC8/?version=2016%20Boundaries%20(ye)&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 200,
-            body: all_details_2016_41804004,
+            body: all_details_2016_DC8,
             forceNetworkError: false // default
         });
     });
 
-    cy.intercept('api/v1/profile/8/geography/41804004/themes_count/?version=2011%20Boundaries&format=json', (req) => {
+    cy.intercept('api/v1/profile/8/geography/DC8/themes_count/?version=2011%20Boundaries&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: [],
@@ -136,7 +201,7 @@ Then('I navigate to a geography with no children', () => {
         })
     })
 
-    cy.intercept('api/v1/profile/8/geography/41804004/themes_count/?version=2016%20with%20wards&format=json', (req) => {
+    cy.intercept('api/v1/profile/8/geography/DC8/themes_count/?version=2016%20Boundaries%20(ye)&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: [],
@@ -144,7 +209,7 @@ Then('I navigate to a geography with no children', () => {
         })
     })
 
-    cy.intercept('api/v1/profile/8/geography/41804004/profile_indicator_summary/?version=2011%20Boundaries&format=json', (req) => {
+    cy.intercept('api/v1/profile/8/geography/DC8/profile_indicator_summary/?version=2011%20Boundaries&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: {},
@@ -152,7 +217,7 @@ Then('I navigate to a geography with no children', () => {
         })
     })
 
-    cy.intercept('api/v1/profile/8/geography/41804004/profile_indicator_summary/?version=2016%20with%20wards&format=json', (req) => {
+    cy.intercept('api/v1/profile/8/geography/DC8/profile_indicator_summary/?version=2016%20Boundaries%20(ye)&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: {},
@@ -160,11 +225,11 @@ Then('I navigate to a geography with no children', () => {
         })
     })
 
-    cy.visit('/#geo:41804004');
+    visitToGeo('DC8');
 })
 
 When('I navigate to a geography with multiple child type', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC085/?version=2016%20with%20wards&skip-children=true&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC085/?version=2016%20Boundaries%20(ye)&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 404,
             forceNetworkError: false // default
@@ -187,7 +252,7 @@ When('I navigate to a geography with multiple child type', () => {
         })
     })
 
-    cy.intercept('api/v1/profile/8/geography/NC085/profile_indicator_summary/?version=2016%20with%20wards&format=json', (req) => {
+    cy.intercept('api/v1/profile/8/geography/NC085/profile_indicator_summary/?version=2016%20Boundaries%20(ye)&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: {},
@@ -195,7 +260,7 @@ When('I navigate to a geography with multiple child type', () => {
         })
     })
 
-    cy.visit('/#geo:NC085');
+    visitToGeo('NC085');
 })
 
 Then('I check if the choropleth is removed', () => {
@@ -218,7 +283,7 @@ When('I expand Rich Data Panel', () => {
 Then('I check if the key metric is shown with the version notification', () => {
     cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__title').should('contain.text', 'test-key-metrics');
     cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description').should('be.visible');
-    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description div').should('contain.text', '(2016 with wards)');
+    cy.get('.rich-data .sub-category-header__key-metrics .key-metric .key-metric__description div').should('contain.text', '(2016 Boundaries (ye))');
 })
 
 Then('I check if the key metric is shown without the version notification', () => {
@@ -231,7 +296,7 @@ Then('I expand Point Mapper', () => {
 })
 
 When('I navigate to NC', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC/?version=2016%20with%20wards&skip-children=true&format=json`, (request) => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC/?version=2016%20Boundaries%20(ye)&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 200,
             body: all_details_2016_NC,
@@ -254,7 +319,7 @@ When('I navigate to NC', () => {
         })
     })
 
-    cy.intercept('api/v1/profile/8/geography/NC/profile_indicator_summary/?version=2016%20with%20wards&format=json', (req) => {
+    cy.intercept('api/v1/profile/8/geography/NC/profile_indicator_summary/?version=2016%20Boundaries%20(ye)&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: {},
@@ -262,7 +327,7 @@ When('I navigate to NC', () => {
         })
     })
 
-    cy.intercept('api/v1/profile/8/geography/NC/themes_count/?version=2016%20with%20wards&format=json', (req) => {
+    cy.intercept('api/v1/profile/8/geography/NC/themes_count/?version=2016%20Boundaries%20(ye)&format=json', (req) => {
         req.reply({
             statusCode: 201,
             body: [],
@@ -270,7 +335,7 @@ When('I navigate to NC', () => {
         })
     })
 
-    cy.visit('/#geo:NC');
+    visitToGeo('NC', true);
 })
 
 Then('I confirm that the data mapper is not stuck in the loading state', () => {

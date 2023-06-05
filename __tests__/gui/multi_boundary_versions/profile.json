@@ -1,59 +1,48 @@
 {
-  "id": 8,
-  "name": "Profile name",
-  "permission_type": "public",
-  "requires_authentication": false,
-  "geography_hierarchy": {
-    "id": 1,
-    "name": "2011 SA Boundaries",
-    "root_geography": {
-      "name": "Version Test",
-      "code": "VT",
-      "level": "province",
-      "version": "2011 Boundaries"
+    "id": 8,
+    "name": "Youth Explorer",
+    "permission_type": "public",
+    "requires_authentication": false,
+    "geography_hierarchy": {
+        "id": 1,
+        "name": "2011 and 2016 SA Boundaries with hexagons",
+        "root_geography": {
+            "name": "South Africa Test",
+            "code": "ZA",
+            "level": "country"
+        },
+        "description": "<p>hexagons as children of metros</p>",
+        "configuration": {
+            "versions": [
+                "2011 Boundaries",
+                "2016 Boundaries (ye)"
+            ],
+            "default_version": "2011 Boundaries"
+        }
     },
-    "description": "",
+    "description": "<h3>TEST ONLY</h3>",
     "configuration": {
-      "default_version": "2011 Boundaries",
-      "versions": [
-        "2011 Boundaries",
-        "2016 with wards"
-      ]
+        "preferred_children": {
+            "country": [
+                "province"
+            ],
+            "district": [
+                "municipality",
+                "mainplace",
+                "equal area hexagon",
+                "ward"
+            ],
+            "province": [
+                "district",
+                "municipality"
+            ],
+            "mainplace": [
+                "subplace"
+            ],
+            "municipality": [
+                "mainplace",
+                "ward"
+            ]
+        },
     }
-  },
-  "description": "",
-  "configuration": {
-    "urls": [
-      "example.com"
-    ],
-    "default_panel": "point_data",
-    "tutorial": [],
-    "root_geography": "VT",
-    "default_coordinates": {
-      "lat": -28.995409163308832,
-      "long": 25.093833387362697,
-      "zoom": 6
-    },
-    "preferred_children": {
-      "country": [
-        "province"
-      ],
-      "district": [
-        "municipality",
-        "mainplace",
-        "ward"
-      ],
-      "province": [
-        "district",
-        "municipality"
-      ],
-      "mainplace": [
-        "subplace"
-      ],
-      "municipality": [
-        "mainplace",
-        "ward"
-      ]
-    }
-  }
 }

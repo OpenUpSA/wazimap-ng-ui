@@ -159,11 +159,11 @@ export function visitToGeo(geoCode, isParent = false, forceClick = false) {
             const latlng = L.latLng(coords.lat, coords.lng);
 
             map.flyTo(latlng, 14);
-            hoverOverTheMapCenter('.leaflet-interactive')
+            const waitMs = forceClick ? 4000 : 0;
+            hoverOverTheMapCenter('.leaflet-overlay-pane .leaflet-zoom-animated')
                 .then(() => {
-                    const waitMs = forceClick ? 4000 : 0;
                     cy.wait(waitMs).then(() => {
-                        cy.get('.leaflet-interactive').click({force: forceClick});
+                        cy.get('.leaflet-overlay-pane .leaflet-zoom-animated').click({force: forceClick});
                     })
                 })
         });

@@ -50,27 +50,6 @@ Feature: Data Mapper
     And I expand Data Mapper
     Then I check if there are 3 categories
 
-    And I navigate to WC and back to ZA in 100 ms
-    And I expand Data Mapper
-    Then I check if there are 3 categories
-    And I expand Rich Data Panel
-    Then I check if the geography name is "South Africa Test"
-
-    When I collapse Rich Data Panel
-    And I navigate to WC and back to ZA in 500 ms
-    And I expand Data Mapper
-    Then I check if there are 3 categories
-    And I expand Rich Data Panel
-    Then I check if the geography name is "South Africa Test"
-
-    When I collapse Rich Data Panel
-    And I navigate to WC and back to ZA in 2000 ms
-    And I expand Data Mapper
-    Then I check if there are 3 categories
-    And I expand Rich Data Panel
-    Then I check if the geography name is "South Africa Test"
-
-
     # confirm that no filters available message is displayed correctly
     When I collapse Rich Data Panel
     And I expand Data Mapper

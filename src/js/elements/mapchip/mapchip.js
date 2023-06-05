@@ -349,7 +349,8 @@ export class MapChip extends Component {
             addButton: 'a.mapping-options__add-filter',
             filterPanel: SidePanels.PANELS.dataMapper,
             removeFilterButton: '.mapping-options__remove-filter',
-            addLockButton: addLockButton
+            addLockButton: addLockButton,
+            rowContainer : this.filterController?.rowContainer
         });
 
         this.show();

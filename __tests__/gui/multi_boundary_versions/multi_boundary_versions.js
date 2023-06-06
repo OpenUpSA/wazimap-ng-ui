@@ -225,7 +225,7 @@ Then('I navigate to a geography with no children', () => {
         })
     })
 
-    visitToGeo('DC8');
+    visitToGeo('DC8', false, true);
 })
 
 When('I navigate to a geography with multiple child type', () => {
@@ -260,7 +260,7 @@ When('I navigate to a geography with multiple child type', () => {
         })
     })
 
-    visitToGeo('NC085');
+    visitToGeo('NC085', false, true);
 })
 
 Then('I check if the choropleth is removed', () => {

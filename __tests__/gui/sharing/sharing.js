@@ -38,6 +38,10 @@ Given('I am on the Wazimap Homepage', () => {
     gotoHomepage();
 })
 
+Then('I wait until map is ready for South Africa Test', () => {
+    waitUntilGeographyIsLoaded("South Africa Test");
+})
+
 Given('I am on the Wazimap Homepage with a missing indicator selected in default', () => {
     setupInterceptions(
         profiles, all_details, profile, themes, {}, [],
@@ -241,6 +245,102 @@ When('I navigate to WC', () => {
     })
 
     cy.visit('/#geo:WC');
+})
+
+When('I navigate to WC using hashcode', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(all_details_WC));
+        tempObj.boundary.properties.code = 'WC';
+        tempObj.profile.geography.code = 'WC';
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept(`/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(profile_indicator_summary_WC));
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept('api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (req) => {
+        req.reply({
+            statusCode: 200,
+            body: [],
+            forceNetworkError: false // default
+        })
+    })
+
+    cy.intercept('/api/v1/profile/8/geography/WC/indicator/**/child_data/', (request) => {
+        let tempObj = JSON.parse(JSON.stringify(profile_indicator_data_WC));
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        });
+    })
+
+    cy.visit('/#geo:WC');
+})
+
+
+When('I navigate to WC using hashcode and filters', () => {
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(all_details_WC));
+        tempObj.boundary.properties.code = 'WC';
+        tempObj.profile.geography.code = 'WC';
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept(`/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json`, (request) => {
+        let tempObj = JSON.parse(JSON.stringify(profile_indicator_summary_WC));
+
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        })
+    });
+
+    cy.intercept('api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (req) => {
+        req.reply({
+            statusCode: 200,
+            body: [],
+            forceNetworkError: false // default
+        })
+    })
+
+    cy.intercept('/api/v1/profile/8/geography/WC/indicator/**/child_data/', (request) => {
+        let tempObj = JSON.parse(JSON.stringify(profile_indicator_data_WC));
+        request.reply({
+            statusCode: 200,
+            body: tempObj,
+            forceNetworkError: false // default
+        });
+    })
+
+    cy.visit('/?profileView=%7B"filters"%3A%5B%7B"indicatorId"%3A1125%2C"filters"%3A%5B%7B"group"%3A"race"%2C"value"%3A"White"%2C"isDefault"%3Afalse%2C"appliesTo"%3A%5B"data_explorer"%5D%2C"isSiteWideFilter"%3Afalse%2C"isFilterAvailable"%3Atrue%7D%2C%7B"group"%3A"race"%2C"value"%3A"Coloured"%2C"isDefault"%3Afalse%2C"appliesTo"%3A%5B"rich_data"%5D%2C"isSiteWideFilter"%3Afalse%7D%5D%7D%5D%2C"hiddenIndicators"%3A%5B%5D%7D#geo:WC');
+})
+
+Then('I confirm hash code is changed to querysting', () => {
+  cy.location().should((location) => {
+    expect(location.hash).to.be.empty
+    let params = new URLSearchParams(location.search);
+    expect(params.get("geo")).to.eq('WC')
+  })
+
 })
 
 Then('I wait until map is ready for Western Cape', () => {

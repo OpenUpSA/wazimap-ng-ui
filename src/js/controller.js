@@ -32,7 +32,7 @@ export default class Controller extends Component {
             let parts = hash.split(':')
             this.api.cancelAndInitAbortController();
             if (parts[0] == '#geo') {
-                this.changeHash(parts[1], true);
+                this.initiateGeographyChange(parts[1], true);
             }
 
             if (parts[0] == '#logout') {
@@ -129,17 +129,17 @@ export default class Controller extends Component {
         super.triggerEvent(event, payload);
     };
 
-    triggerHashChange() {
+    loadInitialGeography() {
         const hash = decodeURI(window.location.hash);
         const urlParams = new URLSearchParams(window.location.search);
 
         let parts = hash.split(':')
         if (parts[0] === '#geo') {
-            this.changeHash(parts[1], true);
+            this.initiateGeographyChange(parts[1], true);
         } else {
           const areaCode = urlParams.get("geo") || this.config.rootGeography;
           if (areaCode !== null){
-            this.changeHash(areaCode, false, areaCode === this.config.rootGeography);
+            this.initiateGeographyChange(areaCode, false, areaCode === this.config.rootGeography);
           }
         }
     };
@@ -505,7 +505,7 @@ export default class Controller extends Component {
         this.versionController.loadAllVersions(this.config.versions);
     }
 
-    changeHash(areaCode, replaceState=false, isRootGeo=false) {
+    initiateGeographyChange(areaCode, replaceState=false, isRootGeo=false) {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set("geo", areaCode);
 
@@ -547,7 +547,7 @@ export default class Controller extends Component {
         payload.mapControl.zoomToLayer(payload.layer)
 
         const areaCode = payload.areaCode;
-        this.changeHash(areaCode)
+        this.initiateGeographyChange(areaCode)
 
         this.triggerEvent("layerClick", payload);
     };
@@ -590,7 +590,7 @@ export default class Controller extends Component {
      */
     onBreadcrumbSelected(payload) {
         this.triggerEvent('controller.breadcrumbs.selected', payload);
-        this.changeHash(payload.code)
+        this.initiateGeographyChange(payload.code)
     }
 
     onTutorial(event, payload) {
@@ -607,7 +607,7 @@ export default class Controller extends Component {
      */
     onSearchResultClick(payload) {
         this.triggerEvent("search.resultClick", payload)
-        this.changeHash(payload.code)
+        this.initiateGeographyChange(payload.code)
     }
 
     /**

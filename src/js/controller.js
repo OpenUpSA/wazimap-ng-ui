@@ -42,7 +42,7 @@ export default class Controller extends Component {
 
         window.addEventListener('popstate', (event) => {
             let hiddenIndicators = [], filteredIndicators = [];
-            let areaCode = '';
+            let areaCode;
 
             if (event.state) {
                 filteredIndicators = event.state.filters;

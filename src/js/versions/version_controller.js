@@ -245,7 +245,7 @@ export class VersionController extends Component {
         const areaCode = payload.payload.areaCode;
 
         this.versions.forEach((version) => {
-            const promise = this.api.getIndicatorSummary(profileId, areaCode, version.model.name)
+            const promise = this.api.getIndicatorSummaryWrapper(profileId, areaCode, version.model.name)
                 .then((data) => {
                     const childrenIndicators = new ChildrenIndicators(data);
 

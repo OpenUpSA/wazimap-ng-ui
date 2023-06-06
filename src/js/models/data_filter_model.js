@@ -51,7 +51,7 @@ export class DataFilterModel extends Observable {
         this._siteWideFilters = siteWideFilters;
         this._filterFunction = filterType === DataFilterModel.FILTER_TYPE.indicators ? this.getFilteredIndicatorData : this.getFilteredPointData;
         this._filterType = filterType;
-        this._restrictValues = restrictValues;
+        this._restrictValues = restrictValues;  // no need for restrictValues here anymore
     }
 
     get restrictValues() {
@@ -90,7 +90,7 @@ export class DataFilterModel extends Observable {
         let self = this;
         let gr = {};
         this.groups.forEach(group => {
-            let dataFilter = new DataFilter(group, this.restrictValues, self.keys);
+            let dataFilter = new DataFilter(group, self.keys);
 
             gr[dataFilter[this.keys.name]] = dataFilter;
         });
@@ -101,7 +101,7 @@ export class DataFilterModel extends Observable {
         let self = this;
         let filters = [];
         this.groups.forEach(group => {
-            let dataFilter = new DataFilter(group, this.restrictValues, self.keys);
+            let dataFilter = new DataFilter(group, self.keys);
             filters.push(dataFilter);
         });
 

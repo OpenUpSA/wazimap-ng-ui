@@ -16,7 +16,8 @@ import {
     waitUntilGeographyIsLoaded,
     collapseChoroplethFilterDialog,
     setupInterceptionsForSpecificGeo,
-    closeChoroplethFilterDialog, confirmChoroplethIsFiltered
+    closeChoroplethFilterDialog, confirmChoroplethIsFiltered,
+    visitToGeo
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profile from "./profile.json";
@@ -240,7 +241,7 @@ When('I navigate to WC', () => {
         });
     })
 
-    cy.visit('/#geo:WC');
+    visitToGeo('WC');
 })
 
 Then('I wait until map is ready for Western Cape', () => {

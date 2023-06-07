@@ -7,6 +7,7 @@ import {
     gotoHomepage,
     setupInterceptions,
     waitUntilGeographyIsLoaded,
+    visitToGeo,
 } from "../common_cy_functions/general";
 
 
@@ -87,7 +88,7 @@ When('I visit Western Cape', () => {
       });
   });
 
-  cy.visit('/#geo:WC');
+  visitToGeo('WC');
 })
 
 Then('I wait until map is ready for Western Cape', () => {
@@ -119,7 +120,7 @@ When('I visit City of Cape Town', () => {
       });
   });
 
-  cy.visit('/#geo:CPT');
+  visitToGeo('CPT');
 })
 
 Then('I check if the location facilities is hidden', () => {
@@ -156,7 +157,7 @@ When('I visit Overberg', () => {
       });
   });
 
-  cy.visit('/#geo:DC3');
+  visitToGeo('DC3');
 })
 
 Then('I wait until map is ready for Overberg', () => {
@@ -176,5 +177,5 @@ Then('I check if rich data panel is empty', () => {
 })
 
 When('I revisit Western Cape', () => {
-  cy.visit('/#geo:WC');
+  visitToGeo('WC', true);
 })

@@ -30,7 +30,6 @@ export default class Controller extends Component {
         $(window).on('hashchange', () => {
             const hash = decodeURI(window.location.hash);
             let parts = hash.split(':')
-            this.api.cancelAndInitAbortController();
             if (parts[0] == '#geo') {
                 this.initiateGeographyChange(parts[1], true);
             }
@@ -506,6 +505,7 @@ export default class Controller extends Component {
     }
 
     initiateGeographyChange(areaCode, replaceState=false, isRootGeo=false) {
+        this.api.cancelAndInitAbortController();
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set("geo", areaCode);
 

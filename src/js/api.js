@@ -68,9 +68,14 @@ export class API extends Observable {
         return self.getIndicatorChildData(profileId, areaCode, indicatorId).then(data => {
             Object.keys(data).forEach((geo) => {
                 Object.keys(self.restrictValues).forEach(restrictKey => {
-                    data[geo] = data[geo].filter(x => self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
+                    // does not contain the key
+                    // or
+                    // key value is one of the restrictValue
+                    data[geo] = data[geo].filter(x => Object.keys(x).indexOf(restrictKey) < 0 || self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
                 })
             });
+
+            console.log({data})
 
             return data;
         });
@@ -240,8 +245,6 @@ export class API extends Observable {
                                 return group;
                             })
                         })
-
-                        console.log({'groups': indicatorData.metadata.groups})
                     });
                 });
             });

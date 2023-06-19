@@ -101,7 +101,7 @@ const IndicatorItemView = (props) => {
     useEffect(() => {
             if (!props.indicator.isHidden && props.indicator?.indicatorData === undefined && !loading) {
                 setLoading(true);
-                props.api.getIndicatorChildData(
+                props.api.getIndicatorChildDataWrapper(
                     props.controller.state.profileId,
                     props.controller.state.profile.profile.geography.code,
                     props.indicator.id

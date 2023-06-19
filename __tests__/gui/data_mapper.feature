@@ -67,6 +67,7 @@ Feature: Data Mapper
     And I click on "Not in Employment" in Data Mapper
     And I click on "NEET" in Data Mapper
     Then I check if the non-aggregatable group filter is applied
+    Then I click on snackbar to hide it
 
     And I navigate to FS
     Then I check if the non-aggregatable group filter is applied

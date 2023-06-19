@@ -8,8 +8,6 @@ import {
 } from "./styledElements";
 import Box from "@mui/material/Box";
 import {Typography} from "@mui/material";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 
 const LoadingItemView = (props) => {
@@ -22,6 +20,20 @@ const LoadingItemView = (props) => {
             </Box>
         }/>
     )
+}
+
+const getSubIndicators = (indicator) => {
+    const primaryGroup = indicator.metadata.primary_group;
+    const primaryGroupObj = indicator.metadata.groups.filter(
+        group => group.name === primaryGroup
+    )
+
+    if (primaryGroupObj.length > 0) {
+        return primaryGroupObj[0].subindicators.filter(
+            sub => sub !== undefined && sub
+        );
+    }
+    return [];
 }
 
 const SubindicatorItemView = (props) => {
@@ -76,17 +88,7 @@ const IndicatorItemView = (props) => {
     const subindicators = useMemo(
         () => {
             const indicator = props.indicator;
-            const primaryGroup = indicator.metadata.primary_group;
-            const primaryGroupObj = indicator.metadata.groups.filter(
-                group => group.name === primaryGroup
-            )
-
-            if (primaryGroupObj.length > 0) {
-                return primaryGroupObj[0].subindicators.filter(
-                    sub => sub !== undefined && sub
-                );
-            }
-            return [];
+            return getSubIndicators(indicator);
         }, [
             props.indicator
         ]
@@ -117,41 +119,43 @@ const IndicatorItemView = (props) => {
         }
     );
 
-    return (
-        <StyledIndicatorTreeItem nodeId={`datamapper-indicator-${props.indicator.id}`} label={
-            <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
-                <Typography variant="body2" sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}
-                            className="indicator-item">
-                    {props.indicator.label}
-                </Typography>
-            </Box>
-        } data-test-id={`datamapper-indicator-${props.indicator.id}`}>
-            {loading && <LoadingItemView/>}
-            {!loading && subindicators.length > 0 && subindicators.map(
-                (subindicator, index) => {
-                    return (
-                        <SubindicatorItemView
-                            subindicator={subindicator}
-                            key={`datamapper-subindicator-${props.indicator.id}-${index}-${props.controller.state.profile.profile.geography.code}`}
+    if (subindicators.length > 0) {
+        return (
+            <StyledIndicatorTreeItem nodeId={`datamapper-indicator-${props.indicator.id}`} label={
+                <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
+                    <Typography variant="body2" sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}
+                                className="indicator-item">
+                        {props.indicator.label}
+                    </Typography>
+                </Box>
+            } data-test-id={`datamapper-indicator-${props.indicator.id}`}>
+                {loading && <LoadingItemView/>}
+                {!loading && subindicators.map(
+                    (subindicator, index) => {
+                        return (
+                            <SubindicatorItemView
+                                subindicator={subindicator}
+                                key={`datamapper-subindicator-${props.indicator.id}-${index}-${props.controller.state.profile.profile.geography.code}`}
 
-                            controller={props.controller}
-                            loading={loading}
-                            indicatorData={props.indicator?.indicatorData}
-                            indicator={props.indicator}
-                            parents={{
-                                ...props.parents,
-                                indicator: props.indicator.label
-                            }}
-                        />
-                    )
-                })
-            }
-        </StyledIndicatorTreeItem>
-    )
+                                controller={props.controller}
+                                loading={loading}
+                                indicatorData={props.indicator?.indicatorData}
+                                indicator={props.indicator}
+                                parents={{
+                                    ...props.parents,
+                                    indicator: props.indicator.label
+                                }}
+                            />
+                        )
+                    })
+                }
+            </StyledIndicatorTreeItem>
+        )
+    }
 }
 
 const IndicatorSubCategoryTreeView = (props) => {
-    const [indicators, setIndicators] = useState(props.subcategory.indicators);
+    const [indicators, setIndicators] = useState(props.subcategory.indicators.filter(x => getSubIndicators(x).length > 0));
 
     const handleIndicatorChange = (indicator) => {
         let newArr = indicators.map(ni => {
@@ -163,40 +167,41 @@ const IndicatorSubCategoryTreeView = (props) => {
         setIndicators(newArr)
     }
 
-    return (
-        <StyledSubCategoryTreeItem nodeId={`datamapper-subcategory-${props.subcategory.id}`} label={
-            <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
-                <Typography variant="body2" sx={{fontSize: '1em', fontWeight: '500', letterSpacing: '.3px'}}
-                            className="indicator-subcategory">
-                    {props.subcategory.name}
-                </Typography>
-            </Box>
-        } data-test-id={`datamapper-subcategory-${props.subcategory.id}`}>
-            {!props.subcategory.length > 0 && indicators != null && indicators.map(
-                (indicator, index) => {
+    if (indicators != null && indicators.length > 0) {
+        return (
+            <StyledSubCategoryTreeItem nodeId={`datamapper-subcategory-${props.subcategory.id}`} label={
+                <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
+                    <Typography variant="body2" sx={{fontSize: '1em', fontWeight: '500', letterSpacing: '.3px'}}
+                                className="indicator-subcategory">
+                        {props.subcategory.name}
+                    </Typography>
+                </Box>
+            } data-test-id={`datamapper-subcategory-${props.subcategory.id}`}>
+                {!props.subcategory.length > 0 && indicators != null && indicators.map(
+                    (indicator, index) => {
 
-                    if (!indicator.isHidden) {
-                        return (
-                            <IndicatorItemView
-                                indicator={indicator}
-                                handleIndicatorChange={(indicator) => handleIndicatorChange(indicator)}
-                                key={`datamapper-indicator-${indicator.id}-${index}-${props.controller.state.profile.profile.geography.code}`}
-                                api={props.api}
-                                controller={props.controller}
-                                categoryName={props.categoryName}
-                                SubCategoryName={props.subcategory.name}
-                                parents={{
-                                    ...props.parents,
-                                    subcategory: props.subcategory.name
-                                }}
-                            />
-                        )
-                    }
-                })
-            }
-        </StyledSubCategoryTreeItem>
-
-    )
+                        if (!indicator.isHidden) {
+                            return (
+                                <IndicatorItemView
+                                    indicator={indicator}
+                                    handleIndicatorChange={(indicator) => handleIndicatorChange(indicator)}
+                                    key={`datamapper-indicator-${indicator.id}-${index}-${props.controller.state.profile.profile.geography.code}`}
+                                    api={props.api}
+                                    controller={props.controller}
+                                    categoryName={props.categoryName}
+                                    SubCategoryName={props.subcategory.name}
+                                    parents={{
+                                        ...props.parents,
+                                        subcategory: props.subcategory.name
+                                    }}
+                                />
+                            )
+                        }
+                    })
+                }
+            </StyledSubCategoryTreeItem>
+        )
+    }
 }
 
 const IndicatorCategoryTreeView = (props) => {

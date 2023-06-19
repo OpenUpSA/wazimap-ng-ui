@@ -14,6 +14,15 @@ export class API extends Observable {
         this.busyLoggingIn = false;
         this.failedLogins = 0;
         this.abortController = null;
+        this._restrictValues = {};
+    }
+
+    set restrictValues(value) {
+        this._restrictValues = value;
+    }
+
+    get restrictValues() {
+        return this._restrictValues;
     }
 
     getToken() {
@@ -51,6 +60,20 @@ export class API extends Observable {
     getIndicatorChildData(profileId, areaCode, indicatorId) {
         const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/child_data/`;
         return this.loadUrl(url, this.abortController);
+    }
+
+    getIndicatorChildDataWrapper(profileId, areaCode, indicatorId) {
+        const self = this;
+
+        return self.getIndicatorChildData(profileId, areaCode, indicatorId).then(data => {
+            Object.keys(data).forEach((geo) => {
+                Object.keys(self.restrictValues).forEach(restrictKey => {
+                    data[geo] = data[geo].filter(x => self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
+                })
+            });
+
+            return data;
+        });
     }
 
     loadThemes(profileId) {
@@ -191,6 +214,40 @@ export class API extends Observable {
     async getIndicatorSummary(profileId, areaCode, version) {
         const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/profile_indicator_summary/?version=${version}&format=json`;
         return this.loadUrl(url, this.abortController);
+    }
+
+    async getIndicatorSummaryWrapper(profileId, areaCode, version) {
+        const self = this;
+
+        return self.getIndicatorSummary(profileId, areaCode, version).then(data => {
+            Object.keys(data).forEach((category) => {
+                let categoryData = data[category];
+                let subCategories = categoryData.subcategories;
+
+                Object.keys(subCategories).forEach((subCategory) => {
+                    let subCategoryData = subCategories[subCategory];
+                    let indicators = subCategoryData.indicators;
+
+                    Object.keys(indicators).forEach((indicator) => {
+                        let indicatorData = indicators[indicator];
+
+                        Object.keys(self.restrictValues).forEach(restrictKey => {
+                            indicatorData.metadata.groups = indicatorData.metadata.groups.map(group => {
+                                if (group.name === restrictKey) {
+                                    group.subindicators = group.subindicators.filter(element => self.restrictValues[restrictKey].includes(element));
+                                }
+
+                                return group;
+                            })
+                        })
+
+                        console.log({'groups': indicatorData.metadata.groups})
+                    });
+                });
+            });
+
+            return data;
+        });
     }
 
     cancelAndInitAbortController() {

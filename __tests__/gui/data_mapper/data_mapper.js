@@ -302,6 +302,10 @@ Then('I check if the legend values are correct', () => {
     })
 })
 
+Then('I click on snackbar to hide it', () => {
+    cy.get('#notistack-snackbar').click();
+})
+
 Then('I expand Rich Data Panel', () => {
     expandRichDataPanel();
 })

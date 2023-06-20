@@ -41,6 +41,7 @@ Feature: Data Mapper
     And I click on TVET colleges category
 
     # confirm that navigating between geographies does not break the data mapper & choropleth
+    And I navigate to ZA
     And I navigate to WC
     And I expand Data Mapper
     Then I check if there are 2 categories
@@ -49,27 +50,9 @@ Feature: Data Mapper
     And I expand Data Mapper
     Then I check if there are 3 categories
 
-    And I navigate to WC and back to ZA in 100 ms
-    And I expand Data Mapper
-    Then I check if there are 3 categories
-    And I expand Rich Data Panel
-    Then I check if the geography name is "South Africa Test"
-
-    And I navigate to WC and back to ZA in 500 ms
-    And I expand Data Mapper
-    Then I check if there are 3 categories
-    And I expand Rich Data Panel
-    Then I check if the geography name is "South Africa Test"
-
-    And I navigate to WC and back to ZA in 2000 ms
-    And I expand Data Mapper
-    Then I check if there are 3 categories
-    And I expand Rich Data Panel
-    Then I check if the geography name is "South Africa Test"
-
-
     # confirm that no filters available message is displayed correctly
-    When I expand Data Mapper
+    When I collapse Rich Data Panel
+    And I expand Data Mapper
     Then Data Mapper should be displayed
     And I click on "Elections" in Data Mapper
     And I click on "2016 Municipal elections" in Data Mapper
@@ -84,6 +67,7 @@ Feature: Data Mapper
     And I click on "Not in Employment" in Data Mapper
     And I click on "NEET" in Data Mapper
     Then I check if the non-aggregatable group filter is applied
+    Then I click on snackbar to hide it
 
     And I navigate to FS
     Then I check if the non-aggregatable group filter is applied

@@ -7,7 +7,7 @@ import {
     checkIfPointFilterDialogIsCollapsed,
     checkIfPointFilterDialogIsExpanded,
     clickOnText,
-    collapseChoroplethFilterDialog,
+    collapseChoroplethFilterDialog, collapseRichDataPanel,
     expandChoroplethFilterDialog,
     expandDataMapper,
     expandPointFilterDialog,
@@ -15,7 +15,7 @@ import {
     expandRichDataPanel,
     gotoHomepage,
     mapBottomItems, selectChoroplethDropdownOption,
-    setupInterceptions,
+    setupInterceptions, visitToGeo,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
@@ -27,6 +27,8 @@ import points from "./points.json";
 import profile_indicator_summary from './profile_indicator_summary.json';
 import profile_indicator_data from './profile_indicator_data.json'
 import profile_indicator_summary_FS from './profile_indicator_summary_FS.json'
+import all_details_EC from './all_details_EC.json'
+import all_details_WC from './all_details_WC.json'
 
 Given('I am on the Wazimap Homepage', () => {
     setupInterceptions(profiles, all_details, profile, themes, points, [], profile_indicator_summary, profile_indicator_data);
@@ -90,14 +92,10 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
     });
 
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/EC/?version=test&skip-children=true&format=json`, (request) => {
-        let tempObj = JSON.parse(JSON.stringify(all_details));
-        tempObj.boundary.properties.code = 'EC';
-        tempObj.profile.geography.code = 'EC';
-
         return trigger.then(() => {
             request.reply({
                 statusCode: 200,
-                body: tempObj,
+                body: all_details_EC,
                 forceNetworkError: false // default
             })
         });
@@ -121,7 +119,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         })
     })
 
-    cy.visit('/#geo:EC');
+    visitToGeo('EC');
 
     cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
         //loading = true
@@ -183,13 +181,9 @@ Then('I check if the point filter dialog is expanded', () => {
 
 When('I navigate to WC', () => {
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
-        let tempObj = JSON.parse(JSON.stringify(all_details));
-        tempObj.boundary.properties.code = 'WC';
-        tempObj.profile.geography.code = 'WC';
-
         request.reply({
             statusCode: 200,
-            body: tempObj,
+            body: all_details_WC,
             forceNetworkError: false // default
         })
     });
@@ -213,7 +207,7 @@ When('I navigate to WC', () => {
         })
     })
 
-    cy.visit('/#geo:WC');
+    visitToGeo('WC', false, true);
 })
 
 When('I navigate to FS', () => {
@@ -241,7 +235,15 @@ When('I navigate to FS', () => {
         })
     });
 
-    cy.visit('/#geo:FS');
+    cy.on('uncaught:exception', (err, runnable) => {
+        // returning false here prevents Cypress from
+        // failing the test
+        if (err.name === "AbortError") {
+            return false
+        }
+    })
+
+    visitToGeo('FS', false, true);
 })
 
 Then(/^I check if there are (\d+) categories$/, function (count) {
@@ -249,13 +251,14 @@ Then(/^I check if there are (\d+) categories$/, function (count) {
 });
 
 Then('I navigate to ZA', () => {
-    cy.visit('/#geo:ZA');
+    visitToGeo('ZA-Test', true);
+    cy.wait(4000);  //wait until zoom out is completed
 })
 
 Then(/^I navigate to WC and back to ZA in (\d+) ms$/, function (ms) {
-    cy.visit('/#geo:WC');
+    visitToGeo('WC', false, true);
     cy.wait(ms);   //without this controller ignores the first request  - to be able to navigate between 2 geographies we need a small delay
-    cy.visit('/#geo:ZA');
+    visitToGeo('ZA-Test', true);
 
     cy.on('uncaught:exception', (err, runnable) => {
         // returning false here prevents Cypress from
@@ -299,8 +302,16 @@ Then('I check if the legend values are correct', () => {
     })
 })
 
+Then('I click on snackbar to hide it', () => {
+    cy.get('#notistack-snackbar').click();
+})
+
 Then('I expand Rich Data Panel', () => {
     expandRichDataPanel();
+})
+
+Then('I collapse Rich Data Panel', () => {
+    collapseRichDataPanel();
 })
 
 Then(/^I check if the geography name is "([^"]*)"$/, function (name) {

@@ -7,7 +7,6 @@ import {createRoot} from "react-dom/client";
 import Watermark from "../ui_components/watermark";
 import React from "react";
 
-
 export class MapControl extends Component {
     constructor(parent, config, zoomToPosition = () => true) {
         super(parent);
@@ -94,6 +93,8 @@ export class MapControl extends Component {
 
         if (mapOptions.leafletOptions.preferCanvas)
             this.configureForwarder(map);
+
+        window.map = map;
 
         return map;
     };

@@ -352,7 +352,7 @@ export class VersionController extends Component {
     }
 
     getAllDetails(version) {
-        const promise = this.api.getProfile(this.profileId, this.areaCode, version.model.name).then(js => {
+        const promise = this.api.getProfileWrapper(this.profileId, this.areaCode, version.model.name).then(js => {
             version.model.exists = true;
             this.versionsRawData.push({
                 'version': version,

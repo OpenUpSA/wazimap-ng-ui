@@ -42,6 +42,40 @@ export class API extends Observable {
         return this.loadUrl(url, this.abortController);
     }
 
+    getProfileWrapper(profileId, areaCode, version) {
+        const self = this;
+
+        return self.getProfile(profileId, areaCode, version).then(data => {
+            Object.keys(data.profile.profile_data).forEach(categoryName => {
+                const subcategories = data.profile.profile_data[categoryName].subcategories;
+                Object.keys(subcategories).forEach(subcategoryName => {
+                    const indicators = subcategories[subcategoryName].indicators;
+                    if (indicators != null) {
+                        Object.keys(indicators).forEach((indicator) => {
+                            let indicatorData = indicators[indicator];
+
+                            Object.keys(self.restrictValues).forEach(restrictKey => {
+                                indicatorData.data = indicatorData.data.filter(x => self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
+
+                                indicatorData.metadata.groups = indicatorData.metadata.groups.map(group => {
+                                    if (group.name === restrictKey) {
+                                        group.subindicators = group.subindicators.filter(element => self.restrictValues[restrictKey].includes(element));
+                                    }
+
+                                    return group;
+                                })
+
+                            })
+                        });
+                    }
+                })
+            })
+            console.log({data})
+
+            return data;
+        });
+    }
+
     getProfileWithoutVersion(profileId, areaCode) {
         const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?skip-children=true&format=json`;
         return this.loadUrl(url, this.abortController);
@@ -74,8 +108,6 @@ export class API extends Observable {
                     data[geo] = data[geo].filter(x => Object.keys(x).indexOf(restrictKey) < 0 || self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
                 })
             });
-
-            console.log({data})
 
             return data;
         });

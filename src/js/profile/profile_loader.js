@@ -106,8 +106,6 @@ export default class ProfileLoader extends Component {
     }
 
     loadCategories = (profile) => {
-        console.log({'profileData':profile.profileData})
-
         let removePrevCategories = true;
         const categories = profile.profileData;
         let isFirst = true;

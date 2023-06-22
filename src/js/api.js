@@ -55,8 +55,13 @@ export class API extends Observable {
                             let indicatorData = indicators[indicator];
 
                             Object.keys(self.restrictValues).forEach(restrictKey => {
-                                indicatorData.data = indicatorData.data.filter(x => self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
+                                // does not contain the key
+                                // or
+                                // key value is one of the restrictValue
+                                indicatorData.data = indicatorData.data.filter(x => Object.keys(x).indexOf(restrictKey) < 0 ||
+                                    self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
 
+                                // filter metadata
                                 indicatorData.metadata.groups = indicatorData.metadata.groups.map(group => {
                                     if (group.name === restrictKey) {
                                         group.subindicators = group.subindicators.filter(element => self.restrictValues[restrictKey].includes(element));
@@ -70,7 +75,6 @@ export class API extends Observable {
                     }
                 })
             })
-            console.log({data})
 
             return data;
         });
@@ -105,7 +109,8 @@ export class API extends Observable {
                     // does not contain the key
                     // or
                     // key value is one of the restrictValue
-                    data[geo] = data[geo].filter(x => Object.keys(x).indexOf(restrictKey) < 0 || self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
+                    data[geo] = data[geo].filter(x => Object.keys(x).indexOf(restrictKey) < 0
+                        || self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
                 })
             });
 

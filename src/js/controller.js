@@ -28,38 +28,29 @@ export default class Controller extends Component {
         this.confirmationModal = new ConfirmationModal(this, ConfirmationModal.COOKIE_NAMES.DATA_MAPPER_VERSION_SELECTION);
 
         $(window).on('hashchange', () => {
-            // On every hash change the render function is called with the new hash.
-            // This is how the navigation of our app happens.
-            this.api.cancelAndInitAbortController();
             const hash = decodeURI(window.location.hash);
             let parts = hash.split(':')
-            let payload = null;
-
             if (parts[0] == '#geo') {
-                payload = self.changeGeography(parts[1])
-                self._shouldMapZoom = true;
-
-            } else if (parts[0] == '#logout') {
-                self.onLogout();
-            } else {
-                //if a category nav is clicked, the hash becomes something like #divId, in that case it should behave same as if hash == ''
-                const areaCode = this.config.rootGeography;
-                self._shouldMapZoom = false;
-                payload = self.changeGeography(areaCode)
+                this.initiateGeographyChange(parts[1], true);
             }
 
-            self.onHashChange(payload);
+            if (parts[0] == '#logout') {
+                self.onLogout();
+            }
         });
 
         window.addEventListener('popstate', (event) => {
             let hiddenIndicators = [], filteredIndicators = [];
+            let areaCode;
 
             if (event.state) {
                 filteredIndicators = event.state.filters;
                 hiddenIndicators = event.state.hiddenIndicators;
+                areaCode = event.state.geo
             } else {
                 const urlParams = new URLSearchParams(window.location.search);
                 const profileView = JSON.parse(urlParams.get("profileView"));
+                areaCode = urlParams.get("geo") || this.config.rootGeography;
                 if (profileView === null) {
                     if (this._filteredIndicators.length > 0) {
                         filteredIndicators = [];
@@ -73,17 +64,23 @@ export default class Controller extends Component {
                 }
             }
 
-            if (!isEqual(hiddenIndicators, this._hiddenIndicators)) {
-                this._hiddenIndicators = hiddenIndicators;
-                this.reloadDataMapper();
-                this.triggerEvent('my_view.hiddenIndicatorsPanel.reload', this.hiddenIndicators);
-            }
+            if (areaCode !== this.versionController.areaCode){
+              let payload = this.changeGeography(areaCode)
+              this._shouldMapZoom = true;
+              this.onHashChange(payload);
+            } else {
+              if (!isEqual(hiddenIndicators, this._hiddenIndicators)) {
+                  this._hiddenIndicators = hiddenIndicators;
+                  this.reloadDataMapper();
+                  this.triggerEvent('my_view.hiddenIndicatorsPanel.reload', this.hiddenIndicators);
+              }
 
-            if (!isEqual(filteredIndicators, this._filteredIndicators)) {
-                this._filteredIndicators = filteredIndicators;
-                this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-                this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
-                this.reDrawChildren();
+              if (!isEqual(filteredIndicators, this._filteredIndicators)) {
+                  this._filteredIndicators = filteredIndicators;
+                  this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+                  this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
+                  this.reDrawChildren();
+              }
             }
         });
     };
@@ -131,8 +128,19 @@ export default class Controller extends Component {
         super.triggerEvent(event, payload);
     };
 
-    triggerHashChange() {
-        $(window).trigger('hashchange');
+    loadInitialGeography() {
+        const hash = decodeURI(window.location.hash);
+        const urlParams = new URLSearchParams(window.location.search);
+
+        let parts = hash.split(':')
+        if (parts[0] === '#geo') {
+            this.initiateGeographyChange(parts[1], true);
+        } else {
+          const areaCode = urlParams.get("geo") || this.config.rootGeography;
+          if (areaCode !== null){
+            this.initiateGeographyChange(areaCode, false, areaCode === this.config.rootGeography);
+          }
+        }
     };
 
     /**
@@ -340,6 +348,7 @@ export default class Controller extends Component {
                 "filters": this._filteredIndicators,
                 "hiddenIndicators": this.hiddenIndicators,
                 "profileView": currentState,
+                "geo": this.versionController.areaCode,
             },
             '',
             `${profileView}${window.location.hash}`
@@ -417,7 +426,8 @@ export default class Controller extends Component {
             history.replaceState(
                 {
                     "filters": this._filteredIndicators,
-                    "hiddenIndicators": this._hiddenIndicators
+                    "hiddenIndicators": this._hiddenIndicators,
+                    "geo": this.versionController.areaCode
                 },
                 '',
                 `${window.location.search}${window.location.hash}`
@@ -483,7 +493,6 @@ export default class Controller extends Component {
         this.loadProfile(payload, true)
     }
 
-
     loadProfile(payload, callRegisterFunction) {
         this.triggerEvent("profile.loading", payload.areaCode);
 
@@ -495,10 +504,38 @@ export default class Controller extends Component {
         this.versionController.loadAllVersions(this.config.versions);
     }
 
-    changeHash(areaCode) {
-        window.location.hash = `#geo:${areaCode}`;
-    }
+    initiateGeographyChange(areaCode, replaceState=false, isRootGeo=false) {
+        this.api.cancelAndInitAbortController();
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("geo", areaCode);
 
+        if (replaceState){
+          let hash = window.location.hash.replace(`#geo:${areaCode}`, '');
+
+          history.replaceState(
+              {
+                  "filters": this._filteredIndicators,
+                  "hiddenIndicators": this.hiddenIndicators,
+                  "geo": areaCode,
+              },
+              '',
+              `?${urlParams.toString()}${hash}`
+          );
+        } else if(!isRootGeo) {
+          history.pushState(
+              {
+                  "filters": this._filteredIndicators,
+                  "hiddenIndicators": this.hiddenIndicators,
+                  "geo": areaCode,
+              },
+              '',
+              `?${urlParams.toString()}${window.location.hash}`
+          );
+        }
+        const payload = this.changeGeography(areaCode);
+        this._shouldMapZoom = !isRootGeo;
+        this.onHashChange(payload);
+    }
 
     onLayerClick(payload) {
         const self = this;
@@ -510,7 +547,7 @@ export default class Controller extends Component {
         payload.mapControl.zoomToLayer(payload.layer)
 
         const areaCode = payload.areaCode;
-        this.changeHash(areaCode)
+        this.initiateGeographyChange(areaCode)
 
         this.triggerEvent("layerClick", payload);
     };
@@ -553,7 +590,7 @@ export default class Controller extends Component {
      */
     onBreadcrumbSelected(payload) {
         this.triggerEvent('controller.breadcrumbs.selected', payload);
-        this.changeHash(payload.code)
+        this.initiateGeographyChange(payload.code)
     }
 
     onTutorial(event, payload) {
@@ -570,7 +607,7 @@ export default class Controller extends Component {
      */
     onSearchResultClick(payload) {
         this.triggerEvent("search.resultClick", payload)
-        this.changeHash(payload.code)
+        this.initiateGeographyChange(payload.code)
     }
 
     /**

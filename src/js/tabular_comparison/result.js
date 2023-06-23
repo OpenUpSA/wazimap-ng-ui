@@ -119,7 +119,21 @@ const Result = (props) => {
         }
         const choroplethMethod = selectedIndicator.indicatorDetail?.choropleth_method;
         const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
-        const data = selectedIndicator.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
+
+        let indicatorData = selectedIndicator.indicatorDetail.data;
+        if (obj.filters.length > 0){
+          obj.filters.map(
+            filterObj => {
+              if (filterObj.group.length > 0 && filterObj.value.length > 0){
+                indicatorData = indicatorData.filter(
+                  f => f[filterObj.group] === filterObj.value
+                )
+              }
+            }
+          )
+        }
+
+        const data = indicatorData?.filter(x => x[primaryGroup] === obj.category);
 
         if (data === null && data.length === 0) {
           return {value, tooltip, formatting};
@@ -127,7 +141,7 @@ const Result = (props) => {
 
         const primaryGroupTotal = getTotalCount(data);
         if (choroplethMethod === "subindicator"){
-          const totalCount = getTotalCount(selectedIndicator.indicatorDetail.data);
+          const totalCount = getTotalCount(indicatorData);
           tooltip = d3format(formatting)(primaryGroupTotal);
           value = (primaryGroupTotal/totalCount);
           formatting = chartConfig.types['Percentage'].formatting;

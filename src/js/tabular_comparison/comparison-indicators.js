@@ -63,7 +63,8 @@ const ComparisonIndicators = (props) => {
         const newObj = {
             index: ++maxIndex,
             indicator: '',
-            category: ''
+            category: '',
+            filters: [],
         }
 
         newArr.push(newObj);
@@ -92,6 +93,14 @@ const ComparisonIndicators = (props) => {
         props.setIndicatorObjs(newArr);
     }
 
+    const handleFilterSelection = (index, newValue) => {
+        let newArr = JSON.parse(JSON.stringify(props.indicatorObjs));
+        let objToUpdate = newArr.filter((obj) => obj.index === index)[0]
+        objToUpdate.filters = newValue;
+
+        props.setIndicatorObjs(newArr);
+    }
+
     const renderIndicators = () => {
         if (props.selectedGeographies.length <= 0) {
             return renderEmptyGeographyState();
@@ -110,6 +119,7 @@ const ComparisonIndicators = (props) => {
                 handleRemove={() => handleRemove(x.index)}
                 handleIndicatorSelection={(newValue) => handleIndicatorSelection(x.index, newValue)}
                 handleCategorySelection={(newValue) => handleCategorySelection(x.index, newValue)}
+                handleFilterSelection={(newValue) => handleFilterSelection(x.index, newValue)}
                 indicatorObjs={props.indicatorObjs}
                 index={x.index}
             />

@@ -1,13 +1,16 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Autocomplete, Box, Card, Grid, Icon, TextField} from "@mui/material";
 
 //components
 import IndicatorAutoComplete from "./indicator-auto-complete";
 import CategoryAutoComplete from "./category-auto-complete";
+import IndicatorFilters from "./indicator-filters";
 
 const Indicator = (props) => {
     const [selectedIndicator, setSelectedIndicator] = useState(null);
     const [categoryValue, setCategoryValue] = useState(null);
+    const [selectedFilters, setSelectedFilters] = useState([]);
+
 
     const indicatorAutoComplete =
         <IndicatorAutoComplete
@@ -36,6 +39,49 @@ const Indicator = (props) => {
         setCategoryValue(selectedValue);
         props.handleCategorySelection(selectedValue);
     }
+
+    useEffect(() => {
+      if (selectedIndicator){
+        const metadata = selectedIndicator.indicatorDetail.metadata;
+        const primaryGroup = metadata.primary_group;
+        const groups = metadata.groups.filter(item => item.name !== primaryGroup);
+        let filters = [];
+        groups.map(
+          item => {
+            if (!item.can_aggregate){
+              filters.push({
+                group: item.name,
+                value: item.subindicators[0],
+                canRemove: false,
+              })
+            }
+          }
+        )
+
+        const defaultFilters = selectedIndicator.indicatorDetail?.chart_configuration?.filter?.defaults || [];
+        defaultFilters.map(
+          filter => {
+            let group = groups.find(item => item.name === filter.name);
+            if (group !== undefined){
+              if (group.subindicators.includes(filter.value)) {
+                filters.push({
+                  group: filter.name,
+                  value: filter.value,
+                  canRemove: true,
+                })
+              }
+            }
+          }
+        )
+        setSelectedFilters(filters);
+      }
+    }, [selectedIndicator])
+
+    useEffect(() => {
+      props.handleFilterSelection(selectedFilters);
+    }, [
+      selectedFilters
+    ])
 
     return (
         <div
@@ -66,7 +112,7 @@ const Indicator = (props) => {
                 </Grid>
             </Card>
             <Card
-                className={'comparison-card last'}
+                className={'comparison-card'}
                 variant={'outlined'}
             >
                 <Grid container>
@@ -83,6 +129,31 @@ const Indicator = (props) => {
                     </Grid>
                 </Grid>
             </Card>
+
+            {selectedIndicator && categoryValue && <Card
+                className={'comparison-card last'}
+                variant={'outlined'}
+            >
+                <Grid container>
+                    <Grid
+                        xs={5}
+                        item={true}
+                    >
+                      Filters:
+                    </Grid>
+                    <Grid
+                        xs={7}
+                        item={true}
+                    >
+                        <IndicatorFilters
+                          indicator={selectedIndicator}
+                          category={categoryValue}
+                          selectedFilters={selectedFilters}
+                          setSelectedFilters={setSelectedFilters}
+                        />
+                    </Grid>
+                </Grid>
+            </Card>}
         </div>
     );
 }

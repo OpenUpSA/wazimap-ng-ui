@@ -1,4 +1,7 @@
-import {Component} from '../utils';
+import {Component} from '../../utils';
+import {createRoot} from "react-dom/client";
+import TutorialButton from "./tutorial_button";
+import React from "react";
 
 export class Tutorial extends Component {
     constructor(parent) {
@@ -6,6 +9,19 @@ export class Tutorial extends Component {
 
         this.wrapperClass = '.w-slider-mask';
         this.slideClass = '.w-slide';
+
+        this.addTutorialButton();
+    }
+
+    addTutorialButton() {
+        let container = window.document.createElement('div');
+        container.classList.add('tutorial-button-container');
+        window.document.getElementsByClassName('main')[0].append(container);
+
+        const root = createRoot(container);
+        root.render(
+            <TutorialButton />
+        )
     }
 
     createSlides = (tutorialArr) => {
@@ -20,9 +36,7 @@ export class Tutorial extends Component {
                 intro.remove();
                 let slide = $('.tutorial__slide-info', item);
                 slide.append('<div><span class="slide-info__title bg-primary"></span><span class="slide-info__introduction"></span></div>');
-            }
-
-            else if (i == 7) {
+            } else if (i == 7) {
                 let title = $('.slide-info__title', item);
                 title.remove();
                 let intro = $('.slide-info__introduction', item);

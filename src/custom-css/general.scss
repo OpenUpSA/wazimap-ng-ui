@@ -23,6 +23,12 @@
   top: 80px;
 }
 
+.tutorial-button-container {
+  position: fixed;
+  right: 0;
+  bottom: 300px;
+}
+
 @media (max-width: 480px) {
   .right-panel-toggles {
     top: 370px;

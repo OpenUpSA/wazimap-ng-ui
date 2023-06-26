@@ -14,7 +14,7 @@ import {PointDataTray} from './elements/point_tray/tray';
 import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
 import {MapDownload} from "./map/map_download";
-import {Tutorial} from "./elements/tutorial";
+import {Tutorial} from "./elements/tutorial/tutorial";
 import {DataMapperMenu} from './elements/data_mapper/menu';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";

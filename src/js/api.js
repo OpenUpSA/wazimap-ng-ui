@@ -270,19 +270,21 @@ export class API extends Observable {
                     let subCategoryData = subCategories[subCategory];
                     let indicators = subCategoryData.indicators;
 
-                    Object.keys(indicators).forEach((indicator) => {
-                        let indicatorData = indicators[indicator];
+                    if (indicators != null) {
+                        Object.keys(indicators).forEach((indicator) => {
+                            let indicatorData = indicators[indicator];
 
-                        Object.keys(self.restrictValues).forEach(restrictKey => {
-                            indicatorData.metadata.groups = indicatorData.metadata.groups.map(group => {
-                                if (group.name === restrictKey) {
-                                    group.subindicators = group.subindicators.filter(element => self.restrictValues[restrictKey].includes(element));
-                                }
+                            Object.keys(self.restrictValues).forEach(restrictKey => {
+                                indicatorData.metadata.groups = indicatorData.metadata.groups.map(group => {
+                                    if (group.name === restrictKey) {
+                                        group.subindicators = group.subindicators.filter(element => self.restrictValues[restrictKey].includes(element));
+                                    }
 
-                                return group;
+                                    return group;
+                                })
                             })
-                        })
-                    });
+                        });
+                    }
                 });
             });
 

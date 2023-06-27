@@ -8,7 +8,11 @@ const StyledButton = styled(Button)(() => ({
     fontWeight: '700',
     color: '#fff',
     textTransform: 'none',
-    transform: 'rotate(-90deg)',
+    right: 0,
+    transform: 'rotate(-90deg) translate(0, -100%)',
+    transformOrigin: '100% 0',
+    position: 'absolute',
+    bottom: '300px',
     '&:hover': {
         paddingBottom: '52px',
         backgroundColor: '#39ad84',

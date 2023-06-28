@@ -157,6 +157,7 @@ export function setupInterceptionsForSpecificGeo(geoCode, all_details) {
 }
 
 export function visitToGeo(geoCode, isParent = false, forceClick = false) {
+    cy.wait(1000)
     const geoName = geoCoordinates[geoCode].name;
     if (isParent) {
         cy.get(`.map-location .location-tag .location-tag__name .truncate:contains('${geoName}')`, {timeout: 20000}).click();

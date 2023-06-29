@@ -102,3 +102,7 @@ When('I navigate to WC and without waiting for response visit ZA', () => {
     visitToGeo('ZA-Test', true);
     sendResponse();
 })
+
+And('I zoom out so whole map is visible', () => {
+  cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true})
+})

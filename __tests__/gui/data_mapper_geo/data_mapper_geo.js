@@ -104,3 +104,7 @@ Then('I wait until map is ready for Western Cape', () => {
 Then('I navigate to ZA', () => {
     visitToGeo('ZA');
 })
+
+And('I zoom out so whole map is visible', () => {
+  cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true})
+})

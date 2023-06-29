@@ -179,3 +179,7 @@ Then('I check if rich data panel is empty', () => {
 When('I revisit Western Cape', () => {
   visitToGeo('WC', true);
 })
+
+And('I zoom out so whole map is visible', () => {
+  cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true});
+})

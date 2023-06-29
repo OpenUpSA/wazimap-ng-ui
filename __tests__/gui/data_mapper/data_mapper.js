@@ -120,6 +120,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
     })
 
     visitToGeo('EC');
+    expandChoroplethFilterDialog();
 
     cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
         //loading = true
@@ -317,3 +318,7 @@ Then('I collapse Rich Data Panel', () => {
 Then(/^I check if the geography name is "([^"]*)"$/, function (name) {
     cy.get('.location__title h1').should('have.text', name);
 });
+
+And('I zoom out so whole map is visible', () => {
+  cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true})
+})

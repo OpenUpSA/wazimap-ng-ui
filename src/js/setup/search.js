@@ -1,4 +1,4 @@
-import {onProfileLoaded as onProfileLoadedSearch} from '../elements/search';
+import {onProfileLoaded as onProfileLoadedSearch} from '../elements/header/search';
 
 export function configureSearchEvents(controller, search) {
     controller.on('profileLoaded', onProfileLoadedSearch);

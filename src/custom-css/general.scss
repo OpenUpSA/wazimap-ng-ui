@@ -24,8 +24,12 @@
 }
 
 .tutorial-button-container {
-  position: relative;
-  height:100%;
+  height: 100%;
+}
+
+.current-view-container {
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 480px) {

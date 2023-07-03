@@ -4,7 +4,7 @@ import ProfileLoader from "./profile/profile_loader";
 import {MapControl} from './map/maps';
 import {Component} from './utils';
 import {Profile} from './profile';
-import {onProfileLoaded as onProfileLoadedSearch, Search} from './elements/search';
+import {onProfileLoaded as onProfileLoadedSearch, Search} from './elements/header/search';
 import {MapChip} from './elements/mapchip/mapchip';
 import {LocationInfoBox} from './elements/location_info_box';
 import {PointData} from "./map/point_data/point_data";
@@ -45,6 +45,8 @@ import {StyleConfig} from "./elements/style_config";
 import {configureStyleConfigEvents} from "./setup/styleconfig";
 import {RichDataLinkRendrer} from "./elements/data_mapper/components/renderer";
 import {MyView} from "./elements/my_view/my_view";
+import {CurrentView} from "./elements/header/current_view/current_view";
+import {configureCurrentViewEvents} from "./setup/currentView";
 
 let defaultFormattingConfig = {
     decimal: ",.1f",
@@ -87,6 +89,7 @@ class Application extends Component {
         const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled, controller);
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
         const myView = new MyView(this, controller, config.siteWideFiltersEnabled, api, profileId);
+        const currentView = new CurrentView(this);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);
@@ -107,6 +110,7 @@ class Application extends Component {
         configureStyleConfigEvents(controller, styleConfig);
         configureFacilityEvents(controller, {profileLoader: profileLoader});
         configureRichDataPanelEvents(controller, {richDataLinkRendrer: richDataLinkRendrer});
+        configureCurrentViewEvents(controller, config, currentView)
         initialPageLoad(controller)
 
         preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))

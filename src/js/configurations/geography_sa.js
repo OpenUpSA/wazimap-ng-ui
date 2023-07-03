@@ -94,6 +94,10 @@ export class Config {
         return mergedConfig;
     }
 
+    get viewName() {
+        return this._viewName;
+    }
+
     getViewConfig(filterType) {
         if (
             this.views[this._viewName] !== undefined

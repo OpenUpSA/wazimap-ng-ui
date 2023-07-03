@@ -9,18 +9,19 @@ export class Tutorial extends Component {
 
         this.wrapperClass = '.w-slider-mask';
         this.slideClass = '.w-slide';
-
-        this.addTutorialButton();
     }
 
-    addTutorialButton() {
+    addTutorialButton(feedbackBtnVisible) {
         let container = window.document.createElement('div');
         container.classList.add('tutorial-button-container');
         window.document.getElementsByClassName('main')[0].append(container);
 
         const root = createRoot(container);
         root.render(
-            <TutorialButton />
+            <TutorialButton
+                displayTutorialDialog={this.displayTutorialDialog}
+                feedbackBtnVisible={feedbackBtnVisible}
+            />
         )
     }
 
@@ -59,5 +60,9 @@ export class Tutorial extends Component {
             return;
         }
         ele.text(text);
+    }
+
+    displayTutorialDialog() {
+        $('.tutorial-modal').css('display', 'flex');
     }
 }

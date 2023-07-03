@@ -540,3 +540,7 @@ export function confirmChartIsFiltered(group, value, chartTitle) {
         expect(matches).equal(true);
     })
 }
+
+export function zoomOutMap() {
+  cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true})
+}

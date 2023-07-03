@@ -6,7 +6,8 @@ import {
     gotoHomepage,
     mapBottomItems,
     setupInterceptions, visitToGeo,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded,
+    zoomOutMap
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profile from "./profile.json";
@@ -106,5 +107,5 @@ Then('I navigate to ZA', () => {
 })
 
 And('I zoom out so whole map is visible', () => {
-  cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true})
+  zoomOutMap();
 })

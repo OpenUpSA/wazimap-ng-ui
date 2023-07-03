@@ -16,7 +16,8 @@ import {
     gotoHomepage,
     mapBottomItems, selectChoroplethDropdownOption,
     setupInterceptions, visitToGeo,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded,
+    zoomOutMap,
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import all_details_FS from "./all_details_FS.json";
@@ -320,5 +321,5 @@ Then(/^I check if the geography name is "([^"]*)"$/, function (name) {
 });
 
 And('I zoom out so whole map is visible', () => {
-  cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true})
+  zoomOutMap();
 })

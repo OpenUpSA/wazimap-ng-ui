@@ -183,6 +183,20 @@ body {
     text-overflow: ellipsis;
 }
 
+.truncate-table-cell {
+    white-space: nowrap;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.untruncate-table-cell {
+  white-space: break-spaces;
+  max-width: 100px;
+  overflow: visible;
+  vertical-align: baseline !important;
+}
+
 .geography-empty-state {
     text-align: center;
     margin-top: 22px;

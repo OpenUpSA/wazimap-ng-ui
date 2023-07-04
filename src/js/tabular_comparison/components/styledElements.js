@@ -5,6 +5,7 @@ import SliderUnstyled, { sliderUnstyledClasses } from '@mui/base/SliderUnstyled'
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
+import Chip from '@mui/material/Chip';
 
 export const AddFilterButton = styled(Button)(({ theme }) => ({
   width: '100%',
@@ -36,4 +37,33 @@ export const RemoveFilterButton = styled(IconButton)(({ theme }) => ({
   "&:hover": {
       backgroundColor: "#FFF"
     }
+}));
+
+export const UnfoldButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: "#E7E7E7",
+  marginLeft: "auto",
+  padding: "4px 7px",
+  "&:hover": {
+      backgroundColor: "#E7E7E7"
+    }
+}));
+
+export const CategoryChip = styled(Chip)(({ theme }) => ({
+  backgroundColor: "#E7E7E7",
+  marginTop: "10px",
+  marginRight: "10px",
+  color: "#FFF",
+  fontSize: "10px",
+  borderRadius: "100px",
+  background: "#2F2F2F"
+}));
+
+export const FilterChip = styled(Chip)(({ theme }) => ({
+  backgroundColor: "#E7E7E7",
+  marginTop: "10px",
+  marginRight: "10px",
+  color: "#2F2F2F",
+  fontSize: "10px",
+  borderRadius: "100px",
+  background: "#E1E1E1"
 }));

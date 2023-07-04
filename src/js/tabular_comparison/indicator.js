@@ -62,7 +62,8 @@ const Indicator = (props) => {
         defaultFilters.map(
           filter => {
             let group = groups.find(item => item.name === filter.name);
-            if (group !== undefined){
+            const isNewFilter = filters.find(item => item.group === filter.name) === undefined;
+            if (group !== undefined && isNewFilter){
               if (group.subindicators.includes(filter.value)) {
                 filters.push({
                   group: filter.name,

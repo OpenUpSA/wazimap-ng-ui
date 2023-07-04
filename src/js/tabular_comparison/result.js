@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {Card, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+
 import {format as d3format} from "d3-format";
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {max as d3max, min as d3min} from 'd3-array';
 import {defaultValues} from "../defaultValues";
 import {Config as SAConfig} from '../configurations/geography_sa';
 import {fillMissingKeys, getColorRange} from "../utils";
-import {ResultArrowSvg, ResultArrowSvg2} from "./svg-icons";
+import {ResultArrowSvg, ResultArrowSvg2, UnfoldMoreSvg, FoldMoreSvg} from "./svg-icons";
+import {UnfoldButton, CategoryChip, FilterChip} from './components/styledElements';
+import Stack from '@mui/material/Stack';
 
 //components
 import SectionTitle from "./section-title";
@@ -16,6 +19,7 @@ const Result = (props) => {
     const arrowSvg = ResultArrowSvg;
     const arrowSvg2 = ResultArrowSvg2;
     const defaultConfig = new SAConfig();
+    const [isResultHeaderFolded, setIsResultHeaderFolded] = useState(true);
 
     useEffect(() => {
         populateRows();
@@ -185,9 +189,27 @@ const Result = (props) => {
                                         <TableCell
                                             data-testid={`table-header-${column.index}`}
                                             key={column.index}
-                                            className={'truncate-table-cell'}
+                                            className={isResultHeaderFolded ? 'truncate-table-cell': 'untruncate-table-cell'}
                                             title={column.indicator + ' : ' + column.category}
-                                        ><b>{column.indicator} : {column.category}</b></TableCell>
+                                        >
+                                          <>
+                                          <b>{column.indicator}</b>
+                                          {!isResultHeaderFolded &&
+                                            <Stack useFlexGap flexWrap="wrap" direction="row">
+                                              {column.category !== null && <CategoryChip label={"Category: "+ column.category} sx={{ marginBottom: '10px' }} />}
+                                              {column.category !== null && column.filters.map(
+                                                (item) => {
+                                                  if (item.group.length > 0 && item.value.length > 0){
+                                                    return <FilterChip label={item.group +": "+ item.value} sx={{ marginBottom: '10px' }} />
+                                                  }
+                                                })
+                                              }
+                                            </Stack>
+                                          }
+
+
+                                          </>
+                                        </TableCell>
                                     )
                                 }
                             })
@@ -270,10 +292,17 @@ const Result = (props) => {
         <Grid
             container
         >
-            <Grid
+            <Grid container
                 className={'margin-bottom-20'}
             >
                 <SectionTitle>Resulting comparison</SectionTitle>
+                {props.indicatorObjs.length > 0 &&
+                  <UnfoldButton aria-label="delete" size="small" onClick={() => setIsResultHeaderFolded(!isResultHeaderFolded)}>
+                    {isResultHeaderFolded && UnfoldMoreSvg}
+                    {!isResultHeaderFolded && FoldMoreSvg}
+                  </UnfoldButton>
+                }
+
             </Grid>
             <Grid container>
                 <Card

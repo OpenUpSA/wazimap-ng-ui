@@ -7,8 +7,11 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
+import {FilterItem, FilterDropdown} from './styledElements';
+
 const Dropdown = ({
   value,
+  placeholder,
   label,
   items,
   isDisabled,
@@ -17,19 +20,27 @@ const Dropdown = ({
 }) => {
 
     return (
-      <FormControl fullWidth disabled={isDisabled}>
-        <InputLabel id="demo-simple-select-label">{dropdownType}</InputLabel>
-        <Select
+      <FormControl fullWidth disabled={isDisabled} size="small">
+        { dropdownType && <InputLabel id="demo-simple-select-label">{dropdownType}</InputLabel>}
+        <FilterDropdown
+          displayEmpty
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={value}
-          label={label}
           onChange={handleDropdownChange}
+          renderValue={(selected) => {
+            if (selected === '') {
+              return <em>{placeholder}</em>;
+            }
+
+            return selected;
+          }}
+          inputProps={{ 'aria-label': 'Without label' }}
         >
           {items.length > 0 && items.map(
-            (item, index) => <MenuItem value={item} key={index}>{item}</MenuItem>
+            (item, index) => <FilterItem value={item} key={index}>{item}</FilterItem>
           )}
-        </Select>
+        </FilterDropdown>
       </FormControl>
     );
 }

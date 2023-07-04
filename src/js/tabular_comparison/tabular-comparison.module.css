@@ -205,6 +205,18 @@ body {
     margin-right: 10px;
 }
 
+.font-13 {
+  font-size: 13px;
+}
+
+.m-auto {
+  margin: auto !important;
+}
+
+.lh-0 {
+  line-height: 0px !important;
+}
+
 /*scroll*/
 /* width */
 ::-webkit-scrollbar {

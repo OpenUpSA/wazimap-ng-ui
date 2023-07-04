@@ -7,6 +7,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FilterRow from './components/FilterRow';
+import {AddFilterButton} from './components/styledElements';
 
 const IndicatorFilters = ({
   indicator,
@@ -95,6 +96,7 @@ const IndicatorFilters = ({
             {selectedFilters && selectedFilters.map((filter, index) => (
               <FilterRow
                 key={index}
+                index={index}
                 selectedGroup={filter.group}
                 selectedValue={filter.value}
                 canRemove={filter.canRemove}
@@ -105,7 +107,9 @@ const IndicatorFilters = ({
               />
             ))}
             <Grid xs={12} item={true}>
-              <Button onClick={onClickingAddFilters}>Add a Filter</Button>
+              <AddFilterButton onClick={onClickingAddFilters}>
+                Add a Filter
+              </AddFilterButton>
             </Grid>
           </Grid>
         </div>

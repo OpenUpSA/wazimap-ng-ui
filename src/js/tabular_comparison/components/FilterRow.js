@@ -7,9 +7,12 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Dropdown from './dropdown';
-import IconButton from '@mui/material/IconButton';
+
+import {RemoveFilterButton} from './styledElements';
+import {RemoveFilterSvg} from '../svg-icons';
 
 const FilterRow = ({
+  index,
   selectedGroup,
   canRemove,
   selectedValue,
@@ -49,32 +52,36 @@ const FilterRow = ({
     )
 
     return (
-      <Grid container item={true} spacing={2}>
-        <Grid xs={5} item={true}>
+      <Grid container item={true} spacing={2} className={'lh-0'}>
+      <Grid xs={2} item={true} className={'m-auto'}>
+        <p className={'font-13'}>Filter {index+1}:</p>
+      </Grid>
+        <Grid xs={4} item={true} className={'m-auto'}>
           <Dropdown
             items={groups}
             label="Group"
-            dropdownType="attribute"
+            placeholder="attribute"
             value={selectedGroup}
             isDisabled={!canRemove}
             handleDropdownChange={handleGroupDropdownChange}
           />
         </Grid>
-        <Grid xs={5} item={true}>
+        <Grid xs={4} item={true} className={'m-auto'}>
           <Dropdown
             items={selectedGroupValues || []}
             label="Value"
-            dropdownType="value"
+            placeholder="value"
             value={selectedValue}
+            isDisabled={selectedGroup === ''}
             handleDropdownChange={handleValueDropdownChange}
           />
         </Grid>
 
-        <Grid xs={2} item={true} alignItems="center" justifyContent="center">
+        <Grid xs={2} item={true} alignItems="center" className={'m-auto'}>
         {canRemove &&
-          <IconButton aria-label="delete" size="small" onClick={() => removeFilterRow(selectedGroup)}>
-            X
-          </IconButton>
+          <RemoveFilterButton aria-label="delete" size="small" onClick={() => removeFilterRow(selectedGroup)}>
+            {RemoveFilterSvg}
+          </RemoveFilterButton>
         }
         </Grid>
       </Grid>

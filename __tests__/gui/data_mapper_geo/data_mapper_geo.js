@@ -6,7 +6,8 @@ import {
     gotoHomepage,
     mapBottomItems,
     setupInterceptions, visitToGeo,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded,
+    zoomOutMap
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profile from "./profile.json";
@@ -103,4 +104,8 @@ Then('I wait until map is ready for Western Cape', () => {
 
 Then('I navigate to ZA', () => {
     visitToGeo('ZA');
+})
+
+And('I zoom out so whole map is visible', () => {
+  zoomOutMap();
 })

@@ -108,6 +108,8 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
 })
 
 When('I navigate to a geography with no points', () => {
+    collapseRichDataPanel();
+    visitToGeo('ZA-Test', true, true);
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC/?version=test&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 200,
@@ -132,7 +134,6 @@ When('I navigate to a geography with no points', () => {
         });
     });
 
-    collapseRichDataPanel();
     visitToGeo('NC');
     expandRichDataPanel();
 })

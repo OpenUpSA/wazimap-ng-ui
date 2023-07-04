@@ -5,7 +5,8 @@ import {
     gotoHomepage,
     setupInterceptions,
     waitUntilGeographyIsLoaded,
-    visitToGeo
+    visitToGeo,
+    zoomOutMap
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profile from "./profile.json";
@@ -101,4 +102,8 @@ When('I navigate to WC and without waiting for response visit ZA', () => {
     visitToGeo('WC');
     visitToGeo('ZA-Test', true);
     sendResponse();
+})
+
+And('I zoom out so whole map is visible', () => {
+  zoomOutMap();
 })

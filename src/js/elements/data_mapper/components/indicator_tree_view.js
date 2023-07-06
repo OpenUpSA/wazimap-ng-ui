@@ -4,10 +4,12 @@ import {
     StyledCategoryTreeItem,
     StyledSubCategoryTreeItem,
     StyledSubindicatorTreeItem,
-    StyledIndicatorTreeItem
+    StyledIndicatorTreeItem,
+    StyledNoSubindicatorTreeItem
 } from "./styledElements";
 import Box from "@mui/material/Box";
 import {Typography} from "@mui/material";
+import {checkIfSubIndicatorHasChildren} from "../../../utils";
 
 
 const LoadingItemView = (props) => {
@@ -34,6 +36,24 @@ const getSubIndicators = (indicator) => {
         );
     }
     return [];
+}
+
+const NoSubindicatorView = (props) => {
+    return (
+        <StyledNoSubindicatorTreeItem
+            nodeId={`datamapper-subindicator-${props.indicator.id}-not-available`}
+            label={
+                <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
+                    <Typography noWrap={false} variant="body2"
+                                sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}>
+                        No data available for this indicator in the current view.
+                    </Typography>
+                </Box>
+            }
+            data-test-id={`datamapper-subindicator-${props.indicator.id}-not-available`}
+            className={"subIndicator-item"}
+        />
+    )
 }
 
 const SubindicatorItemView = (props) => {
@@ -119,6 +139,18 @@ const IndicatorItemView = (props) => {
         }
     );
 
+    const checkForSubIndicatorData = () => {
+        let isValid = false;
+        let indicatorData = props.indicator?.indicatorData;
+        if (indicatorData !== undefined) {
+            isValid = Object.keys(indicatorData).some((geo) => {
+                return indicatorData[geo].length > 0;
+            })
+        }
+
+        return isValid;
+    }
+
     if (subindicators.length > 0) {
         return (
             <StyledIndicatorTreeItem nodeId={`datamapper-indicator-${props.indicator.id}`} label={
@@ -130,7 +162,7 @@ const IndicatorItemView = (props) => {
                 </Box>
             } data-test-id={`datamapper-indicator-${props.indicator.id}`}>
                 {loading && <LoadingItemView/>}
-                {!loading && subindicators.map(
+                {!loading && checkForSubIndicatorData() && subindicators.map(
                     (subindicator, index) => {
                         return (
                             <SubindicatorItemView
@@ -149,6 +181,9 @@ const IndicatorItemView = (props) => {
                         )
                     })
                 }
+                {!loading && !checkForSubIndicatorData() && <NoSubindicatorView
+                    indicator={props.indicator}
+                />}
             </StyledIndicatorTreeItem>
         )
     }

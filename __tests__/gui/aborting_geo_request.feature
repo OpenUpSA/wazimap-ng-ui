@@ -9,6 +9,7 @@ Feature: Aborting geo request
     And I click on "Language" in Data Mapper
     And I click on "Language most spoken at home" in Data Mapper
     And I click on "15-19" in Data Mapper
+    And I zoom out so whole map is visible
 
     When I navigate to WC and without waiting for response visit ZA
     Then I wait until map is ready

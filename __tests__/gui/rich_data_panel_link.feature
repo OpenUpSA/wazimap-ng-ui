@@ -11,6 +11,7 @@ Feature: Rich Data Panel Link
     Then I check if the location facilities is visible
     Then I check if rich data panel has data
     Then I expand Data Mapper
+    And I zoom out so whole map is visible
 
     When I visit Western Cape
     Then I wait until map is ready for Western Cape
@@ -21,6 +22,7 @@ Feature: Rich Data Panel Link
     Then I check if the location facilities is hidden
     Then I check if rich data panel has data
     Then I expand Data Mapper
+    And I zoom out so whole map is visible
 
     When I visit City of Cape Town
     Then I wait until map is ready for City of Cape Town
@@ -40,6 +42,7 @@ Feature: Rich Data Panel Link
     Then I check if the location facilities is hidden
     Then I check if rich data panel is empty
     Then I expand Data Mapper
+    And I zoom out so whole map is visible
 
     When I revisit Western Cape
     Then I wait until map is ready for Western Cape

@@ -1,23 +1,23 @@
 # Production context: all deploys from the Production branch set in your site's deploy contexts will inherit these settings.
 [context.production.environment]
-    GOOGLE_ANALYTICS_ID = "UA-93649482-25"
+    GOOGLE_ANALYTICS_ID = "G-7DSTL89K69"
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
     ENVIRONMENT = "FE_Production"
 
 # Specific branch context: all deploys from this specific branch will inherit these settings.
 [context.staging.environment] # 'staging' is a branch
-    GOOGLE_ANALYTICS_ID = ""
+    GOOGLE_ANALYTICS_ID = "G-9HFRD1796B"
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
     ENVIRONMENT = "FE_Staging"
 
 # Deploy preview context: all deploys generated from a pull/merge request will inherit these settings.
 [context.deploy-preview.environment]
-    GOOGLE_ANALYTICS_ID = ""
+    GOOGLE_ANALYTICS_ID = "G-9HFRD1796B"
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
     ENVIRONMENT = "FE_Deploy-preview"
 
 # Branch deploy context: all deploys that are not from a pull/merge request or from the Production branch will inherit these settings.
 [context.branch-deploy.environment]
-    GOOGLE_ANALYTICS_ID = ""
+    GOOGLE_ANALYTICS_ID = "G-9HFRD1796B"
     SENTRY_DSN = "https://aae3ed779891437d984db424db5c9dd0@o242378.ingest.sentry.io/5257787"
     ENVIRONMENT = "FE_Branch-deploy"

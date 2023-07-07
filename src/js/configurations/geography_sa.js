@@ -98,6 +98,9 @@ export class Config {
         if (this._currentViewData.viewName == null) {
             this._currentViewData.viewName = this.config['default_view_label'];
         }
+        if (this._currentViewData.viewName == null) {
+            this._currentViewData.viewName = 'Default';
+        }
 
         return this._currentViewData;
     }

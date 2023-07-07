@@ -8,6 +8,7 @@ import {
     setupInterceptions,
     waitUntilGeographyIsLoaded,
     visitToGeo,
+    zoomOutMap,
 } from "../common_cy_functions/general";
 
 
@@ -178,4 +179,8 @@ Then('I check if rich data panel is empty', () => {
 
 When('I revisit Western Cape', () => {
   visitToGeo('WC', true);
+})
+
+And('I zoom out so whole map is visible', () => {
+  zoomOutMap();
 })

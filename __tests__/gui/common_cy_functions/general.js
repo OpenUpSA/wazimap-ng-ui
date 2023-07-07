@@ -157,8 +157,9 @@ export function setupInterceptionsForSpecificGeo(geoCode, all_details) {
 }
 
 export function visitToGeo(geoCode, isParent = false, forceClick = false) {
+    cy.wait(1000)
+    const geoName = geoCoordinates[geoCode].name;
     if (isParent) {
-        const geoName = geoCoordinates[geoCode].name;
         cy.get(`.map-location .location-tag .location-tag__name .truncate:contains('${geoName}')`, {timeout: 20000}).click();
     } else {
         const coords = geoCoordinates[geoCode];
@@ -167,17 +168,11 @@ export function visitToGeo(geoCode, isParent = false, forceClick = false) {
             L = win.L;
             let map = win.map;
             const latlng = L.latLng(coords.lat, coords.lng);
-
-            map.flyTo(latlng, 14);
-            const waitMs = forceClick ? 4000 : 0;
-            hoverOverTheMapCenter('.leaflet-overlay-pane .leaflet-zoom-animated')
-                .then(() => {
-                    cy.wait(waitMs).then(() => {
-                        cy.get('.leaflet-overlay-pane .leaflet-zoom-animated').click({force: forceClick});
-                    })
-                })
+            var point = map.latLngToContainerPoint(latlng);
+            cy.get('#main-map', {timeout: 20000}).trigger('click', point.x, point.y);
         });
     }
+    waitUntilGeographyIsLoaded(geoName);
 }
 
 export function extractRequestedIndicatorData(url, indicatorData) {
@@ -544,4 +539,8 @@ export function confirmChartIsFiltered(group, value, chartTitle) {
         }).then(() => {
         expect(matches).equal(true);
     })
+}
+
+export function zoomOutMap() {
+  cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true})
 }

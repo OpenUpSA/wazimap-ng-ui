@@ -378,7 +378,14 @@ export class VersionController extends Component {
 
         this.parent.triggerEvent(VersionController.EVENTS.profileLoaded, dataBundle);
 
-        document.title = dataBundle.overview.name;
+        const geography_name = dataBundle.profile?.geography?.name;
+        const profile_name = dataBundle.overview.name;
+
+        document.title = (
+          geography_name && profile_name ? `${geography_name} - ${profile_name}` :
+          geography_name && !profile_name ? geography_name :
+          profile_name
+        );
     }
 
     appendAllBundles(rawData, version) {

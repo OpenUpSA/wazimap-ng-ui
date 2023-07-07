@@ -111,7 +111,7 @@ class Application extends Component {
 
         preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))
 
-        controller.triggerHashChange()
+        controller.loadInitialGeography()
 
     }
 }

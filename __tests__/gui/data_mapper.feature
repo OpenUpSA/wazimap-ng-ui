@@ -14,6 +14,8 @@ Feature: Data Mapper
     Then I check if choropleth legend is displayed
     Then I expand filter dialog
     Then I check if everything is zero
+    And I zoom out so whole map is visible
+    And I collapse the choropleth filter dialog
 
     And I navigate to EC and check if the loading state is displayed correctly
 
@@ -42,6 +44,7 @@ Feature: Data Mapper
 
     # confirm that navigating between geographies does not break the data mapper & choropleth
     And I navigate to ZA
+    And I collapse the choropleth filter dialog
     And I navigate to WC
     And I expand Data Mapper
     Then I check if there are 2 categories
@@ -58,6 +61,7 @@ Feature: Data Mapper
     And I click on "2016 Municipal elections" in Data Mapper
     And I click on "Number of hung and majority councils" in Data Mapper
     And I click on "Hung" in Data Mapper
+    And I expand the choropleth filter dialog
     Then I check if the message is displayed correctly
 
     # confirm that default filters do not break navigating
@@ -67,6 +71,7 @@ Feature: Data Mapper
     And I click on "Not in Employment" in Data Mapper
     And I click on "NEET" in Data Mapper
     Then I check if the non-aggregatable group filter is applied
+    Then I click on snackbar to hide it
 
     And I navigate to FS
     Then I check if the non-aggregatable group filter is applied

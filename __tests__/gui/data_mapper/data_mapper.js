@@ -16,7 +16,8 @@ import {
     gotoHomepage,
     mapBottomItems, selectChoroplethDropdownOption,
     setupInterceptions, visitToGeo,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded,
+    zoomOutMap,
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import all_details_FS from "./all_details_FS.json";
@@ -120,6 +121,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
     })
 
     visitToGeo('EC');
+    expandChoroplethFilterDialog();
 
     cy.get('.data-mapper-content__loading').should('be.visible').then(() => {
         //loading = true
@@ -302,6 +304,10 @@ Then('I check if the legend values are correct', () => {
     })
 })
 
+Then('I click on snackbar to hide it', () => {
+    cy.get('#notistack-snackbar').click();
+})
+
 Then('I expand Rich Data Panel', () => {
     expandRichDataPanel();
 })
@@ -313,3 +319,7 @@ Then('I collapse Rich Data Panel', () => {
 Then(/^I check if the geography name is "([^"]*)"$/, function (name) {
     cy.get('.location__title h1').should('have.text', name);
 });
+
+And('I zoom out so whole map is visible', () => {
+  zoomOutMap();
+})

@@ -8,7 +8,7 @@ export class CurrentView extends Component {
         super(parent);
     }
 
-    createDropdown(viewsArr) {
+    createDropdown(viewsArr, currentViewData) {
         let container = document.createElement('div');
         container.classList.add('current-view-container');
         window.document.getElementsByClassName('nav__content')[0].append(container);
@@ -17,6 +17,7 @@ export class CurrentView extends Component {
         root.render(
             <ViewSelect
                 viewsArr={viewsArr}
+                viewData={currentViewData}
             />
         )
     }

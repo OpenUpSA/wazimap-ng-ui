@@ -1,7 +1,12 @@
 export function configureCurrentViewEvents(controller, config, currentViewObj) {
     controller.on('profile.loaded', () => {
-        console.log({config})
-        const viewsArr = Object.keys(config.views)
-        currentViewObj.createDropdown(viewsArr);
+        let views = structuredClone(config.views);
+
+        const viewKeys = Object.keys(config.views);
+        if (viewKeys.indexOf(config.currentViewData.viewName) < 0) {
+            views[config.currentViewData.viewName] = {};
+        }
+
+        currentViewObj.createDropdown(views, config.currentViewData);
     })
 }

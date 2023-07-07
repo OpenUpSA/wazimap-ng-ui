@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import {FormControl, MenuItem, Select, selectClasses} from "@mui/material";
 import {styled} from "@mui/system";
 
 const ViewSelect = (props) => {
-    const [views, setViews] = React.useState(props.viewsArr);
+    const [views] = useState(props.viewsArr);
+    const [selectedView] = useState(props.viewData.viewName);
 
 
     const StyledSelect = styled(Select)(() => ({
@@ -15,24 +16,64 @@ const ViewSelect = (props) => {
         },
         [`& .${selectClasses.icon}`]: {
             top: 'unset'
+        },
+        ['& a']: {
+            color: 'rgb(51, 51, 51)',
+            textDecoration: 'none'
         }
     }));
 
     const StyledMenuItem = styled(MenuItem)(() => ({
-        paddingTop: '12px',
+        padding: '0px',
         fontSize: '0.9em',
         lineHeight: '1.2',
-        color: '#666'
+        ['& a']: {
+            display: 'block',
+            width: '100%',
+            paddingLeft: '16px',
+            paddingRight: '16px',
+            paddingTop: '12px',
+            paddingBottom: '12px',
+            color: '#666',
+            textDecoration: 'none'
+        },
+        ['& p']: {
+            width: '100%',
+            paddingLeft: '16px',
+            paddingRight: '16px',
+            paddingTop: '7.71px',
+            paddingBottom: '0px',
+            color: '#666',
+        }
     }));
 
     const handleChange = (event) => {
-        setViews(event.target.value);
+        return;
     };
+
+    const getLabel = (view) => {
+        let label = views[view].label;
+        if (label == null) {
+            label = view;
+        }
+
+        return label;
+    }
+
+    const renderMenuItemContent = (view) => {
+        if (view === selectedView) {
+            return <p>{getLabel(view)}</p>
+        } else {
+            return (
+                <a href={`${window.location.origin}?view=${view}`} target={'_blank'}>{getLabel(view)}</a>
+            )
+        }
+    }
 
     return (
         <FormControl fullWidth>
             <StyledSelect
-                value={'age'}
+                value={selectedView}
                 onChange={handleChange}
                 size={'small'}
                 variant={'filled'}
@@ -47,8 +88,10 @@ const ViewSelect = (props) => {
                 )}
             >
                 {
-                    views.map(view => (
-                        <StyledMenuItem value={view}>{view}</StyledMenuItem>
+                    Object.keys(views).map(view => (
+                        <StyledMenuItem value={view}>
+                            {renderMenuItemContent(view)}
+                        </StyledMenuItem>
                     ))
                 }
             </StyledSelect>

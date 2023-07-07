@@ -48,22 +48,38 @@ export const UnfoldButton = styled(IconButton)(({ theme }) => ({
     }
 }));
 
-export const CategoryChip = styled(Chip)(({ theme }) => ({
-  backgroundColor: "#E7E7E7",
-  marginTop: "10px",
-  marginRight: "10px",
+export const CategoryChip = styled('div')(({ theme }) => ({
+  display: "flex",
+  padding: "2px 6px",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "10px",
+  borderRadius: "100px",
+  background: "#2F2F2F",
   color: "#FFF",
   fontSize: "10px",
-  borderRadius: "100px",
-  background: "#2F2F2F"
+  fontStyle: "normal",
+  fontWeight: "400",
+  lineHeight: "100%",
+  height: "fit-content",
+  marginRight: "4px",
+  marginBottom: "4px",
 }));
 
-export const FilterChip = styled(Chip)(({ theme }) => ({
-  backgroundColor: "#E7E7E7",
-  marginTop: "10px",
-  marginRight: "10px",
+export const FilterChip = styled('div')(({ theme }) => ({
+  display: "flex",
+  padding: "2px 6px",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "10px",
+  borderRadius: "100px",
+  background: "#E1E1E1",
   color: "#2F2F2F",
   fontSize: "10px",
-  borderRadius: "100px",
-  background: "#E1E1E1"
+  fontStyle: "normal",
+  fontWeight: "400",
+  lineHeight: "100%",
+  height: "fit-content",
+  marginRight: "4px",
+  marginBottom: "4px",
 }));

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import {Card, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 
 import {format as d3format} from "d3-format";
@@ -10,6 +10,7 @@ import {fillMissingKeys, getColorRange} from "../utils";
 import {ResultArrowSvg, ResultArrowSvg2, UnfoldMoreSvg, FoldMoreSvg} from "./svg-icons";
 import {UnfoldButton, CategoryChip, FilterChip} from './components/styledElements';
 import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
 
 //components
 import SectionTitle from "./section-title";
@@ -166,6 +167,25 @@ const Result = (props) => {
         }
     }
 
+    const getCategoryChipText = useCallback(
+      (category) => {
+        if (category === null){
+          return "No category selected"
+        }
+        return isResultHeaderFolded ? category : `Category: ${category}`;
+      }, [
+        isResultHeaderFolded
+      ]
+    )
+
+    const getFilterChipText = useCallback(
+      (filter) => {
+        return isResultHeaderFolded ? filter.value : `${filter.group}: ${filter.value}`;
+      }, [
+        isResultHeaderFolded
+      ]
+    )
+
     const renderTable = () => {
         return <TableContainer
             component={Paper}
@@ -181,6 +201,7 @@ const Result = (props) => {
                     <TableRow>
                         <TableCell
                           data-testid={'table-header-0'}
+                          sx={{padding: "9px 10px"}}
                         ><b>Geography</b></TableCell>
                         {
                             props.indicatorObjs.map((column) => {
@@ -191,23 +212,20 @@ const Result = (props) => {
                                             key={column.index}
                                             className={isResultHeaderFolded ? 'truncate-table-cell': 'untruncate-table-cell'}
                                             title={column.indicator + ' : ' + column.category}
+                                            sx={{padding: "9px 10px"}}
                                         >
                                           <>
                                           <b>{column.indicator}</b>
-                                          {!isResultHeaderFolded &&
                                             <Stack useFlexGap flexWrap="wrap" direction="row">
-                                              {column.category !== null && <CategoryChip label={"Category: "+ column.category} sx={{ marginBottom: '10px' }} />}
+                                              <CategoryChip>{getCategoryChipText(column.category)}</CategoryChip>
                                               {column.category !== null && column.filters.map(
                                                 (item) => {
                                                   if (item.group.length > 0 && item.value.length > 0){
-                                                    return <FilterChip label={item.group +": "+ item.value} sx={{ marginBottom: '10px' }} />
+                                                    return <FilterChip>{getFilterChipText(item)}</FilterChip>
                                                   }
                                                 })
                                               }
                                             </Stack>
-                                          }
-
-
                                           </>
                                         </TableCell>
                                     )
@@ -297,10 +315,19 @@ const Result = (props) => {
             >
                 <SectionTitle>Resulting comparison</SectionTitle>
                 {props.indicatorObjs.length > 0 &&
-                  <UnfoldButton aria-label="delete" size="small" onClick={() => setIsResultHeaderFolded(!isResultHeaderFolded)}>
-                    {isResultHeaderFolded && UnfoldMoreSvg}
-                    {!isResultHeaderFolded && FoldMoreSvg}
-                  </UnfoldButton>
+
+                  <Tooltip
+                    title={isResultHeaderFolded ? "Expand header row" : "Collapse header row"}
+                    arrow
+                  >
+                    <UnfoldButton
+                      aria-label="delete"
+                      size="small"
+                      onClick={() => setIsResultHeaderFolded(!isResultHeaderFolded)}
+                    >
+                      {isResultHeaderFolded ? UnfoldMoreSvg : FoldMoreSvg}
+                    </UnfoldButton>
+                  </Tooltip>
                 }
 
             </Grid>

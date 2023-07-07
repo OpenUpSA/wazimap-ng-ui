@@ -52,37 +52,39 @@ const FilterRow = ({
     )
 
     return (
-      <Grid container item={true} spacing={2} className={'lh-0'}>
-      <Grid xs={2} item={true} className={'m-auto'}>
-        <p className={'font-13'}>Filter {index+1}:</p>
-      </Grid>
-        <Grid xs={4} item={true} className={'m-auto'}>
-          <Dropdown
-            items={groups}
-            label="Group"
-            placeholder="attribute"
-            value={selectedGroup}
-            isDisabled={!canRemove}
-            handleDropdownChange={handleGroupDropdownChange}
-          />
+      <Grid container item={true} className={'lh-0'} sx={{paddingBottom: '5px'}}>
+        <Grid xs={2} item={true} className={'m-auto'}>
+          <p className={'font-13'}>Filter {index+1}:</p>
         </Grid>
-        <Grid xs={4} item={true} className={'m-auto'}>
-          <Dropdown
-            items={selectedGroupValues || []}
-            label="Value"
-            placeholder="value"
-            value={selectedValue}
-            isDisabled={selectedGroup === ''}
-            handleDropdownChange={handleValueDropdownChange}
-          />
+        <Grid xs={9} container item={true} spacing={1}>
+          <Grid xs={6} item={true} className={'m-auto'}>
+            <Dropdown
+              items={groups}
+              label="Group"
+              placeholder="attribute"
+              value={selectedGroup}
+              isDisabled={!canRemove}
+              handleDropdownChange={handleGroupDropdownChange}
+            />
+          </Grid>
+          <Grid xs={6} item={true} className={'m-auto'}>
+            <Dropdown
+              items={selectedGroupValues || []}
+              label="Value"
+              placeholder="value"
+              value={selectedValue}
+              isDisabled={selectedGroup === ''}
+              handleDropdownChange={handleValueDropdownChange}
+            />
+          </Grid>
         </Grid>
 
-        <Grid xs={2} item={true} alignItems="center" className={'m-auto'}>
-        {canRemove &&
-          <RemoveFilterButton aria-label="delete" size="small" onClick={() => removeFilterRow(selectedGroup)}>
-            {RemoveFilterSvg}
-          </RemoveFilterButton>
-        }
+        <Grid xs={1} item={true} alignItems="center" className={'m-auto text-end pr-0'}>
+          {canRemove &&
+            <RemoveFilterButton aria-label="delete" size="small" onClick={() => removeFilterRow(selectedGroup)}>
+              {RemoveFilterSvg}
+            </RemoveFilterButton>
+          }
         </Grid>
       </Grid>
     );

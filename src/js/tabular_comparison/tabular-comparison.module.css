@@ -188,6 +188,7 @@ body {
     max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
+    vertical-align: baseline !important;
 }
 
 .untruncate-table-cell {
@@ -229,6 +230,14 @@ body {
 
 .lh-0 {
   line-height: 0px !important;
+}
+
+.text-end{
+  text-align: end;
+}
+
+.pr-0 {
+  padding-right: 0px;
 }
 
 /*scroll*/

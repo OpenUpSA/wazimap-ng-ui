@@ -92,7 +92,7 @@ const IndicatorFilters = ({
 
     return (
         <div>
-          <Grid container spacing={2}>
+          <Grid container>
             {selectedFilters && selectedFilters.map((filter, index) => (
               <FilterRow
                 key={index}

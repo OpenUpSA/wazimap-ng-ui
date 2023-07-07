@@ -45,6 +45,7 @@ const Indicator = (props) => {
         const metadata = selectedIndicator.indicatorDetail.metadata;
         const primaryGroup = metadata.primary_group;
         const groups = metadata.groups.filter(item => item.name !== primaryGroup);
+        const defaultFilters = selectedIndicator.indicatorDetail?.chart_configuration?.filter?.defaults || [];
         let filters = [];
         groups.map(
           item => {
@@ -58,18 +59,21 @@ const Indicator = (props) => {
           }
         )
 
-        const defaultFilters = selectedIndicator.indicatorDetail?.chart_configuration?.filter?.defaults || [];
         defaultFilters.map(
           filter => {
             let group = groups.find(item => item.name === filter.name);
-            const isNewFilter = filters.find(item => item.group === filter.name) === undefined;
-            if (group !== undefined && isNewFilter){
+            const nonAggFilter = filters.find(item => item.group === filter.name);
+            if (group !== undefined){
               if (group.subindicators.includes(filter.value)) {
-                filters.push({
-                  group: filter.name,
-                  value: filter.value,
-                  canRemove: true,
-                })
+                if (nonAggFilter === undefined){
+                  filters.push({
+                    group: filter.name,
+                    value: filter.value,
+                    canRemove: true,
+                  })
+                } else {
+                  nonAggFilter.value = filter.value;
+                }
               }
             }
           }

@@ -55,21 +55,27 @@ When('I click on add indictor', () => {
 
 Then('I check result table', (type) => {
    cy.get(`[data-testid=result-table]`).find('th').eq(0).should('have.text', 'Geography');
-   cy.get(`[data-testid=result-table]`).find('th').eq(1).should('have.text', 'Language most spoken at home : English');
+   cy.get(`[data-testid=result-table]`).find('th').eq(1).find('b').should('have.text', 'Language most spoken at home');
+   cy.get(`[data-testid=result-table]`).find('th').eq(1).find('[data-testid=filter-chip-0]').should('have.text', 'English');
+   cy.get(`[data-testid=result-table]`).find('th').eq(1).find('[data-testid=filter-chip-1]').should('have.text', '15-35 (ZA)');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(0).should('have.text', 'Eastern Cape');
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.text', '301,909');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.text', '119,035');
 })
 
 Then('I check result table after adding second indicator', (type) => {
    cy.get(`[data-testid=result-table]`).find('th').eq(0).should('have.text', 'Geography');
-   cy.get(`[data-testid=result-table]`).find('th').eq(1).should('have.text', 'Language most spoken at home : English');
-   cy.get(`[data-testid=result-table]`).find('th').eq(2).should('have.text', 'Employment status : Unemployed');
+   cy.get(`[data-testid=result-table]`).find('th').eq(1).find('b').should('have.text', 'Language most spoken at home');
+   cy.get(`[data-testid=result-table]`).find('th').eq(1).find('[data-testid=filter-chip-0]').should('have.text', 'English');
+   cy.get(`[data-testid=result-table]`).find('th').eq(1).find('[data-testid=filter-chip-1]').should('have.text', '15-35 (ZA)');
+   cy.get(`[data-testid=result-table]`).find('th').eq(2).find('b').should('have.text', 'Employment status');
+   cy.get(`[data-testid=result-table]`).find('th').eq(2).find('[data-testid=filter-chip-0]').should('have.text', 'Unemployed');
+   cy.get(`[data-testid=result-table]`).find('th').eq(2).find('[data-testid=filter-chip-1]').should('have.text', '15-35 (ZA)');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(0).should('have.text', 'Eastern Cape');
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.text', '301,909');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.text', '119,035');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.css', 'background-color').and('eq', 'rgb(124, 162, 206)')
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.text', '17.02%');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.text', '17.79%');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.css', 'background-color').and('eq', 'rgb(124, 162, 206)')
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.attr', 'title').and('equal', '952,709');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.attr', 'title').and('equal', '384,780');
 })
 
 Then(/^I clear the (\w+) autocomplete field/, (type) => {
@@ -78,17 +84,21 @@ Then(/^I clear the (\w+) autocomplete field/, (type) => {
 
 Then('I check result table after adding second geography', (type) => {
    cy.get(`[data-testid=result-table]`).find('th').eq(0).should('have.text', 'Geography');
-   cy.get(`[data-testid=result-table]`).find('th').eq(1).should('have.text', 'Language most spoken at home : English');
-   cy.get(`[data-testid=result-table]`).find('th').eq(2).should('have.text', 'Employment status : Unemployed');
+   cy.get(`[data-testid=result-table]`).find('th').eq(1).find('b').should('have.text', 'Language most spoken at home');
+   cy.get(`[data-testid=result-table]`).find('th').eq(1).find('[data-testid=filter-chip-0]').should('have.text', 'English');
+   cy.get(`[data-testid=result-table]`).find('th').eq(1).find('[data-testid=filter-chip-1]').should('have.text', '15-35 (ZA)');
+   cy.get(`[data-testid=result-table]`).find('th').eq(2).find('b').should('have.text', 'Employment status');
+   cy.get(`[data-testid=result-table]`).find('th').eq(2).find('[data-testid=filter-chip-0]').should('have.text', 'Unemployed');
+   cy.get(`[data-testid=result-table]`).find('th').eq(2).find('[data-testid=filter-chip-1]').should('have.text', '15-35 (ZA)');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(0).should('have.text', 'Eastern Cape');
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.text', '301,909');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.text', '119,035');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(1).should('have.css', 'background-color').and('eq', 'rgb(239, 243, 255)')
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.text', '17.02%');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.text', '17.79%');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(2).should('have.css', 'background-color').and('eq', 'rgb(239, 243, 255)')
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(0).should('have.text', 'Western Cape');
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(1).should('have.text', '928,895');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(1).should('have.text', '372,879');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(1).should('have.css', 'background-color').and('eq', 'rgb(8, 81, 156)')
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(2).should('have.text', '18.35%');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(2).should('have.text', '18.20%');
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(2).should('have.css', 'background-color').and('eq', 'rgb(8, 81, 156)')
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(2).should('have.attr', 'title').and('equal', '967,681');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(1).find('td').eq(2).should('have.attr', 'title').and('equal', '387,520');
 })

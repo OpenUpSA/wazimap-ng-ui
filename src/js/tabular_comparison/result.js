@@ -217,11 +217,13 @@ const Result = (props) => {
                                           <>
                                           <b>{column.indicator}</b>
                                             <Stack useFlexGap flexWrap="wrap" direction="row">
-                                              <CategoryChip>{getCategoryChipText(column.category)}</CategoryChip>
+                                              <CategoryChip data-testid={`filter-chip-0`}>
+                                                {getCategoryChipText(column.category)}
+                                              </CategoryChip>
                                               {column.category !== null && column.filters.map(
-                                                (item) => {
+                                                (item, idx) => {
                                                   if (item.group.length > 0 && item.value.length > 0){
-                                                    return <FilterChip>{getFilterChipText(item)}</FilterChip>
+                                                    return <FilterChip data-testid={`filter-chip-${idx+1}`}>{getFilterChipText(item)}</FilterChip>
                                                   }
                                                 })
                                               }

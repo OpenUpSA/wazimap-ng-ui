@@ -11,7 +11,7 @@ const StyledButton = styled(Button)(() => ({
     right: 0,
     transform: 'rotate(-90deg) translate(0, -100%)',
     transformOrigin: '100% 0',
-    position: 'absolute',
+    position: 'fixed',
     height: '44px',
     [`& svg`]: {
         marginRight: '5px'

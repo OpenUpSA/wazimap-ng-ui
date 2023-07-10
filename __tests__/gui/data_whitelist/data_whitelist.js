@@ -66,3 +66,7 @@ Given('I am on the Wazimap Homepage Test View', () => {
     setupInterceptions(profiles, all_details, profile, themes, {}, [], profile_indicator_summary, profile_indicator_data);
     cy.visit("/?view=test");
 })
+
+Then(/^I confirm that the view dropdown displays "([^"]*)"$/, function (word) {
+    cy.get('.current-view-container').should('contain.text', word)
+});

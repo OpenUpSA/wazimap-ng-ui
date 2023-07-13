@@ -81,7 +81,6 @@ const ComparisonIndicators = (props) => {
         let objToUpdate = newArr.filter((obj) => obj.index === index)[0];
         objToUpdate.indicator = newValue == null ? '' : newValue.indicator;
         objToUpdate.category = '';
-
         props.setIndicatorObjs(newArr);
     }
 
@@ -89,7 +88,6 @@ const ComparisonIndicators = (props) => {
         let newArr = JSON.parse(JSON.stringify(props.indicatorObjs));
         let objToUpdate = newArr.filter((obj) => obj.index === index)[0]
         objToUpdate.category = newValue;
-
         props.setIndicatorObjs(newArr);
     }
 
@@ -97,7 +95,6 @@ const ComparisonIndicators = (props) => {
         let newArr = JSON.parse(JSON.stringify(props.indicatorObjs));
         let objToUpdate = newArr.filter((obj) => obj.index === index)[0]
         objToUpdate.filters = newValue;
-
         props.setIndicatorObjs(newArr);
     }
 

@@ -83,7 +83,9 @@ const Indicator = (props) => {
     }, [selectedIndicator])
 
     useEffect(() => {
-      props.handleFilterSelection(selectedFilters);
+      if (selectedFilters.length > 0){
+        props.handleFilterSelection(selectedFilters);
+      }
     }, [
       selectedFilters
     ])

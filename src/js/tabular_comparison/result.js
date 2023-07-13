@@ -216,7 +216,7 @@ const Result = (props) => {
                                         >
                                           <>
                                           <b>{column.indicator}</b>
-                                            <Stack useFlexGap flexWrap="wrap" direction="row">
+                                            <Stack flexWrap="wrap" direction="row">
                                               <CategoryChip data-testid={`filter-chip-0`}>
                                                 {getCategoryChipText(column.category)}
                                               </CategoryChip>

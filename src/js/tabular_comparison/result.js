@@ -41,7 +41,7 @@ const Result = (props) => {
 
                 let newObj = {
                     obj: obj,
-                    value: value,
+                    value: value || 0,
                     formatting: formatting,
                     tooltip: tooltip,
                 }
@@ -153,7 +153,6 @@ const Result = (props) => {
         } else {
           value = primaryGroupTotal;
         }
-
         return {value, tooltip, formatting};
     }
 

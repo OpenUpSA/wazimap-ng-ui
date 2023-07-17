@@ -52,7 +52,13 @@ const FilterRow = ({
     )
 
     return (
-      <Grid container item={true} className={'lh-0'} sx={{paddingBottom: '5px'}}>
+      <Grid
+        container
+        item={true}
+        className={'lh-0 filter-row'}
+        sx={{paddingBottom: '5px'}}
+        data-testid={`filter-row-${index}`}
+      >
         <Grid xs={2} item={true} className={'m-auto'}>
           <p className={'font-13'}>Filter {index+1}:</p>
         </Grid>
@@ -75,6 +81,7 @@ const FilterRow = ({
               value={selectedValue}
               isDisabled={selectedGroup === ''}
               handleDropdownChange={handleValueDropdownChange}
+              data-testid="value-dropdown"
             />
           </Grid>
         </Grid>

@@ -107,7 +107,7 @@ const IndicatorFilters = ({
               />
             ))}
             <Grid xs={12} item={true}>
-              <AddFilterButton onClick={onClickingAddFilters}>
+              <AddFilterButton onClick={onClickingAddFilters} data-testid="add-filter">
                 Add a Filter
               </AddFilterButton>
             </Grid>

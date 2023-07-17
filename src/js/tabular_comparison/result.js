@@ -326,6 +326,7 @@ const Result = (props) => {
                       aria-label="delete"
                       size="small"
                       onClick={() => setIsResultHeaderFolded(!isResultHeaderFolded)}
+                      data-testid="unfold-button"
                     >
                       {isResultHeaderFolded ? UnfoldMoreSvg : FoldMoreSvg}
                     </UnfoldButton>

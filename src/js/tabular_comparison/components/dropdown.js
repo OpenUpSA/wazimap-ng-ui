@@ -24,6 +24,7 @@ const Dropdown = ({
         { dropdownType && <InputLabel id="demo-simple-select-label">{dropdownType}</InputLabel>}
         <FilterDropdown
           displayEmpty
+          data-testid={`${label.toLowerCase()}-dropdown`}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={value}

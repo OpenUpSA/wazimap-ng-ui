@@ -140,6 +140,7 @@ const Indicator = (props) => {
             {selectedIndicator && categoryValue && <Card
                 className={'comparison-card last'}
                 variant={'outlined'}
+                data-testid={`filter-panel-${props.index}`}
             >
                 <Grid container>
                     <Grid

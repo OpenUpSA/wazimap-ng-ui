@@ -5602,14 +5602,6 @@
                                             "formatting": ".2%"
                                         }
                                     },
-                                    "filter": {
-                                        "defaults": [
-                                            {
-                                                "name": "age group",
-                                                "value": "15-35 (ZA)"
-                                            }
-                                        ]
-                                    },
                                     "xTicks": 6
                                 },
                                 "chart_type": "bar",
@@ -7326,7 +7318,7 @@
                                             ],
                                             "dataset": 1303,
                                             "name": "age group",
-                                            "can_aggregate": false,
+                                            "can_aggregate": true,
                                             "can_filter": true
                                         },
                                         {

@@ -121,16 +121,19 @@ const Result = (props) => {
         let selectedIndicator = props.indicators.filter((ind) => ind.geo === geo.code && ind.indicator === obj.indicator)[0];
         if (selectedIndicator == null) {
             return {value, tooltip, formatting};
-        } else {
-          value = 0;
         }
 
         const choroplethMethod = selectedIndicator.indicatorDetail?.choropleth_method;
         const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
         formatting = choroplethMethod === "subindicator" ? chartConfig.types['Percentage'].formatting : formatting;
 
-        let indicatorData = selectedIndicator.indicatorDetail.data;
+        let indicatorData = selectedIndicator.indicatorDetail.data || [];
 
+        if (indicatorData.length === 0){
+          return {value, tooltip, formatting};
+        }
+
+        value = 0;
         if (obj.filters.length > 0){
           obj.filters.map(
             filterObj => {

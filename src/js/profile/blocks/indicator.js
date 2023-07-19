@@ -17,6 +17,7 @@ export class Indicator extends ContentBlock {
         hiddenIndicators = []
     ) {
         super(parent, container, indicator, title, isLast, geography, hiddenIndicators);
+
         this.chartAttribution = chartAttribution;
         this._chart = null;
         this.prepareDomElements();
@@ -63,6 +64,7 @@ export class Indicator extends ContentBlock {
         const configuration = this.indicator.chartConfiguration;
 
         let chartData = this.orderChartData();
+
         let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution, addLockButton, restrictValues, defaultFilters);
         this.bubbleEvents(c, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',

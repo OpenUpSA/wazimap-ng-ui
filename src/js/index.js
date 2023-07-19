@@ -110,11 +110,13 @@ async function init() {
     const errorNotifier = new ErrorNotifier();
     errorNotifier.registerErrorHandler();
 
-    const api = new API(pc.baseUrl, hostname);
+    const api = new API(pc.baseUrl, pc.config);
     const data = await api.getProfileConfiguration(hostname);
 
     pc.config.setConfig(data.configuration || {})
     pc.config.setVersions(data.geography_hierarchy || {})
+    api.restrictValues = pc.config.restrictValues;
+
     pc.config.api = api;
     pc.profile = data.id;
     pc.config.baseUrl = pc.baseUrl;

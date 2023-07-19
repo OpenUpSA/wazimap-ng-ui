@@ -101,19 +101,19 @@ export class Subcategory extends Component {
     }
 
     set hasKeyMetrics(value) {
-        this._hasKeyMetrics=value;
+        this._hasKeyMetrics = value;
     }
 
     updateVisibility = () => {
-      this.isVisible = Object.values(this._indicators).filter(
-        indicator => indicator.isVisible
-      ).length > 0 || this.hasKeyMetrics;
-      this.parent.updateVisibility();
+        this.isVisible = Object.values(this._indicators).filter(
+            indicator => indicator.isVisible
+        ).length > 0 || this.hasKeyMetrics;
+        this.parent.updateVisibility();
     }
 
     updateDomElements = () => {
-      $(this._scHeader).parents('.section').find(subcategoryHeaderClass).removeClass('first');
-      $(this._scHeader).removeClass('page-break-before').addClass('first');
+        $(this._scHeader).parents('.section').find(subcategoryHeaderClass).removeClass('first');
+        $(this._scHeader).removeClass('page-break-before').addClass('first');
     }
 
     addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
@@ -181,7 +181,7 @@ export class Subcategory extends Component {
         if (!isEmpty) {
             for (const indicator of sortBy(detail.indicators, "order")) {
                 const title = Object.keys(detail.indicators).filter(k => detail.indicators[k] === indicator)[0];
-                if (typeof indicator.data !== 'undefined') {
+                if (typeof indicator.data !== 'undefined' && indicator.data.length > 0) {
                     let isLast = index === lastIndex;
                     let block = null;
 

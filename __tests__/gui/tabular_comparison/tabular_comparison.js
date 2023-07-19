@@ -148,6 +148,10 @@ Then(/^I assert value for index (\d+) column is "([^"]*)"/, (idx, val) => {
    cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(idx).should('have.text', val);
 })
 
+Then(/^I assert value for index (\d+) column is empty/, (idx) => {
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(idx).should('be.empty');
+})
+
 Then(/^I change "([^"]*)" dropdown for filter at index (\d+) of indicator panel (\d+) to "([^"]*)"/, (type, idx, filterPanelId, val) => {
    cy.get(`[data-testid='filter-panel-${filterPanelId}'] [data-testid='filter-row-${idx}'] [data-testid='${type}-dropdown']`).click().get(`ul > li[data-value="${val}"]`).click();
 })

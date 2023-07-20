@@ -26,6 +26,13 @@
 .tutorial-button-container {
   height: 100%;
   position: fixed;
+  transform: rotate(-90deg);
+  display: flex;
+  transform-origin: 100% 100%;
+  top: auto;
+  bottom: 0;
+  left: auto;
+  right: 0;
 }
 
 .current-view-container {

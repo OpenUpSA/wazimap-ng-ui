@@ -9,19 +9,21 @@ const StyledButton = styled(Button)(() => ({
     fontSize: '14px',
     color: '#fff',
     textTransform: 'none',
-    right: 0,
-    transform: 'rotate(-90deg) translate(0, -100%)',
-    transformOrigin: '100% 0',
-    position: 'fixed',
-    padding: '6px 7px',
+    position: 'absolute',
+    padding: '6px 12px',
     border: 'none',
     borderRadius: '2px',
     height: '43px',
+    left: '0px',
+    bottom: '0px',
+    transition: 'all .2s',
     [`& svg`]: {
         marginRight: '5px'
     },
     '&:hover': {
         backgroundColor: '#39ad84',
+        height: '48px',
+        paddingBottom: '11px'
     }
 }));
 
@@ -30,7 +32,7 @@ const TutorialButton = (props) => {
         <StyledButton
             onClick={props.displayTutorialDialog}
             sx={{
-                bottom: props.feedbackBtnVisible ? '300px' : '200px'
+                left: props.feedbackBtnVisible ? '250px' : '150px'
             }}
         >
             <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20">

@@ -1,7 +1,12 @@
 import { When, Given, Then } from "cypress-cucumber-preprocessor/steps";
+import {waitUntilGeographyIsLoaded} from "../../gui/common_cy_functions/general";
 
 Given('I am on the Wazimap Homepage', () => {
   cy.visit("/")
+})
+
+Then('I wait until map is ready', () => {
+  waitUntilGeographyIsLoaded('South Africa Test');
 })
 
 When("I click on {word}", (link) => {

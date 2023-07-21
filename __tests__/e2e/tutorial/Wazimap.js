@@ -6,7 +6,7 @@ Given('I am on the Wazimap Homepage', () => {
 })
 
 Then('I wait until map is ready', () => {
-  waitUntilGeographyIsLoaded('South Africa Test');
+  waitUntilGeographyIsLoaded('South Africa');
 })
 
 When("I click on {word}", (link) => {

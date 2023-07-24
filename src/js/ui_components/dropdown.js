@@ -76,7 +76,7 @@ export class DropdownModel extends Observable {
             this.triggerEvent(DropdownModel.EVENTS.available);
         }
      }
-        
+
     get manualTrigger() {
         return this._manualTrigger;
     }
@@ -170,12 +170,26 @@ export class Dropdown extends Component {
 
         $(this._trigger).on('click', () => {
             self.model.manualTrigger = true;
+            if ($(".dropdown-menu__content").is(":visible")) {
+              $(".dropdown-menu__content").hide();
+            }
             self.showItems();
+            $('.dropdown-menu__content')
+            document.addEventListener('click', function(event){
+                const closeDropdown = (
+                  event.target.closest(".dropdown-menu__trigger") == null &&
+                  event.target.closest(".dropdown-menu__content") == null &&
+                  event.target.closest(".dropdown__list_item") == null
+                );
+               if (closeDropdown){
+                 self.hideItems();
+               }
+            });
         })
     }
 
     showItems() {
-        $(this._ddWrapper).show()
+        $(this._ddWrapper).show();
     }
 
     hideItems() {
@@ -230,6 +244,7 @@ export class Dropdown extends Component {
     }
 
     redrawItems(items) {
+
         const self = this;
 
         this.reset();
@@ -239,7 +254,6 @@ export class Dropdown extends Component {
 
             $(li).removeClass("selected");
             $('.truncate', li).text(item);
-            $(li).off('click');
             $(li).on('click', () => {
                 self.setSelected(idx)
                 self.hideItems();

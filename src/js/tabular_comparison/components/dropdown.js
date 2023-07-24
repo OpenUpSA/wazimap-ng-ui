@@ -1,11 +1,7 @@
-import React, {useState} from "react";
-import {Autocomplete, Box, Card, Grid, Icon, TextField} from "@mui/material";
-import Button from '@mui/material/Button';
+import React from "react";
 
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 
 import {FilterItem, FilterDropdown} from './styledElements';
 

@@ -1,13 +1,7 @@
-import React, {useState, useCallback, useMemo} from "react";
-import {Autocomplete, Box, Card, Grid, Icon, TextField} from "@mui/material";
-import Button from '@mui/material/Button';
+import React, {useCallback, useMemo} from "react";
+import {Grid} from "@mui/material";
 
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import Dropdown from './dropdown';
-
 import {RemoveFilterButton} from './styledElements';
 import {RemoveFilterSvg} from '../svg-icons';
 

@@ -12,6 +12,6 @@ export function configureCurrentViewEvents(controller, config, currentViewObj) {
             views[config.currentViewData.viewName] = {};
         }
 
-        currentViewObj.createDropdown(views, config.currentViewData);
+        currentViewObj.checkAndCreateDropdown(views, config.currentViewData);
     })
 }

@@ -60,12 +60,21 @@ const ViewSelect = (props) => {
         return label;
     }
 
+    const getViewUrl = (view) => {
+        let url = views[view].url;
+        if (url == null) {
+            url = `${window.location.origin}?view=${view}`;
+        }
+
+        return url;
+    }
+
     const renderMenuItemContent = (view) => {
         if (view === selectedView) {
             return <p>{getLabel(view)}</p>
         } else {
             return (
-                <a href={`${window.location.origin}?view=${view}`} target={'_blank'}>{getLabel(view)}</a>
+                <a href={getViewUrl(view)} target={'_blank'}>{getLabel(view)}</a>
             )
         }
     }
@@ -88,8 +97,11 @@ const ViewSelect = (props) => {
                 )}
             >
                 {
-                    Object.keys(views).map(view => (
-                        <StyledMenuItem value={view}>
+                    Object.keys(views).map((view, index) => (
+                        <StyledMenuItem
+                            value={view}
+                            key={index}
+                        >
                             {renderMenuItemContent(view)}
                         </StyledMenuItem>
                     ))

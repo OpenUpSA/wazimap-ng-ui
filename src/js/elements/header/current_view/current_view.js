@@ -8,6 +8,14 @@ export class CurrentView extends Component {
         super(parent);
     }
 
+    checkAndCreateDropdown(viewsArr, currentViewData) {
+        let dropdownExists = document.getElementsByClassName('current-view-container').length > 0;
+
+        if (!dropdownExists) {
+            this.createDropdown(viewsArr, currentViewData);
+        }
+    }
+
     createDropdown(viewsArr, currentViewData) {
         let container = document.createElement('div');
         container.classList.add('current-view-container');

@@ -1,12 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import {Card, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+
 import {format as d3format} from "d3-format";
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {max as d3max, min as d3min} from 'd3-array';
 import {defaultValues} from "../defaultValues";
 import {Config as SAConfig} from '../configurations/geography_sa';
 import {fillMissingKeys, getColorRange} from "../utils";
-import {ResultArrowSvg, ResultArrowSvg2} from "./svg-icons";
+import {ResultArrowSvg, ResultArrowSvg2, UnfoldMoreSvg, FoldMoreSvg} from "./svg-icons";
+import {UnfoldButton, CategoryChip, FilterChip} from './components/styledElements';
+import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
 
 //components
 import SectionTitle from "./section-title";
@@ -16,6 +20,7 @@ const Result = (props) => {
     const arrowSvg = ResultArrowSvg;
     const arrowSvg2 = ResultArrowSvg2;
     const defaultConfig = new SAConfig();
+    const [isResultHeaderFolded, setIsResultHeaderFolded] = useState(true);
 
     useEffect(() => {
         populateRows();
@@ -117,24 +122,44 @@ const Result = (props) => {
         if (selectedIndicator == null) {
             return {value, tooltip, formatting};
         }
+
         const choroplethMethod = selectedIndicator.indicatorDetail?.choropleth_method;
         const primaryGroup = selectedIndicator.indicatorDetail.metadata?.primary_group;
-        const data = selectedIndicator.indicatorDetail.data?.filter(x => x[primaryGroup] === obj.category);
+        formatting = choroplethMethod === "subindicator" ? chartConfig.types['Percentage'].formatting : formatting;
 
-        if (data === null && data.length === 0) {
+        let indicatorData = selectedIndicator.indicatorDetail.data || [];
+
+        if (indicatorData.length === 0){
+          return {value, tooltip, formatting};
+        }
+
+        value = 0;
+        if (obj.filters.length > 0){
+          obj.filters.map(
+            filterObj => {
+              if (filterObj.group.length > 0 && filterObj.value.length > 0){
+                indicatorData = indicatorData.filter(
+                  f => f[filterObj.group] === filterObj.value
+                )
+              }
+            }
+          )
+        }
+
+        const data = indicatorData?.filter(x => x[primaryGroup] === obj.category);
+
+        if (data === null || data.length === 0) {
           return {value, tooltip, formatting};
         }
 
         const primaryGroupTotal = getTotalCount(data);
         if (choroplethMethod === "subindicator"){
-          const totalCount = getTotalCount(selectedIndicator.indicatorDetail.data);
-          tooltip = d3format(formatting)(primaryGroupTotal);
+          const totalCount = getTotalCount(indicatorData);
+          tooltip = d3format(chartConfig.types['Value'].formatting)(primaryGroupTotal);
           value = (primaryGroupTotal/totalCount);
-          formatting = chartConfig.types['Percentage'].formatting;
         } else {
           value = primaryGroupTotal;
         }
-
         return {value, tooltip, formatting};
     }
 
@@ -147,6 +172,25 @@ const Result = (props) => {
             return renderTable();
         }
     }
+
+    const getCategoryChipText = useCallback(
+      (category) => {
+        if (category === null){
+          return "No category selected"
+        }
+        return isResultHeaderFolded ? category : `Category: ${category}`;
+      }, [
+        isResultHeaderFolded
+      ]
+    )
+
+    const getFilterChipText = useCallback(
+      (filter) => {
+        return isResultHeaderFolded ? filter.value : `${filter.group}: ${filter.value}`;
+      }, [
+        isResultHeaderFolded
+      ]
+    )
 
     const renderTable = () => {
         return <TableContainer
@@ -163,6 +207,7 @@ const Result = (props) => {
                     <TableRow>
                         <TableCell
                           data-testid={'table-header-0'}
+                          sx={{padding: "9px 10px"}}
                         ><b>Geography</b></TableCell>
                         {
                             props.indicatorObjs.map((column) => {
@@ -171,9 +216,26 @@ const Result = (props) => {
                                         <TableCell
                                             data-testid={`table-header-${column.index}`}
                                             key={column.index}
-                                            className={'truncate-table-cell'}
+                                            className={isResultHeaderFolded ? 'truncate-table-cell': 'untruncate-table-cell'}
                                             title={column.indicator + ' : ' + column.category}
-                                        ><b>{column.indicator} : {column.category}</b></TableCell>
+                                            sx={{padding: "9px 10px"}}
+                                        >
+                                          <>
+                                          <b>{column.indicator}</b>
+                                            <Stack flexWrap="wrap" direction="row">
+                                              <CategoryChip data-testid={`filter-chip-0`}>
+                                                {getCategoryChipText(column.category)}
+                                              </CategoryChip>
+                                              {column.category !== null && column.filters.map(
+                                                (item, idx) => {
+                                                  if (item.group.length > 0 && item.value.length > 0){
+                                                    return <FilterChip data-testid={`filter-chip-${idx+1}`}>{getFilterChipText(item)}</FilterChip>
+                                                  }
+                                                })
+                                              }
+                                            </Stack>
+                                          </>
+                                        </TableCell>
                                     )
                                 }
                             })
@@ -256,10 +318,27 @@ const Result = (props) => {
         <Grid
             container
         >
-            <Grid
+            <Grid container
                 className={'margin-bottom-20'}
             >
                 <SectionTitle>Resulting comparison</SectionTitle>
+                {props.indicatorObjs.length > 0 &&
+
+                  <Tooltip
+                    title={isResultHeaderFolded ? "Expand header row" : "Collapse header row"}
+                    arrow
+                  >
+                    <UnfoldButton
+                      aria-label="delete"
+                      size="small"
+                      onClick={() => setIsResultHeaderFolded(!isResultHeaderFolded)}
+                      data-testid="unfold-button"
+                    >
+                      {isResultHeaderFolded ? UnfoldMoreSvg : FoldMoreSvg}
+                    </UnfoldButton>
+                  </Tooltip>
+                }
+
             </Grid>
             <Grid container>
                 <Card

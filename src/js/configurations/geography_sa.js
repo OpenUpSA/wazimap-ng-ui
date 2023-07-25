@@ -7,7 +7,7 @@ export class Config {
     constructor() {
         this.config = {};
         this.versions = [];
-        this._viewName = null;
+        this._currentViewData = {};
     }
 
     setConfig(config) {
@@ -17,7 +17,7 @@ export class Config {
 
     setView() {
         const urlParams = new URLSearchParams(window.location.search);
-        this._viewName = urlParams.get('view');
+        this._currentViewData.viewName = urlParams.get('view');
     }
 
     setVersions(geography_hierarchy) {
@@ -94,12 +94,23 @@ export class Config {
         return mergedConfig;
     }
 
+    get currentViewData() {
+        if (this._currentViewData.viewName == null) {
+            this._currentViewData.viewName = this.config['default_view_label'];
+        }
+        if (this._currentViewData.viewName == null) {
+            this._currentViewData.viewName = 'Default';
+        }
+
+        return this._currentViewData;
+    }
+
     getViewConfig(filterType) {
         if (
-            this.views[this._viewName] !== undefined
-            && this.views[this._viewName][filterType] !== undefined
+            this.views[this._currentViewData.viewName] !== undefined
+            && this.views[this._currentViewData.viewName][filterType] !== undefined
         ) {
-            return this.views[this._viewName][filterType];
+            return this.views[this._currentViewData.viewName][filterType];
         }
         return null;
     }

@@ -1,4 +1,4 @@
-import {Component} from '../utils';
+import {Component} from '../../utils';
 
 const logoContainer = $('img.profile-logo');
 

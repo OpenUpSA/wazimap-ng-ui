@@ -4,6 +4,8 @@ Feature: Data Whitelist
     Given I am on the Wazimap Homepage
     Then I wait until map is ready
 
+    Then I confirm that the view dropdown displays "Default"
+
     # Choropleth default filter
     When I expand Data Mapper
     And I click on "Demographics" in Data Mapper
@@ -26,6 +28,8 @@ Feature: Data Whitelist
   Scenario: Restricting filter values and setting profile-wide filters on a view
     Given I am on the Wazimap Homepage Test View
     Then I wait until map is ready
+
+    Then I confirm that the view dropdown displays "test"
 
     # Choropleth default filter
     When I expand Data Mapper

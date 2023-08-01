@@ -14,6 +14,7 @@ import {slugify} from './charts/utils';
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
 import {DataFilterModel} from "../models/data_filter_model";
 import {SidePanels} from "../elements/side_panels";
+import {configureGroupedBarchart} from "./charts/groupedBarChart";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -23,7 +24,8 @@ const graphValueTypes = {
 };
 const chartTypes = {
     LineChart: 'line',
-    BarChart: 'bar'
+    BarChart: 'bar',
+    GroupedBarChart: 'grouped'
 }
 const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
@@ -208,6 +210,15 @@ export class Chart extends Component {
         embed(this.container, vegaSpec, {renderer: 'svg', actions: false, tooltip: handler.bind(this)})
 
             .then(async (result) => {
+                //todo: remove this.title
+                if (this.title === 'Income by source') {
+                    console.log({
+                        'table': result.view.data('table'),
+                        'data_formatted': result.view.data('data_formatted'),
+                        'data_grouped': result.view.data('data_grouped'),
+                        'signal': result.view.signal('test')
+                    })
+                }
                 this.vegaView = result.view;
                 this.vegaDownloadView = null;
                 this.setChartMenu();
@@ -227,7 +238,11 @@ export class Chart extends Component {
         if (this.chartType === chartTypes.LineChart) {
             return configureLinechart(data, metadata, config);
         } else {
-            return configureBarchart(data, metadata, config);
+            if (this.title === 'Income by source') {
+                return configureGroupedBarchart(data, metadata, config);
+            } else {
+                return configureBarchart(data, metadata, config);
+            }
         }
     }
 
@@ -490,7 +505,13 @@ export class Chart extends Component {
                 let filterName = group;
                 filterName = slugify(filterName)
                 this.vegaView.signal(`${filterName}Filter`, true)
-                this.vegaView.signal(`${filterName}FilterValue`, value)
+                //todo: remove this.title
+                if (this.title !== 'Income by source') {
+                    this.vegaView.signal(`${filterName}FilterValue`, value)
+                } else {
+                    this.vegaView.signal(`${filterName}Filter`, false)
+                    this.vegaView.signal(`${filterName}FilterValue`, ['2018-2019', '2016-2017'])
+                }
             }
         }
         this.selectedFilter = selectedFilter;

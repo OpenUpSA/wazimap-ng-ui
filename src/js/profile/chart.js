@@ -48,7 +48,6 @@ export class Chart extends Component {
     ) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
-        console.log(config);
 
         this._isToggleDisabled = false;
         this.data = data;

@@ -40,6 +40,10 @@
   align-items: center;
 }
 
+.mapping-options__add-filter.disabled, .profile-indicator__new-filter.disabled {
+  opacity: 0.4;
+}
+
 @media (max-width: 480px) {
   .right-panel-toggles {
     top: 370px;

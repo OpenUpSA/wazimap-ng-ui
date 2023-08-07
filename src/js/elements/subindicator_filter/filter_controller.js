@@ -285,6 +285,10 @@ export class FilterController extends Component {
                     filterRow
                 });
             })
+
+            if (this.model.dataFilterModel.availableFilters.length === 1) {
+                this.addFilterButton.disable();
+            }
         }
 
         return filterRow;

@@ -487,7 +487,6 @@ export class Chart extends Component {
             restrictValues,
             this.config?.drilldown,
         );
-        console.log({'drilldown': this.config?.drilldown, 'title': this.title})
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }
@@ -495,7 +494,6 @@ export class Chart extends Component {
     };
 
     applyFilter = (filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl) => {
-        console.log({selectedFilter, selectedFilterDetails});
         this.filteredData = filteredData;
         this.filterGroups.forEach((group) => {
             let {name: filterName} = group;
@@ -516,6 +514,16 @@ export class Chart extends Component {
         this.vegaView.run();
         this.appendDataToTable();
         this.setDownloadUrl();
+
+        if (this.title === 'Income by source') {
+            console.log({
+                'view': this.vegaView,
+                'table': this.vegaView.data('table'),
+                'data_formatted': this.vegaView.data('data_formatted'),
+                'data_grouped': this.vegaView.data('data_grouped'),
+                'signal': this.vegaView.signal('test')
+            })
+        }
 
         const payload = {
             indicatorId: this.data.id,

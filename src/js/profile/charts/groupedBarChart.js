@@ -154,11 +154,12 @@ export const configureGroupedBarchart = (data, metadata, config) => {
             },
             {
                 name:"test",
-                update:"domain('yscale').length"
+                update:"domain('yscale')"
             },
             {
                 name: "height",
-                update: "domain('yscale').length * y_step + y_step"
+                //update: "domain('yscale').length * y_step + y_step"
+                value: 700
             },
             {
                 name: "textAlign",
@@ -171,8 +172,8 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 name: "yscale",
                 type: "band",
                 domain: {data: "table", field: 'income by classification'},
-                range: {step: {signal: "y_step"}},
-                padding: 0.2
+                range: {"step": 300},
+                padding: 0
             },
             {
                 "name": "xscale",
@@ -194,8 +195,9 @@ export const configureGroupedBarchart = (data, metadata, config) => {
         axes: [
             {
                 "orient": "left",
-                "labelPadding": 25,
+                "labelPadding": 0,
                 "labelAlign": "left",
+                "labelOffset": -150,
                 "scale": "yscale",
                 "tickSize": 0,
                 "zindex": 1,
@@ -243,7 +245,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                     {
                         "name": "pos",
                         "type": "band",
-                        "range": "height",
+                        "range": {"step": 30},
                         "domain": {"data": "facet", "field": "financial year"}
                     }
                 ],

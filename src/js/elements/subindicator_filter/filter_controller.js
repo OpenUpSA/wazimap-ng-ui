@@ -64,7 +64,7 @@ export class FilterController extends Component {
         filterPanel: SidePanels.PANELS.dataMapper,
         removeFilterButton: '.mapping-options__remove-filter',
         addLockButton: true,
-        rowContainer: null
+        rowContainer: null,
     }) {
         super(parent);
         this._container = container;
@@ -248,6 +248,7 @@ export class FilterController extends Component {
         }
 
         this.addFilterButton.show();
+
         if (addNewRow) {
             if (addAsFirstRow) {
                 let elementToInsertBefore = $(this.container).find(`${this._elements.filterRowClass}:not(.hidden)`)[0];
@@ -532,11 +533,10 @@ export class FilterController extends Component {
             const groupLookup = this.model.dataFilterModel.groupLookup[filter.indicatorValue];
             const isPrimaryGroup = this.model.dataFilterModel.primaryGroup === groupLookup?.name;
             const isIndicatorAvailable = groupLookup !== undefined && !isPrimaryGroup && groupLookup.values.indexOf(filter.subIndicatorValue) >= 0;
-
+            const rows = this.model.filterRows
             if (!isIndicatorAlreadyFiltered) {
                 if (isIndicatorAvailable) {
                     let filterRow = this.addEmptyFilter(true)
-
                     filterRow.setPrimaryIndexUsingValue(filter.indicatorValue);
                     filterRow.indicatorDropdown.disable();
                     filterRow.setSecondaryIndexUsingValue(filter.subIndicatorValue);

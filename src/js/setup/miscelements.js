@@ -1,4 +1,4 @@
-import {ProfileLayout} from "../elements/profile_layout";
+import {ProfileLayout} from "../elements/header/profile_layout";
 import PDFPrinter from '../print';
 import {SidePanels} from '../elements/side_panels';
 

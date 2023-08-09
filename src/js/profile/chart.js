@@ -484,7 +484,8 @@ export class Chart extends Component {
             {},
             this.siteWideFilters,
             DataFilterModel.FILTER_TYPE.indicators,
-            restrictValues
+            restrictValues,
+            this.config?.drilldown,
         );
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
@@ -493,6 +494,7 @@ export class Chart extends Component {
     };
 
     applyFilter = (filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl) => {
+        console.log({selectedFilter, selectedFilterDetails});
         this.filteredData = filteredData;
         this.filterGroups.forEach((group) => {
             let {name: filterName} = group;

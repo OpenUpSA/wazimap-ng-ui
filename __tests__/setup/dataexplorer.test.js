@@ -26,7 +26,6 @@ describe('Data explorer', () => {
 
       const data = filterIndicatorData(payload, []);
       const indictaor = data[0].subcategories[0].indicators[1];
-      console.log(indictaor);
       expect(indictaor.dataset_content_type).toBe("quantitative");
       expect(indictaor.isHidden).toBe(false);
     })

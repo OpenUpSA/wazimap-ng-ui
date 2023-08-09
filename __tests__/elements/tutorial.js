@@ -1,5 +1,5 @@
 import html from '../../src/index.html';
-import {Tutorial} from '../../src/js/elements/tutorial';
+import {Tutorial} from '../../src/js/elements/tutorial/tutorial';
 import {Component} from "../../src/js/utils";
 
 describe('Tutorials', () => {

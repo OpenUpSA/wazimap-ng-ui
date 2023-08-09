@@ -70,10 +70,14 @@ Given('I am on the Wazimap Homepage Test View', () => {
     cy.visit("/?view=test");
 })
 
+Then(/^I confirm that the view dropdown displays "([^"]*)"$/, function (word) {
+    cy.get('.current-view-container').should('contain.text', word)
+})
+
 When(/^I confirm that available subindicators are "([^"]*)" in Data Mapper$/, function (options) {
     let optionsArr = options.split(',');
     cy.get('.data-mapper').find('.subIndicator-item').should('have.length', optionsArr.length)
     cy.get('.subIndicator-item').each(($div, index) => {
         expect($div.text()).equal(optionsArr[index]);
     })
-});
+})

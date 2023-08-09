@@ -23,6 +23,23 @@
   top: 80px;
 }
 
+.tutorial-button-container {
+  height: 100%;
+  position: fixed;
+  transform: rotate(-90deg);
+  display: flex;
+  transform-origin: 100% 100%;
+  top: auto;
+  bottom: 0;
+  left: auto;
+  right: 0;
+}
+
+.current-view-container {
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 480px) {
   .right-panel-toggles {
     top: 370px;

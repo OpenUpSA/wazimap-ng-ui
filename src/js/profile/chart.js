@@ -487,6 +487,7 @@ export class Chart extends Component {
             restrictValues,
             this.config?.drilldown,
         );
+        console.log({'drilldown': this.config?.drilldown, 'title': this.title})
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }
@@ -507,13 +508,7 @@ export class Chart extends Component {
                 let filterName = group;
                 filterName = slugify(filterName)
                 this.vegaView.signal(`${filterName}Filter`, true)
-                //todo: remove this.title
-                if (this.title !== 'Income by source') {
-                    this.vegaView.signal(`${filterName}FilterValue`, value)
-                } else {
-                    this.vegaView.signal(`${filterName}Filter`, false)
-                    this.vegaView.signal(`${filterName}FilterValue`, ['2018-2019', '2016-2017'])
-                }
+                this.vegaView.signal(`${filterName}FilterValue`, value)
             }
         }
         this.selectedFilter = selectedFilter;

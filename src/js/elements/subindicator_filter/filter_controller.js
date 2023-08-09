@@ -2,7 +2,7 @@ import {FilterRow} from "../../ui_components/filter_row";
 import {Component, Observable} from "../../utils";
 import {AddFilterButton} from "../../ui_components/add_filter_button";
 import {DataFilterModel} from "../../models/data_filter_model";
-import {isEmpty} from 'lodash';
+import {isEmpty, isEqual} from 'lodash';
 import {SidePanels} from "../side_panels";
 
 
@@ -529,10 +529,10 @@ export class FilterController extends Component {
         this.model.dataFilterModel.siteWideFilters.forEach((filter) => {
             const isIndicatorAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue);
             const isPairAlreadyFiltered = this.model.filterRows.some(x => x.model.currentIndicatorValue === filter.indicatorValue
-                && x.model.currentSubindicatorValue === filter.subIndicatorValue);
+                && isEqual(x.model.currentSubindicatorValue, filter.subIndicatorValue));
             const groupLookup = this.model.dataFilterModel.groupLookup[filter.indicatorValue];
             const isPrimaryGroup = this.model.dataFilterModel.primaryGroup === groupLookup?.name;
-            const isIndicatorAvailable = groupLookup !== undefined && !isPrimaryGroup && groupLookup.values.indexOf(filter.subIndicatorValue) >= 0;
+            const isIndicatorAvailable = groupLookup !== undefined && !isPrimaryGroup && groupLookup.values.indexOf(filter.subIndicatorValue?.[0]) >= 0;
             const rows = this.model.filterRows
             if (!isIndicatorAlreadyFiltered) {
                 if (isIndicatorAvailable) {

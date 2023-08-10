@@ -297,7 +297,7 @@ export class DataFilterModel extends Observable {
             _filteredData[geo] = arr.filter((a) => {
                 let isFiltered = true;
                 for (let key in this.selectedSubIndicators) {
-                    if (a[key] !== this.selectedSubIndicators[key]) {
+                    if (!this.selectedSubIndicators[key].includes(a[key])) {
                         isFiltered = false;
                     }
                 }
@@ -317,8 +317,8 @@ export class DataFilterModel extends Observable {
             let add = true;
 
             for (let key in this.selectedSubIndicators) {
-                const value = trimValue(this.selectedSubIndicators[key]);
-                if (ap.point.data.filter(x => x.key === key && trimValue(x.value) === value).length <= 0) {
+                const values = this.selectedSubIndicators[key].map(val => trimValue(val));
+                if (ap.point.data.filter(x => x.key === key && values.includes(trimValue(x.value))).length <= 0) {
                     add = false;
                 }
             }

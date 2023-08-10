@@ -149,17 +149,21 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 update: "Units === 'percentage' ? percentageMaxX : valueMaxX"
             },
             {
-                name: "y_step",
-                value: 100
-            },
-            {
-                name:"test",
-                update:"domain('yscale')"
+                name: "test",
+                update: "domain('yscale')"
             },
             {
                 name: "height",
                 //update: "domain('yscale').length * y_step + y_step"
-                value: 700
+                value: 60
+            },
+            {
+                name: "ysale_step",
+                value: 30
+            },
+            {
+                name: "label_offset",
+                value: -150
             },
             {
                 name: "textAlign",
@@ -172,7 +176,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 name: "yscale",
                 type: "band",
                 domain: {data: "table", field: 'income by classification'},
-                range: {"step": 300},
+                range: {"step": {signal: "ysale_step"}},
                 padding: 0
             },
             {
@@ -197,7 +201,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 "orient": "left",
                 "labelPadding": 0,
                 "labelAlign": "left",
-                "labelOffset": -150,
+                "labelOffset": {signal: "label_offset"},
                 "scale": "yscale",
                 "tickSize": 0,
                 "zindex": 1,

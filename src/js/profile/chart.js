@@ -216,7 +216,7 @@ export class Chart extends Component {
                         'table': result.view.data('table'),
                         'data_formatted': result.view.data('data_formatted'),
                         'data_grouped': result.view.data('data_grouped'),
-                        'signal': result.view.signal('test')
+                        'ysale_step': result.view.signal('ysale_step')
                     })
                 }
                 this.vegaView = result.view;
@@ -516,12 +516,13 @@ export class Chart extends Component {
         this.setDownloadUrl();
 
         if (this.title === 'Income by source') {
+            this.vegaView.signal('ysale_step', this.vegaView.data('table').length * 30 / this.vegaView.data('data_grouped').length + 100)
+            this.vegaView.signal('height', this.vegaView.data('table').length * 30 + 200)
+            this.vegaView.signal('label_offset', (this.vegaView.data('table').length * 30 / this.vegaView.data('data_grouped').length + 15) * -1)
             console.log({
-                'view': this.vegaView,
-                'table': this.vegaView.data('table'),
-                'data_formatted': this.vegaView.data('data_formatted'),
-                'data_grouped': this.vegaView.data('data_grouped'),
-                'signal': this.vegaView.signal('test')
+                'height': this.vegaView.signal('height'),
+                'ysale_step': this.vegaView.signal('ysale_step'),
+                'label_offset': this.vegaView.signal('label_offset')
             })
         }
 

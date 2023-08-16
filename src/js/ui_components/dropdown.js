@@ -1,17 +1,37 @@
 import {Component, Observable} from "../utils";
 
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {createRoot} from 'react-dom/client';
 
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import {FilterDropdown, FilterItem} from './styledElements';
+import CheckIcon from '@mui/icons-material/Check';
+import Tooltip from '@mui/material/Tooltip';
+
+import {isArray, isEqual} from "lodash";
+
+
+export const DrillDownSvg = () => (
+    <Tooltip
+      title="This field allows selecting multiple values at the same time for comparison."
+      arrow
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <g opacity="0.5">
+          <path d="M8.74024 19L7.90024 18.0813L10.3202 15.4344H4.00024V14.1219H10.3202L7.90024 11.475L8.74024 10.5563L12.6002 14.7781L8.74024 19ZM15.2602 13.4438L11.4002 9.22188L15.2602 5L16.1002 5.91875L13.6802 8.56563H20.0002V9.87813H13.6802L16.1002 12.525L15.2602 13.4438Z" fill="#707070"/>
+        </g>
+      </svg>
+    </Tooltip>
+)
+
 
 const DynamicSelect = ({
     label,
     dropdownElement,
+    drillDownOption,
   }) => {
   const [selectedValue, setSelectedValue] = useState(dropdownElement.model.currentValue || []);
   const [isMultiselect, setIsMultiselect] = useState(dropdownElement.model.isMultiselect || false);
@@ -41,29 +61,44 @@ const DynamicSelect = ({
     dropdownElement.model.currentValue = isMultiselect ? event.target.value : [event.target.value];
   };
 
-  const getCurrentlySelectedValue = useMemo(
-    () => {
-      return isMultiselect ? selectedValue : selectedValue?.[0] || '';
+  const getCurrentlySelectedValue = useCallback(
+    (selected) => {
+      if (selected === '' || selected?.[0] === undefined) {
+        return <em>{label}</em>;
+      }
+
+      const isDrillDownField = isArray(selected) ? selected.includes(dropdownElement.drillDownOption) : selected === dropdownElement.drillDownOption;
+
+      if (isDrillDownField){
+        return <em>{selected} <span style={{ float: 'right', height: '20px'}}><DrillDownSvg/></span></em>;
+      }
+      return isMultiselect ? selected.join(", ") : selected || '';
     }, [
-      selectedValue, isMultiselect
+      isMultiselect, drillDownOption
     ]
   )
 
   return (
-    <FormControl fullWidth variant="outlined">
-      <InputLabel>{label}</InputLabel>
-      <Select
-        label={label}
+    <FormControl fullWidth>
+      <FilterDropdown
+        displayEmpty
         multiple={isMultiselect}
-        value={getCurrentlySelectedValue}
+        value={isMultiselect ? selectedValue : selectedValue?.[0] || ''}
         onChange={handleSelectChange}
+        renderValue={(selected) => getCurrentlySelectedValue(selected)}
       >
         {options.map((option, index) => (
-          <MenuItem key={option} value={option}>
+          <FilterItem key={option} value={option}>
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
             {option}
-          </MenuItem>
+            <Box sx={{ marginLeft: 'auto', fontSize: '16px' }}>
+              {option === dropdownElement.drillDownOption && <DrillDownSvg />}
+              {selectedValue.includes(option) && <CheckIcon sx={{fontSize: '14px', marginLeft: '5px', color: '#707070'}}/>}
+            </Box>
+        </div>
+          </FilterItem>
         ))}
-      </Select>
+      </FilterDropdown>
     </FormControl>
   );
 };
@@ -191,7 +226,7 @@ export class Dropdown extends Component {
       updateItems: "Dropdown.updateItems"
     }
 
-    constructor(parent, container, items, defaultText = '', disabled = false, isMultiselect = false) {
+    constructor(parent, container, items, defaultText = '', disabled = false, isMultiselect = false, drillDownOption = '') {
         super(parent);
         this._container = container;
         this._model = new DropdownModel(items, isMultiselect, 0);
@@ -208,6 +243,7 @@ export class Dropdown extends Component {
         this.setText(defaultText);
 
         this._isMultiselect = this.model.isMultiselect;
+        this._drillDownOption = drillDownOption;
 
     }
 
@@ -219,11 +255,16 @@ export class Dropdown extends Component {
         return this._model;
     }
 
+    get drillDownOption() {
+      return this._drillDownOption;
+    }
+
     prepareDomElements() {
         this.root = createRoot(this._container);
         this.root.render(<DynamicSelect
           label={this._defaultText}
           dropdownElement={this}
+          drillDownOption={this.drillDownOption}
         />)
     }
 

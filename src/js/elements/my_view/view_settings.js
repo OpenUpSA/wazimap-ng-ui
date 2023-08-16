@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {IndicatorOptionsSvg, TrashBinSvg, LockButtonInTextSvg} from "./svg_icons";
+import {isArray, isEqual} from "lodash";
 
 import {
     AppliedPanelInfo,
@@ -183,6 +184,7 @@ const ViewSettings = (props) => {
 
     const renderFilterValueBox = (value, isAvailable, rightVal) => {
         // isAvailable is initially undefined
+        value = isArray(value) ? value.join(", ") : value;
         if (isAvailable === false) {
             return (
                 <UnavailableFilteredIndicatorBox
@@ -197,7 +199,7 @@ const ViewSettings = (props) => {
             )
         } else {
             return (
-                <FilteredIndicatorBox>
+                <FilteredIndicatorBox sx={{textWrap: "wrap"}}>
                     {value}
                 </FilteredIndicatorBox>
             )

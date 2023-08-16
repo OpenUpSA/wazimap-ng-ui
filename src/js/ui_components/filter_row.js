@@ -204,7 +204,7 @@ export class FilterRow extends Component {
         else {
             this.showRemoveButton();
         }
-        this.indicatorDropdown = new Dropdown(this, this._indicatorDd, this.model.indicatorValues, FilterRow.SELECT_ATTRIBUTE, false);
+        this.indicatorDropdown = new Dropdown(this, this._indicatorDd, this.model.indicatorValues, FilterRow.SELECT_ATTRIBUTE, false, false, this.model.drillDownGroup);
         this.subIndicatorDropdown = new Dropdown(this, this._subindicatorDd, this.model.subindicatorValues, FilterRow.SELECT_VALUE, true);
 
         this.prepareEvents();
@@ -259,9 +259,14 @@ export class FilterRow extends Component {
         $(this.container).attr('data-isextra', this._isExtra);
         $(this.container).attr('data-isdefault', this._isDefault);
         this._removeFilterButton = $(this.container).find(this._elements.removeFilterButton);
+        this._removeFilterButton.addClass("remove-filter-row")
 
         this._indicatorDd = $(this.container).find(this._elements.filterDropdown)[0];
         this._subindicatorDd = $(this.container).find(this._elements.filterDropdown)[1];
+        $(this.container).addClass("filter-container");
+        $(this.container).find(".profile-indicator__filter").first().after(
+          "<span class='filter-divider'>:</span>"
+        )
     }
 
     addLockButton() {

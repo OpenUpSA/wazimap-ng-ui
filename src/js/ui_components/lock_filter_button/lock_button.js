@@ -19,7 +19,7 @@ const LockButton = (props) => {
         // better to use props.filterRow.model.currentSubindicatorValue instead of rowSubIndicator
         // rowSubIndicator is updated later if it is an unavailable row
         setIsUnavailable(props.filterRow.model.isUnavailable);
-        setIsVisible(props.filterRow.model.currentIndicatorValue !== 'All indicators' && props.filterRow.model.currentSubindicatorValue !== 'All values');
+        setIsVisible(props.filterRow.model.currentIndicatorValue !== 'All indicators' && props.filterRow.model.currentSubindicatorValue !== 'All values' && !props.filterRow.subIndicatorDropdown.model.isMultiselect);
         checkAndSetIsLocked();
     }, [siteWideFilters, rowIndicator, rowSubIndicator])
 
@@ -46,8 +46,8 @@ const LockButton = (props) => {
     const StyledButton = styled(Button)(() => ({
         minWidth: 'unset',
         marginRight: '10px',
-        width: '36px',
-        height: '36px',
+        width: '18px',
+        height: '24px',
         padding: '0'
     }));
 

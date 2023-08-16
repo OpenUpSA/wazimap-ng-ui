@@ -165,6 +165,10 @@ export class FilterController extends Component {
         }
         this.setContentVisibility();
         this.toggleContentVisibility();
+
+        $(this.container).find(".profile-indicator__filter-labels").html(
+          "<div class='filter-row-label'>Indicator filters</div>"
+        );
     }
 
     prepareEvents() {

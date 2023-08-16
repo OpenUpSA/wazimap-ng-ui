@@ -23,6 +23,27 @@
   top: 80px;
 }
 
+.filter-row-label{
+  color: #707070;
+  font-family: Roboto;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: 0.72px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.remove-filter-row{
+  width: 18px;
+  height: 20px;
+  background: none;
+  border: none;
+  margin-left: 0px;
+  align-self: center;
+}
+
+
 .tutorial-button-container {
   height: 100%;
   position: fixed;
@@ -35,9 +56,29 @@
   right: 0;
 }
 
+.profile-indicator__filters-wrapper {
+  width: 90% !important;
+}
+
+
 .current-view-container {
   display: flex;
   align-items: center;
+}
+
+.filter-container {
+  border-radius: 4px;
+  background: #FFF;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.10);
+  padding: 6px;
+  gap: 8px;
+  align-self: stretch;
+  margin-bottom: 10px;
+}
+
+.filter-divider {
+  margin: auto;
+  padding-right: 10px;
 }
 
 @media (max-width: 480px) {

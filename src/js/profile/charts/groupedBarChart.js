@@ -19,6 +19,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
     } = config;
 
     const {primary_group: primaryGroup} = metadata;
+    console.log({primaryGroup})
 
     if (xTicks) {
         xAxis.tickCount = xTicks;
@@ -45,46 +46,29 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 source: "table",
                 transform: [
                     {
-                        type: "aggregate",
-                        ops: ["sum"],
-                        as: ["count"],
-                        fields: ["count"],
-                        groupby: {signal: "groups"}
-                    },
-                    {
                         type: "joinaggregate",
                         as: ["TotalCount"],
                         ops: ["sum"],
-                        fields: ["count"]
+                        fields: ["count"],
+                        groupby: ['financial year']
                     },
                     {
                         type: "formula",
                         expr: "datum.TotalCount > 0.001 ? datum.count/datum.TotalCount : 0",
                         as: "percentage"
-                    },
-                    {
-                        type: "extent",
-                        field: "percentage",
-                        signal: "percentage_extent"
-                    },
-                    {
-                        type: "extent",
-                        field: "count",
-                        signal: "value_extent"
                     }
                 ]
             },
             {
                 name: "data_grouped",
                 source: "table",
-                //values: data,
                 transform: [
                     {
                         type: "aggregate",
                         ops: ["sum"],
                         as: ["count"],
                         fields: ["count"],
-                        groupby: ['income by classification']
+                        groupby: {signal: "groups"}
                     },
                 ]
             }
@@ -175,14 +159,14 @@ export const configureGroupedBarchart = (data, metadata, config) => {
             {
                 name: "yscale",
                 type: "band",
-                domain: {data: "table", field: 'income by classification'},
+                domain: {data: "data_formatted", field: {signal: "mainGroup"}},
                 range: {"step": {signal: "ysale_step"}},
                 padding: 0
             },
             {
                 "name": "xscale",
                 "type": "linear",
-                "domain": {"data": "table", "field": "count"},
+                "domain": {"data": "data_formatted", "field": "count"},
                 "range": "width",
                 "round": true,
                 "zero": true,
@@ -191,23 +175,23 @@ export const configureGroupedBarchart = (data, metadata, config) => {
             {
                 "name": "color",
                 "type": "ordinal",
-                "domain": {"data": "table", "field": "financial year"},
-                "range": {"scheme": "category20"}
+                "domain": {"data": "data_formatted", "field": "financial year"},
+                "range": {"scheme": "dark2"}
             }
         ],
 
         axes: [
             {
                 "orient": "left",
-                "labelPadding": 0,
+                "labelPadding": 38,
                 "labelAlign": "left",
                 "labelOffset": {signal: "label_offset"},
                 "scale": "yscale",
                 "tickSize": 0,
                 "zindex": 1,
-                "labelColor": "hsla(0, 0%, 44%, 1)",
+                "labelColor": "#707070",
                 "labelFontWeight": 700,
-                "domain": false
+                domain: false
             },
             {
                 "orient": "bottom",
@@ -227,9 +211,9 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 "type": "group",
                 "from": {
                     "facet": {
-                        "data": "table",
+                        "data": "data_formatted",
                         "name": "facet",
-                        "groupby": 'income by classification'
+                        "groupby": primaryGroup
                     }
                 },
 
@@ -238,10 +222,10 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                         "fill": {"value": "red"}
                     },
                     "update": {
-                        "text": {"field": 'income by classification'},
+                        "text": {"field": {"signal": "mainGroup"}},
                         "align": {"value": "left"},
-                        "x": {"scale": "xscale", "field": 'income by classification'},
-                        "y": {"scale": "yscale", "field": 'income by classification', "offset": 10, "band": 0}
+                        "x": {"scale": "xscale", "field": {"signal": "mainGroup"}},
+                        "y": {"scale": "yscale", "field": {"signal": "mainGroup"}, "offset": 10, "band": 0}
                     }
                 },
                 "signals": [{"name": "height", "update": "bandwidth('yscale')"}],
@@ -260,15 +244,46 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                     "encode": {
                         "enter": {
                             "y": {"scale": "pos", "field": "financial year"},
-                            height: {scale: "pos", band: 1},
+                            height: {scale: "pos", band: 0.9},
                             "x": {"scale": "xscale", "field": "count"},
                             "x2": {"scale": "xscale", "value": 0},
                             "fill": {"scale": "color", "field": "financial year"}
                         },
-                        update: {
+                        "update": {
+                            "y": {"scale": "pos", "field": "financial year"},
+                            height: {scale: "pos", band: 0.9},
+                            "x": {"scale": "xscale", "field": "count"},
+                            "x2": {"scale": "xscale", "value": 0},
                             tooltip: {
                                 signal: "{'percentage': format(datum.percentage, numberFormat.percentage), 'group': datum[mainGroup] + ' - ' + datum['financial year'], 'count': format(datum.count, numberFormat.value)}"
                             }
+                        }
+                    }
+                }, {
+                    "type": "text",
+                    "from": {"data": "bars"},
+                    "encode": {
+                        "enter": {
+                            "x": {"field": "x", "offset": 0},
+                            "y": {"field": "y", "offset": {"field": "height", "mult": 0.5}},
+                            "fill": [
+                                {"value": "#707070"}
+                            ],
+                            "align": {"value": "right"},
+                            "baseline": {"value": "middle"},
+                            "text": {"field": "datum[financial year]"},
+                            "limit":{"value": 38}
+                        },
+                        "update": {
+                            "x": {"field": "x", "offset": 0},
+                            "y": {"field": "y", "offset": {"field": "height", "mult": 0.5}},
+                            "fill": [
+                                {"value": "#707070"}
+                            ],
+                            "align": {"value": "right"},
+                            "baseline": {"value": "middle"},
+                            "text": {"field": "datum[financial year]"},
+                            "limit":{"value": 38}
                         }
                     }
                 }]

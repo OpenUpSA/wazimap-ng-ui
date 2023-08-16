@@ -15,6 +15,7 @@ import {FilterController} from "../elements/subindicator_filter/filter_controlle
 import {DataFilterModel} from "../models/data_filter_model";
 import {SidePanels} from "../elements/side_panels";
 import {configureGroupedBarchart} from "./charts/groupedBarChart";
+import {isEmpty} from "vega-lite";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -210,15 +211,6 @@ export class Chart extends Component {
         embed(this.container, vegaSpec, {renderer: 'svg', actions: false, tooltip: handler.bind(this)})
 
             .then(async (result) => {
-                //todo: remove this.title
-                if (this.title === 'Income by source') {
-                    console.log({
-                        'table': result.view.data('table'),
-                        'data_formatted': result.view.data('data_formatted'),
-                        'data_grouped': result.view.data('data_grouped'),
-                        'ysale_step': result.view.signal('ysale_step')
-                    })
-                }
                 this.vegaView = result.view;
                 this.vegaDownloadView = null;
                 this.setChartMenu();
@@ -516,14 +508,16 @@ export class Chart extends Component {
         this.setDownloadUrl();
 
         if (this.title === 'Income by source') {
+            console.log({
+                'data_grouped': this.vegaView.data('data_grouped'),
+                'table': this.vegaView.data('table'),
+                'data_formatted': this.vegaView.data('data_formatted')
+            })
+            let labelOffset = Math.min(((this.vegaView.data('table').length / this.vegaView.data('data_grouped').length) * 15 + 45 + 20) * -1, -60);
             this.vegaView.signal('ysale_step', this.vegaView.data('table').length * 30 / this.vegaView.data('data_grouped').length + 100)
             this.vegaView.signal('height', this.vegaView.data('table').length * 30 + 200)
-            this.vegaView.signal('label_offset', (this.vegaView.data('table').length * 30 / this.vegaView.data('data_grouped').length + 15) * -1)
-            console.log({
-                'height': this.vegaView.signal('height'),
-                'ysale_step': this.vegaView.signal('ysale_step'),
-                'label_offset': this.vegaView.signal('label_offset')
-            })
+            this.vegaView.signal('label_offset', labelOffset);
+            this.vegaView.run();
         }
 
         const payload = {

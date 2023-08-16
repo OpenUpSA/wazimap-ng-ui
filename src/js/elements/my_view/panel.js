@@ -61,6 +61,7 @@ const Panel = (props) => {
         })
 
         if (JSON.stringify(newFilteredIndicators) !== JSON.stringify(filteredIndicators)) {
+
             setFilteredIndicators(newFilteredIndicators);
         }
 
@@ -76,7 +77,7 @@ const Panel = (props) => {
         if (currentIndicator === null) {
             isFilterAvailable = true;
         } else {
-            isFilterAvailable = currentIndicator.groups.filter(x => x.name === group && x.subindicators.indexOf(value) >= 0).length > 0;
+            isFilterAvailable = currentIndicator.groups.filter(x => x.name === group && value.every(item => x.subindicators.includes(item))).length > 0;
         }
 
         return isFilterAvailable;

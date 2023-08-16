@@ -163,8 +163,8 @@ export class DataFilterModel extends Observable {
             const group = sf.group.name;
             const value = self._selectedSubindicators[group];
             const isDefault = self.defaultFilterGroups
-                    .some(f => f.group === group && f.value === self._selectedSubindicators[group])
-                || self.nonAggregatableGroups.some(x => x.name === group && x.values[0] === value);
+                    .some(f => f.group === group && self._selectedSubindicators[group].includes(f.value))
+                || self.nonAggregatableGroups.some(x => x.name === group && value.includes(x.values[0]));
 
             return {
                 group: group,

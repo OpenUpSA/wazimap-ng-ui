@@ -12,6 +12,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
     const {
         xTicks,
         defaultType,
+        drilldown,
         types: {
             Value: {formatting: valueFormatting, minX: valueMinX, maxX: valueMaxX},
             Percentage: {formatting: percentageFormatting, minX: percentageMinX, maxX: percentageMaxX}
@@ -19,7 +20,6 @@ export const configureGroupedBarchart = (data, metadata, config) => {
     } = config;
 
     const {primary_group: primaryGroup} = metadata;
-    console.log({primaryGroup})
 
     if (xTicks) {
         xAxis.tickCount = xTicks;
@@ -50,7 +50,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                         as: ["TotalCount"],
                         ops: ["sum"],
                         fields: ["count"],
-                        groupby: ['financial year']
+                        groupby: [drilldown]
                     },
                     {
                         type: "formula",
@@ -175,7 +175,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
             {
                 "name": "color",
                 "type": "ordinal",
-                "domain": {"data": "data_formatted", "field": "financial year"},
+                "domain": {"data": "data_formatted", "field": drilldown},
                 "range": {"scheme": "dark2"}
             }
         ],
@@ -234,7 +234,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                         "name": "pos",
                         "type": "band",
                         "range": {"step": 30},
-                        "domain": {"data": "facet", "field": "financial year"}
+                        "domain": {"data": "facet", "field": drilldown}
                     }
                 ],
                 marks: [{
@@ -243,19 +243,19 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                     "type": "rect",
                     "encode": {
                         "enter": {
-                            "y": {"scale": "pos", "field": "financial year"},
+                            "y": {"scale": "pos", "field": drilldown},
                             height: {scale: "pos", band: 0.9},
                             "x": {"scale": "xscale", "field": "count"},
                             "x2": {"scale": "xscale", "value": 0},
-                            "fill": {"scale": "color", "field": "financial year"}
+                            "fill": {"scale": "color", "field": drilldown}
                         },
                         "update": {
-                            "y": {"scale": "pos", "field": "financial year"},
+                            "y": {"scale": "pos", "field": drilldown},
                             height: {scale: "pos", band: 0.9},
                             "x": {"scale": "xscale", "field": "count"},
                             "x2": {"scale": "xscale", "value": 0},
                             tooltip: {
-                                signal: "{'percentage': format(datum.percentage, numberFormat.percentage), 'group': datum[mainGroup] + ' - ' + datum['financial year'], 'count': format(datum.count, numberFormat.value)}"
+                                signal: `{'percentage': format(datum.percentage, numberFormat.percentage), 'group': datum[mainGroup] + ' - ' + datum['${drilldown}'], 'count': format(datum.count, numberFormat.value)}`
                             }
                         }
                     }
@@ -271,7 +271,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                             ],
                             "align": {"value": "right"},
                             "baseline": {"value": "middle"},
-                            "text": {"field": "datum[financial year]"},
+                            "text": {"field": `datum['${drilldown}']`},
                             "limit":{"value": 38}
                         },
                         "update": {
@@ -282,7 +282,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                             ],
                             "align": {"value": "right"},
                             "baseline": {"value": "middle"},
-                            "text": {"field": "datum[financial year]"},
+                            "text": {"field": `datum['${drilldown}']`},
                             "limit":{"value": 38}
                         }
                     }

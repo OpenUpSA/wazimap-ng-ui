@@ -61,6 +61,7 @@ export class Chart extends Component {
         this.table = null;
         this.filter = null;
         this.groups = data.metadata.groups;
+        this._isGrouped = false;
 
         this.profileAttribution = chartAttribution;
         this.subCategoryNode = _subCategoryNode;
@@ -80,7 +81,21 @@ export class Chart extends Component {
             addLockButton: addLockButton
         });
 
-        this.addChart(data, restrictValues, defaultFilters);
+        this.addChart(restrictValues, defaultFilters, true, false, null);
+    }
+
+    get hasGroupedBarChart() {
+        return this.data.chartConfiguration.drilldown !== undefined
+            && this.data.chartConfiguration.drilldown !== ''
+            && this.data.chart_type !== 'line';
+    }
+
+    get isGrouped() {
+        return this._isGrouped;
+    }
+
+    set isGrouped(value) {
+        this._isGrouped = value;
     }
 
     get previouslySelectedFilters() {
@@ -128,11 +143,11 @@ export class Chart extends Component {
         return this._filterController;
     }
 
-    addChart = (data, restrictValues, defaultFilters) => {
+    addChart = (restrictValues, defaultFilters, setFilters, isGroupedBarChart = false, callback) => {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();
 
-        let vegaSpec = this.configureChart(data.data, data.metadata, this.config);
+        let vegaSpec = this.configureChart(this.data.data, this.data.metadata, this.config, isGroupedBarChart);
 
         const calculatePosition = (item, event, tooltipBox,) => {
             let x, y, offsetX, offsetY;
@@ -209,7 +224,6 @@ export class Chart extends Component {
         }
 
         embed(this.container, vegaSpec, {renderer: 'svg', actions: false, tooltip: handler.bind(this)})
-
             .then(async (result) => {
                 this.vegaView = result.view;
                 this.vegaDownloadView = null;
@@ -220,18 +234,25 @@ export class Chart extends Component {
                 $svg.attr('preserveAspectRatio', 'xMinYMin meet')
                 $svg.removeAttr('width')
                 $svg.removeAttr('height');
-                this.filterGroups = data.metadata.groups;
+                this.filterGroups = this.data.metadata.groups;
+                this.isGrouped = isGroupedBarChart;
 
-                this.handleChartFilter(data, data.metadata.groups, restrictValues, defaultFilters);
+                if (setFilters) {
+                    this.handleChartFilter(this.data, this.data.metadata.groups, restrictValues, defaultFilters);
+                }
+
+                if (callback !== null) {
+                    callback();
+                }
             });
     };
 
-    configureChart = (data, metadata, config) => {
-        if (this.chartType === chartTypes.LineChart) {
-            return configureLinechart(data, metadata, config);
+    configureChart = (data, metadata, config, isGroupedBarChart = false) => {
+        if (isGroupedBarChart) {
+            return configureGroupedBarchart(data, metadata, config);
         } else {
-            if (this.title === 'Income by source') {
-                return configureGroupedBarchart(data, metadata, config);
+            if (this.chartType === chartTypes.LineChart) {
+                return configureLinechart(data, metadata, config);
             } else {
                 return configureBarchart(data, metadata, config);
             }
@@ -486,6 +507,21 @@ export class Chart extends Component {
     };
 
     applyFilter = (filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl) => {
+        if (this.hasGroupedBarChart && !this.isGrouped && Object.keys(selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0) {
+            this.addChart(null,
+                null,
+                false,
+                true,
+                () => this.applyFilter(filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl));
+            return;
+        } else if (this.isGrouped && Object.keys(selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) < 0) {
+            this.addChart(null,
+                null,
+                false,
+                false,
+                () => this.applyFilter(filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl));
+            return;
+        }
         this.filteredData = filteredData;
         this.filterGroups.forEach((group) => {
             let {name: filterName} = group;
@@ -507,18 +543,7 @@ export class Chart extends Component {
         this.appendDataToTable();
         this.setDownloadUrl();
 
-        if (this.title === 'Income by source') {
-            console.log({
-                'data_grouped': this.vegaView.data('data_grouped'),
-                'table': this.vegaView.data('table'),
-                'data_formatted': this.vegaView.data('data_formatted')
-            })
-            let labelOffset = Math.min(((this.vegaView.data('table').length / this.vegaView.data('data_grouped').length) * 15 + 45 + 20) * -1, -60);
-            this.vegaView.signal('ysale_step', this.vegaView.data('table').length * 30 / this.vegaView.data('data_grouped').length + 100)
-            this.vegaView.signal('height', this.vegaView.data('table').length * 30 + 200)
-            this.vegaView.signal('label_offset', labelOffset);
-            this.vegaView.run();
-        }
+        this.setGroupedBarChartHeight();
 
         const payload = {
             indicatorId: this.data.id,
@@ -527,8 +552,19 @@ export class Chart extends Component {
             updadateSharedUrl: updadateSharedUrl,
         };
         this.triggerEvent('profile.chart.filtered', payload);
-
     };
+
+    setGroupedBarChartHeight() {
+        if (!this.isGrouped) {
+            return;
+        }
+
+        let labelOffset = Math.min(((this.vegaView.data('table').length / this.vegaView.data('data_grouped').length) * 15 + 45 + 20) * -1, -60);
+        this.vegaView.signal('ysale_step', this.vegaView.data('table').length * 30 / this.vegaView.data('data_grouped').length + 100)
+        this.vegaView.signal('height', this.vegaView.data('table').length * 30 + 200)
+        this.vegaView.signal('label_offset', labelOffset);
+        this.vegaView.run();
+    }
 
     exportAsCsv = () => {
         const data = this.vegaView.data('table');

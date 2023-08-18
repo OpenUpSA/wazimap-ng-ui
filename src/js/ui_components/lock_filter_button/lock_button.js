@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import {styled} from "@mui/system";
 import {Button} from "@mui/material";
 import {LockButtonSvg, LockedButtonSvg, UnavailableLockButtonSvg} from "../../elements/my_view/svg_icons";
+import {isEqual} from 'lodash';
 
 const LockButton = (props) => {
     const [startedListening, setStartedListening] = useState(false);
@@ -55,7 +56,7 @@ const LockButton = (props) => {
         // better to use props.filterRow.model.currentSubindicatorValue instead of rowSubIndicator
         // rowSubIndicator is updated later if it is an unavailable row
         let filterResult = siteWideFilters.filter(x => x.indicatorValue === props.filterRow.model.currentIndicatorValue
-            && x.subIndicatorValue === props.filterRow.model.currentSubindicatorValue);
+            && isEqual(x.subIndicatorValue, props.filterRow.model.currentSubindicatorValue));
         setIsLocked(filterResult.length > 0);
     }
 

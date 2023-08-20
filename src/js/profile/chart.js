@@ -14,7 +14,7 @@ import {slugify} from './charts/utils';
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
 import {DataFilterModel} from "../models/data_filter_model";
 import {SidePanels} from "../elements/side_panels";
-import {configureGroupedBarchart} from "./charts/groupedBarChart";
+import {configureGroupedBarchart, configureGroupedBarchartDownload} from "./charts/groupedBarChart";
 import {isEmpty} from "vega-lite";
 
 const PERCENTAGE_TYPE = "percentage";
@@ -240,10 +240,14 @@ export class Chart extends Component {
     }
 
     configureChartDownload = (data, metadata, config, annotations) => {
-        if (this.chartType === chartTypes.LineChart) {
-            return configureLinechartDownload(data, metadata, config, annotations);
+        if (this.isGrouped) {
+            return configureGroupedBarchartDownload(data, metadata, config, annotations);
         } else {
-            return configureBarchartDownload(data, metadata, config, annotations);
+            if (this.chartType === chartTypes.LineChart) {
+                return configureLinechartDownload(data, metadata, config, annotations);
+            } else {
+                return configureBarchartDownload(data, metadata, config, annotations);
+            }
         }
     }
 
@@ -361,6 +365,7 @@ export class Chart extends Component {
         let specDownload = this.configureChartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
 
         this.vegaDownloadView = new vega.View(vega.parse(specDownload));
+        this.setGroupedBarChartHeight();
 
         const pngDownloadUrl = await this.vegaDownloadView.toImageURL('png', 1);
         const saveImgButton = $(containerParent).find(".hover-menu__content a.hover-menu__content_item:nth-child(1)");
@@ -513,20 +518,28 @@ export class Chart extends Component {
     };
 
     setGroupedBarChartHeight() {
-        if (!this.isGrouped) {
+        const isDrilldownSelected = this.selectedFilter != null
+            && Object.keys(this.selectedFilter).indexOf(this.config.drilldown) >= 0;
+
+        if (!this.isGrouped || !isDrilldownSelected) {
             return;
         }
 
         const groupCount = this.vegaView.data('data_grouped').length;
         const yCount = this.vegaView.data('data_formatted').length / groupCount;
         const labelOffset = (25 + yCount * 15) * -1;
-        const ysale_step = yCount * 30 + 40;
+        const yscale_step = yCount * 30 + 40;
         const height = this.vegaView.data('data_formatted').length * 30 + (40 * groupCount);
 
-        this.vegaView.signal('ysale_step', ysale_step);
+        this.vegaView.signal('yscale_step', yscale_step);
         this.vegaView.signal('height', height);
         this.vegaView.signal('label_offset', labelOffset);
         this.vegaView.run();
+
+        this.vegaDownloadView.signal('yscale_step', yscale_step);
+        this.vegaDownloadView.signal('height', height);
+        this.vegaDownloadView.signal('label_offset', labelOffset);
+        this.vegaDownloadView.run();
     }
 
     exportAsCsv = () => {

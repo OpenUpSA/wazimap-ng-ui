@@ -46,11 +46,19 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 source: "table",
                 transform: [
                     {
+                        type: "aggregate",
+                        ops: ["sum"],
+                        as: ["count"],
+                        fields: ["count"],
+                        groupby: [drilldown, primaryGroup]
+                    },
+                    {
                         type: "joinaggregate",
                         as: ["TotalCount"],
                         ops: ["sum"],
                         fields: ["count"],
                         groupby: [drilldown]
+
                     },
                     {
                         type: "formula",

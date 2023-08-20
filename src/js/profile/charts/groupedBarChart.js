@@ -13,6 +13,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
         xTicks,
         defaultType,
         drilldown,
+        colorRange,
         types: {
             Value: {formatting: valueFormatting, minX: valueMinX, maxX: valueMaxX},
             Percentage: {formatting: percentageFormatting, minX: percentageMinX, maxX: percentageMaxX}
@@ -85,6 +86,10 @@ export const configureGroupedBarchart = (data, metadata, config) => {
             {
                 name: "groups",
                 value: [primaryGroup],
+            },
+            {
+                name:"colorRange",
+                value: colorRange
             },
             {
                 name: "barvalue",
@@ -184,7 +189,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 "name": "color",
                 "type": "ordinal",
                 "domain": {"data": "data_formatted", "field": drilldown},
-                "range": {"scheme": "dark2"}
+                "range": {signal: "colorRange"}
             }
         ],
 

@@ -522,14 +522,7 @@ export class Chart extends Component {
         const labelOffset = (25 + yCount * 15) * -1;
         const ysale_step = yCount * 30 + 40;
         const height = this.vegaView.data('data_formatted').length * 30 + (40 * groupCount);
-        console.log({
-            groupCount,
-            yCount,
-            labelOffset,
-            ysale_step,
-            height,
-            'data_formatted': this.vegaView.data('data_formatted')
-        })
+
         this.vegaView.signal('ysale_step', ysale_step);
         this.vegaView.signal('height', height);
         this.vegaView.signal('label_offset', labelOffset);

@@ -49,7 +49,7 @@ When(/^I filter by "([^"]*)"$/, function (filter) {
 });
 
 When('I click on the second filter dropdown', () => {
-    cy.get('.mapping-options__filter_menu:visible').eq(1).click();
+    cy.get('.mapping-options__filter:visible').eq(1).click();
 })
 
 Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {

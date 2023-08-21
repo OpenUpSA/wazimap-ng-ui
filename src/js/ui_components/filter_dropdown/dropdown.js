@@ -95,7 +95,7 @@ export const FilterDropdown = ({
         renderValue={(selected) => getCurrentlySelectedValue(selected)}
       >
         {options.map((option, index) => (
-          <FilterItem key={option} value={option}>
+          <FilterItem key={option} value={option} className={"filter-item"}>
           <FilterItemValueContainer>
             {option}
             <FilterItemIconContainer>

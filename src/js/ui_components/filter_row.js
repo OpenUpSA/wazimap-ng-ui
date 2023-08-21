@@ -267,6 +267,12 @@ export class FilterRow extends Component {
         $(this.container).find(".profile-indicator__filter").first().after(
           "<span class='filter-divider'>:</span>"
         )
+        $(this.container).find(".mapping-options__filter").first().after(
+          "<span class='filter-divider'>:</span>"
+        )
+        $(this.container).find(".point-filters__filter").first().after(
+          "<span class='filter-divider'>:</span>"
+        )
     }
 
     addLockButton() {

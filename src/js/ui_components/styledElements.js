@@ -17,6 +17,9 @@ export const FilterDropdown = styled(Select)(({ theme }) => ({
   fontStyle: 'normal',
   fontWeight: '400',
   lineHeight: 'normal',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
 
   '& .MuiOutlinedInput-notchedOutline': {
       border: 0,

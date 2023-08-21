@@ -66,6 +66,8 @@
   align-items: center;
 }
 
+
+// CSS for new filters
 .filter-container {
   border-radius: 4px;
   background: #FFF;
@@ -76,10 +78,41 @@
   margin-bottom: 10px;
 }
 
-.filter-divider {
-  margin: auto;
-  padding-right: 10px;
+.filter-container .profile-indicator__filter,
+.filter-container .mapping-options__filter,
+.filter-container .point-filters__filter{
+  margin-right: 0px;
+  max-width: 50%;
 }
+
+.filter-container .remove-filter-row:hover{
+  background-color: #fff;
+}
+
+.filter-container .remove-filter-row{
+  margin-left: 4px;
+  margin-right: 2px;
+}
+
+.filter-container .profile-indicator__filter-buttons {
+  width: auto !important;
+}
+
+.filter-container .filter-divider {
+  margin: auto;
+}
+
+.profile-indicator__new-filter {
+  margin-right: 0px !important;
+}
+
+.filter-container .mapping-options__remove-filter,
+.filter-container .point-filters__remove-filter{
+  position: unset;
+  margin-left: 0px;
+}
+// END of CSS for new filters
+
 
 @media (max-width: 480px) {
   .right-panel-toggles {

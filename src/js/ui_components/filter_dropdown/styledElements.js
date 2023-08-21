@@ -1,14 +1,11 @@
 import { styled } from '@mui/system';
-import Button from '@mui/material/Button';
-import SliderUnstyled, { sliderUnstyledClasses } from '@mui/base/SliderUnstyled';
 
+import Box from '@mui/material/Box';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
-import Chip from '@mui/material/Chip';
+import CheckIcon from '@mui/icons-material/Check';
 
-
-export const FilterDropdown = styled(Select)(({ theme }) => ({
+export const CustomSelect = styled(Select)(({ theme }) => ({
   backgroundColor: 'rgba(0, 0, 0, 0.05);',
   border: 'none',
   boxShadow: 'none',
@@ -41,4 +38,26 @@ export const FilterItem = styled(MenuItem)(({ theme }) => ({
   fontWeight: '400',
   lineHeight: 'normal',
   width: '100%',
+}));
+
+export const FilterItemValueContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  width: '100%'
+}));
+
+export const FilterItemIconContainer = styled(Box)(({ theme }) => ({
+  marginLeft: 'auto',
+  fontSize: '16px'
+}));
+
+export const DrillDownIconContainer = styled('span')(({ theme }) => ({
+  float: 'right',
+  height: '20px'
+}));
+
+export const SelectedItem = styled(CheckIcon)(({ theme }) => ({
+  fontSize: '14px',
+  marginLeft: '5px',
+  color: '#707070'
 }));

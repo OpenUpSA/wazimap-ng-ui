@@ -528,10 +528,6 @@ export function confirmChartIsFiltered(group, value, chartTitle) {
         .closest('.profile-indicator')
         .find('.profile-indicator__filter-row')
         .each(($el) => {
-            console.log($el.find('.profile-indicator__filter')
-                    .eq(0)
-                    .find('input')
-                    .val())
             matches = $el.find('.profile-indicator__filter')
                     .eq(0)
                     .find('input')

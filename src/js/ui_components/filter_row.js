@@ -264,13 +264,7 @@ export class FilterRow extends Component {
         this._indicatorDd = $(this.container).find(this._elements.filterDropdown)[0];
         this._subindicatorDd = $(this.container).find(this._elements.filterDropdown)[1];
         $(this.container).addClass("filter-container");
-        $(this.container).find(".profile-indicator__filter").first().after(
-          "<span class='filter-divider'>:</span>"
-        )
-        $(this.container).find(".mapping-options__filter").first().after(
-          "<span class='filter-divider'>:</span>"
-        )
-        $(this.container).find(".point-filters__filter").first().after(
+        $(this.container).find("div").first().after(
           "<span class='filter-divider'>:</span>"
         )
     }

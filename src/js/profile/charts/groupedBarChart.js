@@ -89,10 +89,6 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 value: [primaryGroup],
             },
             {
-                name: "colorRange",
-                value: colorRange
-            },
-            {
                 name: "barvalue",
                 value: "datum",
             },
@@ -190,7 +186,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 "name": "color",
                 "type": "ordinal",
                 "domain": {"data": "data_formatted", "field": drilldown},
-                "range": {signal: "colorRange"}
+                "range": colorRange != null && colorRange.length > 0 ? colorRange :  {"scheme": "category20"}
             }
         ],
 

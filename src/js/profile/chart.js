@@ -34,7 +34,17 @@ const MAX_RICH_TABLE_ROWS = 7;
 
 
 export class Chart extends Component {
-    constructor(parent, config, data, groups, _subCategoryNode, title, chartAttribution, addLockButton = true, restrictValues = {}, defaultFilters = []) {
+    constructor(parent,
+                config,
+                data,
+                groups,
+                _subCategoryNode,
+                title,
+                chartAttribution,
+                addLockButton = true,
+                restrictValues = {},
+                defaultFilters = [],
+                chartColorRange) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
 
@@ -66,6 +76,8 @@ export class Chart extends Component {
             removeFilterButton: '.profile-indicator__remove-filter',
             addLockButton: addLockButton
         });
+
+        this.updateConfig(chartColorRange);
 
         this.addChart(restrictValues, defaultFilters, true, false, null);
     }
@@ -125,6 +137,12 @@ export class Chart extends Component {
 
     get filterController() {
         return this._filterController;
+    }
+
+    updateConfig(chartColorRange) {
+        if (this.config.colorRange == null || this.config.colorRange.length <= 0) {
+            this.config.colorRange = chartColorRange;
+        }
     }
 
     addChart = (restrictValues, defaultFilters, setFilters, isGroupedBarChart = false, callback) => {
@@ -524,6 +542,8 @@ export class Chart extends Component {
         if (!this.isGrouped || !isDrilldownSelected) {
             return;
         }
+
+        console.log({'config': this.config, 'view': this.vegaView})
 
         const groupCount = this.vegaView.data('data_grouped').length;
         const yCount = this.vegaView.data('data_formatted').length / groupCount;

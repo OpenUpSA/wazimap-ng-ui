@@ -139,6 +139,10 @@ export class Chart extends Component {
         return this._filterController;
     }
 
+    get isDrilldownSelected(){
+        return this.hasGroupedBarChart && Object.keys(this.selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0;
+    }
+
     updateConfig(chartColorRange) {
         if (this.config.colorRange == null || this.config.colorRange.length <= 0) {
             this.config.colorRange = chartColorRange;
@@ -226,7 +230,7 @@ export class Chart extends Component {
                 this.vegaView = result.view;
                 this.vegaDownloadView = null;
                 this.setChartMenu();
-                this.showChartDataTable();
+                this.showChartDataTable({});
                 this.setDownloadUrl();
                 let $svg = $(this.container).find('svg')
                 $svg.attr('preserveAspectRatio', 'xMinYMin meet')
@@ -269,7 +273,7 @@ export class Chart extends Component {
         }
     }
 
-    showChartDataTable = () => {
+    showChartDataTable = (selectedFilter) => {
         this.createDataTable();
         this.appendDataToTable();
     }
@@ -337,7 +341,7 @@ export class Chart extends Component {
         $(this.table).append(tbody);
 
         let $showExtra = $('.profile-indicator__table_load-more', this.containerParent);
-        if (dataArr.length > MAX_RICH_TABLE_ROWS && $showExtra.length < 1) {
+        if (dataArr.length > MAX_RICH_TABLE_ROWS && $showExtra.length < 1 && !this.isDrilldownSelected) {
             let showExtraRows = false;
             let btnDiv = document.createElement('div');
             $(btnDiv).addClass('profile-indicator__table_show-more profile-indicator__table_showing profile-indicator__table_load-more');
@@ -353,6 +357,20 @@ export class Chart extends Component {
         }
 
         $('.profile-indicator__table_content').css('overflow', 'hidden');
+    }
+
+    appendOrRemoveDataTable() {
+        this.containerParent.find('.drilldown-warning').remove();
+        if (this.isDrilldownSelected) {
+            this.containerParent.find('.profile-indicator__table').remove();
+            let warning = document.createElement('i');
+            warning.classList.add('drilldown-warning');
+            warning.innerText = 'Data table not currently available when comparison is active';
+
+            this.containerParent.append(warning);
+        } else {
+            this.appendDataToTable();
+        }
     }
 
     setChartDomain(chart, config, chartType) {
@@ -521,7 +539,7 @@ export class Chart extends Component {
         this.selectedFilter = selectedFilter;
 
         this.vegaView.run();
-        this.appendDataToTable();
+        this.appendOrRemoveDataTable();
         this.setDownloadUrl();
 
         this.setGroupedBarChartHeight();

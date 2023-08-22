@@ -176,7 +176,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
             {
                 "name": "xscale",
                 "type": "linear",
-                "domain": {"data": "data_formatted", "field": "count"},
+                "domain": {"data": "data_formatted", field: { signal: "datatype[Units]" }},
                 "range": "width",
                 "round": true,
                 "zero": true,
@@ -209,6 +209,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 bandPosition: 0,
                 domainOpacity: 0.5,
                 tickSize: 0,
+                format: { signal: "numberFormat[Units]" },
                 grid: true,
                 gridOpacity: 0.5,
                 labelOpacity: 0.5,
@@ -255,14 +256,14 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                         "enter": {
                             "y": {"scale": "pos", "field": drilldown},
                             height: {scale: "pos", band: 0.9},
-                            "x": {"scale": "xscale", "field": "count"},
+                            x: {scale: "xscale", field: {signal: "datatype[Units]"}},
                             "x2": {"scale": "xscale", "value": 0},
                             "fill": {"scale": "color", "field": drilldown}
                         },
                         "update": {
                             "y": {"scale": "pos", "field": drilldown},
                             height: {scale: "pos", band: 0.9},
-                            "x": {"scale": "xscale", "field": "count"},
+                            x: {scale: "xscale", field: {signal: "datatype[Units]"}},
                             "x2": {"scale": "xscale", "value": 0},
                             tooltip: {
                                 signal: `{'percentage': format(datum.percentage, numberFormat.percentage), 'group': datum[mainGroup] + ' - ' + datum['${drilldown}'], 'count': format(datum.count, numberFormat.value)}`

@@ -78,7 +78,7 @@
     "sass": "^1.52.3"
   },
   "scripts": {
-    "start": "parcel ./src/index.html",
+    "start": "parcel ./src/index.html ./src/tabular-comparison.html",
     "cypress:gui": "cypress run --browser chrome --spec __tests__/gui/*.feature --record --key e45f872b-81b5-4f63-ad26-1dff310fb348",
     "cypress:gui-local": "cypress run --browser chrome --spec __tests__/gui/*.feature",
     "cypress": "cypress run --spec __tests__/e2e/*.feature",

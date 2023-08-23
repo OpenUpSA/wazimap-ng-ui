@@ -15,6 +15,7 @@ import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
 import {MapDownload} from "./map/map_download";
 import {Tutorial} from "./elements/tutorial/tutorial";
+import {TabularLink} from "./elements/tabular_link";
 import {DataMapperMenu} from './elements/data_mapper/menu';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
@@ -90,6 +91,7 @@ class Application extends Component {
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
         const myView = new MyView(this, controller, config.siteWideFiltersEnabled, api, profileId);
         const currentView = new CurrentView(this);
+        const tabularLink = new TabularLink(this, config.tabularLinkEnabled);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);

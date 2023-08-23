@@ -16,7 +16,6 @@ export const createFiltersForGroups = (groups) => {
     let keyName = slugify(name)
     filters.set(keyName, {
       type: "filter",
-      //expr: `!${keyName}Filter || (${keyName}Filter && datum["${name}"] === ${keyName}FilterValue)`,
       expr: `!${keyName}Filter || (${keyName}Filter && indexof(${keyName}FilterValue, datum["${name}"]) >= 0)`
     })
     signals.set(keyName, { name: `${keyName}Filter`, value: false })

@@ -17,48 +17,11 @@ describe('Filter controller', () => {
     })
 
     test('Handles default filter dropdown correctly', () => {
-        params.chartConfiguration.filter = {
-            defaults: [
-                {name: "gender", value: "Female"}
-            ]
-        }
-        let component = new Component();
-        let mc = new MapChip(component, mapchip_colors);
-
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel, false);
-
-        let indicator = params.chartConfiguration.filter.defaults[0].name;
-        let subindicator = params.chartConfiguration.filter.defaults[0].value;
-
-        let indicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("${indicator}")`);
-        let subindicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("${subindicator}")`);
-
-        expect(mc._filterController.model.filterRows[0].indicatorDropdown._selectedItem.text()).toBe(indicator);
-        expect(indicatorDd.length).toBe(1);
-
-        expect(mc._filterController.model.filterRows[0].subIndicatorDropdown._selectedItem.text()).toBe(subindicator);
-        expect(subindicatorDd.length).toBe(1);
+        // replaced by data_mapper.feature
     })
 
     test('Handles non-aggregatable dropdown correctly', () => {
-        params.groups[2].can_aggregate = false;
-        let component = new Component();
-        let mc = new MapChip(component, mapchip_colors);
-
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel, false);
-        let indicator = params.groups[2].name;
-        let subindicator = params.groups[2].subindicators[0];
-
-        let indicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("${indicator}")`);
-        let subindicatorDd = $(`.map-options__filters_content .map-options__filter-row .dropdown-menu__selected-item .truncate:contains("${subindicator}")`);
-
-        expect(mc._filterController.model.filterRows[0].indicatorDropdown._selectedItem.text()).toBe(indicator);
-        expect(indicatorDd.length).toBe(1);
-
-        expect(mc._filterController.model.filterRows[0].subIndicatorDropdown._selectedItem.text()).toBe(subindicator);
-        expect(subindicatorDd.length).toBe(1);
+        // replaced by data_mapper.feature
     })
 
     test(('Does not create duplicate filter rows'), () => {

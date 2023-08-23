@@ -1,6 +1,6 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    confirmChoroplethIsFiltered,
+    confirmChoroplethIsFiltered, confirmDropdownOptions,
     expandChoroplethFilterDialog,
     expandDataMapper,
     gotoHomepage, selectChoroplethDropdownOption,
@@ -48,3 +48,11 @@ Then(/^I confirm that the choropleth is filtered by "([^"]*)"$/, function (filte
     const filters = filter.split(':');
     confirmChoroplethIsFiltered(filters[0], filters[1], 0);
 });
+
+Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {
+    confirmDropdownOptions(arr);
+});
+
+When('I click on the first filter dropdown', () => {
+    cy.get('.mapping-options__filter:visible').eq(0).click();
+})

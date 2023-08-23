@@ -361,7 +361,9 @@ export class Chart extends Component {
 
     appendOrRemoveDataTable() {
         this.containerParent.find('.drilldown-warning').remove();
-        if (this.isDrilldownSelected) {
+        if (this.isDrilldownSelected && this.selectedFilter[this.config.drilldown].length > 1) {
+            // still show the table if only 1 value is selected
+            // this.selectedFilter[this.config.drilldown] === 1
             this.containerParent.find('.profile-indicator__table').remove();
             let warning = document.createElement('i');
             warning.classList.add('drilldown-warning');
@@ -560,8 +562,6 @@ export class Chart extends Component {
         if (!this.isGrouped || !isDrilldownSelected) {
             return;
         }
-
-        console.log({'config': this.config, 'view': this.vegaView})
 
         const groupCount = this.vegaView.data('data_grouped').length;
         const yCount = this.vegaView.data('data_formatted').length / groupCount;

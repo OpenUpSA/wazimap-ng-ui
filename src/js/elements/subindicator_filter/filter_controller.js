@@ -167,7 +167,7 @@ export class FilterController extends Component {
         this.toggleContentVisibility();
 
         $(this.container).find(".profile-indicator__filter-labels").html(
-          "<div class='filter-row-label'>Indicator filters</div>"
+            "<div class='filter-row-label'>Indicator filters</div>"
         );
     }
 
@@ -206,7 +206,7 @@ export class FilterController extends Component {
             return;
         }
 
-        if (this.noFiltersAvailable) {
+        if (this.noFiltersAvailable && this._elements.addLockButton) {
             this.isLoading = false;
             this.addEmptyFilter(true, false, false, false, false, true);
             this.addFilterButton.hide();

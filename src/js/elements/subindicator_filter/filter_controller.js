@@ -439,7 +439,7 @@ export class FilterController extends Component {
             const selectedGroup = row.model.currentIndicatorValue;
             const selectedValue = row.model.currentSubindicatorValue;
             const filters = filteredIndicator.filters;
-            const filterRemains = filters.some(f => f.group === selectedGroup && f.value === selectedValue && f.appliesTo.indexOf(panel) >= 0);
+            const filterRemains = filters.some(f => f.group === selectedGroup && isEqual(f.value, selectedValue) && f.appliesTo.indexOf(panel) >= 0);
 
             if (!filterRemains && selectedGroup !== 'All indicators') {
                 this.removeRowAndAddDefaults(row);
@@ -510,7 +510,7 @@ export class FilterController extends Component {
         let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
 
         defaultGroups.forEach(group => {
-            const alreadyAdded = this.model.filterRows.some(x => x.model.currentIndicatorValue === group.group && x.model.currentSubindicatorValue === group.value);
+            const alreadyAdded = this.model.filterRows.some(x => x.model.currentIndicatorValue === group.group && x.model.currentSubindicatorValue?.[0] === group.value);
 
             if (!alreadyAdded && group.group !== this.model.dataFilterModel.primaryGroup) {
                 self.addDefaultFilter(group);
@@ -522,7 +522,7 @@ export class FilterController extends Component {
         const self = this;
         let previouslySelectedFilters = this.model.dataFilterModel.previouslySelectedFilterGroups;
         previouslySelectedFilters.forEach((group, index) => {
-            const alreadyAdded = this.model.filterRows.some(x => x.model.currentIndicatorValue === group.group && x.model.currentSubindicatorValue === group.value);
+            const alreadyAdded = this.model.filterRows.some(x => x.model.currentIndicatorValue === group.group && isEqual(x.model.currentSubindicatorValue, group.value));
             if (!alreadyAdded && group.group != this.model.dataFilterModel.primaryGroup) {
                 self.addPreviouslySelectedFilters(group, index === 0, true);
             }
@@ -559,8 +559,8 @@ export class FilterController extends Component {
                     // that way we will not update if it is indicator-specific
                     let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
                     let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
-                    let isNonAggregatable = nonAggregatableGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.name && existingFilterRow.model.currentSubindicatorValue === x.values[0]);
-                    let isDefault = defaultGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.group && existingFilterRow.model.currentSubindicatorValue === x.value);
+                    let isNonAggregatable = nonAggregatableGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.name && existingFilterRow.model.currentSubindicatorValue?.[0] === x.values[0]);
+                    let isDefault = defaultGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.group && existingFilterRow.model.currentSubindicatorValue?.[0] === x.value);
 
                     if ((isNonAggregatable || isDefault) && isIndicatorAvailable) {
                         this.addUnavailableFilterRow(existingFilterRow.model.currentIndicatorValue, existingFilterRow.model.currentSubindicatorValue);
@@ -618,7 +618,7 @@ export class FilterController extends Component {
                 // filterRow is available
                 let isRemoved;
                 let isFilteredIndicator = filteredIndicators.some(x => x.filters.some(y => y.group === payload.removedSiteWideFilter.indicatorValue
-                    && y.value === payload.removedSiteWideFilter.subIndicatorValue));
+                    && y.value === payload.removedSiteWideFilter.subIndicatorValue?.[0]));
                 if (isFilteredIndicator) {
                     const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
                     let nonAggregatableGroupsClone = structuredClone(nonAggregatableGroups);
@@ -636,7 +636,7 @@ export class FilterController extends Component {
                 }
 
                 isRemoved = (payload.removedSiteWideFilter.indicatorValue === filterRow.model.currentIndicatorValue
-                    && payload.removedSiteWideFilter.subIndicatorValue === filterRow.model.currentSubindicatorValue);
+                    && isEqual(payload.removedSiteWideFilter.subIndicatorValue, filterRow.model.currentSubindicatorValue));
 
                 if (isRemoved) {
                     this.removeRowAndAddDefaults(filterRow);

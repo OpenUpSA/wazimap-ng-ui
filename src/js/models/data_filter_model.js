@@ -161,9 +161,9 @@ export class DataFilterModel extends Observable {
         const self = this;
         let details = [...self.selectedFilters].map(sf => {
             const group = sf.group.name;
-            const value = self._selectedSubindicators[group];
+            const value = self._selectedSubindicators[group] || [];
             const isDefault = self.defaultFilterGroups
-                    .some(f => f.group === group && self._selectedSubindicators[group].includes(f.value))
+                    .some(f => f.group === group && value.includes(f.value))
                 || self.nonAggregatableGroups.some(x => x.name === group && value.includes(x.values[0]));
 
             return {

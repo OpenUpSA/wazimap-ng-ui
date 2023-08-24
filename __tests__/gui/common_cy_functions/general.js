@@ -464,16 +464,13 @@ export function selectChoroplethDropdownOption(option, dropdownIndex, filterRowI
 }
 
 export function selectChartDropdownOption(option, dropdownIndex, filterRowIndex = 0) {
-    console.log({option, dropdownIndex, filterRowIndex})
-    // cy.get(`.rich-data-content .profile-indicator__filter-row:visible:eq(${filterRowIndex}) .profile-indicator__filter`)
-    //     .eq(dropdownIndex)
-    //     .should('have.class', 'disabled');
-    // cy.get(`.rich-data-content .profile-indicator__filter-row:visible:eq(${filterRowIndex}) .profile-indicator__filter`)
-    //     .eq(dropdownIndex).click();
-
-    // cy.get(".rich-data-content .profile-indicator .profile-indicator__filters-wrapper .profile-indicator__filter-row:visible:eq(0) .profile-indicator__filter").eq(0).click()
-
-    cy.get(".rich-data-content .filter-container:visible:eq(0) .profile-indicator__filter").eq(dropdownIndex).click().get(`ul > li[data-value="${option}"]`).click();
+    cy.get(`.rich-data-content .profile-indicator__filter-row:visible:eq(${filterRowIndex}) .profile-indicator__filter`)
+        .eq(dropdownIndex)
+        .should('not.have.class', 'disabled');
+        cy.get(".rich-data-content .filter-container:visible:eq(0) .profile-indicator__filter").eq(dropdownIndex).then($selectBox => {
+          $selectBox.css('border', '4px solid transparent');
+          cy.wrap($selectBox).click().get(`ul > li[data-value="${option}"]`).click();
+        })
 }
 
 export function confirmChoroplethIsFiltered(group, value, index) {

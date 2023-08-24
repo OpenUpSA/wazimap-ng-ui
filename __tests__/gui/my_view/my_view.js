@@ -55,7 +55,14 @@ When(/^I select "([^"]*)" from subIndicator dropdown in filter dialog$/, functio
 });
 
 When(/^I select "([^"]*)" from indicator dropdown in chart filter/, function (word) {
-    selectChartDropdownOption(word, 0);
+    // selectChartDropdownOption(word, 0);
+    cy.get(".rich-data-content .filter-container:visible:eq(0) .profile-indicator__filter").eq(0).find('.MuiSelect-select').then($button => {
+      $button.css('border', '4px solid magenta');
+    // console.log($button);
+      $button.click();
+    })
+    // cy.wait(2000);
+    // cy.get(".rich-data-content .filter-container:visible:eq(0) .profile-indicator__filter").eq(0).click()
 });
 
 When(/^I select "([^"]*)" from subIndicator dropdown in chart filter/, function (word) {

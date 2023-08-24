@@ -139,7 +139,7 @@ export class Chart extends Component {
         return this._filterController;
     }
 
-    get isDrilldownSelected(){
+    get isDrilldownSelected() {
         return this.hasGroupedBarChart && Object.keys(this.selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0;
     }
 
@@ -564,7 +564,8 @@ export class Chart extends Component {
         }
 
         const groupCount = this.vegaView.data('data_grouped').length;
-        const yCount = this.vegaView.data('data_formatted').length / groupCount;
+        const drilldownValues = [...new Set(this.vegaView.data('data_formatted').map(x => x[this.config.drilldown]))];
+        const yCount = Math.max(this.vegaView.data('data_formatted').length / groupCount, drilldownValues.length);
         const labelOffset = (25 + yCount * 15) * -1;
         const yscale_step = yCount * 30 + 40;
         const height = this.vegaView.data('data_formatted').length * 30 + (40 * groupCount);

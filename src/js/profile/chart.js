@@ -230,7 +230,7 @@ export class Chart extends Component {
                 this.vegaView = result.view;
                 this.vegaDownloadView = null;
                 this.setChartMenu();
-                this.showChartDataTable({});
+                this.showChartDataTable();
                 this.setDownloadUrl();
                 let $svg = $(this.container).find('svg')
                 $svg.attr('preserveAspectRatio', 'xMinYMin meet')
@@ -273,7 +273,7 @@ export class Chart extends Component {
         }
     }
 
-    showChartDataTable = (selectedFilter) => {
+    showChartDataTable = () => {
         this.createDataTable();
         this.appendDataToTable();
     }
@@ -371,7 +371,7 @@ export class Chart extends Component {
 
             this.containerParent.append(warning);
         } else {
-            this.appendDataToTable();
+            this.showChartDataTable();
         }
     }
 

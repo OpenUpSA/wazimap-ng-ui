@@ -3,7 +3,7 @@ import {FormControl, MenuItem, Select, selectClasses} from "@mui/material";
 import {styled} from "@mui/system";
 
 const ViewSelect = (props) => {
-    const [views] = useState(props.viewsArr);
+    const [viewArr] = useState(props.viewsArr);
     const [selectedView] = useState(props.viewData.viewName);
 
 
@@ -52,25 +52,30 @@ const ViewSelect = (props) => {
     };
 
     const getLabel = (view) => {
-        let label = views[view].label;
+        let label = view.label;
         if (label == null) {
-            label = view;
+            label = view.name;
         }
 
         return label;
     }
 
+    const getLabelFromViewName =(viewName)=>{
+        let view = viewArr.filter(x => x.name === viewName)[0];
+        return getLabel(view);
+    }
+
     const getViewUrl = (view) => {
-        let url = views[view].url;
+        let url = view.url;
         if (url == null) {
-            url = `${window.location.origin}?view=${view}`;
+            url = `${window.location.origin}?view=${view.name}`;
         }
 
         return url;
     }
 
     const renderMenuItemContent = (view) => {
-        if (view === selectedView) {
+        if (view.name === selectedView) {
             return <p>{getLabel(view)}</p>
         } else {
             return (
@@ -82,7 +87,7 @@ const ViewSelect = (props) => {
     return (
         <FormControl fullWidth>
             <StyledSelect
-                value={selectedView}
+                value={getLabelFromViewName(selectedView)}
                 onChange={handleChange}
                 size={'small'}
                 variant={'filled'}
@@ -97,9 +102,9 @@ const ViewSelect = (props) => {
                 )}
             >
                 {
-                    Object.keys(views).map((view, index) => (
+                    viewArr.map((view, index) => (
                         <StyledMenuItem
-                            value={view}
+                            value={getLabel(view)}
                             key={index}
                         >
                             {renderMenuItemContent(view)}

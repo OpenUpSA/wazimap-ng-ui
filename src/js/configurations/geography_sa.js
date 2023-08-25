@@ -94,12 +94,18 @@ export class Config {
         return mergedConfig;
     }
 
+    get defaultViewLabel() {
+        let label = this.config['default_view_label'];
+        if (label == null) {
+            label = 'Default';
+        }
+
+        return label;
+    }
+
     get currentViewData() {
         if (this._currentViewData.viewName == null) {
-            this._currentViewData.viewName = this.config['default_view_label'];
-        }
-        if (this._currentViewData.viewName == null) {
-            this._currentViewData.viewName = 'Default';
+            this._currentViewData.viewName = this.defaultViewLabel
         }
 
         return this._currentViewData;

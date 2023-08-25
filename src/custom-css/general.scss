@@ -35,14 +35,21 @@
   right: 0;
 }
 
-.current-view-container {
+.header-containers{
+  width: 250px;
+  justify-content: end;
   display: flex;
+}
+
+.current-view-container {
+  display: inline-flex;
   align-items: center;
 }
 
-.tabular-view-container {
-  display: flex;
+.tabular-button-container {
+  display: inline-flex;
   align-items: center;
+  margin-left: 5px;
 }
 
 @media (max-width: 480px) {

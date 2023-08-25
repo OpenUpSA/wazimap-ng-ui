@@ -77,7 +77,10 @@ const Panel = (props) => {
         if (currentIndicator === null) {
             isFilterAvailable = true;
         } else {
-            isFilterAvailable = currentIndicator.groups.filter(x => x.name === group && value.every(item => x.subindicators.includes(item))).length > 0;
+            isFilterAvailable = currentIndicator.groups.filter(x => {
+                const isValueEqual = typeof(value) === "string" ? x.subindicators.includes(value) : value.every(item => x.subindicators.includes(item));
+                return x.name === group && isValueEqual;
+            }).length > 0;
         }
 
         return isFilterAvailable;

@@ -117,6 +117,12 @@ export class Config {
         return this._currentViewData;
     }
 
+    get chartColorRange() {
+        if (this.config["chart_color_range"] !== undefined)
+            return this.config["chart_color_range"];
+        return [];
+    }
+
     getViewConfig(filterType) {
         if (
             this.views[this._currentViewData.viewName] !== undefined

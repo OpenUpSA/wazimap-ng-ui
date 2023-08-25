@@ -220,7 +220,7 @@ export const configureBarchart = (data, metadata, config) => {
                 from: {data: "data_formatted"},
                 encode: {
                     enter: {
-                        baseline: {value: "top"},
+                        baseline: {value: "bottom"},
                         fill: {value: "grey"},
                         fontSize: {value: 10},
                     },
@@ -236,9 +236,9 @@ export const configureBarchart = (data, metadata, config) => {
                         },
                         y: {
                             scale: "yscale",
-                            band: 1,
+                            band: 0,
                             field: {signal: "mainGroup"},
-                            offset: {value: 2},
+                            offset: {value: -1},
                         },
                     },
                 },

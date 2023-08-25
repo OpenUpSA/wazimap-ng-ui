@@ -18,7 +18,7 @@ let profileWrapper = null;
 
 
 export default class ProfileLoader extends Component {
-    constructor(parent, formattingConfig, _api, _profileId, _config, watermarkEnabled, siteWideFiltersEnabled, restrictValues, defaultFilters) {
+    constructor(parent, formattingConfig, _api, _profileId, _config, watermarkEnabled, siteWideFiltersEnabled, restrictValues, defaultFilters, chartColorRange) {
         super(parent);
         this.api = _api;
         this.profileId = _profileId;
@@ -33,6 +33,7 @@ export default class ProfileLoader extends Component {
         this.defaultFilters = defaultFilters;
         this._categories = [];
         this._hiddenIndicators = [];
+        this.chartColorRange = chartColorRange;
 
         new ResizeObserver(() => {
             this.setWatermarkVisibility();
@@ -129,7 +130,8 @@ export default class ProfileLoader extends Component {
                 this.siteWideFiltersEnabled,
                 this.restrictValues,
                 this.defaultFilters,
-                this.hiddenIndicators
+                this.hiddenIndicators,
+                this.chartColorRange
             );
             if (c.subCategories.length > 0) {
                 let navItem = this.createNavItem(id, category);

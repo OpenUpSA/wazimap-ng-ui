@@ -6,7 +6,8 @@ import {
     expandDataMapper,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded,
+    selectChoroplethDropdownOption,
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profiles from "./profiles.json";
@@ -95,11 +96,8 @@ Then('I check if there is description', () => {
 })
 
 Then('I select a filter', () => {
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:first`).click();
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:first .dropdown__list_item:last`).click();
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:last`).click();
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:last .dropdown__list_item:last`).click();
-
+    selectChoroplethDropdownOption("sex", 0);
+    selectChoroplethDropdownOption("Male", 1)
 })
 
 

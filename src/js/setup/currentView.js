@@ -12,6 +12,18 @@ export function configureCurrentViewEvents(controller, config, currentViewObj) {
             views[config.currentViewData.viewName] = {};
         }
 
-        currentViewObj.checkAndCreateDropdown(views, config.currentViewData);
+        let viewArr = Object.keys(views).filter(x => x !== config.defaultViewLabel).map(key => {
+            return {...views[key], name: key};
+        })
+
+        viewArr.sort((x, y) => x.order == null || x.order > y.order ? 1 : -1);
+
+        // add default
+        viewArr.unshift({
+            url: window.location.origin,
+            name: config.defaultViewLabel
+        })
+
+        currentViewObj.checkAndCreateDropdown(viewArr, config.currentViewData);
     })
 }

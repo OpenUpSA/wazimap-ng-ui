@@ -1,4 +1,4 @@
-import {Component} from "../../../utils";
+import {checkAndCreateHeaderContainers, Component} from "../../../utils";
 import {createRoot} from "react-dom/client";
 import ViewSelect from "./view_select";
 import React from "react";
@@ -17,9 +17,11 @@ export class CurrentView extends Component {
     }
 
     createDropdown(viewsArr, currentViewData) {
+        checkAndCreateHeaderContainers();
+
         let container = document.createElement('div');
         container.classList.add('current-view-container');
-        window.document.getElementsByClassName('nav__content')[0].append(container);
+        window.document.getElementsByClassName('header-containers')[0].append(container);
 
         const root = createRoot(container);
         root.render(

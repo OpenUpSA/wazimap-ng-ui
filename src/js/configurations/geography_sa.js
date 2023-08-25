@@ -49,6 +49,12 @@ export class Config {
         return SidePanels.PANELS.noPanels;
     }
 
+    get tabularLinkEnabled(){
+        if (this.config["tabular_link_enabled"] != undefined)
+            return this.config["tabular_link_enabled"];
+        return false;
+    }
+
     get watermarkEnabled() {
         if (this.config["watermark_enabled"] != undefined)
             return this.config["watermark_enabled"];

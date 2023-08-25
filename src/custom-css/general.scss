@@ -61,9 +61,21 @@
 }
 
 
-.current-view-container {
+.header-containers{
+  width: 250px;
+  justify-content: end;
   display: flex;
+}
+
+.current-view-container {
+  display: inline-flex;
   align-items: center;
+}
+
+.tabular-button-container {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 5px;
 }
 
 

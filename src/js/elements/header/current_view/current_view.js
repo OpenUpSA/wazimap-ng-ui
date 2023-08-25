@@ -9,7 +9,6 @@ export class CurrentView extends Component {
     }
 
     checkAndCreateDropdown(viewsArr, currentViewData) {
-        console.log({currentViewData})
         let dropdownExists = document.getElementsByClassName('current-view-container').length > 0;
 
         if (!dropdownExists) {

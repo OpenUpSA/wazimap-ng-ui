@@ -15,7 +15,7 @@ import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
 import {MapDownload} from "./map/map_download";
 import {Tutorial} from "./elements/tutorial/tutorial";
-import {TabularLink} from "./elements/tabular_link";
+import {TabularLink} from "./elements/header/tabular_link";
 import {DataMapperMenu} from './elements/data_mapper/menu';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
@@ -48,6 +48,7 @@ import {RichDataLinkRendrer} from "./elements/data_mapper/components/renderer";
 import {MyView} from "./elements/my_view/my_view";
 import {CurrentView} from "./elements/header/current_view/current_view";
 import {configureCurrentViewEvents} from "./setup/currentView";
+import {configureTabularLinkEvents} from "./setup/tabularlink";
 
 let defaultFormattingConfig = {
     decimal: ",.1f",
@@ -91,7 +92,7 @@ class Application extends Component {
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
         const myView = new MyView(this, controller, config.siteWideFiltersEnabled, api, profileId);
         const currentView = new CurrentView(this);
-        const tabularLink = new TabularLink(this, config.tabularLinkEnabled);
+        const tabularLink = new TabularLink(this);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);
@@ -112,7 +113,8 @@ class Application extends Component {
         configureStyleConfigEvents(controller, styleConfig);
         configureFacilityEvents(controller, {profileLoader: profileLoader});
         configureRichDataPanelEvents(controller, {richDataLinkRendrer: richDataLinkRendrer});
-        configureCurrentViewEvents(controller, config, currentView)
+        configureCurrentViewEvents(controller, config, currentView);
+        configureTabularLinkEvents(controller, config, tabularLink)
         initialPageLoad(controller)
 
         preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))

@@ -40,6 +40,11 @@
   align-items: center;
 }
 
+.tabular-view-container {
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 480px) {
   .right-panel-toggles {
     top: 370px;

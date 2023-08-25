@@ -563,6 +563,12 @@ export class Chart extends Component {
             return;
         }
 
+        try {
+          let data_grouped =   this.vegaView.data('data_grouped')
+        } catch (error) {
+            return;
+        }
+
         const groupCount = this.vegaView.data('data_grouped').length;
         const drilldownValues = [...new Set(this.vegaView.data('data_formatted').map(x => x[this.config.drilldown]))];
         const yCount = Math.max(this.vegaView.data('data_formatted').length / groupCount, drilldownValues.length);

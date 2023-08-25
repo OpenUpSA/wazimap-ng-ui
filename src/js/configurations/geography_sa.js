@@ -49,6 +49,12 @@ export class Config {
         return SidePanels.PANELS.noPanels;
     }
 
+    get tabularLinkEnabled(){
+        if (this.config["tabular_link_enabled"] != undefined)
+            return this.config["tabular_link_enabled"];
+        return false;
+    }
+
     get watermarkEnabled() {
         if (this.config["watermark_enabled"] != undefined)
             return this.config["watermark_enabled"];
@@ -109,6 +115,12 @@ export class Config {
         }
 
         return this._currentViewData;
+    }
+
+    get chartColorRange() {
+        if (this.config["chart_color_range"] !== undefined)
+            return this.config["chart_color_range"];
+        return [];
     }
 
     getViewConfig(filterType) {

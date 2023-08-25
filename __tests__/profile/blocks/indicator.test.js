@@ -32,15 +32,10 @@ const CHART_DATA = {
                 "R 76801 - R 153600",
                 "R 19201 - R 38400",
                 "R 153601 - R 307200",
-            ]
-        },
-            {
-                name: "gender",
-                subindicators: [
-                    "Female",
-                    "Male"
-                ]
-            }]
+            ],
+            "can_aggregate": true,
+            "can_filter": false
+        }]
     },
     version_data: {
         model: {

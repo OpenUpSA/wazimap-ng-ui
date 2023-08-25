@@ -4,7 +4,8 @@ import {
     expandDataMapper,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded,
+    selectChoroplethDropdownOption
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profiles from "./profiles.json";
@@ -90,11 +91,8 @@ Then('I expand choropleth filter dialog', () => {
 })
 
 Then('I apply filters', () => {
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(0).click()
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter .dropdown__list_item`).contains('sex').click()
-
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).click()
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter .dropdown__list_item`).contains('Male').click()
+    selectChoroplethDropdownOption('sex', 0);
+    selectChoroplethDropdownOption('Male', 1)
 })
 
 Then('I check if filters are still applied', () => {

@@ -48,17 +48,15 @@ export const FilterDropdown = ({
         setSelectedValue(payload.currentValue || []);
       });
 
-      dropdownElement.model.on('DropdownModel.selected', payload => {
-        setSelectedValue(payload.currentValue || []);
-      });
-
       dropdownElement.model.on('DropdownModel.enableMultiselect', payload => {
         setIsMultiselect(payload.isMultiselect);
       });
   }
 
   const handleSelectChange = (event) => {
+    dropdownElement.model.manualTrigger = true;
     dropdownElement.model.currentValue = isMultiselect ? event.target.value : [event.target.value];
+
   };
 
   const getCurrentlySelectedValue = useCallback(

@@ -171,7 +171,6 @@ export class Dropdown extends Component {
 
     prepareEvents() {
         this.prepareModelEvents();
-        this.prepareUIEvents();
     }
 
     prepareModelEvents() {
@@ -188,14 +187,6 @@ export class Dropdown extends Component {
         this.model.on(DropdownModel.EVENTS.available, () => self.setAvailable())
     }
 
-    prepareUIEvents() {
-        const self = this;
-
-        $(this._trigger).on('click', () => {
-            self.model.manualTrigger = true;
-            self.showItems();
-        })
-    }
 
     showItems() {
         $(this._ddWrapper).show()

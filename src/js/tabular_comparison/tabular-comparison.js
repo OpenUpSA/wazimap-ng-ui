@@ -39,10 +39,6 @@ const TabularComparison = (props) => {
             baseUrl: productionUrl,
             config: config
         },
-        'gcro.openup.org.za': {
-            baseUrl: 'https://api.gcro.openup.org.za',
-            config: config
-        },
         'beta.youthexplorer.org.za': {
             baseUrl: productionUrl,
             config: config

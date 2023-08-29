@@ -360,10 +360,14 @@ export class FilterController extends Component {
     }
 
     setAddFilterButton() { // TODO write an unselected filters getter in the data model
-        if (this.model.dataFilterModel.availableFilters.length > 0)
+        let rowToUpdate = this.model.filterRows
+            .filter(x => x.model.currentSubindicatorValue === "All values" && !x.model.isUnavailable)[0];
+        
+        if (this.model.dataFilterModel.availableFilters.length > 0 && rowToUpdate == null) {
             this.addFilterButton.enable();
-        else
+        } else {
             this.addFilterButton.disable();
+        }
     }
 
     addFilter(filterName, isDefault = false, isExtra = true, isPreviouslySelected = false) {

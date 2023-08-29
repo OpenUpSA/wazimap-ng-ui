@@ -139,7 +139,8 @@ Then('I check if the point category legend is hidden', () => {
 })
 
 When('I click on the first filter dropdown', () => {
-    cy.get('.point-filters__filter-menu:visible').first().click();
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(0).find("div").eq(0).click()
 })
 
 Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {
@@ -147,24 +148,18 @@ Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {
 });
 
 When(/^I filter by "([^"]*)"$/, (filter) => {
-    let orderedList = {
-        0: 'Alice',
-        1: 'Hiddingh Campus',
-        2: 'Nongoma',
-        3: 'TestCampus'
-    }
+    let orderedList = 'Alice,Hiddingh Campus,Nongoma,TestCampus';
     const filters = filter.split(':');
-    cy.get('.point-filters__filter-menu:visible').first().click();
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[0]}")`).click({force: true});
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(0).click().get(`ul > li[data-value="${filters[0]}"]`).click();
 
-    cy.get('.point-filters__filter-menu:visible').last().click();
+    // check if the options are ordered alphabetically
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(1).click()
+    confirmDropdownOptions(orderedList)
 
-    //check if the options are ordered alphabetically
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible`).each(($el, index) => {
-        const text = $el.text().trim();
-        expect(text).to.equal(orderedList[index]);
-    })
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[1]}")`).click({force: true});
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(1).click().get(`ul > li[data-value="${filters[1]}"]`).click();
 });
 
 Then('I hide Point Mapper', () => {
@@ -172,11 +167,11 @@ Then('I hide Point Mapper', () => {
 })
 
 Then('I filter by a numerical value', () => {
-    cy.get('.point-filters__filter-menu:visible').first().click();
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("numerical")`).click();
+  cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+    .eq(0).find("div").eq(0).click().get(`ul > li[data-value="numerical"]`).click();
 
-    cy.get('.point-filters__filter-menu:visible').last().click();
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("14")`).click();
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(1).find("div").eq(0).click().get(`ul > li[data-value="14"]`).click();
 })
 
 Then('I check if the filter dialog is collapsed', () => {

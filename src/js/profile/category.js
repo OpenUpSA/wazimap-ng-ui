@@ -29,7 +29,8 @@ export class Category extends Component {
         addLockButton = true,
         restrictValues = {},
         defaultFilters = [],
-        hiddenIndicators = []
+        hiddenIndicators = [],
+        chartColorRange
     ) {
         super(parent);
 
@@ -48,7 +49,7 @@ export class Category extends Component {
 
         this.prepareDomElements();
         this.prepareEvents();
-        this.addCategory(category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators);
+        this.addCategory(category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange);
     }
 
     get filteredIndicators() {
@@ -72,7 +73,7 @@ export class Category extends Component {
             this.uiElements.forEach((ele) => {
                 $(ele).show();
                 const firstSubcategory = this.subCategories.find(
-                  sub => sub.isVisible
+                    sub => sub.isVisible
                 )
                 firstSubcategory.updateDomElements();
             })
@@ -89,9 +90,9 @@ export class Category extends Component {
     }
 
     updateVisibility = () => {
-      this.isVisible = Object.values(this.subCategories).filter(
-        sub => sub.isVisible
-      ).length > 0;
+        this.isVisible = Object.values(this.subCategories).filter(
+            sub => sub.isVisible
+        ).length > 0;
     }
 
     prepareDomElements = () => {
@@ -106,7 +107,7 @@ export class Category extends Component {
         });
     }
 
-    addCategory = (category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators) => {
+    addCategory = (category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange) => {
         const newCategorySection = categoryTemplate.cloneNode(true);
         const sectionHeader = $('.category-header')[0].cloneNode(true);
         const indicatorHeader = $('.sub-category-header')[0].cloneNode(true);
@@ -129,7 +130,7 @@ export class Category extends Component {
             $(newCategorySection).addClass('page-break-before');
         }
 
-        this.loadSubcategories(newCategorySection, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators);
+        this.loadSubcategories(newCategorySection, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange);
 
         this.uiElements.push(newCategorySection);
 
@@ -143,7 +144,7 @@ export class Category extends Component {
         return sectionLink;
     }
 
-    loadSubcategories = (wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators) => {
+    loadSubcategories = (wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange) => {
         let isFirst = true;
 
         for (const subcategoryDetail of sortBy(detail.subcategories, "order")) {
@@ -160,10 +161,11 @@ export class Category extends Component {
                 addLockButton,
                 restrictValues,
                 defaultFilters,
-                hiddenIndicators
+                hiddenIndicators,
+                chartColorRange
             );
             sc.isVisible = sc.indicators.filter(
-              ind => ind.isVisible
+                ind => ind.isVisible
             ).length > 0 || sc.hasKeyMetrics;
             if (sc.indicators.length > 0 || sc.hasKeyMetrics) {
                 this.subCategories.push(sc);

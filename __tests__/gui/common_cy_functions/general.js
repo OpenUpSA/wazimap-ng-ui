@@ -440,7 +440,7 @@ export function confirmNoChoroplethFilterSelected() {
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible`).should('have.length', 1);
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
         .eq(0)
-        .find(' .dropdown-menu__selected-item .truncate')
+        .find('div.MuiSelect-select em')
         .should('have.text', 'Select an attribute');
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('have.class', 'disabled');
 }
@@ -449,7 +449,7 @@ export function confirmNoChartFilterSelected() {
     cy.get('.rich-data-content .profile-indicator__filter-row:visible').should('have.length', 1);
     cy.get('.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter')
         .eq(0)
-        .find(' .dropdown-menu__selected-item .truncate')
+        .find('div.MuiSelect-select em')
         .should('have.text', 'Select an attribute');
     cy.get('.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter').eq(1).should('have.class', 'disabled');
 }
@@ -460,30 +460,27 @@ export function selectChoroplethDropdownOption(option, dropdownIndex, filterRowI
         .should('not.have.class', 'disabled');
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${filterRowIndex}) .mapping-options__filter`)
         .eq(dropdownIndex)
-        .click();
-
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${option}")`, {timeout: 20000}).click({force: true})
+        .click().get(`ul > li[data-value="${option}"]`).click();
 }
 
-export function selectChartDropdownOption(option, dropdownIndex) {
-    cy.get(`.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter`)
+export function selectChartDropdownOption(option, dropdownIndex, filterRowIndex = 0) {
+    cy.get(`.rich-data-content .profile-indicator__filter-row:visible:eq(${filterRowIndex}) .profile-indicator__filter`)
         .eq(dropdownIndex)
         .should('not.have.class', 'disabled');
-    cy.get(`.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter`)
-        .eq(dropdownIndex)
-        .click();
-
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${option}")`, {timeout: 20000}).click({force: true})
+        cy.get(".rich-data-content .filter-container:visible:eq(0) .profile-indicator__filter").eq(dropdownIndex).then($selectBox => {
+          $selectBox.css('border', '4px solid transparent');
+          cy.wrap($selectBox).click().get(`ul > li[data-value="${option}"]`).click();
+        })
 }
 
 export function confirmChoroplethIsFiltered(group, value, index) {
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index})`).should('have.length', 1);
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`)
         .eq(0)
-        .find(' .dropdown-menu__selected-item .truncate')
-        .should('have.text', group);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter:eq(1) .dropdown-menu__selected-item .truncate`, {timeout: 5000})
-        .should('have.text', value);
+        .find('input')
+        .should('have.value', group);
+    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter:eq(1) input`, {timeout: 5000})
+        .should('have.value', value);
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(${index}) .mapping-options__filter`, {timeout: 5000})
         .eq(1)
         .should('not.have.class', 'disabled');
@@ -491,7 +488,7 @@ export function confirmChoroplethIsFiltered(group, value, index) {
 
 export function confirmDropdownOptions(arr) {
     let filters = [];
-    cy.get('.dropdown-menu__content:visible .dropdown__list_item:visible').each(($el) => {
+    cy.get('ul[role="listbox"] .filter-item').each(($el) => {
         const text = $el.text().trim();
         filters.push(text);
     }).then(() => {
@@ -501,7 +498,7 @@ export function confirmDropdownOptions(arr) {
         })
 
         expect(params).to.have.members(filters);
-        cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible`).first().click();
+        cy.get(`ul[role="listbox"] .filter-item:visible`).first().click();
     });
 }
 
@@ -530,12 +527,12 @@ export function confirmChartIsFiltered(group, value, chartTitle) {
         .each(($el) => {
             matches = $el.find('.profile-indicator__filter')
                     .eq(0)
-                    .find('.profile-indicator__filter_menu .dropdown-menu__trigger .dropdown-menu__selected-item .truncate')
-                    .text() === group &&
+                    .find('input')
+                    .val() === group &&
                 $el.find('.profile-indicator__filter')
                     .eq(1)
-                    .find('.profile-indicator__filter_menu .dropdown-menu__trigger .dropdown-menu__selected-item .truncate')
-                    .text() === value
+                    .find('input')
+                    .val() === value
         }).then(() => {
         expect(matches).equal(true);
     })

@@ -192,10 +192,10 @@ body {
 }
 
 .untruncate-table-cell {
-  white-space: break-spaces;
-  max-width: 100px;
-  overflow: visible;
-  vertical-align: baseline !important;
+    white-space: break-spaces;
+    max-width: 100px;
+    overflow: visible;
+    vertical-align: baseline !important;
 }
 
 .geography-empty-state {
@@ -221,23 +221,34 @@ body {
 }
 
 .font-13 {
-  font-size: 13px;
+    font-size: 13px;
 }
 
 .m-auto {
-  margin: auto !important;
+    margin: auto !important;
 }
 
 .lh-0 {
-  line-height: 0px !important;
+    line-height: 0px !important;
 }
 
-.text-end{
-  text-align: end;
+.text-end {
+    text-align: end;
 }
 
 .pr-0 {
-  padding-right: 0px;
+    padding-right: 0px;
+}
+
+.header-profile-logo {
+    height: 44px;
+    border-radius: 4px;
+    margin-top:6px;
+}
+
+.header-profile-logo img.profile-logo {
+    max-height: 40px;
+    margin: auto;
 }
 
 /*scroll*/

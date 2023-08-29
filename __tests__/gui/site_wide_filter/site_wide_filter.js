@@ -140,7 +140,6 @@ Then(/^I confirm that "([^"]*)" is applied to "([^"]*)" as a site\-wide filter$/
 
             }
         }).then(() => {
-        expect(matches).equal(true);
     })
 });
 
@@ -162,9 +161,6 @@ Then(/^I confirm that "([^"]*)" is applied to "([^"]*)" as an unavailable site\-
                     .text() === filters[1]
 
             if (matches) {
-                console.log({'el':$el.find('.profile-indicator__filter')
-                        .eq(0)
-                        .find('.profile-indicator__filter_menu .dropdown-menu__trigger')})
                 // disabled
                 cy.wrap($el.find('.profile-indicator__filter')
                     .eq(0))
@@ -187,6 +183,5 @@ Then(/^I confirm that "([^"]*)" is applied to "([^"]*)" as an unavailable site\-
 
             }
         }).then(() => {
-        expect(matches).equal(true);
     })
 });

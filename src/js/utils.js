@@ -568,3 +568,14 @@ export function getColorRange(values, config, positiveRangeRequested = true) {
         return positiveColorRange;
     }
 }
+
+export function checkAndCreateHeaderContainers() {
+    let container = window.document.querySelector('.nav__content .header-containers');
+    if (container != null) {
+        return
+    }
+
+    container = document.createElement('div');
+    container.classList.add('header-containers');
+    window.document.getElementsByClassName('nav__content')[0].append(container);
+}

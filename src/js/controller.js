@@ -218,7 +218,7 @@ export default class Controller extends Component {
     isAlreadyInFilteredIndicators(filter, indicatorId, filterPanel) {
         let arrClone = structuredClone(this._filteredIndicators);
         const alreadyAdded = arrClone.filter(x => x.indicatorId === indicatorId)[0]?.filters
-            .filter(y => y.group === filter.group && y.value === filter.value && y.appliesTo.indexOf(filterPanel) >= 0)[0] != null;
+            .filter(y => y.group === filter.group && isEqual(y.value, filter.value) && y.appliesTo.indexOf(filterPanel) >= 0)[0] != null;
 
         return alreadyAdded;
     }
@@ -257,13 +257,13 @@ export default class Controller extends Component {
                     })
 
                     let filtersToRemove = existingObj.filters.filter(f => {
-                        const stillExists = selectedFilterDetailsClone.filter(x => x.group === f.group && x.value === f.value).length > 0;
-                        const isSiteWideFilter = f.isSiteWideFilter || this.siteWideFilters.some(x => x.indicatorValue === f.group && x.subIndicatorValue === f.value);
+                        const stillExists = selectedFilterDetailsClone.filter(x => x.group === f.group && isEqual(x.value, f.value)).length > 0;
+                        const isSiteWideFilter = f.isSiteWideFilter || this.siteWideFilters.some(x => x.indicatorValue === f.group && isEqual(x.subIndicatorValue, f.value));
                         return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists && !isSiteWideFilter;
                     })
 
                     filtersToRemove.forEach(x => {
-                        let objToRemove = existingObj.filters.filter(y => y.group === x.group && y.value === x.value && y.appliesTo.indexOf(filterPanel) >= 0)[0];
+                        let objToRemove = existingObj.filters.filter(y => y.group === x.group && isEqual(y.value, x.value) && y.appliesTo.indexOf(filterPanel) >= 0)[0];
                         if (objToRemove.appliesTo.length > 1) {
                             objToRemove.appliesTo.splice(objToRemove.appliesTo.indexOf(filterPanel), 1);
                         } else {
@@ -277,7 +277,7 @@ export default class Controller extends Component {
             });
         }
         if (updateSharedUrl) {
-            this.updateShareUrl();
+          this.updateShareUrl();
         }
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }
@@ -289,7 +289,7 @@ export default class Controller extends Component {
 
         let objToUpdate = this._filteredIndicators.filter(x => x.indicatorId === filteredIndicator.indicatorId)[0];
         let filterArr = objToUpdate.filters.filter(x => !(x.group === selectedFilter.group
-            && x.value === selectedFilter.value
+            && isEqual(x.value, selectedFilter.value)
             && x.appliesTo.indexOf(selectedFilter.appliesTo[0]) >= 0));
         objToUpdate.filters = filterArr;
 
@@ -439,7 +439,7 @@ export default class Controller extends Component {
     }
 
     addSiteWideFilter(indicatorValue, subIndicatorValue) {
-        const alreadyAdded = this._siteWideFilters.some(x => x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue);
+        const alreadyAdded = this._siteWideFilters.some(x => x.indicatorValue === indicatorValue && isEqual(x.subIndicatorValue, subIndicatorValue));
         if (alreadyAdded) {
             return;
         }
@@ -457,7 +457,7 @@ export default class Controller extends Component {
     }
 
     removeSiteWideFilter(indicatorValue, subIndicatorValue) {
-        this._siteWideFilters = this._siteWideFilters.filter(x => !(x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue));
+        this._siteWideFilters = this._siteWideFilters.filter(x => !(x.indicatorValue === indicatorValue && isEqual(x.subIndicatorValue, subIndicatorValue)));
 
         const payload = {
             siteWideFilters: this.siteWideFilters,

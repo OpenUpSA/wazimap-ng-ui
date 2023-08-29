@@ -402,38 +402,15 @@
                 },
                 {
                   "subindicators": [
-                    "Female",
-                    "Male"
-                  ],
-                  "dataset": 1306,
-                  "name": "gender",
-                  "can_aggregate": true,
-                  "can_filter": true
-                },
-                {
-                  "subindicators": [
                     "School/post-school",
                     "NEET",
                     "Employed"
                   ],
                   "dataset": 1306,
                   "name": "neet status",
-                  "can_aggregate": true,
+                  "can_aggregate": false,
                   "can_filter": true
                 },
-                {
-                  "subindicators": [
-                    "Coloured",
-                    "Other",
-                    "Indian or Asian",
-                    "White",
-                    "Black African"
-                  ],
-                  "dataset": 1306,
-                  "name": "race",
-                  "can_aggregate": true,
-                  "can_filter": true
-                }
               ]
             },
             "content_type": "indicator",

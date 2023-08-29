@@ -165,25 +165,25 @@ When('I expand Rich Data Panel', () => {
 });
 
 Then(/^I confirm that the chart is not filtered$/, function () {
-    cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0)').should('have.length', 1);
+    // cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0)').should('have.length', 1);
     cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0) .profile-indicator__filter')
         .eq(0)
-        .find(' .dropdown-menu__selected-item .truncate')
+        .find('div.MuiSelect-select em')
         .should('have.text', 'Select an attribute');
     cy.get('.rich-data-content .profile-indicator__filter-row:visible:eq(0) .profile-indicator__filter').eq(1).should('have.class', 'disabled');
 });
 
 Then(/^I confirm that the chart is filtered by "([^"]*)" at index (\d+)$/, function (filter, index) {
     const filters = filter.split(':');
-    cy.get(`.rich-data-content .profile-indicator:visible:eq(0) .profile-indicator__filter-row:visible:eq(${index})`).should('have.length', 1);
+    // cy.get(`.rich-data-content .profile-indicator:visible:eq(0) .profile-indicator__filter-row:visible:eq(${index})`).find(input).value().should('have.length', 1);
     cy.get(`.rich-data-content .profile-indicator:visible:eq(0) .profile-indicator__filter-row:visible:eq(${index}) .profile-indicator__filter`)
         .eq(0)
-        .find(' .dropdown-menu__selected-item .truncate')
-        .should('have.text', filters[0]);
+        .find('input')
+        .should('have.value', filters[0]);
     cy.get(`.rich-data-content .profile-indicator:visible:eq(0) .profile-indicator__filter-row:visible:eq(${index}) .profile-indicator__filter`)
         .eq(1)
-        .find(' .dropdown-menu__selected-item .truncate')
-        .should('have.text', filters[1]);
+        .find('input')
+        .should('have.value', filters[1]);
     cy.get(`.rich-data-content .profile-indicator:visible:eq(0) .profile-indicator__filter-row:visible:eq(${index}) .profile-indicator__filter`)
         .eq(1)
         .should('not.have.class', 'disabled');

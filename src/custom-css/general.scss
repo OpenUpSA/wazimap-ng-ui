@@ -23,6 +23,27 @@
   top: 80px;
 }
 
+.filter-row-label{
+  color: #707070;
+  font-family: Roboto;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: 0.72px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.remove-filter-row{
+  width: 18px;
+  height: 20px;
+  background: none;
+  border: none;
+  margin-left: 0px;
+  align-self: center;
+}
+
+
 .tutorial-button-container {
   height: 100%;
   position: fixed;
@@ -35,14 +56,79 @@
   right: 0;
 }
 
-.current-view-container {
+.profile-indicator__filters-wrapper {
+  width: 90% !important;
+}
+
+
+.header-containers{
+  width: 250px;
+  justify-content: end;
   display: flex;
+}
+
+.current-view-container {
+  display: inline-flex;
   align-items: center;
+}
+
+.tabular-button-container {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+
+// CSS for new filters
+.filter-container {
+  border-radius: 4px;
+  background: #FFF;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.10);
+  padding: 6px;
+  gap: 8px;
+  align-self: stretch;
+  margin-bottom: 10px;
 }
 
 .mapping-options__add-filter.disabled, .profile-indicator__new-filter.disabled {
   opacity: 0.4;
 }
+
+.filter-container .profile-indicator__filter,
+.filter-container .mapping-options__filter,
+.filter-container .point-filters__filter{
+  margin-right: 0px;
+  max-width: 50%;
+}
+
+.filter-container .remove-filter-row:hover{
+  background-color: #fff;
+}
+
+.filter-container .remove-filter-row{
+  margin-left: 4px;
+  margin-right: 2px;
+}
+
+.filter-container .profile-indicator__filter-buttons {
+  width: auto !important;
+}
+
+.filter-container .filter-divider {
+  margin: auto;
+}
+
+.profile-indicator__new-filter {
+  margin-right: 0px !important;
+}
+
+.filter-container .mapping-options__remove-filter,
+.filter-container .point-filters__remove-filter{
+  position: unset;
+  margin-left: 0px;
+}
+// END of CSS for new filters
+
 
 @media (max-width: 480px) {
   .right-panel-toggles {

@@ -4,7 +4,7 @@ import {getHostname, getAPIUrl, loadDevTools} from "../utils";
 import {API} from "../api";
 
 //components
-import Header from "./header";
+import Header from "./header/header";
 import Body from "./body";
 
 //css
@@ -37,10 +37,6 @@ const TabularComparison = (props) => {
         },
         'geo.vulekamali.gov.za': {
             baseUrl: productionUrl,
-            config: config
-        },
-        'gcro.openup.org.za': {
-            baseUrl: 'https://api.gcro.openup.org.za',
             config: config
         },
         'beta.youthexplorer.org.za': {
@@ -115,7 +111,11 @@ const TabularComparison = (props) => {
 
     return (
         <div>
-            <Header/>
+            <Header
+                api={api}
+                profileId={profileId}
+                profileConfig={profileConfig}
+            />
             <Body
                 api={api}
                 profileId={profileId}

@@ -2,6 +2,7 @@ import {Dropdown, DropdownModel} from "./dropdown";
 import {Component, Observable} from "../utils";
 import {SidePanels} from "../elements/side_panels";
 import {LockFilterButtonWrapper} from "./lock_filter_button/lock_filter_button_wrapper";
+import {isArray, isEqual} from "lodash";
 
 /**
  *
@@ -31,14 +32,15 @@ class FilterRowModel extends Component {
         this._isRequired = isRequired;
         this._isUnavailable = false;
         this._currentIndicatorValue = null;
-        this._currentSubindicatorValue = null;
+        this._currentSubindicatorValue = [];
         this._defaultIndicatorText = defaultIndicatorText;
         this._defaultSubindicatorText = defaultSubindicatorText
         this._dataFilterModel = null;
         this._filterPanel = filterPanel;
         this._isPreviouslySelected = isPreviouslySelected;
-
         this.dataFilterModel = dataFilterModel;
+        this._drillDownGroup = dataFilterModel.drillDownGroup;
+
     }
 
     get dataFilterModel() {
@@ -93,7 +95,7 @@ class FilterRowModel extends Component {
     set isUnavailable(value) {
         this._isUnavailable = value;
         }
-        
+
     get isPreviouslySelected() {
         return this._isPreviouslySelected;
     }
@@ -126,7 +128,7 @@ class FilterRowModel extends Component {
             updateShareUrl = true;
         }
 
-        if (value != null && value !== FilterRowModel.ALL_VALUES) {
+        if (value != null && value !== undefined && value !== FilterRowModel.ALL_VALUES) {
             this.dataFilterModel.addFilter(value, this._filterPanel);
         }
         if (!this.isRequired) {
@@ -142,13 +144,13 @@ class FilterRowModel extends Component {
         /**
          * Returns the currently selected subindicatorValue or defaultSubindicatorText if none is selected
          */
-        if (this._currentSubindicatorValue == null)
+        if (this._currentSubindicatorValue?.[0] === undefined )
             return this._defaultSubindicatorText;
         return this._currentSubindicatorValue;
     }
 
     set currentSubindicatorValue(value) {
-        if (this._currentSubindicatorValue != value) {
+        if (!isEqual(this._currentSubindicatorValue, value)) {
             this._currentSubindicatorValue = value;
             if (value !== undefined) {
                 this.dataFilterModel.setSelectedSubindicator(this.currentIndicatorValue, value);
@@ -164,9 +166,13 @@ class FilterRowModel extends Component {
     set dataFilterModel(dataFilterModel) {
         this._dataFilterModel = dataFilterModel;
         this._currentIndicatorValue = null;
-        this._currentSubindicatorValue = null;
+        this._currentSubindicatorValue = [];
 
         this.triggerEvent(FilterRowModel.EVENTS.updated, this)
+    }
+
+    get drillDownGroup(){
+      return this._drillDownGroup;
     }
 }
 
@@ -198,8 +204,7 @@ export class FilterRow extends Component {
         else {
             this.showRemoveButton();
         }
-
-        this.indicatorDropdown = new Dropdown(this, this._indicatorDd, this.model.indicatorValues, FilterRow.SELECT_ATTRIBUTE, false);
+        this.indicatorDropdown = new Dropdown(this, this._indicatorDd, this.model.indicatorValues, FilterRow.SELECT_ATTRIBUTE, false, false, this.model.drillDownGroup);
         this.subIndicatorDropdown = new Dropdown(this, this._subindicatorDd, this.model.subindicatorValues, FilterRow.SELECT_VALUE, true);
 
         this.prepareEvents();
@@ -218,19 +223,21 @@ export class FilterRow extends Component {
     }
 
     setPrimaryIndexUsingValue(value) {
-        this.indicatorDropdown.model.currentItem = value;
+        this.indicatorDropdown.model.currentItem = isArray(value) ? value : value.split(",");
     }
 
     setSecondaryIndexUsingValue(value) {
-        this.subIndicatorDropdown.model.currentItem = value;
+        this.subIndicatorDropdown.model.currentItem = isArray(value) ? value : value.split(",");
     }
 
     setPrimaryIndex(index) {
-        this.indicatorDropdown.model.currentIndex = index;
+        let value = this.model.indicatorValues[index];
+        this.indicatorDropdown.model.currentValue = isArray(value) ? value : value.split(",");
     }
 
     setSecondaryIndex(index) {
-        this.subIndicatorDropdown.model.currentIndex = index;
+        let value = [this.model.subindicatorValues[index]];
+        this.subIndicatorDropdown.model.currentValue = isArray(value) ? value : value.split(",");
     }
 
     setPrimaryValueUnavailable(value) {
@@ -240,7 +247,7 @@ export class FilterRow extends Component {
     }
 
     setSecondaryValueUnavailable(value) {
-        this.model._currentSubindicatorValue = value;
+        this.model._currentSubindicatorValue = [value];
         this.subIndicatorDropdown.model.isUnavailable = true;
         this.subIndicatorDropdown.setText(value);
     }
@@ -252,9 +259,14 @@ export class FilterRow extends Component {
         $(this.container).attr('data-isextra', this._isExtra);
         $(this.container).attr('data-isdefault', this._isDefault);
         this._removeFilterButton = $(this.container).find(this._elements.removeFilterButton);
+        this._removeFilterButton.addClass("remove-filter-row")
 
         this._indicatorDd = $(this.container).find(this._elements.filterDropdown)[0];
         this._subindicatorDd = $(this.container).find(this._elements.filterDropdown)[1];
+        $(this.container).addClass("filter-container");
+        $(this.container).find("div").first().after(
+          "<span class='filter-divider'>:</span>"
+        )
     }
 
     addLockButton() {
@@ -302,29 +314,33 @@ export class FilterRow extends Component {
     }
 
     onIndicatorSelected(selectedItem) {
-        this.subIndicatorDropdown.setText(FilterRow.SELECT_VALUE);
-        this.subIndicatorDropdown.model.currentIndex = -1;
-        if (selectedItem === FilterRowModel.ALL_VALUES) {
+        this.subIndicatorDropdown.model.currentValue = undefined;
+        if (selectedItem?.[0] === FilterRowModel.ALL_VALUES) {
             this.subIndicatorDropdown.disable();
         } else {
             this.subIndicatorDropdown.enable();
         }
 
-        this.model.currentIndicatorValue = selectedItem;
+        const currentValue = selectedItem?.[0];
+
+        this.model.currentIndicatorValue = currentValue;
+        this.subIndicatorDropdown.model.isMultiselect = (
+          currentValue !== undefined && currentValue !== null &&
+          currentValue === this.model.drillDownGroup
+        )
 
         this.setLockButtonVisibility();
     }
 
     onSubindicatorSelected(selectedItem) {
         this.model.currentSubindicatorValue = selectedItem;
-
         this.setLockButtonVisibility();
     }
 
     setLockButtonVisibility() {
         this.triggerEvent(FilterRow.EVENTS.indicatorOrSubIndicatorSelected, {
             selectedIndicator: this.model.currentIndicatorValue !== FilterRowModel.ALL_INDICATORS,
-            selectedSubIndicator: this.model.currentSubindicatorValue !== FilterRowModel.ALL_VALUES
+            selectedSubIndicator: this.model.currentSubindicatorValue?.[0] !== FilterRowModel.ALL_VALUES
         });
     }
 

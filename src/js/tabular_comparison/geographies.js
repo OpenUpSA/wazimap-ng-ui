@@ -72,8 +72,7 @@ const Geographies = (props) => {
           return 'Search for a place, e.g. municipality name';
         }
       }, [
-        searchedInputText,
-        isFetching
+        searchedInputText
       ]
     )
 

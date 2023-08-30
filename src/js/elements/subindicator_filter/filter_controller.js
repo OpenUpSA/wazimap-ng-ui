@@ -362,8 +362,10 @@ export class FilterController extends Component {
     setAddFilterButton() { // TODO write an unselected filters getter in the data model
         let rowToUpdate = this.model.filterRows
             .filter(x => x.model.currentSubindicatorValue === "All values" && !x.model.isUnavailable)[0];
+
+        const isNullOrHidden = rowToUpdate == null || $(rowToUpdate.container).css('display') === '' || $(rowToUpdate.container).hasClass('hidden');
         
-        if (this.model.dataFilterModel.availableFilters.length > 0 && rowToUpdate == null) {
+        if (this.model.dataFilterModel.availableFilters.length > 0 && isNullOrHidden) {
             this.addFilterButton.enable();
         } else {
             this.addFilterButton.disable();

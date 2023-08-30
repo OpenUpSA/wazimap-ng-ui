@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useMemo} from "react";
 import {Card, Grid} from "@mui/material";
 import {Autocomplete, Box, TextField, Chip} from '@mui/material';
 import {GeographiesArrowSvg} from "./svg-icons";
@@ -8,9 +8,11 @@ import SectionTitle from "./section-title";
 
 const Geographies = (props) => {
     const [options, setOptions] = useState([]);
+    const [searchedInputText, setSearchedInputText] = useState('');
     const arrowSvg = GeographiesArrowSvg;
 
     const filterOptions = (inputValue) => {
+        setSearchedInputText(inputValue);
         props.api.search(props.profileId, inputValue).then((data) => {
             setOptions(data);
         });
@@ -62,6 +64,18 @@ const Geographies = (props) => {
         )
     }
 
+    const getNoOptionMessage = useMemo(
+      () => {
+        if (searchedInputText.length > 2 && options.length === 0){
+          return "No options"
+        } else {
+          return 'Search for a place, e.g. municipality name';
+        }
+      }, [
+        searchedInputText
+      ]
+    )
+
     const autoComplete = <Autocomplete
         disabled={props.api === null}
         disablePortal
@@ -78,6 +92,7 @@ const Geographies = (props) => {
         onChange={(event, newValue) => {
             handleSelection(newValue);
         }}
+        noOptionsText={getNoOptionMessage}
         size={'small'}
         data-testid="geography-autocomplete"
         renderOption={(props, option) => (

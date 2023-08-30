@@ -6,7 +6,7 @@ import {scaleSequential as d3scaleSequential} from 'd3-scale';
 import {max as d3max, min as d3min} from 'd3-array';
 import {defaultValues} from "../defaultValues";
 import {Config as SAConfig} from '../configurations/geography_sa';
-import {fillMissingKeys, getColorRange} from "../utils";
+import {fillMissingKeys, getColorRange, isColorLight} from "../utils";
 import {ResultArrowSvg, ResultArrowSvg2, UnfoldMoreSvg, FoldMoreSvg} from "./svg-icons";
 import {UnfoldButton, CategoryChip, FilterChip} from './components/styledElements';
 import Stack from '@mui/material/Stack';
@@ -257,8 +257,9 @@ const Result = (props) => {
                                     {
                                         props.indicatorObjs.map((obj) => {
                                             if (obj.indicator !== '' && obj.category !== '') {
-                                                const value = row.objs.filter(x => x.obj === obj)[0]?.value;
-                                                const tooltip = row.objs.filter(x => x.obj === obj)[0]?.tooltip;
+                                                const filteredObj = row.objs.filter(x => x.obj === obj)[0]
+                                                const value = filteredObj?.value;
+                                                const tooltip = filteredObj?.tooltip;
                                                 if (value === 'NaN') {
                                                     return (
                                                         <TableCell
@@ -277,7 +278,10 @@ const Result = (props) => {
                                                           component={'td'}
                                                           scope={'row'}
                                                           key={obj.index}
-                                                          sx={{backgroundColor: row.objs.filter(x => x.obj === obj)[0]?.background}}
+                                                          sx={{
+                                                            backgroundColor: filteredObj?.background,
+                                                            color: filteredObj?.background && isColorLight(filteredObj?.background) ? "#333": "#fff",
+                                                          }}
                                                       >{value}
                                                       </TableCell>
                                                     )

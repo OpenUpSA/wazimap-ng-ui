@@ -7,6 +7,8 @@ Feature: Tabular Comparison
     Then I wait until view is ready
 
     And I click on geography autocomplete
+    Then I assert initial click on dropdown
+    Then I search for test123 in geography autocomplete
     Then I assert no options in dropdown
     Then I search for eastern in geography autocomplete
     Then I select EC in autocomplete dropdown
@@ -41,7 +43,7 @@ Feature: Tabular Comparison
     Then I wait until view is ready
 
     And I click on geography autocomplete
-    Then I assert no options in dropdown
+    Then I assert initial click on dropdown
     Then I search for eastern in geography autocomplete
     Then I select EC in autocomplete dropdown
 
@@ -170,7 +172,7 @@ Feature: Tabular Comparison
     Then I wait until view is ready
 
     And I click on geography autocomplete
-    Then I assert no options in dropdown
+    Then I assert initial click on dropdown
     Then I search for eastern in geography autocomplete
     Then I select EC in autocomplete dropdown
 
@@ -192,7 +194,7 @@ Feature: Tabular Comparison
     Then I wait until view is ready
 
     And I click on geography autocomplete
-    Then I assert no options in dropdown
+    Then I assert initial click on dropdown
     Then I search for eastern in geography autocomplete
     Then I select EC in autocomplete dropdown
 

@@ -257,7 +257,7 @@ const Result = (props) => {
                                     {
                                         props.indicatorObjs.map((obj) => {
                                             if (obj.indicator !== '' && obj.category !== '') {
-                                                const filteredObj = row.objs.filter(x => x.obj === obj)[0]
+                                                const filteredObj = row.objs.filter(x => x.obj === obj)[0];
                                                 const value = filteredObj?.value;
                                                 const tooltip = filteredObj?.tooltip;
                                                 if (value === 'NaN') {

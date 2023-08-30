@@ -28,7 +28,10 @@ When(/^I click on (\w+) autocomplete$/, (type) => {
 
 Then('I assert no options in dropdown', () => {
   cy.get('.MuiAutocomplete-popper').contains('No options');
+})
 
+Then('I assert initial click on dropdown', () => {
+  cy.get('.MuiAutocomplete-popper').contains('Search for a place, e.g. municipality name');
 })
 
 Then(/^I search for (\w+) in (\w+) autocomplete$/, (value, type) => {

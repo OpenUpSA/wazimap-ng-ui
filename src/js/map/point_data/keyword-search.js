@@ -1,33 +1,23 @@
 import React from "react";
-import {Autocomplete, Chip, TextField} from "@mui/material";
+import {Chip} from "@mui/material";
+import {StyledAutocomplete, StyledTextField} from "./styled-elements";
 
 const KeywordSearch = (props) => {
-    const top100Films = [
-        {title: 'The Shawshank Redemption', year: 1994},
-        {title: 'The Godfather', year: 1972},
-        {title: 'The Godfather: Part II', year: 1974},
-        {title: 'The Dark Knight', year: 2008},
-        {title: '12 Angry Men', year: 1957}
-    ];
-
     return (
-        <Autocomplete
+        <StyledAutocomplete
             multiple
-            id="tags-filled"
-            options={top100Films.map((option) => option.title)}
-            defaultValue={[top100Films[2].title]}
+            options={[]}
             freeSolo
+            size={'small'}
             renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
-                    <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                    <Chip variant="outlined" label={option} {...getTagProps({index})} />
                 ))
             }
             renderInput={(params) => (
-                <TextField
+                <StyledTextField
                     {...params}
-                    variant="filled"
-                    label="freeSolo"
-                    placeholder="Favorites"
+                    size={'small'}
                 />
             )}
         />

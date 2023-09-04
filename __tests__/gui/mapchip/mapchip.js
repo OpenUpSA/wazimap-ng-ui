@@ -37,9 +37,9 @@ When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
 });
 
 Then('I select an indicator', () => {
-  cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
-  cy.get('.indicator-item').contains('Population group').click();
-  cy.get('.subIndicator-item').contains('Black african').click();
+    cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
+    cy.get('.indicator-item').contains('Population group').click();
+    cy.get('.subIndicator-item').contains('Black african').click();
 })
 
 Then('I check if the choropleth filter dialog is collapsed', () => {
@@ -129,7 +129,7 @@ Then('I check if snackbar is visible', () => {
 })
 
 Then('I wait for snackbar to disappear', () => {
-    cy.wait(10000);
+    cy.wait(5000);
 })
 
 Then('I check if snackbar is not visible', () => {
@@ -178,4 +178,12 @@ Then('I recheck filters applied label is visible', () => {
 
 Then('I check applied filters does not have notification badge', () => {
     cy.get(`${mapBottomItems} .map-options .filters__header_label`).should('not.have.class', 'notification-badges');
+})
+
+Then('I add new filter', () => {
+    cy.get(`${mapBottomItems} .map-options`).contains('Add new filter').click();
+})
+
+Then('I check if the add new filter button is disabled', () => {
+    cy.get(`${mapBottomItems} .map-options`).contains('Add new filter').should('have.class', 'disabled');
 })

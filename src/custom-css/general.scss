@@ -90,6 +90,10 @@
   margin-bottom: 10px;
 }
 
+.mapping-options__add-filter.disabled, .profile-indicator__new-filter.disabled {
+  opacity: 0.4;
+}
+
 .filter-container .profile-indicator__filter,
 .filter-container .mapping-options__filter,
 .filter-container .point-filters__filter{

@@ -290,6 +290,10 @@ export class FilterController extends Component {
                     filterRow
                 });
             })
+
+            if (this.model.dataFilterModel.availableFilters.length === 1) {
+                this.addFilterButton.disable();
+            }
         }
 
         return filterRow;
@@ -356,10 +360,16 @@ export class FilterController extends Component {
     }
 
     setAddFilterButton() { // TODO write an unselected filters getter in the data model
-        if (this.model.dataFilterModel.availableFilters.length > 0)
+        let rowToUpdate = this.model.filterRows
+            .filter(x => x.model.currentSubindicatorValue === "All values" && !x.model.isUnavailable)[0];
+
+        const isNullOrHidden = rowToUpdate == null || $(rowToUpdate.container).css('display') === '' || $(rowToUpdate.container).hasClass('hidden');
+        
+        if (this.model.dataFilterModel.availableFilters.length > 0 && isNullOrHidden) {
             this.addFilterButton.enable();
-        else
+        } else {
             this.addFilterButton.disable();
+        }
     }
 
     addFilter(filterName, isDefault = false, isExtra = true, isPreviouslySelected = false) {

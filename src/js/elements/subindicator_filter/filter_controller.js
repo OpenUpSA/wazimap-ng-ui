@@ -567,7 +567,7 @@ export class FilterController extends Component {
                     // that way we will not update if it is indicator-specific
                     let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
                     let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
-                    let isNonAggregatable = nonAggregatableGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.name && isEqual(existingFilterRow.model.currentSubindicatorValue === x.values));
+                    let isNonAggregatable = nonAggregatableGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.name && isEqual(existingFilterRow.model.currentSubindicatorValue, x.values));
                     let isDefault = defaultGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.group && isEqual(existingFilterRow.model.currentSubindicatorValue, x.value));
 
                     if ((isNonAggregatable || isDefault) && isIndicatorAvailable) {

@@ -39,7 +39,6 @@ class FilterRowModel extends Component {
         this._isPreviouslySelected = isPreviouslySelected;
         this.dataFilterModel = dataFilterModel;
         this._drillDownGroup = dataFilterModel.drillDownGroup;
-
     }
 
     get dataFilterModel() {
@@ -142,7 +141,7 @@ class FilterRowModel extends Component {
         /**
          * Returns the currently selected subindicatorValue or defaultSubindicatorText if none is selected
          */
-        if (this._currentSubindicatorValue?.[0] === undefined )
+        if (this._currentSubindicatorValue?.[0] === undefined)
             return this._defaultSubindicatorText;
         return this._currentSubindicatorValue;
     }
@@ -169,8 +168,8 @@ class FilterRowModel extends Component {
         this.triggerEvent(FilterRowModel.EVENTS.updated, this)
     }
 
-    get drillDownGroup(){
-      return this._drillDownGroup;
+    get drillDownGroup() {
+        return this._drillDownGroup;
     }
 }
 
@@ -184,7 +183,8 @@ export class FilterRow extends Component {
     static EVENTS = {
         removed: 'filterRow.removed',
         indicatorOrSubIndicatorSelected: 'filterRow.indicatorOrSubIndicatorSelected',
-        keywordSelected:'filterRow.keyword.selected'
+        keywordSelected: 'filterRow.keyword.selected',
+        keywordUnselected: 'filterRow.keyword.unselected'
     }
 
     static SELECT_ATTRIBUTE = 'Select an attribute';
@@ -204,9 +204,23 @@ export class FilterRow extends Component {
             this.showRemoveButton();
         }
         this.indicatorDropdown = new Dropdown(this, this._indicatorDd, this.model.indicatorValues, FilterRow.SELECT_ATTRIBUTE, false, false, this.model.drillDownGroup);
-        this.subIndicatorDropdown = new Dropdown(this, this._subindicatorDd, this.model.subindicatorValues, FilterRow.SELECT_VALUE, true);
+        this.initSubIndicatorDropdown();
+
+        this._isFreeTextSearch = false;
 
         this.prepareEvents();
+    }
+
+    initSubIndicatorDropdown(root = null) {
+        const self = this;
+        self.subIndicatorDropdown = new Dropdown(self, self._subindicatorDd, self.model.subindicatorValues, FilterRow.SELECT_VALUE, true, false, '', root);
+
+        self.subIndicatorDropdown.model.on(DropdownModel.EVENTS.selected, dropdownModel => {
+            if (dropdownModel.manualTrigger) {
+                self.model.isPreviouslySelected = false;
+            }
+            self.onSubindicatorSelected(dropdownModel.currentItem);
+        })
     }
 
     get model() {
@@ -221,13 +235,20 @@ export class FilterRow extends Component {
         return this._lockFilterButton;
     }
 
+    get isFreeTextSearch() {
+        return this._isFreeTextSearch;
+    }
+
+    set isFreeTextSearch(value) {
+        this._isFreeTextSearch = value;
+    }
+
     formatValue(value) {
       if (isArray(value)){
         return value;
       }
       return isString(value) ? value.split(",") : [value];
     }
-
 
     setPrimaryIndexUsingValue(value) {
         this.indicatorDropdown.model.currentItem = this.formatValue(value);
@@ -270,7 +291,7 @@ export class FilterRow extends Component {
         this._subindicatorDd = $(this.container).find(this._elements.filterDropdown)[1];
         $(this.container).addClass("filter-container");
         $(this.container).find("div").first().after(
-          "<span class='filter-divider'>:</span>"
+            "<span class='filter-divider'>:</span>"
         )
     }
 
@@ -296,16 +317,13 @@ export class FilterRow extends Component {
             self.onIndicatorSelected(dropdownModel.currentItem);
         })
 
-        this.subIndicatorDropdown.model.on(DropdownModel.EVENTS.selected, dropdownModel => {
-            if (dropdownModel.manualTrigger) {
-                this.model.isPreviouslySelected = false;
-            }
-            self.onSubindicatorSelected(dropdownModel.currentItem);
-        })
-
         this.model.on(FilterRowModel.EVENTS.indicatorSelected, model => {
+            if (model.dataFilterModel.filterType === DataFilterModel.FILTER_TYPE.points && model.currentIndicatorValue !== 'Keyword') {
+                self.parent.triggerEvent(FilterRow.EVENTS.keywordUnselected, this);
+            }
+
             if (model.dataFilterModel.filterType === DataFilterModel.FILTER_TYPE.points && model.currentIndicatorValue === 'Keyword') {
-               self.parent.triggerEvent(FilterRow.EVENTS.keywordSelected, this);
+                self.parent.triggerEvent(FilterRow.EVENTS.keywordSelected, this);
             } else if (model.currentIndicatorValue !== FilterRowModel.ALL_VALUES) {
                 self.updateSubindicatorDropdown();
             }
@@ -332,8 +350,8 @@ export class FilterRow extends Component {
 
         this.model.currentIndicatorValue = currentValue;
         this.subIndicatorDropdown.model.isMultiselect = (
-          currentValue !== undefined && currentValue !== null &&
-          currentValue === this.model.drillDownGroup
+            currentValue !== undefined && currentValue !== null &&
+            currentValue === this.model.drillDownGroup
         )
 
         this.setLockButtonVisibility();

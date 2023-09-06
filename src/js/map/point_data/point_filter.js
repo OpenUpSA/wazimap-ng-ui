@@ -97,12 +97,21 @@ export class PointFilter extends Component {
 
             $(`${this._mapBottomItems} .point-filters`).removeClass('hidden');
 
-
             this.filterController.on('filterRow.keyword.selected', (filterRow) => {
-                let root = createRoot(filterRow.subIndicatorDropdown.container);
-                root.render(
-                    <KeywordSearch/>
-                );
+                if (!filterRow.isFreeTextSearch) {
+                    filterRow.isFreeTextSearch = true;
+                    let root = filterRow.subIndicatorDropdown.root;
+                    root.render(
+                        <KeywordSearch/>
+                    );
+                }
+            })
+
+            this.filterController.on('filterRow.keyword.unselected', (filterRow) => {
+                if (filterRow.isFreeTextSearch){
+                    filterRow.initSubIndicatorDropdown(filterRow.subIndicatorDropdown.root);
+                    filterRow.isFreeTextSearch = false;
+                }
             })
 
             this.hideFilterContent();

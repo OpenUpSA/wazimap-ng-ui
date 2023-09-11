@@ -303,7 +303,7 @@ function expandPanel(panel) {
     recTogglePanel(panelToBeExpanded, nonSelectedPanels, 0).then(function (result) {
         if (result) {
             //nothing was expanded
-            cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click().then(() => {
+            cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click({force: true}).then(() => {
                 cy.get(panel, {timeout: 20000}).should('be.visible');
             });
         } else {

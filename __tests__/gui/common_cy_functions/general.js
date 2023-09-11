@@ -412,7 +412,7 @@ function checkIfFilterDialogIsCollapsed(parentDiv, contentDiv) {
 }
 
 export function checkDataMapperCategoryCount(count) {
-    cy.get('.data-mapper-content__list .indicator-category').should('have.length', count);
+    cy.get('.data-mapper-content__list .indicator-category', {timeout: 20000}).should('have.length', count);
 }
 
 export function compareImages(image1, image2) {

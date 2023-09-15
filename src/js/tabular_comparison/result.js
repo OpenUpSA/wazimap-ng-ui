@@ -137,7 +137,7 @@ const Result = (props) => {
         if (obj.filters.length > 0){
           obj.filters.map(
             filterObj => {
-              if (filterObj.group.length > 0 && filterObj.value.length > 0){
+              if (filterObj.group != null && filterObj.value != null){
                 indicatorData = indicatorData.filter(
                   f => f[filterObj.group] === filterObj.value
                 )

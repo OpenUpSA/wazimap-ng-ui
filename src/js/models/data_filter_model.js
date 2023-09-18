@@ -231,7 +231,7 @@ export class DataFilterModel extends Observable {
     }
 
     isSiteWideFilter(group, value) {
-        return this.siteWideFilters.filter(x => x.indicatorValue === group && x.subIndicatorValue === value)[0] != null;
+        return this.siteWideFilters.filter(x => x.indicatorValue === group && isEqual(x.subIndicatorValue, value))[0] != null;
     }
 
     addFilter(indicatorName, filterPanel) {

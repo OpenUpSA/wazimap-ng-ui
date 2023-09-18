@@ -2,8 +2,6 @@ import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
     allDetailsEndpoint,
     collapseMyViewPanel,
-    confirmNoChartFilterSelected,
-    confirmNoChoroplethFilterSelected,
     expandChoroplethFilterDialog,
     expandDataMapper,
     expandMyViewPanel,
@@ -15,7 +13,6 @@ import {
     setupInterceptions,
     waitUntilGeographyIsLoaded,
     collapseChoroplethFilterDialog,
-    setupInterceptionsForSpecificGeo,
     closeChoroplethFilterDialog, confirmChoroplethIsFiltered,
     visitToGeo
 } from "../common_cy_functions/general";
@@ -39,26 +36,6 @@ Given('I am on the Wazimap Homepage', () => {
     gotoHomepage();
 })
 
-Then('I wait until map is ready for South Africa Test', () => {
-    waitUntilGeographyIsLoaded("South Africa Test");
-})
-
-Given('I am on the Wazimap Homepage with a missing indicator selected in default', () => {
-    setupInterceptions(
-        profiles, all_details, profile, themes, {}, [],
-        profile_indicator_summary, profile_indicator_data, categories
-    );
-    cy.visit('/?profileView=%7B"filters"%3A%5B%7B"indicatorId"%3A5555%2C"filters"%3A%5B%7B"group"%3A"race"%2C"value"%3A"Race%20A"%2C"isDefault"%3Afalse%2C"appliesTo"%3A%5B"data_explorer"%5D%2C"isSiteWideFilter"%3Afalse%7D%5D%7D%5D%2C"hiddenIndicators"%3A%5B%5D%7D');
-})
-
-Given('I am on the Wazimap Homepage with a missing filter selected in default', () => {
-    setupInterceptions(
-        profiles, all_details, profile, themes, {}, [],
-        profile_indicator_summary, profile_indicator_data, categories
-    );
-    cy.visit('/?profileView=%7B"filters"%3A%5B%7B"indicatorId"%3A1125%2C"filters"%3A%5B%7B"group"%3A"race"%2C"value"%3A"Race%20A"%2C"isDefault"%3Afalse%2C"appliesTo"%3A%5B"data_explorer"%5D%2C"isSiteWideFilter"%3Afalse%7D%5D%7D%5D%2C"hiddenIndicators"%3A%5B%5D%7D');
-})
-
 Then('I wait until map is ready', () => {
     waitUntilGeographyIsLoaded('South Africa Test');
 })
@@ -79,10 +56,6 @@ When('I close the filter dialog', () => {
     closeChoroplethFilterDialog();
 })
 
-When('I confirm that there are no filters in filter dialog', () => {
-    confirmNoChoroplethFilterSelected();
-})
-
 When(/^I select "([^"]*)" from indicator dropdown in filter dialog on row "([^"]*)"$/, function (word, index) {
     selectChoroplethDropdownOption(word, 0, index);
 });
@@ -99,36 +72,17 @@ When(/^I select "([^"]*)" from subIndicator dropdown in chart filter/, function 
     selectChartDropdownOption(word, 1);
 });
 
-When("I remove filter from mapchip", function () {
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(1)`).should('have.length', 1);
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible:eq(1) .mapping-options__remove-filter:visible`).click();
-});
-
 Then(/^I confirm that the choropleth is filtered by "([^"]*)" at index (\d+)$/, function (filter, index) {
     const filters = filter.split(':');
     confirmChoroplethIsFiltered(filters[0], filters[1], index);
-});
-
-Then("I visit current url", () => {
-    cy.url().then(($url) => {
-        cy.visit($url);
-    });
 });
 
 When('I expand My View Window', () => {
     expandMyViewPanel();
 })
 
-Then('I check if My View Window is visible', () => {
-    cy.get('div[data-test-id="my-view-panel"]').should('be.visible');
-})
-
 When('I collapse My View Window', () => {
     collapseMyViewPanel();
-})
-
-Then('I check if My View Window is hidden', () => {
-    cy.get('div[data-test-id="my-view-panel"]').should('not.be.visible');
 })
 
 When(/^I click on "([^"]*)" in My View$/, function (word) {
@@ -147,17 +101,6 @@ Then(/^I confirm that there is an indicator filter for "([^"]*)" at index (\d+)$
                     .should('contain.text', filters[3])
             }
         })
-});
-
-Then("I confirm that there are no filters in my view panel", function () {
-    cy.get('div[data-test-id="filtered-indicator-card"]').should("have.length", 0)
-});
-
-Then(/^I remove the indicator filter at index (\d+)$/, function (index) {
-    cy.get('div[data-test-id="filtered-indicator-card"]')
-        .eq(index)
-        .find('button[data-test-id="filtered-indicator-remove-button"]')
-        .click();
 });
 
 When('I expand Rich Data Panel', () => {
@@ -248,102 +191,6 @@ When('I navigate to WC', () => {
     visitToGeo('WC');
 })
 
-When('I navigate to WC using hashcode', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
-        let tempObj = JSON.parse(JSON.stringify(all_details_WC));
-        tempObj.boundary.properties.code = 'WC';
-        tempObj.profile.geography.code = 'WC';
-
-        request.reply({
-            statusCode: 200,
-            body: tempObj,
-            forceNetworkError: false // default
-        })
-    });
-
-    cy.intercept(`/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json`, (request) => {
-        let tempObj = JSON.parse(JSON.stringify(profile_indicator_summary_WC));
-
-        request.reply({
-            statusCode: 200,
-            body: tempObj,
-            forceNetworkError: false // default
-        })
-    });
-
-    cy.intercept('api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (req) => {
-        req.reply({
-            statusCode: 200,
-            body: [],
-            forceNetworkError: false // default
-        })
-    })
-
-    cy.intercept('/api/v1/profile/8/geography/WC/indicator/**/child_data/', (request) => {
-        let tempObj = JSON.parse(JSON.stringify(profile_indicator_data_WC));
-        request.reply({
-            statusCode: 200,
-            body: tempObj,
-            forceNetworkError: false // default
-        });
-    })
-
-    cy.visit('/#geo:WC');
-})
-
-
-When('I navigate to WC using hashcode and filters', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/WC/?version=test&skip-children=true&format=json`, (request) => {
-        let tempObj = JSON.parse(JSON.stringify(all_details_WC));
-        tempObj.boundary.properties.code = 'WC';
-        tempObj.profile.geography.code = 'WC';
-
-        request.reply({
-            statusCode: 200,
-            body: tempObj,
-            forceNetworkError: false // default
-        })
-    });
-
-    cy.intercept(`/api/v1/profile/8/geography/WC/profile_indicator_summary/?version=test&format=json`, (request) => {
-        let tempObj = JSON.parse(JSON.stringify(profile_indicator_summary_WC));
-
-        request.reply({
-            statusCode: 200,
-            body: tempObj,
-            forceNetworkError: false // default
-        })
-    });
-
-    cy.intercept('api/v1/profile/8/geography/WC/themes_count/?version=test&format=json', (req) => {
-        req.reply({
-            statusCode: 200,
-            body: [],
-            forceNetworkError: false // default
-        })
-    })
-
-    cy.intercept('/api/v1/profile/8/geography/WC/indicator/**/child_data/', (request) => {
-        let tempObj = JSON.parse(JSON.stringify(profile_indicator_data_WC));
-        request.reply({
-            statusCode: 200,
-            body: tempObj,
-            forceNetworkError: false // default
-        });
-    })
-
-    cy.visit('/?profileView=%7B"filters"%3A%5B%7B"indicatorId"%3A1125%2C"filters"%3A%5B%7B"group"%3A"race"%2C"value"%3A"White"%2C"isDefault"%3Afalse%2C"appliesTo"%3A%5B"data_explorer"%5D%2C"isSiteWideFilter"%3Afalse%2C"isFilterAvailable"%3Atrue%7D%2C%7B"group"%3A"race"%2C"value"%3A"Coloured"%2C"isDefault"%3Afalse%2C"appliesTo"%3A%5B"rich_data"%5D%2C"isSiteWideFilter"%3Afalse%7D%5D%7D%5D%2C"hiddenIndicators"%3A%5B%5D%7D#geo:WC');
-})
-
-Then('I confirm hash code is changed to querysting', () => {
-  cy.location().should((location) => {
-    expect(location.hash).to.be.empty
-    let params = new URLSearchParams(location.search);
-    expect(params.get("geo")).to.eq('WC')
-  })
-
-})
-
 Then('I wait until map is ready for Western Cape', () => {
     waitUntilGeographyIsLoaded('Western Cape');
 })
@@ -354,10 +201,6 @@ When('I go back to root geography', () => {
 
 Then('I add new filter', () => {
     cy.get(`${mapBottomItems} .map-options .mapping-options__add-filter`).click();
-})
-
-Then('I confirm that the add new filter button exists', () => {
-    cy.get(`${mapBottomItems} .map-options .mapping-options__add-filter`).should('be.visible');
 })
 
 Then(/^I click on "([^"]*)" in hidden indicator tree$/, function (word) {
@@ -386,10 +229,6 @@ Then(/^I click on eye icon on "([^"]*)" indicator$/, function (word) {
     cy.get(`li[data-test-id="${word}"]`).find('.MuiTreeItem-label:first span[data-test-id="eyeIcon"]').click();
 })
 
-Then(/^I click on eye close icon on "([^"]*)" indicator$/, function (word) {
-    cy.get(`li[data-test-id="${word}"]`).find('.MuiTreeItem-label:first span[data-test-id="eyeCloseIcon"]').click();
-})
-
 Then(/^I confirm category "([^"]*)" at position (\d+) is "([^"]*)"$/, function (word, idx, type) {
     cy.get(`.category-header__title:${type}:eq(${idx}) .cc-clear`).should("have.text", word);
 });
@@ -401,41 +240,3 @@ Then(/^I confirm subcategory "([^"]*)" at position (\d+) is "([^"]*)"$/, functio
 Then(/^I confirm indicator "([^"]*)" at position (\d+) is "([^"]*)"$/, function (word, idx, type) {
     cy.get(`.profile-indicator__title:${type}:eq(${idx}) h4`).should("have.text", word);
 });
-
-Then('I wait for 1s for the API data to be processed', () => {
-    cy.wait(1000);
-})
-
-Then('I confirm that the toggle button shows a warning indicator', () => {
-    cy.get(`div[data-test-id="my-view-toggle"] div`).then($els => {
-        // get Window reference from element
-        const win = $els[0].ownerDocument.defaultView
-        // use getComputedStyle to read the pseudo selector
-        const after = win.getComputedStyle($els[0], 'after')
-        // read the value of the `background-color` CSS property
-        const bgColor = after.getPropertyValue('background-color')
-
-        expect(bgColor).to.eq('rgb(255, 91, 57)')
-    })
-})
-
-Then('I confirm that the indicator options shows a warning indicator', () => {
-    cy.get('#indicatorOptions-header div div').then($els => {
-        // get Window reference from element
-        const win = $els[0].ownerDocument.defaultView
-        // use getComputedStyle to read the pseudo selector
-        const after = win.getComputedStyle($els[0], 'after')
-        // read the value of the `background-color` CSS property
-        const bgColor = after.getPropertyValue('background-color')
-
-        expect(bgColor).to.eq('rgb(255, 91, 57)')
-    })
-})
-
-Then('I confirm that there is a help text indicating the indicator has been changed', () => {
-    cy.get('p[data-test-id="filter-not-available-help-text"]').should('have.text', 'This indicator or filter has either been changed or deleted since the view you requested was shared. It is currently unavailable.')
-})
-
-Then('I confirm that there is a help text indicating that there are filters which cannot be applied', () => {
-    cy.get('p[data-test-id="filter-not-available-help-text"]').should('have.text', 'Some filters cannot be applied because the field or value is not available in the relevant data. This might be because the indicator data has been modified since the link was shared, or because the shared link was modified and is not compatible with the data.')
-})

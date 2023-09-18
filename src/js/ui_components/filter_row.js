@@ -2,7 +2,7 @@ import {Dropdown, DropdownModel} from "./dropdown";
 import {Component, Observable} from "../utils";
 import {SidePanels} from "../elements/side_panels";
 import {LockFilterButtonWrapper} from "./lock_filter_button/lock_filter_button_wrapper";
-import {isArray, isEqual} from "lodash";
+import {isArray, isEqual, isString} from "lodash";
 
 /**
  *
@@ -222,22 +222,30 @@ export class FilterRow extends Component {
         return this._lockFilterButton;
     }
 
+    formatValue(value) {
+      if (isArray(value)){
+        return value;
+      }
+      return isString(value) ? value.split(",") : [value];
+    }
+
+
     setPrimaryIndexUsingValue(value) {
-        this.indicatorDropdown.model.currentItem = isArray(value) ? value : value.split(",");
+        this.indicatorDropdown.model.currentItem = this.formatValue(value);
     }
 
     setSecondaryIndexUsingValue(value) {
-        this.subIndicatorDropdown.model.currentItem = isArray(value) ? value : value.split(",");
+        this.subIndicatorDropdown.model.currentItem = this.formatValue(value);
     }
 
     setPrimaryIndex(index) {
         let value = this.model.indicatorValues[index];
-        this.indicatorDropdown.model.currentValue = isArray(value) ? value : value.split(",");
+        this.indicatorDropdown.model.currentValue = this.formatValue(value);
     }
 
     setSecondaryIndex(index) {
         let value = [this.model.subindicatorValues[index]];
-        this.subIndicatorDropdown.model.currentValue = isArray(value) ? value : value.split(",");
+        this.subIndicatorDropdown.model.currentValue = this.formatValue(value);
     }
 
     setPrimaryValueUnavailable(value) {

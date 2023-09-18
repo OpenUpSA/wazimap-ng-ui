@@ -364,7 +364,6 @@ export class FilterController extends Component {
             .filter(x => x.model.currentSubindicatorValue === "All values" && !x.model.isUnavailable)[0];
 
         const isNullOrHidden = rowToUpdate == null || $(rowToUpdate.container).css('display') === '' || $(rowToUpdate.container).hasClass('hidden');
-        
         if (this.model.dataFilterModel.availableFilters.length > 0 && isNullOrHidden) {
             this.addFilterButton.enable();
         } else {

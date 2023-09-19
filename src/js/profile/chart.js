@@ -140,7 +140,7 @@ export class Chart extends Component {
     }
 
     get isDrilldownSelected() {
-        return this.hasGroupedBarChart && Object.keys(this.selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0;
+        return this.hasGroupedBarChart && this.selectedFilter !== null && Object.keys(this.selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0;
     }
 
     updateConfig(chartColorRange) {

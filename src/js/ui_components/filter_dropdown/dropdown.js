@@ -11,7 +11,7 @@ import {
 } from './styledElements';
 import Tooltip from '@mui/material/Tooltip';
 
-import {isArray, isEqual} from "lodash";
+import {isArray, isEqual, isInteger} from "lodash";
 
 
 const DrillDownSvg = () => (
@@ -56,12 +56,13 @@ export const FilterDropdown = ({
   const handleSelectChange = (event) => {
     dropdownElement.model.manualTrigger = true;
     dropdownElement.model.currentValue = isMultiselect ? event.target.value : [event.target.value];
-
   };
 
   const getCurrentlySelectedValue = useCallback(
     (selected) => {
-      if (selected === '' || selected?.[0] === undefined) {
+      const isInvalidValue = isInteger(selected) ? selected.toString()?.[0] === undefined : selected?.[0] === undefined;
+
+      if (selected === undefined || isInvalidValue) {
         return <em>{label}</em>;
       }
 

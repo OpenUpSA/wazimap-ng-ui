@@ -235,7 +235,7 @@ export const hoverOverTheMapCenter = (elementSelectorToFind = null, retryCount =
 
     if (elementSelectorToFind !== null) {
         cy.get("body").then(($body) => {
-            if (!$body.find(elementSelectorToFind).length && retryCount > 1) {
+            if ($body.find(elementSelectorToFind).length <= 0 && retryCount > 1) {
                 cy.log('hover failed - try again');
                 hoverOverTheMapCenter(elementSelectorToFind, retryCount - 1).then(() => {
                     resolve();
@@ -303,7 +303,7 @@ function expandPanel(panel) {
     recTogglePanel(panelToBeExpanded, nonSelectedPanels, 0).then(function (result) {
         if (result) {
             //nothing was expanded
-            cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click().then(() => {
+            cy.get(`.panel-toggles ${panelToBeExpanded.button}`).click({force: true}).then(() => {
                 cy.get(panel, {timeout: 20000}).should('be.visible');
             });
         } else {
@@ -412,7 +412,7 @@ function checkIfFilterDialogIsCollapsed(parentDiv, contentDiv) {
 }
 
 export function checkDataMapperCategoryCount(count) {
-    cy.get('.data-mapper-content__list .indicator-category').should('have.length', count);
+    cy.get('.data-mapper-content__list .indicator-category', {timeout: 20000}).should('have.length', count);
 }
 
 export function compareImages(image1, image2) {

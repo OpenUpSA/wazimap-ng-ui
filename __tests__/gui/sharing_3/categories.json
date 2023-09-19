@@ -1,0 +1,222 @@
+[
+  {
+    "id": 118,
+    "subcategories": [
+      {
+        "id": 295,
+        "name": "Language",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1125,
+            "label": "Language most spoken at home",
+            "groups": [
+              {
+                "subindicators": [
+                  "15-19",
+                  "20-24",
+                  "25-29",
+                  "30-35",
+                  "15-24 (Intl)",
+                  "15-35 (ZA)"
+                ],
+                "name": "age"
+              },
+              {
+                "subindicators": [
+                  "Male",
+                  "Female"
+                ],
+                "name": "gender"
+              },
+              {
+                "subindicators": [
+                  "Afrikaans",
+                  "English",
+                  "isiNdebele",
+                  "isiXhosa",
+                  "isiZulu",
+                  "Sepedi",
+                  "Sesotho",
+                  "Setswana",
+                  "Sign language",
+                  "Siswati",
+                  "Tshivenda",
+                  "Xitsonga",
+                  "Other"
+                ],
+                "name": "language"
+              },
+              {
+                "subindicators": [
+                  "Black African",
+                  "Coloured",
+                  "White",
+                  "Other",
+                  "Indian or Asian"
+                ],
+                "name": "race"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 293,
+        "name": "Migration",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1123,
+            "label": "Region of birth",
+            "groups": [
+              {
+                "subindicators": [
+                  "15-19",
+                  "20-24",
+                  "25-29",
+                  "30-35",
+                  "15-24 (Intl)",
+                  "15-35 (ZA)"
+                ],
+                "name": "age"
+              },
+              {
+                "subindicators": [
+                  "Male",
+                  "Female"
+                ],
+                "name": "gender"
+              },
+              {
+                "subindicators": [
+                  "Afrikaans",
+                  "English",
+                  "isiNdebele",
+                  "isiXhosa",
+                  "isiZulu",
+                  "Sepedi",
+                  "Sesotho",
+                  "Setswana",
+                  "Sign language",
+                  "Siswati",
+                  "Tshivenda",
+                  "Xitsonga",
+                  "Other"
+                ],
+                "name": "language"
+              },
+              {
+                "subindicators": [
+                  "Black African",
+                  "Coloured",
+                  "White",
+                  "Other",
+                  "Indian or Asian"
+                ],
+                "name": "race"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 290,
+        "name": "Population",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1120,
+            "label": "Total population by age group"
+          }
+        ]
+      },
+      {
+        "id": 296,
+        "name": "Province of birth",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1126,
+            "label": "Province of birth"
+          }
+        ]
+      },
+      {
+        "id": 294,
+        "name": "South African Citizenship",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1124,
+            "label": "Citizenship",
+            "groups": [
+              {
+                "subindicators": [
+                  "15-24 (Intl)",
+                  "15-35 (ZA)",
+                  "15-19",
+                  "20-24",
+                  "25-29",
+                  "30-35"
+                ],
+                "name": "age group"
+              },
+              {
+                "subindicators": [
+                  "Yes",
+                  "No",
+                  "Unspecified"
+                ],
+                "name": "citizenship"
+              },
+              {
+                "subindicators": [
+                  "Female",
+                  "Male"
+                ],
+                "name": "gender"
+              },
+              {
+                "subindicators": [
+                  "Black African",
+                  "Coloured",
+                  "Indian or Asian",
+                  "White",
+                  "Other"
+                ],
+                "name": "race"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 292,
+        "name": "Youth population by age group",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1122,
+            "label": "Youth population by age group"
+          }
+        ]
+      },
+      {
+        "id": 291,
+        "name": "Youth status",
+        "description": "",
+        "indicators": [
+          {
+            "id": 1121,
+            "label": "Total population by youth status"
+          }
+        ]
+      }
+    ],
+    "name": "Demographics",
+    "description": "",
+    "order": 91,
+    "icon": "None"
+  }
+]

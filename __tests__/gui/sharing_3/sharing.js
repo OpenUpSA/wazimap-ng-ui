@@ -45,7 +45,7 @@ When('I expand Data Mapper', () => {
 })
 
 When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
-    cy.get('.data-mapper').findByText(word).click();
+    cy.get('.data-mapper').findByText(word).click({force: true});
 })
 
 When('I expand the filter dialog', () => {

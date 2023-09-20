@@ -26,6 +26,7 @@ export class DropdownModel extends Observable {
         this._isUnavailable = isUnavailable;
         this._manualTrigger = false;
         this._isMultiselect = isMultiselect;
+        this._unavailableValue = undefined;
     }
 
     get items() {
@@ -78,10 +79,20 @@ export class DropdownModel extends Observable {
         return this._isUnavailable;
     }
 
+    set unavailableValue(value) {
+        return this._unavailableValue = value;
+    }
+
+    get unavailableValue() {
+        return this._unavailableValue;
+    }
+
     set isUnavailable(value) {
         if (value) {
             this.isDisabled = true;
-            this.triggerEvent(DropdownModel.EVENTS.unavailable);
+            this._isUnavailable = true;
+            this._unavailableValue = value;
+            this.triggerEvent(DropdownModel.EVENTS.unavailable, value)
         } else {
             this.triggerEvent(DropdownModel.EVENTS.available);
         }
@@ -140,8 +151,7 @@ export class Dropdown extends Component {
 
         this.redrawItems(this.model.items);
         this.model.isDisabled = disabled;
-        this.model.isUnavailable = false;
-        this.setText(defaultText);
+        this.model._isUnavailable = false;
 
         this._isMultiselect = this.model.isMultiselect;
         this._drillDownOption = drillDownOption;
@@ -182,9 +192,6 @@ export class Dropdown extends Component {
 
         this.model.on(DropdownModel.EVENTS.disabled, () => self.disable())
         this.model.on(DropdownModel.EVENTS.enabled, () => self.enable())
-
-        this.model.on(DropdownModel.EVENTS.unavailable, () => self.setUnavailable())
-        this.model.on(DropdownModel.EVENTS.available, () => self.setAvailable())
     }
 
 
@@ -206,23 +213,6 @@ export class Dropdown extends Component {
         })
 
         this._listItemElements = [];
-    }
-
-    updateSelectedText() {
-        this.setText(this.model.currentItem);
-    }
-
-    setSelected(value) {
-        this.model.currentValue = value;
-        this.setText(this.model.currentItem);
-    }
-
-    setText(text) {
-        $(this._selectedItem).text(text)
-    }
-
-    getText() {
-        return $(this._selectedItem).text();
     }
 
     enable() {

@@ -250,14 +250,12 @@ export class FilterRow extends Component {
 
     setPrimaryValueUnavailable(value) {
         this.model._currentIndicatorValue = value;
-        this.indicatorDropdown.model.isUnavailable = true;
-        this.indicatorDropdown.setText(value);
+        this.indicatorDropdown.model.isUnavailable = value;
     }
 
     setSecondaryValueUnavailable(value) {
-        this.model._currentSubindicatorValue = [value];
-        this.subIndicatorDropdown.model.isUnavailable = true;
-        this.subIndicatorDropdown.setText(value);
+        this.model._currentSubindicatorValue = isArray(value) ? value : [value];
+        this.subIndicatorDropdown.model.isUnavailable = value;
     }
 
     prepareDomElements() {

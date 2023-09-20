@@ -46,9 +46,9 @@ const LockButton = (props) => {
 
     const StyledButton = styled(Button)(() => ({
         minWidth: 'unset',
-        marginRight: '10px',
-        width: '18px',
-        height: '24px',
+        marginRight: '2px',
+        width: '24px',
+        height: '26px',
         padding: '0'
     }));
 

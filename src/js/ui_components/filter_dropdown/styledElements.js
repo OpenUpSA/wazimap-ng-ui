@@ -61,3 +61,7 @@ export const SelectedItem = styled(CheckIcon)(({ theme }) => ({
   marginLeft: '5px',
   color: '#707070'
 }));
+
+export const UnavailableText = styled('em')(({ theme }) => ({
+  textDecoration: 'line-through'
+}));

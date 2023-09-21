@@ -7,7 +7,8 @@ import {
   FilterItemValueContainer,
   FilterItemIconContainer,
   DrillDownIconContainer,
-  SelectedItem
+  SelectedItem,
+  UnavailableText
 } from './styledElements';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -37,6 +38,9 @@ export const FilterDropdown = ({
   const [isMultiselect, setIsMultiselect] = useState(dropdownElement.model.isMultiselect || false);
   const [options, setOptions] = useState(dropdownElement.model.items);
   const [startedListening, setStartedListening] = useState(false);
+  const [unavailableValue, setUnavailableValue] = useState(
+    dropdownElement.model.isUnavailable ? dropdownElement.model.unavailableValue : undefined
+  );
 
   if (!startedListening) {
       setStartedListening(true);
@@ -51,6 +55,9 @@ export const FilterDropdown = ({
       dropdownElement.model.on('DropdownModel.enableMultiselect', payload => {
         setIsMultiselect(payload.isMultiselect);
       });
+      dropdownElement.model.on('DropdownModel.unavailable', payload => {
+        setUnavailableValue(payload);
+      });
   }
 
   const handleSelectChange = (event) => {
@@ -63,7 +70,11 @@ export const FilterDropdown = ({
       const isInvalidValue = isInteger(selected) ? selected.toString()?.[0] === undefined : selected?.[0] === undefined;
 
       if (selected === undefined || isInvalidValue) {
-        return <em>{label}</em>;
+        return (
+          unavailableValue ? <UnavailableText>
+            {unavailableValue}
+          </UnavailableText> : <em>{label}</em>
+        );
       }
 
       const isDrillDownField = isArray(selected) ? selected.includes(dropdownElement.drillDownOption) : selected === dropdownElement.drillDownOption;
@@ -80,7 +91,7 @@ export const FilterDropdown = ({
       }
       return isMultiselect ? selected.join(", ") : selected || '';
     }, [
-      isMultiselect, drillDownOption
+      isMultiselect, drillDownOption, unavailableValue
     ]
   )
 

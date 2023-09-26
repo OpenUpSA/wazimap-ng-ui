@@ -228,6 +228,7 @@ export class Chart extends Component {
         embed(this.container, vegaSpec, {renderer: 'svg', actions: false, tooltip: handler.bind(this)})
             .then(async (result) => {
                 this.vegaView = result.view;
+
                 this.vegaDownloadView = null;
                 this.setChartMenu();
                 this.showChartDataTable();
@@ -564,7 +565,7 @@ export class Chart extends Component {
         }
 
         try {
-          let data_grouped =   this.vegaView.data('data_grouped')
+            let data_grouped = this.vegaView.data('data_grouped')
         } catch (error) {
             return;
         }

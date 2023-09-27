@@ -24,6 +24,16 @@ const { isFileExist } = require('cy-verify-downloads');
 module.exports = (on, config) => {
     on('file:preprocessor', cucumber())
     on('before:browser:launch', (browser, launchOptionsOrArgs) => {
+        if (browser.name === 'chrome' && browser.isHeadless) {
+            launchOptionsOrArgs.args = launchOptionsOrArgs.args.map((arg) => {
+                if (arg === '--headless') {
+                    return '--headless=new'
+                }
+
+                return arg
+            })
+        }
+
         debug('browser launch args or options %o', launchOptionsOrArgs)
         const args = Array.isArray(launchOptionsOrArgs) ? launchOptionsOrArgs : launchOptionsOrArgs.args
 

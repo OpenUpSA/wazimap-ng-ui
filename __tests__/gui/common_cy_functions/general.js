@@ -45,9 +45,9 @@ const geoCoordinates = {
         name: "Siyanda"
     },
     "NC085": {
-      lat: -28.371381,
-      lng: 23.079396,
-      name: "Tsantsabane"
+        lat: -28.371381,
+        lng: 23.079396,
+        name: "Tsantsabane"
     }
 }
 const allPanels = [
@@ -68,10 +68,14 @@ const allPanels = [
         closeButton: '.rich-data-panel__close'
     }
 ];
-
+let win;
 
 export function setupInterceptions(profiles, all_details, profile, themes, points, themes_count = [],
                                    profile_indicator_summary = {}, indicator_data = {}, categories_data = []) {
+
+    cy.window().then((winLocal) => {
+        win = winLocal;
+    });
 
     cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/ZA/?version=test&skip-children=true&format=json`, (req) => {
         req.reply({
@@ -163,12 +167,9 @@ export function visitToGeo(geoCode, isParent = false, forceClick = false) {
         cy.get(`.map-location .location-tag .location-tag__name .truncate:contains('${geoName}')`, {timeout: 20000}).click();
     } else {
         const coords = geoCoordinates[geoCode];
-        let L;
         cy.window().then((win) => {
-            L = win.L;
-            let map = win.map;
-            const latlng = L.latLng(coords.lat, coords.lng);
-            var point = map.latLngToContainerPoint(latlng);
+            const latlng = win.L.latLng(coords.lat, coords.lng);
+            var point = win.map.latLngToContainerPoint(latlng);
             cy.get('#main-map', {timeout: 20000}).trigger('click', point.x, point.y);
         });
     }
@@ -467,10 +468,10 @@ export function selectChartDropdownOption(option, dropdownIndex, filterRowIndex 
     cy.get(`.rich-data-content .profile-indicator__filter-row:visible:eq(${filterRowIndex}) .profile-indicator__filter`)
         .eq(dropdownIndex)
         .should('not.have.class', 'disabled');
-        cy.get(".rich-data-content .filter-container:visible:eq(0) .profile-indicator__filter").eq(dropdownIndex).then($selectBox => {
-          $selectBox.css('border', '4px solid transparent');
-          cy.wrap($selectBox).click().get(`ul > li[data-value="${option}"]`).click();
-        })
+    cy.get(".rich-data-content .filter-container:visible:eq(0) .profile-indicator__filter").eq(dropdownIndex).then($selectBox => {
+        $selectBox.css('border', '4px solid transparent');
+        cy.wrap($selectBox).click().get(`ul > li[data-value="${option}"]`).click();
+    })
 }
 
 export function confirmChoroplethIsFiltered(group, value, index) {
@@ -539,5 +540,5 @@ export function confirmChartIsFiltered(group, value, chartTitle) {
 }
 
 export function zoomOutMap() {
-  cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true})
+    cy.get("a.leaflet-control-zoom-out", {timeout: 20000}).click({force: true})
 }

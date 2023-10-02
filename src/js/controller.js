@@ -206,13 +206,13 @@ export default class Controller extends Component {
 
         this.state.subindicator = subindicator;
 
-        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails, payload.updadateSharedUrl, SidePanels.PANELS.dataMapper);
+        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails, payload.updateSharedUrl, SidePanels.PANELS.dataMapper);
 
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
     onChartFiltered(payload) {
-        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, payload.updadateSharedUrl, SidePanels.PANELS.richData);
+        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, payload.updateSharedUrl, SidePanels.PANELS.richData);
     }
 
     isAlreadyInFilteredIndicators(filter, indicatorId, filterPanel) {

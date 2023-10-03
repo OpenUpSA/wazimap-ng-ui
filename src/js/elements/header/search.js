@@ -91,6 +91,7 @@ export class Search extends Component {
                 }
             })
                 .keydown(function (event) {
+                    self.getMapCenter();
                     const key = event.keyCode;
                     lastKey = key;
 
@@ -117,6 +118,10 @@ export class Search extends Component {
                     .appendTo($('.search__dropdown_list'));
             };
         });
+    }
+
+    getMapCenter(){
+        console.log({L})
     }
 
     generateSearchLabel(profile, skipTopLevel = true, skipDuplicates = true) {

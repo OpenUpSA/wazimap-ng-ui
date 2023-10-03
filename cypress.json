@@ -1,6 +1,0 @@
-{
-  "baseUrl": "http://localhost:1234",
-  "testFiles": "**/*.{feature,features}",
-  "integrationFolder":"./__tests__",
-  "projectId": "snuts2"
-}

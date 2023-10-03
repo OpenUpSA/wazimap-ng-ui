@@ -1,7 +1,6 @@
 import {Component, trimValue} from "../../utils";
 import {FilterController} from "./filter_controller";
 import {DataFilterModel} from "../../models/data_filter_model";
-import {createRoot} from "react-dom/client";
 import React from "react";
 import KeywordSearch from "./keyword-search";
 
@@ -9,18 +8,30 @@ export class PointFilter extends Component {
     constructor(parent) {
         super(parent);
 
+        this._parent = parent;
         this._isVisible = false;
         this._activePoints = [];
         this._filterCallback = null;
         this._filterController = null;
+        this._dataFilterModel = null;
 
         this._mapBottomItems = '.map-bottom-items--v2';
         this._upArrow = `${this._mapBottomItems} .point-filters .toggle-icon-v--last`;
         this._downArrow = `${this._mapBottomItems} .point-filters .toggle-icon-v--first`;
         this._filterContent = `${this._mapBottomItems} .point-filters_content`;
+        this._keywordSearchOptions = [];
 
         this.prepareEvents();
         this.prepareDomElements();
+    }
+
+    get keywordSearchOptions(){
+        return this._keywordSearchOptions
+    }
+
+    set keywordSearchOptions(value){
+        this._keywordSearchOptions = value;
+        this._parent.reloadSelectedCategories();
     }
 
     get filterCallback() {
@@ -38,8 +49,8 @@ export class PointFilter extends Component {
     set activePoints(value) {
         this._activePoints = value;
         if (this._filterController !== null) {
-            let dataFilterModel = new DataFilterModel(this.groups, {}, null, '', this.activePoints, [], DataFilterModel.FILTER_TYPE.points);
-            this._filterController.updateDataFilterModel(dataFilterModel);
+            this._dataFilterModel.childData = this.activePoints;
+            this._dataFilterModel.groups = this.groups;
         }
     }
 
@@ -51,7 +62,7 @@ export class PointFilter extends Component {
         const self = this;
         const defaultOption = {
             name: 'Keyword',
-            values: []
+            values: this.keywordSearchOptions
         };
         let groups = [defaultOption];
         let categories = [...new Set(this.activePoints.map(x => x.category))];
@@ -75,25 +86,23 @@ export class PointFilter extends Component {
                             if (dVal !== '' && group.values.filter(v => trimValue(v) === dVal).length <= 0) {
                                 group.values.push(dVal);
                             }
-
                             group.values.sort();
                         }
                     })
                 }
             })
         }
-
         return groups
     }
 
     set isVisible(value) {
         if (!this.isVisible && value) {
             this._filterController = new FilterController(this);
-            let dataFilterModel = new DataFilterModel(this.groups, {}, null, '', this.activePoints, [], DataFilterModel.FILTER_TYPE.points);
+            this._dataFilterModel = new DataFilterModel(this.groups, {}, null, '', this.activePoints, [], DataFilterModel.FILTER_TYPE.points);
             if (this._filterController.filterCallback === null) {
                 this._filterController.filterCallback = this.filterCallback;
             }
-            this._filterController.setDataFilterModel(dataFilterModel);
+            this._filterController.setDataFilterModel(this._dataFilterModel);
 
             $(`${this._mapBottomItems} .point-filters`).removeClass('hidden');
 
@@ -102,7 +111,7 @@ export class PointFilter extends Component {
                     filterRow.isFreeTextSearch = true;
                     let root = filterRow.subIndicatorDropdown.root;
                     root.render(
-                        <KeywordSearch/>
+                        <KeywordSearch pointFilter={this} />
                     );
                 }
             })

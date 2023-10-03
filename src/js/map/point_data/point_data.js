@@ -70,6 +70,7 @@ export class PointData extends Component {
 
         this.activePoints = [];  //the visible points on the map
         this.categoryLayers = {};
+        this.activeCategories = [];
 
         this.clusterController = new ClusterController(this, this.map, config);
         this.enableClustering = this.clusterController.isClusteringEnabled();
@@ -127,7 +128,7 @@ export class PointData extends Component {
      * this function is called when a category is toggled
      * */
 
-    async showCategoryPoint(category) {
+    async showCategoryPoint(category, keywords=[]) {
         const self = this;
         let layer = this.categoryLayers[category.id];
 
@@ -136,7 +137,7 @@ export class PointData extends Component {
 
         this.triggerEvent('point_data.category.loading', category);
 
-        const data = await this.getAddressPoints(category);
+        const data = await this.getAddressPoints(category, keywords);
         const points = {
             category: category,
             data: data
@@ -148,9 +149,10 @@ export class PointData extends Component {
         self.triggerEvent('point_data.category.loaded', {category: category, points: data});
 
         self.pointFilter.isVisible = true;
+        this.activeCategories.push(category);
     }
 
-    removeCategoryPoints = (category) => {
+    removeCategoryPoints = (category, disablePointFilter=true) => {
         if (!this.enableClustering) {
             let layer = this.categoryLayers[category.id];
 
@@ -182,9 +184,13 @@ export class PointData extends Component {
             pointLegend.find(`.${pointLegendItemClsName}[data-id='${category.id}']`).remove();
         }
 
-        if (pointLegend.find(`.${pointLegendItemClsName}`).length <= 0) {
+        if (pointLegend.find(`.${pointLegendItemClsName}`).length <= 0 && disablePointFilter) {
             this.pointFilter.isVisible = false;
         }
+
+        this.activeCategories = this.activeCategories.filter((c) => {
+            return c.id !== category.id
+        })
     }
 
     filterPoints(filterResult, selectedFilter) {
@@ -243,11 +249,15 @@ export class PointData extends Component {
         this.triggerEvent('point_data.all.unselected');
     }
 
+    reloadSelectedCategories(payload) {
+        this.triggerEvent('point_data.all.reload', payload);
+    }
+
     /** end of category functions **/
 
-    async getAddressPoints(category) {
+    async getAddressPoints(category, keywords=[]) {
         const points = [];
-        const data = await this.api.loadPoints(this.profileId, category.id)
+        const data = await this.api.loadPoints(this.profileId, category.id, undefined, keywords)
         checkIterate(data.features, feature => {
             const prop = feature.properties;
             const geometry = feature.geometry;

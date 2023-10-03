@@ -1,5 +1,6 @@
 import {styled} from "@mui/system";
 import {TextField,Autocomplete} from "@mui/material";
+import {Chip} from "@mui/material";
 
 export const StyledTextField = styled(TextField)(({theme}) => ({
 
@@ -15,3 +16,17 @@ export const StyledAutocomplete = styled(Autocomplete)(({theme}) => ({
         paddingBottom: '3px !important'
     }
 }));
+
+export const StyledChip = styled(Chip)(({ theme }) => ({
+    background: "#2F2F2F",
+    color: "#FFF",
+    fontSize: "10px",
+    fontStyle: "normal",
+    fontWeight: "400",
+    '& .MuiChip-deleteIcon': {
+        color: '#FFFFFF',
+        '&:hover': {
+            color: '#FFFFFF',
+          }
+      }
+  }));

@@ -32,14 +32,8 @@ When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
     cy.get('.data-mapper').findByText(word).click();
 });
 
-When('I move the cursor', () => {
-    cy.get('body')
-        .trigger('mousemove', {clientX: 500, clientY: 358})
-        .trigger('mousemove', {clientX: 120, clientY: 130});
-})
-
 Then('I confirm that the tooltip is created with the correct text and the correct values if the choropleth method is sub-indicator', () => {
-    hoverOverTheMapCenter('.leaflet-popup .map-tooltip__value .tooltip__value_label .truncate').then(() => {
+    hoverOverTheMapCenter('.leaflet-popup:visible .map-tooltip__value .tooltip__value_label .truncate').then(() => {
         cy.get('.leaflet-popup .map-tooltip__value .tooltip__value_label .truncate').should('have.text', 'Language most spoken at home (15-19)');
         cy.get('.leaflet-popup .tooltip-row-top').should('have.class', 'sub-indicator-type');
         cy.get('.leaflet-popup .map-tooltip__value .tooltip-row-top .tooltip__value_wrapper .tooltip__value_amount div').should('have.text', '258,782');
@@ -52,7 +46,7 @@ Then('I confirm that the tooltip is created with the correct text and the correc
 })
 
 Then('I confirm that the tooltip is created with the correct text and the correct values if the choropleth method is sibling', () => {
-    hoverOverTheMapCenter('.leaflet-popup .map-tooltip__value .tooltip__value_label .truncate').then(() => {
+    hoverOverTheMapCenter('.leaflet-popup:visible .map-tooltip__value .tooltip__value_label .truncate').then(() => {
         cy.get('.leaflet-popup .map-tooltip__value .tooltip__value_label .truncate').should('have.text', 'Region of birth (Male)');
         cy.get('.leaflet-popup .tooltip-row-top').should('have.class', 'sibling-type');
         cy.get('.leaflet-popup .map-tooltip__value .tooltip-row-top .tooltip__value_wrapper .tooltip__value_amount div').should('have.text', '128,571');
@@ -65,7 +59,7 @@ Then('I confirm that the tooltip is created with the correct text and the correc
 })
 
 Then('I confirm that the tooltip is created with the correct text and the label is hidden if the choropleth method is absolute', () => {
-    hoverOverTheMapCenter('.leaflet-popup .map-tooltip__value .tooltip__value_label .truncate').then(() => {
+    hoverOverTheMapCenter('.leaflet-popup:visible .map-tooltip__value .tooltip__value_label .truncate').then(() => {
         cy.get('.leaflet-popup .map-tooltip__value .tooltip__value_label .truncate').should('have.text', 'Citizenship (Yes)');
         cy.get('.leaflet-popup .tooltip-row-top').should('have.class', 'absolute-type');
         cy.get('.leaflet-popup .map-tooltip__value .tooltip-row-top .tooltip__value_wrapper .tooltip__value_amount div').should('have.text', '948,765');

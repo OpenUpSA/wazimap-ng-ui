@@ -562,14 +562,13 @@ export class FilterController extends Component {
                 // indicator is filtered but
                 // still update it if it is the default or non-aggr value
                 const existingFilterRow = this.model.filterRows.filter(x => x.model.currentIndicatorValue === filter.indicatorValue)[0];
-
                 if (!isPairAlreadyFiltered) {
                     // update only if it is default or non-aggr
                     // that way we will not update if it is indicator-specific
                     let nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
                     let defaultGroups = this.model.dataFilterModel.defaultFilterGroups;
-                    let isNonAggregatable = nonAggregatableGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.name && existingFilterRow.model.currentSubindicatorValue?.[0] === x.values[0]);
-                    let isDefault = defaultGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.group && existingFilterRow.model.currentSubindicatorValue?.[0] === x.value);
+                    let isNonAggregatable = nonAggregatableGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.name && isEqual(existingFilterRow.model.currentSubindicatorValue, x.values));
+                    let isDefault = defaultGroups.some(x => existingFilterRow.model.currentIndicatorValue === x.group && isEqual(existingFilterRow.model.currentSubindicatorValue, x.value));
 
                     if ((isNonAggregatable || isDefault) && isIndicatorAvailable) {
                         this.addUnavailableFilterRow(existingFilterRow.model.currentIndicatorValue, existingFilterRow.model.currentSubindicatorValue);
@@ -627,7 +626,7 @@ export class FilterController extends Component {
                 // filterRow is available
                 let isRemoved;
                 let isFilteredIndicator = filteredIndicators.some(x => x.filters.some(y => y.group === payload.removedSiteWideFilter.indicatorValue
-                    && y.value === payload.removedSiteWideFilter.subIndicatorValue?.[0]));
+                    && isEqual(y.value, payload.removedSiteWideFilter.subIndicatorValue)));
                 if (isFilteredIndicator) {
                     const nonAggregatableGroups = this.model.dataFilterModel.nonAggregatableGroups;
                     let nonAggregatableGroupsClone = structuredClone(nonAggregatableGroups);

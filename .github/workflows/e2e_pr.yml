@@ -21,7 +21,7 @@ jobs:
           timeout: 120000
 
       - name: Cypress run
-        uses: cypress-io/github-action@v2.6.1
+        uses: cypress-io/github-action@v4.1.0
         with:
           browser: chrome
           headless: true

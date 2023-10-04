@@ -112,7 +112,7 @@ When('I check if the cluster is created correctly', () => {
         expect($el.attr('stroke-dasharray')).equal(categories[index].circleVal);
     })
 
-    hoverOverTheMapCenter(".leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item").then(() => {
+    hoverOverTheMapCenter().then(() => {
         cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item', {timeout: 20000}).get(($el) => {
             expect($el.length).equal(2);
         })

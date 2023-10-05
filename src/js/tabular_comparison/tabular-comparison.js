@@ -15,6 +15,7 @@ const TabularComparison = (props) => {
     const [profileId, setProfileId] = useState();
     const [profileConfig, setProfileConfig] = useState({});
     const [render, setRender] = useState(true);
+    const [defaultVersionName, setDefaultVersionName] = useState(null);
 
     const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
     const productionUrl = getAPIUrl('https://production.wazimap-ng.openup.org.za');
@@ -102,6 +103,7 @@ const TabularComparison = (props) => {
 
         const api = new API(pc.baseUrl, hostname);
         api.getProfileConfiguration(hostname).then((data) => {
+            setDefaultVersionName(data.geography_hierarchy?.configuration?.default_version);
             setApi(api);
             setProfileId(data.id);
             setProfileConfig(data.configuration)
@@ -120,6 +122,7 @@ const TabularComparison = (props) => {
                 api={api}
                 profileId={profileId}
                 profileConfig={profileConfig}
+                defaultVersionName={defaultVersionName}
             />
         </div>
     );

@@ -46,6 +46,82 @@ export class Search extends Component {
         searchResultItem = $(resultItemClassName)[0].cloneNode(true);
         $(parentClassName).find('.w-form-fail').remove();
         $(parentClassName).find('.w-form-done').remove();
+
+        this.updateSearchDom();
+    }
+
+    updateSearchDom() {
+        const plate = $('.search__dropdown_plate')
+            .css('max-height', 'unset');
+        const headerRow = $('.search__dropdown_results-label');
+
+        this.updateGeoSearchHeader(headerRow);
+        this.updateGeoSearch();
+        this.appendSearchSeparator(plate);
+        this.appendPointsHeader(plate, headerRow);
+        this.appendPointsTable(plate);
+    }
+
+    updateGeoSearchHeader(headerRow) {
+        const headerColumn = headerRow.find('div')[0].cloneNode(true);
+
+        headerRow.append(headerColumn);
+        $(headerRow.find('div')[0]).text('GEOGRAPHIC BOUNDARIES').css('flex', '50%');
+    }
+
+    updateGeoSearch() {
+        $('.search__dropdown_scroll').css('overflow', 'visible')
+            .removeClass('narrow-scroll');
+        $('.search__dropdown_list').css('max-height', '150px')
+            .css('overflow-y', 'scroll')
+            .addClass('narrow-scroll');
+    }
+
+    appendSearchSeparator(plate) {
+        let separator = document.createElement('hr');
+        $(separator).addClass('separator')
+        plate.append(separator);
+    }
+
+    appendPointsHeader(plate, headerRow) {
+        const pointHeaderRow = headerRow[0].cloneNode(true);
+        $($(pointHeaderRow).find('div')[0]).text('SERVICE POINTS');
+        $($(pointHeaderRow).find('div')[1]).text('30 SERVICE POINTS IN 3 CATEGORIES');
+        plate.append(pointHeaderRow)
+
+        //points table header
+        const pointsTableHeader = document.createElement('div');
+        $(pointsTableHeader).addClass('search-result-point-table-header');
+
+        ['NAME', 'SHOW MATCHING RESULTS', 'MATCHING SNIPPET', 'DISTANCE'].forEach(c => {
+            const pointsHeaderColumn = document.createElement('div');
+            $(pointsHeaderColumn).addClass('search-result-point-table-header-column')
+            $(pointsHeaderColumn).text(c);
+
+            pointsTableHeader.append(pointsHeaderColumn);
+        })
+        plate.append(pointsTableHeader)
+    }
+
+    appendPointsTable(plate) {
+        const pointResultContainer = document.createElement('div');
+        $(pointResultContainer).addClass('search-result-point-container').addClass('narrow-scroll');
+        for (let i = 0; i < 20; i++) {
+            const pointRow = document.createElement('div');
+            $(pointRow).addClass('search-result-point-row');
+
+            for (let j = 0; j < 4; j++) {
+                const pointColumn = document.createElement('div');
+                $(pointColumn).addClass('search-result-point-column');
+                $(pointColumn).text('aaaa bbbb cccc dddd eeee ffff gggg hhhh iiii kkkk llll mmmm nnnn');
+
+                pointRow.append(pointColumn);
+            }
+
+            pointResultContainer.append(pointRow);
+        }
+
+        plate.append(pointResultContainer);
     }
 
     /**
@@ -120,8 +196,8 @@ export class Search extends Component {
         });
     }
 
-    getMapCenter(){
-        console.log({L})
+    getMapCenter() {
+        console.log({L, 'center': map.getCenter()})
     }
 
     generateSearchLabel(profile, skipTopLevel = true, skipDuplicates = true) {

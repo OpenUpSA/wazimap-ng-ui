@@ -65,6 +65,7 @@ const Body = (props) => {
                                 indicatorObjs={indicatorObjs}
                                 indicators={indicators}
                                 profileConfig={props.profileConfig}
+                                defaultVersionName={props.defaultVersionName}
                             />
                         </Grid>
                     </Grid>

@@ -1,5 +1,15 @@
 import React, {useEffect, useState, useCallback} from "react";
-import {Card, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {
+    Card,
+    Grid,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
+} from "@mui/material";
 
 import {format as d3format} from "d3-format";
 import {scaleSequential as d3scaleSequential} from 'd3-scale';
@@ -8,7 +18,7 @@ import {defaultValues} from "../defaultValues";
 import {Config as SAConfig} from '../configurations/geography_sa';
 import {fillMissingKeys, getColorRange, isColorLight} from "../utils";
 import {ResultArrowSvg, ResultArrowSvg2, UnfoldMoreSvg, FoldMoreSvg} from "./svg-icons";
-import {UnfoldButton, CategoryChip, FilterChip} from './components/styledElements';
+import {UnfoldButton, CategoryChip, FilterChip, ResultFooter} from './components/styledElements';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -61,8 +71,8 @@ const Result = (props) => {
         const hasPositive = values.some(v => v > 0);
 
         if (hasNegative && hasPositive) {
-          const maxScaleValue = Math.max(...values.map(v => Math.abs(v)));
-          return [maxScaleValue * -1, maxScaleValue]
+            const maxScaleValue = Math.max(...values.map(v => Math.abs(v)));
+            return [maxScaleValue * -1, maxScaleValue]
         }
         return [d3min(values), d3max(values)]
     }
@@ -109,10 +119,10 @@ const Result = (props) => {
     }
 
     const getTotalCount = (data) => {
-      if (data != null && data.length > 0) {
-          return data.reduce((n, {count}) => n + parseFloat(count), 0);
-      }
-      return null;
+        if (data != null && data.length > 0) {
+            return data.reduce((n, {count}) => n + parseFloat(count), 0);
+        }
+        return null;
     }
 
     const getRowDetailsByChoroplethMethod = (geo, obj, chartConfig) => {
@@ -129,38 +139,48 @@ const Result = (props) => {
 
         let indicatorData = selectedIndicator.indicatorDetail.data || [];
 
-        if (indicatorData.length === 0){
-          return {value, tooltip, formatting};
+        if (indicatorData.length === 0) {
+            return {value, tooltip, formatting};
         }
 
         value = 0;
-        if (obj.filters.length > 0){
-          obj.filters.map(
-            filterObj => {
-              if (filterObj.group != null && filterObj.value != null){
-                indicatorData = indicatorData.filter(
-                  f => f[filterObj.group] === filterObj.value
-                )
-              }
-            }
-          )
+        if (obj.filters.length > 0) {
+            obj.filters.map(
+                filterObj => {
+                    if (filterObj.group != null && filterObj.value != null) {
+                        indicatorData = indicatorData.filter(
+                            f => f[filterObj.group] === filterObj.value
+                        )
+                    }
+                }
+            )
         }
 
         const data = indicatorData?.filter(x => x[primaryGroup] === obj.category);
 
         if (data === null || data.length === 0) {
-          return {value, tooltip, formatting};
+            return {value, tooltip, formatting};
         }
 
         const primaryGroupTotal = getTotalCount(data);
-        if (choroplethMethod === "subindicator"){
-          const totalCount = getTotalCount(indicatorData);
-          tooltip = d3format(chartConfig.types['Value'].formatting)(primaryGroupTotal);
-          value = (primaryGroupTotal/totalCount);
+        if (choroplethMethod === "subindicator") {
+            const totalCount = getTotalCount(indicatorData);
+            tooltip = d3format(chartConfig.types['Value'].formatting)(primaryGroupTotal);
+            value = (primaryGroupTotal / totalCount);
         } else {
-          value = primaryGroupTotal;
+            value = primaryGroupTotal;
         }
         return {value, tooltip, formatting};
+    }
+
+    const renderFooter = () => {
+        if (props.defaultVersionName == null) {
+            return;
+        }
+        return (
+            <ResultFooter>Only indicators for the default boundary version `{props.defaultVersionName}` are available in
+                this view</ResultFooter>
+        )
     }
 
     const renderResult = () => {
@@ -174,22 +194,22 @@ const Result = (props) => {
     }
 
     const getCategoryChipText = useCallback(
-      (category) => {
-        if (category === null){
-          return "No category selected"
-        }
-        return isResultHeaderFolded ? category : `Category: ${category}`;
-      }, [
-        isResultHeaderFolded
-      ]
+        (category) => {
+            if (category === null) {
+                return "No category selected"
+            }
+            return isResultHeaderFolded ? category : `Category: ${category}`;
+        }, [
+            isResultHeaderFolded
+        ]
     )
 
     const getFilterChipText = useCallback(
-      (filter) => {
-        return isResultHeaderFolded ? filter.value : `${filter.group}: ${filter.value}`;
-      }, [
-        isResultHeaderFolded
-      ]
+        (filter) => {
+            return isResultHeaderFolded ? filter.value : `${filter.group}: ${filter.value}`;
+        }, [
+            isResultHeaderFolded
+        ]
     )
 
     const renderTable = () => {
@@ -206,8 +226,8 @@ const Result = (props) => {
                 <TableHead>
                     <TableRow>
                         <TableCell
-                          data-testid={'table-header-0'}
-                          sx={{padding: "9px 10px"}}
+                            data-testid={'table-header-0'}
+                            sx={{padding: "9px 10px"}}
                         ><b>Geography</b></TableCell>
                         {
                             props.indicatorObjs.map((column) => {
@@ -216,25 +236,26 @@ const Result = (props) => {
                                         <TableCell
                                             data-testid={`table-header-${column.index}`}
                                             key={column.index}
-                                            className={isResultHeaderFolded ? 'truncate-table-cell': 'untruncate-table-cell'}
+                                            className={isResultHeaderFolded ? 'truncate-table-cell' : 'untruncate-table-cell'}
                                             title={column.indicator + ' : ' + column.category}
                                             sx={{padding: "9px 10px"}}
                                         >
-                                          <>
-                                          <b>{column.indicator}</b>
-                                            <Stack flexWrap="wrap" direction="row">
-                                              <CategoryChip data-testid={`filter-chip-0`}>
-                                                {getCategoryChipText(column.category)}
-                                              </CategoryChip>
-                                              {column.category !== null && column.filters.map(
-                                                (item, idx) => {
-                                                  if (item.group.length > 0 && item.value.length > 0){
-                                                    return <FilterChip data-testid={`filter-chip-${idx+1}`}>{getFilterChipText(item)}</FilterChip>
-                                                  }
-                                                })
-                                              }
-                                            </Stack>
-                                          </>
+                                            <>
+                                                <b>{column.indicator}</b>
+                                                <Stack flexWrap="wrap" direction="row">
+                                                    <CategoryChip data-testid={`filter-chip-0`}>
+                                                        {getCategoryChipText(column.category)}
+                                                    </CategoryChip>
+                                                    {column.category !== null && column.filters.map(
+                                                        (item, idx) => {
+                                                            if (item.group.length > 0 && item.value.length > 0) {
+                                                                return <FilterChip
+                                                                    data-testid={`filter-chip-${idx + 1}`}>{getFilterChipText(item)}</FilterChip>
+                                                            }
+                                                        })
+                                                    }
+                                                </Stack>
+                                            </>
                                         </TableCell>
                                     )
                                 }
@@ -272,18 +293,18 @@ const Result = (props) => {
                                                     )
                                                 } else {
                                                     return (
-                                                      <TableCell
-                                                          title={tooltip}
-                                                          data-testid={`table-row-${idx}-cell-${obj.index}`}
-                                                          component={'td'}
-                                                          scope={'row'}
-                                                          key={obj.index}
-                                                          sx={{
-                                                            backgroundColor: filteredObj?.background,
-                                                            color: filteredObj?.background && isColorLight(filteredObj?.background) ? "#333": "#fff",
-                                                          }}
-                                                      >{value}
-                                                      </TableCell>
+                                                        <TableCell
+                                                            title={tooltip}
+                                                            data-testid={`table-row-${idx}-cell-${obj.index}`}
+                                                            component={'td'}
+                                                            scope={'row'}
+                                                            key={obj.index}
+                                                            sx={{
+                                                                backgroundColor: filteredObj?.background,
+                                                                color: filteredObj?.background && isColorLight(filteredObj?.background) ? "#333" : "#fff",
+                                                            }}
+                                                        >{value}
+                                                        </TableCell>
                                                     )
                                                 }
                                             }
@@ -323,34 +344,35 @@ const Result = (props) => {
             container
         >
             <Grid container
-                className={'margin-bottom-20'}
+                  className={'margin-bottom-20'}
             >
                 <SectionTitle>Resulting comparison</SectionTitle>
                 {props.indicatorObjs.length > 0 &&
 
-                  <Tooltip
-                    title={isResultHeaderFolded ? "Expand header row" : "Collapse header row"}
-                    arrow
-                  >
-                    <UnfoldButton
-                      aria-label="delete"
-                      size="small"
-                      onClick={() => setIsResultHeaderFolded(!isResultHeaderFolded)}
-                      data-testid="unfold-button"
+                    <Tooltip
+                        title={isResultHeaderFolded ? "Expand header row" : "Collapse header row"}
+                        arrow
                     >
-                      {isResultHeaderFolded ? UnfoldMoreSvg : FoldMoreSvg}
-                    </UnfoldButton>
-                  </Tooltip>
+                        <UnfoldButton
+                            aria-label="delete"
+                            size="small"
+                            onClick={() => setIsResultHeaderFolded(!isResultHeaderFolded)}
+                            data-testid="unfold-button"
+                        >
+                            {isResultHeaderFolded ? UnfoldMoreSvg : FoldMoreSvg}
+                        </UnfoldButton>
+                    </Tooltip>
                 }
 
             </Grid>
             <Grid container>
                 <Card
-                    className={'dark-grey-bg full-width border-radius-10'}
+                    className={'dark-grey-bg full-width border-radius-10 position-relative'}
                     variant={'outlined'}
                     sx={{height: calculateFullHeight()}}
                 >
                     {renderResult()}
+                    {renderFooter()}
                 </Card>
             </Grid>
         </Grid>

@@ -243,12 +243,16 @@ body {
 .header-profile-logo {
     height: 44px;
     border-radius: 4px;
-    margin-top:6px;
+    margin-top: 6px;
 }
 
 .header-profile-logo img.profile-logo {
     max-height: 40px;
     margin: auto;
+}
+
+.position-relative {
+    position: relative;
 }
 
 /*scroll*/

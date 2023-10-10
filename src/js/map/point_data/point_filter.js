@@ -31,7 +31,9 @@ export class PointFilter extends Component {
 
     set keywordSearchOptions(value){
         this._keywordSearchOptions = value;
-        this._parent.reloadSelectedCategories();
+        if (this._isVisible){
+            this._parent.reloadSelectedCategories();
+        }
     }
 
     get filterCallback() {
@@ -49,8 +51,8 @@ export class PointFilter extends Component {
     set activePoints(value) {
         this._activePoints = value;
         if (this._filterController !== null) {
-            this._dataFilterModel.childData = this.activePoints;
-            this._dataFilterModel.groups = this.groups;
+            let dataFilterModel = new DataFilterModel(this.groups, {}, null, '', this.activePoints, [], DataFilterModel.FILTER_TYPE.points);
+            this._filterController.updateDataFilterModel(dataFilterModel, this.keywordSearchOptions);
         }
     }
 
@@ -116,10 +118,15 @@ export class PointFilter extends Component {
                 }
             })
 
+            this.filterController.on('filterRow.keywordRow.removed', (payload) => {
+                this.keywordSearchOptions = [];
+            })
+
             this.filterController.on('filterRow.keyword.unselected', (filterRow) => {
                 if (filterRow.isFreeTextSearch){
                     filterRow.initSubIndicatorDropdown(filterRow.subIndicatorDropdown.root);
                     filterRow.isFreeTextSearch = false;
+                    this.keywordSearchOptions = [];
                 }
             })
 
@@ -128,6 +135,9 @@ export class PointFilter extends Component {
             $(`${this._mapBottomItems} .point-filters`).addClass('hidden');
         }
         this._isVisible = value;
+        if (!value) {
+            this.keywordSearchOptions = [];
+        }
     }
 
     get filterController() {

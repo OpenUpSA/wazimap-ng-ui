@@ -184,7 +184,8 @@ export class FilterRow extends Component {
         removed: 'filterRow.removed',
         indicatorOrSubIndicatorSelected: 'filterRow.indicatorOrSubIndicatorSelected',
         keywordSelected: 'filterRow.keyword.selected',
-        keywordUnselected: 'filterRow.keyword.unselected'
+        keywordUnselected: 'filterRow.keyword.unselected',
+        keywordRowRemoved: 'filterRow.keywordRow.removed'
     }
 
     static SELECT_ATTRIBUTE = 'Select an attribute';
@@ -388,9 +389,16 @@ export class FilterRow extends Component {
     }
 
     removeRow() {
+        const isFreeTextSearch = this.isFreeTextSearch;
         this.model.currentIndicatorValue = null;
         $(this.container).remove();
         this.model.dataFilterModel.updateFilteredData();
-        this.triggerEvent(FilterRow.EVENTS.removed, this);
+        this.triggerEvent(FilterRow.EVENTS.removed, {
+            filterRow: this, isFreeTextSearch: isFreeTextSearch
+        });
+
+        if (isFreeTextSearch){
+            this.parent.triggerEvent(FilterRow.EVENTS.keywordRowRemoved, this);
+        }
     }
 }

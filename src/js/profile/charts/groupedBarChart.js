@@ -1,6 +1,7 @@
-import {xAxis, xScale} from "./properties";
+import {xAxis} from "./properties";
 import {createFiltersForGroups} from "./utils";
-import {configureLinechart} from "./lineChart";
+import {index} from "d3-array";
+import * as vega from "vega";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -20,6 +21,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
             Percentage: {formatting: percentageFormatting, minX: percentageMinX, maxX: percentageMaxX}
         }
     } = config;
+    const updatedData = getDataWithColors(data, metadata, colorRange, drilldown);
 
     const {primary_group: primaryGroup} = metadata;
 
@@ -38,7 +40,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
         data: [
             {
                 name: "table",
-                values: data,
+                values: updatedData,
                 transform: [
                     ...filters
                 ]
@@ -52,7 +54,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                         ops: ["sum"],
                         as: ["count"],
                         fields: ["count"],
-                        groupby: [drilldown, primaryGroup]
+                        groupby: [drilldown, primaryGroup, 'groupedBarColor']
                     },
                     {
                         type: "joinaggregate",
@@ -176,7 +178,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
             {
                 "name": "xscale",
                 "type": "linear",
-                "domain": {"data": "data_formatted", field: { signal: "datatype[Units]" }},
+                "domain": {"data": "data_formatted", field: {signal: "datatype[Units]"}},
                 "range": "width",
                 "round": true,
                 "zero": true,
@@ -186,7 +188,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 "name": "color",
                 "type": "ordinal",
                 "domain": {"data": "data_formatted", "field": drilldown},
-                "range": colorRange != null && colorRange.length > 0 ? colorRange :  {"scheme": "category20"}
+                "range": colorRange != null && colorRange.length > 0 ? colorRange : {"scheme": "category20"}
             }
         ],
 
@@ -209,7 +211,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                 bandPosition: 0,
                 domainOpacity: 0.5,
                 tickSize: 0,
-                format: { signal: "numberFormat[Units]" },
+                format: {signal: "numberFormat[Units]"},
                 grid: true,
                 gridOpacity: 0.5,
                 labelOpacity: 0.5,
@@ -258,7 +260,7 @@ export const configureGroupedBarchart = (data, metadata, config) => {
                             height: {scale: "pos", band: 0.9},
                             x: {scale: "xscale", field: {signal: "datatype[Units]"}},
                             "x2": {"scale": "xscale", "value": 0},
-                            "fill": {"scale": "color", "field": drilldown}
+                            "fill": {"field": "groupedBarColor"}
                         },
                         "update": {
                             "y": {"scale": "pos", "field": drilldown},
@@ -363,4 +365,17 @@ function updateSignalValue(spec, name, value) {
     })[0];
 
     ele.value = value;
+}
+
+function getDataWithColors(data, metadata, colorRange, drilldown) {
+    const range  = colorRange.length > 0 ? colorRange : vega.scheme('category20')
+    let updatedData = structuredClone(data);
+    const selectedGroup = metadata.groups.filter(x => x.name === drilldown)[0];
+
+    updatedData.forEach((ud) => {
+        let colorIndex = selectedGroup['subindicators'].indexOf(ud[drilldown]);
+        ud['groupedBarColor'] = range[colorIndex % range.length];
+    });
+
+    return updatedData;
 }

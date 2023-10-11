@@ -228,6 +228,7 @@ export class Chart extends Component {
         embed(this.container, vegaSpec, {renderer: 'svg', actions: false, tooltip: handler.bind(this)})
             .then(async (result) => {
                 this.vegaView = result.view;
+
                 this.vegaDownloadView = null;
                 this.setChartMenu();
                 this.showChartDataTable();
@@ -261,8 +262,8 @@ export class Chart extends Component {
         }
     }
 
-    configureChartDownload = (data, metadata, config, annotations) => {
-        if (this.isGrouped) {
+    configureChartDownload = (data, metadata, config, annotations, isGroupedBarChart = false) => {
+        if (isGroupedBarChart) {
             return configureGroupedBarchartDownload(data, metadata, config, annotations);
         } else {
             if (this.chartType === chartTypes.LineChart) {
@@ -400,16 +401,24 @@ export class Chart extends Component {
             "graphValueType": this.graphValueType
         }
 
-        let specDownload = this.configureChartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
+        let specDownload;
+        if (this.hasGroupedBarChart && this.selectedFilter != null && Object.keys(this.selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0) {
+            specDownload = this.configureChartDownload(this.vegaView.data('data_formatted'), this.data.metadata, this.config, annotations, true);
+        } else {
+            specDownload = this.configureChartDownload(this.vegaView.data('data_formatted'), this.data.metadata, this.config, annotations, false);
+        }
 
         this.vegaDownloadView = new vega.View(vega.parse(specDownload));
         this.setGroupedBarChartHeight();
 
-        const pngDownloadUrl = await this.vegaDownloadView.toImageURL('png', 1);
-        const saveImgButton = $(containerParent).find(".hover-menu__content a.hover-menu__content_item:nth-child(1)");
-        saveImgButton.attr('href', pngDownloadUrl);
-        const chartTitle = this.title;
-        saveImgButton.attr('download', `${chartTitle ? chartTitle : 'chart'}.png`);
+        setTimeout(() => {
+            this.vegaDownloadView.toImageURL('png', 1).then((pngDownloadUrl) => {
+                const saveImgButton = $(containerParent).find(".hover-menu__content a.hover-menu__content_item:nth-child(1)");
+                saveImgButton.attr('href', pngDownloadUrl);
+                const chartTitle = this.title;
+                saveImgButton.attr('download', `${chartTitle ? chartTitle : 'chart'}.png`);
+            });
+        }, 0)
     }
 
     disableChartTypeToggle = () => {
@@ -515,12 +524,12 @@ export class Chart extends Component {
         this._filterController.setDataFilterModel(dataFilterModel);
     };
 
-    applyFilter = (filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl) => {
+    applyFilter = (filteredData, selectedFilter, selectedFilterDetails, updateSharedUrl) => {
         if (this.hasGroupedBarChart && !this.isGrouped && Object.keys(selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0) {
-            this.addChart(null, null, false, true, () => this.applyFilter(filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl));
+            this.addChart(null, null, false, true, () => this.applyFilter(filteredData, selectedFilter, selectedFilterDetails, updateSharedUrl));
             return;
         } else if (this.isGrouped && Object.keys(selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) < 0) {
-            this.addChart(null, null, false, false, () => this.applyFilter(filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl));
+            this.addChart(null, null, false, false, () => this.applyFilter(filteredData, selectedFilter, selectedFilterDetails, updateSharedUrl));
             return;
         }
         this.filteredData = filteredData;
@@ -550,7 +559,7 @@ export class Chart extends Component {
             indicatorId: this.data.id,
             selectedFilter: selectedFilterDetails,
             title: this.title,
-            updadateSharedUrl: updadateSharedUrl,
+            updateSharedUrl: updateSharedUrl,
         };
         this.triggerEvent('profile.chart.filtered', payload);
     };
@@ -564,7 +573,7 @@ export class Chart extends Component {
         }
 
         try {
-          let data_grouped =   this.vegaView.data('data_grouped')
+            let data_grouped = this.vegaView.data('data_grouped')
         } catch (error) {
             return;
         }

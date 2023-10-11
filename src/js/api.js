@@ -128,6 +128,11 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
+    searchPointsByDistance(profileId, searchTerm, lat, long){
+        const url = `${this.baseUrl}/profile/${profileId}/points/points_by_distance/?lat=${lat}&long=${long}&q=${searchTerm}`;
+        return this.loadUrl(url);
+    }
+
     loadPoints(profileId, categoryId, areaCode) {
         let url = '';
         if (areaCode == undefined)

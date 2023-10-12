@@ -238,7 +238,7 @@ export class MapChip extends Component {
         this.triggerEvent('mapchip.removed', this.container);
     }
 
-    applyFilter = (filterResult, selectedFilter, selectedFilterDetails, updadateSharedUrl) => {
+    applyFilter = (filterResult, selectedFilter, selectedFilterDetails, updateSharedUrl) => {
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,
@@ -246,13 +246,13 @@ export class MapChip extends Component {
                 selectedFilterDetails: selectedFilterDetails,
                 metadata: this.metadata,
                 config: this.config,
-                updadateSharedUrl: updadateSharedUrl
+                updateSharedUrl: updateSharedUrl
             }
 
             this.triggerEvent("mapchip.choropleth.filtered", payload)
         }
         this.appliedFilters = selectedFilterDetails;
-        if (updadateSharedUrl){
+        if (updateSharedUrl){
           this.previouslyAppliedFilters = selectedFilterDetails;
         }
         this.filterLabel.setFilterLabelSelectedCount(selectedFilter);

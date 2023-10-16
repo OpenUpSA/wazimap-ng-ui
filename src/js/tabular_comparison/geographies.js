@@ -78,14 +78,16 @@ const Geographies = (props) => {
 
     const renderGeoLabel = (option) => {
         let parents = '';
-        option.parents.forEach((p, index) => {
-            if (index > 0) {
-                if (index > 1) {
-                    parents += ', ';
+        if (option.parents != null){
+            option.parents.forEach((p, index) => {
+                if (index > 0) {
+                    if (index > 1) {
+                        parents += ', ';
+                    }
+                    parents += p.name;
                 }
-                parents += p.name;
-            }
-        })
+            })
+        }
         return `${option.name} (${option.level}${parents === '' ? '' : ` - ${parents}`})`;
     }
 

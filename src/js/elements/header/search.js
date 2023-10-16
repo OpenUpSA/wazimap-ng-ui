@@ -110,13 +110,13 @@ export class Search extends Component {
 
         [{
             title: 'NAME',
-            width: '28%'
+            width: '30%'
         }, {
             title: 'SHOW MATCHING RESULTS',
             width: '30%'
         }, {
             title: 'MATCHING SNIPPET',
-            width: '20%'
+            width: '25%'
         }, {
             title: 'DISTANCE',
             width: '15%'
@@ -150,21 +150,18 @@ export class Search extends Component {
         const pointRow = document.createElement('div');
         $(pointRow).addClass('search-result-point-row');
 
-        const pointColumn = this.createPointSearchColumn(rowData.properties['name'], '28%');
+        const pointColumn = this.createPointSearchColumn(rowData.properties['name'], '30%');
         pointRow.append(pointColumn);
 
         const pointColumn2 = this.createPointSearchDropdown('30%', rowData.properties['icon'], rowData.properties['theme_name']);
         pointRow.append(pointColumn2);
 
-        const pointColumn3 = this.createPointSearchColumn(rowData.properties['theme_name'], '20%');
+        const pointColumn3 = this.createPointSearchColumn(rowData.properties['theme_name'], '25%');
         pointRow.append(pointColumn3);
 
         const distance = `${parseInt(rowData.properties['distance'])} km`;
         const pointColumn4 = this.createPointSearchColumn(distance, '15%');
         pointRow.append(pointColumn4);
-
-        const pinColumn = this.createPinColumn('7%');
-        pointRow.append(pinColumn);
 
         return pointRow;
     }
@@ -179,25 +176,12 @@ export class Search extends Component {
         return pointColumn;
     }
 
-    createPinColumn(width) {
-        const pin = document.createElement('button');
-        $(pin).addClass('fa fa-thumbtack point-result-pin');
-
-        const pointColumn = document.createElement('div');
-        $(pointColumn).css('width', width);
-        $(pointColumn).css('padding', '0');
-        $(pointColumn).addClass('search-result-point-column');
-        $(pointColumn).html(pin);
-
-        return pointColumn;
-    }
-
     createPointSearchDropdown(width, icon, text) {
         const pointColumn = document.createElement('div');
         $(pointColumn).addClass('search-result-point-column');
         $(pointColumn).css('width', width);
 
-        $(pointColumn).html(new Dropdown(this, pointColumn, ['aa', 'bb'], text, false, false, false));
+        $(pointColumn).html(new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], text, false, false, false));
 
         return pointColumn;
     }

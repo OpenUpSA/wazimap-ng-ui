@@ -79,14 +79,14 @@ const Geographies = (props) => {
     const renderGeoLabel = (option) => {
         let parents = '';
         option.parents.forEach((p, index) => {
-            if (index > 0){
+            if (index > 0) {
                 if (index > 1) {
                     parents += ', ';
                 }
                 parents += p.name;
             }
         })
-        return `${option.name} (${option.level} - ${parents})`
+        return `${option.name} (${option.level}${parents === '' ? '' : ` - ${parents}`})`;
     }
 
     const autoComplete = <Autocomplete

@@ -151,7 +151,7 @@ export class Dropdown extends Component {
         updateItems: "Dropdown.updateItems"
     }
 
-    constructor(parent, container, items, defaultText = '', disabled = false, isMultiselect = false, drillDownOption = '', isUpdatable = true) {
+    constructor(parent, container, items, defaultText = '', disabled = false, isMultiselect = false, drillDownOption = '', root = null, isUpdatable = true) {
         super(parent);
         this._container = container;
         this._model = new DropdownModel(items, isMultiselect, 0, false, false, isUpdatable);

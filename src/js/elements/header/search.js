@@ -188,7 +188,7 @@ export class Search extends Component {
         $(pointColumn).addClass('search-result-point-column');
         $(pointColumn).css('width', width);
 
-        let dd = new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], text, false, false, false, false);
+        let dd = new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], text, false, false, false, null, false);
         dd.model.on(DropdownModel.EVENTS.selected, selectedOptionArr => {
             const selectedOption = selectedOptionArr[0];
             let category = {

@@ -245,10 +245,10 @@ export class FilterRow extends Component {
     }
 
     formatValue(value) {
-      if (isArray(value)){
-        return value;
-      }
-      return isString(value) ? value.split(",") : [value];
+        if (isArray(value)) {
+            return value;
+        }
+        return isString(value) ? value.split(",") : [value];
     }
 
     setPrimaryIndexUsingValue(value) {
@@ -397,7 +397,7 @@ export class FilterRow extends Component {
             filterRow: this, isFreeTextSearch: isFreeTextSearch
         });
 
-        if (isFreeTextSearch){
+        if (isFreeTextSearch) {
             this.parent.triggerEvent(FilterRow.EVENTS.keywordRowRemoved, this);
         }
     }

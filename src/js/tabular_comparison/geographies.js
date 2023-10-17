@@ -65,16 +65,31 @@ const Geographies = (props) => {
     }
 
     const getNoOptionMessage = useMemo(
-      () => {
-        if (searchedInputText.length > 2 && options.length === 0){
-          return "No options"
-        } else {
-          return 'Search for a place, e.g. municipality name';
-        }
-      }, [
-        searchedInputText
-      ]
+        () => {
+            if (searchedInputText.length > 2 && options.length === 0) {
+                return "No options"
+            } else {
+                return 'Search for a place, e.g. municipality name';
+            }
+        }, [
+            searchedInputText
+        ]
     )
+
+    const renderGeoLabel = (option) => {
+        let parents = '';
+        if (option.parents != null){
+            option.parents.forEach((p, index) => {
+                if (index > 0) {
+                    if (index > 1) {
+                        parents += ', ';
+                    }
+                    parents += p.name;
+                }
+            })
+        }
+        return `${option.name} (${option.level}${parents === '' ? '' : ` - ${parents}`})`;
+    }
 
     const autoComplete = <Autocomplete
         disabled={props.api === null}
@@ -100,7 +115,7 @@ const Geographies = (props) => {
                 component="li"
                 {...props}
             >
-                {option.code} - {option.name}
+                {renderGeoLabel(option)}
             </Box>
         )}
         renderInput={(params) =>

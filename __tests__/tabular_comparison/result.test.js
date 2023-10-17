@@ -85,7 +85,7 @@ describe('Test resulting comparison', () => {
       expect(screen.getByTestId('table-row-0-cell-1')).toHaveTextContent('2,757,773');
 
       expect(screen.getByTestId('table-row-1-cell-0')).toHaveTextContent('Western Cape');
-      expect(screen.getByTestId('table-row-1-cell-1')).toHaveTextContent('');
+      expect(screen.getByTestId('table-row-1-cell-1')).toHaveTextContent('No Data');
 
     })
 

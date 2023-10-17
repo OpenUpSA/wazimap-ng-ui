@@ -62,7 +62,6 @@ const Result = (props) => {
         })
 
         setBackgroundColors(rows);
-
         setRows(rows);
     }
 
@@ -279,7 +278,7 @@ const Result = (props) => {
                                         props.indicatorObjs.map((obj) => {
                                             if (obj.indicator !== '' && obj.category !== '') {
                                                 const filteredObj = row.objs.filter(x => x.obj === obj)[0];
-                                                const value = filteredObj?.value;
+                                                const value = filteredObj?.value != null ? filteredObj.value : 'No Data';
                                                 const tooltip = filteredObj?.tooltip;
                                                 if (value === 'NaN') {
                                                     return (
@@ -289,7 +288,7 @@ const Result = (props) => {
                                                             scope={'row'}
                                                             key={obj.index}
                                                             sx={{backgroundColor: '#fff'}}
-                                                        ></TableCell>   //empty
+                                                        >No Data</TableCell>   //empty
                                                     )
                                                 } else {
                                                     return (
@@ -301,7 +300,7 @@ const Result = (props) => {
                                                             key={obj.index}
                                                             sx={{
                                                                 backgroundColor: filteredObj?.background,
-                                                                color: filteredObj?.background && isColorLight(filteredObj?.background) ? "#333" : "#fff",
+                                                                color: filteredObj?.background && !isColorLight(filteredObj?.background) ? "#fff" : "#333",
                                                             }}
                                                         >{value}
                                                         </TableCell>

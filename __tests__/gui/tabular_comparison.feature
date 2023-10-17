@@ -11,7 +11,7 @@ Feature: Tabular Comparison
     Then I search for test123 in geography autocomplete
     Then I assert no options in dropdown
     Then I search for eastern in geography autocomplete
-    Then I select EC in autocomplete dropdown
+    Then I select Eastern Cape in autocomplete dropdown
 
     And I click on add indictor
     Then I click on indicator autocomplete
@@ -34,7 +34,7 @@ Feature: Tabular Comparison
     And I click on geography autocomplete
     Then I clear the geography autocomplete field
     Then I search for western in geography autocomplete
-    Then I select WC in autocomplete dropdown
+    Then I select Western Cape in autocomplete dropdown
     Then I check result table after adding second geography
 
   Scenario: Verify that the tabular comparison indicator filters works correctly
@@ -45,7 +45,7 @@ Feature: Tabular Comparison
     And I click on geography autocomplete
     Then I assert initial click on dropdown
     Then I search for eastern in geography autocomplete
-    Then I select EC in autocomplete dropdown
+    Then I select Eastern Cape in autocomplete dropdown
 
     And I click on add indictor
     Then I click on indicator autocomplete
@@ -174,7 +174,7 @@ Feature: Tabular Comparison
     And I click on geography autocomplete
     Then I assert initial click on dropdown
     Then I search for eastern in geography autocomplete
-    Then I select EC in autocomplete dropdown
+    Then I select Eastern Cape in autocomplete dropdown
 
     And I click on add indictor
     Then I click on indicator autocomplete
@@ -196,7 +196,7 @@ Feature: Tabular Comparison
     And I click on geography autocomplete
     Then I assert initial click on dropdown
     Then I search for eastern in geography autocomplete
-    Then I select EC in autocomplete dropdown
+    Then I select Eastern Cape in autocomplete dropdown
 
     And I click on add indictor
     Then I click on indicator autocomplete

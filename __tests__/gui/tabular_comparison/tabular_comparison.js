@@ -45,7 +45,7 @@ Then(/^I search for (\w+) in (\w+) autocomplete$/, (value, type) => {
     }).as('selectedgeo');
   }
 
-  cy.get(`[data-testid=${type}-autocomplete]`).last().find('input').type(value);
+  cy.get(`[data-testid=${type}-autocomplete]`).last().find('input').clear().type(value);
 })
 
 Then(/^I select ([\w ]+) in autocomplete dropdown$/, (value) => {

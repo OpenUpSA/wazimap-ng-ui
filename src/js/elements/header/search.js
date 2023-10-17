@@ -1,6 +1,6 @@
 import {Component} from '../../utils';
 import {select as d3select} from 'd3-selection';
-import {Dropdown} from "../../ui_components/dropdown";
+import {Dropdown, DropdownModel} from "../../ui_components/dropdown";
 
 // TODO should change this to jquery instead
 var navSearch = d3select(".nav__search");
@@ -87,9 +87,16 @@ export class Search extends Component {
 
     appendPointsTitle(titleRow) {
         const pointTitleRow = titleRow[0].cloneNode(true);
+        $(pointTitleRow).addClass('search-result-point-table-summary-row')
         $($(pointTitleRow).find('div')[0]).text('SERVICE POINTS');
-        $($(pointTitleRow).find('div')[1]).text('30 SERVICE POINTS IN 3 CATEGORIES');
+        $($(pointTitleRow).find('div')[1]).addClass('search-result-point-table-summary-text')
+            .text('')
         this.plate.append(pointTitleRow)
+    }
+
+    updatePointsHeaderSummary(data) {
+        $('.search-result-point-table-summary-row .search-result-point-table-summary-text')
+            .text(`${data.features.length} SERVICE POINTS IN ${[...new Set(data.features.map(item => item.properties.theme_id))].length} THEMES`)
     }
 
     appendPointsNoData() {
@@ -153,7 +160,7 @@ export class Search extends Component {
         const pointColumn = this.createPointSearchColumn(rowData.properties['name'], '30%');
         pointRow.append(pointColumn);
 
-        const pointColumn2 = this.createPointSearchDropdown('30%', rowData.properties['icon'], rowData.properties['theme_name']);
+        const pointColumn2 = this.createPointSearchDropdown('30%', rowData.properties['icon'], rowData.properties['theme_name'], rowData.properties['category_id']);
         pointRow.append(pointColumn2);
 
         const pointColumn3 = this.createPointSearchColumn(rowData.properties['theme_name'], '25%');
@@ -176,12 +183,24 @@ export class Search extends Component {
         return pointColumn;
     }
 
-    createPointSearchDropdown(width, icon, text) {
+    createPointSearchDropdown(width, icon, text, categoryId) {
         const pointColumn = document.createElement('div');
         $(pointColumn).addClass('search-result-point-column');
         $(pointColumn).css('width', width);
 
-        $(pointColumn).html(new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], text, false, false, false));
+        let dd = new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], text, false, false, false, false);
+        dd.model.on(DropdownModel.EVENTS.selected, selectedOptionArr => {
+            const selectedOption = selectedOptionArr[0];
+            let category = {
+                id: categoryId,
+                theme: {
+                    icon: icon
+                }
+            }
+            this.triggerEvent('search.category.selected', category);
+        })
+
+        $(pointColumn).html(dd);
 
         return pointColumn;
     }
@@ -226,6 +245,7 @@ export class Search extends Component {
                             self.removePointsNoData();
                             self.appendPointsHeaderRow();
                             self.appendPointsTable(data);
+                            self.updatePointsHeaderSummary(data);
                         })
                     }, 0)
                 }

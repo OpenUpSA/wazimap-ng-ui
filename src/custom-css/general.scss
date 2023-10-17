@@ -97,9 +97,10 @@
     margin-bottom: 4px;
     margin-top: 2px;
     display: flex;
+    cursor: pointer;
 
     &:hover {
-      background-color: rgba(0, 0, 0, .1);
+      background-image: linear-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .1))
     }
 
     .search-result-point-column {

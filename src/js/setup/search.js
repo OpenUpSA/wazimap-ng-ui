@@ -5,4 +5,8 @@ export function configureSearchEvents(controller, search) {
 
     search.on('search.resultClick', payload => controller.onSearchResultClick(payload));
     controller.bubbleEvents(search, ['search.before', 'search.results', 'search.clear'])
+
+    search.on('search.category.selected', category => {
+        controller.triggerEvent('point_tray.category.selected', category);
+    })
 }

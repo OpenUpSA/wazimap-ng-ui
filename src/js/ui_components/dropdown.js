@@ -18,7 +18,7 @@ export class DropdownModel extends Observable {
         enableMultiselect: 'DropdownModel.enableMultiselect'
     }
 
-    constructor(items = [], isMultiselect = false, currentValue=[], isDisabled = false, isUnavailable = false) {
+    constructor(items = [], isMultiselect = false, currentValue = [], isDisabled = false, isUnavailable = false, isUpdatable = true) {
         super();
 
         this._items = items;
@@ -27,6 +27,7 @@ export class DropdownModel extends Observable {
         this._manualTrigger = false;
         this._isMultiselect = isMultiselect;
         this._unavailableValue = undefined;
+        this._isUpdatable = isUpdatable;
     }
 
     get items() {
@@ -38,8 +39,12 @@ export class DropdownModel extends Observable {
     }
 
     set currentValue(value) {
-        this._currentValue = value;
-        this.triggerEvent(DropdownModel.EVENTS.selected, this)
+        if (this.isUpdatable) {
+            this._currentValue = value;
+            this.triggerEvent(DropdownModel.EVENTS.selected, this);
+        } else {
+            this.triggerEvent(DropdownModel.EVENTS.selected, value);
+        }
     }
 
     get currentItem() {
@@ -47,9 +52,9 @@ export class DropdownModel extends Observable {
     }
 
     set currentItem(value) {
-        if (value === [] || value === undefined || value === ''){
-          this.currentValue = value;
-          return;
+        if (value === [] || value === undefined || value === '') {
+            this.currentValue = value;
+            return;
         }
 
         const isSubsetResult = value.every(item => this.items.includes(item));
@@ -96,23 +101,31 @@ export class DropdownModel extends Observable {
         } else {
             this.triggerEvent(DropdownModel.EVENTS.available);
         }
-     }
+    }
 
     get manualTrigger() {
         return this._manualTrigger;
     }
 
     set manualTrigger(val) {
-      this._manualTrigger = val;
+        this._manualTrigger = val;
     }
 
     get isMultiselect() {
-      return this._isMultiselect;
+        return this._isMultiselect;
     }
 
     set isMultiselect(value) {
-      this._isMultiselect = value;
-      this.triggerEvent(DropdownModel.EVENTS.enableMultiselect, this);
+        this._isMultiselect = value;
+        this.triggerEvent(DropdownModel.EVENTS.enableMultiselect, this);
+    }
+
+    get isUpdatable() {
+        return this._isUpdatable;
+    }
+
+    set isUpdatable(value) {
+        this._isUpdatable = value;
     }
 
     getIndexForValue(value) {
@@ -135,13 +148,13 @@ export class Dropdown extends Component {
      */
 
     static EVENTS = {
-      updateItems: "Dropdown.updateItems"
+        updateItems: "Dropdown.updateItems"
     }
 
-    constructor(parent, container, items, defaultText = '', disabled = false, isMultiselect = false, drillDownOption = '') {
+    constructor(parent, container, items, defaultText = '', disabled = false, isMultiselect = false, drillDownOption = '', isUpdatable = true) {
         super(parent);
         this._container = container;
-        this._model = new DropdownModel(items, isMultiselect, 0);
+        this._model = new DropdownModel(items, isMultiselect, 0, false, false, isUpdatable);
         this._defaultText = defaultText;
         this._listItemElements = [];
         this._manualTrigger = false;
@@ -167,15 +180,15 @@ export class Dropdown extends Component {
     }
 
     get drillDownOption() {
-      return this._drillDownOption;
+        return this._drillDownOption;
     }
 
     prepareDomElements() {
         this.root = createRoot(this._container);
         this.root.render(<FilterDropdown
-          label={this._defaultText}
-          dropdownElement={this}
-          drillDownOption={this.drillDownOption}
+            label={this._defaultText}
+            dropdownElement={this}
+            drillDownOption={this.drillDownOption}
         />)
     }
 
@@ -233,7 +246,7 @@ export class Dropdown extends Component {
         $(this._trigger).css('text-decoration', 'line-through');
     }
 
-    redrawItems(items, currentIndex=0) {
+    redrawItems(items, currentIndex = 0) {
         this.triggerEvent(Dropdown.EVENTS.updateItems, {items});
     }
 }

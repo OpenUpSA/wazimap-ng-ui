@@ -133,12 +133,17 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
-    loadPoints(profileId, categoryId, areaCode) {
+    loadPoints(profileId, categoryId, areaCode=undefined, keywords) {
         let url = '';
         if (areaCode == undefined)
             url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/points/?format=json`;
         else
             url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/geography/${areaCode}/points/?format=json`;
+
+        if (keywords.length > 0){
+            const searchParams = keywords.map(item => `q=${encodeURIComponent(item)}`).join("&");
+            url = `${url}&${searchParams}`;
+        }
         return this.loadUrl(url);
     }
 

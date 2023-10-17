@@ -158,6 +158,7 @@ export class Dropdown extends Component {
         this._defaultText = defaultText;
         this._listItemElements = [];
         this._manualTrigger = false;
+        this._root = root;
 
         this.prepareDomElements();
         this.prepareEvents();
@@ -183,8 +184,18 @@ export class Dropdown extends Component {
         return this._drillDownOption;
     }
 
+    get root(){
+        return this._root;
+    }
+
+    set root(value){
+        this._root = value;
+    }
+
     prepareDomElements() {
-        this.root = createRoot(this._container);
+        if (this.root == null){
+            this.root = createRoot(this._container);
+        }
         this.root.render(<FilterDropdown
             label={this._defaultText}
             dropdownElement={this}

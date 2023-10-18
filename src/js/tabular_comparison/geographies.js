@@ -9,12 +9,16 @@ import SectionTitle from "./section-title";
 const Geographies = (props) => {
     const [options, setOptions] = useState([]);
     const [searchedInputText, setSearchedInputText] = useState('');
+    const [fetchingGeographies, setFetchingGeographies] = useState(false);
     const arrowSvg = GeographiesArrowSvg;
 
     const filterOptions = (inputValue) => {
         setSearchedInputText(inputValue);
+        setOptions([]);
+        setFetchingGeographies(true);
         props.api.search(props.profileId, inputValue).then((data) => {
             setOptions(data);
+            setFetchingGeographies(false);
         });
     }
 
@@ -66,13 +70,18 @@ const Geographies = (props) => {
 
     const getNoOptionMessage = useMemo(
         () => {
-            if (searchedInputText.length > 2 && options.length === 0) {
+
+            if (searchedInputText.length > 2 && options.length === 0 && fetchingGeographies){
+                return "searching..."
+            }
+            else if (searchedInputText.length > 2 && options.length === 0 && !fetchingGeographies){
                 return "No options"
             } else {
                 return 'Search for a place, e.g. municipality name';
             }
         }, [
-            searchedInputText
+            searchedInputText,
+            fetchingGeographies
         ]
     )
 

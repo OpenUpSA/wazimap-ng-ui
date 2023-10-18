@@ -184,16 +184,16 @@ export class Dropdown extends Component {
         return this._drillDownOption;
     }
 
-    get root(){
+    get root() {
         return this._root;
     }
 
-    set root(value){
+    set root(value) {
         this._root = value;
     }
 
     prepareDomElements() {
-        if (this.root == null){
+        if (this.root == null) {
             this.root = createRoot(this._container);
         }
         this.root.render(<FilterDropdown

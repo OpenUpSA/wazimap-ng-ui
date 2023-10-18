@@ -1,6 +1,7 @@
 import {Component} from '../../utils';
 import {select as d3select} from 'd3-selection';
 import {Dropdown, DropdownModel} from "../../ui_components/dropdown";
+import React from "react";
 
 // TODO should change this to jquery instead
 var navSearch = d3select(".nav__search");
@@ -188,7 +189,7 @@ export class Search extends Component {
         $(pointColumn).addClass('search-result-point-column');
         $(pointColumn).css('width', width);
 
-        let dd = new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], text, false, false, false, null, false);
+        let dd = new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], <span><i className="material-icons">account_balance</i> {text}</span>, false, false, false, null, false);
         dd.model.on(DropdownModel.EVENTS.selected, selectedOptionArr => {
             const selectedOption = selectedOptionArr[0];
             let category = {

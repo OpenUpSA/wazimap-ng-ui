@@ -45,7 +45,7 @@ Then(/^I search for (\w+) in (\w+) autocomplete$/, (value, type) => {
     }).as('selectedgeo');
   }
 
-  cy.get(`[data-testid=${type}-autocomplete]`).last().find('input').type(value);
+  cy.get(`[data-testid=${type}-autocomplete]`).last().find('input').clear().type(value);
 })
 
 Then(/^I select ([\w ]+) in autocomplete dropdown$/, (value) => {
@@ -158,7 +158,7 @@ Then(/^I assert value for index (\d+) column is "([^"]*)"/, (idx, val) => {
 })
 
 Then(/^I assert value for index (\d+) column is empty/, (idx) => {
-   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(idx).should('be.empty');
+   cy.get(`[data-testid=result-table]`).find('tbody tr').eq(0).find('td').eq(idx).should('have.text', 'No Data');
 })
 
 Then(/^I change "([^"]*)" dropdown for filter at index (\d+) of indicator panel (\d+) to "([^"]*)"/, (type, idx, filterPanelId, val) => {

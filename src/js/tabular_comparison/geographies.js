@@ -9,12 +9,16 @@ import SectionTitle from "./section-title";
 const Geographies = (props) => {
     const [options, setOptions] = useState([]);
     const [searchedInputText, setSearchedInputText] = useState('');
+    const [fetchingGeographies, setFetchingGeographies] = useState(false);
     const arrowSvg = GeographiesArrowSvg;
 
     const filterOptions = (inputValue) => {
         setSearchedInputText(inputValue);
+        setOptions([]);
+        setFetchingGeographies(true);
         props.api.search(props.profileId, inputValue).then((data) => {
             setOptions(data);
+            setFetchingGeographies(false);
         });
     }
 
@@ -65,16 +69,36 @@ const Geographies = (props) => {
     }
 
     const getNoOptionMessage = useMemo(
-      () => {
-        if (searchedInputText.length > 2 && options.length === 0){
-          return "No options"
-        } else {
-          return 'Search for a place, e.g. municipality name';
-        }
-      }, [
-        searchedInputText
-      ]
+        () => {
+
+            if (searchedInputText.length > 2 && options.length === 0 && fetchingGeographies){
+                return "searching..."
+            }
+            else if (searchedInputText.length > 2 && options.length === 0 && !fetchingGeographies){
+                return "No options"
+            } else {
+                return 'Search for a place, e.g. municipality name';
+            }
+        }, [
+            searchedInputText,
+            fetchingGeographies
+        ]
     )
+
+    const renderGeoLabel = (option) => {
+        let parents = '';
+        if (option.parents != null){
+            option.parents.forEach((p, index) => {
+                if (index > 0) {
+                    if (index > 1) {
+                        parents += ', ';
+                    }
+                    parents += p.name;
+                }
+            })
+        }
+        return `${option.name} (${option.level}${parents === '' ? '' : ` - ${parents}`})`;
+    }
 
     const autoComplete = <Autocomplete
         disabled={props.api === null}
@@ -100,7 +124,7 @@ const Geographies = (props) => {
                 component="li"
                 {...props}
             >
-                {option.code} - {option.name}
+                {renderGeoLabel(option)}
             </Box>
         )}
         renderInput={(params) =>

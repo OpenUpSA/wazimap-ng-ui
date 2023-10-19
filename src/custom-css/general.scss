@@ -125,6 +125,17 @@
 
       .MuiSelect-select i.material-icons {
         font-size: 18px;
+        position: absolute;
+        left: 10px;
+        bottom: 9px;
+      }
+
+      .MuiSelect-select .dd-text-container {
+        margin-left: 20px;
+      }
+
+      .MuiInputBase-formControl {
+        height: 32px;
       }
     }
   }

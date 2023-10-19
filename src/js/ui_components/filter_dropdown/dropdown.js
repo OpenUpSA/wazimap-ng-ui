@@ -75,7 +75,7 @@ export const FilterDropdown = ({
                 return (
                     unavailableValue ? <UnavailableText>
                         {unavailableValue}
-                    </UnavailableText> : <em>{label}</em>
+                    </UnavailableText> : label
                 );
             }
 

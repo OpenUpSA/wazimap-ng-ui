@@ -31,7 +31,7 @@ class FilterControllerModel extends Observable {
     }
 
     removeFilterRow(filterRow) {
-        this._filterRows = this._filterRows.filter(filter => filter != filterRow)
+        this._filterRows = this._filterRows.filter(filter => filter !== filterRow.filterRow);
         this.triggerEvent(FilterControllerModel.EVENTS.filterRemoved, filterRow)
     }
 

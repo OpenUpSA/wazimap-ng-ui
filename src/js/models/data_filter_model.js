@@ -230,6 +230,10 @@ export class DataFilterModel extends Observable {
         this._siteWideFilters = value;
     }
 
+    get filterType(){
+        return this._filterType;
+    }
+
     isSiteWideFilter(group, value) {
         return this.siteWideFilters.filter(x => x.indicatorValue === group && isEqual(x.subIndicatorValue, value))[0] != null;
     }

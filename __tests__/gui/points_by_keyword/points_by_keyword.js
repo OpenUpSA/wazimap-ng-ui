@@ -132,7 +132,7 @@ Then('I check if the point category legend is hidden', () => {
 
 When('I click on the first filter dropdown', () => {
     cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
-      .eq(0).find("div").eq(0).click()
+        .eq(0).find("div").eq(0).click()
 })
 
 Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {
@@ -143,10 +143,10 @@ When(/^I filter by "([^"]*)"$/, (filter) => {
     let orderedList = 'Alice,Hiddingh Campus,Nongoma,TestCampus';
     const filters = filter.split(':');
     cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
-      .eq(0).click().get(`ul > li[data-value="${filters[0]}"]`).click();
+        .eq(0).click().get(`ul > li[data-value="${filters[0]}"]`).click();
 
     cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
-      .eq(1).click().type(filters[1]).type('{enter}')
+        .eq(1).click().type(filters[1]).type('{enter}')
 });
 
 Then('I check if the filter dialog is collapsed', () => {
@@ -170,5 +170,6 @@ When('I expand Point Mapper', () => {
 })
 
 Then(`I assert that {int} markers are displayed on map`, (count) => {
+    cy.wait(1000);  // wait for the filtering is completed
     assertMarkerCountOnMap(count);
 })

@@ -117,17 +117,13 @@ export class Search extends Component {
         $(pointsTableHeader).addClass('search-result-point-table-header');
 
         [{
-            title: 'NAME',
-            width: '30%'
+            title: 'NAME', width: '30%'
         }, {
-            title: 'SHOW MATCHING RESULTS',
-            width: '30%'
+            title: 'SHOW MATCHING RESULTS', width: '30%'
         }, {
-            title: 'MATCHING SNIPPET',
-            width: '25%'
+            title: 'MATCHING SNIPPET', width: '25%'
         }, {
-            title: 'DISTANCE',
-            width: '15%'
+            title: 'DISTANCE', width: '15%'
         }].forEach(c => {
             const pointsHeaderColumn = document.createElement('div');
             $(pointsHeaderColumn).addClass('search-result-point-table-header-column')
@@ -140,13 +136,13 @@ export class Search extends Component {
 
     }
 
-    appendPointsTable(data) {
+    appendPointsTable(searchTerm, data) {
         this.plate.find('.search-result-point-container').remove();
 
         const pointResultContainer = document.createElement('div');
         $(pointResultContainer).addClass('search-result-point-container').addClass('narrow-scroll');
         for (let i = 0; i < data.features.length; i++) {
-            const pointRow = this.createPointSearchRow(data.features[i]);
+            const pointRow = this.createPointSearchRow(searchTerm, data.features[i]);
 
             pointResultContainer.append(pointRow);
         }
@@ -154,24 +150,61 @@ export class Search extends Component {
         this.plate.append(pointResultContainer);
     }
 
-    createPointSearchRow(rowData) {
+    createPointSearchRow(searchTerm, rowData) {
+        const self = this;
         const pointRow = document.createElement('div');
         $(pointRow).addClass('search-result-point-row');
 
-        const pointColumn = this.createPointSearchColumn(rowData.properties['name'], '30%');
-        pointRow.append(pointColumn);
+        const pointNameColumn = this.createPointSearchColumn(rowData.properties['name'], '30%');
+        pointRow.append(pointNameColumn);
 
-        const pointColumn2 = this.createPointSearchDropdown('30%', rowData.properties['icon'], rowData.properties['theme_name'], rowData.properties['category_id']);
-        pointRow.append(pointColumn2);
+        const pointThemeColumn = this.createPointSearchDropdown('30%', rowData);
+        pointRow.append(pointThemeColumn);
 
-        const pointColumn3 = this.createPointSearchColumn(rowData.properties['theme_name'], '25%');
-        pointRow.append(pointColumn3);
+        const pointMatchColumn = this.createPointSearchColumn(this.getMatchingSnippet(searchTerm, rowData), '25%');
+        pointRow.append(pointMatchColumn);
 
         const distance = `${parseInt(rowData.properties['distance'])} km`;
-        const pointColumn4 = this.createPointSearchColumn(distance, '15%');
-        pointRow.append(pointColumn4);
+        const pointDistanceColumn = this.createPointSearchColumn(distance, '15%');
+        pointRow.append(pointDistanceColumn);
+
+        $(pointRow).on('click', () => {
+            self.triggerEvent('search.point.selected', rowData);
+        })
 
         return pointRow;
+    }
+
+    getMatchingSnippet(searchTerm, rowData) {
+        const term = searchTerm.toLowerCase();
+        const properties = rowData.properties;
+        let text = '';
+        if (properties['name'].toLowerCase().indexOf(term) >= 0) {
+            text = properties['name'];
+        } else if (properties['category_name'].toLowerCase().indexOf(term) >= 0) {
+            text = properties['category_name'];
+        } else if (properties['theme_name'].toLowerCase().indexOf(term) >= 0) {
+            text = properties['theme_name'];
+        } else if (properties['theme_name'].toLowerCase().indexOf(term) >= 0) {
+            text = properties['theme_name'];
+        } else {
+            let dataArr = properties['data'];
+            console.log({dataArr})
+            let i = 0;
+            while (i < dataArr.length && text === '') {
+                console.log({i, 'data': dataArr[i]})
+                if ((typeof dataArr[i].value === 'string' && dataArr[i].value.toLowerCase().indexOf(term) >= 0) || (dataArr[i].value === term)) {
+                    text = dataArr[i].value;
+                }
+                i++;
+            }
+        }
+
+        if (text.toLowerCase().indexOf(term) !== 0) {
+            text = '...' + text.substring(text.toLowerCase().indexOf(term));
+        }
+
+        return text;
     }
 
     createPointSearchColumn(text, width) {
@@ -184,18 +217,27 @@ export class Search extends Component {
         return pointColumn;
     }
 
-    createPointSearchDropdown(width, icon, text, categoryId) {
+    createPointSearchDropdown(width, rowData) {
         const pointColumn = document.createElement('div');
         $(pointColumn).addClass('search-result-point-column');
         $(pointColumn).css('width', width);
 
-        let dd = new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], <span className={'dd-text-container'}><i className="material-icons">{icon}</i> {text}</span>, false, false, false, null, false);
+        const properties = rowData.properties;
+
+        const icon = properties['icon'];
+        const themeName = properties['theme_name'];
+        const categoryId = properties['category_id'];
+        const color = properties['color'];
+
+        const ddText = <span className={'dd-text-container'}><i className="material-icons"
+                                                                style={{color: color}}>{icon}</i> {themeName}</span>;
+
+        let dd = new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], ddText, false, false, false, null, false);
         dd.model.on(DropdownModel.EVENTS.selected, selectedOptionArr => {
             const selectedOption = selectedOptionArr[0];
             let category = {
-                id: categoryId,
-                theme: {
-                    icon: icon
+                id: categoryId, theme: {
+                    icon: icon, color: color
                 }
             }
             this.triggerEvent('search.category.selected', category);
@@ -217,8 +259,7 @@ export class Search extends Component {
             let element = $(this);
 
             $(this).autocomplete({
-                minLength: minLength,
-                source: function (request, response) {
+                minLength: minLength, source: function (request, response) {
                     setTimeout(() => {
                         if (lastKey === 38 || lastKey === 40) {
                             //arrow keys -- add active class to result item
@@ -245,7 +286,7 @@ export class Search extends Component {
                         self.api.searchPointsByDistance(self.profileId, searchTerm, mapCenter.lat, mapCenter.lng).then(data => {
                             self.removePointsNoData();
                             self.appendPointsHeaderRow();
-                            self.appendPointsTable(data);
+                            self.appendPointsTable(searchTerm, data);
                             self.updatePointsHeaderSummary(data);
                         })
                     }, 0)
@@ -299,14 +340,12 @@ export class Search extends Component {
 
         parents = parents.reverse();
 
-        if (skipTopLevel)
-            parents = parents.slice(0, -1);
+        if (skipTopLevel) parents = parents.slice(0, -1);
 
 
         parents.forEach((parent, idx) => {
             if (!skipDuplicates || parent.name != previous) {
-                if (idx > 0)
-                    label += ', '
+                if (idx > 0) label += ', '
                 label += parent.name;
             }
 
@@ -314,8 +353,7 @@ export class Search extends Component {
         })
 
         return {
-            name: profile.name,
-            parents: label
+            name: profile.name, parents: label
         };
     }
 

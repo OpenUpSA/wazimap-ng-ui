@@ -9,4 +9,8 @@ export function configureSearchEvents(controller, search) {
     search.on('search.category.selected', category => {
         controller.triggerEvent('point_tray.category.selected', category);
     })
+
+    search.on('search.point.selected', pointData => {
+        controller.triggerEvent('point_tray.point.selected', pointData);
+    })
 }

@@ -2,6 +2,33 @@ import {Component} from '../../utils';
 import {createRoot} from "react-dom/client";
 import TutorialButton from "./tutorial_button";
 import React from "react";
+import { CollectionsBookmarkRounded } from '@mui/icons-material';
+
+import xss from 'xss';
+
+
+const allowedTags = ['a', 'b', 'em', 'span', 'i', 'div', 'p', 'ul', 'li', 'ol', 'table', 'tr', 'td', 'th'];
+const allowedAttributes = ["class", "target", "style", "href"];
+const xssOptions = {
+    stripIgnoreTag: true,
+    onTag: function (tag, html, options) {
+        if (allowedTags.indexOf(tag) === -1) {
+            return '';
+        }
+    },
+    onTagAttr: function (tag, name, value, isWhiteAttr) {
+        if (allowedAttributes.indexOf(name) >= 0) {
+            return name + '="' + xss.escapeAttrValue(value) + '"';
+        }
+    },
+    onIgnoreTagAttr: function (tag, name, value, isWhiteAttr) {
+        if (name.substr(0, 5) === "data-") {
+            return name + '="' + xss.escapeAttrValue(value) + '"';
+        }
+    }
+};
+
+const xssFilter = new xss.FilterXSS(xssOptions);
 
 export class Tutorial extends Component {
     constructor(parent) {
@@ -9,6 +36,8 @@ export class Tutorial extends Component {
 
         this.wrapperClass = '.w-slider-mask';
         this.slideClass = '.w-slide';
+        this.nextButton = '.w-slider-arrow-right .tutorial__slide_button';
+        this.prevButton = '.w-slider-arrow-left .tutorial__slide_button';
     }
 
     addTutorialButton(feedbackBtnVisible) {
@@ -27,30 +56,41 @@ export class Tutorial extends Component {
 
     createSlides = (tutorialArr) => {
         let tutorials = tutorialArr || [];
+        let container = $(this.wrapperClass);
+        let nextButton = $(this.nextButton);
+        let prevButton = $(this.prevButton);
+        let currentIndex = 0;
+        var items = container.find(this.slideClass);
+        var clonedItem = items.first().clone();
 
-        tutorials.forEach((slide, i) => {
-            let item = $(this.wrapperClass).find(this.slideClass)[i];
+        let self = this;
+        if (tutorials.length > 0) {
+            items.remove();
+            tutorials.forEach((slide, i) => {
+                let item = clonedItem.clone();
+                item.find(".slide-info__title").html(xssFilter.process(slide.title));
+                item.find(".slide-info__introduction").html(xssFilter.process(slide.text));
+                item.find(".tutorial__slide-number").html(`<div>${i+1}/${tutorialArr.length}</div>`);
+                item.find(".tutorial__slide-image").css('background-image', `url(${slide.image})`);
+                container.append(item);
+            });
 
-            // hardcode fix of slides
-            if (i == 6) {
-                let intro = $('.slide-info__introduction', item);
-                intro.remove();
-                let slide = $('.tutorial__slide-info', item);
-                slide.append('<div><span class="slide-info__title bg-primary"></span><span class="slide-info__introduction"></span></div>');
-            } else if (i == 7) {
-                let title = $('.slide-info__title', item);
-                title.remove();
-                let intro = $('.slide-info__introduction', item);
-                intro.remove();
+            nextButton.click(function() {
+                currentIndex = (currentIndex + 1) % tutorials.length;
+                self.updateCarousel(currentIndex);
+            });
 
-                let slide = $('.tutorial__slide-info', item);
-                slide.append('<div><span class="slide-info__title bg-primary"></span><a href="https://openup.gitbook.io/wazimap-ng-user-guide/" target="_blank"><span class="slide-info__introduction"></span></a></div>');
-            }
+            prevButton.click(function() {
+                currentIndex = (currentIndex - 1 + tutorials.length) % tutorials.length;
+                self.updateCarousel(currentIndex);
+            });
 
-            this.setTextOrLogError('.slide-info__title', item, slide.title, i);
-            this.setTextOrLogError('.slide-info__introduction', item, slide.body, i);
-            $('.tutorial__slide-image', item).css('background-image', `url(${slide.image})`);
-        });
+        }
+
+    }
+    updateCarousel = (currentIndex) => {
+        $(this.slideClass).hide();
+        $(this.slideClass).eq(currentIndex).show();
     }
 
     setTextOrLogError = (cls, item, text, index) => {

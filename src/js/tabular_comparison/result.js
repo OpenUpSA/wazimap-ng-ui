@@ -158,8 +158,6 @@ const Result = (props) => {
         let data = [];
         if (obj.category != null) {
             data = indicatorData?.filter(x => x[primaryGroup] === obj.category);
-        } else {
-            data = indicatorData;
         }
 
         if (data === null || data.length === 0) {
@@ -235,7 +233,7 @@ const Result = (props) => {
                         ><b>Geography</b></TableCell>
                         {
                             props.indicatorObjs.map((column) => {
-                                if (column.indicator !== '' && column.category !== '' && column.indicator != null && column.category != null) {
+                                if (column.indicator !== '' && column.category !== '') {
                                     return (
                                         <TableCell
                                             data-testid={`table-header-${column.index}`}
@@ -281,7 +279,7 @@ const Result = (props) => {
                                     >{row.geo}</TableCell>
                                     {
                                         props.indicatorObjs.map((obj) => {
-                                            if (obj.indicator !== '' && obj.category !== '' && obj.indicator != null && obj.category != null) {
+                                            if (obj.indicator !== '' && obj.category !== '') {
                                                 const filteredObj = row.objs.filter(x => x.obj === obj)[0];
                                                 const value = filteredObj?.value != null ? filteredObj.value : 'No Data';
                                                 const tooltip = filteredObj?.tooltip;

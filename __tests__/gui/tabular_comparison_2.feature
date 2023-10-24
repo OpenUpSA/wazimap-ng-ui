@@ -42,6 +42,8 @@ Feature: Tabular Comparison
 
     # Add one custom filter and see if results page change
     Then I click on add filter button for indicator panel 1
+    # make sure empty filter does not break the table
+    Then I assert value for index 1 column is "27,950"
     Then I check if filter row count for indicator panel 1 is 2
     Then I check "group" selected for filter at index 1 of indicator panel 1 is "attribute"
     Then I check "group" dropdown for filter at index 1 of indicator panel 1 is enabled

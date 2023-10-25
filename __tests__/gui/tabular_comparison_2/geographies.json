@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Eastern Cape",
+    "code": "EC",
+    "level": "province",
+    "versions": [],
+    "parents": []
+  },
+  {
+    "name": "Western Cape",
+    "code": "WC",
+    "level": "province",
+    "versions": [],
+    "parents": []
+  }
+]

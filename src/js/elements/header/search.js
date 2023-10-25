@@ -232,7 +232,7 @@ export class Search extends Component {
         const ddText = <span className={'dd-text-container'}><i className="material-icons"
                                                                 style={{color: color}}>{icon}</i> {themeName}</span>;
 
-        let dd = new Dropdown(this, pointColumn, ['Plot all points in category', 'Plot matching points in category'], ddText, false, false, false, null, false);
+        let dd = new Dropdown(this, pointColumn, ['Plot all points in category'], ddText, false, false, false, null, false);
         dd.model.on(DropdownModel.EVENTS.selected, selectedOptionArr => {
             const selectedOption = selectedOptionArr[0];
             let category = {

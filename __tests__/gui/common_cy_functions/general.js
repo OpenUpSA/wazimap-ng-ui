@@ -176,6 +176,19 @@ export function visitToGeo(geoCode, isParent = false, forceClick = false) {
     waitUntilGeographyIsLoaded(geoName);
 }
 
+export function assertMarkerCountOnMap(count) {
+    cy.window().then((win) => {
+        const map = win.map;
+        const allMarkers = [];
+        map.eachLayer((layer) => {
+          if (layer instanceof win.L.Marker) {
+            allMarkers.push(layer);
+          }
+        });
+        expect(allMarkers.length).equal(count);
+      });
+}
+
 export function extractRequestedIndicatorData(url, indicatorData) {
     let domain = url.match(/^https:\/\/[^/]+/);
     let geo = url.replace(`${domain}/api/v1/profile/8/geography/`, '');

@@ -2,8 +2,14 @@ export function configurePointDataEvents(controller, objs = {pointDataTray: null
     const pointDataTray = objs['pointDataTray'];
     const pointData = objs['pointData'];
 
-    controller.on("point_tray.category.selected", payload => pointData.showCategoryPoint(payload.payload));
+    controller.on("point_tray.category.selected", payload => pointData.showCategoryPoint(payload.payload, pointData.pointFilter.keywordSearchOptions));
     controller.on("point_tray.category.unselected", payload => pointData.removeCategoryPoints(payload.payload));
+    controller.on("point_data.all.reload", payload => {
+        pointData.activeCategories.map((category) => {
+            pointData.removeCategoryPoints(category, false);
+            pointData.showCategoryPoint(category, pointData.pointFilter.keywordSearchOptions)
+        })
+    });
     controller.on("map.zoomed", payload => pointData.onMapZoomed(payload.payload));
     controller.on("point_data.all.unselected", () => pointDataTray.unSelectAll())
     controller.on("point_data.category.loading", payload => {
@@ -23,7 +29,7 @@ export function configurePointDataEvents(controller, objs = {pointDataTray: null
     controller.bubbleEvents(pointData, [
         'point_data.category.loaded', 'point_data.category.loading',
         'point_data.load_popup.hovered', 'point_data.load_popup.clicked',
-        'point_data.all.unselected'
+        'point_data.all.unselected', 'point_data.all.reload'
     ]);
 
     pointDataTray.loadThemes();

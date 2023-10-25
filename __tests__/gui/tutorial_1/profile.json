@@ -27,44 +27,21 @@
     "tutorial": [
       {
         "title": "Title A:",
-        "text": "body A",
+        "text": "This is a custom text",
         "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-1.png"
 
       },
       {
         "title": "Title B:",
-        "text": "Body B",
+        "text": '<a href="#">Link</a>',
         "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-2.png"
+
       },
       {
-        "text": "Body C",
+        "title": "Title C:",
+        "text": "<b>Bold Text</b>",
         "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-3.png",
-        "title": "Title C:"
-      },
-      {
-        "text": "body d",
-        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-4.png",
-        "title": "title d"
-      },
-      {
-        "text": "body e",
-        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-5.png",
-        "title": "title e:"
-      },
-      {
-        "text": "body f",
-        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-6.png",
-        "title": "title f"
-      },
-      {
-        "text": "body g",
-        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-7.png",
-        "title": "title g"
-      },
-      {
-        "text": "body h",
-        "image": "https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-8.png",
-        "title": "title h"
+
       }
     ],
     "default_coordinates": {

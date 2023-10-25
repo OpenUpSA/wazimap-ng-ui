@@ -2,8 +2,6 @@ import {Component} from '../../utils';
 import {createRoot} from "react-dom/client";
 import TutorialButton from "./tutorial_button";
 import React from "react";
-import { CollectionsBookmarkRounded } from '@mui/icons-material';
-
 import xss from 'xss';
 
 

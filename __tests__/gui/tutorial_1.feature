@@ -3,12 +3,12 @@ Feature: Tutorial 2 (?)
 
   Scenario: Verify the sandbox information is displayed
     Given I am on the Wazimap Homepage
-      Then I wait until map is ready
+    Then I wait until map is ready
     When I click on Tutorial
-      Then I check if the slide 1 is displayed correctly
+    Then I check if the slide 1 is displayed correctly
     And I click on Next
-      Then I check if the slide 2 is displayed correctly
+    Then I check if the slide 2 is displayed correctly
     And I click on Next
-      Then I check if the slide 3 is displayed correctly
+    Then I check if the slide 3 is displayed correctly
     And I click on Next
-      Then I check if the slide 1 is displayed correctly
+    Then I check if the slide 1 is displayed correctly

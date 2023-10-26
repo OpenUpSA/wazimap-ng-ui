@@ -146,7 +146,7 @@ const Result = (props) => {
         if (obj.filters.length > 0) {
             obj.filters.map(
                 filterObj => {
-                    if (filterObj.group != null && filterObj.value != null) {
+                    if (filterObj.group != null && filterObj.value != null && filterObj.group !== '' && filterObj.value !== '') {
                         indicatorData = indicatorData.filter(
                             f => f[filterObj.group] === filterObj.value
                         )
@@ -155,7 +155,10 @@ const Result = (props) => {
             )
         }
 
-        const data = indicatorData?.filter(x => x[primaryGroup] === obj.category);
+        let data = [];
+        if (obj.category != null) {
+            data = indicatorData?.filter(x => x[primaryGroup] === obj.category);
+        }
 
         if (data === null || data.length === 0) {
             return {value, tooltip, formatting};

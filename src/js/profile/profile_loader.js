@@ -65,7 +65,7 @@ export default class ProfileLoader extends Component {
     }
 
     set hiddenIndicators(value) {
-      this._hiddenIndicators = value;
+        this._hiddenIndicators = value;
     }
 
     loadProfile = (dataBundle, activeVersion) => {
@@ -139,7 +139,7 @@ export default class ProfileLoader extends Component {
                 isFirst = false;    //set to false only when there is a visible item
             }
             c.isVisible = c.subCategories.filter(
-              subcategory => subcategory.isVisible
+                subcategory => subcategory.isVisible
             ).length > 0;
 
             this.bubbleEvents(c, [

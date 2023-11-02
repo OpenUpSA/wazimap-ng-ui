@@ -3,6 +3,7 @@ import {createRoot} from "react-dom/client";
 import Watermark from "../../ui_components/watermark";
 import React from "react";
 import PointMapperTreeview from "./point_mapper_treeview";
+import CcLicense from "../../ui_components/cc_license";
 
 const categoryWrapperClsName = '.point-mapper__h1_content';
 const treeLineClsName = '.point-data__h2_line-v';
@@ -13,7 +14,7 @@ const stylesClsName = '.styles';
 const loadingClsName = '.point-mapper-content__loading';
 
 export class PointDataTray extends Component {
-    constructor(parent, api, profileId, watermarkEnabled) {
+    constructor(parent, api, profileId, watermarkEnabled, ccLicenseEnabled) {
         super(parent);
         this.api = api;
         this.profileId = profileId;
@@ -23,6 +24,9 @@ export class PointDataTray extends Component {
 
         if (watermarkEnabled) {
             this.addWatermark();
+        }
+        if (ccLicenseEnabled) {
+            this.addCcLicense();
         }
         this.addTreeviewRoot();
     }
@@ -67,7 +71,7 @@ export class PointDataTray extends Component {
     }
 
     categoryToggled(category) {
-        if (category.isLoading){
+        if (category.isLoading) {
             return;
         }
 
@@ -130,6 +134,21 @@ export class PointDataTray extends Component {
 
         let watermarkRoot = createRoot(watermarkWrapper);
         watermarkRoot.render(<Watermark/>);
+    }
+
+    addCcLicense() {
+        if ($('.point-mapper .cc-license-wrapper').length > 0) {
+            return;
+        }
+
+        let licenseWrapper = document.createElement('div');
+        $(licenseWrapper)
+            .addClass('cc-license-wrapper');
+        $('.point-mapper-content')
+            .append(licenseWrapper);
+
+        let licenseRoot = createRoot(licenseWrapper);
+        licenseRoot.render(<CcLicense/>);
     }
 
     unSelectAll() {

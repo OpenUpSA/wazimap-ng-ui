@@ -6,6 +6,7 @@ import {MapLocker} from './maplocker';
 import {createRoot} from "react-dom/client";
 import Watermark from "../ui_components/watermark";
 import React from "react";
+import CcLicense from "../ui_components/cc_license";
 
 export class MapControl extends Component {
     constructor(parent, config, zoomToPosition = () => true) {
@@ -43,6 +44,9 @@ export class MapControl extends Component {
         if (config.watermarkEnabled) {
             this.addWatermark();
         }
+        if (config.ccLicenseEnabled) {
+            this.addCcLicense();
+        }
 
         this.choropleth = new Choropleth(this, this.layerCache, this.layerStyler, config.map.choropleth);
     };
@@ -55,6 +59,25 @@ export class MapControl extends Component {
 
         let watermarkRoot = createRoot(watermarkWrapper);
         watermarkRoot.render(<Watermark/>);
+    }
+
+    addCcLicense(){
+        if ($('.main .map-cc-license-wrapper').length > 0) {
+            return;
+        }
+        let mapWrapper = document.createElement('div');
+        $(mapWrapper).addClass('map-cc-license-wrapper');
+
+        let licenseWrapper = document.createElement('div');
+        $(licenseWrapper).addClass('cc-license-wrapper');
+
+        $(mapWrapper).append(licenseWrapper);
+
+        $('.main')
+            .append(mapWrapper);
+
+        let licenseRoot = createRoot(licenseWrapper);
+        licenseRoot.render(<CcLicense/>);
     }
 
     registerEvents() {

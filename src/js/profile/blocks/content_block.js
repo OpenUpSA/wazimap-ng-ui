@@ -9,7 +9,7 @@ const chartFooterClass = '.profile-indicator__chart_footer';
 export class ContentBlock extends Component {
     static BLOCK_TYPES = {Indicator: 'indicator', HTMLBlock: 'html'};
 
-    constructor(parent, container, indicator, title, isLast, geography) {
+    constructor(parent, container, indicator, title, isLast, geography, hiddenIndicators) {
         super(parent);
 
         this._container = container;
@@ -20,6 +20,10 @@ export class ContentBlock extends Component {
         this._activeVersion = null;
 
         this.prepareEvents();
+        this._isVisible = !hiddenIndicators.includes(indicator.id);
+        if (!this._isVisible){
+          $(this.container).hide();
+        }
     }
 
     prepareEvents() {
@@ -27,6 +31,20 @@ export class ContentBlock extends Component {
             this._activeVersion = activeVersion;
             this.createVersionData();
         });
+    }
+
+    get isVisible(){
+      return this._isVisible;
+    }
+
+    set isVisible(value){
+      if (!value){
+        $(this.container).hide();
+      } else {
+        $(this.container).show();
+      }
+      this._isVisible = value;
+      this.parent.updateVisibility();
     }
 
     get container() {
@@ -90,13 +108,13 @@ export class ContentBlock extends Component {
 
         let ele = document.createElement('p');
         $(ele).addClass('profile-indicator__version');
-        $(ele).html(`This indicator applies to 
+        $(ele).html(`This indicator applies to
         <a href="#">
             <span class="version-link is--location no-link">${this.geography.name}</span>
-        </a> in the 
+        </a> in the
         <a href="#">
             <span class="version-link is--version no-link">${this.indicator.version_data.model.name}</span>
-        </a>. The map currently shows the 
+        </a>. The map currently shows the
         <a href="#">
             <span class="version-link is--current no-link">${this.activeVersion.model.name}</span>
         </a>.`);

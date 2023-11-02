@@ -24,7 +24,7 @@ class FilterControllerModel extends Observable {
     }
 
     removeFilterRow(filterRow) {
-        this._filterRows = this._filterRows.filter(filter => filter != filterRow)
+        this._filterRows = this._filterRows.filter(filter => filter != filterRow);
         this.triggerEvent(FilterControllerModel.EVENTS.filterRemoved, filterRow)
     }
 }
@@ -186,21 +186,6 @@ export class FilterController extends Component {
 
         this.updateAvailableFiltersOfRows();
         this.model.dataFilterModel.updateFilteredData();
-
-        const addFilterRow = this.noFiltersAvailable && this.model.dataFilterModel.availableFilters.length > 0;   //no filters were available but now there are filterable fields
-        const removeFilterRow = !this.noFiltersAvailable && this.model.dataFilterModel.availableFilters.length <= 0;    //there were filterable fields but now there are none
-
-        this.noFiltersAvailable = this.model.dataFilterModel.availableFilters.length <= 0;
-
-        if (addFilterRow) {
-            this.addEmptyFilter(true, false);
-        }
-
-        if (removeFilterRow) {
-            this.model.filterRows.forEach((fr) => {
-                fr.removeRow();
-            })
-        }
     }
 
     updateAvailableFiltersOfRows() {

@@ -17,82 +17,14 @@ describe('Add filter button', () => {
     })
 
     test('Adds a filter row', () => {
-        let component = new Component();
-        let mc = new MapChip(component, mapchip_colors);
-        params.chartConfiguration.filter = {
-            defaults: [{
-                name: 'gender',
-                value: 'Male'
-            }]
-        }
-
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel, false);
-
-        let prevFilterRow = $('.map-options__filters_content .map-options__filter-row').length;
-        $('.mapping-options__add-filter').trigger('click');
-        let afterFilterRow = $('.map-options__filters_content .map-options__filter-row').length;
-
-        expect(afterFilterRow).toBe(prevFilterRow + 1);
+        // replaced by data_mapper.feature
     })
 
     test('Is enabled', () => {
-        params.groups = [
-            {
-                subindicators: ["30-35", "20-24", "15-24 (Intl)", "15-35 (ZA)", "15-19", "25-29"],
-                dataset: 241,
-                name: "age",
-                can_aggregate: true,
-                can_filter: true
-            },
-            {
-                subindicators: ["Female", "Male"],
-                dataset: 241,
-                name: "gender",
-                can_aggregate: true,
-                can_filter: true
-            },
-            {
-                subindicators: ["Xitsonga", "Sign language", "isiNdebele", "Setswana", "Sesotho", "English", "Other", "Siswati", "Afrikaans", "Sepedi", "Tshivenda", "isiXhosa", "isiZulu"],
-                dataset: 241,
-                name: "language",
-                can_aggregate: true,
-                can_filter: true
-            },
-            {
-                subindicators: ["Black African", "Indian or Asian", "Other", "Coloured", "White"],
-                dataset: 241,
-                name: "race",
-                can_aggregate: true,
-                can_filter: true
-            }];
-
-        let component = new Component();
-        let mc = new MapChip(component, mapchip_colors);
-
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel, false);
-
-        let btn = document.querySelector('.mapping-options__add-filter');
-        expect(btn).not.toHaveClass('disabled');
+        // replaced by mapchip_filter_row.feature
     })
 
     test('Is disabled', () => {
-        params.groups = [{
-            subindicators: ["Female", "Male"],
-            dataset: 241,
-            name: "gender",
-            can_aggregate: false,
-            can_filter: true
-        }];
-
-        let component = new Component();
-        let mc = new MapChip(component, mapchip_colors);
-
-        let dataFilterModel = new DataFilterModel(params.groups, params.chartConfiguration.filter, [], params.primaryGroup, params.childData);
-        mc.setFilterController(dataFilterModel, false);
-
-        let btn = document.querySelector(`${mapBottomItems} .mapping-options__add-filter`);
-        expect(btn).toHaveClass('disabled');
+        // replaced by mapchip_filter_row.feature
     })
 })

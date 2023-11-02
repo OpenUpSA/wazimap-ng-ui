@@ -6,7 +6,8 @@ import {
     expandDataMapper,
     gotoHomepage, mapBottomItems,
     setupInterceptions,
-    waitUntilGeographyIsLoaded
+    waitUntilGeographyIsLoaded,
+    selectChoroplethDropdownOption,
 } from "../common_cy_functions/general";
 import all_details from "./all_details.json";
 import profiles from "./profiles.json";
@@ -36,9 +37,9 @@ When(/^I click on "([^"]*)" in Data Mapper$/, function (word) {
 });
 
 Then('I select an indicator', () => {
-  cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
-  cy.get('.indicator-item').contains('Population group').click();
-  cy.get('.subIndicator-item').contains('Black african').click();
+    cy.get('.indicator-subcategory').contains('Population (2016 Community Survey)').click();
+    cy.get('.indicator-item').contains('Population group').click();
+    cy.get('.subIndicator-item').contains('Black african').click();
 })
 
 Then('I check if the choropleth filter dialog is collapsed', () => {
@@ -95,11 +96,8 @@ Then('I check if there is description', () => {
 })
 
 Then('I select a filter', () => {
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:first`).click();
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:first .dropdown__list_item:last`).click();
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:last`).click();
-    cy.get(`${mapBottomItems} .map-options .map-options__filter-row:last .mapping-options__filter:last .dropdown__list_item:last`).click();
-
+    selectChoroplethDropdownOption("sex", 0);
+    selectChoroplethDropdownOption("Male", 1)
 })
 
 
@@ -131,7 +129,7 @@ Then('I check if snackbar is visible', () => {
 })
 
 Then('I wait for snackbar to disappear', () => {
-    cy.wait(10000);
+    cy.wait(5000);
 })
 
 Then('I check if snackbar is not visible', () => {
@@ -180,4 +178,12 @@ Then('I recheck filters applied label is visible', () => {
 
 Then('I check applied filters does not have notification badge', () => {
     cy.get(`${mapBottomItems} .map-options .filters__header_label`).should('not.have.class', 'notification-badges');
+})
+
+Then('I add new filter', () => {
+    cy.get(`${mapBottomItems} .map-options`).contains('Add new filter').click();
+})
+
+Then('I check if the add new filter button is disabled', () => {
+    cy.get(`${mapBottomItems} .map-options`).contains('Add new filter').should('have.class', 'disabled');
 })

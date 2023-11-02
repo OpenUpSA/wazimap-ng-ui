@@ -4,7 +4,7 @@ import {getHostname, getAPIUrl, loadDevTools} from "../utils";
 import {API} from "../api";
 
 //components
-import Header from "./header";
+import Header from "./header/header";
 import Body from "./body";
 
 //css
@@ -13,7 +13,9 @@ import './tabular-comparison.module.css';
 const TabularComparison = (props) => {
     const [api, setApi] = useState(null);
     const [profileId, setProfileId] = useState();
+    const [profileConfig, setProfileConfig] = useState({});
     const [render, setRender] = useState(true);
+    const [defaultVersionName, setDefaultVersionName] = useState(null);
 
     const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
     const productionUrl = getAPIUrl('https://production.wazimap-ng.openup.org.za');
@@ -36,10 +38,6 @@ const TabularComparison = (props) => {
         },
         'geo.vulekamali.gov.za': {
             baseUrl: productionUrl,
-            config: config
-        },
-        'gcro.openup.org.za': {
-            baseUrl: 'https://api.gcro.openup.org.za',
             config: config
         },
         'beta.youthexplorer.org.za': {
@@ -105,18 +103,26 @@ const TabularComparison = (props) => {
 
         const api = new API(pc.baseUrl, hostname);
         api.getProfileConfiguration(hostname).then((data) => {
+            setDefaultVersionName(data.geography_hierarchy?.configuration?.default_version);
             setApi(api);
             setProfileId(data.id);
+            setProfileConfig(data.configuration)
         });
         setRender(false);
     })
 
     return (
         <div>
-            <Header/>
+            <Header
+                api={api}
+                profileId={profileId}
+                profileConfig={profileConfig}
+            />
             <Body
                 api={api}
                 profileId={profileId}
+                profileConfig={profileConfig}
+                defaultVersionName={defaultVersionName}
             />
         </div>
     );

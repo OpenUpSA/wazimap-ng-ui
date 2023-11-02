@@ -37,7 +37,33 @@
         "English",
         "Afrikaans",
         "This is ignored"
+      ],
+      "age": [
+        "20-24",
+        "30-35"
       ]
+    },
+    "views": {
+      "test": {
+        "default_filters": [
+          {
+            "name": "gender",
+            "value": "Male"
+          }
+        ],
+        "restrict_values": {
+          "language": [
+            "English",
+            "Sepedi",
+            "isiXhosa"
+          ],
+          "age": [
+            "15-19",
+            "20-24",
+            "30-35"
+          ]
+        }
+      }
     },
     "tutorial": [],
     "default_coordinates": {

@@ -1,0 +1,205 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": 441633,
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.093833387362697,
+          -28.995409163308832
+        ]
+      },
+      "properties": {
+        "data": [
+          {
+            "key": "campus",
+            "value": "Nongoma"
+          },
+          {
+            "key": "phone number",
+            "value": "0358310358"
+          },
+          {
+            "key": "email address",
+            "value": "campushead@nongoma.co.za"
+          },
+          {
+            "key": "institution type",
+            "value": "TVET"
+          },
+          {
+            "key": "physical address",
+            "value": "Nongoma Main Road Nongoma"
+          }
+        ],
+        "name": "Mthashana FET College (A)",
+        "url": null,
+        "image": null
+      }
+    },
+    {
+      "id": 1007596,
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.41374,
+          -33.92949
+        ]
+      },
+      "properties": {
+        "data": [
+          {
+            "key": "data verification status",
+            "value": "Unverified"
+          },
+          {
+            "key": "facility type",
+            "value": "University"
+          },
+          {
+            "key": "campus",
+            "value": "Hiddingh Campus"
+          },
+          {
+            "key": "address",
+            "value": "31-37 Orange St, Gardens, 8001"
+          },
+          {
+            "key": "phone number",
+            "value": "0216509111"
+          },
+          {
+            "key": "email address",
+            "value": "hum-dean@uct.ac.za"
+          },
+          {
+            "key": "website",
+            "value": "https://www.uct.ac.za/"
+          }
+        ],
+        "name": "University of Cape Town",
+        "url": null,
+        "image": null
+      }
+    },
+    {
+      "id": 1007598,
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.8329509,
+          -32.7901325
+        ]
+      },
+      "properties": {
+        "data": [
+          {
+            "key": "data verification status",
+            "value": "Unverified"
+          },
+          {
+            "key": "facility type",
+            "value": "University"
+          },
+          {
+            "key": "campus",
+            "value": "Alice"
+          },
+          {
+            "key": "address",
+            "value": "1 King Williamstown Road, Alice, 5700"
+          },
+          {
+            "key": "phone number",
+            "value": "0406022441"
+          },
+          {
+            "key": "email address",
+            "value": "admissions@ufh.ac.za"
+          },
+          {
+            "key": "website",
+            "value": "https://www.ufh.ac.za/"
+          },
+          {
+            "key": "numerical",
+            "value": 14
+          }
+        ],
+        "name": "University of Fort Hare",
+        "url": null,
+        "image": null
+      }
+    },
+    {
+      "id": 1047305,
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.783591,
+          -31.943308
+        ]
+      },
+      "properties": {
+        "data": [
+          {
+            "key": "data verification status",
+            "value": "Verified (DHET 2021)"
+          },
+          {
+            "key": "address",
+            "value": "Border Training Centre, 10 Mfaxa Road, NU1 Mdantsane, East London, 5219"
+          },
+          {
+            "key": "principal",
+            "value": "Mr M Mdunyelwa"
+          },
+          {
+            "key": "email address (principal)",
+            "value": "mbuleli.mdunyelwa@ecdoe.gov.za; MMdunyelwa@EC.CETC.edu.za"
+          },
+          {
+            "key": "phone number (principal)",
+            "value": "411804072"
+          },
+          {
+            "key": "cellphone number (principal)",
+            "value": 729838087
+          },
+          {
+            "key": "pa to principal",
+            "value": "Ms Zukiswa Jack"
+          },
+          {
+            "key": "email address (pa)",
+            "value": "ZJack@EC.CETC.edu.za "
+          },
+          {
+            "key": "phone number (pa)",
+            "value": "414595025"
+          },
+          {
+            "key": "cellphone number (pa)",
+            "value": "605254039"
+          },
+          {
+            "key": "campus",
+            "value": "    "
+          },
+          {
+            "key": "numerical",
+            "value": 22
+          }
+        ],
+        "name": "Eastern Cape CETC",
+        "url": null,
+        "image": null
+      }
+    }
+  ]
+}

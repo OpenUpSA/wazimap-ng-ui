@@ -183,6 +183,21 @@ body {
     text-overflow: ellipsis;
 }
 
+.truncate-table-cell {
+    white-space: nowrap;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: baseline !important;
+}
+
+.untruncate-table-cell {
+    white-space: break-spaces;
+    max-width: 100px;
+    overflow: visible;
+    vertical-align: baseline !important;
+}
+
 .geography-empty-state {
     text-align: center;
     margin-top: 22px;
@@ -203,6 +218,41 @@ body {
 
 .result-empty-state svg {
     margin-right: 10px;
+}
+
+.font-13 {
+    font-size: 13px;
+}
+
+.m-auto {
+    margin: auto !important;
+}
+
+.lh-0 {
+    line-height: 0px !important;
+}
+
+.text-end {
+    text-align: end;
+}
+
+.pr-0 {
+    padding-right: 0px;
+}
+
+.header-profile-logo {
+    height: 44px;
+    border-radius: 4px;
+    margin-top: 6px;
+}
+
+.header-profile-logo img.profile-logo {
+    max-height: 40px;
+    margin: auto;
+}
+
+.position-relative {
+    position: relative;
 }
 
 /*scroll*/

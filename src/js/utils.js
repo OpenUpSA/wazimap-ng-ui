@@ -541,3 +541,41 @@ export function isColorLight(color) {
 
     return total > threshold;
 }
+
+export function getColorRange(values, config, positiveRangeRequested = true) {
+    const hasNegative = values.some(v => v < 0);
+    const hasPositive = values.some(v => v > 0);
+
+    let positiveColorRange = config.positive_color_range;
+    let negativeColorRange = config.negative_color_range;
+    let zeroColor = config.zero_color;
+
+    if (hasPositive && !hasNegative) {
+        // only positive
+        return positiveColorRange;
+    } else if (!hasPositive && hasNegative) {
+        // only negative
+        return negativeColorRange;
+    } else if (hasPositive && hasNegative) {
+        // both
+        if (positiveRangeRequested) {
+            return [zeroColor, positiveColorRange[1]];
+        } else {
+            return [negativeColorRange[0], zeroColor];
+        }
+    } else {
+        // all zero
+        return positiveColorRange;
+    }
+}
+
+export function checkAndCreateHeaderContainers() {
+    let container = window.document.querySelector('.nav__content .header-containers');
+    if (container != null) {
+        return
+    }
+
+    container = document.createElement('div');
+    container.classList.add('header-containers');
+    window.document.getElementsByClassName('nav__content')[0].append(container);
+}

@@ -86,24 +86,24 @@ export default class Analytics {
 
     registerPointEvents(controller) {
         controller.on('point_tray.theme.selected', payload => {
-            const themeLabel = payload.payload.data.name;
+            const themeLabel = payload.name;
             this.basicLogEvent(payload, 'points', 'theme_selected', themeLabel);
         })
 
         controller.on('point_tray.theme.unselected', payload => {
-            const themeLabel = payload.payload.data.name;
+            const themeLabel = payload.name;
             this.basicLogEvent(payload, 'points', 'theme_unselected', themeLabel);
         })
 
         controller.on('point_tray.category.selected', payload => {
-            const categoryLabel = payload.payload.data.name;
+            const categoryLabel = payload.name;
             const key = categoryKey(categoryLabel);
 
             this.basicLogEvent(payload, 'points', 'category_selected', categoryLabel);
         })
 
         controller.on('point_tray.category.unselected', payload => {
-            const categoryLabel = payload.payload.data.name;
+            const categoryLabel = payload.name;
             this.basicLogEvent(payload, 'points', 'category_unselected', categoryLabel);
         })
 
@@ -119,7 +119,7 @@ export default class Analytics {
 
 
         controller.on('categoryPointLoading', payload => {
-            const categoryLabel = payload.payload.data.name;
+            const categoryLabel = payload.name;
             const key = categoryKey(categoryLabel);
 
             this.timer.startTimer(key);

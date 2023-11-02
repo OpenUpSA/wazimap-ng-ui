@@ -1,0 +1,7375 @@
+{
+  "profile": {
+    "logo": {
+      "image": "",
+      "url": "/"
+    },
+    "geography": {
+      "name": "",
+      "code": "FS",
+      "level": "province",
+      "version": "2011 Boundaries",
+      "parents": []
+    },
+    "profile_data": {
+      "Economic Opportunities": {
+        "description": "",
+        "subcategories": {
+          "NEET Status": {
+            "description": "",
+            "indicators": {
+              "Not in Employment, Education and Training (NEET) status": {
+                "id": 1134,
+                "description": "",
+                "choropleth_method": "subindicator",
+                "last_updated_at": "2021-10-13T15:43:22.928664Z",
+                "metadata": {
+                  "source": "Stats SA Census 2011",
+                  "description": "",
+                  "url": null,
+                  "licence": {
+                    "name": null,
+                    "url": null
+                  },
+                  "primary_group": "neet status",
+                  "groups": [
+                    {
+                      "subindicators": [
+                        "20-24",
+                        "15-19",
+                        "25-29",
+                        "15-35 (ZA)",
+                        "30-35",
+                        "15-24 (Intl)"
+                      ],
+                      "dataset": 1306,
+                      "name": "age group",
+                      "can_aggregate": false,
+                      "can_filter": true
+                    },
+                    {
+                      "subindicators": [
+                        "Female",
+                        "Male"
+                      ],
+                      "dataset": 1306,
+                      "name": "gender",
+                      "can_aggregate": true,
+                      "can_filter": true
+                    },
+                    {
+                      "subindicators": [
+                        "School/post-school",
+                        "NEET",
+                        "Employed"
+                      ],
+                      "dataset": 1306,
+                      "name": "neet status",
+                      "can_aggregate": true,
+                      "can_filter": true
+                    },
+                    {
+                      "subindicators": [
+                        "Coloured",
+                        "Other",
+                        "Indian or Asian",
+                        "White",
+                        "Black African"
+                      ],
+                      "dataset": 1306,
+                      "name": "race",
+                      "can_aggregate": true,
+                      "can_filter": true
+                    }
+                  ]
+                },
+                "content_type": "indicator",
+                "dataset_content_type": "quantitative",
+                "version": "2011 Boundaries",
+                "chart_configuration": {
+                  "types": {
+                    "Value": {
+                      "formatting": ",.0f"
+                    },
+                    "Percentage": {
+                      "maxX": 1,
+                      "minX": 0
+                    }
+                  },
+                  "filter": {
+                    "defaults": [
+                      {
+                        "name": "age group",
+                        "value": "15-35 (ZA)"
+                      }
+                    ]
+                  }
+                },
+                "data": [
+                  {
+                    "race": "Black African",
+                    "count": 5695.895279999643,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 3240.146730000073,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 94101.70858991136,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 91741.16288992361,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 15915.964479996715,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 22542.668860003214,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 313.38660000000084,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 217.2054000000004,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 2735.3898000000804,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 2677.024450000079,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 777.1351499999931,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 925.9845499999903,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 65.63489999999992,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 21.773950000000003,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 211.99170000000052,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 200.15690000000043,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 25.295700000000004,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 34.02615,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 1029.5627499999866,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 953.396999999987,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 5784.214029999605,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 5444.394749999709,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 482.52635000000294,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 628.0895699999988,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 65.84359999999991,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 17.4609,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 85.20014999999987,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 73.67839999999988,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 41.02614999999998,
+                    "gender": "Male",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 40.44354999999998,
+                    "gender": "Female",
+                    "age group": "15-19",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 31508.753540010242,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 18544.41067999917,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 27096.584570009225,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 26635.927770008526,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 54024.20128004322,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 74108.45341001464,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1419.2560000000071,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1184.4998499999933,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 591.2697000000003,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 623.1389999999992,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1588.1219000000162,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 2071.8862500000423,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 655.0185999999978,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 100.45234999999983,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 70.46969999999989,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 71.9479499999999,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 123.74804999999974,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 130.64369999999977,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 4415.935390000008,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 4176.564790000105,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 1949.569450000033,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 2247.3413800000453,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 1133.8930099999905,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 1663.2206300000107,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 527.4966000000024,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 105.1827999999998,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 35.234849999999994,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 31.60875,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 119.12194999999977,
+                    "gender": "Male",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 80.88709999999988,
+                    "gender": "Female",
+                    "age group": "20-24",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 50242.902970035895,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 32295.982840013825,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 3762.277480000135,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 5370.130739999743,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 44554.35779003095,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 69463.07527003768,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1882.9665000000314,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1678.8672500000218,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 88.19114999999985,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 121.38249999999977,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1171.8171999999927,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1667.87995000002,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 1107.0889999999881,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 128.74804999999975,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 13.2522,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 13.043500000000002,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 146.0437499999999,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 143.06109999999987,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 6482.1404099994115,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 5833.738379999583,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 289.62291000000124,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 346.76503000000173,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 947.4841499999881,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 1874.6093800000194,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 794.3318999999925,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 122.70454999999976,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 7.73045,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 8.626100000000001,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 127.26979999999973,
+                    "gender": "Male",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 118.91324999999978,
+                    "gender": "Female",
+                    "age group": "25-29",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 55866.89366004341,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 37066.76296002016,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 1570.9963900000137,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 3075.083470000096,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 36523.56530002078,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 62499.20125005347,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 2143.6615500000426,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1774.5360000000264,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 49.93904999999996,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 73.46969999999989,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 998.8516499999841,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1583.718300000015,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 997.8191999999844,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 160.46115000000003,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 10.93915,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 5.52175,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 121.64369999999975,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 150.10459999999995,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 7629.9273399990625,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 6388.883849999422,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 101.21239999999982,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 152.35451999999998,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 908.4430799999899,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 2367.1697200000317,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 696.792549999996,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 118.60019999999979,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 7.52175,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 9.8348,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 106.18279999999979,
+                    "gender": "Male",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 76.57404999999989,
+                    "gender": "Female",
+                    "age group": "30-35",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 37204.648820017515,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 21784.557410002435,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 121198.29315977369,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 118377.09065978815,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 69940.16576003542,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 96651.1222699021,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1732.6426000000242,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 1401.7052500000054,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 3326.659500000115,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 3300.163450000113,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 2365.25705000006,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 2997.8708000000793,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 720.6534999999948,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 122.22629999999975,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 282.46140000000116,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 272.10485000000097,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 149.0437499999999,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 164.66985000000003,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 5445.4981399997005,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 5129.961789999805,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 7733.7834799989905,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 7691.736129999021,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 1616.4193600000126,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 2291.3102000000395,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 593.3402,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 122.64369999999975,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 120.43499999999976,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 105.2871499999998,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 160.14809999999997,
+                    "gender": "Male",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 121.33064999999975,
+                    "gender": "Female",
+                    "age group": "15-24 (Intl)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 143314.44544983635,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 91147.30320993095,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 126531.56702974682,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 126822.30486974555,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 151018.0888498776,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Black African",
+                    "count": 228613.39879047035,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 5759.270649999672,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 4855.108499999893,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 3464.7897000001203,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 3495.0156500001212,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 4535.92590000001,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Coloured",
+                    "count": 6249.469049999486,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 2825.5617000000857,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 411.4355000000022,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 306.65275000000133,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 290.67010000000124,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 416.73120000000233,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Indian or Asian",
+                    "count": 457.8355500000025,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 19557.56589000026,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 17352.584019997852,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "White",
+                    "count": 8124.618789998884,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 8190.855679998854,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "White",
+                    "count": 3472.3465900000924,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "White",
+                    "count": 6533.089299999401,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 2084.464650000044,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 363.94845000000174,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "Employed"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 135.68719999999982,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 123.74804999999975,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "School/post-school"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 393.60070000000206,
+                    "gender": "Male",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  },
+                  {
+                    "race": "Other",
+                    "count": 316.8179500000013,
+                    "gender": "Female",
+                    "age group": "15-35 (ZA)",
+                    "neet status": "NEET"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "highlights": [],
+    "overview": {
+      "name": "Youth Explorer",
+      "description": ""
+    }
+  },
+  "boundary": {
+    "type": "Feature",
+    "geometry": {
+      "type": "MultiPolygon",
+      "coordinates": [
+        [
+          [
+            [
+              28.2443,
+              -26.8848
+            ],
+            [
+              28.2789,
+              -26.9058
+            ],
+            [
+              28.3004,
+              -26.9402
+            ],
+            [
+              28.3284,
+              -26.9479
+            ],
+            [
+              28.3543,
+              -26.9314
+            ],
+            [
+              28.3922,
+              -26.9314
+            ],
+            [
+              28.4346,
+              -27.0025
+            ],
+            [
+              28.4517,
+              -26.9797
+            ],
+            [
+              28.4859,
+              -26.9711
+            ],
+            [
+              28.5109,
+              -26.9928
+            ],
+            [
+              28.5497,
+              -27.0416
+            ],
+            [
+              28.5855,
+              -27.0359
+            ],
+            [
+              28.6095,
+              -27.008
+            ],
+            [
+              28.6444,
+              -27.0203
+            ],
+            [
+              28.6555,
+              -26.9969
+            ],
+            [
+              28.6102,
+              -26.9869
+            ],
+            [
+              28.6469,
+              -26.953
+            ],
+            [
+              28.6797,
+              -26.9736
+            ],
+            [
+              28.7254,
+              -26.9846
+            ],
+            [
+              28.7353,
+              -27.0007
+            ],
+            [
+              28.8109,
+              -27.0386
+            ],
+            [
+              28.87,
+              -27.0317
+            ],
+            [
+              28.9004,
+              -27.0483
+            ],
+            [
+              28.9042,
+              -27.0198
+            ],
+            [
+              28.9548,
+              -27.0115
+            ],
+            [
+              28.9675,
+              -26.9915
+            ],
+            [
+              29.0388,
+              -27.0221
+            ],
+            [
+              29.0721,
+              -27.057
+            ],
+            [
+              29.061,
+              -27.0717
+            ],
+            [
+              29.086,
+              -27.1153
+            ],
+            [
+              29.1364,
+              -27.1542
+            ],
+            [
+              29.1709,
+              -27.1416
+            ],
+            [
+              29.2239,
+              -27.1447
+            ],
+            [
+              29.2298,
+              -27.1672
+            ],
+            [
+              29.2841,
+              -27.1907
+            ],
+            [
+              29.3005,
+              -27.2119
+            ],
+            [
+              29.3315,
+              -27.2101
+            ],
+            [
+              29.3396,
+              -27.2527
+            ],
+            [
+              29.3913,
+              -27.2427
+            ],
+            [
+              29.4434,
+              -27.2669
+            ],
+            [
+              29.463,
+              -27.2871
+            ],
+            [
+              29.469,
+              -27.3242
+            ],
+            [
+              29.4901,
+              -27.3369
+            ],
+            [
+              29.5094,
+              -27.3773
+            ],
+            [
+              29.5371,
+              -27.387
+            ],
+            [
+              29.5599,
+              -27.4322
+            ],
+            [
+              29.6007,
+              -27.4701
+            ],
+            [
+              29.6189,
+              -27.506
+            ],
+            [
+              29.7043,
+              -27.4894
+            ],
+            [
+              29.6993,
+              -27.4503
+            ],
+            [
+              29.7212,
+              -27.4329
+            ],
+            [
+              29.7587,
+              -27.4426
+            ],
+            [
+              29.7032,
+              -27.472
+            ],
+            [
+              29.7216,
+              -27.4883
+            ],
+            [
+              29.7124,
+              -27.5184
+            ],
+            [
+              29.7584,
+              -27.5271
+            ],
+            [
+              29.7804,
+              -27.5595
+            ],
+            [
+              29.7796,
+              -27.5873
+            ],
+            [
+              29.7348,
+              -27.6071
+            ],
+            [
+              29.6979,
+              -27.6408
+            ],
+            [
+              29.6768,
+              -27.6397
+            ],
+            [
+              29.6701,
+              -27.6701
+            ],
+            [
+              29.709,
+              -27.6985
+            ],
+            [
+              29.703,
+              -27.7614
+            ],
+            [
+              29.7313,
+              -27.8081
+            ],
+            [
+              29.697,
+              -27.8245
+            ],
+            [
+              29.6871,
+              -27.8585
+            ],
+            [
+              29.6904,
+              -27.8957
+            ],
+            [
+              29.6577,
+              -27.9374
+            ],
+            [
+              29.6359,
+              -27.9945
+            ],
+            [
+              29.6394,
+              -28.0155
+            ],
+            [
+              29.6169,
+              -28.0468
+            ],
+            [
+              29.6555,
+              -28.09
+            ],
+            [
+              29.6585,
+              -28.1401
+            ],
+            [
+              29.6632,
+              -28.1444
+            ],
+            [
+              29.6629,
+              -28.1772
+            ],
+            [
+              29.6263,
+              -28.1857
+            ],
+            [
+              29.6096,
+              -28.215
+            ],
+            [
+              29.6198,
+              -28.2412
+            ],
+            [
+              29.5587,
+              -28.2583
+            ],
+            [
+              29.5506,
+              -28.2472
+            ],
+            [
+              29.4829,
+              -28.2722
+            ],
+            [
+              29.4793,
+              -28.2907
+            ],
+            [
+              29.4376,
+              -28.3211
+            ],
+            [
+              29.4143,
+              -28.3759
+            ],
+            [
+              29.3734,
+              -28.3719
+            ],
+            [
+              29.3201,
+              -28.4068
+            ],
+            [
+              29.3226,
+              -28.424
+            ],
+            [
+              29.2901,
+              -28.4379
+            ],
+            [
+              29.2488,
+              -28.4249
+            ],
+            [
+              29.229,
+              -28.4563
+            ],
+            [
+              29.1915,
+              -28.4938
+            ],
+            [
+              29.2163,
+              -28.519
+            ],
+            [
+              29.1964,
+              -28.545
+            ],
+            [
+              29.1615,
+              -28.5421
+            ],
+            [
+              29.135,
+              -28.5663
+            ],
+            [
+              29.0963,
+              -28.5451
+            ],
+            [
+              28.974,
+              -28.5746
+            ],
+            [
+              28.9409,
+              -28.6314
+            ],
+            [
+              28.9428,
+              -28.6509
+            ],
+            [
+              28.8962,
+              -28.6947
+            ],
+            [
+              28.8913,
+              -28.7465
+            ],
+            [
+              28.8758,
+              -28.7646
+            ],
+            [
+              28.8582,
+              -28.7561
+            ],
+            [
+              28.8078,
+              -28.7709
+            ],
+            [
+              28.8009,
+              -28.7454
+            ],
+            [
+              28.8115,
+              -28.72
+            ],
+            [
+              28.795,
+              -28.6997
+            ],
+            [
+              28.7588,
+              -28.6861
+            ],
+            [
+              28.7267,
+              -28.6877
+            ],
+            [
+              28.7046,
+              -28.6713
+            ],
+            [
+              28.7031,
+              -28.6194
+            ],
+            [
+              28.6824,
+              -28.5904
+            ],
+            [
+              28.6481,
+              -28.5714
+            ],
+            [
+              28.6122,
+              -28.5974
+            ],
+            [
+              28.5684,
+              -28.6083
+            ],
+            [
+              28.5186,
+              -28.6027
+            ],
+            [
+              28.4721,
+              -28.6054
+            ],
+            [
+              28.4536,
+              -28.6193
+            ],
+            [
+              28.4132,
+              -28.6274
+            ],
+            [
+              28.3685,
+              -28.6673
+            ],
+            [
+              28.3528,
+              -28.7002
+            ],
+            [
+              28.3033,
+              -28.7004
+            ],
+            [
+              28.2807,
+              -28.7148
+            ],
+            [
+              28.2568,
+              -28.7002
+            ],
+            [
+              28.1954,
+              -28.7107
+            ],
+            [
+              28.1191,
+              -28.7416
+            ],
+            [
+              28.0732,
+              -28.8158
+            ],
+            [
+              28.0506,
+              -28.8198
+            ],
+            [
+              28.0284,
+              -28.8739
+            ],
+            [
+              27.9658,
+              -28.871
+            ],
+            [
+              27.9487,
+              -28.8527
+            ],
+            [
+              27.916,
+              -28.8651
+            ],
+            [
+              27.8889,
+              -28.9165
+            ],
+            [
+              27.8329,
+              -28.9063
+            ],
+            [
+              27.7983,
+              -28.9184
+            ],
+            [
+              27.7628,
+              -28.8975
+            ],
+            [
+              27.76,
+              -28.9414
+            ],
+            [
+              27.7308,
+              -28.9457
+            ],
+            [
+              27.7162,
+              -29.0044
+            ],
+            [
+              27.6824,
+              -29.0066
+            ],
+            [
+              27.6762,
+              -29.0663
+            ],
+            [
+              27.6142,
+              -29.1642
+            ],
+            [
+              27.5514,
+              -29.1962
+            ],
+            [
+              27.5247,
+              -29.241
+            ],
+            [
+              27.5476,
+              -29.2464
+            ],
+            [
+              27.4723,
+              -29.3185
+            ],
+            [
+              27.4363,
+              -29.3341
+            ],
+            [
+              27.4377,
+              -29.3627
+            ],
+            [
+              27.4028,
+              -29.414
+            ],
+            [
+              27.3705,
+              -29.4487
+            ],
+            [
+              27.3613,
+              -29.4856
+            ],
+            [
+              27.3349,
+              -29.4814
+            ],
+            [
+              27.3076,
+              -29.4957
+            ],
+            [
+              27.2779,
+              -29.5263
+            ],
+            [
+              27.1856,
+              -29.5661
+            ],
+            [
+              27.1522,
+              -29.5622
+            ],
+            [
+              27.1197,
+              -29.5775
+            ],
+            [
+              27.0859,
+              -29.6146
+            ],
+            [
+              27.0479,
+              -29.6338
+            ],
+            [
+              27.0139,
+              -29.6617
+            ],
+            [
+              27.0385,
+              -29.677
+            ],
+            [
+              27.0966,
+              -29.7299
+            ],
+            [
+              27.2229,
+              -29.9968
+            ],
+            [
+              27.2965,
+              -30.0561
+            ],
+            [
+              27.3269,
+              -30.1481
+            ],
+            [
+              27.3942,
+              -30.1425
+            ],
+            [
+              27.3866,
+              -30.1921
+            ],
+            [
+              27.3655,
+              -30.2188
+            ],
+            [
+              27.3659,
+              -30.2579
+            ],
+            [
+              27.3891,
+              -30.2935
+            ],
+            [
+              27.3774,
+              -30.3271
+            ],
+            [
+              27.403,
+              -30.393
+            ],
+            [
+              27.3769,
+              -30.4088
+            ],
+            [
+              27.3446,
+              -30.3973
+            ],
+            [
+              27.2935,
+              -30.4567
+            ],
+            [
+              27.3284,
+              -30.4819
+            ],
+            [
+              27.2845,
+              -30.5034
+            ],
+            [
+              27.2295,
+              -30.4992
+            ],
+            [
+              27.1885,
+              -30.5238
+            ],
+            [
+              27.1324,
+              -30.5093
+            ],
+            [
+              27.138,
+              -30.5322
+            ],
+            [
+              27.1054,
+              -30.5583
+            ],
+            [
+              27.0853,
+              -30.528
+            ],
+            [
+              27.0037,
+              -30.5383
+            ],
+            [
+              26.9981,
+              -30.5487
+            ],
+            [
+              27.0427,
+              -30.5864
+            ],
+            [
+              27.0279,
+              -30.6046
+            ],
+            [
+              27.0029,
+              -30.5946
+            ],
+            [
+              26.9479,
+              -30.6076
+            ],
+            [
+              26.9299,
+              -30.6272
+            ],
+            [
+              26.943,
+              -30.6621
+            ],
+            [
+              26.8968,
+              -30.6674
+            ],
+            [
+              26.8477,
+              -30.6839
+            ],
+            [
+              26.8141,
+              -30.6427
+            ],
+            [
+              26.7751,
+              -30.649
+            ],
+            [
+              26.7528,
+              -30.6656
+            ],
+            [
+              26.7257,
+              -30.6664
+            ],
+            [
+              26.7066,
+              -30.6857
+            ],
+            [
+              26.6295,
+              -30.6939
+            ],
+            [
+              26.6261,
+              -30.6614
+            ],
+            [
+              26.5752,
+              -30.6668
+            ],
+            [
+              26.5217,
+              -30.6402
+            ],
+            [
+              26.4812,
+              -30.6276
+            ],
+            [
+              26.4902,
+              -30.596
+            ],
+            [
+              26.4469,
+              -30.5688
+            ],
+            [
+              26.4252,
+              -30.5652
+            ],
+            [
+              26.3489,
+              -30.595
+            ],
+            [
+              26.3138,
+              -30.5826
+            ],
+            [
+              26.2942,
+              -30.591
+            ],
+            [
+              26.2646,
+              -30.5638
+            ],
+            [
+              26.2597,
+              -30.5407
+            ],
+            [
+              26.1938,
+              -30.528
+            ],
+            [
+              26.1941,
+              -30.5038
+            ],
+            [
+              26.1626,
+              -30.4835
+            ],
+            [
+              26.098,
+              -30.5165
+            ],
+            [
+              25.9731,
+              -30.5394
+            ],
+            [
+              25.9268,
+              -30.5703
+            ],
+            [
+              25.9027,
+              -30.5428
+            ],
+            [
+              25.8749,
+              -30.5728
+            ],
+            [
+              25.8925,
+              -30.5982
+            ],
+            [
+              25.8512,
+              -30.6293
+            ],
+            [
+              25.7998,
+              -30.6348
+            ],
+            [
+              25.782,
+              -30.6463
+            ],
+            [
+              25.7789,
+              -30.6759
+            ],
+            [
+              25.7498,
+              -30.6825
+            ],
+            [
+              25.7001,
+              -30.6795
+            ],
+            [
+              25.6716,
+              -30.6409
+            ],
+            [
+              25.6309,
+              -30.6593
+            ],
+            [
+              25.6031,
+              -30.5944
+            ],
+            [
+              25.5563,
+              -30.6166
+            ],
+            [
+              25.5299,
+              -30.613
+            ],
+            [
+              25.4768,
+              -30.6346
+            ],
+            [
+              25.4536,
+              -30.609
+            ],
+            [
+              25.3766,
+              -30.5599
+            ],
+            [
+              25.3281,
+              -30.5614
+            ],
+            [
+              25.3071,
+              -30.5771
+            ],
+            [
+              25.2371,
+              -30.5012
+            ],
+            [
+              25.21,
+              -30.5051
+            ],
+            [
+              25.1519,
+              -30.4573
+            ],
+            [
+              25.1577,
+              -30.4426
+            ],
+            [
+              25.1256,
+              -30.4202
+            ],
+            [
+              25.0937,
+              -30.3715
+            ],
+            [
+              25.0356,
+              -30.3442
+            ],
+            [
+              25.0472,
+              -30.3197
+            ],
+            [
+              25.035,
+              -30.2869
+            ],
+            [
+              24.9863,
+              -30.29
+            ],
+            [
+              24.946,
+              -30.2504
+            ],
+            [
+              24.9553,
+              -30.228
+            ],
+            [
+              24.9274,
+              -30.2024
+            ],
+            [
+              24.9016,
+              -30.2082
+            ],
+            [
+              24.8677,
+              -30.1309
+            ],
+            [
+              24.8364,
+              -30.1151
+            ],
+            [
+              24.7962,
+              -30.0448
+            ],
+            [
+              24.8081,
+              -30.023
+            ],
+            [
+              24.794,
+              -29.999
+            ],
+            [
+              24.7247,
+              -29.9922
+            ],
+            [
+              24.6713,
+              -29.9714
+            ],
+            [
+              24.6626,
+              -29.9394
+            ],
+            [
+              24.6678,
+              -29.9065
+            ],
+            [
+              24.6079,
+              -29.9113
+            ],
+            [
+              24.5626,
+              -29.8759
+            ],
+            [
+              24.5439,
+              -29.8433
+            ],
+            [
+              24.5131,
+              -29.8425
+            ],
+            [
+              24.4875,
+              -29.813
+            ],
+            [
+              24.4355,
+              -29.8063
+            ],
+            [
+              24.4116,
+              -29.7907
+            ],
+            [
+              24.376,
+              -29.727
+            ],
+            [
+              24.3487,
+              -29.702
+            ],
+            [
+              24.3475,
+              -29.6545
+            ],
+            [
+              24.6619,
+              -29.0792
+            ],
+            [
+              24.9018,
+              -28.648
+            ],
+            [
+              24.8277,
+              -28.627
+            ],
+            [
+              24.8678,
+              -28.5171
+            ],
+            [
+              24.8469,
+              -28.5038
+            ],
+            [
+              24.8868,
+              -28.465
+            ],
+            [
+              24.9376,
+              -28.3249
+            ],
+            [
+              24.8903,
+              -28.3102
+            ],
+            [
+              24.8705,
+              -28.2704
+            ],
+            [
+              24.9054,
+              -28.2748
+            ],
+            [
+              24.9267,
+              -28.2469
+            ],
+            [
+              24.9646,
+              -28.2507
+            ],
+            [
+              25.0283,
+              -28.0734
+            ],
+            [
+              25.0747,
+              -28.0642
+            ],
+            [
+              25.1049,
+              -28.0167
+            ],
+            [
+              25.0906,
+              -27.984
+            ],
+            [
+              25.1613,
+              -27.9266
+            ],
+            [
+              25.2009,
+              -27.8866
+            ],
+            [
+              25.2497,
+              -27.8686
+            ],
+            [
+              25.2381,
+              -27.837
+            ],
+            [
+              25.2774,
+              -27.7953
+            ],
+            [
+              25.3404,
+              -27.793
+            ],
+            [
+              25.364,
+              -27.7505
+            ],
+            [
+              25.424,
+              -27.7156
+            ],
+            [
+              25.4727,
+              -27.7078
+            ],
+            [
+              25.4794,
+              -27.6934
+            ],
+            [
+              25.5558,
+              -27.6867
+            ],
+            [
+              25.5966,
+              -27.6551
+            ],
+            [
+              25.6275,
+              -27.6672
+            ],
+            [
+              25.6578,
+              -27.6949
+            ],
+            [
+              25.6785,
+              -27.677
+            ],
+            [
+              25.6774,
+              -27.6308
+            ],
+            [
+              25.8274,
+              -27.5667
+            ],
+            [
+              25.8526,
+              -27.621
+            ],
+            [
+              25.8983,
+              -27.6225
+            ],
+            [
+              25.9269,
+              -27.6039
+            ],
+            [
+              25.9485,
+              -27.633
+            ],
+            [
+              25.9684,
+              -27.625
+            ],
+            [
+              26.0023,
+              -27.6489
+            ],
+            [
+              26.0107,
+              -27.6898
+            ],
+            [
+              26.0032,
+              -27.708
+            ],
+            [
+              26.0262,
+              -27.7347
+            ],
+            [
+              26.0709,
+              -27.715
+            ],
+            [
+              26.0926,
+              -27.696
+            ],
+            [
+              26.0551,
+              -27.6701
+            ],
+            [
+              26.0855,
+              -27.6492
+            ],
+            [
+              26.075,
+              -27.621
+            ],
+            [
+              26.0845,
+              -27.5951
+            ],
+            [
+              26.1062,
+              -27.5955
+            ],
+            [
+              26.1255,
+              -27.5648
+            ],
+            [
+              26.1552,
+              -27.5626
+            ],
+            [
+              26.1701,
+              -27.5361
+            ],
+            [
+              26.2272,
+              -27.5134
+            ],
+            [
+              26.2204,
+              -27.473
+            ],
+            [
+              26.2389,
+              -27.4378
+            ],
+            [
+              26.2678,
+              -27.4163
+            ],
+            [
+              26.3084,
+              -27.4178
+            ],
+            [
+              26.3452,
+              -27.3854
+            ],
+            [
+              26.3724,
+              -27.3838
+            ],
+            [
+              26.4231,
+              -27.4069
+            ],
+            [
+              26.4452,
+              -27.3881
+            ],
+            [
+              26.5064,
+              -27.3985
+            ],
+            [
+              26.447,
+              -27.3509
+            ],
+            [
+              26.4968,
+              -27.265
+            ],
+            [
+              26.4433,
+              -27.217
+            ],
+            [
+              26.4206,
+              -27.1734
+            ],
+            [
+              26.4271,
+              -27.1512
+            ],
+            [
+              26.4736,
+              -27.1538
+            ],
+            [
+              26.5029,
+              -27.1307
+            ],
+            [
+              26.5253,
+              -27.0939
+            ],
+            [
+              26.5856,
+              -27.106
+            ],
+            [
+              26.5937,
+              -27.0801
+            ],
+            [
+              26.5818,
+              -27.0531
+            ],
+            [
+              26.6121,
+              -27.0283
+            ],
+            [
+              26.6211,
+              -27.0027
+            ],
+            [
+              26.6718,
+              -26.9957
+            ],
+            [
+              26.7006,
+              -27.0086
+            ],
+            [
+              26.7129,
+              -26.9757
+            ],
+            [
+              26.7552,
+              -26.9619
+            ],
+            [
+              26.805,
+              -26.932
+            ],
+            [
+              26.8157,
+              -26.9532
+            ],
+            [
+              26.8485,
+              -26.9402
+            ],
+            [
+              26.8686,
+              -26.9199
+            ],
+            [
+              26.9087,
+              -26.9457
+            ],
+            [
+              26.9242,
+              -26.9278
+            ],
+            [
+              26.9272,
+              -26.8871
+            ],
+            [
+              26.9472,
+              -26.892
+            ],
+            [
+              27.0139,
+              -26.932
+            ],
+            [
+              27.0873,
+              -26.9384
+            ],
+            [
+              27.1134,
+              -26.9264
+            ],
+            [
+              27.1423,
+              -26.9418
+            ],
+            [
+              27.183,
+              -26.9314
+            ],
+            [
+              27.1737,
+              -26.9676
+            ],
+            [
+              27.2118,
+              -26.9767
+            ],
+            [
+              27.2192,
+              -26.9444
+            ],
+            [
+              27.3061,
+              -26.8533
+            ],
+            [
+              27.33,
+              -26.8532
+            ],
+            [
+              27.3705,
+              -26.9037
+            ],
+            [
+              27.4075,
+              -26.9258
+            ],
+            [
+              27.44,
+              -26.8995
+            ],
+            [
+              27.476,
+              -26.8835
+            ],
+            [
+              27.4875,
+              -26.8494
+            ],
+            [
+              27.5118,
+              -26.8365
+            ],
+            [
+              27.5174,
+              -26.782
+            ],
+            [
+              27.5398,
+              -26.7843
+            ],
+            [
+              27.5826,
+              -26.7689
+            ],
+            [
+              27.5904,
+              -26.7384
+            ],
+            [
+              27.6295,
+              -26.7323
+            ],
+            [
+              27.6287,
+              -26.764
+            ],
+            [
+              27.6614,
+              -26.7732
+            ],
+            [
+              27.7252,
+              -26.7603
+            ],
+            [
+              27.7477,
+              -26.7859
+            ],
+            [
+              27.768,
+              -26.7865
+            ],
+            [
+              27.7828,
+              -26.7506
+            ],
+            [
+              27.8736,
+              -26.7476
+            ],
+            [
+              27.8956,
+              -26.7193
+            ],
+            [
+              27.9228,
+              -26.7051
+            ],
+            [
+              27.941,
+              -26.6759
+            ],
+            [
+              27.9691,
+              -26.6688
+            ],
+            [
+              27.9996,
+              -26.696
+            ],
+            [
+              27.9922,
+              -26.7259
+            ],
+            [
+              28.0082,
+              -26.7701
+            ],
+            [
+              28.0802,
+              -26.8347
+            ],
+            [
+              28.1148,
+              -26.8444
+            ],
+            [
+              28.1191,
+              -26.8893
+            ],
+            [
+              28.1713,
+              -26.8837
+            ],
+            [
+              28.2016,
+              -26.9101
+            ],
+            [
+              28.2443,
+              -26.8848
+            ]
+          ]
+        ]
+      ]
+    },
+    "properties": {
+      "code": "FS",
+      "name": "Free State",
+      "area": 129825.156,
+      "parent": "ZA",
+      "level": "province",
+      "version": "2016 with wards"
+    }
+  },
+  "parent_layers": [],
+  "themes": [],
+  "children": {
+    "district": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "MultiPolygon",
+            "coordinates": [
+              [
+                [
+                  [
+                    25.7453,
+                    -28.9064
+                  ],
+                  [
+                    25.7375,
+                    -28.9608
+                  ],
+                  [
+                    25.7472,
+                    -28.9779
+                  ],
+                  [
+                    25.7194,
+                    -29.0063
+                  ],
+                  [
+                    25.7609,
+                    -29.0258
+                  ],
+                  [
+                    25.7313,
+                    -29.077
+                  ],
+                  [
+                    25.7347,
+                    -29.1412
+                  ],
+                  [
+                    25.7716,
+                    -29.1692
+                  ],
+                  [
+                    25.7443,
+                    -29.1769
+                  ],
+                  [
+                    25.7412,
+                    -29.226
+                  ],
+                  [
+                    25.7824,
+                    -29.2242
+                  ],
+                  [
+                    25.8012,
+                    -29.2329
+                  ],
+                  [
+                    25.8076,
+                    -29.2601
+                  ],
+                  [
+                    25.8415,
+                    -29.2323
+                  ],
+                  [
+                    25.8636,
+                    -29.2521
+                  ],
+                  [
+                    25.9055,
+                    -29.2543
+                  ],
+                  [
+                    25.9149,
+                    -29.3061
+                  ],
+                  [
+                    25.9662,
+                    -29.2927
+                  ],
+                  [
+                    25.9926,
+                    -29.2731
+                  ],
+                  [
+                    26.0045,
+                    -29.3103
+                  ],
+                  [
+                    26.0235,
+                    -29.3393
+                  ],
+                  [
+                    25.9988,
+                    -29.3582
+                  ],
+                  [
+                    25.9594,
+                    -29.3655
+                  ],
+                  [
+                    25.9794,
+                    -29.4016
+                  ],
+                  [
+                    26.0323,
+                    -29.4171
+                  ],
+                  [
+                    26.06,
+                    -29.4422
+                  ],
+                  [
+                    26.0778,
+                    -29.4797
+                  ],
+                  [
+                    26.1634,
+                    -29.4678
+                  ],
+                  [
+                    26.2093,
+                    -29.4766
+                  ],
+                  [
+                    26.2097,
+                    -29.4352
+                  ],
+                  [
+                    26.2483,
+                    -29.4251
+                  ],
+                  [
+                    26.2926,
+                    -29.427
+                  ],
+                  [
+                    26.3354,
+                    -29.4435
+                  ],
+                  [
+                    26.3586,
+                    -29.4355
+                  ],
+                  [
+                    26.4074,
+                    -29.4556
+                  ],
+                  [
+                    26.4547,
+                    -29.4482
+                  ],
+                  [
+                    26.4527,
+                    -29.3994
+                  ],
+                  [
+                    26.4742,
+                    -29.3899
+                  ],
+                  [
+                    26.4978,
+                    -29.3986
+                  ],
+                  [
+                    26.5135,
+                    -29.3476
+                  ],
+                  [
+                    26.5358,
+                    -29.3497
+                  ],
+                  [
+                    26.566,
+                    -29.3187
+                  ],
+                  [
+                    26.5903,
+                    -29.3136
+                  ],
+                  [
+                    26.594,
+                    -29.2904
+                  ],
+                  [
+                    26.6234,
+                    -29.2957
+                  ],
+                  [
+                    26.6701,
+                    -29.3161
+                  ],
+                  [
+                    26.6416,
+                    -29.34
+                  ],
+                  [
+                    26.6593,
+                    -29.3538
+                  ],
+                  [
+                    26.6686,
+                    -29.3847
+                  ],
+                  [
+                    26.6963,
+                    -29.3998
+                  ],
+                  [
+                    26.7017,
+                    -29.4366
+                  ],
+                  [
+                    26.7546,
+                    -29.4355
+                  ],
+                  [
+                    26.7741,
+                    -29.4527
+                  ],
+                  [
+                    26.8345,
+                    -29.456
+                  ],
+                  [
+                    26.8387,
+                    -29.4393
+                  ],
+                  [
+                    26.8849,
+                    -29.4462
+                  ],
+                  [
+                    26.9121,
+                    -29.486
+                  ],
+                  [
+                    26.9654,
+                    -29.4977
+                  ],
+                  [
+                    26.9538,
+                    -29.5339
+                  ],
+                  [
+                    26.999,
+                    -29.5198
+                  ],
+                  [
+                    27.016,
+                    -29.5275
+                  ],
+                  [
+                    27.0607,
+                    -29.5228
+                  ],
+                  [
+                    27.0814,
+                    -29.5592
+                  ],
+                  [
+                    27.1115,
+                    -29.5531
+                  ],
+                  [
+                    27.1274,
+                    -29.5747
+                  ],
+                  [
+                    27.0859,
+                    -29.6146
+                  ],
+                  [
+                    27.0479,
+                    -29.6338
+                  ],
+                  [
+                    27.0139,
+                    -29.6618
+                  ],
+                  [
+                    27.0385,
+                    -29.677
+                  ],
+                  [
+                    27.0966,
+                    -29.7299
+                  ],
+                  [
+                    27.2229,
+                    -29.9968
+                  ],
+                  [
+                    27.2965,
+                    -30.0561
+                  ],
+                  [
+                    27.3269,
+                    -30.1481
+                  ],
+                  [
+                    27.3941,
+                    -30.1425
+                  ],
+                  [
+                    27.3866,
+                    -30.1921
+                  ],
+                  [
+                    27.3655,
+                    -30.2188
+                  ],
+                  [
+                    27.3659,
+                    -30.2579
+                  ],
+                  [
+                    27.3891,
+                    -30.2936
+                  ],
+                  [
+                    27.3774,
+                    -30.3271
+                  ],
+                  [
+                    27.403,
+                    -30.393
+                  ],
+                  [
+                    27.3769,
+                    -30.4088
+                  ],
+                  [
+                    27.3446,
+                    -30.3973
+                  ],
+                  [
+                    27.3132,
+                    -30.4415
+                  ],
+                  [
+                    27.2935,
+                    -30.4568
+                  ],
+                  [
+                    27.3284,
+                    -30.4819
+                  ],
+                  [
+                    27.2845,
+                    -30.5034
+                  ],
+                  [
+                    27.2295,
+                    -30.4992
+                  ],
+                  [
+                    27.1885,
+                    -30.5238
+                  ],
+                  [
+                    27.1697,
+                    -30.5123
+                  ],
+                  [
+                    27.1324,
+                    -30.5093
+                  ],
+                  [
+                    27.138,
+                    -30.5322
+                  ],
+                  [
+                    27.1053,
+                    -30.5583
+                  ],
+                  [
+                    27.0853,
+                    -30.5281
+                  ],
+                  [
+                    27.0036,
+                    -30.5383
+                  ],
+                  [
+                    26.9981,
+                    -30.5487
+                  ],
+                  [
+                    27.0427,
+                    -30.5864
+                  ],
+                  [
+                    27.0279,
+                    -30.6046
+                  ],
+                  [
+                    27.0029,
+                    -30.5946
+                  ],
+                  [
+                    26.9479,
+                    -30.6076
+                  ],
+                  [
+                    26.9299,
+                    -30.6272
+                  ],
+                  [
+                    26.943,
+                    -30.6621
+                  ],
+                  [
+                    26.8968,
+                    -30.6674
+                  ],
+                  [
+                    26.8477,
+                    -30.6839
+                  ],
+                  [
+                    26.8141,
+                    -30.6427
+                  ],
+                  [
+                    26.7751,
+                    -30.649
+                  ],
+                  [
+                    26.7528,
+                    -30.6656
+                  ],
+                  [
+                    26.7257,
+                    -30.6664
+                  ],
+                  [
+                    26.7066,
+                    -30.6857
+                  ],
+                  [
+                    26.6295,
+                    -30.6939
+                  ],
+                  [
+                    26.6261,
+                    -30.6614
+                  ],
+                  [
+                    26.5752,
+                    -30.6668
+                  ],
+                  [
+                    26.5512,
+                    -30.6618
+                  ],
+                  [
+                    26.5217,
+                    -30.6402
+                  ],
+                  [
+                    26.4812,
+                    -30.6276
+                  ],
+                  [
+                    26.4902,
+                    -30.596
+                  ],
+                  [
+                    26.4469,
+                    -30.5688
+                  ],
+                  [
+                    26.4252,
+                    -30.5652
+                  ],
+                  [
+                    26.3489,
+                    -30.595
+                  ],
+                  [
+                    26.3138,
+                    -30.5826
+                  ],
+                  [
+                    26.2942,
+                    -30.591
+                  ],
+                  [
+                    26.2646,
+                    -30.5638
+                  ],
+                  [
+                    26.2596,
+                    -30.5407
+                  ],
+                  [
+                    26.1938,
+                    -30.528
+                  ],
+                  [
+                    26.1941,
+                    -30.5038
+                  ],
+                  [
+                    26.1626,
+                    -30.4835
+                  ],
+                  [
+                    26.1301,
+                    -30.5049
+                  ],
+                  [
+                    26.1496,
+                    -30.535
+                  ],
+                  [
+                    26.1176,
+                    -30.535
+                  ],
+                  [
+                    26.098,
+                    -30.5165
+                  ],
+                  [
+                    26.0328,
+                    -30.5313
+                  ],
+                  [
+                    25.9731,
+                    -30.5394
+                  ],
+                  [
+                    25.9268,
+                    -30.5703
+                  ],
+                  [
+                    25.9027,
+                    -30.5428
+                  ],
+                  [
+                    25.8849,
+                    -30.5442
+                  ],
+                  [
+                    25.8748,
+                    -30.5728
+                  ],
+                  [
+                    25.8925,
+                    -30.5982
+                  ],
+                  [
+                    25.8593,
+                    -30.6137
+                  ],
+                  [
+                    25.8512,
+                    -30.6293
+                  ],
+                  [
+                    25.7998,
+                    -30.6348
+                  ],
+                  [
+                    25.782,
+                    -30.6463
+                  ],
+                  [
+                    25.7789,
+                    -30.6759
+                  ],
+                  [
+                    25.7498,
+                    -30.6825
+                  ],
+                  [
+                    25.7001,
+                    -30.6795
+                  ],
+                  [
+                    25.6818,
+                    -30.6689
+                  ],
+                  [
+                    25.6716,
+                    -30.6409
+                  ],
+                  [
+                    25.6309,
+                    -30.6593
+                  ],
+                  [
+                    25.6031,
+                    -30.5944
+                  ],
+                  [
+                    25.5909,
+                    -30.5907
+                  ],
+                  [
+                    25.5563,
+                    -30.6166
+                  ],
+                  [
+                    25.5299,
+                    -30.613
+                  ],
+                  [
+                    25.4768,
+                    -30.6346
+                  ],
+                  [
+                    25.4536,
+                    -30.609
+                  ],
+                  [
+                    25.3766,
+                    -30.5599
+                  ],
+                  [
+                    25.3281,
+                    -30.5614
+                  ],
+                  [
+                    25.3071,
+                    -30.5771
+                  ],
+                  [
+                    25.2371,
+                    -30.5012
+                  ],
+                  [
+                    25.21,
+                    -30.5051
+                  ],
+                  [
+                    25.1519,
+                    -30.4573
+                  ],
+                  [
+                    25.1577,
+                    -30.4426
+                  ],
+                  [
+                    25.1256,
+                    -30.4202
+                  ],
+                  [
+                    25.0937,
+                    -30.3715
+                  ],
+                  [
+                    25.0356,
+                    -30.3442
+                  ],
+                  [
+                    25.0472,
+                    -30.3197
+                  ],
+                  [
+                    25.035,
+                    -30.2869
+                  ],
+                  [
+                    24.9863,
+                    -30.29
+                  ],
+                  [
+                    24.946,
+                    -30.2504
+                  ],
+                  [
+                    24.9553,
+                    -30.228
+                  ],
+                  [
+                    24.9274,
+                    -30.2024
+                  ],
+                  [
+                    24.9016,
+                    -30.2082
+                  ],
+                  [
+                    24.8677,
+                    -30.1309
+                  ],
+                  [
+                    24.8364,
+                    -30.1151
+                  ],
+                  [
+                    24.8386,
+                    -30.0956
+                  ],
+                  [
+                    24.8164,
+                    -30.0795
+                  ],
+                  [
+                    24.7962,
+                    -30.0448
+                  ],
+                  [
+                    24.808,
+                    -30.023
+                  ],
+                  [
+                    24.794,
+                    -29.999
+                  ],
+                  [
+                    24.7247,
+                    -29.9922
+                  ],
+                  [
+                    24.6713,
+                    -29.9714
+                  ],
+                  [
+                    24.6626,
+                    -29.9394
+                  ],
+                  [
+                    24.6678,
+                    -29.9065
+                  ],
+                  [
+                    24.6079,
+                    -29.9113
+                  ],
+                  [
+                    24.5626,
+                    -29.876
+                  ],
+                  [
+                    24.5439,
+                    -29.8433
+                  ],
+                  [
+                    24.5131,
+                    -29.8425
+                  ],
+                  [
+                    24.4875,
+                    -29.813
+                  ],
+                  [
+                    24.4355,
+                    -29.8063
+                  ],
+                  [
+                    24.4116,
+                    -29.7907
+                  ],
+                  [
+                    24.376,
+                    -29.727
+                  ],
+                  [
+                    24.3487,
+                    -29.702
+                  ],
+                  [
+                    24.3475,
+                    -29.6545
+                  ],
+                  [
+                    24.8018,
+                    -28.8283
+                  ],
+                  [
+                    24.7977,
+                    -28.8537
+                  ],
+                  [
+                    24.811,
+                    -28.9131
+                  ],
+                  [
+                    24.8691,
+                    -28.8947
+                  ],
+                  [
+                    24.9593,
+                    -28.9449
+                  ],
+                  [
+                    24.9827,
+                    -28.9445
+                  ],
+                  [
+                    25.0059,
+                    -28.9081
+                  ],
+                  [
+                    25.0856,
+                    -28.9076
+                  ],
+                  [
+                    25.1122,
+                    -28.9613
+                  ],
+                  [
+                    25.1702,
+                    -28.9474
+                  ],
+                  [
+                    25.206,
+                    -28.9225
+                  ],
+                  [
+                    25.2217,
+                    -28.895
+                  ],
+                  [
+                    25.2406,
+                    -28.9072
+                  ],
+                  [
+                    25.3067,
+                    -28.8941
+                  ],
+                  [
+                    25.3347,
+                    -28.8947
+                  ],
+                  [
+                    25.39,
+                    -28.9168
+                  ],
+                  [
+                    25.4185,
+                    -28.8966
+                  ],
+                  [
+                    25.4578,
+                    -28.8965
+                  ],
+                  [
+                    25.5112,
+                    -28.8694
+                  ],
+                  [
+                    25.5294,
+                    -28.8525
+                  ],
+                  [
+                    25.5513,
+                    -28.8813
+                  ],
+                  [
+                    25.5716,
+                    -28.8751
+                  ],
+                  [
+                    25.626,
+                    -28.894
+                  ],
+                  [
+                    25.6653,
+                    -28.8904
+                  ],
+                  [
+                    25.6996,
+                    -28.9072
+                  ],
+                  [
+                    25.7453,
+                    -28.9064
+                  ]
+                ]
+              ]
+            ]
+          },
+          "properties": {
+            "code": "DC16",
+            "name": "Xhariep",
+            "area": 37673.726,
+            "parent": "FS",
+            "level": "district",
+            "version": "2016 with wards"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "MultiPolygon",
+            "coordinates": [
+              [
+                [
+                  [
+                    27.3879,
+                    -28.2141
+                  ],
+                  [
+                    27.3262,
+                    -28.2265
+                  ],
+                  [
+                    27.3058,
+                    -28.2627
+                  ],
+                  [
+                    27.2768,
+                    -28.2828
+                  ],
+                  [
+                    27.2166,
+                    -28.2534
+                  ],
+                  [
+                    27.1304,
+                    -28.2841
+                  ],
+                  [
+                    27.0893,
+                    -28.2711
+                  ],
+                  [
+                    27.0909,
+                    -28.2936
+                  ],
+                  [
+                    27.0654,
+                    -28.2964
+                  ],
+                  [
+                    27.0661,
+                    -28.3419
+                  ],
+                  [
+                    27.0372,
+                    -28.3989
+                  ],
+                  [
+                    27.075,
+                    -28.4077
+                  ],
+                  [
+                    27.1065,
+                    -28.4018
+                  ],
+                  [
+                    27.1174,
+                    -28.4453
+                  ],
+                  [
+                    27.1373,
+                    -28.4767
+                  ],
+                  [
+                    27.1874,
+                    -28.4823
+                  ],
+                  [
+                    27.1646,
+                    -28.5225
+                  ],
+                  [
+                    27.1567,
+                    -28.5583
+                  ],
+                  [
+                    27.2122,
+                    -28.578
+                  ],
+                  [
+                    27.2127,
+                    -28.6265
+                  ],
+                  [
+                    27.1901,
+                    -28.6676
+                  ],
+                  [
+                    27.1926,
+                    -28.6977
+                  ],
+                  [
+                    27.2087,
+                    -28.7056
+                  ],
+                  [
+                    27.1966,
+                    -28.7335
+                  ],
+                  [
+                    27.1702,
+                    -28.7597
+                  ],
+                  [
+                    27.2007,
+                    -28.7817
+                  ],
+                  [
+                    27.1863,
+                    -28.8051
+                  ],
+                  [
+                    27.1522,
+                    -28.7566
+                  ],
+                  [
+                    27.1488,
+                    -28.7259
+                  ],
+                  [
+                    27.1074,
+                    -28.7683
+                  ],
+                  [
+                    27.0463,
+                    -28.7699
+                  ],
+                  [
+                    27.0297,
+                    -28.7439
+                  ],
+                  [
+                    26.947,
+                    -28.7503
+                  ],
+                  [
+                    26.9111,
+                    -28.7683
+                  ],
+                  [
+                    26.8537,
+                    -28.8863
+                  ],
+                  [
+                    26.7527,
+                    -29.003
+                  ],
+                  [
+                    26.779,
+                    -29.0158
+                  ],
+                  [
+                    26.7164,
+                    -29.0724
+                  ],
+                  [
+                    26.6934,
+                    -29.0656
+                  ],
+                  [
+                    26.6607,
+                    -29.0767
+                  ],
+                  [
+                    26.6343,
+                    -29.0596
+                  ],
+                  [
+                    26.6176,
+                    -29.0062
+                  ],
+                  [
+                    26.605,
+                    -29.0078
+                  ],
+                  [
+                    26.5669,
+                    -28.9681
+                  ],
+                  [
+                    26.5249,
+                    -29.0012
+                  ],
+                  [
+                    26.5174,
+                    -28.9831
+                  ],
+                  [
+                    26.4719,
+                    -28.948
+                  ],
+                  [
+                    26.4346,
+                    -28.9633
+                  ],
+                  [
+                    26.4309,
+                    -28.991
+                  ],
+                  [
+                    26.4031,
+                    -28.9892
+                  ],
+                  [
+                    26.3662,
+                    -28.9625
+                  ],
+                  [
+                    26.362,
+                    -28.9194
+                  ],
+                  [
+                    26.335,
+                    -28.9012
+                  ],
+                  [
+                    26.3032,
+                    -28.9419
+                  ],
+                  [
+                    26.2807,
+                    -28.9404
+                  ],
+                  [
+                    26.2338,
+                    -28.8809
+                  ],
+                  [
+                    26.1919,
+                    -28.8516
+                  ],
+                  [
+                    26.1653,
+                    -28.8546
+                  ],
+                  [
+                    26.1526,
+                    -28.8282
+                  ],
+                  [
+                    26.1236,
+                    -28.8053
+                  ],
+                  [
+                    26.0781,
+                    -28.8091
+                  ],
+                  [
+                    26.0332,
+                    -28.8299
+                  ],
+                  [
+                    26.0287,
+                    -28.8526
+                  ],
+                  [
+                    25.9865,
+                    -28.876
+                  ],
+                  [
+                    25.977,
+                    -28.8049
+                  ],
+                  [
+                    25.9265,
+                    -28.8265
+                  ],
+                  [
+                    25.921,
+                    -28.8099
+                  ],
+                  [
+                    25.9308,
+                    -28.7711
+                  ],
+                  [
+                    25.9079,
+                    -28.774
+                  ],
+                  [
+                    25.8787,
+                    -28.7601
+                  ],
+                  [
+                    25.8541,
+                    -28.8157
+                  ],
+                  [
+                    25.8563,
+                    -28.8676
+                  ],
+                  [
+                    25.8089,
+                    -28.8535
+                  ],
+                  [
+                    25.8047,
+                    -28.893
+                  ],
+                  [
+                    25.7453,
+                    -28.9064
+                  ],
+                  [
+                    25.6996,
+                    -28.9072
+                  ],
+                  [
+                    25.6653,
+                    -28.8904
+                  ],
+                  [
+                    25.626,
+                    -28.894
+                  ],
+                  [
+                    25.5716,
+                    -28.8751
+                  ],
+                  [
+                    25.5513,
+                    -28.8813
+                  ],
+                  [
+                    25.5294,
+                    -28.8525
+                  ],
+                  [
+                    25.5112,
+                    -28.8694
+                  ],
+                  [
+                    25.4578,
+                    -28.8965
+                  ],
+                  [
+                    25.4185,
+                    -28.8966
+                  ],
+                  [
+                    25.39,
+                    -28.9168
+                  ],
+                  [
+                    25.3347,
+                    -28.8947
+                  ],
+                  [
+                    25.3067,
+                    -28.8941
+                  ],
+                  [
+                    25.2406,
+                    -28.9072
+                  ],
+                  [
+                    25.2217,
+                    -28.895
+                  ],
+                  [
+                    25.206,
+                    -28.9225
+                  ],
+                  [
+                    25.1702,
+                    -28.9474
+                  ],
+                  [
+                    25.1122,
+                    -28.9613
+                  ],
+                  [
+                    25.0856,
+                    -28.9076
+                  ],
+                  [
+                    25.0059,
+                    -28.9081
+                  ],
+                  [
+                    24.9827,
+                    -28.9445
+                  ],
+                  [
+                    24.9593,
+                    -28.9449
+                  ],
+                  [
+                    24.8691,
+                    -28.8947
+                  ],
+                  [
+                    24.811,
+                    -28.9131
+                  ],
+                  [
+                    24.7977,
+                    -28.8537
+                  ],
+                  [
+                    24.8018,
+                    -28.8283
+                  ],
+                  [
+                    24.9018,
+                    -28.648
+                  ],
+                  [
+                    24.8277,
+                    -28.627
+                  ],
+                  [
+                    24.8678,
+                    -28.5171
+                  ],
+                  [
+                    24.8469,
+                    -28.5038
+                  ],
+                  [
+                    24.8868,
+                    -28.465
+                  ],
+                  [
+                    24.9376,
+                    -28.3249
+                  ],
+                  [
+                    24.8903,
+                    -28.3102
+                  ],
+                  [
+                    24.8705,
+                    -28.2704
+                  ],
+                  [
+                    24.9053,
+                    -28.2748
+                  ],
+                  [
+                    24.9267,
+                    -28.2469
+                  ],
+                  [
+                    24.9646,
+                    -28.2507
+                  ],
+                  [
+                    25.0281,
+                    -28.0735
+                  ],
+                  [
+                    25.0747,
+                    -28.0642
+                  ],
+                  [
+                    25.0769,
+                    -28.0484
+                  ],
+                  [
+                    25.1049,
+                    -28.0167
+                  ],
+                  [
+                    25.0906,
+                    -27.984
+                  ],
+                  [
+                    25.1325,
+                    -27.9468
+                  ],
+                  [
+                    25.1367,
+                    -27.9235
+                  ],
+                  [
+                    25.1613,
+                    -27.9266
+                  ],
+                  [
+                    25.2009,
+                    -27.8866
+                  ],
+                  [
+                    25.2497,
+                    -27.8686
+                  ],
+                  [
+                    25.2381,
+                    -27.837
+                  ],
+                  [
+                    25.2774,
+                    -27.7953
+                  ],
+                  [
+                    25.3404,
+                    -27.793
+                  ],
+                  [
+                    25.364,
+                    -27.7505
+                  ],
+                  [
+                    25.424,
+                    -27.7156
+                  ],
+                  [
+                    25.4727,
+                    -27.7078
+                  ],
+                  [
+                    25.4794,
+                    -27.6934
+                  ],
+                  [
+                    25.5558,
+                    -27.6867
+                  ],
+                  [
+                    25.5966,
+                    -27.6551
+                  ],
+                  [
+                    25.6275,
+                    -27.6672
+                  ],
+                  [
+                    25.6578,
+                    -27.6949
+                  ],
+                  [
+                    25.6785,
+                    -27.677
+                  ],
+                  [
+                    25.6774,
+                    -27.6308
+                  ],
+                  [
+                    25.7099,
+                    -27.6246
+                  ],
+                  [
+                    25.7277,
+                    -27.6092
+                  ],
+                  [
+                    25.8302,
+                    -27.5662
+                  ],
+                  [
+                    25.8526,
+                    -27.621
+                  ],
+                  [
+                    25.8983,
+                    -27.6225
+                  ],
+                  [
+                    25.9269,
+                    -27.6039
+                  ],
+                  [
+                    25.9485,
+                    -27.633
+                  ],
+                  [
+                    25.9684,
+                    -27.625
+                  ],
+                  [
+                    26.0023,
+                    -27.6489
+                  ],
+                  [
+                    26.0107,
+                    -27.6898
+                  ],
+                  [
+                    26.0032,
+                    -27.708
+                  ],
+                  [
+                    26.0262,
+                    -27.7347
+                  ],
+                  [
+                    26.0709,
+                    -27.715
+                  ],
+                  [
+                    26.0926,
+                    -27.696
+                  ],
+                  [
+                    26.0551,
+                    -27.6701
+                  ],
+                  [
+                    26.0855,
+                    -27.6492
+                  ],
+                  [
+                    26.075,
+                    -27.621
+                  ],
+                  [
+                    26.0845,
+                    -27.5951
+                  ],
+                  [
+                    26.1061,
+                    -27.5955
+                  ],
+                  [
+                    26.1255,
+                    -27.5648
+                  ],
+                  [
+                    26.1552,
+                    -27.5626
+                  ],
+                  [
+                    26.1701,
+                    -27.5361
+                  ],
+                  [
+                    26.2033,
+                    -27.5162
+                  ],
+                  [
+                    26.2272,
+                    -27.5134
+                  ],
+                  [
+                    26.2204,
+                    -27.473
+                  ],
+                  [
+                    26.2388,
+                    -27.4378
+                  ],
+                  [
+                    26.2678,
+                    -27.4163
+                  ],
+                  [
+                    26.3084,
+                    -27.4178
+                  ],
+                  [
+                    26.3452,
+                    -27.3854
+                  ],
+                  [
+                    26.3724,
+                    -27.3838
+                  ],
+                  [
+                    26.4231,
+                    -27.4069
+                  ],
+                  [
+                    26.4452,
+                    -27.3881
+                  ],
+                  [
+                    26.5064,
+                    -27.3985
+                  ],
+                  [
+                    26.447,
+                    -27.3509
+                  ],
+                  [
+                    26.4968,
+                    -27.265
+                  ],
+                  [
+                    26.4433,
+                    -27.217
+                  ],
+                  [
+                    26.4206,
+                    -27.1734
+                  ],
+                  [
+                    26.4271,
+                    -27.1512
+                  ],
+                  [
+                    26.4736,
+                    -27.1538
+                  ],
+                  [
+                    26.5029,
+                    -27.1307
+                  ],
+                  [
+                    26.5216,
+                    -27.1044
+                  ],
+                  [
+                    26.5754,
+                    -27.1833
+                  ],
+                  [
+                    26.6352,
+                    -27.1716
+                  ],
+                  [
+                    26.6452,
+                    -27.1909
+                  ],
+                  [
+                    26.6831,
+                    -27.1903
+                  ],
+                  [
+                    26.7032,
+                    -27.2188
+                  ],
+                  [
+                    26.7276,
+                    -27.2308
+                  ],
+                  [
+                    26.7229,
+                    -27.264
+                  ],
+                  [
+                    26.7396,
+                    -27.2882
+                  ],
+                  [
+                    26.738,
+                    -27.3449
+                  ],
+                  [
+                    26.696,
+                    -27.3498
+                  ],
+                  [
+                    26.699,
+                    -27.4008
+                  ],
+                  [
+                    26.7463,
+                    -27.3953
+                  ],
+                  [
+                    26.7568,
+                    -27.4356
+                  ],
+                  [
+                    26.7735,
+                    -27.4565
+                  ],
+                  [
+                    26.7897,
+                    -27.5108
+                  ],
+                  [
+                    26.7537,
+                    -27.514
+                  ],
+                  [
+                    26.7633,
+                    -27.5643
+                  ],
+                  [
+                    26.7758,
+                    -27.5754
+                  ],
+                  [
+                    26.8208,
+                    -27.5861
+                  ],
+                  [
+                    26.8739,
+                    -27.5896
+                  ],
+                  [
+                    26.8854,
+                    -27.5759
+                  ],
+                  [
+                    26.8704,
+                    -27.5338
+                  ],
+                  [
+                    26.8894,
+                    -27.5226
+                  ],
+                  [
+                    26.9501,
+                    -27.5225
+                  ],
+                  [
+                    26.9335,
+                    -27.5578
+                  ],
+                  [
+                    26.9663,
+                    -27.5625
+                  ],
+                  [
+                    27.0163,
+                    -27.5982
+                  ],
+                  [
+                    26.9745,
+                    -27.6429
+                  ],
+                  [
+                    27.0062,
+                    -27.6655
+                  ],
+                  [
+                    26.9699,
+                    -27.6944
+                  ],
+                  [
+                    27.0448,
+                    -27.7491
+                  ],
+                  [
+                    27.0772,
+                    -27.7891
+                  ],
+                  [
+                    27.0409,
+                    -27.8091
+                  ],
+                  [
+                    27.0525,
+                    -27.8593
+                  ],
+                  [
+                    27.0757,
+                    -27.8905
+                  ],
+                  [
+                    27.0928,
+                    -27.8858
+                  ],
+                  [
+                    27.1578,
+                    -27.9333
+                  ],
+                  [
+                    27.1928,
+                    -27.8997
+                  ],
+                  [
+                    27.2152,
+                    -27.9151
+                  ],
+                  [
+                    27.2386,
+                    -27.9086
+                  ],
+                  [
+                    27.2922,
+                    -27.923
+                  ],
+                  [
+                    27.3008,
+                    -27.9607
+                  ],
+                  [
+                    27.359,
+                    -27.9325
+                  ],
+                  [
+                    27.3658,
+                    -27.9452
+                  ],
+                  [
+                    27.3635,
+                    -28.0015
+                  ],
+                  [
+                    27.3736,
+                    -28.0196
+                  ],
+                  [
+                    27.4056,
+                    -28.0261
+                  ],
+                  [
+                    27.4338,
+                    -28.0498
+                  ],
+                  [
+                    27.4718,
+                    -28.1071
+                  ],
+                  [
+                    27.4068,
+                    -28.105
+                  ],
+                  [
+                    27.3867,
+                    -28.1588
+                  ],
+                  [
+                    27.3701,
+                    -28.1703
+                  ],
+                  [
+                    27.3879,
+                    -28.2141
+                  ]
+                ]
+              ]
+            ]
+          },
+          "properties": {
+            "code": "DC18",
+            "name": "Lejweleputswa",
+            "area": 31930.28,
+            "parent": "FS",
+            "level": "district",
+            "version": "2016 with wards"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "MultiPolygon",
+            "coordinates": [
+              [
+                [
+                  [
+                    29.7587,
+                    -27.4426
+                  ],
+                  [
+                    29.7032,
+                    -27.472
+                  ],
+                  [
+                    29.7216,
+                    -27.4883
+                  ],
+                  [
+                    29.7124,
+                    -27.5184
+                  ],
+                  [
+                    29.7584,
+                    -27.5271
+                  ],
+                  [
+                    29.7804,
+                    -27.5595
+                  ],
+                  [
+                    29.7796,
+                    -27.5873
+                  ],
+                  [
+                    29.7348,
+                    -27.6071
+                  ],
+                  [
+                    29.6979,
+                    -27.6408
+                  ],
+                  [
+                    29.6768,
+                    -27.6397
+                  ],
+                  [
+                    29.6701,
+                    -27.6701
+                  ],
+                  [
+                    29.709,
+                    -27.6985
+                  ],
+                  [
+                    29.703,
+                    -27.7614
+                  ],
+                  [
+                    29.7313,
+                    -27.8081
+                  ],
+                  [
+                    29.697,
+                    -27.8245
+                  ],
+                  [
+                    29.6871,
+                    -27.8585
+                  ],
+                  [
+                    29.6903,
+                    -27.8957
+                  ],
+                  [
+                    29.6576,
+                    -27.9374
+                  ],
+                  [
+                    29.6359,
+                    -27.9945
+                  ],
+                  [
+                    29.6394,
+                    -28.0155
+                  ],
+                  [
+                    29.6169,
+                    -28.0468
+                  ],
+                  [
+                    29.6555,
+                    -28.09
+                  ],
+                  [
+                    29.6633,
+                    -28.142
+                  ],
+                  [
+                    29.6628,
+                    -28.1773
+                  ],
+                  [
+                    29.6263,
+                    -28.1857
+                  ],
+                  [
+                    29.6096,
+                    -28.215
+                  ],
+                  [
+                    29.6198,
+                    -28.2412
+                  ],
+                  [
+                    29.5587,
+                    -28.2583
+                  ],
+                  [
+                    29.5506,
+                    -28.2472
+                  ],
+                  [
+                    29.4829,
+                    -28.2722
+                  ],
+                  [
+                    29.4793,
+                    -28.2907
+                  ],
+                  [
+                    29.4376,
+                    -28.3211
+                  ],
+                  [
+                    29.4143,
+                    -28.3759
+                  ],
+                  [
+                    29.3734,
+                    -28.3719
+                  ],
+                  [
+                    29.3201,
+                    -28.4068
+                  ],
+                  [
+                    29.3226,
+                    -28.424
+                  ],
+                  [
+                    29.2901,
+                    -28.4379
+                  ],
+                  [
+                    29.2487,
+                    -28.4249
+                  ],
+                  [
+                    29.229,
+                    -28.4563
+                  ],
+                  [
+                    29.1915,
+                    -28.4938
+                  ],
+                  [
+                    29.2162,
+                    -28.519
+                  ],
+                  [
+                    29.1964,
+                    -28.545
+                  ],
+                  [
+                    29.1615,
+                    -28.5421
+                  ],
+                  [
+                    29.135,
+                    -28.5663
+                  ],
+                  [
+                    29.0963,
+                    -28.5451
+                  ],
+                  [
+                    28.974,
+                    -28.5746
+                  ],
+                  [
+                    28.9409,
+                    -28.6314
+                  ],
+                  [
+                    28.9428,
+                    -28.6509
+                  ],
+                  [
+                    28.8962,
+                    -28.6947
+                  ],
+                  [
+                    28.8913,
+                    -28.7465
+                  ],
+                  [
+                    28.8736,
+                    -28.7707
+                  ],
+                  [
+                    28.8682,
+                    -28.7603
+                  ],
+                  [
+                    28.8078,
+                    -28.7709
+                  ],
+                  [
+                    28.8009,
+                    -28.7454
+                  ],
+                  [
+                    28.8115,
+                    -28.72
+                  ],
+                  [
+                    28.795,
+                    -28.6997
+                  ],
+                  [
+                    28.7588,
+                    -28.6861
+                  ],
+                  [
+                    28.7267,
+                    -28.6877
+                  ],
+                  [
+                    28.7046,
+                    -28.6713
+                  ],
+                  [
+                    28.7031,
+                    -28.6194
+                  ],
+                  [
+                    28.6824,
+                    -28.5904
+                  ],
+                  [
+                    28.6481,
+                    -28.5714
+                  ],
+                  [
+                    28.6122,
+                    -28.5974
+                  ],
+                  [
+                    28.5684,
+                    -28.6083
+                  ],
+                  [
+                    28.5186,
+                    -28.6027
+                  ],
+                  [
+                    28.4721,
+                    -28.6054
+                  ],
+                  [
+                    28.4536,
+                    -28.6193
+                  ],
+                  [
+                    28.4132,
+                    -28.6274
+                  ],
+                  [
+                    28.3684,
+                    -28.6673
+                  ],
+                  [
+                    28.3528,
+                    -28.7002
+                  ],
+                  [
+                    28.3033,
+                    -28.7004
+                  ],
+                  [
+                    28.2807,
+                    -28.7148
+                  ],
+                  [
+                    28.2568,
+                    -28.7002
+                  ],
+                  [
+                    28.1954,
+                    -28.7107
+                  ],
+                  [
+                    28.1685,
+                    -28.7053
+                  ],
+                  [
+                    28.1603,
+                    -28.7252
+                  ],
+                  [
+                    28.1191,
+                    -28.7416
+                  ],
+                  [
+                    28.0732,
+                    -28.8158
+                  ],
+                  [
+                    28.0506,
+                    -28.8198
+                  ],
+                  [
+                    28.0284,
+                    -28.8739
+                  ],
+                  [
+                    28.0126,
+                    -28.8798
+                  ],
+                  [
+                    27.9658,
+                    -28.871
+                  ],
+                  [
+                    27.9487,
+                    -28.8527
+                  ],
+                  [
+                    27.916,
+                    -28.8651
+                  ],
+                  [
+                    27.8889,
+                    -28.9165
+                  ],
+                  [
+                    27.8329,
+                    -28.9063
+                  ],
+                  [
+                    27.7983,
+                    -28.9184
+                  ],
+                  [
+                    27.7628,
+                    -28.8975
+                  ],
+                  [
+                    27.76,
+                    -28.9414
+                  ],
+                  [
+                    27.7308,
+                    -28.9457
+                  ],
+                  [
+                    27.7162,
+                    -29.0044
+                  ],
+                  [
+                    27.6824,
+                    -29.0066
+                  ],
+                  [
+                    27.6726,
+                    -29.0444
+                  ],
+                  [
+                    27.6762,
+                    -29.0663
+                  ],
+                  [
+                    27.632,
+                    -29.132
+                  ],
+                  [
+                    27.6109,
+                    -29.1335
+                  ],
+                  [
+                    27.6142,
+                    -29.1642
+                  ],
+                  [
+                    27.5514,
+                    -29.1962
+                  ],
+                  [
+                    27.5247,
+                    -29.241
+                  ],
+                  [
+                    27.5476,
+                    -29.2464
+                  ],
+                  [
+                    27.5145,
+                    -29.2819
+                  ],
+                  [
+                    27.4902,
+                    -29.2945
+                  ],
+                  [
+                    27.4723,
+                    -29.3185
+                  ],
+                  [
+                    27.4363,
+                    -29.3342
+                  ],
+                  [
+                    27.4377,
+                    -29.3627
+                  ],
+                  [
+                    27.4028,
+                    -29.414
+                  ],
+                  [
+                    27.3705,
+                    -29.4487
+                  ],
+                  [
+                    27.3613,
+                    -29.4856
+                  ],
+                  [
+                    27.3349,
+                    -29.4814
+                  ],
+                  [
+                    27.3076,
+                    -29.4958
+                  ],
+                  [
+                    27.2779,
+                    -29.5263
+                  ],
+                  [
+                    27.1855,
+                    -29.5661
+                  ],
+                  [
+                    27.1522,
+                    -29.5622
+                  ],
+                  [
+                    27.1274,
+                    -29.5747
+                  ],
+                  [
+                    27.1115,
+                    -29.5531
+                  ],
+                  [
+                    27.0814,
+                    -29.5592
+                  ],
+                  [
+                    27.0607,
+                    -29.5228
+                  ],
+                  [
+                    27.016,
+                    -29.5275
+                  ],
+                  [
+                    26.999,
+                    -29.5198
+                  ],
+                  [
+                    26.9786,
+                    -29.4837
+                  ],
+                  [
+                    26.991,
+                    -29.4554
+                  ],
+                  [
+                    26.9629,
+                    -29.428
+                  ],
+                  [
+                    27.011,
+                    -29.3951
+                  ],
+                  [
+                    27.0677,
+                    -29.4416
+                  ],
+                  [
+                    27.0856,
+                    -29.3857
+                  ],
+                  [
+                    27.0534,
+                    -29.3436
+                  ],
+                  [
+                    27.0235,
+                    -29.3551
+                  ],
+                  [
+                    27.0227,
+                    -29.3805
+                  ],
+                  [
+                    26.9769,
+                    -29.3741
+                  ],
+                  [
+                    26.9428,
+                    -29.3157
+                  ],
+                  [
+                    26.9633,
+                    -29.2569
+                  ],
+                  [
+                    26.9174,
+                    -29.2198
+                  ],
+                  [
+                    26.9172,
+                    -29.1821
+                  ],
+                  [
+                    26.9453,
+                    -29.1684
+                  ],
+                  [
+                    26.9741,
+                    -29.14
+                  ],
+                  [
+                    27.0117,
+                    -29.1281
+                  ],
+                  [
+                    26.9998,
+                    -29.1053
+                  ],
+                  [
+                    27.02,
+                    -29.0818
+                  ],
+                  [
+                    27.0513,
+                    -29.0706
+                  ],
+                  [
+                    26.9949,
+                    -29.0219
+                  ],
+                  [
+                    26.9624,
+                    -29.0219
+                  ],
+                  [
+                    26.9406,
+                    -28.9646
+                  ],
+                  [
+                    26.9463,
+                    -28.9397
+                  ],
+                  [
+                    26.9135,
+                    -28.9177
+                  ],
+                  [
+                    26.8927,
+                    -28.9341
+                  ],
+                  [
+                    26.8181,
+                    -28.9271
+                  ],
+                  [
+                    26.8537,
+                    -28.8863
+                  ],
+                  [
+                    26.9111,
+                    -28.7683
+                  ],
+                  [
+                    26.947,
+                    -28.7503
+                  ],
+                  [
+                    27.0297,
+                    -28.7439
+                  ],
+                  [
+                    27.0463,
+                    -28.7699
+                  ],
+                  [
+                    27.1074,
+                    -28.7683
+                  ],
+                  [
+                    27.1488,
+                    -28.7259
+                  ],
+                  [
+                    27.1522,
+                    -28.7566
+                  ],
+                  [
+                    27.1863,
+                    -28.8051
+                  ],
+                  [
+                    27.2007,
+                    -28.7817
+                  ],
+                  [
+                    27.1702,
+                    -28.7597
+                  ],
+                  [
+                    27.1966,
+                    -28.7335
+                  ],
+                  [
+                    27.2087,
+                    -28.7056
+                  ],
+                  [
+                    27.1926,
+                    -28.6977
+                  ],
+                  [
+                    27.1901,
+                    -28.6676
+                  ],
+                  [
+                    27.2127,
+                    -28.6265
+                  ],
+                  [
+                    27.2122,
+                    -28.578
+                  ],
+                  [
+                    27.1567,
+                    -28.5583
+                  ],
+                  [
+                    27.1646,
+                    -28.5225
+                  ],
+                  [
+                    27.1874,
+                    -28.4823
+                  ],
+                  [
+                    27.1373,
+                    -28.4767
+                  ],
+                  [
+                    27.1174,
+                    -28.4453
+                  ],
+                  [
+                    27.1065,
+                    -28.4018
+                  ],
+                  [
+                    27.075,
+                    -28.4077
+                  ],
+                  [
+                    27.0372,
+                    -28.3989
+                  ],
+                  [
+                    27.0661,
+                    -28.3419
+                  ],
+                  [
+                    27.0654,
+                    -28.2964
+                  ],
+                  [
+                    27.0909,
+                    -28.2936
+                  ],
+                  [
+                    27.0893,
+                    -28.2711
+                  ],
+                  [
+                    27.1304,
+                    -28.2841
+                  ],
+                  [
+                    27.2166,
+                    -28.2534
+                  ],
+                  [
+                    27.2768,
+                    -28.2828
+                  ],
+                  [
+                    27.3058,
+                    -28.2627
+                  ],
+                  [
+                    27.3262,
+                    -28.2265
+                  ],
+                  [
+                    27.3879,
+                    -28.2141
+                  ],
+                  [
+                    27.3908,
+                    -28.2395
+                  ],
+                  [
+                    27.4452,
+                    -28.2387
+                  ],
+                  [
+                    27.4701,
+                    -28.2732
+                  ],
+                  [
+                    27.4832,
+                    -28.2488
+                  ],
+                  [
+                    27.5696,
+                    -28.2825
+                  ],
+                  [
+                    27.6112,
+                    -28.2415
+                  ],
+                  [
+                    27.5963,
+                    -28.176
+                  ],
+                  [
+                    27.6277,
+                    -28.1711
+                  ],
+                  [
+                    27.6599,
+                    -28.1841
+                  ],
+                  [
+                    27.6538,
+                    -28.1266
+                  ],
+                  [
+                    27.6932,
+                    -28.124
+                  ],
+                  [
+                    27.689,
+                    -28.0962
+                  ],
+                  [
+                    27.655,
+                    -28.0599
+                  ],
+                  [
+                    27.7034,
+                    -28.0403
+                  ],
+                  [
+                    27.6954,
+                    -28.0026
+                  ],
+                  [
+                    27.7377,
+                    -27.9282
+                  ],
+                  [
+                    27.7783,
+                    -27.9104
+                  ],
+                  [
+                    27.8112,
+                    -27.9503
+                  ],
+                  [
+                    27.823,
+                    -27.9337
+                  ],
+                  [
+                    27.8726,
+                    -27.9338
+                  ],
+                  [
+                    27.8639,
+                    -27.8479
+                  ],
+                  [
+                    27.8628,
+                    -27.7895
+                  ],
+                  [
+                    27.8415,
+                    -27.7205
+                  ],
+                  [
+                    27.8381,
+                    -27.6726
+                  ],
+                  [
+                    27.8828,
+                    -27.657
+                  ],
+                  [
+                    27.8819,
+                    -27.6385
+                  ],
+                  [
+                    27.9198,
+                    -27.6426
+                  ],
+                  [
+                    27.9886,
+                    -27.6322
+                  ],
+                  [
+                    27.9825,
+                    -27.6121
+                  ],
+                  [
+                    28.0078,
+                    -27.5638
+                  ],
+                  [
+                    28.0569,
+                    -27.5642
+                  ],
+                  [
+                    28.1048,
+                    -27.5333
+                  ],
+                  [
+                    28.1378,
+                    -27.5207
+                  ],
+                  [
+                    28.155,
+                    -27.4989
+                  ],
+                  [
+                    28.1887,
+                    -27.4818
+                  ],
+                  [
+                    28.2102,
+                    -27.4982
+                  ],
+                  [
+                    28.2509,
+                    -27.4978
+                  ],
+                  [
+                    28.258,
+                    -27.5722
+                  ],
+                  [
+                    28.2842,
+                    -27.567
+                  ],
+                  [
+                    28.3644,
+                    -27.5294
+                  ],
+                  [
+                    28.3996,
+                    -27.5234
+                  ],
+                  [
+                    28.427,
+                    -27.5064
+                  ],
+                  [
+                    28.4748,
+                    -27.5328
+                  ],
+                  [
+                    28.4671,
+                    -27.5627
+                  ],
+                  [
+                    28.5112,
+                    -27.5969
+                  ],
+                  [
+                    28.5517,
+                    -27.5795
+                  ],
+                  [
+                    28.5497,
+                    -27.5551
+                  ],
+                  [
+                    28.5975,
+                    -27.5624
+                  ],
+                  [
+                    28.6255,
+                    -27.6114
+                  ],
+                  [
+                    28.675,
+                    -27.5905
+                  ],
+                  [
+                    28.7426,
+                    -27.599
+                  ],
+                  [
+                    28.7456,
+                    -27.5337
+                  ],
+                  [
+                    28.7739,
+                    -27.5315
+                  ],
+                  [
+                    28.7716,
+                    -27.4838
+                  ],
+                  [
+                    28.7855,
+                    -27.4625
+                  ],
+                  [
+                    28.8173,
+                    -27.4655
+                  ],
+                  [
+                    28.8302,
+                    -27.4523
+                  ],
+                  [
+                    28.8808,
+                    -27.4435
+                  ],
+                  [
+                    28.8912,
+                    -27.4075
+                  ],
+                  [
+                    28.9274,
+                    -27.4025
+                  ],
+                  [
+                    28.9169,
+                    -27.3458
+                  ],
+                  [
+                    28.9374,
+                    -27.2877
+                  ],
+                  [
+                    28.967,
+                    -27.28
+                  ],
+                  [
+                    28.9643,
+                    -27.2619
+                  ],
+                  [
+                    28.9819,
+                    -27.2357
+                  ],
+                  [
+                    28.9787,
+                    -27.2063
+                  ],
+                  [
+                    29.0056,
+                    -27.1669
+                  ],
+                  [
+                    28.998,
+                    -27.1466
+                  ],
+                  [
+                    29.0055,
+                    -27.1097
+                  ],
+                  [
+                    28.9965,
+                    -27.0797
+                  ],
+                  [
+                    29.0151,
+                    -27.01
+                  ],
+                  [
+                    29.0572,
+                    -27.0093
+                  ],
+                  [
+                    29.0542,
+                    -27.035
+                  ],
+                  [
+                    29.0721,
+                    -27.057
+                  ],
+                  [
+                    29.061,
+                    -27.0718
+                  ],
+                  [
+                    29.086,
+                    -27.1153
+                  ],
+                  [
+                    29.1035,
+                    -27.1298
+                  ],
+                  [
+                    29.121,
+                    -27.1716
+                  ],
+                  [
+                    29.1364,
+                    -27.1542
+                  ],
+                  [
+                    29.1709,
+                    -27.1416
+                  ],
+                  [
+                    29.2239,
+                    -27.1447
+                  ],
+                  [
+                    29.2298,
+                    -27.1672
+                  ],
+                  [
+                    29.2841,
+                    -27.1907
+                  ],
+                  [
+                    29.3005,
+                    -27.2119
+                  ],
+                  [
+                    29.3315,
+                    -27.2101
+                  ],
+                  [
+                    29.3396,
+                    -27.2527
+                  ],
+                  [
+                    29.3913,
+                    -27.2427
+                  ],
+                  [
+                    29.4434,
+                    -27.2669
+                  ],
+                  [
+                    29.4629,
+                    -27.2871
+                  ],
+                  [
+                    29.469,
+                    -27.3242
+                  ],
+                  [
+                    29.4901,
+                    -27.3369
+                  ],
+                  [
+                    29.5094,
+                    -27.3773
+                  ],
+                  [
+                    29.5371,
+                    -27.387
+                  ],
+                  [
+                    29.5599,
+                    -27.4322
+                  ],
+                  [
+                    29.5843,
+                    -27.4642
+                  ],
+                  [
+                    29.6007,
+                    -27.4701
+                  ],
+                  [
+                    29.6189,
+                    -27.506
+                  ],
+                  [
+                    29.7043,
+                    -27.4894
+                  ],
+                  [
+                    29.6993,
+                    -27.4503
+                  ],
+                  [
+                    29.7212,
+                    -27.4329
+                  ],
+                  [
+                    29.7587,
+                    -27.4426
+                  ]
+                ]
+              ]
+            ]
+          },
+          "properties": {
+            "code": "DC19",
+            "name": "Thabo Mofutsanyane",
+            "area": 33269.187,
+            "parent": "FS",
+            "level": "district",
+            "version": "2016 with wards"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "MultiPolygon",
+            "coordinates": [
+              [
+                [
+                  [
+                    28.2443,
+                    -26.8848
+                  ],
+                  [
+                    28.2789,
+                    -26.9058
+                  ],
+                  [
+                    28.3004,
+                    -26.9402
+                  ],
+                  [
+                    28.3284,
+                    -26.9479
+                  ],
+                  [
+                    28.3543,
+                    -26.9314
+                  ],
+                  [
+                    28.3922,
+                    -26.9314
+                  ],
+                  [
+                    28.4346,
+                    -27.0025
+                  ],
+                  [
+                    28.4517,
+                    -26.9797
+                  ],
+                  [
+                    28.4859,
+                    -26.9711
+                  ],
+                  [
+                    28.5109,
+                    -26.9928
+                  ],
+                  [
+                    28.5497,
+                    -27.0416
+                  ],
+                  [
+                    28.5855,
+                    -27.0359
+                  ],
+                  [
+                    28.6095,
+                    -27.008
+                  ],
+                  [
+                    28.6444,
+                    -27.0203
+                  ],
+                  [
+                    28.6555,
+                    -26.9969
+                  ],
+                  [
+                    28.6102,
+                    -26.987
+                  ],
+                  [
+                    28.6469,
+                    -26.953
+                  ],
+                  [
+                    28.6797,
+                    -26.9736
+                  ],
+                  [
+                    28.7254,
+                    -26.9846
+                  ],
+                  [
+                    28.7353,
+                    -27.0007
+                  ],
+                  [
+                    28.7702,
+                    -27.0028
+                  ],
+                  [
+                    28.7736,
+                    -27.0174
+                  ],
+                  [
+                    28.8109,
+                    -27.0386
+                  ],
+                  [
+                    28.87,
+                    -27.0317
+                  ],
+                  [
+                    28.9004,
+                    -27.0483
+                  ],
+                  [
+                    28.9042,
+                    -27.0198
+                  ],
+                  [
+                    28.9548,
+                    -27.0115
+                  ],
+                  [
+                    28.9675,
+                    -26.9915
+                  ],
+                  [
+                    29.0151,
+                    -27.01
+                  ],
+                  [
+                    28.9965,
+                    -27.0797
+                  ],
+                  [
+                    29.0055,
+                    -27.1097
+                  ],
+                  [
+                    28.998,
+                    -27.1466
+                  ],
+                  [
+                    29.0056,
+                    -27.1669
+                  ],
+                  [
+                    28.9787,
+                    -27.2063
+                  ],
+                  [
+                    28.9819,
+                    -27.2357
+                  ],
+                  [
+                    28.9643,
+                    -27.2619
+                  ],
+                  [
+                    28.967,
+                    -27.28
+                  ],
+                  [
+                    28.9374,
+                    -27.2877
+                  ],
+                  [
+                    28.9169,
+                    -27.3458
+                  ],
+                  [
+                    28.9274,
+                    -27.4025
+                  ],
+                  [
+                    28.8912,
+                    -27.4075
+                  ],
+                  [
+                    28.8808,
+                    -27.4435
+                  ],
+                  [
+                    28.8302,
+                    -27.4523
+                  ],
+                  [
+                    28.8173,
+                    -27.4655
+                  ],
+                  [
+                    28.7855,
+                    -27.4625
+                  ],
+                  [
+                    28.7716,
+                    -27.4838
+                  ],
+                  [
+                    28.7739,
+                    -27.5315
+                  ],
+                  [
+                    28.7456,
+                    -27.5337
+                  ],
+                  [
+                    28.7426,
+                    -27.599
+                  ],
+                  [
+                    28.675,
+                    -27.5905
+                  ],
+                  [
+                    28.6255,
+                    -27.6114
+                  ],
+                  [
+                    28.5975,
+                    -27.5624
+                  ],
+                  [
+                    28.5497,
+                    -27.5551
+                  ],
+                  [
+                    28.5517,
+                    -27.5795
+                  ],
+                  [
+                    28.5112,
+                    -27.5969
+                  ],
+                  [
+                    28.4671,
+                    -27.5627
+                  ],
+                  [
+                    28.4748,
+                    -27.5328
+                  ],
+                  [
+                    28.427,
+                    -27.5064
+                  ],
+                  [
+                    28.3996,
+                    -27.5234
+                  ],
+                  [
+                    28.3644,
+                    -27.5294
+                  ],
+                  [
+                    28.2842,
+                    -27.567
+                  ],
+                  [
+                    28.258,
+                    -27.5722
+                  ],
+                  [
+                    28.2509,
+                    -27.4978
+                  ],
+                  [
+                    28.2102,
+                    -27.4982
+                  ],
+                  [
+                    28.1887,
+                    -27.4818
+                  ],
+                  [
+                    28.155,
+                    -27.4989
+                  ],
+                  [
+                    28.1378,
+                    -27.5207
+                  ],
+                  [
+                    28.1048,
+                    -27.5333
+                  ],
+                  [
+                    28.0569,
+                    -27.5642
+                  ],
+                  [
+                    28.0078,
+                    -27.5638
+                  ],
+                  [
+                    27.9825,
+                    -27.6121
+                  ],
+                  [
+                    27.9886,
+                    -27.6322
+                  ],
+                  [
+                    27.9198,
+                    -27.6426
+                  ],
+                  [
+                    27.8819,
+                    -27.6385
+                  ],
+                  [
+                    27.8828,
+                    -27.657
+                  ],
+                  [
+                    27.8381,
+                    -27.6726
+                  ],
+                  [
+                    27.8415,
+                    -27.7205
+                  ],
+                  [
+                    27.8628,
+                    -27.7895
+                  ],
+                  [
+                    27.8639,
+                    -27.8479
+                  ],
+                  [
+                    27.8726,
+                    -27.9338
+                  ],
+                  [
+                    27.823,
+                    -27.9337
+                  ],
+                  [
+                    27.8112,
+                    -27.9503
+                  ],
+                  [
+                    27.7783,
+                    -27.9104
+                  ],
+                  [
+                    27.7377,
+                    -27.9282
+                  ],
+                  [
+                    27.6954,
+                    -28.0026
+                  ],
+                  [
+                    27.7034,
+                    -28.0403
+                  ],
+                  [
+                    27.655,
+                    -28.0599
+                  ],
+                  [
+                    27.689,
+                    -28.0962
+                  ],
+                  [
+                    27.6932,
+                    -28.124
+                  ],
+                  [
+                    27.6538,
+                    -28.1266
+                  ],
+                  [
+                    27.6599,
+                    -28.1841
+                  ],
+                  [
+                    27.6277,
+                    -28.1711
+                  ],
+                  [
+                    27.5963,
+                    -28.176
+                  ],
+                  [
+                    27.6112,
+                    -28.2415
+                  ],
+                  [
+                    27.5696,
+                    -28.2825
+                  ],
+                  [
+                    27.4832,
+                    -28.2488
+                  ],
+                  [
+                    27.4701,
+                    -28.2732
+                  ],
+                  [
+                    27.4452,
+                    -28.2387
+                  ],
+                  [
+                    27.3908,
+                    -28.2395
+                  ],
+                  [
+                    27.3879,
+                    -28.2141
+                  ],
+                  [
+                    27.3701,
+                    -28.1703
+                  ],
+                  [
+                    27.3867,
+                    -28.1588
+                  ],
+                  [
+                    27.4068,
+                    -28.105
+                  ],
+                  [
+                    27.4718,
+                    -28.1071
+                  ],
+                  [
+                    27.4338,
+                    -28.0498
+                  ],
+                  [
+                    27.4056,
+                    -28.0261
+                  ],
+                  [
+                    27.3736,
+                    -28.0196
+                  ],
+                  [
+                    27.3635,
+                    -28.0015
+                  ],
+                  [
+                    27.3658,
+                    -27.9452
+                  ],
+                  [
+                    27.359,
+                    -27.9325
+                  ],
+                  [
+                    27.3008,
+                    -27.9607
+                  ],
+                  [
+                    27.2922,
+                    -27.923
+                  ],
+                  [
+                    27.2386,
+                    -27.9086
+                  ],
+                  [
+                    27.2152,
+                    -27.9151
+                  ],
+                  [
+                    27.1928,
+                    -27.8997
+                  ],
+                  [
+                    27.1578,
+                    -27.9333
+                  ],
+                  [
+                    27.0928,
+                    -27.8858
+                  ],
+                  [
+                    27.0757,
+                    -27.8905
+                  ],
+                  [
+                    27.0525,
+                    -27.8593
+                  ],
+                  [
+                    27.0409,
+                    -27.8091
+                  ],
+                  [
+                    27.0772,
+                    -27.7891
+                  ],
+                  [
+                    27.0448,
+                    -27.7491
+                  ],
+                  [
+                    26.9699,
+                    -27.6944
+                  ],
+                  [
+                    27.0062,
+                    -27.6655
+                  ],
+                  [
+                    26.9745,
+                    -27.6429
+                  ],
+                  [
+                    27.0163,
+                    -27.5982
+                  ],
+                  [
+                    26.9663,
+                    -27.5625
+                  ],
+                  [
+                    26.9335,
+                    -27.5578
+                  ],
+                  [
+                    26.9501,
+                    -27.5225
+                  ],
+                  [
+                    26.8894,
+                    -27.5226
+                  ],
+                  [
+                    26.8704,
+                    -27.5338
+                  ],
+                  [
+                    26.8854,
+                    -27.5759
+                  ],
+                  [
+                    26.8739,
+                    -27.5896
+                  ],
+                  [
+                    26.8208,
+                    -27.5861
+                  ],
+                  [
+                    26.7758,
+                    -27.5754
+                  ],
+                  [
+                    26.7633,
+                    -27.5643
+                  ],
+                  [
+                    26.7537,
+                    -27.514
+                  ],
+                  [
+                    26.7897,
+                    -27.5108
+                  ],
+                  [
+                    26.7735,
+                    -27.4565
+                  ],
+                  [
+                    26.7568,
+                    -27.4356
+                  ],
+                  [
+                    26.7463,
+                    -27.3953
+                  ],
+                  [
+                    26.699,
+                    -27.4008
+                  ],
+                  [
+                    26.696,
+                    -27.3498
+                  ],
+                  [
+                    26.738,
+                    -27.3449
+                  ],
+                  [
+                    26.7396,
+                    -27.2882
+                  ],
+                  [
+                    26.7229,
+                    -27.264
+                  ],
+                  [
+                    26.7276,
+                    -27.2308
+                  ],
+                  [
+                    26.7032,
+                    -27.2188
+                  ],
+                  [
+                    26.6831,
+                    -27.1903
+                  ],
+                  [
+                    26.6452,
+                    -27.1909
+                  ],
+                  [
+                    26.6352,
+                    -27.1716
+                  ],
+                  [
+                    26.5754,
+                    -27.1833
+                  ],
+                  [
+                    26.5216,
+                    -27.1044
+                  ],
+                  [
+                    26.5486,
+                    -27.0985
+                  ],
+                  [
+                    26.5856,
+                    -27.106
+                  ],
+                  [
+                    26.5937,
+                    -27.0801
+                  ],
+                  [
+                    26.5818,
+                    -27.0531
+                  ],
+                  [
+                    26.6121,
+                    -27.0283
+                  ],
+                  [
+                    26.6211,
+                    -27.0027
+                  ],
+                  [
+                    26.6718,
+                    -26.9957
+                  ],
+                  [
+                    26.7006,
+                    -27.0086
+                  ],
+                  [
+                    26.7129,
+                    -26.9757
+                  ],
+                  [
+                    26.7552,
+                    -26.9619
+                  ],
+                  [
+                    26.805,
+                    -26.932
+                  ],
+                  [
+                    26.8157,
+                    -26.9532
+                  ],
+                  [
+                    26.8485,
+                    -26.9402
+                  ],
+                  [
+                    26.8686,
+                    -26.9199
+                  ],
+                  [
+                    26.9087,
+                    -26.9457
+                  ],
+                  [
+                    26.9242,
+                    -26.9278
+                  ],
+                  [
+                    26.9272,
+                    -26.8871
+                  ],
+                  [
+                    26.9472,
+                    -26.892
+                  ],
+                  [
+                    27.0139,
+                    -26.9321
+                  ],
+                  [
+                    27.0873,
+                    -26.9384
+                  ],
+                  [
+                    27.1134,
+                    -26.9264
+                  ],
+                  [
+                    27.1422,
+                    -26.9418
+                  ],
+                  [
+                    27.1701,
+                    -26.923
+                  ],
+                  [
+                    27.183,
+                    -26.9314
+                  ],
+                  [
+                    27.1737,
+                    -26.9676
+                  ],
+                  [
+                    27.2118,
+                    -26.9767
+                  ],
+                  [
+                    27.2192,
+                    -26.9444
+                  ],
+                  [
+                    27.3061,
+                    -26.8533
+                  ],
+                  [
+                    27.33,
+                    -26.8532
+                  ],
+                  [
+                    27.3705,
+                    -26.9037
+                  ],
+                  [
+                    27.4075,
+                    -26.9258
+                  ],
+                  [
+                    27.44,
+                    -26.8995
+                  ],
+                  [
+                    27.476,
+                    -26.8835
+                  ],
+                  [
+                    27.4875,
+                    -26.8494
+                  ],
+                  [
+                    27.5118,
+                    -26.8365
+                  ],
+                  [
+                    27.5174,
+                    -26.782
+                  ],
+                  [
+                    27.5398,
+                    -26.7843
+                  ],
+                  [
+                    27.5826,
+                    -26.7689
+                  ],
+                  [
+                    27.5904,
+                    -26.7384
+                  ],
+                  [
+                    27.6295,
+                    -26.7323
+                  ],
+                  [
+                    27.6287,
+                    -26.764
+                  ],
+                  [
+                    27.6614,
+                    -26.7732
+                  ],
+                  [
+                    27.689,
+                    -26.7618
+                  ],
+                  [
+                    27.7252,
+                    -26.7603
+                  ],
+                  [
+                    27.7477,
+                    -26.7859
+                  ],
+                  [
+                    27.768,
+                    -26.7865
+                  ],
+                  [
+                    27.7828,
+                    -26.7506
+                  ],
+                  [
+                    27.8736,
+                    -26.7476
+                  ],
+                  [
+                    27.8956,
+                    -26.7193
+                  ],
+                  [
+                    27.9228,
+                    -26.7051
+                  ],
+                  [
+                    27.941,
+                    -26.6759
+                  ],
+                  [
+                    27.9691,
+                    -26.6688
+                  ],
+                  [
+                    27.9996,
+                    -26.696
+                  ],
+                  [
+                    27.9922,
+                    -26.7259
+                  ],
+                  [
+                    28.0082,
+                    -26.7701
+                  ],
+                  [
+                    28.0802,
+                    -26.8347
+                  ],
+                  [
+                    28.1148,
+                    -26.8444
+                  ],
+                  [
+                    28.1191,
+                    -26.8893
+                  ],
+                  [
+                    28.1713,
+                    -26.8837
+                  ],
+                  [
+                    28.2016,
+                    -26.9101
+                  ],
+                  [
+                    28.2283,
+                    -26.9034
+                  ],
+                  [
+                    28.2443,
+                    -26.8848
+                  ]
+                ]
+              ]
+            ]
+          },
+          "properties": {
+            "code": "DC20",
+            "name": "Fezile Dabi",
+            "area": 20667.975,
+            "parent": "FS",
+            "level": "district",
+            "version": "2016 with wards"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "MultiPolygon",
+            "coordinates": [
+              [
+                [
+                  [
+                    26.8181,
+                    -28.9271
+                  ],
+                  [
+                    26.8927,
+                    -28.9341
+                  ],
+                  [
+                    26.9135,
+                    -28.9177
+                  ],
+                  [
+                    26.9463,
+                    -28.9397
+                  ],
+                  [
+                    26.9406,
+                    -28.9646
+                  ],
+                  [
+                    26.9624,
+                    -29.0219
+                  ],
+                  [
+                    26.9949,
+                    -29.0219
+                  ],
+                  [
+                    27.0513,
+                    -29.0706
+                  ],
+                  [
+                    27.02,
+                    -29.0818
+                  ],
+                  [
+                    26.9998,
+                    -29.1053
+                  ],
+                  [
+                    27.0117,
+                    -29.1281
+                  ],
+                  [
+                    26.9741,
+                    -29.14
+                  ],
+                  [
+                    26.9453,
+                    -29.1684
+                  ],
+                  [
+                    26.9172,
+                    -29.1821
+                  ],
+                  [
+                    26.9174,
+                    -29.2198
+                  ],
+                  [
+                    26.9633,
+                    -29.2569
+                  ],
+                  [
+                    26.9428,
+                    -29.3157
+                  ],
+                  [
+                    26.9769,
+                    -29.3741
+                  ],
+                  [
+                    27.0227,
+                    -29.3805
+                  ],
+                  [
+                    27.0235,
+                    -29.3551
+                  ],
+                  [
+                    27.0534,
+                    -29.3436
+                  ],
+                  [
+                    27.0856,
+                    -29.3857
+                  ],
+                  [
+                    27.0677,
+                    -29.4416
+                  ],
+                  [
+                    27.011,
+                    -29.3951
+                  ],
+                  [
+                    26.9629,
+                    -29.428
+                  ],
+                  [
+                    26.991,
+                    -29.4554
+                  ],
+                  [
+                    26.9786,
+                    -29.4837
+                  ],
+                  [
+                    26.999,
+                    -29.5198
+                  ],
+                  [
+                    26.9538,
+                    -29.5339
+                  ],
+                  [
+                    26.9654,
+                    -29.4977
+                  ],
+                  [
+                    26.9121,
+                    -29.486
+                  ],
+                  [
+                    26.8849,
+                    -29.4462
+                  ],
+                  [
+                    26.8387,
+                    -29.4393
+                  ],
+                  [
+                    26.8345,
+                    -29.456
+                  ],
+                  [
+                    26.7741,
+                    -29.4527
+                  ],
+                  [
+                    26.7546,
+                    -29.4355
+                  ],
+                  [
+                    26.7017,
+                    -29.4366
+                  ],
+                  [
+                    26.6963,
+                    -29.3998
+                  ],
+                  [
+                    26.6686,
+                    -29.3847
+                  ],
+                  [
+                    26.6593,
+                    -29.3538
+                  ],
+                  [
+                    26.6416,
+                    -29.34
+                  ],
+                  [
+                    26.6701,
+                    -29.3161
+                  ],
+                  [
+                    26.6234,
+                    -29.2957
+                  ],
+                  [
+                    26.594,
+                    -29.2904
+                  ],
+                  [
+                    26.5903,
+                    -29.3136
+                  ],
+                  [
+                    26.566,
+                    -29.3187
+                  ],
+                  [
+                    26.5358,
+                    -29.3497
+                  ],
+                  [
+                    26.5135,
+                    -29.3476
+                  ],
+                  [
+                    26.4978,
+                    -29.3986
+                  ],
+                  [
+                    26.4742,
+                    -29.3899
+                  ],
+                  [
+                    26.4527,
+                    -29.3994
+                  ],
+                  [
+                    26.4547,
+                    -29.4482
+                  ],
+                  [
+                    26.4074,
+                    -29.4556
+                  ],
+                  [
+                    26.3586,
+                    -29.4355
+                  ],
+                  [
+                    26.3354,
+                    -29.4435
+                  ],
+                  [
+                    26.2926,
+                    -29.427
+                  ],
+                  [
+                    26.2483,
+                    -29.4251
+                  ],
+                  [
+                    26.2097,
+                    -29.4352
+                  ],
+                  [
+                    26.2093,
+                    -29.4766
+                  ],
+                  [
+                    26.1634,
+                    -29.4678
+                  ],
+                  [
+                    26.0778,
+                    -29.4797
+                  ],
+                  [
+                    26.06,
+                    -29.4422
+                  ],
+                  [
+                    26.0323,
+                    -29.4171
+                  ],
+                  [
+                    25.9794,
+                    -29.4016
+                  ],
+                  [
+                    25.9594,
+                    -29.3655
+                  ],
+                  [
+                    25.9988,
+                    -29.3582
+                  ],
+                  [
+                    26.0235,
+                    -29.3393
+                  ],
+                  [
+                    26.0045,
+                    -29.3103
+                  ],
+                  [
+                    25.9926,
+                    -29.2731
+                  ],
+                  [
+                    25.9662,
+                    -29.2927
+                  ],
+                  [
+                    25.9149,
+                    -29.3061
+                  ],
+                  [
+                    25.9055,
+                    -29.2543
+                  ],
+                  [
+                    25.8636,
+                    -29.2521
+                  ],
+                  [
+                    25.8415,
+                    -29.2323
+                  ],
+                  [
+                    25.8076,
+                    -29.2601
+                  ],
+                  [
+                    25.8012,
+                    -29.2329
+                  ],
+                  [
+                    25.7824,
+                    -29.2242
+                  ],
+                  [
+                    25.7412,
+                    -29.226
+                  ],
+                  [
+                    25.7443,
+                    -29.1769
+                  ],
+                  [
+                    25.7716,
+                    -29.1692
+                  ],
+                  [
+                    25.7347,
+                    -29.1412
+                  ],
+                  [
+                    25.7313,
+                    -29.077
+                  ],
+                  [
+                    25.7609,
+                    -29.0258
+                  ],
+                  [
+                    25.7194,
+                    -29.0063
+                  ],
+                  [
+                    25.7472,
+                    -28.9779
+                  ],
+                  [
+                    25.7375,
+                    -28.9608
+                  ],
+                  [
+                    25.7453,
+                    -28.9064
+                  ],
+                  [
+                    25.8047,
+                    -28.893
+                  ],
+                  [
+                    25.8089,
+                    -28.8535
+                  ],
+                  [
+                    25.8563,
+                    -28.8676
+                  ],
+                  [
+                    25.8541,
+                    -28.8157
+                  ],
+                  [
+                    25.8787,
+                    -28.7601
+                  ],
+                  [
+                    25.9079,
+                    -28.774
+                  ],
+                  [
+                    25.9308,
+                    -28.7711
+                  ],
+                  [
+                    25.921,
+                    -28.8099
+                  ],
+                  [
+                    25.9265,
+                    -28.8265
+                  ],
+                  [
+                    25.977,
+                    -28.8049
+                  ],
+                  [
+                    25.9865,
+                    -28.876
+                  ],
+                  [
+                    26.0287,
+                    -28.8526
+                  ],
+                  [
+                    26.0332,
+                    -28.8299
+                  ],
+                  [
+                    26.0781,
+                    -28.8091
+                  ],
+                  [
+                    26.1236,
+                    -28.8053
+                  ],
+                  [
+                    26.1526,
+                    -28.8282
+                  ],
+                  [
+                    26.1653,
+                    -28.8546
+                  ],
+                  [
+                    26.1919,
+                    -28.8516
+                  ],
+                  [
+                    26.2338,
+                    -28.8809
+                  ],
+                  [
+                    26.2807,
+                    -28.9404
+                  ],
+                  [
+                    26.3032,
+                    -28.9419
+                  ],
+                  [
+                    26.335,
+                    -28.9012
+                  ],
+                  [
+                    26.362,
+                    -28.9194
+                  ],
+                  [
+                    26.3662,
+                    -28.9625
+                  ],
+                  [
+                    26.4031,
+                    -28.9892
+                  ],
+                  [
+                    26.4309,
+                    -28.991
+                  ],
+                  [
+                    26.4346,
+                    -28.9633
+                  ],
+                  [
+                    26.4719,
+                    -28.948
+                  ],
+                  [
+                    26.5174,
+                    -28.9831
+                  ],
+                  [
+                    26.5249,
+                    -29.0012
+                  ],
+                  [
+                    26.5669,
+                    -28.9681
+                  ],
+                  [
+                    26.605,
+                    -29.0078
+                  ],
+                  [
+                    26.6176,
+                    -29.0062
+                  ],
+                  [
+                    26.6343,
+                    -29.0596
+                  ],
+                  [
+                    26.6607,
+                    -29.0767
+                  ],
+                  [
+                    26.6934,
+                    -29.0656
+                  ],
+                  [
+                    26.7164,
+                    -29.0724
+                  ],
+                  [
+                    26.779,
+                    -29.0158
+                  ],
+                  [
+                    26.7527,
+                    -29.003
+                  ],
+                  [
+                    26.8181,
+                    -28.9271
+                  ]
+                ]
+              ]
+            ]
+          },
+          "properties": {
+            "code": "MAN",
+            "name": "Mangaung",
+            "area": 6283.988,
+            "parent": "FS",
+            "level": "district",
+            "version": "2016 with wards"
+          }
+        }
+      ]
+    }
+  }
+}

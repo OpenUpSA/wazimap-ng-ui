@@ -47,10 +47,6 @@ const profiles = {
         baseUrl: productionUrl,
         config: config
     },
-    'gcro.openup.org.za': {
-        baseUrl: 'https://api.gcro.openup.org.za',
-        config: config
-    },
     'beta.youthexplorer.org.za': {
         baseUrl: productionUrl,
         config: config
@@ -110,28 +106,41 @@ async function init() {
     const errorNotifier = new ErrorNotifier();
     errorNotifier.registerErrorHandler();
 
-    const api = new API(pc.baseUrl, hostname);
+    const api = new API(pc.baseUrl, pc.config);
     const data = await api.getProfileConfiguration(hostname);
 
     pc.config.setConfig(data.configuration || {})
     pc.config.setVersions(data.geography_hierarchy || {})
+    api.restrictValues = pc.config.restrictValues;
+
     pc.config.api = api;
     pc.profile = data.id;
     pc.config.baseUrl = pc.baseUrl;
     if (GOOGLE_ANALYTICS_ID !== "undefined" && GOOGLE_ANALYTICS_ID !== "") {
-        const head = document.getElementsByTagName('head')[0];
+        pc.config.analytics = initGA(GOOGLE_ANALYTICS_ID, pc.profile);
+    } else {
+        // dev or staging
+        pc.config.analytics = initGA('UA-93649482-33', pc.profile);
+    }
+    pc.config.profile = data.id;
 
-        const analyticsScript = document.createElement('script');
-        analyticsScript.src = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`;
-        head.appendChild(analyticsScript);
+    configureApplication(data.id, pc.config);
+}
 
-        const configScript = document.createElement('script');
-        configScript.text = `
+function initGA(id, profile) {
+    const head = document.getElementsByTagName('head')[0];
+
+    const analyticsScript = document.createElement('script');
+    analyticsScript.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+    head.appendChild(analyticsScript);
+
+    const configScript = document.createElement('script');
+    configScript.text = `
         window.dataLayer = window.dataLayer || [];
         function gtag() {
             dataLayer.push(arguments);
         }
-        const analyticsId = '${GOOGLE_ANALYTICS_ID}';
+        const analyticsId = '${id}';
         gtag('js', new Date());
         gtag('config', analyticsId, { 'send_page_view': false });
         gtag('config', analyticsId, {
@@ -139,15 +148,9 @@ async function init() {
         });
         window.gtag = gtag;
         `;
-        head.appendChild(configScript);
+    head.appendChild(configScript);
 
-        pc.config.analytics = new Analytics(`${GOOGLE_ANALYTICS_ID}`, pc.profile);
-    } else {
-        console.warn("Not initialising Google Analytics because GOOGLE_ANALYTICS_ID is not set");
-    }
-    pc.config.profile = data.id;
-
-    configureApplication(data.id, pc.config);
+    return new Analytics(`${id}`, profile);
 }
 
 window.init = init;

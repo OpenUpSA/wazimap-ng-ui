@@ -1,0 +1,67 @@
+{
+    "id": 8,
+    "name": "Profile name",
+    "permission_type": "public",
+    "requires_authentication": false,
+    "geography_hierarchy": {
+      "id": 1,
+      "name": "2011 SA Boundaries",
+      "root_geography": {
+        "name": "South Africa",
+        "code": "ZA",
+        "level": "country",
+        "version": "2011 Boundaries"
+      },
+      "description": "",
+      "configuration": {
+        "default_version": "test",
+        "versions": ["test"]
+      }
+    },
+    "description": "",
+    "configuration": {
+      "urls": [
+        "example.com"
+      ],
+      "views": {
+        "youth": {
+            "default_filters": [
+                {
+                    "name": "language",
+                    "value": "English"
+                }
+            ],
+            "restrict_values": {
+                "age": [
+                    "15-35 (ZA)",
+                    "15-24 (Intl)",
+                    "30-35",
+                    "15-19",
+                ],
+                "race": [
+                    "Coloured",
+                    "Black African",
+                    "Indian or Asian"
+                ],
+                "language": [
+                    "English",
+                    "Afrikaans",
+                    "Some other"
+                ]
+            }
+        }
+    },
+      "tutorial": [],
+      "default_coordinates": {
+        "lat": -28.995409163308832,
+        "long": 25.093833387362697,
+        "zoom": 6
+      },
+      "default_filters": [
+        {
+          "name": "race",
+          "value": "Black African"
+        }
+    ]
+    }
+  }

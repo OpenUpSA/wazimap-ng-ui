@@ -17,21 +17,21 @@ Feature: Point Data
     Then I check if the filter dialog is expanded
 
     And I click on the first filter dropdown
-    Then I check if the filter options are "All values, campus, institution type, numerical"
+    Then I check if the filter options are "All values, Keyword, campus, institution type, numerical"
 
     And I expand Labour theme
     Then I select Additional DEL facilities category
     Then I check if the cluster is created correctly
 
     And I click on the first filter dropdown
-    Then I check if the filter options are "All values, campus, institution type, numerical, website"
+    Then I check if the filter options are "All values, Keyword, campus, institution type, numerical, website"
 
     And I filter by "campus:Nongoma"
     Then I check if the marker color is "#22a6b3"
 
     And I deselect TVET colleges category
     And I click on the first filter dropdown
-    Then I check if the filter options are "All values, website, campus"
+    Then I check if the filter options are "All values, Keyword, website, campus"
     Then I check if the marker color is "#eb4d4b"
 
     # to make sure filter pane is visible when a category is unchecked and checked again

@@ -10,7 +10,7 @@ import profiles from "./profiles.json";
 import all_details from "../tutorial/all_details.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, null, null);
+    setupInterceptions(profiles, all_details, profile, [], null);
     gotoHomepage();
 })
 

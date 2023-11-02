@@ -6,7 +6,7 @@ import IndicatorAutoComplete from '../../src/js/tabular_comparison/indicator-aut
 
 const mockedHandleIndicatorSelection = jest.fn();
 
-describe('Yest indicator autocomplete', () => {
+describe('Test indicator autocomplete', () => {
     const indicatorOptions = [
         'Language most spoken at home',
         'Region of birth',

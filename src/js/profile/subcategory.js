@@ -30,7 +30,9 @@ export class Subcategory extends Component {
         profileConfig,
         addLockButton = true,
         restrictValues = {},
-        defaultFilters = []
+        defaultFilters = [],
+        hiddenIndicators = [],
+        chartColorRange
     ) {
         super(parent);
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
@@ -40,10 +42,11 @@ export class Subcategory extends Component {
         this._profileConfig = profileConfig;
         this._isVisible = true;
         this._uiElements = [];
+        this._scHeader = null;
+        this._hasKeyMetrics = false;
 
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
-        this.addIndicators(wrapper, detail, addLockButton, restrictValues, defaultFilters);
-
+        this.addIndicators(wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange);
         this.prepareEvents();
     }
 
@@ -87,12 +90,31 @@ export class Subcategory extends Component {
                 $(ele).hide();
             })
         }
-
         this._isVisible = value;
     }
 
     get uiElements() {
         return this._uiElements;
+    }
+
+    get hasKeyMetrics() {
+        return this._hasKeyMetrics;
+    }
+
+    set hasKeyMetrics(value) {
+        this._hasKeyMetrics = value;
+    }
+
+    updateVisibility = () => {
+        this.isVisible = Object.values(this._indicators).filter(
+            indicator => indicator.isVisible
+        ).length > 0 || this.hasKeyMetrics;
+        this.parent.updateVisibility();
+    }
+
+    updateDomElements = () => {
+        $(this._scHeader).parents('.section').find(subcategoryHeaderClass).removeClass('first');
+        $(this._scHeader).removeClass('page-break-before').addClass('first');
     }
 
     addSubCategoryHeaders = (wrapper, subcategory, detail, isFirst) => {
@@ -119,9 +141,10 @@ export class Subcategory extends Component {
         this.uiElements.push(scHeader);
 
         wrapper.append(scHeader);
+        this._scHeader = scHeader;
     }
 
-    addIndicatorBlock(container, indicator, title, isLast, addLockButton, restrictValues, defaultFilters) {
+    addIndicatorBlock(container, indicator, title, isLast, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange) {
         let block = new Indicator(
             this,
             container,
@@ -132,7 +155,9 @@ export class Subcategory extends Component {
             this._profileConfig.chart_attribution,
             addLockButton,
             restrictValues,
-            defaultFilters
+            defaultFilters,
+            hiddenIndicators,
+            chartColorRange
         );
         this.bubbleEvents(block, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
@@ -143,23 +168,22 @@ export class Subcategory extends Component {
         return block;
     }
 
-    addHTMLBlock(container, indicator, title, isLast) {
-        let block = new HTMLBlock(this, container, indicator, title, isLast, this.geography)
+    addHTMLBlock(container, indicator, title, isLast, hiddenIndicators) {
+        let block = new HTMLBlock(this, container, indicator, title, isLast, this.geography, hiddenIndicators)
 
         return block;
     }
 
-    addIndicators = (wrapper, detail, addLockButton, restrictValues, defaultFilters) => {
+    addIndicators = (wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange) => {
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
         const $template = $(indicatorClass);
         assertNTemplates(2, $template);
-
         if (!isEmpty) {
             for (const indicator of sortBy(detail.indicators, "order")) {
                 const title = Object.keys(detail.indicators).filter(k => detail.indicators[k] === indicator)[0];
-                if (typeof indicator.data !== 'undefined') {
+                if (typeof indicator.data !== 'undefined' && indicator.data.length > 0) {
                     let isLast = index === lastIndex;
                     let block = null;
 
@@ -167,13 +191,11 @@ export class Subcategory extends Component {
                     $(wrapper).append(indicatorContainer);
                     let metadata = indicator.metadata;
                     if (indicator.content_type === ContentBlock.BLOCK_TYPES.Indicator) {
-                        block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast, addLockButton, restrictValues, defaultFilters);
+                        block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange);
                     } else if (indicator.content_type === ContentBlock.BLOCK_TYPES.HTMLBlock) {
-                        block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast);
+                        block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast, hiddenIndicators);
                     }
-
                     this._indicators.push(block);
-
                     index++;
                 }
             }
@@ -200,5 +222,6 @@ export class Subcategory extends Component {
         key_metrics.forEach((km) => {
             new KeyMetric(self, km, metricTemplate, metricWrapper);
         })
+        this.hasKeyMetrics = true;
     }
 }

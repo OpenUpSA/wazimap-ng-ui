@@ -31,6 +31,7 @@ export class MapChip extends Component {
         this._filterController = null;
         this._isContentVisible = false;
         this._appliedFilters = [];
+        this._previouslyAppliedFilters = [];
         this.siteWideFiltersEnabled = siteWideFiltersEnabled;
         this.restrictValues = restrictValues;
         this.defaultFilters = defaultFilters;
@@ -82,6 +83,14 @@ export class MapChip extends Component {
 
     set appliedFilters(value) {
         this._appliedFilters = value;
+    }
+
+    get previouslyAppliedFilters() {
+        return this._previouslyAppliedFilters;
+    }
+
+    set previouslyAppliedFilters(value) {
+        this._previouslyAppliedFilters = value;
     }
 
     get title() {
@@ -229,7 +238,7 @@ export class MapChip extends Component {
         this.triggerEvent('mapchip.removed', this.container);
     }
 
-    applyFilter = (filterResult, selectedFilter, selectedFilterDetails, updadateSharedUrl) => {
+    applyFilter = (filterResult, selectedFilter, selectedFilterDetails, updateSharedUrl) => {
         if (filterResult !== null) {
             const payload = {
                 data: filterResult,
@@ -237,12 +246,15 @@ export class MapChip extends Component {
                 selectedFilterDetails: selectedFilterDetails,
                 metadata: this.metadata,
                 config: this.config,
-                updadateSharedUrl: updadateSharedUrl
+                updateSharedUrl: updateSharedUrl
             }
 
             this.triggerEvent("mapchip.choropleth.filtered", payload)
         }
         this.appliedFilters = selectedFilterDetails;
+        if (updateSharedUrl){
+          this.previouslyAppliedFilters = selectedFilterDetails;
+        }
         this.filterLabel.setFilterLabelSelectedCount(selectedFilter);
     }
 
@@ -261,6 +273,7 @@ export class MapChip extends Component {
         if (params.childData === undefined) {
             return;
         }
+        this.appliedFilters = [];
 
         this.metadata = params.metadata;
         this.config = params.config;
@@ -307,32 +320,17 @@ export class MapChip extends Component {
 
         // Filter controller
         this.setFilterController(dataFilterModel, this.siteWideFiltersEnabled);
+
+        const previouslyAppliedFilters = structuredClone(this.previouslyAppliedFilters);
+        const appliedFilters = structuredClone(this.appliedFilters);
+        this.filterLabel.compareFilters(previouslyAppliedFilters, appliedFilters, dataFilterModel.siteWideFilters);
+        this.previouslyAppliedFilters = appliedFilters;
     }
 
     setFilterLabel(dataFilterModel, groups) {
-        const selectedFilters = dataFilterModel.previouslySelectedFilters;
-        const defaultFilters = dataFilterModel?.configFilters?.defaults;
-        if (defaultFilters) {
-            let filters = [];
-            defaultFilters.forEach(item => {
-                const alreadyAdded = selectedFilters.some(x => x.filters.some(y => y.appliesTo.indexOf('data_explorer') >= 0 && y.group === item.name));
-                if (!alreadyAdded) {
-                    filters.push({
-                        group: item.name,
-                        value: item.value
-                    })
-                }
-            });
-            if (filters.length > 0) {
-                selectedFilters.push({filters: filters})
-            }
-        }
-
-        this.filterLabel.compareFilters(this.appliedFilters, selectedFilters, dataFilterModel.siteWideFilters);
         this.filterLabel.setFilterLabelTotalCount(groups);
         this.filterLabel.setFilterLabelSelectedCount({});
         this.filterLabel.setFilterLabelContainerVisibility(!this.isContentVisible);
-        this.appliedFilters = selectedFilters
     }
 
     setDescriptionIcon(description) {
@@ -351,7 +349,8 @@ export class MapChip extends Component {
             addButton: 'a.mapping-options__add-filter',
             filterPanel: SidePanels.PANELS.dataMapper,
             removeFilterButton: '.mapping-options__remove-filter',
-            addLockButton: addLockButton
+            addLockButton: addLockButton,
+            rowContainer : this.filterController?.rowContainer
         });
 
         this.show();

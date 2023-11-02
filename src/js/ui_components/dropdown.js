@@ -1,5 +1,11 @@
 import {Component, Observable} from "../utils";
 
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import {FilterDropdown} from './filter_dropdown/dropdown';
+
+import {isArray, isEqual} from "lodash";
+
 
 export class DropdownModel extends Observable {
     static EVENTS = {
@@ -9,42 +15,47 @@ export class DropdownModel extends Observable {
         disabled: 'DropdownModel.disabled', // triggered when the dropdown is set to disabled
         unavailable: 'DropdownModel.unavailable',   // triggered when the dropdown is set to unavailable
         available: 'DropdownModel.available', // triggered when the dropdown is set to available
+        enableMultiselect: 'DropdownModel.enableMultiselect'
     }
 
-    constructor(items = [], currentIndex = 0, isDisabled = false, isUnavailable = false) {
+    constructor(items = [], isMultiselect = false, currentValue = [], isDisabled = false, isUnavailable = false) {
         super();
 
         this._items = items;
-        this._currentIndex = currentIndex;
         this._isDisabled = isDisabled;
         this._isUnavailable = isUnavailable;
         this._manualTrigger = false;
+        this._isMultiselect = isMultiselect;
+        this._unavailableValue = undefined;
     }
 
     get items() {
         return this._items;
     }
 
-    get currentIndex() {
-        return this._currentIndex;
+    get currentValue() {
+        return this._currentValue;
     }
 
-    set currentIndex(idx) {
-        this._currentIndex = idx;
+    set currentValue(value) {
+        this._currentValue = value;
         this.triggerEvent(DropdownModel.EVENTS.selected, this)
     }
 
     get currentItem() {
-        return this._items[this.currentIndex]
+        return this.currentValue
     }
 
     set currentItem(value) {
-        for (let idx in this.items) {
-            let item = this.items[idx];
-            if (item === value) {
-                this.currentIndex = idx;
-                return;
-            }
+        if (value === [] || value === undefined || value === '') {
+            this.currentValue = value;
+            return;
+        }
+
+        const isSubsetResult = value.every(item => this.items.includes(item));
+        if (isSubsetResult) {
+            this.currentValue = value;
+            return;
         }
 
         throw `Did not find value: ${value} in dropdown items`;
@@ -68,21 +79,40 @@ export class DropdownModel extends Observable {
         return this._isUnavailable;
     }
 
+    set unavailableValue(value) {
+        return this._unavailableValue = value;
+    }
+
+    get unavailableValue() {
+        return this._unavailableValue;
+    }
+
     set isUnavailable(value) {
         if (value) {
             this.isDisabled = true;
-            this.triggerEvent(DropdownModel.EVENTS.unavailable);
+            this._isUnavailable = true;
+            this._unavailableValue = value;
+            this.triggerEvent(DropdownModel.EVENTS.unavailable, value)
         } else {
             this.triggerEvent(DropdownModel.EVENTS.available);
         }
-     }
-        
+    }
+
     get manualTrigger() {
         return this._manualTrigger;
     }
 
     set manualTrigger(val) {
-      this._manualTrigger = val;
+        this._manualTrigger = val;
+    }
+
+    get isMultiselect() {
+        return this._isMultiselect;
+    }
+
+    set isMultiselect(value) {
+        this._isMultiselect = value;
+        this.triggerEvent(DropdownModel.EVENTS.enableMultiselect, this);
     }
 
     getIndexForValue(value) {
@@ -90,13 +120,11 @@ export class DropdownModel extends Observable {
     }
 
     setIndexUsingValue(value) {
-        let index = this.getIndexForValue(value);
-        this.currentIndex = index;
+        this.currentValue = values;
     }
 
     updateItems(items, currentIndex = 0) {
         this._items = items;
-        this._currentIndex = currentIndex;
         this.triggerEvent(DropdownModel.EVENTS.update, this);
     }
 }
@@ -106,23 +134,29 @@ export class Dropdown extends Component {
      * A class representing a dropdown widget
      */
 
-    static EVENTS = {}
+    static EVENTS = {
+        updateItems: "Dropdown.updateItems"
+    }
 
-    constructor(parent, container, items, defaultText = '', disabled = false) {
+    constructor(parent, container, items, defaultText = '', disabled = false, isMultiselect = false, drillDownOption = '', root = null) {
         super(parent);
         this._container = container;
-        this._model = new DropdownModel(items, 0);
+        this._model = new DropdownModel(items, isMultiselect, 0);
         this._defaultText = defaultText;
         this._listItemElements = [];
         this._manualTrigger = false;
+        this._root = root;
 
         this.prepareDomElements();
         this.prepareEvents();
 
         this.redrawItems(this.model.items);
         this.model.isDisabled = disabled;
-        this.model.isUnavailable = false;
-        this.setText(defaultText);
+        this.model._isUnavailable = false;
+
+        this._isMultiselect = this.model.isMultiselect;
+        this._drillDownOption = drillDownOption;
+
     }
 
     get container() {
@@ -133,18 +167,31 @@ export class Dropdown extends Component {
         return this._model;
     }
 
-    prepareDomElements() {
-        this._ddWrapper = $(this.container).find('.dropdown-menu__content')[0];
-        this._listItem = $('.styles .dropdown-menu__content .dropdown__list_item')[0].cloneNode(true);
-        $(this.container).find('.dropdown__list_item').remove();
+    get drillDownOption() {
+        return this._drillDownOption;
+    }
 
-        this._selectedItem = $(this.container).find('.dropdown-menu__selected-item .truncate');
-        this._trigger = $(this.container).find('.dropdown-menu__trigger')[0]
+    get root(){
+        return this._root;
+    }
+
+    set root(value){
+        this._root = value;
+    }
+
+    prepareDomElements() {
+        if (this.root == null){
+            this.root = createRoot(this._container);
+        }
+        this.root.render(<FilterDropdown
+            label={this._defaultText}
+            dropdownElement={this}
+            drillDownOption={this.drillDownOption}
+        />)
     }
 
     prepareEvents() {
         this.prepareModelEvents();
-        this.prepareUIEvents();
     }
 
     prepareModelEvents() {
@@ -154,25 +201,10 @@ export class Dropdown extends Component {
             self.redrawItems(model.items);
         })
 
-        this.model.on(DropdownModel.EVENTS.selected, () => {
-            self.updateSelectedText();
-        })
-
         this.model.on(DropdownModel.EVENTS.disabled, () => self.disable())
         this.model.on(DropdownModel.EVENTS.enabled, () => self.enable())
-
-        this.model.on(DropdownModel.EVENTS.unavailable, () => self.setUnavailable())
-        this.model.on(DropdownModel.EVENTS.available, () => self.setAvailable())
     }
 
-    prepareUIEvents() {
-        const self = this;
-
-        $(this._trigger).on('click', () => {
-            self.model.manualTrigger = true;
-            self.showItems();
-        })
-    }
 
     showItems() {
         $(this._ddWrapper).show()
@@ -194,23 +226,6 @@ export class Dropdown extends Component {
         this._listItemElements = [];
     }
 
-    updateSelectedText() {
-        this.setText(this.model.currentItem);
-    }
-
-    setSelected(idx) {
-        this.model.currentIndex = idx;
-        this.setText(this.model.currentItem);
-    }
-
-    setText(text) {
-        $(this._selectedItem).text(text)
-    }
-
-    getText() {
-        return $(this._selectedItem).text();
-    }
-
     enable() {
         $(this._trigger).removeClass('is--disabled');
         $(this.container).removeClass('disabled');
@@ -229,25 +244,7 @@ export class Dropdown extends Component {
         $(this._trigger).css('text-decoration', 'line-through');
     }
 
-    redrawItems(items) {
-        const self = this;
-
-        this.reset();
-
-        items.forEach((item, idx) => {
-            let li = self._listItem.cloneNode(true);
-
-            $(li).removeClass("selected");
-            $('.truncate', li).text(item);
-            $(li).off('click');
-            $(li).on('click', () => {
-                self.setSelected(idx)
-                self.hideItems();
-                $(this).addClass("selected");
-            })
-            $(self._ddWrapper).append(li);
-            $(li).show();
-            self._listItemElements.push(li);
-        })
+    redrawItems(items, currentIndex = 0) {
+        this.triggerEvent(Dropdown.EVENTS.updateItems, {items});
     }
 }

@@ -1,6 +1,6 @@
 import {Observable, trimValue} from "../utils";
 import {DataFilter} from "./data_filter";
-import {isEqual} from "vega-lite";
+import {isEmpty, isEqual} from "lodash";
 
 /**
  * A class that stores the state of a dataset filter. Consists of a list of indicators,
@@ -36,7 +36,8 @@ export class DataFilterModel extends Observable {
         childData,
         siteWideFilters = [],
         filterType = DataFilterModel.FILTER_TYPE.indicators,
-        restrictValues = {}
+        restrictValues = {},
+        drillDownGroup = null,
     ) {
         super()
         this._groups = groups;
@@ -52,6 +53,7 @@ export class DataFilterModel extends Observable {
         this._filterFunction = filterType === DataFilterModel.FILTER_TYPE.indicators ? this.getFilteredIndicatorData : this.getFilteredPointData;
         this._filterType = filterType;
         this._restrictValues = restrictValues;
+        this._drillDownGroup = drillDownGroup;
     }
 
     get restrictValues() {
@@ -68,6 +70,10 @@ export class DataFilterModel extends Observable {
 
     get groups() {
         return this._groups;
+    }
+
+    get drillDownGroup() {
+      return this._drillDownGroup;
     }
 
     set groups(value) {
@@ -90,7 +96,7 @@ export class DataFilterModel extends Observable {
         let self = this;
         let gr = {};
         this.groups.forEach(group => {
-            let dataFilter = new DataFilter(group, this.restrictValues, self.keys);
+            let dataFilter = new DataFilter(group, self.keys);
 
             gr[dataFilter[this.keys.name]] = dataFilter;
         });
@@ -101,7 +107,7 @@ export class DataFilterModel extends Observable {
         let self = this;
         let filters = [];
         this.groups.forEach(group => {
-            let dataFilter = new DataFilter(group, this.restrictValues, self.keys);
+            let dataFilter = new DataFilter(group, self.keys);
             filters.push(dataFilter);
         });
 
@@ -155,10 +161,10 @@ export class DataFilterModel extends Observable {
         const self = this;
         let details = [...self.selectedFilters].map(sf => {
             const group = sf.group.name;
-            const value = self._selectedSubindicators[group];
+            const value = self._selectedSubindicators[group] || [];
             const isDefault = self.defaultFilterGroups
-                    .some(f => f.group === group && f.value === self._selectedSubindicators[group])
-                || self.nonAggregatableGroups.some(x => x.name === group && x.values[0] === value);
+                    .some(f => f.group === group && isEqual(value, [f.value]))
+                || self.nonAggregatableGroups.some(x => x.name === group && isEqual(value, [x.values[0]]));
 
             return {
                 group: group,
@@ -224,8 +230,12 @@ export class DataFilterModel extends Observable {
         this._siteWideFilters = value;
     }
 
+    get filterType(){
+        return this._filterType;
+    }
+
     isSiteWideFilter(group, value) {
-        return this.siteWideFilters.filter(x => x.indicatorValue === group && x.subIndicatorValue === value)[0] != null;
+        return this.siteWideFilters.filter(x => x.indicatorValue === group && isEqual(x.subIndicatorValue, value))[0] != null;
     }
 
     addFilter(indicatorName, filterPanel) {
@@ -270,7 +280,7 @@ export class DataFilterModel extends Observable {
     }
 
     setSelectedSubindicator(indicatorName, subindicatorValue) {
-        if (this._selectedSubindicators[indicatorName] != subindicatorValue) {
+        if (!isEqual(this._selectedSubindicators[indicatorName], subindicatorValue)) {
             this._selectedSubindicators[indicatorName] = subindicatorValue;
         }
     }
@@ -291,7 +301,7 @@ export class DataFilterModel extends Observable {
             _filteredData[geo] = arr.filter((a) => {
                 let isFiltered = true;
                 for (let key in this.selectedSubIndicators) {
-                    if (a[key] !== this.selectedSubIndicators[key]) {
+                    if (!this.selectedSubIndicators[key].includes(a[key])) {
                         isFiltered = false;
                     }
                 }
@@ -311,8 +321,8 @@ export class DataFilterModel extends Observable {
             let add = true;
 
             for (let key in this.selectedSubIndicators) {
-                const value = trimValue(this.selectedSubIndicators[key]);
-                if (ap.point.data.filter(x => x.key === key && trimValue(x.value) === value).length <= 0) {
+                const values = this.selectedSubIndicators[key].map(val => trimValue(val));
+                if (ap.point.data.filter(x => x.key === key && values.includes(trimValue(x.value))).length <= 0) {
                     add = false;
                 }
             }

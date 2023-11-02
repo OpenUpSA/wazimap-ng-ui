@@ -5,6 +5,7 @@
     "subcategories": {
       "Language": {
         "order": 242,
+        "id": 1,
         "name": "Language",
         "indicators": {
           "Language most spoken at home": {
@@ -108,6 +109,7 @@
       },
       "Migration": {
         "order": 243,
+        "id": 2,
         "name": "Migration",
         "indicators": {
           "Region of birth": {
@@ -211,6 +213,7 @@
       },
       "South African Citizenship": {
         "order": 246,
+        "id": 3,
         "name": "South African Citizenship",
         "indicators": {
           "Citizenship": {

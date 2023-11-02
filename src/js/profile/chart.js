@@ -14,16 +14,16 @@ import {slugify} from './charts/utils';
 import {FilterController} from "../elements/subindicator_filter/filter_controller";
 import {DataFilterModel} from "../models/data_filter_model";
 import {SidePanels} from "../elements/side_panels";
+import {configureGroupedBarchart, configureGroupedBarchartDownload} from "./charts/groupedBarChart";
+import {isEmpty} from "vega-lite";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
 const graphValueTypes = {
-    'Percentage': PERCENTAGE_TYPE,
-    'Value': VALUE_TYPE
+    'Percentage': PERCENTAGE_TYPE, 'Value': VALUE_TYPE
 };
 const chartTypes = {
-    LineChart: 'line',
-    BarChart: 'bar'
+    LineChart: 'line', BarChart: 'bar', GroupedBarChart: 'grouped'
 }
 const chartContainerClass = ".indicator__chart";
 const tooltipClass = ".bar-chart__row_tooltip";
@@ -34,18 +34,17 @@ const MAX_RICH_TABLE_ROWS = 7;
 
 
 export class Chart extends Component {
-    constructor(
-        parent,
-        config,
-        data,
-        groups,
-        _subCategoryNode,
-        title,
-        chartAttribution,
-        addLockButton = true,
-        restrictValues = {},
-        defaultFilters = []
-    ) {
+    constructor(parent,
+                config,
+                data,
+                groups,
+                _subCategoryNode,
+                title,
+                chartAttribution,
+                addLockButton = true,
+                restrictValues = {},
+                defaultFilters = [],
+                chartColorRange) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
 
@@ -58,6 +57,7 @@ export class Chart extends Component {
         this.table = null;
         this.filter = null;
         this.groups = data.metadata.groups;
+        this._isGrouped = false;
 
         this.profileAttribution = chartAttribution;
         this.subCategoryNode = _subCategoryNode;
@@ -77,7 +77,21 @@ export class Chart extends Component {
             addLockButton: addLockButton
         });
 
-        this.addChart(data, restrictValues, defaultFilters);
+        this.updateConfig(chartColorRange);
+
+        this.addChart(restrictValues, defaultFilters, true, false, null);
+    }
+
+    get hasGroupedBarChart() {
+        return this.data.chartConfiguration.drilldown !== undefined && this.data.chartConfiguration.drilldown !== '' && this.data.chart_type !== 'line';
+    }
+
+    get isGrouped() {
+        return this._isGrouped;
+    }
+
+    set isGrouped(value) {
+        this._isGrouped = value;
     }
 
     get previouslySelectedFilters() {
@@ -125,11 +139,21 @@ export class Chart extends Component {
         return this._filterController;
     }
 
-    addChart = (data, restrictValues, defaultFilters) => {
+    get isDrilldownSelected() {
+        return this.hasGroupedBarChart && this.selectedFilter !== null && Object.keys(this.selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0;
+    }
+
+    updateConfig(chartColorRange) {
+        if (this.config.colorRange == null || this.config.colorRange.length <= 0) {
+            this.config.colorRange = chartColorRange;
+        }
+    }
+
+    addChart = (restrictValues, defaultFilters, setFilters, isGroupedBarChart = false, callback) => {
         $(".bar-chart", this.container).remove();
         $("svg", this.container).remove();
 
-        let vegaSpec = this.configureChart(data.data, data.metadata, this.config);
+        let vegaSpec = this.configureChart(this.data.data, this.data.metadata, this.config, isGroupedBarChart);
 
         const calculatePosition = (item, event, tooltipBox,) => {
             let x, y, offsetX, offsetY;
@@ -197,18 +221,14 @@ export class Chart extends Component {
 
             // make the tooltip visible
             this.el.classList.add('visible', tooltipClassSubstr);
-            const {x, y} = calculatePosition(
-                item,
-                event,
-                this.el.getBoundingClientRect()
-            );
+            const {x, y} = calculatePosition(item, event, this.el.getBoundingClientRect());
             this.el.setAttribute('style', `top: ${y}px; left: ${x}px; z-index: 999;`);
         }
 
         embed(this.container, vegaSpec, {renderer: 'svg', actions: false, tooltip: handler.bind(this)})
-
             .then(async (result) => {
                 this.vegaView = result.view;
+
                 this.vegaDownloadView = null;
                 this.setChartMenu();
                 this.showChartDataTable();
@@ -217,25 +237,40 @@ export class Chart extends Component {
                 $svg.attr('preserveAspectRatio', 'xMinYMin meet')
                 $svg.removeAttr('width')
                 $svg.removeAttr('height');
-                this.filterGroups = data.metadata.groups;
+                this.filterGroups = this.data.metadata.groups;
+                this.isGrouped = isGroupedBarChart;
 
-                this.handleChartFilter(data, data.metadata.groups, restrictValues, defaultFilters);
+                if (setFilters) {
+                    this.handleChartFilter(this.data, this.data.metadata.groups, restrictValues, defaultFilters);
+                }
+
+                if (callback !== null) {
+                    callback();
+                }
             });
     };
 
-    configureChart = (data, metadata, config) => {
-        if (this.chartType === chartTypes.LineChart) {
-            return configureLinechart(data, metadata, config);
+    configureChart = (data, metadata, config, isGroupedBarChart = false) => {
+        if (isGroupedBarChart) {
+            return configureGroupedBarchart(data, metadata, config);
         } else {
-            return configureBarchart(data, metadata, config);
+            if (this.chartType === chartTypes.LineChart) {
+                return configureLinechart(data, metadata, config);
+            } else {
+                return configureBarchart(data, metadata, config);
+            }
         }
     }
 
-    configureChartDownload = (data, metadata, config, annotations) => {
-        if (this.chartType === chartTypes.LineChart) {
-            return configureLinechartDownload(data, metadata, config, annotations);
+    configureChartDownload = (data, metadata, config, annotations, isGroupedBarChart = false) => {
+        if (isGroupedBarChart) {
+            return configureGroupedBarchartDownload(data, metadata, config, annotations);
         } else {
-            return configureBarchartDownload(data, metadata, config, annotations);
+            if (this.chartType === chartTypes.LineChart) {
+                return configureLinechartDownload(data, metadata, config, annotations);
+            } else {
+                return configureBarchartDownload(data, metadata, config, annotations);
+            }
         }
     }
 
@@ -307,7 +342,7 @@ export class Chart extends Component {
         $(this.table).append(tbody);
 
         let $showExtra = $('.profile-indicator__table_load-more', this.containerParent);
-        if (dataArr.length > MAX_RICH_TABLE_ROWS && $showExtra.length < 1) {
+        if (dataArr.length > MAX_RICH_TABLE_ROWS && $showExtra.length < 1 && !this.isDrilldownSelected) {
             let showExtraRows = false;
             let btnDiv = document.createElement('div');
             $(btnDiv).addClass('profile-indicator__table_show-more profile-indicator__table_showing profile-indicator__table_load-more');
@@ -325,12 +360,26 @@ export class Chart extends Component {
         $('.profile-indicator__table_content').css('overflow', 'hidden');
     }
 
+    appendOrRemoveDataTable() {
+        this.containerParent.find('.drilldown-warning').remove();
+        if (this.isDrilldownSelected && this.selectedFilter[this.config.drilldown].length > 1) {
+            // still show the table if only 1 value is selected
+            // this.selectedFilter[this.config.drilldown] === 1
+            this.containerParent.find('.profile-indicator__table').remove();
+            let warning = document.createElement('i');
+            warning.classList.add('drilldown-warning');
+            warning.innerText = 'Data table not currently available when comparison is active';
+
+            this.containerParent.append(warning);
+        } else {
+            this.showChartDataTable();
+        }
+    }
+
     setChartDomain(chart, config, chartType) {
         const chartConfig = config.types[chartType]
-        if (chartConfig.minX != defaultValues.DEFAULT_CONFIG)
-            chart.minX(chartConfig.minX)
-        if (chartConfig.maxX != defaultValues.DEFAULT_CONFIG)
-            chart.maxX(chartConfig.maxX)
+        if (chartConfig.minX != defaultValues.DEFAULT_CONFIG) chart.minX(chartConfig.minX)
+        if (chartConfig.maxX != defaultValues.DEFAULT_CONFIG) chart.maxX(chartConfig.maxX)
     }
 
     setDownloadUrl = async () => {
@@ -352,17 +401,24 @@ export class Chart extends Component {
             "graphValueType": this.graphValueType
         }
 
-        let specDownload = this.configureChartDownload(this.vegaView.data('table'), this.data.metadata, this.config, annotations);
+        let specDownload;
+        if (this.hasGroupedBarChart && this.selectedFilter != null && Object.keys(this.selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0) {
+            specDownload = this.configureChartDownload(this.vegaView.data('data_formatted'), this.data.metadata, this.config, annotations, true);
+        } else {
+            specDownload = this.configureChartDownload(this.vegaView.data('data_formatted'), this.data.metadata, this.config, annotations, false);
+        }
 
         this.vegaDownloadView = new vega.View(vega.parse(specDownload));
+        this.setGroupedBarChartHeight();
 
-        const pngDownloadUrl = await this.vegaDownloadView.toImageURL('png', 1);
-        const saveImgButton = $(containerParent).find(
-            ".hover-menu__content a.hover-menu__content_item:nth-child(1)"
-        );
-        saveImgButton.attr('href', pngDownloadUrl);
-        const chartTitle = this.title;
-        saveImgButton.attr('download', `${chartTitle ? chartTitle : 'chart'}.png`);
+        setTimeout(() => {
+            this.vegaDownloadView.toImageURL('png', 1).then((pngDownloadUrl) => {
+                const saveImgButton = $(containerParent).find(".hover-menu__content a.hover-menu__content_item:nth-child(1)");
+                saveImgButton.attr('href', pngDownloadUrl);
+                const chartTitle = this.title;
+                saveImgButton.attr('download', `${chartTitle ? chartTitle : 'chart'}.png`);
+            });
+        }, 0)
     }
 
     disableChartTypeToggle = () => {
@@ -461,23 +517,21 @@ export class Chart extends Component {
                 chartDefaultFilters.defaults.push(df);
             })
         }
-        let dataFilterModel = new DataFilterModel(
-            groups,
-            chartDefaultFilters,
-            this.previouslySelectedFilters,
-            indicators.metadata.primary_group,
-            {},
-            this.siteWideFilters,
-            DataFilterModel.FILTER_TYPE.indicators,
-            restrictValues
-        );
+        let dataFilterModel = new DataFilterModel(groups, chartDefaultFilters, this.previouslySelectedFilters, indicators.metadata.primary_group, {}, this.siteWideFilters, DataFilterModel.FILTER_TYPE.indicators, restrictValues, this.config?.drilldown,);
         if (this._filterController.filterCallback === null) {
             this._filterController.filterCallback = this.applyFilter;
         }
         this._filterController.setDataFilterModel(dataFilterModel);
     };
 
-    applyFilter = (filteredData, selectedFilter, selectedFilterDetails, updadateSharedUrl) => {
+    applyFilter = (filteredData, selectedFilter, selectedFilterDetails, updateSharedUrl) => {
+        if (this.hasGroupedBarChart && !this.isGrouped && Object.keys(selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) >= 0) {
+            this.addChart(null, null, false, true, () => this.applyFilter(filteredData, selectedFilter, selectedFilterDetails, updateSharedUrl));
+            return;
+        } else if (this.isGrouped && Object.keys(selectedFilter).indexOf(this.data.chartConfiguration?.drilldown) < 0) {
+            this.addChart(null, null, false, false, () => this.applyFilter(filteredData, selectedFilter, selectedFilterDetails, updateSharedUrl));
+            return;
+        }
         this.filteredData = filteredData;
         this.filterGroups.forEach((group) => {
             let {name: filterName} = group;
@@ -496,26 +550,58 @@ export class Chart extends Component {
         this.selectedFilter = selectedFilter;
 
         this.vegaView.run();
-        this.appendDataToTable();
+        this.appendOrRemoveDataTable();
         this.setDownloadUrl();
+
+        this.setGroupedBarChartHeight();
 
         const payload = {
             indicatorId: this.data.id,
             selectedFilter: selectedFilterDetails,
             title: this.title,
-            updadateSharedUrl: updadateSharedUrl,
+            updateSharedUrl: updateSharedUrl,
         };
         this.triggerEvent('profile.chart.filtered', payload);
-
     };
+
+    setGroupedBarChartHeight() {
+        const isDrilldownSelected = this.selectedFilter != null
+            && Object.keys(this.selectedFilter).indexOf(this.config.drilldown) >= 0;
+
+        if (!this.isGrouped || !isDrilldownSelected) {
+            return;
+        }
+
+        try {
+            let data_grouped = this.vegaView.data('data_grouped')
+        } catch (error) {
+            return;
+        }
+
+        const groupCount = this.vegaView.data('data_grouped').length;
+        const drilldownValues = [...new Set(this.vegaView.data('data_formatted').map(x => x[this.config.drilldown]))];
+        const yCount = Math.max(this.vegaView.data('data_formatted').length / groupCount, drilldownValues.length);
+        const labelOffset = (25 + yCount * 15) * -1;
+        const yscale_step = yCount * 30 + 40;
+        const height = this.vegaView.data('data_formatted').length * 30 + (40 * groupCount);
+
+        this.vegaView.signal('yscale_step', yscale_step);
+        this.vegaView.signal('height', height);
+        this.vegaView.signal('label_offset', labelOffset);
+        this.vegaView.run();
+
+        this.vegaDownloadView.signal('yscale_step', yscale_step);
+        this.vegaDownloadView.signal('height', height);
+        this.vegaDownloadView.signal('label_offset', labelOffset);
+        this.vegaDownloadView.run();
+    }
 
     exportAsCsv = () => {
         const data = this.vegaView.data('table');
 
         const fileName = `${this.title}.csv`;
 
-        let csvContent = "data:text/csv;charset=utf-8,"
-            + Papa.unparse(data);
+        let csvContent = "data:text/csv;charset=utf-8," + Papa.unparse(data);
 
         let encodedUri = encodeURI(csvContent);
         let link = document.createElement("a");

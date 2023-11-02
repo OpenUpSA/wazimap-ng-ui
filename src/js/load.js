@@ -4,7 +4,7 @@ import ProfileLoader from "./profile/profile_loader";
 import {MapControl} from './map/maps';
 import {Component} from './utils';
 import {Profile} from './profile';
-import {onProfileLoaded as onProfileLoadedSearch, Search} from './elements/search';
+import {onProfileLoaded as onProfileLoadedSearch, Search} from './elements/header/search';
 import {MapChip} from './elements/mapchip/mapchip';
 import {LocationInfoBox} from './elements/location_info_box';
 import {PointData} from "./map/point_data/point_data";
@@ -14,7 +14,8 @@ import {PointDataTray} from './elements/point_tray/tray';
 import Analytics from './analytics';
 import {BoundaryTypeBox} from "./map/boundary_type_box";
 import {MapDownload} from "./map/map_download";
-import {Tutorial} from "./elements/tutorial";
+import {Tutorial} from "./elements/tutorial/tutorial";
+import {TabularLink} from "./elements/header/tabular_link";
 import {DataMapperMenu} from './elements/data_mapper/menu';
 
 import "data-visualisations/src/charts/bar/reusable-bar-chart/stories.styles.css";
@@ -45,6 +46,9 @@ import {StyleConfig} from "./elements/style_config";
 import {configureStyleConfigEvents} from "./setup/styleconfig";
 import {RichDataLinkRendrer} from "./elements/data_mapper/components/renderer";
 import {MyView} from "./elements/my_view/my_view";
+import {CurrentView} from "./elements/header/current_view/current_view";
+import {configureCurrentViewEvents} from "./setup/currentView";
+import {configureTabularLinkEvents} from "./setup/tabularlink";
 
 let defaultFormattingConfig = {
     decimal: ",.1f",
@@ -74,7 +78,7 @@ class Application extends Component {
         const pointDataTray = new PointDataTray(this, api, profileId, config.watermarkEnabled);
         const mapchip = new MapChip(this, config.choropleth, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters);
         const search = new Search(this, api, profileId, 2);
-        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters);
+        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters, config.chartColorRange);
         const locationInfoBox = new LocationInfoBox(this, formattingConfig);
         const zoomToggle = new ZoomToggle(this);
         const preferredChildToggle = new PreferredChildToggle(this);
@@ -87,6 +91,8 @@ class Application extends Component {
         const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled, controller);
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
         const myView = new MyView(this, controller, config.siteWideFiltersEnabled, api, profileId);
+        const currentView = new CurrentView(this);
+        const tabularLink = new TabularLink(this);
 
         configureMapEvents(controller, {mapcontrol: mapcontrol, zoomToggle: zoomToggle});
         configureSpinnerEvents(controller);
@@ -107,11 +113,13 @@ class Application extends Component {
         configureStyleConfigEvents(controller, styleConfig);
         configureFacilityEvents(controller, {profileLoader: profileLoader});
         configureRichDataPanelEvents(controller, {richDataLinkRendrer: richDataLinkRendrer});
+        configureCurrentViewEvents(controller, config, currentView);
+        configureTabularLinkEvents(controller, config, tabularLink)
         initialPageLoad(controller)
 
         preferredChildToggle.on('preferredChildChange', payload => controller.onPreferredChildChange(payload))
 
-        controller.triggerHashChange()
+        controller.loadInitialGeography()
 
     }
 }

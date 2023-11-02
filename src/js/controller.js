@@ -28,63 +28,60 @@ export default class Controller extends Component {
         this.confirmationModal = new ConfirmationModal(this, ConfirmationModal.COOKIE_NAMES.DATA_MAPPER_VERSION_SELECTION);
 
         $(window).on('hashchange', () => {
-            // On every hash change the render function is called with the new hash.
-            // This is how the navigation of our app happens.
-            this.api.cancelAndInitAbortController();
             const hash = decodeURI(window.location.hash);
             let parts = hash.split(':')
-            let payload = null;
-
             if (parts[0] == '#geo') {
-                payload = self.changeGeography(parts[1])
-                self._shouldMapZoom = true;
-
-            } else if (parts[0] == '#logout') {
-                self.onLogout();
-            } else {
-                //if a category nav is clicked, the hash becomes something like #divId, in that case it should behave same as if hash == ''
-                const areaCode = this.config.rootGeography;
-                self._shouldMapZoom = false;
-                payload = self.changeGeography(areaCode)
+                this.initiateGeographyChange(parts[1], true);
             }
 
-            self.onHashChange(payload);
+            if (parts[0] == '#logout') {
+                self.onLogout();
+            }
         });
 
         window.addEventListener('popstate', (event) => {
-          let hiddenIndicators = [], filteredIndicators = [];
+            let hiddenIndicators = [], filteredIndicators = [];
+            let areaCode;
 
-          if (event.state){
-            filteredIndicators = event.state.filters;
-            hiddenIndicators = event.state.hiddenIndicators;
-          } else {
+            if (event.state) {
+                filteredIndicators = event.state.filters;
+                hiddenIndicators = event.state.hiddenIndicators;
+                areaCode = event.state.geo
+            } else {
                 const urlParams = new URLSearchParams(window.location.search);
                 const profileView = JSON.parse(urlParams.get("profileView"));
+                areaCode = urlParams.get("geo") || this.config.rootGeography;
                 if (profileView === null) {
-                    if (this._filteredIndicators.length > 0){
-                      filteredIndicators = [];
+                    if (this._filteredIndicators.length > 0) {
+                        filteredIndicators = [];
                     }
-                    if (this._hiddenIndicators.length > 0){
-                      hiddenIndicators = [];
+                    if (this._hiddenIndicators.length > 0) {
+                        hiddenIndicators = [];
                     }
                 } else {
-                  filteredIndicators = this.filteredIndicators;
-                  hiddenIndicators = this.hiddenIndicators;
+                    filteredIndicators = this.filteredIndicators;
+                    hiddenIndicators = this.hiddenIndicators;
                 }
             }
 
-          if (!isEqual(hiddenIndicators, this._hiddenIndicators)){
-            this._hiddenIndicators = hiddenIndicators;
-            this.reloadDataMapper();
-            this.triggerEvent('my_view.hiddenIndicatorsPanel.reload', this.hiddenIndicators);
-          }
+            if (areaCode !== this.versionController.areaCode){
+              let payload = this.changeGeography(areaCode)
+              this._shouldMapZoom = true;
+              this.onHashChange(payload);
+            } else {
+              if (!isEqual(hiddenIndicators, this._hiddenIndicators)) {
+                  this._hiddenIndicators = hiddenIndicators;
+                  this.reloadDataMapper();
+                  this.triggerEvent('my_view.hiddenIndicatorsPanel.reload', this.hiddenIndicators);
+              }
 
-          if (!isEqual(filteredIndicators, this._filteredIndicators)){
-            this._filteredIndicators = filteredIndicators;
-            this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-            this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
-            this.reDrawChildren();
-          }
+              if (!isEqual(filteredIndicators, this._filteredIndicators)) {
+                  this._filteredIndicators = filteredIndicators;
+                  this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+                  this.triggerEvent(VersionController.EVENTS.ready, this.versionController.allVersionsBundle);
+                  this.reDrawChildren();
+              }
+            }
         });
     };
 
@@ -131,8 +128,19 @@ export default class Controller extends Component {
         super.triggerEvent(event, payload);
     };
 
-    triggerHashChange() {
-        $(window).trigger('hashchange');
+    loadInitialGeography() {
+        const hash = decodeURI(window.location.hash);
+        const urlParams = new URLSearchParams(window.location.search);
+
+        let parts = hash.split(':')
+        if (parts[0] === '#geo') {
+            this.initiateGeographyChange(parts[1], true);
+        } else {
+          const areaCode = urlParams.get("geo") || this.config.rootGeography;
+          if (areaCode !== null){
+            this.initiateGeographyChange(areaCode, false, areaCode === this.config.rootGeography);
+          }
+        }
     };
 
     /**
@@ -198,19 +206,19 @@ export default class Controller extends Component {
 
         this.state.subindicator = subindicator;
 
-        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails, payload.updadateSharedUrl, SidePanels.PANELS.dataMapper);
+        this.updateFilteredIndicators(subindicator.indicatorId, subindicator.indicatorTitle, payload.selectedFilterDetails, payload.updateSharedUrl, SidePanels.PANELS.dataMapper);
 
         this.triggerEvent("mapchip.choropleth.filtered", payload);
     }
 
     onChartFiltered(payload) {
-        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, payload.updadateSharedUrl, SidePanels.PANELS.richData);
+        this.updateFilteredIndicators(payload.indicatorId, payload.title, payload.selectedFilter, payload.updateSharedUrl, SidePanels.PANELS.richData);
     }
 
     isAlreadyInFilteredIndicators(filter, indicatorId, filterPanel) {
         let arrClone = structuredClone(this._filteredIndicators);
         const alreadyAdded = arrClone.filter(x => x.indicatorId === indicatorId)[0]?.filters
-            .filter(y => y.group === filter.group && y.value === filter.value && y.appliesTo.indexOf(filterPanel) >= 0)[0] != null;
+            .filter(y => y.group === filter.group && isEqual(y.value, filter.value) && y.appliesTo.indexOf(filterPanel) >= 0)[0] != null;
 
         return alreadyAdded;
     }
@@ -224,7 +232,8 @@ export default class Controller extends Component {
         let filteredIndicator = {
             indicatorId: indicatorId,
             filters: selectedFilterDetailsClone,
-            indicatorTitle: indicatorTitle
+            indicatorTitle: indicatorTitle,
+            indicatorIsAvailable: true
         };
 
         if (isNewObj) {
@@ -248,13 +257,13 @@ export default class Controller extends Component {
                     })
 
                     let filtersToRemove = existingObj.filters.filter(f => {
-                        const stillExists = selectedFilterDetailsClone.filter(x => x.group === f.group && x.value === f.value).length > 0;
-                        const isSiteWideFilter = f.isSiteWideFilter || this.siteWideFilters.some(x => x.indicatorValue === f.group && x.subIndicatorValue === f.value);
+                        const stillExists = selectedFilterDetailsClone.filter(x => x.group === f.group && isEqual(x.value, f.value)).length > 0;
+                        const isSiteWideFilter = f.isSiteWideFilter || this.siteWideFilters.some(x => x.indicatorValue === f.group && isEqual(x.subIndicatorValue, f.value));
                         return f.appliesTo.indexOf(filterPanel) >= 0 && !stillExists && !isSiteWideFilter;
                     })
 
                     filtersToRemove.forEach(x => {
-                        let objToRemove = existingObj.filters.filter(y => y.group === x.group && y.value === x.value && y.appliesTo.indexOf(filterPanel) >= 0)[0];
+                        let objToRemove = existingObj.filters.filter(y => y.group === x.group && isEqual(y.value, x.value) && y.appliesTo.indexOf(filterPanel) >= 0)[0];
                         if (objToRemove.appliesTo.length > 1) {
                             objToRemove.appliesTo.splice(objToRemove.appliesTo.indexOf(filterPanel), 1);
                         } else {
@@ -268,7 +277,7 @@ export default class Controller extends Component {
             });
         }
         if (updateSharedUrl) {
-            this.updateShareUrl();
+          this.updateShareUrl();
         }
         this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
     }
@@ -280,7 +289,7 @@ export default class Controller extends Component {
 
         let objToUpdate = this._filteredIndicators.filter(x => x.indicatorId === filteredIndicator.indicatorId)[0];
         let filterArr = objToUpdate.filters.filter(x => !(x.group === selectedFilter.group
-            && x.value === selectedFilter.value
+            && isEqual(x.value, selectedFilter.value)
             && x.appliesTo.indexOf(selectedFilter.appliesTo[0]) >= 0));
         objToUpdate.filters = filterArr;
 
@@ -297,124 +306,140 @@ export default class Controller extends Component {
         this.updateShareUrl();
     }
 
-    updateHiddenIndicators(indicatorId, action="add"){
-      let hiddenIndicators = structuredClone(this._hiddenIndicators);
-      if(action === "add"){
-        hiddenIndicators = [...hiddenIndicators, indicatorId]
-      } else {
-        hiddenIndicators = hiddenIndicators.filter(item => item !== indicatorId);
-      }
-      this._hiddenIndicators = hiddenIndicators;
-      this.reloadDataMapper();
-      this.updateShareUrl();
+    updateHiddenIndicators(indicatorId, action = "add") {
+        let hiddenIndicators = structuredClone(this._hiddenIndicators);
+        if (action === "add") {
+            hiddenIndicators = [...hiddenIndicators, indicatorId]
+        } else {
+            hiddenIndicators = hiddenIndicators.filter(item => item !== indicatorId);
+        }
+        this._hiddenIndicators = hiddenIndicators;
+        this.reloadDataMapper();
+        this.updateShareUrl();
     }
 
     reloadDataMapper() {
-      const currentGeo = this.state.profile.profile.geography.code;
-      let indicators = this.versionController.getIndicatorDataByGeo(currentGeo);
-      this.triggerEvent("datamapper.reload", indicators.indicatorData);
+        const currentGeo = this.state.profile.profile.geography.code;
+        let indicators = this.versionController.getIndicatorDataByGeo(currentGeo);
+        this.triggerEvent("datamapper.reload", indicators.indicatorData);
     }
 
-    pushState(currentState){
-      let profileView = "/";
-      if (
-          currentState?.filters !== undefined && currentState.filters.length > 0
-          || currentState?.hiddenIndicators !== undefined && currentState.hiddenIndicators.length > 0
-        ){
-        profileView = `?profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
-      }
+    pushState(currentState) {
+        let profileView = "/";
 
-      history.pushState(
-        {
-          "filters": this._filteredIndicators,
-          "hiddenIndicators": this.hiddenIndicators,
-          "profileView": currentState,
-        },
-        '',
-        `${profileView}${window.location.hash}`
-      );
-    }
+        const urlParams = new URLSearchParams(window.location.search);
+        let hasOtherKeys = false;
+        [...urlParams.keys()].forEach((key, index) => {
+            if (key !== 'profileView') {
+                profileView += `${index === 0 ? '?' : '&'}${key}=${urlParams.get(key)}`;
+                hasOtherKeys = true;
+            }
+        })
 
-    updateShareUrl(){
-      let selectedFilters = [];
-      this._filteredIndicators.map(
-        (indicatorFilter) => {
-          const nonDefaultFilters = indicatorFilter.filters.filter(f => f.isDefault !== true);
-          if (nonDefaultFilters.length > 0){
-            selectedFilters.push({
-              "indicatorId": indicatorFilter.indicatorId,
-              "filters": nonDefaultFilters
-            })
-          }
+        if (
+            currentState?.filters !== undefined && currentState.filters.length > 0
+            || currentState?.hiddenIndicators !== undefined && currentState.hiddenIndicators.length > 0
+        ) {
+            profileView += `${hasOtherKeys ? '&' : '?'}profileView=${encodeURIComponent(JSON.stringify(currentState))}`;
         }
-      )
-      let currentState = {
-          "filters": selectedFilters,
-          "hiddenIndicators": this.hiddenIndicators,
-      }
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const profileView = JSON.parse(urlParams.get("profileView"));
-      if (selectedFilters.length > 0 || this.hiddenIndicators.length > 0){
-        if (profileView === null){
-          this.pushState(currentState);
-        } else {
-          if(!isEqual(profileView, currentState)){
-            this.pushState(currentState);
-          }
-        }
-      } else if ((selectedFilters.length === 0 || this.hiddenIndicators.length === 0) && profileView !== null ) {
-        this.pushState(currentState);
-      }
-    }
-
-    loadInitialFilters(dataBundle){
-      if (this._filteredIndicators.length > 0 || this._hiddenIndicators.length > 0){
-        return;
-      }
-
-      const profileData = dataBundle?.profile?.profileData;
-      const urlParams = new URLSearchParams(window.location.search);
-      const profileView = JSON.parse(urlParams.get("profileView"));
-      if (profileView !== null && (profileData !== null || profileData !== undefined || !isEmpty(profileData))) {
-
-        const urlFilters = profileView["filters"];
-        this._filteredIndicators = urlFilters.map(indicator => {
-          let indicatorTitle = '';
-          Object.values(profileData).map(category => {
-            Object.values(category.subcategories).map(subcategory => {
-              Object.values(subcategory.indicators).map(i => {
-                  if (i.id === indicator.indicatorId){
-                    indicatorTitle = i.label;
-                  }
-              })
-            })
-          })
-          return {
-            indicatorId: indicator.indicatorId,
-            indicatorTitle: indicatorTitle,
-            filters: indicator.filters
-          }
-        });
-
-        this._hiddenIndicators = profileView["hiddenIndicators"] || [];
-
-        history.replaceState(
-          {
-            "filters": this._filteredIndicators,
-            "hiddenIndicators": this._hiddenIndicators
-          },
-          '',
-          `${window.location.search}${window.location.hash}`
+        history.pushState(
+            {
+                "filters": this._filteredIndicators,
+                "hiddenIndicators": this.hiddenIndicators,
+                "profileView": currentState,
+                "geo": this.versionController.areaCode,
+            },
+            '',
+            `${profileView}${window.location.hash}`
         );
+    }
 
-        this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
-        this.triggerEvent('my_view.hiddenIndicatorsPanel.reload', this.hiddenIndicators);
-      }
+    updateShareUrl() {
+        let selectedFilters = [];
+        this._filteredIndicators.map(
+            (indicatorFilter) => {
+                const nonDefaultFilters = indicatorFilter.filters.filter(f => f.isDefault !== true);
+                if (nonDefaultFilters.length > 0) {
+                    selectedFilters.push({
+                        "indicatorId": indicatorFilter.indicatorId,
+                        "filters": nonDefaultFilters
+                    })
+                }
+            }
+        )
+        let currentState = {
+            "filters": selectedFilters,
+            "hiddenIndicators": this.hiddenIndicators,
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const profileView = JSON.parse(urlParams.get("profileView"));
+        if (selectedFilters.length > 0 || this.hiddenIndicators.length > 0) {
+            if (profileView === null) {
+                this.pushState(currentState);
+            } else {
+                if (!isEqual(profileView, currentState)) {
+                    this.pushState(currentState);
+                }
+            }
+        } else if ((selectedFilters.length === 0 || this.hiddenIndicators.length === 0) && profileView !== null) {
+            this.pushState(currentState);
+        }
+    }
+
+    loadInitialFilters(dataBundle) {
+        if (this._filteredIndicators.length > 0 || this._hiddenIndicators.length > 0) {
+            return;
+        }
+
+        const profileData = dataBundle?.profile?.profileData;
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileView = JSON.parse(urlParams.get("profileView"));
+        if (profileView !== null && (profileData !== null || profileData !== undefined || !isEmpty(profileData))) {
+
+            const urlFilters = profileView["filters"];
+            this._filteredIndicators = urlFilters.map(indicator => {
+                let indicatorTitle = '';
+                let indicatorIsAvailable = false;
+                Object.values(profileData).map(category => {
+                    Object.values(category.subcategories).map(subcategory => {
+                        Object.values(subcategory.indicators).map(i => {
+                            if (i.id === indicator.indicatorId) {
+                                indicatorTitle = i.label;
+                                indicatorIsAvailable = true;
+                            }
+                        })
+                    })
+                })
+                return {
+                    indicatorId: indicator.indicatorId,
+                    indicatorTitle: indicatorTitle,
+                    filters: indicator.filters,
+                    indicatorIsAvailable: indicatorIsAvailable
+                }
+            });
+
+            this._hiddenIndicators = profileView["hiddenIndicators"] || [];
+
+            history.replaceState(
+                {
+                    "filters": this._filteredIndicators,
+                    "hiddenIndicators": this._hiddenIndicators,
+                    "geo": this.versionController.areaCode
+                },
+                '',
+                `${window.location.search}${window.location.hash}`
+            );
+
+            this.triggerEvent('my_view.filteredIndicators.updated', this.filteredIndicators);
+            this.triggerEvent('my_view.hiddenIndicatorsPanel.reload', this.hiddenIndicators);
+        }
     }
 
     addSiteWideFilter(indicatorValue, subIndicatorValue) {
-        const alreadyAdded = this._siteWideFilters.some(x => x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue);
+        const alreadyAdded = this._siteWideFilters.some(x => x.indicatorValue === indicatorValue && isEqual(x.subIndicatorValue, subIndicatorValue));
         if (alreadyAdded) {
             return;
         }
@@ -432,7 +457,7 @@ export default class Controller extends Component {
     }
 
     removeSiteWideFilter(indicatorValue, subIndicatorValue) {
-        this._siteWideFilters = this._siteWideFilters.filter(x => !(x.indicatorValue === indicatorValue && x.subIndicatorValue === subIndicatorValue));
+        this._siteWideFilters = this._siteWideFilters.filter(x => !(x.indicatorValue === indicatorValue && isEqual(x.subIndicatorValue, subIndicatorValue)));
 
         const payload = {
             siteWideFilters: this.siteWideFilters,
@@ -468,7 +493,6 @@ export default class Controller extends Component {
         this.loadProfile(payload, true)
     }
 
-
     loadProfile(payload, callRegisterFunction) {
         this.triggerEvent("profile.loading", payload.areaCode);
 
@@ -480,10 +504,38 @@ export default class Controller extends Component {
         this.versionController.loadAllVersions(this.config.versions);
     }
 
-    changeHash(areaCode) {
-        window.location.hash = `#geo:${areaCode}`;
-    }
+    initiateGeographyChange(areaCode, replaceState=false, isRootGeo=false) {
+        this.api.cancelAndInitAbortController();
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("geo", areaCode);
 
+        if (replaceState){
+          let hash = window.location.hash.replace(`#geo:${areaCode}`, '');
+
+          history.replaceState(
+              {
+                  "filters": this._filteredIndicators,
+                  "hiddenIndicators": this.hiddenIndicators,
+                  "geo": areaCode,
+              },
+              '',
+              `?${urlParams.toString()}${hash}`
+          );
+        } else if(!isRootGeo) {
+          history.pushState(
+              {
+                  "filters": this._filteredIndicators,
+                  "hiddenIndicators": this.hiddenIndicators,
+                  "geo": areaCode,
+              },
+              '',
+              `?${urlParams.toString()}${window.location.hash}`
+          );
+        }
+        const payload = this.changeGeography(areaCode);
+        this._shouldMapZoom = !isRootGeo;
+        this.onHashChange(payload);
+    }
 
     onLayerClick(payload) {
         const self = this;
@@ -495,7 +547,7 @@ export default class Controller extends Component {
         payload.mapControl.zoomToLayer(payload.layer)
 
         const areaCode = payload.areaCode;
-        this.changeHash(areaCode)
+        this.initiateGeographyChange(areaCode)
 
         this.triggerEvent("layerClick", payload);
     };
@@ -538,7 +590,7 @@ export default class Controller extends Component {
      */
     onBreadcrumbSelected(payload) {
         this.triggerEvent('controller.breadcrumbs.selected', payload);
-        this.changeHash(payload.code)
+        this.initiateGeographyChange(payload.code)
     }
 
     onTutorial(event, payload) {
@@ -555,7 +607,7 @@ export default class Controller extends Component {
      */
     onSearchResultClick(payload) {
         this.triggerEvent("search.resultClick", payload)
-        this.changeHash(payload.code)
+        this.initiateGeographyChange(payload.code)
     }
 
     /**

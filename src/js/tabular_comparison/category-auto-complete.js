@@ -12,11 +12,6 @@ const CategoryAutoComplete = (props) => {
                         .filter((x) => x.name === props.selectedIndicator.indicatorDetail.metadata.primary_group)[0].subindicators
             }
             getOptionLabel={(option) => option}
-            getOptionDisabled={(option) => {
-                let alreadySelected = props.indicatorObjs.filter(x => x.indicator === props.selectedIndicator.indicator && x.category === option)[0];
-
-                return alreadySelected != null && alreadySelected.category !== props.categoryValue;
-            }}
             size={'small'}
             value={props.categoryValue}
             onChange={(event, selectedValue) => props.handleCategorySelection(event, selectedValue)}

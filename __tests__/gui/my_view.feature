@@ -48,8 +48,9 @@ Feature: My View Panel
     And I expand Rich Data Panel
     Then I confirm that the chart is not filtered
 
+
     # My view contains choropleth and rich data filters at the same time
-    When I select "language" from indicator dropdown in chart filter
+    Then I select "language" from indicator dropdown in chart filter
     And I select "Afrikaans" from subIndicator dropdown in chart filter
     And I collapse Rich Data Panel
     And I expand My View Window

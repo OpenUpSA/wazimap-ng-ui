@@ -7,6 +7,8 @@ import {
     gotoHomepage,
     setupInterceptions,
     waitUntilGeographyIsLoaded,
+    visitToGeo,
+    zoomOutMap,
 } from "../common_cy_functions/general";
 
 
@@ -26,7 +28,7 @@ import themes_count_CPT from "./CPT/themes_count.json";
 import all_details_DC3 from "./DC3/all_details.json";
 
 Given('I am on the Wazimap Homepage', () => {
-  setupInterceptions(profiles, all_details_ZA, profile, {}, {}, themes_count_ZA, profile_indicator_summary_ZA, {});
+  setupInterceptions(profiles, all_details_ZA, profile, [], {}, themes_count_ZA, profile_indicator_summary_ZA, {});
   gotoHomepage();
 })
 
@@ -87,7 +89,7 @@ When('I visit Western Cape', () => {
       });
   });
 
-  cy.visit('/#geo:WC');
+  visitToGeo('WC');
 })
 
 Then('I wait until map is ready for Western Cape', () => {
@@ -119,7 +121,7 @@ When('I visit City of Cape Town', () => {
       });
   });
 
-  cy.visit('/#geo:CPT');
+  visitToGeo('CPT');
 })
 
 Then('I check if the location facilities is hidden', () => {
@@ -156,7 +158,7 @@ When('I visit Overberg', () => {
       });
   });
 
-  cy.visit('/#geo:DC3');
+  visitToGeo('DC3');
 })
 
 Then('I wait until map is ready for Overberg', () => {
@@ -176,5 +178,9 @@ Then('I check if rich data panel is empty', () => {
 })
 
 When('I revisit Western Cape', () => {
-  cy.visit('/#geo:WC');
+  visitToGeo('WC', true);
+})
+
+And('I zoom out so whole map is visible', () => {
+  zoomOutMap();
 })

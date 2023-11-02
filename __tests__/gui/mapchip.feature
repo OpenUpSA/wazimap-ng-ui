@@ -22,12 +22,15 @@ Feature: Mapchip
     Then I check filters applied label is hidden
     Then I check if there is description
     Then I select a filter
+    Then I add new filter
+    Then I check if the add new filter button is disabled
 
     And I collapse the choropleth filter dialog
     Then I recheck filters applied label is visible
     Then I recheck applied filter label text
 
 
+    And I click on "Demographics" in Data Mapper
     And I click on Economic Opportunities in Data Mapper
     Then I select another indicator
     Then I check if snackbar is visible

@@ -7,10 +7,17 @@ export class Config {
     constructor() {
         this.config = {};
         this.versions = [];
+        this._currentViewData = {};
     }
 
     setConfig(config) {
         this.config = config;
+        this.setView();
+    }
+
+    setView() {
+        const urlParams = new URLSearchParams(window.location.search);
+        this._currentViewData.viewName = urlParams.get('view');
     }
 
     setVersions(geography_hierarchy) {
@@ -42,6 +49,12 @@ export class Config {
         return SidePanels.PANELS.noPanels;
     }
 
+    get tabularLinkEnabled(){
+        if (this.config["tabular_link_enabled"] != undefined)
+            return this.config["tabular_link_enabled"];
+        return false;
+    }
+
     get watermarkEnabled() {
         if (this.config["watermark_enabled"] != undefined)
             return this.config["watermark_enabled"];
@@ -55,14 +68,74 @@ export class Config {
     }
 
     get defaultFilters() {
-        if (this.config["default_filters"] != undefined)
-            return this.config["default_filters"];
-        return [];
+        let globalConfig = [];
+        let viewConfig = [];
+        let mergedConfig = [];
+
+        viewConfig = this.getViewConfig('default_filters') || [];
+
+        if (this.config["default_filters"] !== undefined) {
+            globalConfig = this.config["default_filters"];
+        }
+
+        mergedConfig = globalConfig.filter(x => !viewConfig.find(y => x['name'] === y['name']));
+        mergedConfig = mergedConfig.concat(viewConfig);
+
+        return mergedConfig;
     }
 
     get restrictValues() {
-        if (this.config["restrict_values"] != undefined)
-            return this.config["restrict_values"];
+        let globalConfig = {};
+        let viewConfig = {};
+        let mergedConfig = {};
+
+        viewConfig = this.getViewConfig('restrict_values') || {};
+
+        if (this.config["restrict_values"] !== undefined) {
+            globalConfig = this.config["restrict_values"];
+        }
+
+        Object.assign(mergedConfig, globalConfig, viewConfig);
+
+        return mergedConfig;
+    }
+
+    get defaultViewLabel() {
+        let label = this.config['default_view_label'];
+        if (label == null) {
+            label = 'Default';
+        }
+
+        return label;
+    }
+
+    get currentViewData() {
+        if (this._currentViewData.viewName == null) {
+            this._currentViewData.viewName = this.defaultViewLabel
+        }
+
+        return this._currentViewData;
+    }
+
+    get chartColorRange() {
+        if (this.config["chart_color_range"] !== undefined)
+            return this.config["chart_color_range"];
+        return [];
+    }
+
+    getViewConfig(filterType) {
+        if (
+            this.views[this._currentViewData.viewName] !== undefined
+            && this.views[this._currentViewData.viewName][filterType] !== undefined
+        ) {
+            return this.views[this._currentViewData.viewName][filterType];
+        }
+        return null;
+    }
+
+    get views() {
+        if (this.config["views"] != undefined)
+            return this.config["views"];
         return {};
     }
 

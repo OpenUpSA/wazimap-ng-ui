@@ -86,7 +86,7 @@ describe('Test add indictor to compare button', () => {
       const addIndicatorButton = screen.getByTestId("add-indicator");
       fireEvent.click(addIndicatorButton);
       expect(mockSetIndicatorObjs).toHaveBeenCalledTimes(1)
-      expect(mockSetIndicatorObjs).toHaveBeenCalledWith([{ index: 1, indicator: '', category: '' }])
+      expect(mockSetIndicatorObjs).toHaveBeenCalledWith([{ index: 1, indicator: '', category: '', filters: [] }])
     })
 })
 
@@ -135,7 +135,7 @@ describe('Test indicator panel actions', () => {
       let input = selectAutocompleteResult(indicatorPanel, "indicator", "Employment")
       expect(input.value).toBe("Employment status");
       expect(mockSetIndicatorObjs).toHaveBeenCalledTimes(1);
-      expect(mockSetIndicatorObjs).toHaveBeenCalledWith([{ index: 1, indicator: 'Employment status', category: '' }])
+      expect(mockSetIndicatorObjs).toHaveBeenCalledWith([{ index: 1, indicator: 'Employment status', category: ''}])
     })
 
     test('Category value can be searched and selected', () => {

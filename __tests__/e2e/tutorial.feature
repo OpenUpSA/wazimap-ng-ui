@@ -5,6 +5,7 @@ Feature: Tutorial (?)
   Scenario: Verify the sandbox information is displayed
     # Enter steps here
     Given I am on the Wazimap Homepage
+    Then I wait until map is ready
     When I click on Tutorial
 		Then "Introduction:" should be displayed
     And I click on Next

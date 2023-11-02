@@ -37,7 +37,7 @@ describe('Test resulting comparison empty states', () => {
     test('Empty state when geography is selected and indicator obj is added', () => {
       renderComponent({
           selectedGeographies: [{"code": "EC", "name": "Eastern Cape"}],
-          indicatorObjs: [{"index": 1, "indicator": "", "category": ""}]
+          indicatorObjs: [{"index": 1, "indicator": "", "category": "", "filters": []}]
       });
       const geographyTableHeader = screen.getByText(/Geography/i);
       expect(geographyTableHeader).toBeInTheDocument();
@@ -52,13 +52,13 @@ describe('Test resulting comparison', () => {
     test('Results table when one indicator and one geo is selected', () => {
       renderComponent({
           selectedGeographies: [{"name": "Eastern Cape", "code": "EC"}],
-          indicatorObjs: [{ index: 1, indicator: 'Region of birth', category: 'Male' }],
+          indicatorObjs: [{ index: 1, indicator: 'Region of birth', category: 'Male', filters: [] }],
           indicators: ec_indicators
       });
 
       // assert headers
       expect(screen.getByTestId('table-header-0')).toHaveTextContent('Geography');
-      expect(screen.getByTestId('table-header-1')).toHaveTextContent('Region of birth : Male');
+      expect(screen.getByTestId('table-header-1')).toHaveTextContent('Region of birth');
 
       // assert table rows
       expect(screen.getByTestId('table-row-0-cell-0')).toHaveTextContent('Eastern Cape');
@@ -72,20 +72,20 @@ describe('Test resulting comparison', () => {
             {"name": "Eastern Cape", "code": "EC"},
             {"name": "Western Cape", "code": "WC"}
           ],
-          indicatorObjs: [{ index: 1, indicator: 'Region of birth', category: 'Male' }],
+          indicatorObjs: [{ index: 1, indicator: 'Region of birth', category: 'Male', filters: [] }],
           indicators: ec_indicators
       });
 
       // assert headers
       expect(screen.getByTestId('table-header-0')).toHaveTextContent('Geography');
-      expect(screen.getByTestId('table-header-1')).toHaveTextContent('Region of birth : Male');
+      expect(screen.getByTestId('table-header-1')).toHaveTextContent('Region of birth');
 
       // assert table rows
       expect(screen.getByTestId('table-row-0-cell-0')).toHaveTextContent('Eastern Cape');
       expect(screen.getByTestId('table-row-0-cell-1')).toHaveTextContent('2,757,773');
 
       expect(screen.getByTestId('table-row-1-cell-0')).toHaveTextContent('Western Cape');
-      expect(screen.getByTestId('table-row-1-cell-1')).toHaveTextContent('');
+      expect(screen.getByTestId('table-row-1-cell-1')).toHaveTextContent('No Data');
 
     })
 
@@ -96,13 +96,13 @@ describe('Test resulting comparison', () => {
             {"name": "Eastern Cape", "code": "EC"},
             {"name": "Western Cape", "code": "WC"}
           ],
-          indicatorObjs: [{ index: 1, indicator: 'Region of birth', category: 'Male' }],
+          indicatorObjs: [{ index: 1, indicator: 'Region of birth', category: 'Male', filters: [] }],
           indicators: indicators.concat(ec_indicators, wc_indicators)
       });
 
       // assert headers
       expect(screen.getByTestId('table-header-0')).toHaveTextContent('Geography');
-      expect(screen.getByTestId('table-header-1')).toHaveTextContent('Region of birth : Male');
+      expect(screen.getByTestId('table-header-1')).toHaveTextContent('Region of birth');
 
       // assert table rows
       expect(screen.getByTestId('table-row-0-cell-0')).toHaveTextContent('Eastern Cape');
@@ -121,30 +121,30 @@ describe('Test resulting comparison', () => {
             {"name": "Western Cape", "code": "WC"}
           ],
           indicatorObjs: [
-            { index: 1, indicator: 'Region of birth', category: 'Male' },
-            { index: 2, indicator: 'Total population by age group', category: '25-29' },
+            { index: 1, indicator: 'Region of birth', category: 'Male', filters: [] },
+            { index: 2, indicator: 'Total population by age group', category: '25-29', filters: [] },
           ],
           indicators: indicators.concat(ec_indicators, wc_indicators)
       });
 
       // assert headers
       expect(screen.getByTestId('table-header-0')).toHaveTextContent('Geography');
-      expect(screen.getByTestId('table-header-1')).toHaveTextContent('Region of birth : Male');
-      expect(screen.getByTestId('table-header-2')).toHaveTextContent('Total population by age group : 25-29');
+      expect(screen.getByTestId('table-header-1')).toHaveTextContent('Region of birth');
+      expect(screen.getByTestId('table-header-2')).toHaveTextContent('Total population by age group');
 
       // assert table rows
       expect(screen.getByTestId('table-row-0-cell-0')).toHaveTextContent('Eastern Cape');
       expect(screen.getByTestId('table-row-0-cell-1')).toHaveTextContent('2,757,773');
-      expect(screen.getByTestId('table-row-0-cell-1')).toHaveStyle('background-color: rgb(186, 186, 186)');
+      expect(screen.getByTestId('table-row-0-cell-1')).toHaveStyle('background-color: rgb(8, 81, 156)');
       expect(screen.getByTestId('table-row-0-cell-2')).toHaveTextContent('456,183');
-      expect(screen.getByTestId('table-row-0-cell-2')).toHaveStyle('background-color: rgb(255, 255, 255)');
+      expect(screen.getByTestId('table-row-0-cell-2')).toHaveStyle('background-color: rgb(239, 243, 255)');
 
 
       expect(screen.getByTestId('table-row-1-cell-0')).toHaveTextContent('Western Cape');
       expect(screen.getByTestId('table-row-1-cell-1')).toHaveTextContent('2,602,049');
-      expect(screen.getByTestId('table-row-1-cell-1')).toHaveStyle('background-color: rgb(255, 255, 255)');
+      expect(screen.getByTestId('table-row-1-cell-1')).toHaveStyle('background-color: rgb(239, 243, 255)');
       expect(screen.getByTestId('table-row-1-cell-2')).toHaveTextContent('564,243');
-      expect(screen.getByTestId('table-row-1-cell-2')).toHaveStyle('background-color: rgb(186, 186, 186)');
+      expect(screen.getByTestId('table-row-1-cell-2')).toHaveStyle('background-color: rgb(8, 81, 156)');
 
     })
 
@@ -156,17 +156,17 @@ describe('Test resulting comparison', () => {
             {"name": "Western Cape", "code": "WC"}
           ],
           indicatorObjs: [
-            { index: 1, indicator: 'Citizenship', category: 'Yes' },
-            { index: 2, indicator: 'Citizenship', category: 'No' },
+            { index: 1, indicator: 'Citizenship', category: 'Yes', filters: [] },
+            { index: 2, indicator: 'Citizenship', category: 'No', filters: [] },
           ],
           indicators: indicators.concat(ec_indicators, wc_indicators)
       });
 
       // assert table rows
-      // ,.2f formatting set in fixture Citizenship indicator of EC
+      // .2% formatting set in fixture Citizenship indicator of EC
       expect(screen.getByTestId('table-row-0-cell-0')).toHaveTextContent('Eastern Cape');
-      expect(screen.getByTestId('table-row-0-cell-1')).toHaveTextContent('5,488,393.50');
-      expect(screen.getByTestId('table-row-0-cell-2')).toHaveTextContent('82,910.31');
+      expect(screen.getByTestId('table-row-0-cell-1')).toHaveTextContent('98.06%');
+      expect(screen.getByTestId('table-row-0-cell-2')).toHaveTextContent('1.48%');
 
       // No formatting set in fixture Citizenship indicator of WC (Should pick up default)
       expect(screen.getByTestId('table-row-1-cell-0')).toHaveTextContent('Western Cape');

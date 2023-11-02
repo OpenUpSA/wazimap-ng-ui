@@ -37,20 +37,20 @@ When('I expand Higher Education theme', () => {
 })
 
 Then('I select TVET colleges category', () => {
-    cy.get('.point-mapper__h2:contains("TVET colleges")')
-        .closest('.point-mapper__h1')
-        .find('.point-mapper__h1_trigger')
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges")')
+        .closest('li[data-test-class="tree-view-theme-item"]')
+        .find('i.material-icons')
         .should('have.css', 'color')
         .and('eq', 'rgb(34, 166, 179)');
-    cy.get('.point-mapper__h2:contains("TVET colleges")').click();
-    cy.get('.point-mapper__h2:contains("TVET colleges") .point-mapper__h2_load-complete').should('be.visible');
-    cy.get('.point-mapper__h2:contains("TVET colleges")')
-        .should('have.css', 'background-image')
-        .and('eq', 'linear-gradient(rgba(34, 166, 179, 0.2), rgba(34, 166, 179, 0.2))');
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges")').click();
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges") i.fa-check').should('be.visible');
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges") .MuiTreeItem-content')
+        .should('have.css', 'background-color')
+        .and('eq', 'rgba(34, 166, 179, 0.2)');
 })
 
 Then('I deselect TVET colleges category', () => {
-    cy.get('.point-mapper__h2:contains("TVET colleges")').click();
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("TVET colleges")').click();
 })
 
 When(/^I check if the marker color is rgb\((\d+), (\d+), (\d+)\)$/, (color1, color2, color3) => {
@@ -76,20 +76,20 @@ When('I expand Labour theme', () => {
 })
 
 Then('I select Additional DEL facilities category', () => {
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")')
-        .closest('.point-mapper__h1')
-        .find('.point-mapper__h1_trigger')
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)")')
+        .closest('li[data-test-class="tree-view-theme-item"]')
+        .find('i.material-icons')
         .should('have.css', 'color')
         .and('eq', 'rgb(235, 77, 75)');
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")').click();
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)") .point-mapper__h2_load-complete').should('be.visible');
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")')
-        .should('have.css', 'background-image')
-        .and('eq', 'linear-gradient(rgba(235, 77, 75, 0.2), rgba(235, 77, 75, 0.2))');
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)")').click();
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)") i.fa-check').should('be.visible');
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)") .MuiTreeItem-content')
+        .should('have.css', 'background-color')
+        .and('eq', 'rgba(235, 77, 75, 0.2)');
 })
 
 Then('I deselect Additional DEL facilities category', () => {
-    cy.get('.point-mapper__h2:contains("Additional DEL facilities (unverified)")').click();
+    cy.get('li[data-test-class="tree-view-category-item"]:contains("Additional DEL facilities (unverified)")').click();
 })
 
 When('I check if the cluster is created correctly', () => {
@@ -112,26 +112,19 @@ When('I check if the cluster is created correctly', () => {
         expect($el.attr('stroke-dasharray')).equal(categories[index].circleVal);
     })
 
-    hoverOverTheMapCenter();
+    hoverOverTheMapCenter().then(() => {
+        cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item', {timeout: 20000}).get(($el) => {
+            expect($el.length).equal(2);
+        })
 
-    cy.get("body").then(($body) => {
-        if (!$body.find(".leaflet-popup-content").length) {
-            cy.log('hover failed - try again');
-            hoverOverTheMapCenter();
-        }
+        cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item').each(($el, index) => {
+            expect($el.find('.tooltip__cluster-icon').attr('style')).to.contain(`background-color: ${categories[index].color};`);
+            expect($el.find('.tooltip__cluster-title')).to.have.text(categories[index].name);
+            expect($el.find('.tootlip__cluster-facet')).to.have.text('1');
+        })
+
+        cy.get('body').trigger('click', {clientX: 0, clientY: 0})
     })
-
-    cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item', {timeout: 20000}).get(($el) => {
-        expect($el.length).equal(2);
-    })
-
-    cy.get('.leaflet-popup-pane .facility-tooltip__cluster a.tooltip__cluster-item').each(($el, index) => {
-        expect($el.find('.tooltip__cluster-icon').attr('style')).to.contain(`background-color: ${categories[index].color};`);
-        expect($el.find('.tooltip__cluster-title')).to.have.text(categories[index].name);
-        expect($el.find('.tootlip__cluster-facet')).to.have.text('1');
-    })
-
-    cy.get('body').trigger('click', {clientX: 0, clientY: 0})
 })
 
 Then('I check if the filter dialog is displayed', () => {
@@ -146,7 +139,8 @@ Then('I check if the point category legend is hidden', () => {
 })
 
 When('I click on the first filter dropdown', () => {
-    cy.get('.point-filters__filter-menu:visible').first().click();
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(0).find("div").eq(0).click()
 })
 
 Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {
@@ -154,24 +148,18 @@ Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {
 });
 
 When(/^I filter by "([^"]*)"$/, (filter) => {
-    let orderedList = {
-        0: 'Alice',
-        1: 'Hiddingh Campus',
-        2: 'Nongoma',
-        3: 'TestCampus'
-    }
+    let orderedList = 'Alice,Hiddingh Campus,Nongoma,TestCampus';
     const filters = filter.split(':');
-    cy.get('.point-filters__filter-menu:visible').first().click();
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[0]}")`).click({force: true});
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(0).click().get(`ul > li[data-value="${filters[0]}"]`).click();
 
-    cy.get('.point-filters__filter-menu:visible').last().click();
+    // check if the options are ordered alphabetically
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(1).click()
+    confirmDropdownOptions(orderedList)
 
-    //check if the options are ordered alphabetically
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible`).each(($el, index) => {
-        const text = $el.text().trim();
-        expect(text).to.equal(orderedList[index]);
-    })
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("${filters[1]}")`).click({force: true});
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(1).click().get(`ul > li[data-value="${filters[1]}"]`).click();
 });
 
 Then('I hide Point Mapper', () => {
@@ -179,11 +167,11 @@ Then('I hide Point Mapper', () => {
 })
 
 Then('I filter by a numerical value', () => {
-    cy.get('.point-filters__filter-menu:visible').first().click();
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("numerical")`).click();
+  cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+    .eq(0).find("div").eq(0).click().get(`ul > li[data-value="numerical"]`).click();
 
-    cy.get('.point-filters__filter-menu:visible').last().click();
-    cy.get(`.dropdown-menu__content:visible .dropdown__list_item:visible:contains("14")`).click();
+    cy.get(`.point-filters_content .filter-container:visible:eq(0) .point-filters__filter`)
+      .eq(1).find("div").eq(0).click().get(`ul > li[data-value="14"]`).click();
 })
 
 Then('I check if the filter dialog is collapsed', () => {

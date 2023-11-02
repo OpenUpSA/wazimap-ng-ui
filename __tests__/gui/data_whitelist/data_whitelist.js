@@ -1,10 +1,13 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    collapseMyViewPanel, confirmChartIsFiltered,
-    confirmChoroplethIsFiltered, confirmDropdownOptions,
+    confirmChartIsFiltered,
+    confirmChoroplethIsFiltered,
+    confirmDropdownOptions,
     expandChoroplethFilterDialog,
-    expandDataMapper, expandRichDataPanel,
-    gotoHomepage, selectChoroplethDropdownOption,
+    expandDataMapper,
+    expandRichDataPanel,
+    gotoHomepage,
+    selectChoroplethDropdownOption,
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
@@ -46,7 +49,7 @@ When(/^I filter by "([^"]*)"$/, function (filter) {
 });
 
 When('I click on the second filter dropdown', () => {
-    cy.get('.mapping-options__filter_menu:visible').eq(1).click();
+    cy.get('.mapping-options__filter:visible').eq(1).click();
 })
 
 Then(/^I check if the filter options are "([^"]*)"$/, (arr) => {
@@ -57,7 +60,24 @@ When('I expand Rich Data Panel', () => {
     expandRichDataPanel();
 })
 
-Then(/^I confirm that "([^"]*)" is applied to "([^"]*)" as a site\-wide filter$/, function (filter, chartTitle) {
+Then(/^I confirm that "([^"]*)" is applied to "([^"]*)"$/, function (filter, chartTitle) {
     const filters = filter.split(':');
     confirmChartIsFiltered(filters[0], filters[1], chartTitle);
 });
+
+Given('I am on the Wazimap Homepage Test View', () => {
+    setupInterceptions(profiles, all_details, profile, themes, {}, [], profile_indicator_summary, profile_indicator_data);
+    cy.visit("/?view=test");
+})
+
+Then(/^I confirm that the view dropdown displays "([^"]*)"$/, function (word) {
+    cy.get('.current-view-container').should('contain.text', word)
+})
+
+When(/^I confirm that available subindicators are "([^"]*)" in Data Mapper$/, function (options) {
+    let optionsArr = options.split(',');
+    cy.get('.data-mapper').find('.subIndicator-item').should('have.length', optionsArr.length)
+    cy.get('.subIndicator-item').each(($div, index) => {
+        expect($div.text()).equal(optionsArr[index]);
+    })
+})

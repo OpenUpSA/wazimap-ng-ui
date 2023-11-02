@@ -1,21 +1,22 @@
 import {Given, Then, When} from "cypress-cucumber-preprocessor/steps";
 import {
-    allDetailsEndpoint,
+    allDetailsEndpoint, collapseRichDataPanel,
     expandRichDataPanel,
     gotoHomepage,
-    setupInterceptions,
+    setupInterceptions, visitToGeo,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
-import all_details from "../facilities/all_details.json";
-import all_details_CPT from "../facilities/all_details_CPT.json";
+import all_details from "./all_details.json";
+import all_details_NC from "./all_details_NC.json";
+import all_details_EC from "./all_details_EC.json"
 import themes_count from "./themes_count.json";
 import themes_count_EC from "./themes_count_EC.json";
 import all_details_WC from "./all_details_WC.json";
-import profile from "../facilities/profile.json";
+import profile from "./profile.json";
 import profiles from "./profiles.json";
 
 Given('I am on the Wazimap Homepage', () => {
-    setupInterceptions(profiles, all_details, profile, null, null);
+    setupInterceptions(profiles, all_details, profile, [], null);
 
     cy.intercept('/api/v1/profile/8/geography/ZA/themes_count/?version=test&format=json', (request) => {
         request.reply({
@@ -70,7 +71,7 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         return trigger.then(() => {
             request.reply({
                 statusCode: 201,
-                body: all_details,
+                body: all_details_EC,
                 forceNetworkError: false // default
             })
         });
@@ -96,7 +97,9 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
         });
     });
 
-    cy.visit('/#geo:EC');
+    collapseRichDataPanel();
+    visitToGeo('EC');
+    expandRichDataPanel();
 
     cy.get('.location-facilities__trigger--loading').should('be.visible').then(() => {
         sendResponse();
@@ -105,15 +108,17 @@ When('I navigate to EC and check if the loading state is displayed correctly', (
 })
 
 When('I navigate to a geography with no points', () => {
-    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/CPT/?version=test&skip-children=true&format=json`, (request) => {
+    collapseRichDataPanel();
+    visitToGeo('ZA-Test', true, true);
+    cy.intercept(`/api/v1/${allDetailsEndpoint}/profile/8/geography/NC/?version=test&skip-children=true&format=json`, (request) => {
         request.reply({
             statusCode: 200,
-            body: all_details_CPT,
+            body: all_details_NC,
             forceNetworkError: false // default
         });
     });
 
-    cy.intercept('/api/v1/profile/8/geography/CPT/themes_count/?version=test&format=json', (request) => {
+    cy.intercept('/api/v1/profile/8/geography/NC/themes_count/?version=test&format=json', (request) => {
         request.reply({
             statusCode: 200,
             body: [],
@@ -121,7 +126,7 @@ When('I navigate to a geography with no points', () => {
         });
     });
 
-    cy.intercept('/api/v1/profile/8/geography/CPT/profile_indicator_summary/?version=test&format=json', (request) => {
+    cy.intercept('/api/v1/profile/8/geography/NC/profile_indicator_summary/?version=test&format=json', (request) => {
         request.reply({
             statusCode: 200,
             body: {},
@@ -129,7 +134,8 @@ When('I navigate to a geography with no points', () => {
         });
     });
 
-    cy.visit('/#geo:CPT');
+    visitToGeo('NC');
+    expandRichDataPanel();
 })
 
 Then('Facilities should not be visible', () => {
@@ -137,7 +143,7 @@ Then('Facilities should not be visible', () => {
 })
 
 When('I navigate back to ZA', () => {
-    cy.visit('/#geo:ZA');
+    visitToGeo('ZA-Test', true);
 })
 
 Then('Facilities should be visible', () => {
@@ -174,9 +180,15 @@ When('I navigate to a geography where themes-count endpoint fails', () => {
         })
     });
 
-    cy.visit('/#geo:WC');
+    collapseRichDataPanel();
+    visitToGeo('WC');
+    expandRichDataPanel();
 })
 
 Then('I check if error message is displayed on the theme count section', () => {
     cy.get('.location__facilities_error').should('be.visible');
+})
+
+When('I collapse Rich Data Panel', () => {
+    collapseRichDataPanel();
 })

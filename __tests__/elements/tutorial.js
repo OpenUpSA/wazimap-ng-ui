@@ -5,35 +5,35 @@ import {Component} from "../../src/js/utils";
 describe('Tutorials', () => {
     let tutorialModal;
     let tutorialArr = [{
-        body: 'body A',
+        text: 'body A',
         image: 'https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-1.png',
         title: 'Title A:'
     }, {
-        body: 'Body B',
+        text: 'Body B',
         image: 'https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-2.png',
         title: 'Title B:'
     }, {
-        body: 'Body C',
+        text: 'Body C',
         image: 'https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-3.png',
         title: 'Title C:'
     }, {
-        body: 'body d',
+        text: 'body d',
         image: 'https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-4.png',
         title: 'title d'
     }, {
-        body: 'body e',
+        text: 'body e',
         image: 'https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-5.png',
         title: 'title e:'
     }, {
-        body: 'body f',
+        text: 'body f',
         image: 'https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-6.png',
         title: 'title f'
     }, {
-        body: 'body g',
+        text: 'body g',
         image: 'https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-7.png',
         title: 'title g'
     }, {
-        body: 'body h',
+        text: 'body h',
         image: 'https://wazimap-ng.s3-eu-west-1.amazonaws.com/africa-data-hub/wazi-tut-8.png',
         title: 'title h'
     }];
@@ -106,7 +106,7 @@ describe('Tutorials', () => {
 
             tutorialModal.find('.slide').each(function (i) {
                 let introEle = $(this).find('.tutorial__slide-content .tutorial__slide-info .slide-info__introduction');
-                expect(introEle.text()).toBe(tutorialArr[i].body);
+                expect(introEle.text()).toBe(tutorialArr[i].text);
             })
         })
 

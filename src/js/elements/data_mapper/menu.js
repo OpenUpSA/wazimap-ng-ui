@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import CcLicense from "../../ui_components/cc_license";
 
 
 let parentContainer = null;
@@ -95,7 +96,7 @@ export function loadMenu(dataMapperMenu, data) {
  * This class is a stub for a menu component
  */
 export class DataMapperMenu extends Component {
-    constructor(parent, api, watermarkEnabled, controller) {
+    constructor(parent, api, watermarkEnabled, ccLicenseEnabled, controller) {
         super(parent);
 
         this._isLoading = false;
@@ -106,6 +107,9 @@ export class DataMapperMenu extends Component {
 
         if (watermarkEnabled) {
             this.addWatermark();
+        }
+        if (ccLicenseEnabled) {
+            this.addCcLicense();
         }
         this.addDataMapperMenuRoot();
     }
@@ -157,6 +161,21 @@ export class DataMapperMenu extends Component {
 
         let watermarkRoot = createRoot(watermarkWrapper);
         watermarkRoot.render(<Watermark/>);
+    }
+
+    addCcLicense() {
+        if ($('.data-mapper .cc-license-wrapper').length > 0) {
+            return;
+        }
+
+        let licenseWrapper = document.createElement('div');
+        $(licenseWrapper)
+            .addClass('cc-license-wrapper');
+        $('.data-mapper-content')
+            .append(licenseWrapper);
+
+        let licenseRoot = createRoot(licenseWrapper);
+        licenseRoot.render(<CcLicense/>);
     }
 
     addDataMapperMenuRoot() {

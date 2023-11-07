@@ -12,8 +12,8 @@ const CcLicense = (props) => {
 
     return (
         <LicenseContainer>
-            @ 2023. This work is openly licensed via <a href={'https://creativecommons.org/licenses/by-nc-nd/4.0'}
-                                                        target={'_blank'}>CC BY-NC-ND 4.0</a>
+            <span>@ 2023. This work is openly licensed via <a href={'https://creativecommons.org/licenses/by-nc-nd/4.0'}
+                                                        target={'_blank'}>CC BY-NC-ND 4.0</a></span>
         </LicenseContainer>
     );
 }

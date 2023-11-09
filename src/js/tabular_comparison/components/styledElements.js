@@ -1,11 +1,9 @@
 import {styled} from '@mui/system';
 import Button from '@mui/material/Button';
-import SliderUnstyled, {sliderUnstyledClasses} from '@mui/base/SliderUnstyled';
 
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
-import Chip from '@mui/material/Chip';
 
 export const AddFilterButton = styled(Button)(({theme}) => ({
     width: '100%',

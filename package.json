@@ -48,7 +48,7 @@
     "shx": "^0.3.2",
     "start-server-and-test": "^1.13.1",
     "svelte-dev-tools": "^0.0.2",
-    "vega": "^5.17.0",
+    "vega": "5.25.0",
     "vega-embed": "^6.13.0",
     "vega-lite": "^4.17.0",
     "xlsx": "^0.17.0",
@@ -94,7 +94,7 @@
     "prebuild-dev": "shx rm -rf dist/*",
     "build-dev": "parcel build ./src/index.html ./src/tabular-comparison.html --no-minify --public-url ./",
     "prebuild": "shx rm -rf dist/*",
-    "build": "parcel build ./src/index.html ./src/tabular-comparison.html --public-url ./ ",
+    "build": "parcel build ./src/index.html ./src/tabular-comparison.html --no-minify --public-url ./ ",
     "clean-files": "cp dist/js*.js dist/wazimap-ng.js; cp dist/js*.js.map dist/wazimap-ng.js.map; cp dist/js*.css dist/wazimap-ng.css"
   },
   "browserslist": "> 0.25%, not dead",

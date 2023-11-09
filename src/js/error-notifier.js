@@ -1,28 +1,36 @@
 export class ErrorNotifier {
-    constructor() {
-        this._ignoreMessages = ["The user aborted a request."];
-    }
+  constructor() {
+    this._ignoreMessages = ["The user aborted a request."];
+  }
 
-    get ignoreMessages() {
-        return this._ignoreMessages;
-    }
+  get ignoreMessages() {
+    return this._ignoreMessages;
+  }
 
-    registerErrorHandler() {
-        let self = this;
-        window.addEventListener("error", function (errorEvent) {
-            self.showNotification();
-        });
+  registerErrorHandler() {
+    let self = this;
+    window.addEventListener("error", function (errorEvent) {
+      // Do not notify React errors
+      if (errorEvent.message.indexOf("React") == -1) {
+        self.showNotification();
+      }
+    });
 
-        window.addEventListener("unhandledrejection", function (promiseRejectionEvent) {
-            // handle promise errors
-            let reason = promiseRejectionEvent.reason.message;
-            if (self.ignoreMessages.indexOf(reason) < 0) {
-                self.showNotification();
-            }
-        });
-    }
+    window.addEventListener(
+      "unhandledrejection",
+      function (promiseRejectionEvent) {
+        // handle promise errors
+        let reason = promiseRejectionEvent.reason.message;
+        if (self.ignoreMessages.indexOf(reason) < 0) {
+          self.showNotification();
+        }
+      }
+    );
+  }
 
-    showNotification() {
-        alert('An unexpected error occurred. Please reload the page and try again. If the problem persists, please contact support@wazimap.co.za');
-    }
+  showNotification() {
+    alert(
+      "An unexpected error occurred. Please reload the page and try again. If the problem persists, please contact support@wazimap.co.za"
+    );
+  }
 }

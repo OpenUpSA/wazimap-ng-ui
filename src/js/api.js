@@ -128,7 +128,7 @@ export class API extends Observable {
         return this.loadUrl(url);
     }
 
-    loadPoints(profileId, categoryId, areaCode=undefined, keywords) {
+    loadPoints(profileId, categoryId, areaCode=undefined, keywords=[]) {
         let url = '';
         console.log(areaCode)
         if (areaCode == undefined)

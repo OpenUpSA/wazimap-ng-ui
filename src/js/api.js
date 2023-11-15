@@ -130,7 +130,6 @@ export class API extends Observable {
 
     loadPoints(profileId, categoryId, areaCode=undefined, keywords=[]) {
         let url = '';
-        console.log(areaCode)
         if (areaCode == undefined)
             url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/points/?format=json`;
         else

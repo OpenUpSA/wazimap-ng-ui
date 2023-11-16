@@ -46,4 +46,10 @@ export function configureMiscElementEvents(application, controller) {
     controller.on('open.rich_data.panel', () => {
         sidePanels.togglePanel(SidePanels.PANELS.richData);
     });
+
+    controller.on('open.point_data.panel', () => {
+        if (sidePanels.currentPanel !== SidePanels.PANELS.pointData){
+          sidePanels.togglePanel(SidePanels.PANELS.pointData);
+        }
+    });
 }

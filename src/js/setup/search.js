@@ -7,10 +7,12 @@ export function configureSearchEvents(controller, search) {
     controller.bubbleEvents(search, ['search.before', 'search.results', 'search.clear'])
 
     search.on('search.category.selected', category => {
+        controller.triggerEvent('open.point_data.panel');
         controller.triggerEvent('point_tray.category.selected', category);
     })
 
     search.on('search.point.selected', pointData => {
+        controller.triggerEvent('open.point_data.panel');
         controller.triggerEvent('point_tray.point.selected', pointData);
     })
 }

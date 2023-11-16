@@ -61,6 +61,12 @@ export class Config {
         return true;
     }
 
+    get ccLicenseEnabled() {
+        if (this.config["cc_license_enabled"] != undefined)
+            return this.config["cc_license_enabled"];
+        return false;
+    }
+
     get siteWideFiltersEnabled() {
         if (this.config["site_wide_filters_enabled"] != undefined)
             return this.config["site_wide_filters_enabled"];

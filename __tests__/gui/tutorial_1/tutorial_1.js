@@ -5,8 +5,8 @@ import {
     setupInterceptions,
     waitUntilGeographyIsLoaded
 } from "../common_cy_functions/general";
-import profile from "../tutorial/profile.json";
-import profiles from "./profiles.json";
+import profile from "./profile.json";
+import profiles from "../tutorial/profiles.json";
 import all_details from "../tutorial/all_details.json";
 
 Given('I am on the Wazimap Homepage', () => {
@@ -27,11 +27,11 @@ When("I check if the slide {word} is displayed correctly", (index) => {
 
     cy.get(`.w-slide:eq(${index - 1}) .tutorial__slide-number`)
         .should('be.visible')
-        .should('have.text', `${index}/8`);
+        .should('have.text', `${index}/3`);
 
     cy.get(`.w-slide:eq(${index - 1}) .tutorial__slide-info .slide-info__title`)
         .should('be.visible')
-        .should('have.html', slideData.title);
+        .should('have.text', slideData.title);
 
     cy.get(`.w-slide:eq(${index - 1}) .tutorial__slide-info .slide-info__introduction`)
         .should('be.visible')

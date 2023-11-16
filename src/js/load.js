@@ -75,7 +75,7 @@ class Application extends Component {
         const mapcontrol = new MapControl(this, config, () => controller.shouldMapZoom);
         mapcontrol.popup = new Popup(this, formattingConfig, mapcontrol.map);
         const pointData = new PointData(this, api, mapcontrol.map, profileId, config);
-        const pointDataTray = new PointDataTray(this, api, profileId, config.watermarkEnabled);
+        const pointDataTray = new PointDataTray(this, api, profileId, config.watermarkEnabled, config.ccLicenseEnabled);
         const mapchip = new MapChip(this, config.choropleth, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters);
         const search = new Search(this, api, profileId, 2);
         const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters, config.chartColorRange);
@@ -88,7 +88,7 @@ class Application extends Component {
         const styleConfig = new StyleConfig(config.style);
         const tabNotice = new TabNotice(this, config.config.feedback);
         const translations = new Translations(this, config.config.translations);
-        const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled, controller);
+        const dataMapperMenu = new DataMapperMenu(this, api, config.watermarkEnabled, config.ccLicenseEnabled, controller);
         const richDataLinkRendrer = new RichDataLinkRendrer(this);
         const myView = new MyView(this, controller, config.siteWideFiltersEnabled, api, profileId);
         const currentView = new CurrentView(this);

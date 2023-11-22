@@ -1,5 +1,5 @@
-import {Observable} from './utils'
-import {LoginDialogue} from './elements/login_dialogue';
+import { Observable } from "./utils";
+import { LoginDialogue } from "./elements/login_dialogue";
 
 const loginDialogue = new LoginDialogue();
 const AUTHENTICATION_ERROR = "Not Authenticated";
@@ -7,333 +7,345 @@ const AUTHENTICATION_ERROR = "Not Authenticated";
 const MAX_FAILURES = 3;
 
 export class API extends Observable {
-    constructor(serverUrl) {
-        super();
-        this.token = null;
-        this.baseUrl = `${serverUrl}/api/v1`;
-        this.busyLoggingIn = false;
-        this.failedLogins = 0;
-        this.abortController = null;
-        this._restrictValues = {};
-    }
+  constructor(serverUrl) {
+    super();
+    this.token = null;
+    this.baseUrl = `${serverUrl}/api/v1`;
+    this.busyLoggingIn = false;
+    this.failedLogins = 0;
+    this.abortController = null;
+    this._restrictValues = {};
+  }
 
-    set restrictValues(value) {
-        this._restrictValues = value;
-    }
+  set restrictValues(value) {
+    this._restrictValues = value;
+  }
 
-    get restrictValues() {
-        return this._restrictValues;
-    }
+  get restrictValues() {
+    return this._restrictValues;
+  }
 
-    getToken() {
-        return sessionStorage.getItem("token");
-    }
+  getToken() {
+    return sessionStorage.getItem("token");
+  }
 
-    setToken(token) {
-        if (token == null)
-            sessionStorage.removeItem("token")
-        else
-            sessionStorage.setItem("token", token);
+  setToken(token) {
+    if (token == null) sessionStorage.removeItem("token");
+    else sessionStorage.setItem("token", token);
+  }
 
-    }
+  getProfile(profileId, areaCode, version) {
+    const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?version=${version}&skip-children=true&format=json`;
+    return this.loadUrl(url, this.abortController);
+  }
 
-    getProfile(profileId, areaCode, version) {
-        const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?version=${version}&skip-children=true&format=json`;
-        return this.loadUrl(url, this.abortController);
-    }
+  getProfileWrapper(profileId, areaCode, version) {
+    const self = this;
 
-    getProfileWrapper(profileId, areaCode, version) {
-        const self = this;
+    return self.getProfile(profileId, areaCode, version).then((data) => {
+      Object.keys(data.profile.profile_data).forEach((categoryName) => {
+        const subcategories =
+          data.profile.profile_data[categoryName].subcategories;
+        Object.keys(subcategories).forEach((subcategoryName) => {
+          const indicators = subcategories[subcategoryName].indicators;
+          if (indicators != null) {
+            Object.keys(indicators).forEach((indicator) => {
+              let indicatorData = indicators[indicator];
 
-        return self.getProfile(profileId, areaCode, version).then(data => {
-            Object.keys(data.profile.profile_data).forEach(categoryName => {
-                const subcategories = data.profile.profile_data[categoryName].subcategories;
-                Object.keys(subcategories).forEach(subcategoryName => {
-                    const indicators = subcategories[subcategoryName].indicators;
-                    if (indicators != null) {
-                        Object.keys(indicators).forEach((indicator) => {
-                            let indicatorData = indicators[indicator];
+              Object.keys(self.restrictValues).forEach((restrictKey) => {
+                // does not contain the key
+                // or
+                // key value is one of the restrictValue
+                indicatorData.data = indicatorData.data.filter(
+                  (x) =>
+                    Object.keys(x).indexOf(restrictKey) < 0 ||
+                    self.restrictValues[restrictKey].indexOf(x[restrictKey]) >=
+                      0
+                );
 
-                            Object.keys(self.restrictValues).forEach(restrictKey => {
-                                // does not contain the key
-                                // or
-                                // key value is one of the restrictValue
-                                indicatorData.data = indicatorData.data.filter(x => Object.keys(x).indexOf(restrictKey) < 0 ||
-                                    self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
-
-                                // filter metadata
-                                indicatorData.metadata.groups = indicatorData.metadata.groups.map(group => {
-                                    if (group.name === restrictKey) {
-                                        group.subindicators = group.subindicators.filter(element => self.restrictValues[restrictKey].includes(element));
-                                    }
-
-                                    return group;
-                                })
-
-                            })
-                        });
+                // filter metadata
+                indicatorData.metadata.groups =
+                  indicatorData.metadata.groups.map((group) => {
+                    if (group.name === restrictKey) {
+                      group.subindicators = group.subindicators.filter(
+                        (element) =>
+                          self.restrictValues[restrictKey].includes(element)
+                      );
                     }
-                })
-            })
 
-            return data;
-        });
-    }
-
-    getProfileWithoutVersion(profileId, areaCode) {
-        const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?skip-children=true&format=json`;
-        return this.loadUrl(url, this.abortController);
-    }
-
-    getProfileConfiguration(hostname) {
-        const url = `${this.baseUrl}/profile_by_url?format=json`;
-        return this.loadUrl(url, null, {'wm-hostname': hostname});
-    }
-
-    loadChoroplethData(profileId, areaCode, indicatorId) {
-        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/`;
-        return this.loadUrl(url, this.abortController);
-    }
-
-    getIndicatorChildData(profileId, areaCode, indicatorId) {
-        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/child_data/`;
-        return this.loadUrl(url, this.abortController);
-    }
-
-    getIndicatorChildDataWrapper(profileId, areaCode, indicatorId) {
-        const self = this;
-
-        return self.getIndicatorChildData(profileId, areaCode, indicatorId).then(data => {
-            Object.keys(data).forEach((geo) => {
-                Object.keys(self.restrictValues).forEach(restrictKey => {
-                    // does not contain the key
-                    // or
-                    // key value is one of the restrictValue
-                    data[geo] = data[geo].filter(x => Object.keys(x).indexOf(restrictKey) < 0
-                        || self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0);
-                })
+                    return group;
+                  });
+              });
             });
-
-            return data;
+          }
         });
+      });
+
+      return data;
+    });
+  }
+
+  getProfileWithoutVersion(profileId, areaCode) {
+    const url = `${this.baseUrl}/all_details/profile/${profileId}/geography/${areaCode}/?skip-children=true&format=json`;
+    return this.loadUrl(url, this.abortController);
+  }
+
+  getProfileConfiguration(hostname) {
+    const url = `${this.baseUrl}/profile_by_url?format=json`;
+    return this.loadUrl(url, null, { "wm-hostname": hostname });
+  }
+
+  loadChoroplethData(profileId, areaCode, indicatorId) {
+    const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/`;
+    return this.loadUrl(url, this.abortController);
+  }
+
+  getIndicatorChildData(profileId, areaCode, indicatorId) {
+    const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/indicator/${indicatorId}/child_data/`;
+    return this.loadUrl(url, this.abortController);
+  }
+
+  getIndicatorChildDataWrapper(profileId, areaCode, indicatorId) {
+    const self = this;
+
+    return self
+      .getIndicatorChildData(profileId, areaCode, indicatorId)
+      .then((data) => {
+        Object.keys(data).forEach((geo) => {
+          Object.keys(self.restrictValues).forEach((restrictKey) => {
+            // does not contain the key
+            // or
+            // key value is one of the restrictValue
+            data[geo] = data[geo].filter(
+              (x) =>
+                Object.keys(x).indexOf(restrictKey) < 0 ||
+                self.restrictValues[restrictKey].indexOf(x[restrictKey]) >= 0
+            );
+          });
+        });
+
+        return data;
+      });
+  }
+
+  loadThemes(profileId) {
+    const url = `${this.baseUrl}/profile/${profileId}/points/themes/?format=json`;
+    return this.loadUrl(url);
+  }
+
+  search(profileId, searchTerm) {
+    const url = `${this.baseUrl}/geography/search/${profileId}/?q=${searchTerm}&format=json`;
+    return this.loadUrl(url);
+  }
+
+  searchPointsByDistance(profileId, searchTerm, lat, long) {
+    const url = `${this.baseUrl}/profile/${profileId}/points/points_by_distance/?lat=${lat}&long=${long}&q=${searchTerm}`;
+    return this.loadUrl(url);
+  }
+
+  loadPoints(profileId, categoryId, areaCode = undefined, keywords = []) {
+    let url = "";
+    if (areaCode == undefined)
+      url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/points/?format=json`;
+    else
+      url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/geography/${areaCode}/points/?format=json`;
+
+    if (keywords.length > 0) {
+      const searchParams = keywords
+        .map((item) => `q=${encodeURIComponent(item)}`)
+        .join("&");
+      url = `${url}&${searchParams}`;
+    }
+    return this.loadUrl(url);
+  }
+
+  loadAllPoints(profileId, areaCode) {
+    let url = `${this.baseUrl}/profile/${profileId}/points/geography/${areaCode}/points/?format=json`;
+    return this.loadUrl(url);
+  }
+
+  loadProfileIndicators(profileId) {
+    let url = `${this.baseUrl}/profiles/${profileId}/categories/?format=json`;
+    return this.loadUrl(url);
+  }
+
+  async waitToLogIn() {
+    let count = 0;
+    while (true) {
+      if (!this.busyLoggingIn) break;
+      console.log("Another login request already sent. Waiting");
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      count += 1;
+
+      if (count > 500) {
+        throw "Tired of waiting for login. Something went wrong";
+      }
+    }
+  }
+
+  async loadUrl(url, abortController, headers = {}) {
+    let response;
+    const self = this;
+    response = await this.getTokenJSON(url, abortController, headers);
+    if (response.status === 401 || response.status === 403) {
+      await this.waitToLogIn();
+      try {
+        await self.authenticate(url);
+        response = await this.getTokenJSON(url, abortController, headers);
+      } finally {
+        console.log("stopped logging in");
+
+        this.busyLoggingIn = false;
+      }
+    } else if (response.status === 404) {
+      throw response;
     }
 
-    loadThemes(profileId) {
-        const url = `${this.baseUrl}/profile/${profileId}/points/themes/?format=json`;
-        return this.loadUrl(url);
+    const json = await response.json();
+
+    return json;
+  }
+
+  async authenticate(nextUrl) {
+    const url = `${this.baseUrl}/rest-auth/login/`;
+
+    if (this.getToken() != null) {
+      console.log("Already logged in. Not authenticating");
+      return;
     }
 
-    search(profileId, searchTerm) {
-        const url = `${this.baseUrl}/geography/search/${profileId}/?q=${searchTerm}&format=json`;
-        return this.loadUrl(url);
-    }
+    if (this.busyLoggingIn) return;
 
-    searchPointsByDistance(profileId, searchTerm, lat, long){
-        const url = `${this.baseUrl}/profile/${profileId}/points/points_by_distance/?lat=${lat}&long=${long}&q=${searchTerm}`;
-        return this.loadUrl(url);
-    }
+    // This is a race condition but shouldn't be a big deal if two requests happen simultaneously
+    this.busyLoggingIn = true;
+    while (true) {
+      if (this.failedLogins >= MAX_FAILURES) throw "Too many failed logins";
 
-    loadPoints(profileId, categoryId, areaCode=undefined, keywords) {
-        let url = '';
-        if (areaCode == undefined)
-            url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/points/?format=json`;
-        else
-            url = `${this.baseUrl}/profile/${profileId}/points/category/${categoryId}/geography/${areaCode}/points/?format=json`;
-
-        if (keywords.length > 0){
-            const searchParams = keywords.map(item => `q=${encodeURIComponent(item)}`).join("&");
-            url = `${url}&${searchParams}`;
-        }
-        return this.loadUrl(url);
-    }
-
-    loadAllPoints(profileId, areaCode) {
-        let url = `${this.baseUrl}/profile/${profileId}/points/geography/${areaCode}/points/?format=json`
-        return this.loadUrl(url);
-    }
-
-    loadProfileIndicators(profileId) {
-        let url = `${this.baseUrl}/profiles/${profileId}/categories/?format=json`
-        return this.loadUrl(url);
-    }
-
-    async waitToLogIn() {
-        let count = 0;
-        while (true) {
-            if (!this.busyLoggingIn)
-                break
-            console.log("Another login request already sent. Waiting")
-            await new Promise(resolve => setTimeout(resolve, 200))
-
-            count += 1
-
-            if (count > 500) {
-                throw "Tired of waiting for login. Something went wrong"
-            }
-        }
-    }
-
-    async loadUrl(url, abortController, headers = {}) {
-        let response;
-        const self = this;
-        response = await this.getTokenJSON(url, abortController, headers)
-        if (response.status === 401 || response.status === 403) {
-            await this.waitToLogIn();
-            try {
-                await self.authenticate(url);
-                response = await this.getTokenJSON(url, abortController, headers);
-            } finally {
-                console.log("stopped logging in")
-
-                this.busyLoggingIn = false;
-
-            }
-        } else if (response.status === 404) {
-            throw response;
-        }
-
+      const credentials = await loginDialogue.displayLogin(nextUrl);
+      const response = await postJSON(url, credentials);
+      if (response.ok) {
         const json = await response.json();
-
-        return json;
-    }
-
-    async authenticate(nextUrl) {
-        const url = `${this.baseUrl}/rest-auth/login/`;
-
-        if (this.getToken() != null) {
-            console.log("Already logged in. Not authenticating")
-            return
+        if (json["key"] != undefined) {
+          this.setToken(json["key"]);
+          this.failedLogins = 0;
+          break;
+        } else {
+          throw "Expected to receive a token";
         }
-
-        if (this.busyLoggingIn)
-            return;
-
-        // This is a race condition but shouldn't be a big deal if two requests happen simultaneously
-        this.busyLoggingIn = true;
-        while (true) {
-            if (this.failedLogins >= MAX_FAILURES)
-                throw 'Too many failed logins';
-
-            const credentials = await loginDialogue.displayLogin(nextUrl);
-            const response = await postJSON(url, credentials)
-            if (response.ok) {
-                const json = await response.json();
-                if (json['key'] != undefined) {
-                    this.setToken(json['key'])
-                    this.failedLogins = 0;
-                    break;
-                } else {
-                    throw 'Expected to receive a token';
-                }
-            } else if (response.status == 400 || response.status == 403) {
-                this.failedLogins += 1
-                continue
-            } else {
-                throw "Some network exception occurred: " + response.status;
-            }
-
-        }
-        this.busyLoggingIn = false;
+      } else if (response.status == 400 || response.status == 403) {
+        this.failedLogins += 1;
+        continue;
+      } else {
+        throw "Some network exception occurred: " + response.status;
+      }
     }
+    this.busyLoggingIn = false;
+  }
 
-    async logout() {
-        const self = this;
-        if (this.getToken() != null) {
-            const url = `${this.baseUrl}/rest-auth/logout/`;
-            const response = await postJSON(url, this.token)
-            self.setToken(null);
-        }
+  async logout() {
+    const self = this;
+    if (this.getToken() != null) {
+      const url = `${this.baseUrl}/rest-auth/logout/`;
+      const response = await postJSON(url, this.token);
+      self.setToken(null);
     }
+  }
 
-    async getTokenJSON(url, abortController = null, headers = {}) {
-        const token = this.getToken();
-        if (token != '' && token != null)
-            headers['Authorization'] = `Token ${token}`;
+  async getTokenJSON(url, abortController = null, headers = {}) {
+    const token = this.getToken();
+    if (token != "" && token != null)
+      headers["Authorization"] = `Token ${token}`;
 
-        return getJSON(url, abortController, headers)
-    }
+    return getJSON(url, abortController, headers);
+  }
 
-    async getThemesCount(profileId, areaCode, version) {
-        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/themes_count/?version=${version}&format=json`;
-        return this.loadUrl(url, this.abortController);
-    }
+  async getThemesCount(profileId, areaCode, version) {
+    const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/themes_count/?version=${version}&format=json`;
+    return this.loadUrl(url, this.abortController);
+  }
 
-    async getChildrenIndicators(profileId, areaCode, version) {
-        const url = `${this.baseUrl}/children-indicators/profile/${profileId}/geography/${areaCode}/?version=${version}&format=json`;
-        return this.loadUrl(url, this.abortController);
-    }
+  async getChildrenIndicators(profileId, areaCode, version) {
+    const url = `${this.baseUrl}/children-indicators/profile/${profileId}/geography/${areaCode}/?version=${version}&format=json`;
+    return this.loadUrl(url, this.abortController);
+  }
 
-    async getIndicatorSummary(profileId, areaCode, version) {
-        const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/profile_indicator_summary/?version=${version}&format=json`;
-        return this.loadUrl(url, this.abortController);
-    }
+  async getIndicatorSummary(profileId, areaCode, version) {
+    const url = `${this.baseUrl}/profile/${profileId}/geography/${areaCode}/profile_indicator_summary/?version=${version}&format=json`;
+    return this.loadUrl(url, this.abortController);
+  }
 
-    async getIndicatorSummaryWrapper(profileId, areaCode, version) {
-        const self = this;
+  async getIndicatorSummaryWrapper(profileId, areaCode, version) {
+    const self = this;
 
-        return self.getIndicatorSummary(profileId, areaCode, version).then(data => {
-            Object.keys(data).forEach((category) => {
-                let categoryData = data[category];
-                let subCategories = categoryData.subcategories;
+    return self
+      .getIndicatorSummary(profileId, areaCode, version)
+      .then((data) => {
+        Object.keys(data).forEach((category) => {
+          let categoryData = data[category];
+          let subCategories = categoryData.subcategories;
 
-                Object.keys(subCategories).forEach((subCategory) => {
-                    let subCategoryData = subCategories[subCategory];
-                    let indicators = subCategoryData.indicators;
+          Object.keys(subCategories).forEach((subCategory) => {
+            let subCategoryData = subCategories[subCategory];
+            let indicators = subCategoryData.indicators;
 
-                    if (indicators != null) {
-                        Object.keys(indicators).forEach((indicator) => {
-                            let indicatorData = indicators[indicator];
+            if (indicators != null) {
+              Object.keys(indicators).forEach((indicator) => {
+                let indicatorData = indicators[indicator];
 
-                            Object.keys(self.restrictValues).forEach(restrictKey => {
-                                indicatorData.metadata.groups = indicatorData.metadata.groups.map(group => {
-                                    if (group.name === restrictKey) {
-                                        group.subindicators = group.subindicators.filter(element => self.restrictValues[restrictKey].includes(element));
-                                    }
+                Object.keys(self.restrictValues).forEach((restrictKey) => {
+                  indicatorData.metadata.groups =
+                    indicatorData.metadata.groups.map((group) => {
+                      if (group.name === restrictKey) {
+                        group.subindicators = group.subindicators.filter(
+                          (element) =>
+                            self.restrictValues[restrictKey].includes(element)
+                        );
+                      }
 
-                                    return group;
-                                })
-                            })
-                        });
-                    }
+                      return group;
+                    });
                 });
-            });
-
-            return data;
+              });
+            }
+          });
         });
+
+        return data;
+      });
+  }
+
+  cancelAndInitAbortController() {
+    if (this.abortController !== null) {
+      //on first request this.abortController is null
+      this.abortController.abort();
     }
 
-    cancelAndInitAbortController() {
-        if (this.abortController !== null) {
-            //on first request this.abortController is null
-            this.abortController.abort();
-        }
-
-        this.abortController = new AbortController();
-    }
+    this.abortController = new AbortController();
+  }
 }
 
 async function postJSON(url, data = {}, headers = {}) {
-    const defaultHeaders = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    }
+  const defaultHeaders = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
 
-    headers = {...defaultHeaders, ...headers};
-    const response = await fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        headers: headers,
-        redirect: 'follow',
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return response;
+  headers = { ...defaultHeaders, ...headers };
+  const response = await fetch(url, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    headers: headers,
+    redirect: "follow",
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return response;
 }
 
 async function getJSON(url, abortController, headers = {}) {
-    const response = await fetch(url,
-        {
-            headers: headers,
-            signal: abortController === null ? null : abortController.signal
-        })
-    return response;
+  const response = await fetch(url, {
+    headers: headers,
+    signal: abortController === null ? null : abortController.signal,
+  });
+  return response;
 }

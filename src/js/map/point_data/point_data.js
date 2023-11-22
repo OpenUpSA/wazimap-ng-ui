@@ -128,8 +128,13 @@ export class PointData extends Component {
      * this function is called when a category is toggled
      * */
 
-    async showCategoryPoint(category, keywords=[]) {
+    async showCategoryPoint(category, keywords = []) {
         const self = this;
+        const alreadySelected = this.activeCategories.filter(x => x.id === category.id).length > 0;
+        if (alreadySelected) {
+            return;
+        }
+
         let layer = this.categoryLayers[category.id];
 
         layer = this.genLayer()
@@ -152,7 +157,52 @@ export class PointData extends Component {
         this.activeCategories.push(category);
     }
 
-    removeCategoryPoints = (category, disablePointFilter=true) => {
+    showSinglePoint = (pointData) => {
+        const properties = pointData.properties;
+        const alreadySelected = this.activeCategories.filter(x => x.id === properties['category_id']).length > 0;
+        if (alreadySelected) {
+            return;
+        }
+
+        const theme = {
+            color: properties['color'],
+            icon: properties['icon']
+        }
+
+        const category = {
+            id: properties['category_id'],
+            name: properties['category_name'],
+            theme: theme
+        }
+
+        let layer = this.genLayer();
+        this.categoryLayers[category.id] = layer;
+
+        this.triggerEvent('point_data.category.loading', category);
+
+        const data = [{
+            name: properties['name'],
+            data: properties['data'],
+            icon: properties['icon'],
+            x: pointData.geometry.coordinates[0],
+            y: pointData.geometry.coordinates[1],
+            category: category,
+            theme: theme
+        }]
+
+        const points = {
+            category: category,
+            data: data
+        };
+        this.createMarkers(points, layer);
+        this.map.addLayer(layer);
+
+        this.triggerEvent('point_data.category.loaded', {category: category, points: data});
+
+        this.pointFilter.isVisible = true;
+    }
+
+    removeCategoryPoints = (category, disablePointFilter = true) => {
         if (!this.enableClustering) {
             let layer = this.categoryLayers[category.id];
 
@@ -255,7 +305,7 @@ export class PointData extends Component {
 
     /** end of category functions **/
 
-    async getAddressPoints(category, keywords=[]) {
+    async getAddressPoints(category, keywords = []) {
         const points = [];
         const data = await this.api.loadPoints(this.profileId, category.id, undefined, keywords)
         checkIterate(data.features, feature => {

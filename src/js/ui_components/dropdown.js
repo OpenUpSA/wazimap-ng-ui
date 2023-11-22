@@ -18,7 +18,7 @@ export class DropdownModel extends Observable {
         enableMultiselect: 'DropdownModel.enableMultiselect'
     }
 
-    constructor(items = [], isMultiselect = false, currentValue = [], isDisabled = false, isUnavailable = false) {
+    constructor(items = [], isMultiselect = false, currentValue = [], isDisabled = false, isUnavailable = false, isUpdatable = true) {
         super();
 
         this._items = items;
@@ -27,6 +27,7 @@ export class DropdownModel extends Observable {
         this._manualTrigger = false;
         this._isMultiselect = isMultiselect;
         this._unavailableValue = undefined;
+        this._isUpdatable = isUpdatable;
     }
 
     get items() {
@@ -38,8 +39,12 @@ export class DropdownModel extends Observable {
     }
 
     set currentValue(value) {
-        this._currentValue = value;
-        this.triggerEvent(DropdownModel.EVENTS.selected, this)
+        if (this.isUpdatable) {
+            this._currentValue = value;
+            this.triggerEvent(DropdownModel.EVENTS.selected, this);
+        } else {
+            this.triggerEvent(DropdownModel.EVENTS.selected, value);
+        }
     }
 
     get currentItem() {
@@ -115,6 +120,14 @@ export class DropdownModel extends Observable {
         this.triggerEvent(DropdownModel.EVENTS.enableMultiselect, this);
     }
 
+    get isUpdatable() {
+        return this._isUpdatable;
+    }
+
+    set isUpdatable(value) {
+        this._isUpdatable = value;
+    }
+
     getIndexForValue(value) {
         return this.items.indexOf(value);
     }
@@ -138,10 +151,10 @@ export class Dropdown extends Component {
         updateItems: "Dropdown.updateItems"
     }
 
-    constructor(parent, container, items, defaultText = '', disabled = false, isMultiselect = false, drillDownOption = '', root = null) {
+    constructor(parent, container, items, defaultText = '', disabled = false, isMultiselect = false, drillDownOption = '', root = null, isUpdatable = true) {
         super(parent);
         this._container = container;
-        this._model = new DropdownModel(items, isMultiselect, 0);
+        this._model = new DropdownModel(items, isMultiselect, 0, false, false, isUpdatable);
         this._defaultText = defaultText;
         this._listItemElements = [];
         this._manualTrigger = false;
@@ -171,16 +184,16 @@ export class Dropdown extends Component {
         return this._drillDownOption;
     }
 
-    get root(){
+    get root() {
         return this._root;
     }
 
-    set root(value){
+    set root(value) {
         this._root = value;
     }
 
     prepareDomElements() {
-        if (this.root == null){
+        if (this.root == null) {
             this.root = createRoot(this._container);
         }
         this.root.render(<FilterDropdown

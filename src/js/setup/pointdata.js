@@ -3,6 +3,7 @@ export function configurePointDataEvents(controller, objs = {pointDataTray: null
     const pointData = objs['pointData'];
 
     controller.on("point_tray.category.selected", payload => pointData.showCategoryPoint(payload.payload, pointData.pointFilter.keywordSearchOptions));
+    controller.on("point_tray.point.selected", payload => pointData.showSinglePoint(payload.payload));
     controller.on("point_tray.category.unselected", payload => pointData.removeCategoryPoints(payload.payload));
     controller.on("point_data.all.reload", payload => {
         pointData.activeCategories.map((category) => {

@@ -30,7 +30,7 @@
   top: 80px;
 }
 
-.filter-row-label{
+.filter-row-label {
   color: #707070;
   font-family: Roboto;
   font-size: 12px;
@@ -41,7 +41,8 @@
   text-transform: uppercase;
   margin-bottom: 10px;
 }
-.remove-filter-row{
+
+.remove-filter-row {
   width: 18px;
   height: 20px;
   background: none;
@@ -68,7 +69,7 @@
 }
 
 
-.header-containers{
+.header-containers {
   width: 250px;
   justify-content: end;
   display: flex;
@@ -85,6 +86,83 @@
   margin-left: 5px;
 }
 
+.separator {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #f4f4f4;
+  margin: 1em 0 3px;
+  padding: 0;
+}
+
+.search-result-point-container {
+  max-height: 150px;
+  overflow-y: scroll;
+
+  .search-result-point-row {
+    background-color: #f0f0f0;
+    margin-bottom: 4px;
+    margin-top: 2px;
+    display: flex;
+    cursor: pointer;
+
+    &:hover {
+      background-image: linear-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .1))
+    }
+
+    .search-result-point-column {
+      padding-left: 12px;
+      padding-right: 12px;
+      font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+
+      button.point-result-pin {
+        background-color: transparent;
+        height: 100%;
+        border-left: 5px solid #fff;
+        text-align: center;
+        width: 100%;
+        padding: 0;
+        margin: 0 auto;
+      }
+
+      .MuiSelect-select i.material-icons {
+        font-size: 18px;
+        position: absolute;
+        left: 10px;
+        bottom: 9px;
+      }
+
+      .MuiSelect-select .dd-text-container {
+        margin-left: 20px;
+      }
+
+      .MuiInputBase-formControl {
+        height: 32px;
+      }
+    }
+  }
+}
+
+.search-result-point-table-header {
+  display: flex;
+
+  .search-result-point-table-header-column {
+    width: 25%;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 9px;
+    color: #707070;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 
 // CSS for new filters
 .filter-container {
@@ -103,16 +181,16 @@
 
 .filter-container .profile-indicator__filter,
 .filter-container .mapping-options__filter,
-.filter-container .point-filters__filter{
+.filter-container .point-filters__filter {
   margin-right: 0px;
   max-width: 50%;
 }
 
-.filter-container .remove-filter-row:hover{
+.filter-container .remove-filter-row:hover {
   background-color: #fff;
 }
 
-.filter-container .remove-filter-row{
+.filter-container .remove-filter-row {
   margin-left: 4px;
   margin-right: 2px;
 }
@@ -130,10 +208,11 @@
 }
 
 .filter-container .mapping-options__remove-filter,
-.filter-container .point-filters__remove-filter{
+.filter-container .point-filters__remove-filter {
   position: unset;
   margin-left: 0px;
 }
+
 // END of CSS for new filters
 
 

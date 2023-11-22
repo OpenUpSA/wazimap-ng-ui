@@ -19,8 +19,8 @@ const Theme = (props) => {
         })
     }
 
-    const checkIfAllCategoriesAreSelected = () => {
-        return !props.theme.categories.some(x => !x.isSelected);
+    const checkIfAnyCategoriesAreSelected = () => {
+        return props.theme.categories.some(x => x.isSelected);
     }
 
     const checkIfThemeIsLoading = () => {
@@ -43,7 +43,7 @@ const Theme = (props) => {
                     <ThemeLabel
                         theme={props.theme}
                         isThemeExpanded={props.isThemeExpanded}
-                        isThemeSelected={checkIfAllCategoriesAreSelected()}
+                        isThemeSelected={checkIfAnyCategoriesAreSelected()}
                         isThemeLoading={checkIfThemeIsLoading()}
                         themeToggled={props.themeToggled}
                     />
@@ -56,7 +56,7 @@ const Theme = (props) => {
                         {props.theme.icon}
                     </i>
                 }
-                className={checkIfAllCategoriesAreSelected() ? 'selected' : ''}
+                className={checkIfAnyCategoriesAreSelected() ? 'selected' : ''}
             >
                 {renderCategories(props.theme.categories)}
             </StyledTreeItem>

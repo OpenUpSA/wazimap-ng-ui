@@ -1,5 +1,7 @@
 import {Component} from '../../utils';
 import {select as d3select} from 'd3-selection';
+import {Dropdown, DropdownModel} from "../../ui_components/dropdown";
+import React from "react";
 
 // TODO should change this to jquery instead
 var navSearch = d3select(".nav__search");
@@ -36,6 +38,7 @@ export class Search extends Component {
         minLength = minChars;
         this.api = api;
         this.profileId = profileId;
+        this.plate = null;
 
         this.prepareDomElements();
         this.setSearchInput();
@@ -46,6 +49,203 @@ export class Search extends Component {
         searchResultItem = $(resultItemClassName)[0].cloneNode(true);
         $(parentClassName).find('.w-form-fail').remove();
         $(parentClassName).find('.w-form-done').remove();
+
+        this.updateSearchDom();
+    }
+
+    updateSearchDom() {
+        this.plate = $('.search__dropdown_plate')
+            .css('max-height', 'unset');
+        const titleRow = $('.search__dropdown_results-label');
+
+        this.updateGeoSearchHeader(titleRow);
+        this.updateGeoSearch();
+        this.appendSearchSeparator();
+        this.appendPointsTitle(titleRow);
+        this.appendPointsNoData();
+    }
+
+    updateGeoSearchHeader(titleRow) {
+        const headerColumn = titleRow.find('div')[0].cloneNode(true);
+
+        titleRow.append(headerColumn);
+        $(titleRow.find('div')[0]).text('GEOGRAPHIC BOUNDARIES').css('flex', '50%');
+    }
+
+    updateGeoSearch() {
+        $('.search__dropdown_scroll').css('overflow', 'visible')
+            .removeClass('narrow-scroll');
+        $('.search__dropdown_list').css('max-height', '150px')
+            .css('overflow-y', 'scroll')
+            .addClass('narrow-scroll');
+    }
+
+    appendSearchSeparator() {
+        let separator = document.createElement('hr');
+        $(separator).addClass('separator')
+        this.plate.append(separator);
+    }
+
+    appendPointsTitle(titleRow) {
+        const pointTitleRow = titleRow[0].cloneNode(true);
+        $(pointTitleRow).addClass('search-result-point-table-summary-row')
+        $($(pointTitleRow).find('div')[0]).text('SERVICE POINTS');
+        $($(pointTitleRow).find('div')[1]).addClass('search-result-point-table-summary-text')
+            .text('')
+        this.plate.append(pointTitleRow)
+    }
+
+    updatePointsHeaderSummary(data) {
+        $('.search-result-point-table-summary-row .search-result-point-table-summary-text')
+            .text(`${data.features.length} SERVICE POINTS IN ${[...new Set(data.features.map(item => item.properties.theme_id))].length} THEMES`)
+    }
+
+    appendPointsNoData() {
+        const noDataContainer = $('.search__dropdown_no-data')[0].cloneNode(true);
+        $(noDataContainer).addClass('points-no-data');
+        this.plate.append(noDataContainer);
+    }
+
+    removePointsNoData() {
+        this.plate.find('.points-no-data').remove();
+    }
+
+    appendPointsHeaderRow() {
+        this.plate.find('.search-result-point-table-header').remove();
+
+        const pointsTableHeader = document.createElement('div');
+        $(pointsTableHeader).addClass('search-result-point-table-header');
+
+        [{
+            title: 'NAME', width: '30%'
+        }, {
+            title: 'SHOW MATCHING RESULTS', width: '30%'
+        }, {
+            title: 'MATCHING SNIPPET', width: '25%'
+        }, {
+            title: 'DISTANCE', width: '15%'
+        }].forEach(c => {
+            const pointsHeaderColumn = document.createElement('div');
+            $(pointsHeaderColumn).addClass('search-result-point-table-header-column')
+            $(pointsHeaderColumn).text(c.title);
+            $(pointsHeaderColumn).css('width', c.width);
+
+            pointsTableHeader.append(pointsHeaderColumn);
+        })
+        this.plate.append(pointsTableHeader)
+
+    }
+
+    appendPointsTable(searchTerm, data) {
+        this.plate.find('.search-result-point-container').remove();
+
+        const pointResultContainer = document.createElement('div');
+        $(pointResultContainer).addClass('search-result-point-container').addClass('narrow-scroll');
+        for (let i = 0; i < data.features.length; i++) {
+            const pointRow = this.createPointSearchRow(searchTerm, data.features[i]);
+
+            pointResultContainer.append(pointRow);
+        }
+
+        this.plate.append(pointResultContainer);
+    }
+
+    createPointSearchRow(searchTerm, rowData) {
+        const self = this;
+        const pointRow = document.createElement('div');
+        $(pointRow).addClass('search-result-point-row');
+
+        const pointNameColumn = this.createPointSearchColumn(rowData.properties['name'], '30%');
+        pointRow.append(pointNameColumn);
+
+        const pointThemeColumn = this.createPointSearchDropdown('30%', rowData);
+        pointRow.append(pointThemeColumn);
+
+        const pointMatchColumn = this.createPointSearchColumn(this.getMatchingSnippet(searchTerm, rowData), '25%');
+        pointRow.append(pointMatchColumn);
+
+        const distance = `${parseInt(rowData.properties['distance'])} km`;
+        const pointDistanceColumn = this.createPointSearchColumn(distance, '15%');
+        pointRow.append(pointDistanceColumn);
+
+        $(pointRow).on('click', () => {
+            self.triggerEvent('search.point.selected', rowData);
+        })
+
+        return pointRow;
+    }
+
+    getMatchingSnippet(searchTerm, rowData) {
+        const term = searchTerm.toLowerCase();
+        const properties = rowData.properties;
+        let text = '';
+        if (properties['name'].toLowerCase().indexOf(term) >= 0) {
+            text = properties['name'];
+        } else if (properties['category_name'].toLowerCase().indexOf(term) >= 0) {
+            text = properties['category_name'];
+        } else if (properties['theme_name'].toLowerCase().indexOf(term) >= 0) {
+            text = properties['theme_name'];
+        } else if (properties['theme_name'].toLowerCase().indexOf(term) >= 0) {
+            text = properties['theme_name'];
+        } else {
+            let dataArr = properties['data'];
+            console.log({dataArr})
+            let i = 0;
+            while (i < dataArr.length && text === '') {
+                console.log({i, 'data': dataArr[i]})
+                if ((typeof dataArr[i].value === 'string' && dataArr[i].value.toLowerCase().indexOf(term) >= 0) || (dataArr[i].value === term)) {
+                    text = dataArr[i].value;
+                }
+                i++;
+            }
+        }
+
+        if (text.toLowerCase().indexOf(term) !== 0) {
+            text = '...' + text.substring(text.toLowerCase().indexOf(term));
+        }
+
+        return text;
+    }
+
+    createPointSearchColumn(text, width) {
+        const pointColumn = document.createElement('div');
+        $(pointColumn).prop('title', text);
+        $(pointColumn).css('width', width);
+        $(pointColumn).addClass('search-result-point-column');
+        $(pointColumn).text(text);
+
+        return pointColumn;
+    }
+
+    createPointSearchDropdown(width, rowData) {
+        const pointColumn = document.createElement('div');
+        $(pointColumn).addClass('search-result-point-column');
+        $(pointColumn).css('width', width);
+
+        const properties = rowData.properties;
+
+        const icon = properties['icon'];
+        const themeName = properties['theme_name'];
+        const categoryId = properties['category_id'];
+        const color = properties['color'];
+
+        const ddText = <span className={'dd-text-container'}><i className="material-icons"
+                                                                style={{color: color}}>{icon}</i> {themeName}</span>;
+
+        let dd = new Dropdown(this, pointColumn, ['Plot all points in category'], ddText, false, false, false, null, false);
+        dd.model.on(DropdownModel.EVENTS.selected, selectedOptionArr => {
+            const selectedOption = selectedOptionArr[0];
+            let category = {
+                id: categoryId, theme: {
+                    icon: icon, color: color
+                }
+            }
+            this.triggerEvent('search.category.selected', category);
+        })
+
+        $(pointColumn).html(dd);
+
+        return pointColumn;
     }
 
     /**
@@ -53,15 +253,13 @@ export class Search extends Component {
      * */
     setSearchInput = () => {
         let self = this;
-        let count = 0;
         let lastKey = 0;
         let activeItemIndex = -1;
         $(inputClassName).each(function () {
             let element = $(this);
 
             $(this).autocomplete({
-                minLength: minLength,
-                source: function (request, response) {
+                minLength: minLength, source: function (request, response) {
                     setTimeout(() => {
                         if (lastKey === 38 || lastKey === 40) {
                             //arrow keys -- add active class to result item
@@ -80,17 +278,22 @@ export class Search extends Component {
                         const searchTerm = request.term;
 
                         self.api.search(self.profileId, searchTerm).then(data => {
-                            self.triggerEvent('search.results', {items: data});
-
-                            count = data.length;
-                            $('.search__dropdown_results-value').html(count);  //this needs to be here because if 0 row returns from the API, render function is not fired
-
+                            self.appendGeoSearchResult(data);
                             response(data);
+                        })
+
+                        const mapCenter = self.getMapCenter();
+                        self.api.searchPointsByDistance(self.profileId, searchTerm, mapCenter.lat, mapCenter.lng).then(data => {
+                            self.removePointsNoData();
+                            self.appendPointsHeaderRow();
+                            self.appendPointsTable(searchTerm, data);
+                            self.updatePointsHeaderSummary(data);
                         })
                     }, 0)
                 }
             })
                 .keydown(function (event) {
+                    self.getMapCenter();
                     const key = event.keyCode;
                     lastKey = key;
 
@@ -119,6 +322,17 @@ export class Search extends Component {
         });
     }
 
+    getMapCenter() {
+        return map.getCenter();
+    }
+
+    appendGeoSearchResult(data) {
+        this.triggerEvent('search.results', {items: data});
+
+        const count = data.length;
+        $('.search__dropdown_results-value').html(count);  //this needs to be here because if 0 row returns from the API, render function is not fired
+    }
+
     generateSearchLabel(profile, skipTopLevel = true, skipDuplicates = true) {
         let parents = profile.parents;
         let label = '';
@@ -126,14 +340,12 @@ export class Search extends Component {
 
         parents = parents.reverse();
 
-        if (skipTopLevel)
-            parents = parents.slice(0, -1);
+        if (skipTopLevel) parents = parents.slice(0, -1);
 
 
         parents.forEach((parent, idx) => {
             if (!skipDuplicates || parent.name != previous) {
-                if (idx > 0)
-                    label += ', '
+                if (idx > 0) label += ', '
                 label += parent.name;
             }
 
@@ -141,8 +353,7 @@ export class Search extends Component {
         })
 
         return {
-            name: profile.name,
-            parents: label
+            name: profile.name, parents: label
         };
     }
 

@@ -3,7 +3,8 @@ import {Component} from "../utils";
 export class ConfirmationModal extends Component {
     static  COOKIE_NAMES = {
         BOUNDARY_TYPE_SELECTION: 'boundary_selection',
-        DATA_MAPPER_VERSION_SELECTION: 'version_selection'
+        DATA_MAPPER_VERSION_SELECTION: 'version_selection',
+        CC_LICENSE: 'cc_license'
     };
 
     constructor(parent, cookieName) {
@@ -12,7 +13,6 @@ export class ConfirmationModal extends Component {
         this._isVisible = false;
         this._element = $('.warning-modal:not(.global-loading-modal)');
         this._cookieName = cookieName;
-
         this.prepareEvents();
     }
 
@@ -28,6 +28,7 @@ export class ConfirmationModal extends Component {
         this._isVisible = value;
 
         if (value) {
+            this.setContent();
             this.element.removeClass('hidden');
         } else {
             this.element.addClass('hidden');
@@ -36,6 +37,29 @@ export class ConfirmationModal extends Component {
 
     get cookieName() {
         return this._cookieName;
+    }
+
+    setContent() {
+        const licenseContent = $('.warning-modal .warning .license__content');
+        if (this.cookieName === ConfirmationModal.COOKIE_NAMES.CC_LICENSE) {
+            if (licenseContent.length <= 0) {
+                const p = document.createElement('p');
+                $(p).text('Dear User, We\'re thrilled you found value in Youth Explorer\'s data! If you intend to use or reference this data in your work, we kindly request that you include proper citations to acknowledge the source. This not only respects the efforts put into compiling this information but also helps others locate and benefit from it. Thank you for your cooperation and dedication to accurate attributions!');
+
+                const license__content = document.createElement('div');
+                $(license__content).addClass('license__content');
+                $(license__content).append(p);
+                $('.warning-modal .warning').prepend(license__content);
+            }
+
+            $('.warning-modal .warning .warning__content').addClass('hidden');
+            $('.warning-modal .warning .license__content').removeClass('hidden');
+            $('.warning-modal .warning .warning__header').addClass('hidden');
+        } else {
+            $('.warning-modal .warning .warning__content').removeClass('hidden');
+            $('.warning-modal .warning .license__content').addClass('hidden');
+            $('.warning-modal .warning .warning__header').removeClass('hidden');
+        }
     }
 
     prepareEvents() {

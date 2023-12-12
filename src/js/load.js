@@ -78,7 +78,7 @@ class Application extends Component {
         const pointDataTray = new PointDataTray(this, api, profileId, config.watermarkEnabled, config.ccLicenseEnabled);
         const mapchip = new MapChip(this, config.choropleth, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters);
         const search = new Search(this, api, profileId, 2);
-        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters, config.chartColorRange);
+        const profileLoader = new ProfileLoader(this, formattingConfig, api, profileId, config.config, config.watermarkEnabled, config.siteWideFiltersEnabled, config.restrictValues, config.defaultFilters, config.chartColorRange, config.ccLicenseEnabled);
         const locationInfoBox = new LocationInfoBox(this, formattingConfig);
         const zoomToggle = new ZoomToggle(this);
         const preferredChildToggle = new PreferredChildToggle(this);

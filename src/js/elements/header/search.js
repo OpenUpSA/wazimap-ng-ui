@@ -32,13 +32,14 @@ export class Search extends Component {
      * constructor of the class
      * sets the default values, calls init function(this.setSearchInput)
      * */
-    constructor(parent, api, profileId, minChars) {
+    constructor(parent, api, profileId, minChars, config) {
         super(parent);
 
         minLength = minChars;
         this.api = api;
         this.profileId = profileId;
         this.plate = null;
+        this.config = config;
 
         this.prepareDomElements();
         this.setSearchInput();
@@ -60,9 +61,11 @@ export class Search extends Component {
 
         this.updateGeoSearchHeader(titleRow);
         this.updateGeoSearch();
-        this.appendSearchSeparator();
-        this.appendPointsTitle(titleRow);
-        this.appendPointsNoData();
+        if (this.config.pointSearchEnabled) {
+            this.appendSearchSeparator();
+            this.appendPointsTitle(titleRow);
+            this.appendPointsNoData();
+        }
     }
 
     updateGeoSearchHeader(titleRow) {
@@ -282,13 +285,15 @@ export class Search extends Component {
                             response(data);
                         })
 
-                        const mapCenter = self.getMapCenter();
-                        self.api.searchPointsByDistance(self.profileId, searchTerm, mapCenter.lat, mapCenter.lng).then(data => {
-                            self.removePointsNoData();
-                            self.appendPointsHeaderRow();
-                            self.appendPointsTable(searchTerm, data);
-                            self.updatePointsHeaderSummary(data);
-                        })
+                        if (self.config.pointSearchEnabled) {
+                            const mapCenter = self.getMapCenter();
+                            self.api.searchPointsByDistance(self.profileId, searchTerm, mapCenter.lat, mapCenter.lng).then(data => {
+                                self.removePointsNoData();
+                                self.appendPointsHeaderRow();
+                                self.appendPointsTable(searchTerm, data);
+                                self.updatePointsHeaderSummary(data);
+                            })
+                        }
                     }, 0)
                 }
             })

@@ -30,7 +30,8 @@ export class Category extends Component {
         restrictValues = {},
         defaultFilters = [],
         hiddenIndicators = [],
-        chartColorRange
+        chartColorRange,
+        ccLicenseEnabled = false
     ) {
         super(parent);
 
@@ -49,7 +50,7 @@ export class Category extends Component {
 
         this.prepareDomElements();
         this.prepareEvents();
-        this.addCategory(category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange);
+        this.addCategory(category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange, ccLicenseEnabled);
     }
 
     get filteredIndicators() {
@@ -107,7 +108,7 @@ export class Category extends Component {
         });
     }
 
-    addCategory = (category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange) => {
+    addCategory = (category, detail, isFirst, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange, ccLicenseEnabled) => {
         const newCategorySection = categoryTemplate.cloneNode(true);
         const sectionHeader = $('.category-header')[0].cloneNode(true);
         const indicatorHeader = $('.sub-category-header')[0].cloneNode(true);
@@ -130,7 +131,7 @@ export class Category extends Component {
             $(newCategorySection).addClass('page-break-before');
         }
 
-        this.loadSubcategories(newCategorySection, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange);
+        this.loadSubcategories(newCategorySection, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange, ccLicenseEnabled);
 
         this.uiElements.push(newCategorySection);
 
@@ -144,7 +145,7 @@ export class Category extends Component {
         return sectionLink;
     }
 
-    loadSubcategories = (wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange) => {
+    loadSubcategories = (wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange, ccLicenseEnabled) => {
         let isFirst = true;
 
         for (const subcategoryDetail of sortBy(detail.subcategories, "order")) {
@@ -162,7 +163,8 @@ export class Category extends Component {
                 restrictValues,
                 defaultFilters,
                 hiddenIndicators,
-                chartColorRange
+                chartColorRange,
+                ccLicenseEnabled
             );
             sc.isVisible = sc.indicators.filter(
                 ind => ind.isVisible

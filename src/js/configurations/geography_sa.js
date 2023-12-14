@@ -67,6 +67,12 @@ export class Config {
         return false;
     }
 
+    get pointSearchEnabled(){
+        if(this.config["point_search_enabled"] != undefined)
+            return this.config["point_search_enabled"];
+        return true;
+    }
+
     get siteWideFiltersEnabled() {
         if (this.config["site_wide_filters_enabled"] != undefined)
             return this.config["site_wide_filters_enabled"];

@@ -15,14 +15,15 @@ export class Indicator extends ContentBlock {
         restrictValues = {},
         defaultFilters = [],
         hiddenIndicators = [],
-        chartColorRange
+        chartColorRange,
+        ccLicenseEnabled = false
     ) {
         super(parent, container, indicator, title, isLast, geography, hiddenIndicators);
 
         this.chartAttribution = chartAttribution;
         this._chart = null;
         this.prepareDomElements();
-        this.addIndicatorChart(addLockButton, restrictValues, defaultFilters, chartColorRange);
+        this.addIndicatorChart(addLockButton, restrictValues, defaultFilters, chartColorRange, ccLicenseEnabled);
     }
 
     get previouslySelectedFilters() {
@@ -60,13 +61,13 @@ export class Indicator extends ContentBlock {
         super.prepareDomElements();
     }
 
-    addIndicatorChart(addLockButton, restrictValues, defaultFilters, chartColorRange) {
+    addIndicatorChart(addLockButton, restrictValues, defaultFilters, chartColorRange, ccLicenseEnabled) {
         let groups = Object.keys(this.indicator.groups);
         const configuration = this.indicator.chartConfiguration;
 
         let chartData = this.orderChartData();
 
-        let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution, addLockButton, restrictValues, defaultFilters, chartColorRange);
+        let c = new Chart(this, configuration, chartData, groups, this.container, this.title, this.chartAttribution, addLockButton, restrictValues, defaultFilters, chartColorRange, ccLicenseEnabled);
         this.bubbleEvents(c, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
             'profile.chart.download_csv', 'profile.chart.download_excel', 'profile.chart.download_json', 'profile.chart.download_kml',

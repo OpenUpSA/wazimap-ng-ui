@@ -32,7 +32,8 @@ export class Subcategory extends Component {
         restrictValues = {},
         defaultFilters = [],
         hiddenIndicators = [],
-        chartColorRange
+        chartColorRange,
+        ccLicenseEnabled = false
     ) {
         super(parent);
         scHeaderClone = $(subcategoryHeaderClass)[0].cloneNode(true);
@@ -46,7 +47,7 @@ export class Subcategory extends Component {
         this._hasKeyMetrics = false;
 
         this.addSubCategoryHeaders(wrapper, subcategory, detail, isFirst);
-        this.addIndicators(wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange);
+        this.addIndicators(wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange,ccLicenseEnabled);
         this.prepareEvents();
     }
 
@@ -144,7 +145,7 @@ export class Subcategory extends Component {
         this._scHeader = scHeader;
     }
 
-    addIndicatorBlock(container, indicator, title, isLast, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange) {
+    addIndicatorBlock(container, indicator, title, isLast, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange,ccLicenseEnabled) {
         let block = new Indicator(
             this,
             container,
@@ -157,7 +158,8 @@ export class Subcategory extends Component {
             restrictValues,
             defaultFilters,
             hiddenIndicators,
-            chartColorRange
+            chartColorRange,
+            ccLicenseEnabled
         );
         this.bubbleEvents(block, [
             'profile.chart.saveAsPng', 'profile.chart.valueTypeChanged',
@@ -174,7 +176,7 @@ export class Subcategory extends Component {
         return block;
     }
 
-    addIndicators = (wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange) => {
+    addIndicators = (wrapper, detail, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange,ccLicenseEnabled) => {
         let index = 0;
         let lastIndex = Object.entries(detail.indicators).length - 1;
         let isEmpty = JSON.stringify(detail.indicators) === JSON.stringify({});
@@ -191,7 +193,7 @@ export class Subcategory extends Component {
                     $(wrapper).append(indicatorContainer);
                     let metadata = indicator.metadata;
                     if (indicator.content_type === ContentBlock.BLOCK_TYPES.Indicator) {
-                        block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange);
+                        block = this.addIndicatorBlock(indicatorContainer, indicator, title, isLast, addLockButton, restrictValues, defaultFilters, hiddenIndicators, chartColorRange,ccLicenseEnabled);
                     } else if (indicator.content_type === ContentBlock.BLOCK_TYPES.HTMLBlock) {
                         block = this.addHTMLBlock(indicatorContainer, indicator, title, isLast, hiddenIndicators);
                     }

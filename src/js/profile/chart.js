@@ -16,6 +16,7 @@ import {DataFilterModel} from "../models/data_filter_model";
 import {SidePanels} from "../elements/side_panels";
 import {configureGroupedBarchart, configureGroupedBarchartDownload} from "./charts/groupedBarChart";
 import {isEmpty} from "vega-lite";
+import {ConfirmationModal} from "../ui_components/confirmation_modal";
 
 const PERCENTAGE_TYPE = "percentage";
 const VALUE_TYPE = "value";
@@ -44,7 +45,9 @@ export class Chart extends Component {
                 addLockButton = true,
                 restrictValues = {},
                 defaultFilters = [],
-                chartColorRange) {
+                chartColorRange,
+                ccLicenseEnabled = false
+    ) {
         //we need the subindicators and groups too even though we have detail parameter. they are used for the default chart data
         super(parent);
 
@@ -76,6 +79,10 @@ export class Chart extends Component {
             removeFilterButton: '.profile-indicator__remove-filter',
             addLockButton: addLockButton
         });
+
+        this.ccLicenseEnabled = ccLicenseEnabled;
+
+        this.confirmationModal = new ConfirmationModal(this, ConfirmationModal.COOKIE_NAMES.CC_LICENSE);
 
         this.updateConfig(chartColorRange);
 
@@ -454,20 +461,33 @@ export class Chart extends Component {
         $(this.containerParent).find('.hover-menu__content_list--last a').each(function () {
             $(this).off('click');
             $(this).on('click', () => {
-                let exportType = $(this).data('id');
-                const downloadFn = {
-                    'csv': self.exportAsCsv,
-                    'excel': self.exportAsExcel,
-                    'json': self.exportAsJson,
-                    'kml': self.exportAsKml,
-                };
-                self.triggerEvent(`profile.chart.download_${exportType}`, self);
-
-                let fileName = self.getChartTitle('-');
-                downloadFn[exportType](fileName);
+                if (self.ccLicenseEnabled) {
+                    self.confirmationModal.askForConfirmation()
+                        .then((payload) => {
+                            if (payload.confirmed) {
+                                self.initDownload(self, this);
+                            }
+                        })
+                } else {
+                    self.initDownload(self, this);
+                }
             })
         });
     };
+
+    initDownload(self, chart) {
+        let exportType = $(chart).data('id');
+        const downloadFn = {
+            'csv': self.exportAsCsv,
+            'excel': self.exportAsExcel,
+            'json': self.exportAsJson,
+            'kml': self.exportAsKml,
+        };
+        self.triggerEvent(`profile.chart.download_${exportType}`, self);
+
+        let fileName = self.getChartTitle('-');
+        downloadFn[exportType](fileName);
+    }
 
     selectedGraphValueTypeChanged = (containerParent, selectedDisplayType) => {
         this.graphValueType = selectedDisplayType;

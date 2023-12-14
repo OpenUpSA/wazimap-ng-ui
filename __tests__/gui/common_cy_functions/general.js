@@ -454,7 +454,7 @@ export function confirmNoChoroplethFilterSelected() {
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible`).should('have.length', 1);
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`)
         .eq(0)
-        .find('div.MuiSelect-select em')
+        .find('div.MuiSelect-select')
         .should('have.text', 'Select an attribute');
     cy.get(`${mapBottomItems} .map-options .map-options__filter-row:visible .mapping-options__filter`).eq(1).should('have.class', 'disabled');
 }
@@ -463,7 +463,7 @@ export function confirmNoChartFilterSelected() {
     cy.get('.rich-data-content .profile-indicator__filter-row:visible').should('have.length', 1);
     cy.get('.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter')
         .eq(0)
-        .find('div.MuiSelect-select em')
+        .find('div.MuiSelect-select')
         .should('have.text', 'Select an attribute');
     cy.get('.rich-data-content .profile-indicator__filter-row:visible .profile-indicator__filter').eq(1).should('have.class', 'disabled');
 }

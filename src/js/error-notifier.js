@@ -10,8 +10,11 @@ export class ErrorNotifier {
   registerErrorHandler() {
     let self = this;
     window.addEventListener("error", function (errorEvent) {
-      // Do not notify React errors
-      if (errorEvent.message.indexOf("React") == -1) {
+      // Do not notify React errors or AbortController
+      if (
+        errorEvent.message.indexOf("React") == -1 &&
+        errorEvent.message.indexOf("aborted") == -1
+      ) {
         self.showNotification();
       }
     });

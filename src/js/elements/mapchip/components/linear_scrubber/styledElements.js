@@ -1,19 +1,21 @@
-import { styled } from '@mui/system';
-import SliderUnstyled, { sliderUnstyledClasses } from '@mui/base/SliderUnstyled';
+import { styled } from "@mui/system";
+import { Slider } from '@mui/base/Slider';
 
-export const ParentContainer = styled('div')(({ theme }) => ({
+//import { sliderUnstyledClasses } from "@mui/base";
+
+export const ParentContainer = styled("div")(({ theme }) => ({
   padding: "15px 10px",
   margin: "auto",
   borderBottom: "1px solid #ebebeb",
 }));
 
-export const CustomSliderRail = styled('div')(({ theme }) => ({
+export const CustomSliderRail = styled("div")(({ theme }) => ({
   backgroundColor: "#aba9a952",
   height: "20px",
-  borderRadius: "10px"
+  borderRadius: "10px",
 }));
 
-export const StyledSlider = styled(SliderUnstyled)(
+export const StyledSlider = styled(Slider)(
   ({ theme }) => `
   color: ${theme.palette.grey[500]};
   height: 4px;
@@ -80,5 +82,5 @@ export const StyledSlider = styled(SliderUnstyled)(
     text-align: center;
     color: red;
   }
-  `,
+  `
 );

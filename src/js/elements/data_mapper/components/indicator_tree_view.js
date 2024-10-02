@@ -46,7 +46,7 @@ const NoSubindicatorView = (props) => {
                 <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
                     <Typography noWrap={false} variant="body2"
                                 sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}>
-                        Data currently not available for this indicator
+                        Data currently not available for this indicator.
                     </Typography>
                 </Box>
             }

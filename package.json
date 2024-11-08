@@ -2,7 +2,7 @@
   "name": "wazimap-ng",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Adi Eyal <adi@openup.org.za>",
+  "author": "CTO <cto@openup.org.za>",
   "license": "MIT",
   "engines": {
     "node": "16.20.2"

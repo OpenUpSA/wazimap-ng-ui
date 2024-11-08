@@ -18,7 +18,7 @@ const TabularComparison = (props) => {
     const [defaultVersionName, setDefaultVersionName] = useState(null);
 
     const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
-    const productionUrl = getAPIUrl('https://production.wazimap-ng.openup.org.za');
+    const productionUrl = getAPIUrl('https://api.wazimap.com');
     const defaultProfile = 8;
     const defaultUrl = productionUrl;
     const defaultConfig = new SAConfig();

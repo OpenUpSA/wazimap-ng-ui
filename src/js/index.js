@@ -9,7 +9,7 @@ import {getHostname, getAPIUrl, loadDevTools} from './utils';
 import {ErrorNotifier} from "./error-notifier";
 
 const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
-const productionUrl = getAPIUrl('https://production.wazimap-ng.openup.org.za');
+const productionUrl = getAPIUrl('https://api.wazimap.com');
 let config = new SAConfig();
 
 let hostname = getHostname();

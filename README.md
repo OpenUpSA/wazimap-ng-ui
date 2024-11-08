@@ -69,7 +69,7 @@ HOSTNAME=youthexplorer.org.za yarn start`
 | Variable                | Default                              | Description                                                                                                       |
 | ----------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
 | HOSTNAME                | unset                                | If set, overrides using the hostname in the address bar to determine the profile being requested. e.g. `youthexplorer.org.za` |
-| API_URL                 | unset                                | If set, overrides the default production and staging backend URLs. e.g. `https://production.wazimap-ng.openup.org.za`|
+| API_URL                 | unset                                | If set, overrides the default production and staging backend URLs. e.g. `https://api.wazimap.com`|
 | ENVIRONMENT             | unset                                | E.g. `production`, `staging`, `sandbox`|
 | SENTRY_DSN              | unset                                | Required in production, staging and sandbox environment                                                           |
 | GOOGLE_ANALYTICS_ID     | unset                                | ID for Google Analytics. Usually only required in production environment                                                |

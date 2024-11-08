@@ -8,7 +8,7 @@ import * as Sentry from '@sentry/browser';
 import {getHostname, getAPIUrl, loadDevTools} from './utils';
 import {ErrorNotifier} from "./error-notifier";
 
-const mainUrl = getAPIUrl('https://staging.wazimap-ng.openup.org.za');
+const mainUrl = getAPIUrl('https://staging-api.wazimap.com');
 const productionUrl = getAPIUrl('https://api.wazimap.com');
 let config = new SAConfig();
 

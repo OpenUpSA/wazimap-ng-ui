@@ -74,7 +74,7 @@ export function makeServer({environment = "development"} = {}) {
         //API needs to send the data for the children of the current geo only.
 
         routes() {
-            this.urlPrefix = 'https://staging.wazimap-ng.openup.org.za/';
+            this.urlPrefix = 'https://staging-api.wazimap.com/';
             this.namespace = "api/v1";
             this.timing = 750;
 

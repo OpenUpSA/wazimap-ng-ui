@@ -80,7 +80,7 @@ async function getProfileData(profileUrl) {
 export async function install() {
   let data = []
   let profileUrl = 'https://api.wazimap.com/api/v1/profiles';
-  let stagingProfileUrl = 'https://staging.wazimap-ng.openup.org.za/api/v1/profiles';
+  let stagingProfileUrl = 'https://staging-api.wazimap.com/api/v1/profiles';
   data = data.concat(await getProfileData(profileUrl))
   data = data.concat(await getProfileData(stagingProfileUrl))
   const devtools = new DevTools({

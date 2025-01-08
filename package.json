@@ -5,7 +5,7 @@
   "author": "CTO <cto@openup.org.za>",
   "license": "MIT",
   "engines": {
-    "node": "16.20.2"
+    "node": "20.x"
   },
   "dependencies": {
     "@emotion/react": "^11.9.3",

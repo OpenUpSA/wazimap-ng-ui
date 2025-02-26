@@ -13,7 +13,7 @@ export class DescriptionInfoIcon extends Component {
 
     getDescriptionIconHTML (){
       let html = "<div class='filters__header_info' title='Show Description'>";
-      html += "<i class='fa fa-info-circle'></i>";
+      html += "<i class='fas fa-info-circle'></i>";
       html += "</div>";
       return html;
     }

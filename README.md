@@ -31,19 +31,9 @@ The main new features are:
 # Related software
 There is no shortage of mapping software available, both commerical and open-source. Wazimap focuses on providing a platform for data custodians to showcase their datasets and mashing them up with public data. The most similar tool that we have found is the excellent [GeoNode](https://geonode.org/). We feel that approach to publishing data is significantly different enough to warrant a separate project.
 
-# Roadmap
-Version 0.8 is due soon and will fix bugs that currently don't have workarounds. We'll publish the 1.0 roadmap soon.
-
-# Future features
-* WFS endpoint for publishing data to other GIS software
-* Pluggable data visualisations
-* Better handling of geography hierarchies.
-* Improved handling of temporal and other types of non-census-like data.
-* Speed improvements
-* A large standard database of public datasets.
-
-
 # Installation
+
+Requires: NodeJS 20.x.
 
 
 ```bash

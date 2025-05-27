@@ -65,7 +65,7 @@
     "@testing-library/jest-dom": "^5.11.6",
     "babel-jest": "^26.3.0",
     "babel-plugin-transform-regenerator": "^6.26.0",
-    "canvas": "^2.9.3",
+    "canvas": "^2.11.1",
     "chrome-remote-interface": "^0.31.0",
     "cssnano": "^4.1.10",
     "cy-verify-downloads": "^0.0.5",

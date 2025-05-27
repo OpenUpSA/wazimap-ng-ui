@@ -10,6 +10,7 @@ import {
 import Box from "@mui/material/Box";
 import {Typography} from "@mui/material";
 import {checkIfSubIndicatorHasChildren} from "../../../utils";
+import Tooltip from "@mui/material/Tooltip";
 
 
 const LoadingItemView = (props) => {
@@ -153,38 +154,47 @@ const IndicatorItemView = (props) => {
 
     if (subindicators.length > 0) {
         return (
-            <StyledIndicatorTreeItem nodeId={`datamapper-indicator-${props.indicator.id}`} label={
-                <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
-                    <Typography variant="body2" sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}
-                                className="indicator-item">
-                        {props.indicator.label}
-                    </Typography>
-                </Box>
-            } data-test-id={`datamapper-indicator-${props.indicator.id}`}>
-                {loading && <LoadingItemView/>}
-                {!loading && checkForSubIndicatorData() && subindicators.map(
-                    (subindicator, index) => {
-                        return (
-                            <SubindicatorItemView
-                                subindicator={subindicator}
-                                key={`datamapper-subindicator-${props.indicator.id}-${index}-${props.controller.state.profile.profile.geography.code}`}
+            <Tooltip
+                title={props.indicator.label || "No description available"}
+                placement="right"
+                arrow
+                followCursor
+            >
+                <span>
+                    <StyledIndicatorTreeItem nodeId={`datamapper-indicator-${props.indicator.id}`} label={
+                        <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
+                            <Typography variant="body2" sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}
+                                        className="indicator-item">
+                                {props.indicator.label}
+                            </Typography>
+                        </Box>
+                    } data-test-id={`datamapper-indicator-${props.indicator.id}`}>
+                        {loading && <LoadingItemView/>}
+                        {!loading && checkForSubIndicatorData() && subindicators.map(
+                            (subindicator, index) => {
+                                return (
+                                    <SubindicatorItemView
+                                        subindicator={subindicator}
+                                        key={`datamapper-subindicator-${props.indicator.id}-${index}-${props.controller.state.profile.profile.geography.code}`}
 
-                                controller={props.controller}
-                                loading={loading}
-                                indicatorData={props.indicator?.indicatorData}
-                                indicator={props.indicator}
-                                parents={{
-                                    ...props.parents,
-                                    indicator: props.indicator.label
-                                }}
-                            />
-                        )
-                    })
-                }
-                {!loading && !checkForSubIndicatorData() && <NoSubindicatorView
-                    indicator={props.indicator}
-                />}
-            </StyledIndicatorTreeItem>
+                                        controller={props.controller}
+                                        loading={loading}
+                                        indicatorData={props.indicator?.indicatorData}
+                                        indicator={props.indicator}
+                                        parents={{
+                                            ...props.parents,
+                                            indicator: props.indicator.label
+                                        }}
+                                    />
+                                )
+                            })
+                        }
+                        {!loading && !checkForSubIndicatorData() && <NoSubindicatorView
+                            indicator={props.indicator}
+                        />}
+                    </StyledIndicatorTreeItem>
+                </span>
+            </Tooltip>
         )
     }
 }

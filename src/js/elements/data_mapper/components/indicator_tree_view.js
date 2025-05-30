@@ -45,7 +45,7 @@ const NoSubindicatorView = (props) => {
             label={
                 <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
                     <Typography noWrap={false} variant="body2"
-                                sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}>
+                                sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}} title="Data currently not available for this indicator">
                         Data currently not available for this indicator.
                     </Typography>
                 </Box>
@@ -90,7 +90,7 @@ const SubindicatorItemView = (props) => {
             label={
                 <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
                     <Typography variant="body2" sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}
-                                className={"truncate"}>
+                                className={"truncate"} title={props.subindicator}>
                         {props.subindicator}
                     </Typography>
                 </Box>
@@ -156,7 +156,7 @@ const IndicatorItemView = (props) => {
             <StyledIndicatorTreeItem nodeId={`datamapper-indicator-${props.indicator.id}`} label={
                 <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
                     <Typography variant="body2" sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}
-                                className="indicator-item">
+                                className="indicator-item" title={props.indicator.label}>
                         {props.indicator.label}
                     </Typography>
                 </Box>
@@ -207,7 +207,7 @@ const IndicatorSubCategoryTreeView = (props) => {
             <StyledSubCategoryTreeItem nodeId={`datamapper-subcategory-${props.subcategory.id}`} label={
                 <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
                     <Typography variant="body2" sx={{fontSize: '1em', fontWeight: '500', letterSpacing: '.3px'}}
-                                className="indicator-subcategory">
+                                className="indicator-subcategory" title={props.subcategory.name}>
                         {props.subcategory.name}
                     </Typography>
                 </Box>
@@ -243,7 +243,7 @@ const IndicatorCategoryTreeView = (props) => {
     return (
         <StyledCategoryTreeItem nodeId={`datamapper-category-${props.category.id}`} label={
             <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
-                <Typography variant="body2" sx={{fontSize: '.9em', fontWeight: '500', letterSpacing: '.3px'}}>
+                <Typography variant="body2" sx={{fontSize: '.9em', fontWeight: '500', letterSpacing: '.3px'}} title={props.category.name}>
                     {props.category.name}
                 </Typography>
             </Box>

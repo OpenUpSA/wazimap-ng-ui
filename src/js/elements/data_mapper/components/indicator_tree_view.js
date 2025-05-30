@@ -90,7 +90,7 @@ const SubindicatorItemView = (props) => {
             label={
                 <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
                     <Typography variant="body2" sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}
-                                className={"truncate"} title={props.subindicator}>
+                                className={"truncate"}>
                         {props.subindicator}
                     </Typography>
                 </Box>
@@ -156,7 +156,7 @@ const IndicatorItemView = (props) => {
             <StyledIndicatorTreeItem nodeId={`datamapper-indicator-${props.indicator.id}`} label={
                 <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
                     <Typography variant="body2" sx={{fontSize: '1em', letterSpacing: '.3px', color: '#666'}}
-                                className="indicator-item" title={props.indicator.label}>
+                                className="indicator-item">
                         {props.indicator.label}
                     </Typography>
                 </Box>
@@ -207,7 +207,7 @@ const IndicatorSubCategoryTreeView = (props) => {
             <StyledSubCategoryTreeItem nodeId={`datamapper-subcategory-${props.subcategory.id}`} label={
                 <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
                     <Typography variant="body2" sx={{fontSize: '1em', fontWeight: '500', letterSpacing: '.3px'}}
-                                className="indicator-subcategory" title={props.subcategory.name}>
+                                className="indicator-subcategory">
                         {props.subcategory.name}
                     </Typography>
                 </Box>
@@ -243,7 +243,7 @@ const IndicatorCategoryTreeView = (props) => {
     return (
         <StyledCategoryTreeItem nodeId={`datamapper-category-${props.category.id}`} label={
             <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr: 0}}>
-                <Typography variant="body2" sx={{fontSize: '.9em', fontWeight: '500', letterSpacing: '.3px'}} title={props.category.name}>
+                <Typography variant="body2" sx={{fontSize: '.9em', fontWeight: '500', letterSpacing: '.3px'}}>
                     {props.category.name}
                 </Typography>
             </Box>
